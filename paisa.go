@@ -1,13 +1,27 @@
 package main
 
 import (
-	"fmt"
-	"os"
+	log "github.com/sirupsen/logrus"
+	"github.com/spf13/viper"
 
-	"github.com/ananthakumaran/paisa/internal/ledger"
+	"github.com/ananthakumaran/paisa/internal/model"
+	"gorm.io/driver/sqlite"
+	"gorm.io/gorm"
 )
 
 func main() {
-	postings, _ := ledger.Parse(os.Args[1])
-	fmt.Println(postings)
+	viper.SetConfigName("paisa.yaml")
+	viper.SetConfigType("yaml")
+	viper.AddConfigPath(".")
+
+	err := viper.ReadInConfig()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	db, err := gorm.Open(sqlite.Open(viper.GetString("db_path")), &gorm.Config{})
+	if err != nil {
+		log.Fatal(err)
+	}
+	model.Sync(db)
 }

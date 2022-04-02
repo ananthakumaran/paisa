@@ -1,3 +1,5 @@
 paisa.db
 paisa.yaml
 paisa
+web/static/dist*
+node_modules

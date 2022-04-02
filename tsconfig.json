@@ -1,0 +1,5 @@
+{
+  "compilerOptions": { "esModuleInterop": true },
+  "include": ["web/src/**/*"],
+  "exclude": ["node_modules", "**/*.spec.ts"]
+}

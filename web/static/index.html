@@ -8,6 +8,41 @@
     <title>Paisa</title>
   </head>
   <body>
-    <script src="static/js/index.js"></script>
+    <nav class="navbar is-light" role="navigation" aria-label="main navigation">
+      <div class="navbar-brand">
+        <span class="navbar-item is-size-4 has-text-weight-medium">₹ Paisa</span>
+        <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </a>
+      </div>
+
+      <div class="navbar-menu">
+        <div class="navbar-start">
+          <a id="overview" class="navbar-item is-active">Overview</a>
+          <a id="investment" class="navbar-item">Investment</a>
+        </div>
+      </div>
+    </nav>
+    <section class="section tab-overview">
+    </section>
+    <section class="section tab-investment">
+      <div class="container is-fluid">
+        <div class="columns">
+          <div class="column is-12">
+            <svg id="d3-investment-timeline" width="100%" height="500"></svg>
+          </div>
+        </div>
+        <div class="columns">
+          <div class="column is-12 has-text-centered">
+            <div>
+              <p class="heading">Investment Timeline</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <script src="static/dist.js"></script>
   </body>
 </html>

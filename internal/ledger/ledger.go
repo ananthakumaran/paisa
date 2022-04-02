@@ -15,7 +15,7 @@ import (
 func Parse(journalPath string) ([]*posting.Posting, error) {
 	var postings []*posting.Posting
 
-	command := exec.Command("ledger", "-f", journalPath, "csv", "--csv-format", "%(quoted(date)),%(quoted(payee)),%(quoted(display_account)),%(quoted(commodity(scrub(display_amount)))),%(quoted(quantity(scrub(display_amount))))\n")
+	command := exec.Command("ledger", "-f", journalPath, "csv", "--csv-format", "%(quoted(date)),%(quoted(payee)),%(quoted(display_account)),%(quoted(commodity(scrub(display_amount)))),%(quoted(quantity(scrub(display_amount)))),%(quoted(to_int(scrub(market(amount,date)))))\n")
 	var output, error bytes.Buffer
 	command.Stdout = &output
 	command.Stderr = &error
@@ -42,7 +42,12 @@ func Parse(journalPath string) ([]*posting.Posting, error) {
 			return nil, err
 		}
 
-		posting := posting.Posting{Date: date, Payee: record[1], Account: record[2], Commodity: record[3], Quantity: quantity}
+		amount, err := strconv.ParseFloat(record[5], 64)
+		if err != nil {
+			return nil, err
+		}
+
+		posting := posting.Posting{Date: date, Payee: record[1], Account: record[2], Commodity: record[3], Quantity: quantity, Amount: amount}
 		postings = append(postings, &posting)
 
 	}

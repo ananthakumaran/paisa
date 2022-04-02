@@ -1,21 +1,24 @@
 package posting
 
 import (
-	"gorm.io/gorm"
+	"log"
 	"time"
+
+	"gorm.io/gorm"
 )
 
 type Posting struct {
-	ID        uint `gorm:"primaryKey"`
-	Date      time.Time
-	Payee     string
-	Account   string
-	Commodity string
-	Quantity  float64
+	ID        uint      `gorm:"primaryKey" json:"id"`
+	Date      time.Time `json:"date"`
+	Payee     string    `json:"payee"`
+	Account   string    `json:"account"`
+	Commodity string    `json:"commodity"`
+	Quantity  float64   `json:"quantity"`
+	Amount    float64   `json:"amount"`
 }
 
 func UpsertAll(db *gorm.DB, postings []*Posting) {
-	db.Transaction(func(tx *gorm.DB) error {
+	err := db.Transaction(func(tx *gorm.DB) error {
 		err := tx.Exec("DELETE FROM postings").Error
 		if err != nil {
 			return err
@@ -29,4 +32,8 @@ func UpsertAll(db *gorm.DB, postings []*Posting) {
 
 		return nil
 	})
+
+	if err != nil {
+		log.Fatal(err)
+	}
 }

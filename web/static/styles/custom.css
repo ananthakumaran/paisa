@@ -1,0 +1,60 @@
+:focus {
+    outline: 0;
+}
+
+body {
+    font-size: 14px;
+}
+
+.axis text {
+    font-size: 10px;
+    fill: #aaa;
+}
+.axis path.domain, .axis line {
+    fill: none;
+    stroke: #ccc;
+    shape-rendering: crispEdges;
+}
+
+.axis .tick line {
+    stroke: #dedede;
+    shape-rendering: crispEdges;
+}
+
+.legendOrdinal .label {
+    display: block;
+    font-size: 11px;
+    letter-spacing: 1px;
+    margin-bottom: 5px;
+    text-transform: uppercase;
+    font-weight: normal;
+    color: #4a4a4a;
+}
+
+#d3-investment-timeline .legendOrdinal .label, #d3-breakdown .legendOrdinal .label {
+    font-size: 8px;
+}
+
+.y.axis line {
+    stroke: #f5f5f5;
+}
+
+.y.axis path.domain {
+    display: none
+}
+
+
+#d3-salary-timeline .x.axis > g.tick {
+    display: none
+}
+
+#d3-salary-timeline .x.axis > g.tick:nth-child(3n-1) {
+    display: inline
+}
+
+.node {
+  box-sizing: border-box;
+  position: absolute;
+  overflow: hidden;
+  padding-top: 30px;
+}

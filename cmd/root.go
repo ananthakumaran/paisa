@@ -11,7 +11,6 @@ var cfgFile string
 var rootCmd = &cobra.Command{
 	Use:   "paisa",
 	Short: "A command line tool to manager personal finance",
-	Long:  "",
 }
 
 func Execute() {

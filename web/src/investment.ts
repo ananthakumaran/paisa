@@ -36,7 +36,8 @@ export default async function () {
     groupKeys,
     _.map(groupKeys, () => 0)
   );
-  const start = dayjs("01-Oct-2014", "DD-MMM-YYYY"),
+
+  const start = _.min(_.map(postings, (p) => p.timestamp)),
     end = dayjs().startOf("month");
   const ts = _.groupBy(postings, (p) => p.timestamp.format("YYYY-MM"));
 

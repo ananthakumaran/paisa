@@ -12,7 +12,6 @@ import (
 var updateCmd = &cobra.Command{
 	Use:   "update",
 	Short: "Sync journal data",
-	Long:  "",
 	Run: func(cmd *cobra.Command, args []string) {
 		db, err := gorm.Open(sqlite.Open(viper.GetString("db_path")), &gorm.Config{})
 		if err != nil {

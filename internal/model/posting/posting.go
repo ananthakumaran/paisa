@@ -1,10 +1,9 @@
 package posting
 
 import (
-	"log"
-	"time"
-
+	log "github.com/sirupsen/logrus"
 	"gorm.io/gorm"
+	"time"
 )
 
 type Posting struct {

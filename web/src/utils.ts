@@ -16,9 +16,20 @@ export interface Posting {
   timestamp: dayjs.Dayjs;
 }
 
+export interface Networth {
+  date: string;
+  actual: number;
+  gain: number;
+
+  timestamp: dayjs.Dayjs;
+}
+
 export function ajax(
   route: "/api/investment"
 ): Promise<{ postings: Posting[] }>;
+export function ajax(
+  route: "/api/overview"
+): Promise<{ networth_timeline: Networth[] }>;
 export async function ajax(route: string) {
   const response = await fetch(route);
   return await response.json();

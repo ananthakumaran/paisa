@@ -13,6 +13,9 @@ func Listen(db *gorm.DB) {
 	router.SetTrustedProxies(nil)
 	router.Static("/static", "web/static")
 	router.StaticFile("/", "web/static/index.html")
+	router.GET("/api/overview", func(c *gin.Context) {
+		c.JSON(200, GetOverview(db))
+	})
 	router.GET("/api/investment", func(c *gin.Context) {
 		c.JSON(200, GetInvestment(db))
 	})

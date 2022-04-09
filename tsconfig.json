@@ -1,5 +1,10 @@
 {
-  "compilerOptions": { "esModuleInterop": true },
+  "compilerOptions": {
+    "esModuleInterop": true,
+    "target": "ESNext",
+    "lib": ["DOM", "ESNext"],
+    "moduleResolution": "node"
+  },
   "include": ["web/src/**/*"],
   "exclude": ["node_modules", "**/*.spec.ts"]
 }

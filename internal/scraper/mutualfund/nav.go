@@ -12,7 +12,7 @@ import (
 	"github.com/ananthakumaran/paisa/internal/model/price"
 )
 
-func GetNav(schemeCode string) ([]*price.Price, error) {
+func GetNav(schemeCode string, commodityName string) ([]*price.Price, error) {
 	url := fmt.Sprintf("https://api.mfapi.in/mf/%s", schemeCode)
 	resp, err := http.Get(url)
 	if err != nil {
@@ -50,7 +50,7 @@ func GetNav(schemeCode string) ([]*price.Price, error) {
 			return nil, err
 		}
 
-		price := price.Price{Date: date, CommodityType: price.MutualFund, CommodityID: schemeCode, Value: value}
+		price := price.Price{Date: date, CommodityType: price.MutualFund, CommodityID: schemeCode, CommodityName: commodityName, Value: value}
 		prices = append(prices, &price)
 	}
 	return prices, nil

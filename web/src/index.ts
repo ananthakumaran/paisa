@@ -8,7 +8,7 @@ import overview from "./overview";
 import investment from "./investment";
 
 const tabs = {
-  overview: overview,
+  overview: _.once(overview),
   investment: _.once(investment)
 };
 

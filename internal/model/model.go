@@ -21,11 +21,19 @@ func Sync(db *gorm.DB) {
 
 	db.AutoMigrate(&price.Price{})
 	log.Info("Fetching mutual fund history")
-	accounts := viper.GetStringMap("accounts")
-	for name, accountConfig := range accounts {
-		log.Info("Fetching account ", aurora.Bold(name))
-		schemeCode := strconv.Itoa(accountConfig.(map[string]interface{})["code"].(int))
-		prices, err := mutualfund.GetNav(schemeCode)
+	type Commodity struct {
+		Name string
+		Type string
+		Code int
+	}
+
+	var commodities []Commodity
+	viper.UnmarshalKey("commodities", &commodities)
+	for _, commodity := range commodities {
+		name := commodity.Name
+		log.Info("Fetching commodity ", aurora.Bold(name))
+		schemeCode := strconv.Itoa(commodity.Code)
+		prices, err := mutualfund.GetNav(schemeCode, name)
 		if err != nil {
 			log.Fatal(err)
 		}

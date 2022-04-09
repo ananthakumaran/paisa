@@ -1,9 +1,11 @@
 package price
 
 import (
-	"gorm.io/gorm"
 	"time"
 
+	"gorm.io/gorm"
+
+	"github.com/google/btree"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -18,7 +20,12 @@ type Price struct {
 	Date          time.Time
 	CommodityType CommodityType
 	CommodityID   string
+	CommodityName string
 	Value         float64
+}
+
+func (p Price) Less(o btree.Item) bool {
+	return p.Date.Before(o.(Price).Date)
 }
 
 func UpsertAll(db *gorm.DB, commodityType CommodityType, commodityID string, prices []*Price) {

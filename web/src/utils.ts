@@ -12,6 +12,7 @@ export interface Posting {
   commodity: string;
   quanity: number;
   amount: number;
+  market_amount: number;
 
   timestamp: dayjs.Dayjs;
 }
@@ -27,6 +28,7 @@ export interface Networth {
 export function ajax(
   route: "/api/investment"
 ): Promise<{ postings: Posting[] }>;
+export function ajax(route: "/api/ledger"): Promise<{ postings: Posting[] }>;
 export function ajax(
   route: "/api/overview"
 ): Promise<{ networth_timeline: Networth[] }>;
@@ -63,6 +65,13 @@ export function formatCurrencyCrude(value: number) {
   return sprintf(`%.${precision}f %s`, x, unit);
 }
 
+export function formatFloat(value) {
+  if (obscure) {
+    return "00";
+  }
+  return sprintf("%.2f", value);
+}
+
 export function forEachMonth(
   start: dayjs.Dayjs,
   end: dayjs.Dayjs,
@@ -95,4 +104,9 @@ export function skipTicks(
 
     return index % skip === 0 ? cb(data, index) : null;
   };
+}
+
+export function setHtml(selector: string, value: string) {
+  var node = document.querySelector(".d3-" + selector);
+  node.innerHTML = value;
 }

@@ -7,6 +7,7 @@ import (
 	"github.com/ananthakumaran/paisa/internal/model/posting"
 	"github.com/ananthakumaran/paisa/internal/model/price"
 	"github.com/google/btree"
+	"github.com/samber/lo"
 	log "github.com/sirupsen/logrus"
 	"gorm.io/gorm"
 )
@@ -40,6 +41,21 @@ func loadCache(db *gorm.DB) {
 
 		cache.pricesTree[price.CommodityName].ReplaceOrInsert(price)
 	}
+
+	var postings []posting.Posting
+	result = db.Find(&postings)
+	if result.Error != nil {
+		log.Fatal(result.Error)
+	}
+
+	for commodityName, postings := range lo.GroupBy(postings, func(p posting.Posting) string { return p.Commodity }) {
+		if postings[0].Commodity != "INR" && cache.pricesTree[commodityName] == nil {
+			cache.pricesTree[commodityName] = btree.New(2)
+			for _, p := range postings {
+				cache.pricesTree[commodityName].ReplaceOrInsert(price.Price{Date: p.Date, CommodityID: p.Commodity, CommodityName: p.Commodity, Value: p.Amount / p.Quantity})
+			}
+		}
+	}
 }
 
 func GetMarketPrice(db *gorm.DB, p posting.Posting, date time.Time) float64 {
@@ -62,6 +78,8 @@ func GetMarketPrice(db *gorm.DB, p posting.Posting, date time.Time) float64 {
 		if found {
 			return p.Quantity * pc.Value
 		}
+	} else {
+		log.Info("not found ", p)
 	}
 
 	return p.Amount

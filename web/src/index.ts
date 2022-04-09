@@ -6,10 +6,12 @@ dayjs.extend(isSameOrBefore);
 
 import overview from "./overview";
 import investment from "./investment";
+import ledger from "./ledger";
 
 const tabs = {
   overview: _.once(overview),
-  investment: _.once(investment)
+  investment: _.once(investment),
+  ledger: _.once(ledger)
 };
 
 function toggleTab(id: string) {

@@ -25,7 +25,7 @@ func GetOverview(db *gorm.DB) gin.H {
 		log.Fatal(result.Error)
 	}
 	networthTimeline := ComputeTimeline(db, postings)
-	return gin.H{"networth_timeline": networthTimeline, "postings": postings}
+	return gin.H{"networth_timeline": networthTimeline}
 }
 
 func ComputeTimeline(db *gorm.DB, postings []posting.Posting) []Networth {

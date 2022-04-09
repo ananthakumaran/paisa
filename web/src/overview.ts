@@ -1,12 +1,24 @@
-import { ajax, formatCurrency, formatCurrencyCrude, Networth } from "./utils";
+import {
+  ajax,
+  formatCurrency,
+  formatCurrencyCrude,
+  Networth,
+  setHtml
+} from "./utils";
 import _ from "lodash";
 import * as d3 from "d3";
 import dayjs from "dayjs";
 import legend from "d3-svg-legend";
+import { pointer } from "d3";
 
 export default async function () {
   const { networth_timeline: points } = await ajax("/api/overview");
   _.each(points, (n) => (n.timestamp = dayjs(n.date)));
+
+  const current = _.last(points);
+  setHtml("networth", formatCurrency(current.actual + current.gain));
+  setHtml("investment", formatCurrency(current.actual));
+  setHtml("gains", formatCurrency(current.gain));
 
   const start = _.min(_.map(points, (p) => p.timestamp)),
     end = dayjs();

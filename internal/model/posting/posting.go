@@ -14,6 +14,8 @@ type Posting struct {
 	Commodity string    `json:"commodity"`
 	Quantity  float64   `json:"quantity"`
 	Amount    float64   `json:"amount"`
+
+	MarketAmount float64 `gorm:"-:all" json:"market_amount"`
 }
 
 func UpsertAll(db *gorm.DB, postings []*Posting) {

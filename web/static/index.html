@@ -22,9 +22,34 @@
         <div class="navbar-start">
           <a id="overview" class="navbar-item is-active">Overview</a>
           <a id="investment" class="navbar-item">Investment</a>
+          <a id="ledger" class="navbar-item">Ledger</a>
         </div>
       </div>
     </nav>
+    <section class="section tab-overview">
+      <div class="container">
+        <nav class="level">
+          <div class="level-item has-text-centered">
+            <div>
+              <p class="heading">Net worth</p>
+              <p class="d3-networth title"></p>
+            </div>
+          </div>
+          <div class="level-item has-text-centered">
+            <div>
+              <p class="heading">Investment</p>
+              <p class="d3-investment title"></p>
+            </div>
+          </div>
+          <div class="level-item has-text-centered">
+            <div>
+              <p class="heading">Gain</p>
+              <p class="d3-gains title"></p>
+            </div>
+          </div>
+        </nav>
+      </div>
+    </section>
     <section class="section tab-overview">
       <div class="container is-fluid">
         <div class="columns">
@@ -53,6 +78,58 @@
             <div>
               <p class="heading">Investment Timeline</p>
             </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="section tab-ledger">
+      <div class="container is-fluid">
+        <nav class="level">
+          <div class="level-left">
+            <div class="level-item">
+              <p class="subtitle is-5">
+                Postings
+              </p>
+            </div>
+            <div class="level-item">
+              <div class="field">
+                <p class="control">
+                  <input class="d3-posting-filter input" style="width: 440px" type="text" placeholder="filter account">
+                </p>
+              </div>
+            </div>
+          </div>
+        </nav>
+        <div class="columns">
+          <div class="column is-6">
+            <table class="table is-narrow is-fullwidth">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Account</th>
+                  <th class='has-text-right'>Amount</th>
+                  <th class='has-text-right'>Market Value</th>
+                  <th class='has-text-right'>Change</th>
+                  <th class='has-text-right'>%</th>
+                </tr>
+              </thead>
+              <tbody class="d3-postings">
+              </tbody>
+            </table>
+          </div>
+          <div class="column is-6">
+            <table class="table is-narrow is-fullwidth">
+              <thead>
+                <tr>
+                  <th>Account</th>
+                  <th class='has-text-right'>Amount</th>
+                  <th class='has-text-right'>Market Value</th>
+                  <th class='has-text-right'>Change</th>
+                </tr>
+              </thead>
+              <tbody class="d3-postings-total">
+              </tbody>
+            </table>
           </div>
         </div>
       </div>

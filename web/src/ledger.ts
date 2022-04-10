@@ -1,12 +1,15 @@
 import * as d3 from "d3";
 import dayjs from "dayjs";
 import _ from "lodash";
-import { ajax, formatCurrency, formatFloat, Posting } from "./utils";
+import { ajax, Breakdown, formatCurrency, formatFloat, Posting } from "./utils";
 
 export default async function () {
-  const { postings: postings } = await ajax("/api/ledger");
+  const { postings: postings, breakdowns: breakdowns } = await ajax(
+    "/api/ledger"
+  );
   _.each(postings, (p) => (p.timestamp = dayjs(p.date)));
 
+  renderBreakdowns(breakdowns);
   renderTransactions(postings);
 
   d3.select("input.d3-posting-filter").on(
@@ -69,4 +72,33 @@ function filterTransactions(postings: Posting[], filter: string) {
   }
 
   return _.filter(postings, (t) => filterRegex.test(t.account));
+}
+
+function renderBreakdowns(breakdowns: Breakdown[]) {
+  const tbody = d3.select(".d3-postings-breakdown");
+  const trs = tbody.selectAll("tr").data(Object.values(breakdowns));
+
+  trs.exit().remove();
+  trs
+    .enter()
+    .append("tr")
+    .merge(trs as any)
+    .html((b) => {
+      let changePercentage = 0,
+        changeClass = "";
+
+      const gain = b.market_amount - b.amount;
+      if (gain > 0) {
+        changeClass = "has-text-success";
+      } else if (gain < 0) {
+        changeClass = "has-text-danger";
+      }
+      changePercentage = 0;
+      return `
+       <td style='max-width: 200px; overflow: hidden;'>${b.group}</td>
+       <td class='has-text-right'>${formatCurrency(b.amount)}</td>
+       <td class='has-text-right'>${formatCurrency(b.market_amount)}</td>
+       <td class='${changeClass} has-text-right'>${formatCurrency(gain)}</td>
+      `;
+    });
 }

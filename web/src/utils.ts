@@ -25,10 +25,18 @@ export interface Networth {
   timestamp: dayjs.Dayjs;
 }
 
+export interface Breakdown {
+  group: string;
+  amount: number;
+  market_amount: number;
+}
+
 export function ajax(
   route: "/api/investment"
 ): Promise<{ postings: Posting[] }>;
-export function ajax(route: "/api/ledger"): Promise<{ postings: Posting[] }>;
+export function ajax(
+  route: "/api/ledger"
+): Promise<{ postings: Posting[]; breakdowns: Breakdown[] }>;
 export function ajax(
   route: "/api/overview"
 ): Promise<{ networth_timeline: Networth[] }>;

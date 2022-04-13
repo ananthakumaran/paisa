@@ -1,0 +1,16 @@
+[book]
+authors = ["Anantha Kumaran"]
+language = "en"
+multilingual = false
+src = "src"
+title = "Paisa"
+
+[preprocessor]
+
+[preprocessor.admonish]
+command = "mdbook-admonish"
+
+[output]
+
+[output.html]
+additional-css = ["./mdbook-admonish.css"]

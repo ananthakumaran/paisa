@@ -6,6 +6,7 @@ import (
 
 	"github.com/ananthakumaran/paisa/internal/model/posting"
 	"github.com/ananthakumaran/paisa/internal/model/price"
+	"github.com/ananthakumaran/paisa/internal/utils"
 	"github.com/google/btree"
 	"github.com/samber/lo"
 	log "github.com/sirupsen/logrus"
@@ -66,20 +67,13 @@ func GetMarketPrice(db *gorm.DB, p posting.Posting, date time.Time) float64 {
 
 	pt := cache.pricesTree[p.Commodity]
 	if pt != nil {
-		var pc price.Price
-		var found bool
 
-		pt.DescendLessOrEqual(price.Price{Date: date}, func(item btree.Item) bool {
-			pc = item.(price.Price)
-			found = true
-			return false
-		})
-
-		if found {
+		pc := utils.BTreeDescendFirstLessOrEqual(pt, price.Price{Date: date})
+		if pc.Value != 0 {
 			return p.Quantity * pc.Value
 		}
 	} else {
-		log.Info("not found ", p)
+		log.Info("Not found ", p)
 	}
 
 	return p.Amount

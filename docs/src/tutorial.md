@@ -14,13 +14,13 @@ content
 ```go
 2022/01/01 Salary
     Income:Salary                              -100,000 INR
-    Asset:Savings                               100,000 INR
+    Checking                                    100,000 INR
 ```
 
 **ledger** follows the double-entry accounting system. In simple terms, it
 tracks the movement of money from debit account to credit
 account. Here `Income:Salary` is the debit account and
-`Asset:Savings` is the credit account. The date at which the
+`Checking` is the credit account. The date at which the
 transaction took place and a description of the transaction is written
 in the first line followed by the list of credit or debit
 entry. Account name could be anything. The `:` in the account name
@@ -31,23 +31,23 @@ accounts must be zero.
 ```go
 2022/01/01 Salary
     Income:Salary                              -100,000 INR
-    Asset:Savings                               100,000 INR
+    Checking                                    100,000 INR
 
 2022/02/01 Salary
     Income:Salary                              -100,000 INR
-    Asset:Savings                               100,000 INR
+    Checking                                    100,000 INR
 
 2022/03/01 Salary
     Income:Salary                              -100,000 INR
-    Asset:Savings                               100,000 INR
+    Checking                                    100,000 INR
 ```
 
 let's add few more entries. The total balance in your savings account
 could be found by
 
 ```go
-❯ ledger -f personal.ledger balance Asset:Savings
-300,000 INR  Asset:Savings
+❯ ledger -f personal.ledger balance Checking
+300,000 INR  Checking
 ```
 
 Let's say your company deducts 12,000 INR and contributes it to EPF,
@@ -56,17 +56,17 @@ we could represent it as follows
 ```go
 2022/01/01 Salary
     Income:Salary                              -100,000 INR
-    Asset:Savings                                88,000 INR
+    Checking                                     88,000 INR
     Asset:Debt:EPF                               12,000 INR
 
 2022/02/01 Salary
     Income:Salary                              -100,000 INR
-    Asset:Savings                                88,000 INR
+    Checking                                     88,000 INR
     Asset:Debt:EPF                               12,000 INR
 
 2022/03/01 Salary
     Income:Salary                              -100,000 INR
-    Asset:Savings                                88,000 INR
+    Checking                                     88,000 INR
     Asset:Debt:EPF                               12,000 INR
 ```
 
@@ -123,7 +123,7 @@ directory
 
 ```yaml
 # absolute path of journal file
-journal_path: /home/john/finance/example.ledger
+journal_path: /home/john/finance/personal.ledger
 # absolute path of sql database
 db_path: /home/john/finance/paisa.db
 # commodities list
@@ -151,8 +151,7 @@ INFO Mutual Fund Scheme Code: 120684
 
 ```admonish
 You might see lot of funds with similar names. The search command
-supports crude fuzzy search, separate each word with space. For example,
-`nifty next grow direct` would match the above fund.
+supports crude fuzzy search. For example, `nifty next grow direct` would match the above fund.
 ```
 
 ## Update

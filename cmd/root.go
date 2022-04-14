@@ -1,6 +1,8 @@
 package cmd
 
 import (
+	"os"
+
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -27,6 +29,11 @@ func init() {
 
 func initConfig() {
 	log.SetFormatter(&log.TextFormatter{DisableTimestamp: true})
+
+	currentCommand, _, _ := rootCmd.Find(os.Args[1:])
+	if currentCommand.Name() == "init" {
+		return
+	}
 
 	if cfgFile != "" {
 		viper.SetConfigFile(cfgFile)

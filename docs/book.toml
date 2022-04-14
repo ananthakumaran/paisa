@@ -3,7 +3,7 @@ authors = ["Anantha Kumaran"]
 language = "en"
 multilingual = false
 src = "src"
-title = "Paisa"
+title = "₹ Paisa"
 
 [preprocessor]
 

@@ -7,6 +7,7 @@ import (
 	"github.com/samber/lo"
 	log "github.com/sirupsen/logrus"
 
+	"github.com/ChizhovVadim/xirr"
 	"github.com/ananthakumaran/paisa/internal/model/posting"
 	"github.com/ananthakumaran/paisa/internal/service"
 	"github.com/gin-gonic/gin"
@@ -17,6 +18,7 @@ type Breakdown struct {
 	Group        string  `json:"group"`
 	Amount       float64 `json:"amount"`
 	MarketAmount float64 `json:"market_amount"`
+	XIRR         float64 `json:"xirr"`
 }
 
 func GetLedger(db *gorm.DB) gin.H {
@@ -36,29 +38,31 @@ func GetLedger(db *gorm.DB) gin.H {
 }
 
 func computeBreakdown(db *gorm.DB, postings []posting.Posting) map[string]Breakdown {
-	byAccount := lo.GroupBy(postings, func(p posting.Posting) string { return p.Account })
-	result := make(map[string]Breakdown)
-
-	setOrUpdate := func(account string, breakdown Breakdown) {
-		existingBreakdown, found := result[account]
-		if !found {
-			existingBreakdown = Breakdown{Group: account}
+	accounts := make(map[string]bool)
+	for _, p := range postings {
+		var parts []string
+		for _, part := range strings.Split(p.Account, ":") {
+			parts = append(parts, part)
+			accounts[strings.Join(parts, ":")] = true
 		}
 
-		existingBreakdown.Amount += breakdown.Amount
-		existingBreakdown.MarketAmount += breakdown.MarketAmount
-		result[account] = existingBreakdown
 	}
 
-	for account, ps := range byAccount {
+	today := time.Now()
+	result := make(map[string]Breakdown)
+
+	for group := range accounts {
+		ps := lo.Filter(postings, func(p posting.Posting, _ int) bool { return strings.HasPrefix(p.Account, group) })
 		amount := lo.Reduce(ps, func(acc float64, p posting.Posting, _ int) float64 { return acc + p.Amount }, 0.0)
 		marketAmount := lo.Reduce(ps, func(acc float64, p posting.Posting, _ int) float64 { return acc + p.MarketAmount }, 0.0)
-		breakdown := Breakdown{Amount: amount, MarketAmount: marketAmount}
-		var parts []string
-		for _, p := range strings.Split(account, ":") {
-			parts = append(parts, p)
-			setOrUpdate(strings.Join(parts, ":"), breakdown)
+		payments := lo.Reverse(lo.Map(ps, func(p posting.Posting, _ int) xirr.Payment { return xirr.Payment{Date: p.Date, Amount: -p.Amount} }))
+		payments = append(payments, xirr.Payment{Date: today, Amount: marketAmount})
+		returns, err := xirr.XIRR(payments)
+		if err != nil {
+			log.Fatal(err)
 		}
+		breakdown := Breakdown{Amount: amount, MarketAmount: marketAmount, XIRR: (returns - 1) * 100, Group: group}
+		result[group] = breakdown
 	}
 
 	return result

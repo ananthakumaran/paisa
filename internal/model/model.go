@@ -15,7 +15,7 @@ import (
 
 func Sync(db *gorm.DB) {
 	db.AutoMigrate(&posting.Posting{})
-	log.Info("Syncing postings from ledger")
+	log.Info("Syncing transactions from journal")
 	postings, _ := ledger.Parse(viper.GetString("journal_path"))
 	posting.UpsertAll(db, postings)
 

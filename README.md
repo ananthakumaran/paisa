@@ -1,10 +1,9 @@
 # Paisa
 
-Paisa is an opinionated command line tool to manage personal finance
-for Indians. Paisa uses the [ledger](https://www.ledger-cli.org/) double entry accounting
-system.
+**Paisa** is a command line tool and WebGUI to manage personal
+finance, specially tailored for Indians. It builds on top of the
+[ledger](https://www.ledger-cli.org/) double entry accounting tool.
 
-## Goals
+## Status
 
-* data never leaves the system
-* journal should be a text file
+It's in very early stages of development.

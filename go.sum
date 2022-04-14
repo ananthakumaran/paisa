@@ -1,3 +1,5 @@
+github.com/ChizhovVadim/xirr v0.0.0-20210210181856-508bc36c62aa h1:FwRnTf9b00fcD1w4pkV23+LBBrxxm91CTfrgsYAG9VE=
+github.com/ChizhovVadim/xirr v0.0.0-20210210181856-508bc36c62aa/go.mod h1:Ncy9etDvS9TBbvZHS4de6sxzeuJtc9H79dKHTHAwMz8=
 github.com/chzyer/logex v1.1.10 h1:Swpa1K6QvQznwJRcfTfQJmTE72DqScAa40E+fbHEXEE=
 github.com/chzyer/logex v1.1.10/go.mod h1:+Ywpsq7O8HXn0nuIou7OrIPyXbp3wmkHB+jjWRnGsAI=
 github.com/chzyer/readline v0.0.0-20180603132655-2972be24d48e h1:fY5BOSpyZCqRo5OhCuC+XN+r/bBCmeuuJtjz+bCNIf8=

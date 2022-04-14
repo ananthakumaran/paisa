@@ -16,7 +16,7 @@ INFO Generating config file: /home/john/finance/paisa.yaml
 INFO Generating journal file: /home/john/finance/personal.ledger
 ❯ paisa update
 INFO Using config file: /home/john/finance/paisa.yaml
-INFO Syncing postings from ledger
+INFO Syncing transactions from journal
 INFO Fetching mutual fund history
 INFO Fetching commodity NIFTY
 INFO Fetching commodity NIFTY_JR

@@ -99,6 +99,7 @@ function renderBreakdowns(breakdowns: Breakdown[]) {
        <td class='has-text-right'>${formatCurrency(b.amount)}</td>
        <td class='has-text-right'>${formatCurrency(b.market_amount)}</td>
        <td class='${changeClass} has-text-right'>${formatCurrency(gain)}</td>
+       <td class='${changeClass} has-text-right'>${formatFloat(b.xirr)}</td>
       `;
     });
 }

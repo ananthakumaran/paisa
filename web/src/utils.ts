@@ -29,6 +29,7 @@ export interface Breakdown {
   group: string;
   amount: number;
   market_amount: number;
+  xirr: number;
 }
 
 export function ajax(

@@ -3,6 +3,7 @@ module github.com/ananthakumaran/paisa
 go 1.18
 
 require (
+	github.com/ChizhovVadim/xirr v0.0.0-20210210181856-508bc36c62aa
 	github.com/gin-gonic/gin v1.7.7
 	github.com/google/btree v1.0.1
 	github.com/logrusorgru/aurora v2.0.3+incompatible

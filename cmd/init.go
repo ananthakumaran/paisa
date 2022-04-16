@@ -8,13 +8,15 @@ import (
 
 	"time"
 
+	"strings"
+
 	"github.com/ananthakumaran/paisa/internal/model/price"
 	"github.com/ananthakumaran/paisa/internal/scraper/mutualfund"
 	"github.com/ananthakumaran/paisa/internal/utils"
 	"github.com/google/btree"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
-	"strings"
+	"math/rand"
 )
 
 var initCmd = &cobra.Command{
@@ -47,6 +49,9 @@ commodities:
   - name: NIFTY_JR
     type: mutualfund
     code: 120684
+  - name: ABCBF
+    type: mutualfund
+    code: 119533
 `
 	log.Info("Generating config file: ", configFilePath)
 	journalFilePath := path.Join(cwd, "personal.ledger")
@@ -75,10 +80,67 @@ func formatFloat(num float64) string {
 	return strings.TrimRight(strings.TrimRight(s, "0"), ".")
 }
 
+func emitSalary(file *os.File, start time.Time) {
+	var salary float64 = 100000 + (float64(start.Year())-2019)*20000
+	_, err := file.WriteString(fmt.Sprintf(`
+%s Salary
+    Income:Salary
+    Asset:Debt:EPF                  %s INR
+    Checking                        %s INR
+`, start.Format("2006/01/02"), formatFloat(salary*0.12), formatFloat(salary*0.88)))
+	if err != nil {
+		log.Fatal(err)
+	}
+
+}
+
+func emitEquityMutualFund(file *os.File, start time.Time, pricesTree map[string]*btree.BTree) {
+	multiplier := 1.0
+	if start.Year() > 2020 && rand.Intn(3) == 0 {
+		multiplier = -1.0
+	}
+	pc := utils.BTreeDescendFirstLessOrEqual(pricesTree["NIFTY"], price.Price{Date: start})
+	_, err := file.WriteString(fmt.Sprintf(`
+%s Mutual Fund Nifty
+    Asset:Equity:NIFTY   %s NIFTY @ %s INR
+    Checking
+`, start.Format("2006/01/02"), formatFloat(10000/pc.Value*multiplier), formatFloat(pc.Value)))
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	pc = utils.BTreeDescendFirstLessOrEqual(pricesTree["NIFTY_JR"], price.Price{Date: start})
+	_, err = file.WriteString(fmt.Sprintf(`
+%s Mutual Fund Nifty Next 50
+    Asset:Equity:NIFTY_JR   %s NIFTY_JR @ %s INR
+    Checking
+`, start.Format("2006/01/02"), formatFloat(10000/pc.Value*multiplier), formatFloat(pc.Value)))
+	if err != nil {
+		log.Fatal(err)
+	}
+
+}
+
+func emitDebtMutualFund(file *os.File, start time.Time, pricesTree map[string]*btree.BTree) {
+	multiplier := 1.0
+	if start.Year() > 2020 && rand.Intn(3) == 0 {
+		multiplier = -1.0
+	}
+	pc := utils.BTreeDescendFirstLessOrEqual(pricesTree["ABCBF"], price.Price{Date: start})
+	_, err := file.WriteString(fmt.Sprintf(`
+%s Mutual Fund Birla Corporate Fund
+    Asset:Debt:ABCBF   %s ABCBF @ %s INR
+    Checking
+`, start.Format("2006/01/02"), formatFloat(10000/pc.Value*multiplier), formatFloat(pc.Value)))
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
 func generateJournalFile(cwd string) {
 	journalFilePath := path.Join(cwd, "personal.ledger")
 	log.Info("Generating journal file: ", journalFilePath)
-	ledgerFile, err := os.OpenFile(journalFilePath, os.O_CREATE|os.O_WRONLY, 0644)
+	ledgerFile, err := os.OpenFile(journalFilePath, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0644)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -92,39 +154,11 @@ func generateJournalFile(cwd string) {
 	pricesTree := make(map[string]*btree.BTree)
 	loadPrices("120716", "NIFTY", pricesTree)
 	loadPrices("120684", "NIFTY_JR", pricesTree)
+	loadPrices("119533", "ABCBF", pricesTree)
 
 	for ; start.Before(end); start = start.AddDate(0, 1, 0) {
-		// salary
-		var salary float64 = 100000 + (float64(start.Year())-2019)*20000
-		_, err := ledgerFile.WriteString(fmt.Sprintf(`
-%s Salary
-    Income:Salary
-    Asset:Debt:EPF                  %s INR
-    Checking                        %s INR
-`, start.Format("2006/01/02"), formatFloat(salary*0.12), formatFloat(salary*0.88)))
-		if err != nil {
-			log.Fatal(err)
-		}
-
-		// mutual fund
-		pc := utils.BTreeDescendFirstLessOrEqual(pricesTree["NIFTY"], price.Price{Date: start})
-		_, err = ledgerFile.WriteString(fmt.Sprintf(`
-%s Mutual Fund Nifty
-    Asset:Equity:NIFTY   %s NIFTY @ %s INR
-    Checking
-`, start.Format("2006/01/02"), formatFloat(10000/pc.Value), formatFloat(pc.Value)))
-		if err != nil {
-			log.Fatal(err)
-		}
-
-		pc = utils.BTreeDescendFirstLessOrEqual(pricesTree["NIFTY_JR"], price.Price{Date: start})
-		_, err = ledgerFile.WriteString(fmt.Sprintf(`
-%s Mutual Fund Nifty Next 50
-    Asset:Equity:NIFTY_JR   %s NIFTY_JR @ %s INR
-    Checking
-`, start.Format("2006/01/02"), formatFloat(10000/pc.Value), formatFloat(pc.Value)))
-		if err != nil {
-			log.Fatal(err)
-		}
+		emitSalary(ledgerFile, start)
+		emitEquityMutualFund(ledgerFile, start, pricesTree)
+		emitDebtMutualFund(ledgerFile, start, pricesTree)
 	}
 }

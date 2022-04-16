@@ -32,6 +32,15 @@ export interface Breakdown {
   xirr: number;
 }
 
+export interface Aggregate {
+  date: string;
+  account: string;
+  amount: number;
+  market_amount: number;
+
+  timestamp: dayjs.Dayjs;
+}
+
 export function ajax(
   route: "/api/investment"
 ): Promise<{ postings: Posting[] }>;
@@ -41,6 +50,10 @@ export function ajax(
 export function ajax(
   route: "/api/overview"
 ): Promise<{ networth_timeline: Networth[] }>;
+export function ajax(route: "/api/allocation"): Promise<{
+  aggregates: { [key: string]: Aggregate };
+  aggregates_timeline: { [key: string]: Aggregate }[];
+}>;
 export async function ajax(route: string) {
   const response = await fetch(route);
   return await response.json();
@@ -101,6 +114,10 @@ export function secondName(account: string) {
   return account.split(":")[1];
 }
 
+export function parentName(account: string) {
+  return _.dropRight(account.split(":"), 1).join(":");
+}
+
 export function skipTicks(
   minWidth: number,
   width: number,
@@ -118,4 +135,14 @@ export function skipTicks(
 export function setHtml(selector: string, value: string) {
   var node = document.querySelector(".d3-" + selector);
   node.innerHTML = value;
+}
+
+export function rainbowScale(keys: string[]) {
+  const x = d3
+    .scaleLinear()
+    .domain([0, _.size(keys) - 1])
+    .range([0, 0.9]);
+  return d3
+    .scaleOrdinal(_.map(keys, (_value, i) => d3.interpolateRainbow(x(i))))
+    .domain(keys);
 }

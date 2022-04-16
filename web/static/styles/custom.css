@@ -53,8 +53,12 @@ body {
 }
 
 .node {
-  box-sizing: border-box;
-  position: absolute;
-  overflow: hidden;
-  padding-top: 30px;
+    box-sizing: border-box;
+    position: absolute;
+    overflow: hidden;
+    padding-top: 30px;
+}
+
+#d3-allocation-category, #d3-allocation-value {
+    position: relative;
 }

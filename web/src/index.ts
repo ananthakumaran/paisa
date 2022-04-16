@@ -1,16 +1,18 @@
-import $ from "jquery";
-import _ from "lodash";
 import dayjs from "dayjs";
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
+import $ from "jquery";
+import _ from "lodash";
 dayjs.extend(isSameOrBefore);
 
-import overview from "./overview";
+import allocation from "./allocation";
 import investment from "./investment";
 import ledger from "./ledger";
+import overview from "./overview";
 
 const tabs = {
   overview: _.once(overview),
   investment: _.once(investment),
+  allocation: _.once(allocation),
   ledger: _.once(ledger)
 };
 

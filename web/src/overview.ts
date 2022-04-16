@@ -1,3 +1,7 @@
+import * as d3 from "d3";
+import legend from "d3-svg-legend";
+import dayjs from "dayjs";
+import _ from "lodash";
 import {
   ajax,
   formatCurrency,
@@ -5,11 +9,6 @@ import {
   Networth,
   setHtml
 } from "./utils";
-import _ from "lodash";
-import * as d3 from "d3";
-import dayjs from "dayjs";
-import legend from "d3-svg-legend";
-import { pointer } from "d3";
 
 export default async function () {
   const { networth_timeline: points } = await ajax("/api/overview");

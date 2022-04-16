@@ -1,17 +1,14 @@
+import * as d3 from "d3";
+import legend from "d3-svg-legend";
+import dayjs from "dayjs";
+import _ from "lodash";
 import {
   ajax,
-  formatCurrency,
   forEachMonth,
   formatCurrencyCrude,
-  Posting,
   secondName,
   skipTicks
 } from "./utils";
-import _ from "lodash";
-import * as d3 from "d3";
-import dayjs from "dayjs";
-import legend from "d3-svg-legend";
-import { ticks } from "d3";
 
 export default async function () {
   const { postings: postings } = await ajax("/api/investment");
@@ -29,7 +26,11 @@ export default async function () {
       .append("g")
       .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-  const groups = _.uniq(_.map(postings, (p) => secondName(p.account)));
+  const groups = _.chain(postings)
+    .map((p) => secondName(p.account))
+    .uniq()
+    .sort()
+    .value();
   const groupKeys = _.flatMap(groups, (g) => [g + "-credit", g + "-debit"]);
 
   const defaultValues = _.zipObject(
@@ -41,8 +42,11 @@ export default async function () {
     end = dayjs().startOf("month");
   const ts = _.groupBy(postings, (p) => p.timestamp.format("YYYY-MM"));
 
-  let points: { date: dayjs.Dayjs; month: string; [key: string]: number }[] =
-    [];
+  let points: {
+    date: dayjs.Dayjs;
+    month: string;
+    [key: string]: number | string | dayjs.Dayjs;
+  }[] = [];
 
   forEachMonth(start, end, (month) => {
     const values = _.chain(ts[month.format("YYYY-MM")] || [])
@@ -133,7 +137,11 @@ export default async function () {
 
   g.append("g")
     .selectAll("g")
-    .data(d3.stack().offset(d3.stackOffsetDiverging).keys(groupKeys)(points))
+    .data(
+      d3.stack().offset(d3.stackOffsetDiverging).keys(groupKeys)(
+        points as { [key: string]: number }[]
+      )
+    )
     .enter()
     .append("g")
     .attr("fill", function (d) {

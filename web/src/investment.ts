@@ -5,7 +5,9 @@ import _ from "lodash";
 import {
   ajax,
   forEachMonth,
+  forEachYear,
   formatCurrencyCrude,
+  Posting,
   secondName,
   skipTicks
 } from "./utils";
@@ -13,8 +15,40 @@ import {
 export default async function () {
   const { postings: postings } = await ajax("/api/investment");
   _.each(postings, (p) => (p.timestamp = dayjs(p.date)));
+  renderMonthlyInvestmentTimeline(postings);
+  renderYearlyInvestmentTimeline(postings);
+}
 
-  const svg = d3.select("#d3-investment-timeline"),
+function renderMonthlyInvestmentTimeline(postings: Posting[]) {
+  renderInvestmentTimeline(
+    postings,
+    "#d3-investment-timeline",
+    "MMM-YYYY",
+    forEachMonth
+  );
+}
+
+function renderYearlyInvestmentTimeline(postings: Posting[]) {
+  renderInvestmentTimeline(
+    postings,
+    "#d3-yearly-investment-timeline",
+    "YYYY",
+    forEachYear
+  );
+}
+
+function renderInvestmentTimeline(
+  postings: Posting[],
+  id: string,
+  timeFormat: string,
+  iterator: (
+    start: dayjs.Dayjs,
+    end: dayjs.Dayjs,
+    cb: (current: dayjs.Dayjs) => any
+  ) => any
+) {
+  const MAX_BAR_WIDTH = 40;
+  const svg = d3.select(id),
     margin = { top: 40, right: 30, bottom: 80, left: 40 },
     width =
       document.getElementById("d3-investment-timeline").parentElement
@@ -40,7 +74,7 @@ export default async function () {
 
   const start = _.min(_.map(postings, (p) => p.timestamp)),
     end = dayjs().startOf("month");
-  const ts = _.groupBy(postings, (p) => p.timestamp.format("YYYY-MM"));
+  const ts = _.groupBy(postings, (p) => p.timestamp.format(timeFormat));
 
   let points: {
     date: dayjs.Dayjs;
@@ -48,8 +82,8 @@ export default async function () {
     [key: string]: number | string | dayjs.Dayjs;
   }[] = [];
 
-  forEachMonth(start, end, (month) => {
-    const values = _.chain(ts[month.format("YYYY-MM")] || [])
+  iterator(start, end, (month) => {
+    const values = _.chain(ts[month.format(timeFormat)] || [])
       .groupBy((t) => secondName(t.account))
       .flatMap((postings, key) => [
         [
@@ -77,7 +111,7 @@ export default async function () {
     points.push(
       _.merge(
         {
-          month: month.format("MMM-YYYY"),
+          month: month.format(timeFormat),
           date: month
         },
         defaultValues,
@@ -154,7 +188,10 @@ export default async function () {
     .enter()
     .append("rect")
     .attr("x", function (d) {
-      return x((d.data as any).month);
+      return (
+        x((d.data as any).month) +
+        (x.bandwidth() - Math.min(x.bandwidth(), MAX_BAR_WIDTH)) / 2
+      );
     })
     .attr("y", function (d) {
       return y(d[1]);
@@ -162,7 +199,7 @@ export default async function () {
     .attr("height", function (d) {
       return y(d[0]) - y(d[1]);
     })
-    .attr("width", x.bandwidth());
+    .attr("width", Math.min(x.bandwidth(), MAX_BAR_WIDTH));
 
   svg
     .append("g")

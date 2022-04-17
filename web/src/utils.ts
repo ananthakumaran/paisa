@@ -106,6 +106,18 @@ export function forEachMonth(
   }
 }
 
+export function forEachYear(
+  start: dayjs.Dayjs,
+  end: dayjs.Dayjs,
+  cb: (current: dayjs.Dayjs) => any
+) {
+  let current = start;
+  while (current.isSameOrBefore(end, "year")) {
+    cb(current);
+    current = current.add(1, "year");
+  }
+}
+
 export function lastName(account: string) {
   return _.last(account.split(":"));
 }

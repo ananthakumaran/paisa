@@ -77,7 +77,23 @@
         <div class="columns">
           <div class="column is-12 has-text-centered">
             <div>
-              <p class="heading">Investment Timeline</p>
+              <p class="heading">Monthly Investment Timeline</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="section tab-investment">
+      <div class="container is-fluid">
+        <div class="columns">
+          <div class="column is-12">
+            <svg id="d3-yearly-investment-timeline" width="100%" height="300"></svg>
+          </div>
+        </div>
+        <div class="columns">
+          <div class="column is-12 has-text-centered">
+            <div>
+              <p class="heading">Yearly Investment Timeline</p>
             </div>
           </div>
         </div>
@@ -159,7 +175,7 @@
                   <th class='has-text-right'>Amount</th>
                   <th class='has-text-right'>Market Value</th>
                   <th class='has-text-right'>Change</th>
-                  <th class='has-text-right'>%</th>
+                  <th class='has-text-right'>CAGR</th>
                 </tr>
               </thead>
               <tbody class="d3-postings">

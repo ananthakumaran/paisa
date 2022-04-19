@@ -89,20 +89,17 @@ month.
 
 ```go
 2018/01/01 Investment
-    Assett:Savings                               -25,000 INR
-    Asset:Debt:PPF                                 5,000 INR
+    Checking                                     -20,000 INR
     Asset:Equity:NIFTY          148.0865 NIFTY @ 67.5281 INR
     Asset:Equity:NIFTY_JR    358.6659 NIFTY_JR @ 27.8811 INR
 
 2018/02/01 Investment
-    Assett:Savings                               -25,000 INR
-    Asset:Debt:PPF                                 5,000 INR
+    Checking                                     -20,000 INR
     Asset:Equity:NIFTY          140.2870 NIFTY @ 71.2824 INR
     Asset:Equity:NIFTY_JR    363.2242 NIFTY_JR @ 27.5312 INR
 
 2018/03/01 Investment
-    Assett:Savings                               -25,000 INR
-    Asset:Debt:PPF                                 5,000 INR
+    Checking                                     -20,000 INR
     Asset:Equity:NIFTY          147.5908 NIFTY @ 67.7549 INR
     Asset:Equity:NIFTY_JR    378.4323 NIFTY_JR @ 26.4248 INR
 ```
@@ -111,6 +108,16 @@ Let's consider `148.0865 NIFTY @ 67.5281 INR`. Here NIFTY is the name
 of the commodity and we have bought 148.0865 units at 67.5281 INR per
 unit.
 
+## Interest
+
+There are many instruments like EPF, FD etc which pay interest at
+regular intervals. We can treat it as just another transaction.
+
+```go
+2022/03/31 EPF Interest
+    Income:Interest:EPF                         -15,000 INR
+    Asset:Debt:EPF                               15,000 INR
+```
 
 ## Config
 

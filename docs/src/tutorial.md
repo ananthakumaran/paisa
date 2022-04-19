@@ -156,7 +156,7 @@ INFO Using cached results; pass '-u' to update the cache
 INFO Mutual Fund Scheme Code: 120684
 ```
 
-```admonish
+```
 You might see lot of funds with similar names. The search command
 supports crude fuzzy search. For example, `nifty next grow direct` would match the above fund.
 ```

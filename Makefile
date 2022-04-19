@@ -6,3 +6,9 @@ watch:
 	./node_modules/.bin/esbuild web/src/index.ts --bundle --watch --sourcemap --outfile=web/static/dist.js
 docs:
 	cd docs && mdbook serve --open
+
+linux-binary:
+	nix-shell --run 'go build'
+
+publish:
+	nix-shell --run 'cd docs && mdbook build'

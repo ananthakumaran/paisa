@@ -1,0 +1,56 @@
+name: CI
+
+on:
+  - pull_request
+  - push
+
+jobs:
+  linux-binary:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2.4.0
+    - uses: cachix/install-nix-action@v15
+      with:
+        nix_path: nixpkgs=channel:nixos-unstable
+    - run: |
+        make linux-binary
+        cp paisa paisa-linux-amd64
+    - name: Release
+      uses: softprops/action-gh-release@v1
+      with:
+        draft: true
+        files: |
+          paisa-*
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  mac-binary:
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@v2.4.0
+    - run: |
+        brew update
+        brew install --force --overwrite go sqlite3
+        go build
+        cp paisa paisa-darwin-amd64
+    - name: Release
+      uses: softprops/action-gh-release@v1
+      with:
+        draft: true
+        files: |
+          paisa-*
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2.4.0
+    - uses: cachix/install-nix-action@v15
+      with:
+        nix_path: nixpkgs=channel:nixos-unstable
+    - name: publish
+      run: make publish
+    - name: Deploy
+      uses: JamesIves/github-pages-deploy-action@4.1.0
+      with:
+        BRANCH: gh-pages
+        FOLDER: docs/book

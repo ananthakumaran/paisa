@@ -1,7 +1,14 @@
 import * as d3 from "d3";
 import dayjs from "dayjs";
 import _ from "lodash";
-import { ajax, Breakdown, formatCurrency, formatFloat, Posting } from "./utils";
+import {
+  ajax,
+  Breakdown,
+  depth,
+  formatCurrency,
+  formatFloat,
+  Posting
+} from "./utils";
 
 export default async function () {
   const { postings: postings, breakdowns: breakdowns } = await ajax(
@@ -94,8 +101,9 @@ function renderBreakdowns(breakdowns: Breakdown[]) {
         changeClass = "has-text-danger";
       }
       changePercentage = 0;
+      const indent = _.repeat("&emsp;&emsp;", depth(b.group) - 1);
       return `
-       <td style='max-width: 200px; overflow: hidden;'>${b.group}</td>
+       <td style='max-width: 200px; overflow: hidden;'>${indent}${b.group}</td>
        <td class='has-text-right'>${formatCurrency(b.amount)}</td>
        <td class='has-text-right'>${formatCurrency(b.market_amount)}</td>
        <td class='${changeClass} has-text-right'>${formatCurrency(gain)}</td>

@@ -130,6 +130,10 @@ export function parentName(account: string) {
   return _.dropRight(account.split(":"), 1).join(":");
 }
 
+export function depth(account: string) {
+  return account.split(":").length;
+}
+
 export function skipTicks(
   minWidth: number,
   width: number,

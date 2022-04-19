@@ -26,5 +26,8 @@ func Listen(db *gorm.DB) {
 		c.JSON(200, GetLedger(db))
 	})
 	log.Info("Listening on 7500")
-	router.Run(":7500")
+	err := router.Run(":7500")
+	if err != nil {
+		log.Fatal(err)
+	}
 }

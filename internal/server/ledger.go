@@ -33,11 +33,11 @@ func GetLedger(db *gorm.DB) gin.H {
 		p.MarketAmount = service.GetMarketPrice(db, p, date)
 		return p
 	})
-	breakdowns := computeBreakdown(lo.Filter(postings, func(p posting.Posting, _ int) bool { return strings.HasPrefix(p.Account, "Asset:") }))
+	breakdowns := computeBreakdown(db, lo.Filter(postings, func(p posting.Posting, _ int) bool { return strings.HasPrefix(p.Account, "Asset:") }))
 	return gin.H{"postings": postings, "breakdowns": breakdowns}
 }
 
-func computeBreakdown(postings []posting.Posting) map[string]Breakdown {
+func computeBreakdown(db *gorm.DB, postings []posting.Posting) map[string]Breakdown {
 	accounts := make(map[string]bool)
 	for _, p := range postings {
 		var parts []string
@@ -53,9 +53,22 @@ func computeBreakdown(postings []posting.Posting) map[string]Breakdown {
 
 	for group := range accounts {
 		ps := lo.Filter(postings, func(p posting.Posting, _ int) bool { return strings.HasPrefix(p.Account, group) })
-		amount := lo.Reduce(ps, func(acc float64, p posting.Posting, _ int) float64 { return acc + p.Amount }, 0.0)
+		amount := lo.Reduce(ps, func(acc float64, p posting.Posting, _ int) float64 {
+			if service.IsInterest(db, p) {
+				return acc
+			} else {
+				return acc + p.Amount
+			}
+		}, 0.0)
 		marketAmount := lo.Reduce(ps, func(acc float64, p posting.Posting, _ int) float64 { return acc + p.MarketAmount }, 0.0)
-		payments := lo.Reverse(lo.Map(ps, func(p posting.Posting, _ int) xirr.Payment { return xirr.Payment{Date: p.Date, Amount: -p.Amount} }))
+		payments := lo.Reverse(lo.Map(ps, func(p posting.Posting, _ int) xirr.Payment {
+			if service.IsInterest(db, p) {
+				return xirr.Payment{Date: p.Date, Amount: 0}
+			} else {
+				return xirr.Payment{Date: p.Date, Amount: -p.Amount}
+			}
+
+		}))
 		payments = append(payments, xirr.Payment{Date: today, Amount: marketAmount})
 		returns, err := xirr.XIRR(payments)
 		if err != nil {

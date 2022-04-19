@@ -42,11 +42,19 @@ func ComputeTimeline(db *gorm.DB, postings []posting.Posting) []Networth {
 		}
 
 		actual := lo.Reduce(pastPostings, func(agg float64, p posting.Posting, _ int) float64 {
-			return p.Amount + agg
+			if service.IsInterest(db, p) {
+				return agg
+			} else {
+				return p.Amount + agg
+			}
 		}, 0)
 
 		gain := lo.Reduce(pastPostings, func(agg float64, p posting.Posting, _ int) float64 {
-			return service.GetMarketPrice(db, p, start) - p.Amount + agg
+			if service.IsInterest(db, p) {
+				return p.Amount + agg
+			} else {
+				return service.GetMarketPrice(db, p, start) - p.Amount + agg
+			}
 		}, 0)
 		networths = append(networths, Networth{Date: start, Actual: actual, Gain: gain})
 	}

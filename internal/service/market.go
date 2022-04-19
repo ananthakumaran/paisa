@@ -15,16 +15,17 @@ import (
 
 type priceCache struct {
 	mu         sync.Mutex
+	loaded     bool
 	pricesTree map[string]*btree.BTree
 }
 
-var cache priceCache
+var pcache priceCache
 
-func loadCache(db *gorm.DB) {
-	cache.mu.Lock()
-	defer cache.mu.Unlock()
+func loadPriceCache(db *gorm.DB) {
+	pcache.mu.Lock()
+	defer pcache.mu.Unlock()
 
-	if cache.pricesTree != nil {
+	if pcache.loaded {
 		return
 	}
 
@@ -33,14 +34,14 @@ func loadCache(db *gorm.DB) {
 	if result.Error != nil {
 		log.Fatal(result.Error)
 	}
-	cache.pricesTree = make(map[string]*btree.BTree)
+	pcache.pricesTree = make(map[string]*btree.BTree)
 
 	for _, price := range prices {
-		if cache.pricesTree[price.CommodityName] == nil {
-			cache.pricesTree[price.CommodityName] = btree.New(2)
+		if pcache.pricesTree[price.CommodityName] == nil {
+			pcache.pricesTree[price.CommodityName] = btree.New(2)
 		}
 
-		cache.pricesTree[price.CommodityName].ReplaceOrInsert(price)
+		pcache.pricesTree[price.CommodityName].ReplaceOrInsert(price)
 	}
 
 	var postings []posting.Posting
@@ -50,22 +51,24 @@ func loadCache(db *gorm.DB) {
 	}
 
 	for commodityName, postings := range lo.GroupBy(postings, func(p posting.Posting) string { return p.Commodity }) {
-		if postings[0].Commodity != "INR" && cache.pricesTree[commodityName] == nil {
-			cache.pricesTree[commodityName] = btree.New(2)
+		if postings[0].Commodity != "INR" && pcache.pricesTree[commodityName] == nil {
+			pcache.pricesTree[commodityName] = btree.New(2)
 			for _, p := range postings {
-				cache.pricesTree[commodityName].ReplaceOrInsert(price.Price{Date: p.Date, CommodityID: p.Commodity, CommodityName: p.Commodity, Value: p.Amount / p.Quantity})
+				pcache.pricesTree[commodityName].ReplaceOrInsert(price.Price{Date: p.Date, CommodityID: p.Commodity, CommodityName: p.Commodity, Value: p.Amount / p.Quantity})
 			}
 		}
 	}
+
+	pcache.loaded = true
 }
 
 func GetMarketPrice(db *gorm.DB, p posting.Posting, date time.Time) float64 {
-	loadCache(db)
+	loadPriceCache(db)
 	if p.Commodity == "INR" {
 		return p.Amount
 	}
 
-	pt := cache.pricesTree[p.Commodity]
+	pt := pcache.pricesTree[p.Commodity]
 	if pt != nil {
 
 		pc := utils.BTreeDescendFirstLessOrEqual(pt, price.Price{Date: date})

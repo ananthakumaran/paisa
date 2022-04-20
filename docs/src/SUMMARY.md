@@ -8,3 +8,5 @@
 - [Tutorial](tutorial.md)
 
 # Reference Guide
+
+- [Accounts](accounts.md)

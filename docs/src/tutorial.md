@@ -83,8 +83,8 @@ we could represent it as follows
 ## Commodity
 
 So far we have only dealt with INR. **ledger** can handle commodity as
-well. Let's say you are also investing 10,000 INR on UTI Nifty Index
-Fund and 10,000 INR on ICICI Nifty Next 50 Index Fund every
+well. Let's say you are also investing 10,000 INR in UTI Nifty Index
+Fund and 10,000 INR in ICICI Nifty Next 50 Index Fund every
 month.
 
 ```go
@@ -110,7 +110,7 @@ unit.
 
 ## Interest
 
-There are many instruments like EPF, FD etc which pay interest at
+There are many instruments like EPF, FD, etc which pay interest at
 regular intervals. We can treat it as just another transaction.
 
 ```go
@@ -143,7 +143,9 @@ commodities:
     code: 120684
 ```
 
-**paisa** supports mutual fund commodity as of today. The code is the
+**paisa** can fetch the latest price of mutual fund commodity as of
+today. For other types of commodities, the purchase/sell price of the
+last transaction would be considered the latest price. The code is the
 scheme code of the fund. The *search* command can be used to find
 scheme code
 
@@ -156,15 +158,15 @@ INFO Using cached results; pass '-u' to update the cache
 INFO Mutual Fund Scheme Code: 120684
 ```
 
-```
-You might see lot of funds with similar names. The search command
+
+You might see a lot of funds with similar names. The search command
 supports crude fuzzy search. For example, `nifty next grow direct` would match the above fund.
-```
+
 
 ## Update
 
 Once the config file is created, run the update command, followed by
-serve command.
+the serve command.
 
 ```shell
 ❯ paisa update
@@ -178,4 +180,9 @@ INFO Using config file: /home/john/finance/paisa.yaml
 INFO Listening on 7500
 ```
 
-You can then go to [http://localhost:7500](http://localhost:7500) to view more details
+You can then go to [http://localhost:7500](http://localhost:7500) to view more
+details. The update command loads all the transactions from journal
+file and fetch the latest price of all the commodities. Whenever you
+make any changes to the journal file, you need to run the update
+command. The serve command starts a local server and provides the
+WebGUI.

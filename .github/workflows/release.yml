@@ -14,7 +14,9 @@ jobs:
       with:
         nix_path: nixpkgs=channel:nixos-unstable
     - run: |
-        make linux-binary
+        nix-shell --run 'npm install'
+        nix-shell --run './node_modules/.bin/esbuild web/src/index.ts --bundle --outfile=web/static/dist.js'
+        nix-shell --run 'go build'
         cp paisa paisa-linux-amd64
     - name: Release
       uses: softprops/action-gh-release@v1
@@ -31,6 +33,8 @@ jobs:
     - run: |
         brew update
         brew install --force --overwrite go sqlite3
+        npm install
+        ./node_modules/.bin/esbuild web/src/index.ts --bundle --outfile=web/static/dist.js
         go build
         cp paisa paisa-darwin-amd64
     - name: Release

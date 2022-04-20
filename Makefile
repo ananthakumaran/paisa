@@ -7,8 +7,5 @@ watch:
 docs:
 	cd docs && mdbook serve --open
 
-linux-binary:
-	nix-shell --run 'go build'
-
 publish:
 	nix-shell --run 'cd docs && mdbook build'

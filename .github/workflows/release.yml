@@ -1,8 +1,9 @@
-name: CI
+name: Release
 
 on:
-  - pull_request
-  - push
+  push:
+    tags:
+      - '*'
 
 jobs:
   linux-binary:
@@ -40,17 +41,3 @@ jobs:
           paisa-*
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  publish:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2.4.0
-    - uses: cachix/install-nix-action@v15
-      with:
-        nix_path: nixpkgs=channel:nixos-unstable
-    - name: publish
-      run: make publish
-    - name: Deploy
-      uses: JamesIves/github-pages-deploy-action@4.1.0
-      with:
-        BRANCH: gh-pages
-        FOLDER: docs/book

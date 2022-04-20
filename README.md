@@ -13,4 +13,4 @@ request.
 
 ## License
 
-This software is licensed under [the MIT license](./LICENSE.md).
+This software is licensed under [the MIT license](./LICENSE).

@@ -1,7 +1,7 @@
 # Installation
 
 * Follow the installation instruction in [ledger](https://www.ledger-cli.org/download.html) site and install **ledger**
-* Download the latest prebuilt [binary](https://github.com/ananthakumaran/webify/releases/latest)
+* Download the latest prebuilt [binary](https://github.com/ananthakumaran/paisa/releases/latest)
 
 ## Quick Start
 

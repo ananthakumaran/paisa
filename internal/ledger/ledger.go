@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"encoding/csv"
 
-	"log"
+	log "github.com/sirupsen/logrus"
 	"os/exec"
 	"strconv"
 	"time"
@@ -15,11 +15,16 @@ import (
 func Parse(journalPath string) ([]*posting.Posting, error) {
 	var postings []*posting.Posting
 
+	_, err := exec.LookPath("ledger")
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	command := exec.Command("ledger", "-f", journalPath, "csv", "--csv-format", "%(quoted(date)),%(quoted(payee)),%(quoted(display_account)),%(quoted(commodity(scrub(display_amount)))),%(quoted(quantity(scrub(display_amount)))),%(quoted(to_int(scrub(market(amount,date)))))\n")
 	var output, error bytes.Buffer
 	command.Stdout = &output
 	command.Stderr = &error
-	err := command.Run()
+	err = command.Run()
 	if err != nil {
 		log.Fatal(error.String())
 		return nil, err

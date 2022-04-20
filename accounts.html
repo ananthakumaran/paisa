@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Introduction - ₹ Paisa</title>
+        <title>Accounts - ₹ Paisa</title>
         <!-- Custom HTML head -->
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="">
@@ -75,7 +75,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="introduction.html" class="active">Introduction</a></li><li class="chapter-item expanded affix "><li class="part-title">Getting Started</li><li class="chapter-item expanded "><a href="installation.html"><strong aria-hidden="true">1.</strong> Installation</a></li><li class="chapter-item expanded "><a href="tutorial.html"><strong aria-hidden="true">2.</strong> Tutorial</a></li><li class="chapter-item expanded affix "><li class="part-title">Reference Guide</li><li class="chapter-item expanded "><a href="accounts.html"><strong aria-hidden="true">3.</strong> Accounts</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="introduction.html">Introduction</a></li><li class="chapter-item expanded affix "><li class="part-title">Getting Started</li><li class="chapter-item expanded "><a href="installation.html"><strong aria-hidden="true">1.</strong> Installation</a></li><li class="chapter-item expanded "><a href="tutorial.html"><strong aria-hidden="true">2.</strong> Tutorial</a></li><li class="chapter-item expanded affix "><li class="part-title">Reference Guide</li><li class="chapter-item expanded "><a href="accounts.html" class="active"><strong aria-hidden="true">3.</strong> Accounts</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -134,22 +134,29 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="introduction"><a class="header" href="#introduction">Introduction</a></h1>
-<p><strong>Paisa</strong> is a command line tool and WebGUI to manage personal
-finance, specially tailored for Indians. It builds on top of the
-<a href="https://www.ledger-cli.org/">ledger</a> double entry accounting tool.</p>
+                        <h1 id="accounts"><a class="header" href="#accounts">Accounts</a></h1>
+<p>Even though <strong>ledger</strong> doesn't have any Account naming convention,
+<strong>paisa</strong> makes lot of assumptions and expects you to follow the same
+naming convention.</p>
+<h3 id="asset"><a class="header" href="#asset">Asset</a></h3>
+<p>All your assets should go under <code>Asset:</code>. The level of granularity is
+up to you. The recommended convention is to use
+<code>Asset:{instrument_type}:{instrument_name}</code>. The instrument type may
+be <code>Cash</code>, <code>Equity</code>, <code>Debt</code>, etc. The instrument name may be the name of
+the fund, stock, etc</p>
+<h3 id="income"><a class="header" href="#income">Income</a></h3>
+<p>All your income should come from <code>Income:</code>.</p>
 <ul>
-<li>Your financial data never leaves your system</li>
-<li>The journal and config information are stored in plain text files
-that can be easily version controlled</li>
+<li><code>Income:Salary</code> - salary debit account</li>
+<li><code>Income:Interest:{name}</code> - interest debit account</li>
 </ul>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="next" href="installation.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                                <i class="fa fa-angle-right"></i>
+                            <a rel="prev" href="tutorial.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
                             </a>
                         <div style="clear: both"></div>
                     </nav>
@@ -157,8 +164,8 @@ that can be easily version controlled</li>
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="next" href="installation.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                        <i class="fa fa-angle-right"></i>
+                    <a rel="prev" href="tutorial.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
                     </a>
             </nav>
 

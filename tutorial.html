@@ -75,7 +75,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="introduction.html">Introduction</a></li><li class="chapter-item expanded affix "><li class="part-title">Getting Started</li><li class="chapter-item expanded "><a href="installation.html"><strong aria-hidden="true">1.</strong> Installation</a></li><li class="chapter-item expanded "><a href="tutorial.html" class="active"><strong aria-hidden="true">2.</strong> Tutorial</a></li><li class="chapter-item expanded affix "><li class="part-title">Reference Guide</li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="introduction.html">Introduction</a></li><li class="chapter-item expanded affix "><li class="part-title">Getting Started</li><li class="chapter-item expanded "><a href="installation.html"><strong aria-hidden="true">1.</strong> Installation</a></li><li class="chapter-item expanded "><a href="tutorial.html" class="active"><strong aria-hidden="true">2.</strong> Tutorial</a></li><li class="chapter-item expanded affix "><li class="part-title">Reference Guide</li><li class="chapter-item expanded "><a href="accounts.html"><strong aria-hidden="true">3.</strong> Accounts</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -200,8 +200,8 @@ we could represent it as follows</p>
 </code></pre>
 <h2 id="commodity"><a class="header" href="#commodity">Commodity</a></h2>
 <p>So far we have only dealt with INR. <strong>ledger</strong> can handle commodity as
-well. Let's say you are also investing 10,000 INR on UTI Nifty Index
-Fund and 10,000 INR on ICICI Nifty Next 50 Index Fund every
+well. Let's say you are also investing 10,000 INR in UTI Nifty Index
+Fund and 10,000 INR in ICICI Nifty Next 50 Index Fund every
 month.</p>
 <pre><code class="language-go">2018/01/01 Investment
     Checking                                     -20,000 INR
@@ -222,7 +222,7 @@ month.</p>
 of the commodity and we have bought 148.0865 units at 67.5281 INR per
 unit.</p>
 <h2 id="interest"><a class="header" href="#interest">Interest</a></h2>
-<p>There are many instruments like EPF, FD etc which pay interest at
+<p>There are many instruments like EPF, FD, etc which pay interest at
 regular intervals. We can treat it as just another transaction.</p>
 <pre><code class="language-go">2022/03/31 EPF Interest
     Income:Interest:EPF                         -15,000 INR
@@ -247,7 +247,9 @@ commodities:
     type: mutualfund
     code: 120684
 </code></pre>
-<p><strong>paisa</strong> supports mutual fund commodity as of today. The code is the
+<p><strong>paisa</strong> can fetch the latest price of mutual fund commodity as of
+today. For other types of commodities, the purchase/sell price of the
+last transaction would be considered the latest price. The code is the
 scheme code of the fund. The <em>search</em> command can be used to find
 scheme code</p>
 <pre><code class="language-shell">❯ paisa search mutualfund
@@ -257,12 +259,11 @@ INFO Using cached results; pass '-u' to update the cache
 ✔ ICICI Prudential Nifty Next 50 Index Fund - Direct Plan -  Growth
 INFO Mutual Fund Scheme Code: 120684
 </code></pre>
-<pre><code>You might see lot of funds with similar names. The search command
-supports crude fuzzy search. For example, `nifty next grow direct` would match the above fund.
-</code></pre>
+<p>You might see a lot of funds with similar names. The search command
+supports crude fuzzy search. For example, <code>nifty next grow direct</code> would match the above fund.</p>
 <h2 id="update"><a class="header" href="#update">Update</a></h2>
 <p>Once the config file is created, run the update command, followed by
-serve command.</p>
+the serve command.</p>
 <pre><code class="language-shell">❯ paisa update
 INFO Using config file: /home/john/finance/paisa.yaml
 INFO Syncing transactions from journal
@@ -273,7 +274,12 @@ INFO Fetching commodity NIFTY_JR
 INFO Using config file: /home/john/finance/paisa.yaml
 INFO Listening on 7500
 </code></pre>
-<p>You can then go to <a href="http://localhost:7500">http://localhost:7500</a> to view more details</p>
+<p>You can then go to <a href="http://localhost:7500">http://localhost:7500</a> to view more
+details. The update command loads all the transactions from journal
+file and fetch the latest price of all the commodities. Whenever you
+make any changes to the journal file, you need to run the update
+command. The serve command starts a local server and provides the
+WebGUI.</p>
 
                     </main>
 
@@ -281,6 +287,9 @@ INFO Listening on 7500
                         <!-- Mobile navigation buttons -->
                             <a rel="prev" href="installation.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
+                            </a>
+                            <a rel="next" href="accounts.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
                             </a>
                         <div style="clear: both"></div>
                     </nav>
@@ -290,6 +299,9 @@ INFO Listening on 7500
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
                     <a rel="prev" href="installation.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
+                    </a>
+                    <a rel="next" href="accounts.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
                     </a>
             </nav>
 

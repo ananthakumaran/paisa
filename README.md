@@ -8,4 +8,9 @@ to get started.
 ## Status
 
 It's in very early stages of development. Feel free to open an issue
-if you found a bug or start a discussion if you have a feature request.
+if you found a bug or start a discussion if you have a feature
+request.
+
+## License
+
+This software is licensed under [the MIT license](./LICENSE.md).

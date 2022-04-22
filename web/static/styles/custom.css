@@ -21,7 +21,7 @@ body {
     shape-rendering: crispEdges;
 }
 
-.legendOrdinal .label {
+.legendOrdinal .label, .legendLine .label {
     display: block;
     font-size: 11px;
     letter-spacing: 1px;

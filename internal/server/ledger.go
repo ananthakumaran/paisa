@@ -15,10 +15,11 @@ import (
 )
 
 type Breakdown struct {
-	Group        string  `json:"group"`
-	Amount       float64 `json:"amount"`
-	MarketAmount float64 `json:"market_amount"`
-	XIRR         float64 `json:"xirr"`
+	Group            string  `json:"group"`
+	InvestmentAmount float64 `json:"investment_amount"`
+	WithdrawalAmount float64 `json:"withdrawal_amount"`
+	MarketAmount     float64 `json:"market_amount"`
+	XIRR             float64 `json:"xirr"`
 }
 
 func GetLedger(db *gorm.DB) gin.H {
@@ -53,11 +54,18 @@ func computeBreakdown(db *gorm.DB, postings []posting.Posting) map[string]Breakd
 
 	for group := range accounts {
 		ps := lo.Filter(postings, func(p posting.Posting, _ int) bool { return strings.HasPrefix(p.Account, group) })
-		amount := lo.Reduce(ps, func(acc float64, p posting.Posting, _ int) float64 {
-			if service.IsInterest(db, p) {
+		investmentAmount := lo.Reduce(ps, func(acc float64, p posting.Posting, _ int) float64 {
+			if p.Amount < 0 || service.IsInterest(db, p) {
 				return acc
 			} else {
 				return acc + p.Amount
+			}
+		}, 0.0)
+		withdrawalAmount := lo.Reduce(ps, func(acc float64, p posting.Posting, _ int) float64 {
+			if p.Amount > 0 || service.IsInterest(db, p) {
+				return acc
+			} else {
+				return acc + -p.Amount
 			}
 		}, 0.0)
 		marketAmount := lo.Reduce(ps, func(acc float64, p posting.Posting, _ int) float64 { return acc + p.MarketAmount }, 0.0)
@@ -74,7 +82,7 @@ func computeBreakdown(db *gorm.DB, postings []posting.Posting) map[string]Breakd
 		if err != nil {
 			log.Fatal(err)
 		}
-		breakdown := Breakdown{Amount: amount, MarketAmount: marketAmount, XIRR: (returns - 1) * 100, Group: group}
+		breakdown := Breakdown{InvestmentAmount: investmentAmount, WithdrawalAmount: withdrawalAmount, MarketAmount: marketAmount, XIRR: (returns - 1) * 100, Group: group}
 		result[group] = breakdown
 	}
 

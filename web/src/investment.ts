@@ -6,10 +6,12 @@ import {
   ajax,
   forEachMonth,
   forEachYear,
+  formatCurrency,
   formatCurrencyCrude,
   Posting,
   secondName,
-  skipTicks
+  skipTicks,
+  tooltip
 } from "./utils";
 
 export default async function () {
@@ -24,6 +26,7 @@ function renderMonthlyInvestmentTimeline(postings: Posting[]) {
     postings,
     "#d3-investment-timeline",
     "MMM-YYYY",
+    true,
     forEachMonth
   );
 }
@@ -33,6 +36,7 @@ function renderYearlyInvestmentTimeline(postings: Posting[]) {
     postings,
     "#d3-yearly-investment-timeline",
     "YYYY",
+    false,
     forEachYear
   );
 }
@@ -41,6 +45,7 @@ function renderInvestmentTimeline(
   postings: Posting[],
   id: string,
   timeFormat: string,
+  showTooltip: boolean,
   iterator: (
     start: dayjs.Dayjs,
     end: dayjs.Dayjs,
@@ -51,8 +56,7 @@ function renderInvestmentTimeline(
   const svg = d3.select(id),
     margin = { top: 40, right: 30, bottom: 80, left: 40 },
     width =
-      document.getElementById("d3-investment-timeline").parentElement
-        .clientWidth -
+      document.getElementById(id.substring(1)).parentElement.clientWidth -
       margin.left -
       margin.right,
     height = +svg.attr("height") - margin.top - margin.bottom,
@@ -83,6 +87,7 @@ function renderInvestmentTimeline(
   }[] = [];
 
   iterator(start, end, (month) => {
+    postings = ts[month.format(timeFormat)] || [];
     const values = _.chain(ts[month.format(timeFormat)] || [])
       .groupBy((t) => secondName(t.account))
       .flatMap((postings, key) => [
@@ -112,7 +117,8 @@ function renderInvestmentTimeline(
       _.merge(
         {
           month: month.format(timeFormat),
-          date: month
+          date: month,
+          postings: postings
         },
         defaultValues,
         values
@@ -187,6 +193,21 @@ function renderInvestmentTimeline(
     })
     .enter()
     .append("rect")
+    .attr("data-tippy-content", (d) => {
+      if (!showTooltip) {
+        return null;
+      }
+      const postings: Posting[] = (d.data as any).postings;
+      return tooltip(
+        _.sortBy(
+          postings.map((p) => [
+            _.drop(p.account.split(":")).join(":"),
+            [formatCurrency(p.amount), "has-text-weight-bold has-text-right"]
+          ]),
+          (r) => r[0]
+        )
+      );
+    })
     .attr("x", function (d) {
       return (
         x((d.data as any).month) +

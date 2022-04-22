@@ -41,7 +41,7 @@ export default async function () {
   svg
     .append("g")
     .attr("class", "legendOrdinal")
-    .attr("transform", "translate(80,3)");
+    .attr("transform", "translate(165,3)");
 
   const legendOrdinal = legend
     .legendColor()
@@ -52,6 +52,24 @@ export default async function () {
     .scale(ordinal);
 
   svg.select(".legendOrdinal").call(legendOrdinal as any);
+
+  svg
+    .append("g")
+    .attr("class", "legendLine")
+    .attr("transform", "translate(80,3)");
+
+  const legendLine = legend
+    .legendColor()
+    .shape("rect")
+    .orient("horizontal")
+    .shapePadding(0)
+    .labelOffset(22)
+    .shapeHeight(3)
+    .shapeWidth(25)
+    .labels(["investment"])
+    .scale(d3.scaleOrdinal().domain(["investment"]).range(["#333"]));
+
+  svg.select(".legendLine").call(legendLine as any);
 
   const x = d3.scaleTime().range([0, width]).domain([start, end]),
     y = d3

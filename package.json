@@ -10,7 +10,8 @@
     "esbuild": "^0.14.29",
     "jquery": "^3.6.0",
     "lodash": "^4.17.21",
-    "sprintf-js": "^1.1.2"
+    "sprintf-js": "^1.1.2",
+    "tippy.js": "^6.3.7"
   },
   "devDependencies": {
     "nodemon": "^2.0.15"

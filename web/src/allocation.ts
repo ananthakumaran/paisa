@@ -10,7 +10,9 @@ import {
   lastName,
   parentName,
   rainbowScale,
-  secondName
+  secondName,
+  textColor,
+  tooltip
 } from "./utils";
 
 export default async function () {
@@ -61,14 +63,22 @@ function renderAllocation(aggregates: { [key: string]: Aggregate }) {
       .enter()
       .append("div")
       .attr("class", "node")
-      .attr("title", (d) => {
-        return [d.id, formatCurrency(d.value), percent(d)].join("\n");
+      .attr("data-tippy-content", (d) => {
+        return tooltip([
+          ["Account", [d.id, "has-text-right"]],
+          [
+            "MarketAmount",
+            [formatCurrency(d.value), "has-text-weight-bold has-text-right"]
+          ],
+          ["Percentage", [percent(d), "has-text-weight-bold has-text-right"]]
+        ]);
       })
       .style("top", (d: any) => d.y0 + "px")
       .style("left", (d: any) => d.x0 + "px")
       .style("width", (d: any) => d.x1 - d.x0 + "px")
       .style("height", (d: any) => d.y1 - d.y0 + "px")
-      .style("background", (d) => color(d.id));
+      .style("background", (d) => color(d.id))
+      .style("color", (d) => textColor(color(d.id)));
 
     cell
       .append("p")

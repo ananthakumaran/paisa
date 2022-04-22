@@ -7,6 +7,7 @@ import {
   depth,
   formatCurrency,
   formatFloat,
+  lastName,
   Posting
 } from "./utils";
 
@@ -94,7 +95,7 @@ function renderBreakdowns(breakdowns: Breakdown[]) {
       let changePercentage = 0,
         changeClass = "";
 
-      const gain = b.market_amount - b.amount;
+      const gain = b.market_amount + b.withdrawal_amount - b.investment_amount;
       if (gain > 0) {
         changeClass = "has-text-success";
       } else if (gain < 0) {
@@ -103,8 +104,11 @@ function renderBreakdowns(breakdowns: Breakdown[]) {
       changePercentage = 0;
       const indent = _.repeat("&emsp;&emsp;", depth(b.group) - 1);
       return `
-       <td style='max-width: 200px; overflow: hidden;'>${indent}${b.group}</td>
-       <td class='has-text-right'>${formatCurrency(b.amount)}</td>
+       <td style='max-width: 200px; overflow: hidden;'>${indent}${lastName(
+        b.group
+      )}</td>
+       <td class='has-text-right'>${formatCurrency(b.investment_amount)}</td>
+       <td class='has-text-right'>${formatCurrency(b.withdrawal_amount)}</td>
        <td class='has-text-right'>${formatCurrency(b.market_amount)}</td>
        <td class='${changeClass} has-text-right'>${formatCurrency(gain)}</td>
        <td class='${changeClass} has-text-right'>${formatFloat(b.xirr)}</td>

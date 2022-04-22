@@ -27,7 +27,8 @@ export interface Networth {
 
 export interface Breakdown {
   group: string;
-  amount: number;
+  investment_amount: number;
+  withdrawal_amount: number;
   market_amount: number;
   xirr: number;
 }
@@ -161,4 +162,33 @@ export function rainbowScale(keys: string[]) {
   return d3
     .scaleOrdinal(_.map(keys, (_value, i) => d3.interpolateRainbow(x(i))))
     .domain(keys);
+}
+
+export function textColor(backgroundColor: string) {
+  const color = d3.rgb(backgroundColor);
+  // http://www.w3.org/TR/AERT#color-contrast
+  const brightness = (color.r * 299 + color.g * 587 + color.b) / 1000;
+  if (brightness > 125) {
+    return "black";
+  }
+  return "white";
+}
+
+export function tooltip(rows: Array<Array<string | [string, string]>>) {
+  const trs = rows
+    .map((r) => {
+      const cells = r
+        .map((c) => {
+          if (typeof c == "string") {
+            return `<td>${c}</td>`;
+          } else {
+            return `<td class='${c[1]}'>${c[0]}</td>`;
+          }
+        })
+        .join("\n");
+
+      return `<tr>${cells}</tr>`;
+    })
+    .join("\n");
+  return `<table class='table is-narrow is-size-7'><tbody>${trs}</tbody></table>`;
 }

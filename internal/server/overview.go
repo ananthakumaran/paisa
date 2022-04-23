@@ -13,9 +13,10 @@ import (
 )
 
 type Networth struct {
-	Date   time.Time `json:"date"`
-	Actual float64   `json:"actual"`
-	Gain   float64   `json:"gain"`
+	Date             time.Time `json:"date"`
+	InvestmentAmount float64   `json:"investment_amount"`
+	WithdrawalAmount float64   `json:"withdrawal_amount"`
+	GainAmount       float64   `json:"gain_amount"`
 }
 
 func GetOverview(db *gorm.DB) gin.H {
@@ -41,11 +42,19 @@ func ComputeTimeline(db *gorm.DB, postings []posting.Posting) []Networth {
 			pastPostings = append(pastPostings, p)
 		}
 
-		actual := lo.Reduce(pastPostings, func(agg float64, p posting.Posting, _ int) float64 {
-			if service.IsInterest(db, p) {
+		investment := lo.Reduce(pastPostings, func(agg float64, p posting.Posting, _ int) float64 {
+			if p.Amount < 0 || service.IsInterest(db, p) {
 				return agg
 			} else {
 				return p.Amount + agg
+			}
+		}, 0)
+
+		withdrawal := lo.Reduce(pastPostings, func(agg float64, p posting.Posting, _ int) float64 {
+			if p.Amount > 0 || service.IsInterest(db, p) {
+				return agg
+			} else {
+				return -p.Amount + agg
 			}
 		}, 0)
 
@@ -56,7 +65,7 @@ func ComputeTimeline(db *gorm.DB, postings []posting.Posting) []Networth {
 				return service.GetMarketPrice(db, p, start) - p.Amount + agg
 			}
 		}, 0)
-		networths = append(networths, Networth{Date: start, Actual: actual, Gain: gain})
+		networths = append(networths, Networth{Date: start, InvestmentAmount: investment, WithdrawalAmount: withdrawal, GainAmount: gain})
 	}
 	return networths
 }

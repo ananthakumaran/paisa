@@ -1,4 +1,5 @@
 import * as d3 from "d3";
+window.d3 = d3;
 import legend from "d3-svg-legend";
 import dayjs from "dayjs";
 import _ from "lodash";
@@ -15,9 +16,17 @@ export default async function () {
   _.each(points, (n) => (n.timestamp = dayjs(n.date)));
 
   const current = _.last(points);
-  setHtml("networth", formatCurrency(current.actual + current.gain));
-  setHtml("investment", formatCurrency(current.actual));
-  setHtml("gains", formatCurrency(current.gain));
+  setHtml(
+    "networth",
+    formatCurrency(
+      current.investment_amount +
+        current.gain_amount -
+        current.withdrawal_amount
+    )
+  );
+  setHtml("investment", formatCurrency(current.investment_amount));
+  setHtml("withdrawal", formatCurrency(current.withdrawal_amount));
+  setHtml("gains", formatCurrency(current.gain_amount));
 
   const start = _.min(_.map(points, (p) => p.timestamp)),
     end = dayjs();
@@ -34,22 +43,28 @@ export default async function () {
       .append("g")
       .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-  const keys = ["gain", "loss"];
-  const colors = d3.schemeSet2;
-  const ordinal = d3.scaleOrdinal().domain(keys).range(colors);
+  const areaKeys = ["gain", "loss"];
+  const colors = ["#b2df8a", "#fb9a99"];
+  const areaScale = d3.scaleOrdinal().domain(areaKeys).range(colors);
+
+  const lineKeys = ["networth", "investment", "withdrawal"];
+  const lineScale = d3
+    .scaleOrdinal<string>()
+    .domain(lineKeys)
+    .range(["#1f77b4", "#17becf", "#ff7f0e"]);
 
   svg
     .append("g")
     .attr("class", "legendOrdinal")
-    .attr("transform", "translate(165,3)");
+    .attr("transform", "translate(365,3)");
 
   const legendOrdinal = legend
     .legendColor()
     .shape("rect")
     .orient("horizontal")
     .shapePadding(50)
-    .labels(keys)
-    .scale(ordinal);
+    .labels(areaKeys)
+    .scale(areaScale);
 
   svg.select(".legendOrdinal").call(legendOrdinal as any);
 
@@ -62,12 +77,12 @@ export default async function () {
     .legendColor()
     .shape("rect")
     .orient("horizontal")
-    .shapePadding(0)
+    .shapePadding(70)
     .labelOffset(22)
     .shapeHeight(3)
     .shapeWidth(25)
-    .labels(["investment"])
-    .scale(d3.scaleOrdinal().domain(["investment"]).range(["#333"]));
+    .labels(lineKeys)
+    .scale(lineScale);
 
   svg.select(".legendLine").call(legendLine as any);
 
@@ -75,8 +90,14 @@ export default async function () {
     y = d3
       .scaleLinear()
       .range([height, 0])
-      .domain([0, d3.max<Networth, number>(points, (d) => d.gain + d.actual)]),
-    z = d3.scaleOrdinal<string>(colors).domain(keys);
+      .domain([
+        0,
+        d3.max<Networth, number>(
+          points,
+          (d) => d.gain_amount + d.investment_amount
+        )
+      ]),
+    z = d3.scaleOrdinal<string>(colors).domain(areaKeys);
 
   let area = (y0, y1) =>
     d3
@@ -120,7 +141,7 @@ export default async function () {
     .attr(
       "d",
       area(height, (d) => {
-        return y(d.gain + d.actual);
+        return y(d.gain_amount + d.investment_amount);
       })
     );
 
@@ -131,7 +152,7 @@ export default async function () {
     .attr(
       "d",
       area(0, (d) => {
-        return y(d.gain + d.actual);
+        return y(d.gain_amount + d.investment_amount);
       })
     );
 
@@ -142,10 +163,11 @@ export default async function () {
       `url(${new URL("#clip-above", window.location.toString())})`
     )
     .style("fill", z("gain"))
+    .style("opacity", "0.8")
     .attr(
       "d",
       area(0, (d) => {
-        return y(d.actual);
+        return y(d.investment_amount);
       })
     );
 
@@ -156,16 +178,17 @@ export default async function () {
       `url(${new URL("#clip-below", window.location.toString())})`
     )
     .style("fill", z("loss"))
+    .style("opacity", "0.8")
     .attr(
       "d",
       area(height, (d) => {
-        return y(d.actual);
+        return y(d.investment_amount);
       })
     );
 
   layer
     .append("path")
-    .style("stroke", "#333")
+    .style("stroke", lineScale("investment"))
     .style("fill", "none")
     .attr(
       "d",
@@ -173,6 +196,33 @@ export default async function () {
         .line<Networth>()
         .curve(d3.curveBasis)
         .x((d) => x(d.timestamp))
-        .y((d) => y(d.actual))
+        .y((d) => y(d.investment_amount))
+    );
+
+  layer
+    .append("path")
+    .style("stroke", lineScale("withdrawal"))
+    .style("fill", "none")
+    .attr(
+      "d",
+      d3
+        .line<Networth>()
+        .curve(d3.curveBasis)
+        .defined((d) => d.withdrawal_amount > 0)
+        .x((d) => x(d.timestamp))
+        .y((d) => y(d.withdrawal_amount))
+    );
+
+  layer
+    .append("path")
+    .style("stroke", lineScale("networth"))
+    .style("fill", "none")
+    .attr(
+      "d",
+      d3
+        .line<Networth>()
+        .curve(d3.curveBasis)
+        .x((d) => x(d.timestamp))
+        .y((d) => y(d.investment_amount + d.gain_amount - d.withdrawal_amount))
     );
 }

@@ -19,8 +19,9 @@ export interface Posting {
 
 export interface Networth {
   date: string;
-  actual: number;
-  gain: number;
+  investment_amount: number;
+  withdrawal_amount: number;
+  gain_amount: number;
 
   timestamp: dayjs.Dayjs;
 }

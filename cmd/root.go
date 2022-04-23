@@ -8,7 +8,7 @@ import (
 	"github.com/spf13/viper"
 )
 
-var cfgFile string
+var configFile string
 
 var rootCmd = &cobra.Command{
 	Use:   "paisa",
@@ -24,7 +24,7 @@ func Execute() {
 
 func init() {
 	cobra.OnInitialize(initConfig)
-	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is ./paisa.yaml)")
+	rootCmd.PersistentFlags().StringVar(&configFile, "config", "", "config file (default is ./paisa.yaml)")
 }
 
 func initConfig() {
@@ -35,10 +35,11 @@ func initConfig() {
 		return
 	}
 
-	if cfgFile != "" {
-		viper.SetConfigFile(cfgFile)
+	if envConfigFile := os.Getenv("PAISA_CONFIG"); envConfigFile != "" {
+		viper.SetConfigFile(envConfigFile)
+	} else if configFile != "" {
+		viper.SetConfigFile(configFile)
 	} else {
-
 		viper.SetConfigName("paisa.yaml")
 		viper.SetConfigType("yaml")
 		viper.AddConfigPath(".")

@@ -17,13 +17,18 @@ export interface Posting {
   timestamp: dayjs.Dayjs;
 }
 
-export interface Networth {
+export interface Overview {
   date: string;
   investment_amount: number;
   withdrawal_amount: number;
   gain_amount: number;
 
   timestamp: dayjs.Dayjs;
+}
+
+export interface Gain {
+  account: string;
+  overview_timeline: Overview[];
 }
 
 export interface Breakdown {
@@ -49,9 +54,13 @@ export function ajax(
 export function ajax(
   route: "/api/ledger"
 ): Promise<{ postings: Posting[]; breakdowns: Breakdown[] }>;
-export function ajax(
-  route: "/api/overview"
-): Promise<{ networth_timeline: Networth[] }>;
+export function ajax(route: "/api/overview"): Promise<{
+  overview_timeline: Overview[];
+  overview_timeline_breakdown: { [key: string]: Overview[] };
+}>;
+export function ajax(route: "/api/gain"): Promise<{
+  gain_timeline_breakdown: Gain[];
+}>;
 export function ajax(route: "/api/allocation"): Promise<{
   aggregates: { [key: string]: Aggregate };
   aggregates_timeline: { [key: string]: Aggregate }[];

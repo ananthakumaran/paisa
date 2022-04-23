@@ -1,58 +1,66 @@
 import * as d3 from "d3";
-import { ContainerElement } from "d3";
 import legend from "d3-svg-legend";
 import dayjs from "dayjs";
 import _ from "lodash";
-import {
-  ajax,
-  formatCurrency,
-  formatCurrencyCrude,
-  Overview,
-  setHtml
-} from "./utils";
+import { ajax, formatCurrencyCrude, Overview } from "./utils";
 
 export default async function () {
-  const { overview_timeline: points } = await ajax("/api/overview");
-  _.each(points, (n) => (n.timestamp = dayjs(n.date)));
-
-  const current = _.last(points);
-  setHtml(
-    "networth",
-    formatCurrency(
-      current.investment_amount +
-        current.gain_amount -
-        current.withdrawal_amount
-    )
+  const { gain_timeline_breakdown: gains } = await ajax("/api/gain");
+  _.each(gains, (g) =>
+    _.each(g.overview_timeline, (o) => (o.timestamp = dayjs(o.date)))
   );
-  setHtml("investment", formatCurrency(current.investment_amount));
-  setHtml("withdrawal", formatCurrency(current.withdrawal_amount));
-  setHtml("gains", formatCurrency(current.gain_amount));
 
-  renderOverview(points, document.getElementById("d3-overview-timeline"));
-}
+  renderLegend();
 
-function renderOverview(points: Overview[], element: Element) {
-  const start = _.min(_.map(points, (p) => p.timestamp)),
+  const start = _.min(
+      _.flatMap(gains, (g) => _.map(g.overview_timeline, (o) => o.timestamp))
+    ),
     end = dayjs();
 
+  const svgs = d3
+    .select("#d3-gain-timeline-breakdown")
+    .selectAll("svg")
+    .data(_.sortBy(gains, (g) => g.account));
+
+  svgs.exit().remove();
+
+  svgs
+    .enter()
+    .append("svg")
+    .attr("width", "100%")
+    .attr("height", "150")
+    .each(function (gain) {
+      renderOverviewSmall(gain.overview_timeline, this, gain.account, [
+        start,
+        end
+      ]);
+    });
+}
+
+const areaKeys = ["gain", "loss"];
+const colors = ["#b2df8a", "#fb9a99"];
+const areaScale = d3.scaleOrdinal().domain(areaKeys).range(colors);
+const lineKeys = ["networth", "investment", "withdrawal"];
+const lineScale = d3
+  .scaleOrdinal<string>()
+  .domain(lineKeys)
+  .range(["#1f77b4", "#17becf", "#ff7f0e"]);
+
+function renderOverviewSmall(
+  points: Overview[],
+  element: Element,
+  account: string,
+  xDomain: [dayjs.Dayjs, dayjs.Dayjs]
+) {
   const svg = d3.select(element),
-    margin = { top: 40, right: 80, bottom: 20, left: 40 },
+    margin = { top: 15, right: 80, bottom: 20, left: 40 },
     width = element.parentElement.clientWidth - margin.left - margin.right,
     height = +svg.attr("height") - margin.top - margin.bottom,
     g = svg
       .append("g")
       .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-  const areaKeys = ["gain", "loss"];
-  const colors = ["#b2df8a", "#fb9a99"];
-  const areaScale = d3.scaleOrdinal().domain(areaKeys).range(colors);
-
-  const lineKeys = ["networth", "investment", "withdrawal"];
-  const lineScale = d3
-    .scaleOrdinal<string>()
-    .domain(lineKeys)
-    .range(["#1f77b4", "#17becf", "#ff7f0e"]);
-  const x = d3.scaleTime().range([0, width]).domain([start, end]),
+  const x = d3.scaleTime().range([0, width]).domain(xDomain),
     y = d3
       .scaleLinear()
       .range([height, 0])
@@ -81,11 +89,15 @@ function renderOverview(points: Overview[], element: Element) {
   g.append("g")
     .attr("class", "axis y")
     .attr("transform", `translate(${width},0)`)
-    .call(d3.axisRight(y).tickPadding(5).tickFormat(formatCurrencyCrude));
+    .call(
+      d3.axisRight(y).ticks(5).tickPadding(5).tickFormat(formatCurrencyCrude)
+    );
 
   g.append("g")
     .attr("class", "axis y")
-    .call(d3.axisLeft(y).tickSize(-width).tickFormat(formatCurrencyCrude));
+    .call(
+      d3.axisLeft(y).ticks(5).tickSize(-width).tickFormat(formatCurrencyCrude)
+    );
 
   const layer = g
     .selectAll(".layer")
@@ -190,8 +202,17 @@ function renderOverview(points: Overview[], element: Element) {
 
   svg
     .append("g")
+    .append("text")
+    .attr("transform", "translate(80,12)")
+    .text(account);
+}
+
+function renderLegend() {
+  const svg = d3.select("#d3-gain-legend");
+  svg
+    .append("g")
     .attr("class", "legendOrdinal")
-    .attr("transform", "translate(365,3)");
+    .attr("transform", "translate(315,3)");
 
   const legendOrdinal = legend
     .legendColor()
@@ -206,7 +227,7 @@ function renderOverview(points: Overview[], element: Element) {
   svg
     .append("g")
     .attr("class", "legendLine")
-    .attr("transform", "translate(80,3)");
+    .attr("transform", "translate(30,3)");
 
   const legendLine = legend
     .legendColor()

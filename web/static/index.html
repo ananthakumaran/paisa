@@ -23,6 +23,7 @@
         <div class="navbar-start">
           <a id="overview" class="navbar-item is-active">Overview</a>
           <a id="investment" class="navbar-item">Investment</a>
+          <a id="gain" class="navbar-item">Gain</a>
           <a id="allocation" class="navbar-item">Allocation</a>
           <a id="ledger" class="navbar-item">Ledger</a>
         </div>
@@ -62,7 +63,7 @@
       <div class="container is-fluid">
         <div class="columns">
           <div class="column is-12">
-            <svg id="d3-networth-timeline" width="100%" height="500"></svg>
+            <svg id="d3-overview-timeline" width="100%" height="500"></svg>
           </div>
         </div>
         <div class="columns">
@@ -70,6 +71,12 @@
             <div>
               <p class="heading">Networth Timeline</p>
             </div>
+          </div>
+        </div>
+      </div>
+      <div class="container is-fluid">
+        <div class="columns">
+          <div id="d3-overview-timeline-breakdown" class="column is-12">
           </div>
         </div>
       </div>
@@ -102,6 +109,21 @@
             <div>
               <p class="heading">Yearly Investment Timeline</p>
             </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="section tab-gain">
+      <div class="container is-fluid">
+        <div class="columns">
+          <div  class="column is-12">
+            <svg id="d3-gain-legend" width="100%" height="50"></svg>
+          </div>
+        </div>
+      </div>
+      <div class="container is-fluid">
+        <div class="columns">
+          <div id="d3-gain-timeline-breakdown" class="column is-12">
           </div>
         </div>
       </div>

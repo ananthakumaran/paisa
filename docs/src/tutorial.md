@@ -125,8 +125,9 @@ So far we have been mostly talking about **ledger**. We need to know
 the basics of **ledger** because **paisa** builds on top of
 **ledger**.
 
-**paisa** expects a config file named `paisa.yaml` in the current
-directory
+**paisa** checks for a config file named `paisa.yaml` in the current
+directory. It can also be set via flag `--config` or env variable
+`PAISA_CONFIG`.
 
 ```yaml
 # absolute path of journal file

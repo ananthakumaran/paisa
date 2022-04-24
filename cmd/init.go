@@ -81,7 +81,7 @@ func formatFloat(num float64) string {
 }
 
 func emitSalary(file *os.File, start time.Time) {
-	var salary float64 = 100000 + (float64(start.Year())-2019)*20000
+	var salary float64 = 100000 + (float64(start.Year())-2019)*(100000*0.05)
 	_, err := file.WriteString(fmt.Sprintf(`
 %s Salary
     Income:Salary
@@ -90,6 +90,19 @@ func emitSalary(file *os.File, start time.Time) {
 `, start.Format("2006/01/02"), formatFloat(salary*0.12), formatFloat(salary*0.88)))
 	if err != nil {
 		log.Fatal(err)
+	}
+
+	if start.Year() > 2019 && start.Month() == time.March {
+		_, err = file.WriteString(fmt.Sprintf(`
+%s EPF Interest
+    Income:Interest:EPF
+    Asset:Debt:EPF                  %s INR
+`, start.Format("2006/01/02"), formatFloat(salary*0.12*((float64(start.Year())-2019)*12)*0.075)))
+
+		if err != nil {
+			log.Fatal(err)
+		}
+
 	}
 
 }

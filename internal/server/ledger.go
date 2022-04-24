@@ -2,12 +2,10 @@ package server
 
 import (
 	"strings"
-	"time"
 
 	"github.com/samber/lo"
 	log "github.com/sirupsen/logrus"
 
-	"github.com/ChizhovVadim/xirr"
 	"github.com/ananthakumaran/paisa/internal/model/posting"
 	"github.com/ananthakumaran/paisa/internal/service"
 	"github.com/gin-gonic/gin"
@@ -29,11 +27,7 @@ func GetLedger(db *gorm.DB) gin.H {
 		log.Fatal(result.Error)
 	}
 
-	date := time.Now()
-	postings = lo.Map(postings, func(p posting.Posting, _ int) posting.Posting {
-		p.MarketAmount = service.GetMarketPrice(db, p, date)
-		return p
-	})
+	postings = service.PopulateMarketPrice(db, postings)
 	breakdowns := computeBreakdown(db, lo.Filter(postings, func(p posting.Posting, _ int) bool { return strings.HasPrefix(p.Account, "Asset:") }))
 	return gin.H{"postings": postings, "breakdowns": breakdowns}
 }
@@ -49,7 +43,6 @@ func computeBreakdown(db *gorm.DB, postings []posting.Posting) map[string]Breakd
 
 	}
 
-	today := time.Now()
 	result := make(map[string]Breakdown)
 
 	for group := range accounts {
@@ -69,20 +62,9 @@ func computeBreakdown(db *gorm.DB, postings []posting.Posting) map[string]Breakd
 			}
 		}, 0.0)
 		marketAmount := lo.Reduce(ps, func(acc float64, p posting.Posting, _ int) float64 { return acc + p.MarketAmount }, 0.0)
-		payments := lo.Reverse(lo.Map(ps, func(p posting.Posting, _ int) xirr.Payment {
-			if service.IsInterest(db, p) {
-				return xirr.Payment{Date: p.Date, Amount: 0}
-			} else {
-				return xirr.Payment{Date: p.Date, Amount: -p.Amount}
-			}
 
-		}))
-		payments = append(payments, xirr.Payment{Date: today, Amount: marketAmount})
-		returns, err := xirr.XIRR(payments)
-		if err != nil {
-			log.Fatal(err)
-		}
-		breakdown := Breakdown{InvestmentAmount: investmentAmount, WithdrawalAmount: withdrawalAmount, MarketAmount: marketAmount, XIRR: (returns - 1) * 100, Group: group}
+		xirr := service.XIRR(db, ps)
+		breakdown := Breakdown{InvestmentAmount: investmentAmount, WithdrawalAmount: withdrawalAmount, MarketAmount: marketAmount, XIRR: xirr, Group: group}
 		result[group] = breakdown
 	}
 

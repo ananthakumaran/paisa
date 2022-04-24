@@ -29,6 +29,7 @@ export interface Overview {
 export interface Gain {
   account: string;
   overview_timeline: Overview[];
+  xirr: number;
 }
 
 export interface Breakdown {

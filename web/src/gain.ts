@@ -2,7 +2,14 @@ import * as d3 from "d3";
 import legend from "d3-svg-legend";
 import dayjs from "dayjs";
 import _ from "lodash";
-import { ajax, formatCurrencyCrude, Overview } from "./utils";
+import {
+  ajax,
+  formatCurrency,
+  formatCurrencyCrude,
+  formatFloat,
+  Gain,
+  Overview
+} from "./utils";
 
 export default async function () {
   const { gain_timeline_breakdown: gains } = await ajax("/api/gain");
@@ -17,43 +24,83 @@ export default async function () {
     ),
     end = dayjs();
 
-  const svgs = d3
+  const divs = d3
     .select("#d3-gain-timeline-breakdown")
-    .selectAll("svg")
+    .selectAll("div")
     .data(_.sortBy(gains, (g) => g.account));
 
-  svgs.exit().remove();
+  divs.exit().remove();
 
-  svgs
-    .enter()
+  const columns = divs.enter().append("div").attr("class", "columns");
+
+  const leftColumn = columns.append("div").attr("class", "column is-2");
+  leftColumn
+    .append("table")
+    .attr("class", "table is-narrow is-fullwidth is-size-7")
+    .append("tbody")
+    .each(renderTable);
+
+  const rightColumn = columns.append("div").attr("class", "column is-10");
+  rightColumn
     .append("svg")
     .attr("width", "100%")
     .attr("height", "150")
     .each(function (gain) {
-      renderOverviewSmall(gain.overview_timeline, this, gain.account, [
-        start,
-        end
-      ]);
+      renderOverviewSmall(gain.overview_timeline, this, [start, end]);
     });
 }
 
 const areaKeys = ["gain", "loss"];
 const colors = ["#b2df8a", "#fb9a99"];
 const areaScale = d3.scaleOrdinal().domain(areaKeys).range(colors);
-const lineKeys = ["networth", "investment", "withdrawal"];
+const lineKeys = ["balance", "investment", "withdrawal"];
 const lineScale = d3
   .scaleOrdinal<string>()
   .domain(lineKeys)
   .range(["#1f77b4", "#17becf", "#ff7f0e"]);
 
+function renderTable(gain: Gain) {
+  const tbody = d3.select(this);
+  const current = _.last(gain.overview_timeline);
+  tbody.html(function (d) {
+    return `
+<tr>
+  <td>Account</td>
+  <td class='has-text-right has-text-weight-bold'>${gain.account}</td>
+</tr>
+<tr>
+  <td>Investment</td>
+  <td class='has-text-right'>${formatCurrency(current.investment_amount)}</td>
+</tr>
+<tr>
+  <td>Withdrawal</td>
+  <td class='has-text-right'>${formatCurrency(current.withdrawal_amount)}</td>
+</tr>
+<tr>
+  <td>Gain</td>
+  <td class='has-text-right'>${formatCurrency(current.gain_amount)}</td>
+</tr>
+<tr>
+  <td>Balance</td>
+  <td class='has-text-right'>${formatCurrency(
+    current.investment_amount + current.gain_amount - current.withdrawal_amount
+  )}</td>
+</tr>
+<tr>
+  <td>XIRR</td>
+  <td class='has-text-right'>${formatFloat(gain.xirr)}</td>
+</tr>
+`;
+  });
+}
+
 function renderOverviewSmall(
   points: Overview[],
   element: Element,
-  account: string,
   xDomain: [dayjs.Dayjs, dayjs.Dayjs]
 ) {
   const svg = d3.select(element),
-    margin = { top: 15, right: 80, bottom: 20, left: 40 },
+    margin = { top: 5, right: 80, bottom: 20, left: 40 },
     width = element.parentElement.clientWidth - margin.left - margin.right,
     height = +svg.attr("height") - margin.top - margin.bottom,
     g = svg
@@ -189,7 +236,7 @@ function renderOverviewSmall(
 
   layer
     .append("path")
-    .style("stroke", lineScale("networth"))
+    .style("stroke", lineScale("balance"))
     .style("fill", "none")
     .attr(
       "d",
@@ -199,12 +246,6 @@ function renderOverviewSmall(
         .x((d) => x(d.timestamp))
         .y((d) => y(d.investment_amount + d.gain_amount - d.withdrawal_amount))
     );
-
-  svg
-    .append("g")
-    .append("text")
-    .attr("transform", "translate(80,12)")
-    .text(account);
 }
 
 function renderLegend() {

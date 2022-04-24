@@ -4,6 +4,7 @@ import (
 	log "github.com/sirupsen/logrus"
 
 	"github.com/ananthakumaran/paisa/internal/model/posting"
+	"github.com/ananthakumaran/paisa/internal/service"
 	"github.com/gin-gonic/gin"
 	"github.com/samber/lo"
 	"gorm.io/gorm"
@@ -12,6 +13,7 @@ import (
 type Gain struct {
 	Account          string     `json:"account"`
 	OverviewTimeline []Overview `json:"overview_timeline"`
+	XIRR             float64    `json:"xirr"`
 }
 
 func GetGain(db *gorm.DB) gin.H {
@@ -21,10 +23,11 @@ func GetGain(db *gorm.DB) gin.H {
 		log.Fatal(result.Error)
 	}
 
+	postings = service.PopulateMarketPrice(db, postings)
 	byAccount := lo.GroupBy(postings, func(p posting.Posting) string { return p.Account })
 	var gains []Gain
 	for account, ps := range byAccount {
-		gains = append(gains, Gain{Account: account, OverviewTimeline: computeOverviewTimeline(db, ps)})
+		gains = append(gains, Gain{Account: account, XIRR: service.XIRR(db, ps), OverviewTimeline: computeOverviewTimeline(db, ps)})
 	}
 
 	return gin.H{"gain_timeline_breakdown": gains}

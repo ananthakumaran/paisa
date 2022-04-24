@@ -81,3 +81,11 @@ func GetMarketPrice(db *gorm.DB, p posting.Posting, date time.Time) float64 {
 
 	return p.Amount
 }
+
+func PopulateMarketPrice(db *gorm.DB, ps []posting.Posting) []posting.Posting {
+	date := time.Now()
+	return lo.Map(ps, func(p posting.Posting, _ int) posting.Posting {
+		p.MarketAmount = GetMarketPrice(db, p, date)
+		return p
+	})
+}

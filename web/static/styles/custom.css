@@ -56,7 +56,10 @@ body {
     box-sizing: border-box;
     position: absolute;
     overflow: hidden;
-    padding-top: 30px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    flex-wrap: wrap;
 }
 
 #d3-allocation-category, #d3-allocation-value {

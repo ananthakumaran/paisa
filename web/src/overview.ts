@@ -1,5 +1,4 @@
 import * as d3 from "d3";
-import { ContainerElement } from "d3";
 import legend from "d3-svg-legend";
 import dayjs from "dayjs";
 import _ from "lodash";
@@ -65,7 +64,7 @@ function renderOverview(points: Overview[], element: Element) {
       ]),
     z = d3.scaleOrdinal<string>(colors).domain(areaKeys);
 
-  let area = (y0, y1) =>
+  const area = (y0, y1) =>
     d3
       .area<Overview>()
       .curve(d3.curveBasis)

@@ -92,8 +92,7 @@ function renderBreakdowns(breakdowns: Breakdown[]) {
     .append("tr")
     .merge(trs as any)
     .html((b) => {
-      let changePercentage = 0,
-        changeClass = "";
+      let changeClass = "";
 
       const gain = b.market_amount + b.withdrawal_amount - b.investment_amount;
       if (gain > 0) {
@@ -101,7 +100,6 @@ function renderBreakdowns(breakdowns: Breakdown[]) {
       } else if (gain < 0) {
         changeClass = "has-text-danger";
       }
-      changePercentage = 0;
       const indent = _.repeat("&emsp;&emsp;", depth(b.group) - 1);
       return `
        <td style='max-width: 200px; overflow: hidden;'>${indent}${lastName(

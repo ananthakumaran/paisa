@@ -1,5 +1,4 @@
 import * as d3 from "d3";
-import { group } from "d3";
 import legend from "d3-svg-legend";
 import dayjs from "dayjs";
 import _ from "lodash";
@@ -221,7 +220,7 @@ function renderAllocationTimeline(
     .attr("class", "legendOrdinal")
     .attr("transform", "translate(40,0)");
 
-  var legendOrdinal = legend
+  const legendOrdinal = legend
     .legendColor()
     .shape("rect")
     .orient("horizontal")

@@ -62,7 +62,7 @@ const lineScale = d3
 function renderTable(gain: Gain) {
   const tbody = d3.select(this);
   const current = _.last(gain.overview_timeline);
-  tbody.html(function (d) {
+  tbody.html(function () {
     return `
 <tr>
   <td>Account</td>
@@ -120,7 +120,7 @@ function renderOverviewSmall(
       ]),
     z = d3.scaleOrdinal<string>(colors).domain(areaKeys);
 
-  let area = (y0, y1) =>
+  const area = (y0, y1) =>
     d3
       .area<Overview>()
       .curve(d3.curveBasis)

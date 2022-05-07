@@ -9,3 +9,7 @@ docs:
 
 publish:
 	nix-shell --run 'cd docs && mdbook build'
+
+lint:
+	./node_modules/.bin/prettier --check web/src
+	./node_modules/.bin/eslint web/src --ext .js,.jsx,.ts,.tsx

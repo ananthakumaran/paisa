@@ -1,5 +1,4 @@
 import dayjs from "dayjs";
-import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
 import { sprintf } from "sprintf-js";
 import _ from "lodash";
 import * as d3 from "d3";
@@ -161,7 +160,7 @@ export function skipTicks(
 }
 
 export function setHtml(selector: string, value: string) {
-  var node = document.querySelector(".d3-" + selector);
+  const node = document.querySelector(".d3-" + selector);
   node.innerHTML = value;
 }
 

@@ -80,7 +80,7 @@ function renderInvestmentTimeline(
     end = dayjs().startOf("month");
   const ts = _.groupBy(postings, (p) => p.timestamp.format(timeFormat));
 
-  let points: {
+  const points: {
     date: dayjs.Dayjs;
     month: string;
     [key: string]: number | string | dayjs.Dayjs;
@@ -162,7 +162,7 @@ function renderInvestmentTimeline(
       d3
         .axisBottom(x)
         .ticks(5)
-        .tickFormat(skipTicks(30, width, points.length, (d, i) => d.toString()))
+        .tickFormat(skipTicks(30, width, points.length, (d) => d.toString()))
     )
     .selectAll("text")
     .attr("y", 10)
@@ -227,7 +227,7 @@ function renderInvestmentTimeline(
     .attr("class", "legendOrdinal")
     .attr("transform", "translate(40,0)");
 
-  var legendOrdinal = legend
+  const legendOrdinal = legend
     .legendColor()
     .shape("rect")
     .orient("horizontal")

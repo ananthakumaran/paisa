@@ -14,6 +14,12 @@
     "tippy.js": "^6.3.7"
   },
   "devDependencies": {
-    "nodemon": "^2.0.15"
+    "@typescript-eslint/eslint-plugin": "^5.22.0",
+    "@typescript-eslint/parser": "^5.22.0",
+    "eslint": "^8.15.0",
+    "eslint-config-prettier": "^8.5.0",
+    "nodemon": "^2.0.15",
+    "prettier": "2.6.2",
+    "typescript": "^4.6.4"
   }
 }

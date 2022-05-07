@@ -1,4 +1,5 @@
 import * as d3 from "d3";
+import { group } from "d3";
 import legend from "d3-svg-legend";
 import dayjs from "dayjs";
 import _ from "lodash";
@@ -154,7 +155,7 @@ function renderAllocationTimeline(
   });
 
   const svg = d3.select("#d3-allocation-timeline"),
-    margin = { top: 40, right: 50, bottom: 20, left: 30 },
+    margin = { top: 40, right: 60, bottom: 20, left: 35 },
     width =
       document.getElementById("d3-allocation-timeline").parentElement
         .clientWidth -
@@ -166,59 +167,54 @@ function renderAllocationTimeline(
       .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
   const x = d3.scaleTime().range([0, width]).domain([start, end]),
-    y = d3.scaleLinear().range([height, 0]).domain([0, 100]),
+    y = d3
+      .scaleLinear()
+      .range([height, 0])
+      .domain([
+        0,
+        d3.max(d3.map(points, (p) => d3.max(_.values(_.omit(p, "date")))))
+      ]),
     z = d3.scaleOrdinal(d3.schemeCategory10).domain(assets);
 
-  const stack = d3.stack<Point>().keys(assets);
-  const series = stack(points);
-
-  const area = d3
-    .area<d3.SeriesPoint<Point>>()
-    .x(function (d) {
-      return x(d.data.date);
-    })
-    .y0(function (d) {
-      return y(d[0]);
-    })
-    .y1(function (d) {
-      return y(d[1]);
-    });
+  const line = (group) =>
+    d3
+      .line<Point>()
+      .curve(d3.curveLinear)
+      .defined((p, i) => p[group] > 0 || points[i + 1]?.[group] > 0)
+      .x((p) => x(p.date))
+      .y((p) => y(p[group]));
 
   g.append("g")
     .attr("class", "axis x")
     .attr("transform", "translate(0," + height + ")")
     .call(d3.axisBottom(x));
 
-  g.append("g").attr("class", "axis y").call(d3.axisLeft(y));
+  g.append("g")
+    .attr("class", "axis y")
+    .call(
+      d3
+        .axisLeft(y)
+        .tickSize(-width)
+        .tickFormat((y) => `${y}%`)
+    );
   g.append("g")
     .attr("class", "axis y")
     .attr("transform", `translate(${width},0)`)
-    .call(d3.axisRight(y));
+    .call(d3.axisRight(y).tickFormat((y) => `${y}%`));
 
   const layer = g
     .selectAll(".layer")
-    .data(series)
+    .data(assets)
     .enter()
     .append("g")
     .attr("class", "layer");
 
   layer
     .append("path")
-    .attr("class", "area")
-    .style("fill", function (d) {
-      return z(d.key);
-    })
-    .attr("d", area);
-
-  layer
-    .filter(function (d) {
-      return d[d.length - 1][1] - d[d.length - 1][0] > 0.01;
-    })
-    .append("text")
-    .attr("x", width - 6)
-    .attr("y", function (d) {
-      return y((d[d.length - 1][0] + d[d.length - 1][1]) / 2);
-    });
+    .attr("fill", "none")
+    .attr("stroke", (group) => z(group))
+    .attr("stroke-width", "2")
+    .attr("d", (group) => line(group)(points));
 
   svg
     .append("g")

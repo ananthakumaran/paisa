@@ -13,3 +13,4 @@ publish:
 lint:
 	./node_modules/.bin/prettier --check web/src
 	./node_modules/.bin/eslint web/src --ext .js,.jsx,.ts,.tsx
+	test -z $$(gofmt -l .)

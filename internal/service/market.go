@@ -14,7 +14,7 @@ import (
 )
 
 type priceCache struct {
-	mu         sync.Mutex
+	sync.Mutex
 	loaded     bool
 	pricesTree map[string]*btree.BTree
 }
@@ -22,8 +22,8 @@ type priceCache struct {
 var pcache priceCache
 
 func loadPriceCache(db *gorm.DB) {
-	pcache.mu.Lock()
-	defer pcache.mu.Unlock()
+	pcache.Lock()
+	defer pcache.Unlock()
 
 	if pcache.loaded {
 		return

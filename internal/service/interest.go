@@ -11,7 +11,7 @@ import (
 )
 
 type interestCache struct {
-	mu       sync.Mutex
+	sync.Mutex
 	loaded   bool
 	postings map[time.Time][]posting.Posting
 }
@@ -19,8 +19,8 @@ type interestCache struct {
 var icache interestCache
 
 func loadInterestCache(db *gorm.DB) {
-	icache.mu.Lock()
-	defer icache.mu.Unlock()
+	icache.Lock()
+	defer icache.Unlock()
 
 	if icache.loaded {
 		return

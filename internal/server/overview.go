@@ -36,6 +36,10 @@ func computeOverviewTimeline(db *gorm.DB, postings []posting.Posting) []Overview
 	var p posting.Posting
 	var pastPostings []posting.Posting
 
+	if len(postings) == 0 {
+		return networths
+	}
+
 	end := time.Now()
 	for start := postings[0].Date; start.Before(end); start = start.AddDate(0, 0, 1) {
 		for len(postings) > 0 && (postings[0].Date.Before(start) || postings[0].Date.Equal(start)) {

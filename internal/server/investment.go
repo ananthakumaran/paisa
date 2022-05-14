@@ -12,9 +12,10 @@ import (
 func GetInvestment(db *gorm.DB) gin.H {
 	var postings []posting.Posting
 	result := db.Where("account like ?", "Asset:%").Find(&postings)
-	postings = lo.Filter(postings, func(p posting.Posting, _ int) bool { return !service.IsInterest(db, p) })
 	if result.Error != nil {
 		log.Fatal(result.Error)
 	}
+
+	postings = lo.Filter(postings, func(p posting.Posting, _ int) bool { return !service.IsInterest(db, p) })
 	return gin.H{"postings": postings}
 }

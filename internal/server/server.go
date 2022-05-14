@@ -29,6 +29,9 @@ func Listen(db *gorm.DB) {
 	router.GET("/api/gain", func(c *gin.Context) {
 		c.JSON(200, GetGain(db))
 	})
+	router.GET("/api/income", func(c *gin.Context) {
+		c.JSON(200, GetIncome(db))
+	})
 	router.GET("/api/allocation", func(c *gin.Context) {
 		c.JSON(200, GetAllocation(db))
 	})

@@ -31,7 +31,7 @@ body {
     color: #4a4a4a;
 }
 
-#d3-investment-timeline .legendOrdinal .label, #d3-breakdown .legendOrdinal .label {
+#d3-investment-timeline .legendOrdinal .label, #d3-yearly-investment-timeline .legendOrdinal .label, #d3-income-timeline .legendOrdinal .label, #d3-breakdown .legendOrdinal .label {
     font-size: 8px;
 }
 

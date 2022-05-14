@@ -4,53 +4,29 @@ import dayjs from "dayjs";
 import _ from "lodash";
 import {
   ajax,
-  forEachMonth,
-  forEachYear,
   formatCurrency,
   formatCurrencyCrude,
+  Income,
   Posting,
-  secondName,
+  restName,
   skipTicks,
   tooltip
 } from "./utils";
 
 export default async function () {
-  const { postings: postings } = await ajax("/api/investment");
-  _.each(postings, (p) => (p.timestamp = dayjs(p.date)));
-  renderMonthlyInvestmentTimeline(postings);
-  renderYearlyInvestmentTimeline(postings);
+  const { income_timeline: incomes } = await ajax("/api/income");
+  _.each(incomes, (i) => (i.timestamp = dayjs(i.date)));
+  renderMonthlyInvestmentTimeline(incomes);
 }
 
-function renderMonthlyInvestmentTimeline(postings: Posting[]) {
-  renderInvestmentTimeline(
-    postings,
-    "#d3-investment-timeline",
-    "MMM-YYYY",
-    true,
-    forEachMonth
-  );
+function renderMonthlyInvestmentTimeline(incomes: Income[]) {
+  renderIncomeTimeline(incomes, "#d3-income-timeline", "MMM-YYYY");
 }
 
-function renderYearlyInvestmentTimeline(postings: Posting[]) {
-  renderInvestmentTimeline(
-    postings,
-    "#d3-yearly-investment-timeline",
-    "YYYY",
-    false,
-    forEachYear
-  );
-}
-
-function renderInvestmentTimeline(
-  postings: Posting[],
+function renderIncomeTimeline(
+  incomes: Income[],
   id: string,
-  timeFormat: string,
-  showTooltip: boolean,
-  iterator: (
-    start: dayjs.Dayjs,
-    end: dayjs.Dayjs,
-    cb: (current: dayjs.Dayjs) => any
-  ) => any
+  timeFormat: string
 ) {
   const MAX_BAR_WIDTH = 40;
   const svg = d3.select(id),
@@ -64,65 +40,41 @@ function renderInvestmentTimeline(
       .append("g")
       .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-  const groups = _.chain(postings)
-    .map((p) => secondName(p.account))
+  const postings = _.flatMap(incomes, (i) => i.postings);
+  const groupKeys = _.chain(postings)
+    .map((p) => restName(p.account))
     .uniq()
     .sort()
     .value();
-  const groupKeys = _.flatMap(groups, (g) => [g + "-credit", g + "-debit"]);
 
   const defaultValues = _.zipObject(
     groupKeys,
     _.map(groupKeys, () => 0)
   );
 
-  const start = _.min(_.map(postings, (p) => p.timestamp)),
-    end = dayjs().startOf("month");
-  const ts = _.groupBy(postings, (p) => p.timestamp.format(timeFormat));
-
-  const points: {
+  let points: {
     date: dayjs.Dayjs;
     month: string;
     [key: string]: number | string | dayjs.Dayjs;
   }[] = [];
 
-  iterator(start, end, (month) => {
-    postings = ts[month.format(timeFormat)] || [];
-    const values = _.chain(ts[month.format(timeFormat)] || [])
-      .groupBy((t) => secondName(t.account))
+  points = _.map(incomes, (i) => {
+    const values = _.chain(i.postings)
+      .groupBy((p) => restName(p.account))
       .flatMap((postings, key) => [
-        [
-          key + "-credit",
-          _.sum(
-            _.filter(
-              _.map(postings, (p) => p.amount),
-              (a) => a >= 0
-            )
-          )
-        ],
-        [
-          key + "-debit",
-          _.sum(
-            _.filter(
-              _.map(postings, (p) => p.amount),
-              (a) => a < 0
-            )
-          )
-        ]
+        [key, _.sum(_.map(postings, (p) => -p.amount))]
       ])
       .fromPairs()
       .value();
 
-    points.push(
-      _.merge(
-        {
-          month: month.format(timeFormat),
-          date: month,
-          postings: postings
-        },
-        defaultValues,
-        values
-      )
+    return _.merge(
+      {
+        month: i.timestamp.format(timeFormat),
+        date: i.timestamp,
+        postings: i.postings
+      },
+      defaultValues,
+      values
     );
   });
 
@@ -189,15 +141,12 @@ function renderInvestmentTimeline(
     .enter()
     .append("rect")
     .attr("data-tippy-content", (d) => {
-      if (!showTooltip) {
-        return null;
-      }
       const postings: Posting[] = (d.data as any).postings;
       return tooltip(
         _.sortBy(
           postings.map((p) => [
-            _.drop(p.account.split(":")).join(":"),
-            [formatCurrency(p.amount), "has-text-weight-bold has-text-right"]
+            restName(p.account),
+            [formatCurrency(-p.amount), "has-text-weight-bold has-text-right"]
           ]),
           (r) => r[0]
         )
@@ -227,7 +176,7 @@ function renderInvestmentTimeline(
     .shape("rect")
     .orient("horizontal")
     .shapePadding(100)
-    .labels(groups)
+    .labels(groupKeys)
     .scale(z);
 
   svg.select(".legendOrdinal").call(legendOrdinal as any);

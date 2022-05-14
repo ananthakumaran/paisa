@@ -48,6 +48,13 @@ export interface Aggregate {
   timestamp: dayjs.Dayjs;
 }
 
+export interface Income {
+  date: string;
+  postings: Posting[];
+
+  timestamp: dayjs.Dayjs;
+}
+
 export function ajax(
   route: "/api/investment"
 ): Promise<{ postings: Posting[] }>;
@@ -64,6 +71,9 @@ export function ajax(route: "/api/gain"): Promise<{
 export function ajax(route: "/api/allocation"): Promise<{
   aggregates: { [key: string]: Aggregate };
   aggregates_timeline: { [key: string]: Aggregate }[];
+}>;
+export function ajax(route: "/api/income"): Promise<{
+  income_timeline: Income[];
 }>;
 export async function ajax(route: string) {
   const response = await fetch(route);
@@ -135,6 +145,10 @@ export function lastName(account: string) {
 
 export function secondName(account: string) {
   return account.split(":")[1];
+}
+
+export function restName(account: string) {
+  return _.drop(account.split(":")).join(":");
 }
 
 export function parentName(account: string) {

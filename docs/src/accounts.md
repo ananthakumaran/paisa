@@ -16,5 +16,9 @@ the fund, stock, etc
 
 All your income should come from `Income:`.
 
-* `Income:Salary` - salary debit account
+* `Income:Salary:{company}` - salary debit account
 * `Income:Interest:{name}` - interest debit account
+
+### Tax
+
+Income tax paid to government should be credited to `Tax` account

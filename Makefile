@@ -7,6 +7,9 @@ watch:
 docs:
 	cd docs && mdbook serve --open
 
+sample:
+	go build && ./paisa init && ./paisa update && ./paisa serve
+
 publish:
 	nix-shell --run 'cd docs && mdbook build'
 

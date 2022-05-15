@@ -19,6 +19,8 @@ import (
 	"math/rand"
 )
 
+const START_YEAR = 2015
+
 var initCmd = &cobra.Command{
 	Use:   "init",
 	Short: "generates a sample config and journal file",
@@ -81,23 +83,31 @@ func formatFloat(num float64) string {
 }
 
 func emitSalary(file *os.File, start time.Time) {
-	var salary float64 = 100000 + (float64(start.Year())-2019)*(100000*0.05)
+	var salary float64 = 100000 + (float64(start.Year())-START_YEAR)*(100000*0.05)
+	var company string
+	if start.Year() > 2017 {
+		company = "Globex"
+	} else {
+		company = "Acme"
+	}
+
 	_, err := file.WriteString(fmt.Sprintf(`
 %s Salary
-    Income:Salary
+    Income:Salary:%s
     Asset:Debt:EPF                  %s INR
+    Tax                             %s INR
     Checking                        %s INR
-`, start.Format("2006/01/02"), formatFloat(salary*0.12), formatFloat(salary*0.88)))
+`, start.Format("2006/01/02"), company, formatFloat(salary*0.12), formatFloat(salary*0.20), formatFloat(salary*0.68)))
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	if start.Year() > 2019 && start.Month() == time.March {
+	if start.Year() > START_YEAR && start.Month() == time.March {
 		_, err = file.WriteString(fmt.Sprintf(`
 %s EPF Interest
     Income:Interest:EPF
     Asset:Debt:EPF                  %s INR
-`, start.Format("2006/01/02"), formatFloat(salary*0.12*((float64(start.Year())-2019)*12)*0.075)))
+`, start.Format("2006/01/02"), formatFloat(salary*0.12*((float64(start.Year())-START_YEAR)*12)*0.075)))
 
 		if err != nil {
 			log.Fatal(err)
@@ -109,10 +119,11 @@ func emitSalary(file *os.File, start time.Time) {
 
 func emitEquityMutualFund(file *os.File, start time.Time, pricesTree map[string]*btree.BTree) {
 	multiplier := 1.0
-	if start.Year() > 2020 && rand.Intn(3) == 0 {
+	if start.Year() > START_YEAR+1 && rand.Intn(3) == 0 {
 		multiplier = -1.0
 	}
 	pc := utils.BTreeDescendFirstLessOrEqual(pricesTree["NIFTY"], price.Price{Date: start})
+	log.Info(pc)
 	_, err := file.WriteString(fmt.Sprintf(`
 %s Mutual Fund Nifty
     Asset:Equity:NIFTY   %s NIFTY @ %s INR
@@ -136,7 +147,7 @@ func emitEquityMutualFund(file *os.File, start time.Time, pricesTree map[string]
 
 func emitDebtMutualFund(file *os.File, start time.Time, pricesTree map[string]*btree.BTree) {
 	multiplier := 1.0
-	if start.Year() > 2020 && rand.Intn(3) == 0 {
+	if start.Year() > START_YEAR+1 && rand.Intn(3) == 0 {
 		multiplier = -1.0
 	}
 	pc := utils.BTreeDescendFirstLessOrEqual(pricesTree["ABCBF"], price.Price{Date: start})
@@ -159,7 +170,7 @@ func generateJournalFile(cwd string) {
 	}
 
 	end := time.Now()
-	start, err := time.Parse("02-01-2006", "01-01-2019")
+	start, err := time.Parse("02-01-2006", fmt.Sprintf("01-01-%d", START_YEAR))
 	if err != nil {
 		log.Fatal(err)
 	}

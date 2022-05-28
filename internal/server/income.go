@@ -23,7 +23,7 @@ type Tax struct {
 
 func GetIncome(db *gorm.DB) gin.H {
 	var incomePostings []posting.Posting
-	result := db.Where("account like ?", "Income:%").Order("date ASC").Find(&incomePostings)
+	result := db.Where("account like ? and account not like ?", "Income:%", "Income:Interest:%").Order("date ASC").Find(&incomePostings)
 	if result.Error != nil {
 		log.Fatal(result.Error)
 	}

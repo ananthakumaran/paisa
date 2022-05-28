@@ -7,8 +7,14 @@ let
   }) { };
 
 in pkgs.mkShell {
-  nativeBuildInputs =
-    [ pinned.go_1_18 pinned.gopls pkgs.sqlite pkgs.nodejs-17_x pkgs.mdbook ];
+  nativeBuildInputs = [
+    pinned.go_1_18
+    pinned.gotools
+    pinned.gopls
+    pkgs.sqlite
+    pkgs.nodejs-17_x
+    pkgs.mdbook
+  ];
 
   shellHook = ''
     export CGO_ENABLED=1

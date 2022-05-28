@@ -16,4 +16,5 @@ publish:
 lint:
 	./node_modules/.bin/prettier --check web/src
 	./node_modules/.bin/eslint web/src --ext .js,.jsx,.ts,.tsx
+	./node_modules/.bin/tsc --project tsconfig.json --noEmit
 	test -z $$(gofmt -l .)

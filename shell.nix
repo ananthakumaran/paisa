@@ -12,7 +12,7 @@ in pkgs.mkShell {
     pinned.gotools
     pinned.gopls
     pkgs.sqlite
-    pkgs.nodejs-17_x
+    pinned.nodejs-17_x
     pkgs.mdbook
   ];
 

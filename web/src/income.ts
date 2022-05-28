@@ -30,7 +30,7 @@ function renderIncomeTimeline(
 ) {
   const MAX_BAR_WIDTH = 40;
   const svg = d3.select(id),
-    margin = { top: 40, right: 30, bottom: 80, left: 40 },
+    margin = { top: 60, right: 30, bottom: 80, left: 40 },
     width =
       document.getElementById(id.substring(1)).parentElement.clientWidth -
       margin.left -
@@ -47,6 +47,14 @@ function renderIncomeTimeline(
     .sort()
     .value();
 
+  const groupTotal = _.chain(postings)
+    .groupBy((p) => restName(p.account))
+    .map((postings, key) => {
+      const total = _.sumBy(postings, (p) => -p.amount);
+      return `${key} ${formatCurrency(total)}`;
+    })
+    .value();
+
   const defaultValues = _.zipObject(
     groupKeys,
     _.map(groupKeys, () => 0)
@@ -61,9 +69,7 @@ function renderIncomeTimeline(
   points = _.map(incomes, (i) => {
     const values = _.chain(i.postings)
       .groupBy((p) => restName(p.account))
-      .flatMap((postings, key) => [
-        [key, _.sum(_.map(postings, (p) => -p.amount))]
-      ])
+      .flatMap((postings, key) => [[key, _.sumBy(postings, (p) => -p.amount)]])
       .fromPairs()
       .value();
 
@@ -176,8 +182,10 @@ function renderIncomeTimeline(
     .shape("rect")
     .orient("horizontal")
     .shapePadding(100)
-    .labels(groupKeys)
+    .labels(groupTotal)
     .scale(z);
+
+  (legendOrdinal as any).labelWrap(75); // type missing
 
   svg.select(".legendOrdinal").call(legendOrdinal as any);
 }

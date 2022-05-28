@@ -1,4 +1,5 @@
 import * as d3 from "d3";
+import { group } from "d3";
 import legend from "d3-svg-legend";
 import dayjs from "dayjs";
 import _ from "lodash";
@@ -63,8 +64,9 @@ function renderIncomeTimeline(
     .groupBy((p) => restName(p.account))
     .map((postings, key) => {
       const total = _.sumBy(postings, (p) => -p.amount);
-      return `${key} ${formatCurrency(total)}`;
+      return [key, `${key} ${formatCurrency(total)}`];
     })
+    .fromPairs()
     .value();
 
   const defaultValues = _.zipObject(
@@ -184,17 +186,21 @@ function renderIncomeTimeline(
     })
     .attr("width", Math.min(x.bandwidth(), MAX_BAR_WIDTH));
 
+  const LEGEND_PADDING = 100;
+
   svg
     .append("g")
     .attr("class", "legendOrdinal")
-    .attr("transform", "translate(40,0)");
+    .attr("transform", `translate(${LEGEND_PADDING / 2},0)`);
 
   const legendOrdinal = legend
     .legendColor()
     .shape("rect")
     .orient("horizontal")
-    .shapePadding(100)
-    .labels(groupTotal)
+    .shapePadding(LEGEND_PADDING)
+    .labels(({ i }) => {
+      return groupTotal[groupKeys[i]];
+    })
     .scale(z);
 
   (legendOrdinal as any).labelWrap(75); // type missing

@@ -15,13 +15,25 @@ type Income struct {
 	Postings []posting.Posting `json:"postings"`
 }
 
+type Tax struct {
+	StartDate time.Time         `json:"start_date"`
+	EndDate   time.Time         `json:"end_date"`
+	Postings  []posting.Posting `json:"postings"`
+}
+
 func GetIncome(db *gorm.DB) gin.H {
-	var postings []posting.Posting
-	result := db.Where("account like ?", "Income:%").Order("date ASC").Find(&postings)
+	var incomePostings []posting.Posting
+	result := db.Where("account like ?", "Income:%").Order("date ASC").Find(&incomePostings)
 	if result.Error != nil {
 		log.Fatal(result.Error)
 	}
-	return gin.H{"income_timeline": computeIncomeTimeline(postings)}
+
+	var taxPostings []posting.Posting
+	result = db.Where("account = ?", "Tax").Order("date ASC").Find(&taxPostings)
+	if result.Error != nil {
+		log.Fatal(result.Error)
+	}
+	return gin.H{"income_timeline": computeIncomeTimeline(incomePostings), "tax_timeline": computeTaxTimeline(taxPostings)}
 }
 
 func computeIncomeTimeline(postings []posting.Posting) []Income {
@@ -44,4 +56,27 @@ func computeIncomeTimeline(postings []posting.Posting) []Income {
 
 	}
 	return incomes
+}
+
+func computeTaxTimeline(postings []posting.Posting) []Tax {
+	var taxes []Tax = make([]Tax, 0)
+
+	if len(postings) == 0 {
+		return taxes
+	}
+
+	var p posting.Posting
+	end := time.Now()
+	for start := utils.BeginningOfFinancialYear(postings[0].Date); start.Before(end); start = start.AddDate(1, 0, 0) {
+		yearEnd := utils.EndOfFinancialYear(start)
+		var currentMonthPostings []posting.Posting = make([]posting.Posting, 0)
+		for len(postings) > 0 && (postings[0].Date.Before(yearEnd) || postings[0].Date.Equal(start)) {
+			p, postings = postings[0], postings[1:]
+			currentMonthPostings = append(currentMonthPostings, p)
+		}
+
+		taxes = append(taxes, Tax{StartDate: start, EndDate: yearEnd, Postings: currentMonthPostings})
+
+	}
+	return taxes
 }

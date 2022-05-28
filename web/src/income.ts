@@ -9,14 +9,26 @@ import {
   Income,
   Posting,
   restName,
+  setHtml,
   skipTicks,
   tooltip
 } from "./utils";
 
 export default async function () {
-  const { income_timeline: incomes } = await ajax("/api/income");
+  const { income_timeline: incomes, tax_timeline: taxes } = await ajax(
+    "/api/income"
+  );
   _.each(incomes, (i) => (i.timestamp = dayjs(i.date)));
   renderMonthlyInvestmentTimeline(incomes);
+
+  const grossIncome = _.sumBy(incomes, (i) =>
+    _.sumBy(i.postings, (p) => -p.amount)
+  );
+
+  const netTax = _.sumBy(taxes, (t) => _.sumBy(t.postings, (p) => p.amount));
+
+  setHtml("gross-income", formatCurrency(grossIncome));
+  setHtml("net-tax", formatCurrency(netTax));
 }
 
 function renderMonthlyInvestmentTimeline(incomes: Income[]) {

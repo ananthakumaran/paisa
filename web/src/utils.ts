@@ -55,6 +55,12 @@ export interface Income {
   timestamp: dayjs.Dayjs;
 }
 
+export interface Tax {
+  start_date: string;
+  end_date: string;
+  postings: Posting[];
+}
+
 export function ajax(
   route: "/api/investment"
 ): Promise<{ postings: Posting[] }>;
@@ -74,6 +80,7 @@ export function ajax(route: "/api/allocation"): Promise<{
 }>;
 export function ajax(route: "/api/income"): Promise<{
   income_timeline: Income[];
+  tax_timeline: Tax[];
 }>;
 export async function ajax(route: string) {
   const response = await fetch(route);

@@ -1,5 +1,4 @@
 import * as d3 from "d3";
-import { group } from "d3";
 import legend from "d3-svg-legend";
 import dayjs from "dayjs";
 import _ from "lodash";

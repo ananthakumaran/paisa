@@ -10,6 +10,12 @@ body {
     font-size: 10px;
     fill: #aaa;
 }
+
+.axis.dark text {
+    font-size: 12px;
+    fill: #666;
+}
+
 .axis path.domain, .axis line {
     fill: none;
     stroke: #ccc;

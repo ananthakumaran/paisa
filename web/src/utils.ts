@@ -115,11 +115,11 @@ export function formatCurrencyCrude(value: number) {
   return sprintf(`%.${precision}f %s`, x, unit);
 }
 
-export function formatFloat(value) {
+export function formatFloat(value, precision = 2) {
   if (obscure) {
     return "00";
   }
-  return sprintf("%.2f", value);
+  return sprintf(`%.${precision}f`, value);
 }
 
 export function forEachMonth(

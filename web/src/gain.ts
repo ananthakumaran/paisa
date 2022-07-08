@@ -71,43 +71,99 @@ function renderTable(gain: Gain) {
 
 function renderOverview(gains: Gain[]) {
   gains = _.sortBy(gains, (g) => g.account);
-  const BAR_HEIGHT = 16;
+  const xirrTextWidth = 40;
+  const BAR_HEIGHT = 13;
   const id = "#d3-gain-overview";
   const svg = d3.select(id),
-    margin = { top: 40, right: 30, bottom: 80, left: 150 },
+    margin = { top: 40, right: 40 + xirrTextWidth, bottom: 80, left: 150 },
     width =
       document.getElementById(id.substring(1)).parentElement.clientWidth -
       margin.left -
       margin.right,
-    height = gains.length * BAR_HEIGHT,
+    height = gains.length * BAR_HEIGHT * 2,
     g = svg
       .append("g")
       .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
   svg.attr("height", height + margin.top + margin.bottom);
 
-  const y = d3.scaleBand().range([0, height]).paddingInner(0.1).paddingOuter(0);
+  const y = d3.scaleBand().range([0, height]).paddingInner(0).paddingOuter(0);
   y.domain(gains.map((g) => restName(g.account)));
+  const y1 = d3
+    .scaleBand()
+    .range([0, y.bandwidth()])
+    .domain(["0", "1"])
+    .paddingInner(0)
+    .paddingOuter(0);
+
+  const keys = ["balance", "investment", "withdrawal", "gain", "loss"];
+  const colors = ["#1f77b4", "#17becf", "#ff7f0e", "#b2df8a", "#fb9a99"];
+  const z = d3.scaleOrdinal<string>(colors).domain(keys);
 
   const getInvestmentAmount = (g: Gain) =>
     _.last(g.overview_timeline).investment_amount;
 
   const getGainAmount = (g: Gain) => _.last(g.overview_timeline).gain_amount;
+  const getWithdrawalAmount = (g: Gain) =>
+    _.last(g.overview_timeline).withdrawal_amount;
+
+  const getBalanceAmount = (g: Gain) => {
+    const current = _.last(g.overview_timeline);
+    return (
+      current.investment_amount +
+      current.gain_amount -
+      current.withdrawal_amount
+    );
+  };
 
   const maxInvestment = _.chain(gains).map(getInvestmentAmount).max().value();
-  const maxGain = _.chain(gains).map(getGainAmount).max().value();
-  const maxLoss = _.min([_.chain(gains).map(getGainAmount).min().value(), 0]);
-  const maxX = maxInvestment + maxGain + Math.abs(maxLoss);
-  const x = d3.scaleLinear().range([0, width]);
+  const maxX = _.chain(gains)
+    .map((g) => getInvestmentAmount(g) + _.max([getGainAmount(g), 0]))
+    .max()
+    .value();
+  const xirrWidth = 250;
+  const textGroupWidth = 225;
+  const x = d3.scaleLinear().range([0, width - xirrWidth - textGroupWidth]);
   x.domain([0, maxX]);
   const x1 = d3
     .scaleLinear()
-    .range([0, x(maxInvestment)])
-    .domain([0, maxInvestment]);
-  const x2 = d3
-    .scaleLinear()
-    .range([x(maxInvestment), width])
-    .domain([maxLoss, maxGain]);
+    .range([width - xirrWidth + 20, width])
+    .domain([
+      _.min([_.min(_.map(gains, (g) => g.xirr)), 0]),
+      _.max([0, _.max(_.map(gains, (g) => g.xirr))])
+    ]);
 
+  g.append("line")
+    .attr("stroke", "#ddd")
+    .attr("x1", x(maxX) + textGroupWidth + 10)
+    .attr("y1", 0)
+    .attr("x2", x(maxX) + textGroupWidth + 10)
+    .attr("y2", height);
+
+  g.append("line")
+    .attr("stroke", "#ddd")
+    .attr("x1", 0)
+    .attr("y1", height)
+    .attr("x2", width + xirrTextWidth)
+    .attr("y2", height);
+
+  g.append("text")
+    .attr("fill", "#4a4a4a")
+    .text("XIRR")
+    .attr("text-anchor", "middle")
+    .attr("x", width + 20 - xirrWidth / 2)
+    .attr("y", height + 40);
+
+  g.append("g")
+    .attr("class", "axis y")
+    .attr("transform", "translate(0," + height + ")")
+    .call(
+      d3
+        .axisBottom(x)
+        .tickSize(-height)
+        .tickFormat(
+          skipTicks(50, x(maxInvestment), x.ticks().length, formatCurrencyCrude)
+        )
+    );
   g.append("g")
     .attr("class", "axis y")
     .attr("transform", "translate(0," + height + ")")
@@ -116,56 +172,149 @@ function renderOverview(gains: Gain[]) {
         .axisBottom(x1)
         .tickSize(-height)
         .tickFormat(
-          skipTicks(
-            50,
-            x(maxInvestment),
-            x1.ticks().length,
-            formatCurrencyCrude
-          )
-        )
-    );
-  g.append("g")
-    .attr("class", "axis y")
-    .attr("transform", "translate(0," + height + ")")
-    .call(
-      d3
-        .axisBottom(x2)
-        .tickSize(-height)
-        .tickFormat(
-          skipTicks(
-            50,
-            width - x(maxInvestment),
-            x2.ticks().length,
-            formatCurrencyCrude
-          )
+          skipTicks(40, xirrWidth, x1.ticks().length, (n) => formatFloat(n, 1))
         )
     );
 
   g.append("g").attr("class", "axis y dark").call(d3.axisLeft(y));
 
-  g.append("g")
-    .selectAll("rect")
+  const textGroup = g
+    .append("g")
+    .selectAll("g")
     .data(gains)
     .enter()
+    .append("g")
+    .attr("class", "inline-text");
+
+  textGroup
+    .append("text")
+    .text((g) => formatCurrency(getInvestmentAmount(g)))
+    .attr("alignment-baseline", "hanging")
+    .attr("text-anchor", "end")
+    .style("fill", (g) =>
+      getInvestmentAmount(g) > 0 ? z("investment") : "none"
+    )
+    .attr("dx", "-3")
+    .attr("dy", "3")
+    .attr("x", x(maxX) + textGroupWidth / 3)
+    .attr("y", (g) => y(restName(g.account)));
+
+  textGroup
+    .append("text")
+    .text((g) => formatCurrency(getGainAmount(g)))
+    .attr("alignment-baseline", "hanging")
+    .attr("text-anchor", "end")
+    .style("fill", (g) => (getGainAmount(g) > 0 ? z("gain") : "none"))
+    .attr("dx", "3")
+    .attr("dy", "3")
+    .attr("x", x(maxX) + (textGroupWidth * 2) / 3)
+    .attr("y", (g) => y(restName(g.account)));
+
+  textGroup
+    .append("text")
+    .text((g) => formatCurrency(getBalanceAmount(g)))
+    .attr("text-anchor", "end")
+    .style("fill", (g) => (getBalanceAmount(g) > 0 ? z("balance") : "none"))
+    .attr("dx", "-3")
+    .attr("dy", "-3")
+    .attr("x", x(maxX) + textGroupWidth / 3)
+    .attr("y", (g) => y(restName(g.account)) + y.bandwidth());
+
+  textGroup
+    .append("text")
+    .text((g) => formatCurrency(getGainAmount(g)))
+    .attr("text-anchor", "end")
+    .style("fill", (g) => (getGainAmount(g) < 0 ? z("loss") : "none"))
+    .attr("dx", "-3")
+    .attr("dy", "-3")
+    .attr("x", x(maxX) + (textGroupWidth * 2) / 3)
+    .attr("y", (g) => y(restName(g.account)) + y.bandwidth());
+
+  textGroup
+    .append("text")
+    .text((g) => formatCurrency(getWithdrawalAmount(g)))
+    .attr("text-anchor", "end")
+    .style("fill", (g) =>
+      getWithdrawalAmount(g) > 0 ? z("withdrawal") : "none"
+    )
+    .attr("dx", "3")
+    .attr("dy", "-3")
+    .attr("x", x(maxX) + textGroupWidth)
+    .attr("y", (g) => y(restName(g.account)) + y.bandwidth());
+
+  textGroup
+    .append("line")
+    .attr("stroke", "#ddd")
+    .attr("x1", x(0))
+    .attr("y1", (g) => y(restName(g.account)))
+    .attr("x2", x(0) + width + xirrTextWidth)
+    .attr("y2", (g) => y(restName(g.account)));
+
+  textGroup
+    .append("text")
+    .text((g) => formatFloat(g.xirr))
+    .attr("text-anchor", "end")
+    .attr("alignment-baseline", "middle")
+    .style("fill", (g) => (g.xirr < 0 ? z("loss") : z("gain")))
+    .attr("x", width + xirrTextWidth)
+    .attr("y", (g) => y(restName(g.account)) + y.bandwidth() / 2);
+
+  const groups = g
+    .append("g")
+    .selectAll("g.group")
+    .data(gains)
+    .enter()
+    .append("g")
+    .attr("class", "group")
+    .attr("transform", (g) => "translate(0," + y(restName(g.account)) + ")");
+
+  groups
+    .selectAll("g")
+    .data((g) => [
+      d3.stack().keys(["investment", "gain"])([
+        {
+          i: "0",
+          data: g,
+          investment: getInvestmentAmount(g),
+          gain: _.max([getGainAmount(g), 0])
+        }
+      ] as any),
+      d3.stack().keys(["balance", "loss", "withdrawal"])([
+        {
+          i: "1",
+          data: g,
+          balance: getBalanceAmount(g),
+          withdrawal: getWithdrawalAmount(g),
+          loss: Math.abs(_.min([getGainAmount(g), 0]))
+        }
+      ] as any)
+    ])
+    .enter()
+    .append("g")
+    .selectAll("rect")
+    .data((d) => {
+      return d;
+    })
+    .enter()
     .append("rect")
-    .attr("fill", lineScale("investment"))
-    .attr("x", x(0))
-    .attr("y", (g) => y(restName(g.account)))
-    .attr("height", y.bandwidth())
-    .attr("width", (g) => x(getInvestmentAmount(g)));
+    .attr("fill", (d) => {
+      return z(d.key);
+    })
+    .attr("x", (d) => x(d[0][0]))
+    .attr("y", (d: any) => y1(d[0].data.i))
+    .attr("height", y1.bandwidth())
+    .attr("width", (d) => x(d[0][1]) - x(d[0][0]));
 
   g.append("g")
     .selectAll("rect")
     .data(gains)
     .enter()
     .append("rect")
-    .attr("fill", (g) =>
-      getGainAmount(g) < 0 ? areaScale("loss") : areaScale("gain")
-    )
-    .attr("x", (g) => (getGainAmount(g) < 0 ? x2(getGainAmount(g)) : x2(0)))
+    .attr("fill", (g) => (g.xirr < 0 ? z("loss") : z("gain")))
+    .attr("x", (g) => (g.xirr < 0 ? x1(g.xirr) : x1(0)))
     .attr("y", (g) => y(restName(g.account)))
     .attr("height", y.bandwidth())
-    .attr("width", (g) => x(Math.abs(getGainAmount(g))));
+    .attr("width", (g) => Math.abs(x1(0) - x1(g.xirr)));
 
   g.append("g")
     .selectAll("rect")
@@ -215,7 +364,7 @@ function renderOverview(gains: Gain[]) {
     .attr("x", x(0))
     .attr("y", (g) => y(restName(g.account)))
     .attr("height", y.bandwidth())
-    .attr("width", x(maxX));
+    .attr("width", width);
 }
 
 function renderPerAccountOverview(gains: Gain[]) {
@@ -409,13 +558,13 @@ function renderLegend() {
   svg
     .append("g")
     .attr("class", "legendOrdinal")
-    .attr("transform", "translate(315,3)");
+    .attr("transform", "translate(280,3)");
 
   const legendOrdinal = legend
     .legendColor()
     .shape("rect")
     .orient("horizontal")
-    .shapePadding(50)
+    .shapePadding(70)
     .labels(areaKeys)
     .scale(areaScale);
 
@@ -431,9 +580,6 @@ function renderLegend() {
     .shape("rect")
     .orient("horizontal")
     .shapePadding(70)
-    .labelOffset(22)
-    .shapeHeight(3)
-    .shapeWidth(25)
     .labels(lineKeys)
     .scale(lineScale);
 

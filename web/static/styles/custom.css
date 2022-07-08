@@ -11,6 +11,11 @@ body {
     fill: #aaa;
 }
 
+.inline-text text {
+    font-size: 10px;
+    font-weight: bold;
+}
+
 .axis.dark text {
     font-size: 12px;
     fill: #666;
@@ -46,16 +51,20 @@ body {
 }
 
 .y.axis path.domain {
-    display: none
+    display: none;
+}
+
+.y.axis.keep-domain path.domain {
+    display: block;
 }
 
 
 #d3-salary-timeline .x.axis > g.tick {
-    display: none
+    display: none;
 }
 
 #d3-salary-timeline .x.axis > g.tick:nth-child(3n-1) {
-    display: inline
+    display: inline;
 }
 
 .node {

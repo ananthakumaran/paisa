@@ -71,11 +71,10 @@ function renderTable(gain: Gain) {
 
 function renderOverview(gains: Gain[]) {
   gains = _.sortBy(gains, (g) => g.account);
-  const xirrTextWidth = 40;
   const BAR_HEIGHT = 13;
   const id = "#d3-gain-overview";
   const svg = d3.select(id),
-    margin = { top: 40, right: 40 + xirrTextWidth, bottom: 80, left: 150 },
+    margin = { top: 40, right: 40, bottom: 80, left: 150 },
     width =
       document.getElementById(id.substring(1)).parentElement.clientWidth -
       margin.left -
@@ -121,12 +120,16 @@ function renderOverview(gains: Gain[]) {
     .max()
     .value();
   const xirrWidth = 250;
+  const xirrTextWidth = 40;
+  const xirrMargin = 20;
   const textGroupWidth = 225;
-  const x = d3.scaleLinear().range([0, width - xirrWidth - textGroupWidth]);
+  const textGroupZero = xirrWidth + xirrTextWidth + xirrMargin;
+
+  const x = d3.scaleLinear().range([textGroupZero + textGroupWidth, width]);
   x.domain([0, maxX]);
   const x1 = d3
     .scaleLinear()
-    .range([width - xirrWidth + 20, width])
+    .range([0, xirrWidth])
     .domain([
       _.min([_.min(_.map(gains, (g) => g.xirr)), 0]),
       _.max([0, _.max(_.map(gains, (g) => g.xirr))])
@@ -134,23 +137,23 @@ function renderOverview(gains: Gain[]) {
 
   g.append("line")
     .attr("stroke", "#ddd")
-    .attr("x1", x(maxX) + textGroupWidth + 10)
+    .attr("x1", xirrWidth + xirrTextWidth + xirrMargin / 2)
     .attr("y1", 0)
-    .attr("x2", x(maxX) + textGroupWidth + 10)
+    .attr("x2", xirrWidth + xirrTextWidth + xirrMargin / 2)
     .attr("y2", height);
 
   g.append("line")
     .attr("stroke", "#ddd")
     .attr("x1", 0)
     .attr("y1", height)
-    .attr("x2", width + xirrTextWidth)
+    .attr("x2", width)
     .attr("y2", height);
 
   g.append("text")
     .attr("fill", "#4a4a4a")
     .text("XIRR")
     .attr("text-anchor", "middle")
-    .attr("x", width + 20 - xirrWidth / 2)
+    .attr("x", xirrWidth / 2)
     .attr("y", height + 40);
 
   g.append("g")
@@ -196,7 +199,7 @@ function renderOverview(gains: Gain[]) {
     )
     .attr("dx", "-3")
     .attr("dy", "3")
-    .attr("x", x(maxX) + textGroupWidth / 3)
+    .attr("x", textGroupZero + textGroupWidth / 3)
     .attr("y", (g) => y(restName(g.account)));
 
   textGroup
@@ -205,9 +208,9 @@ function renderOverview(gains: Gain[]) {
     .attr("alignment-baseline", "hanging")
     .attr("text-anchor", "end")
     .style("fill", (g) => (getGainAmount(g) > 0 ? z("gain") : "none"))
-    .attr("dx", "3")
+    .attr("dx", "-3")
     .attr("dy", "3")
-    .attr("x", x(maxX) + (textGroupWidth * 2) / 3)
+    .attr("x", textGroupZero + (textGroupWidth * 2) / 3)
     .attr("y", (g) => y(restName(g.account)));
 
   textGroup
@@ -217,7 +220,7 @@ function renderOverview(gains: Gain[]) {
     .style("fill", (g) => (getBalanceAmount(g) > 0 ? z("balance") : "none"))
     .attr("dx", "-3")
     .attr("dy", "-3")
-    .attr("x", x(maxX) + textGroupWidth / 3)
+    .attr("x", textGroupZero + textGroupWidth / 3)
     .attr("y", (g) => y(restName(g.account)) + y.bandwidth());
 
   textGroup
@@ -227,7 +230,7 @@ function renderOverview(gains: Gain[]) {
     .style("fill", (g) => (getGainAmount(g) < 0 ? z("loss") : "none"))
     .attr("dx", "-3")
     .attr("dy", "-3")
-    .attr("x", x(maxX) + (textGroupWidth * 2) / 3)
+    .attr("x", textGroupZero + (textGroupWidth * 2) / 3)
     .attr("y", (g) => y(restName(g.account)) + y.bandwidth());
 
   textGroup
@@ -237,17 +240,17 @@ function renderOverview(gains: Gain[]) {
     .style("fill", (g) =>
       getWithdrawalAmount(g) > 0 ? z("withdrawal") : "none"
     )
-    .attr("dx", "3")
+    .attr("dx", "-3")
     .attr("dy", "-3")
-    .attr("x", x(maxX) + textGroupWidth)
+    .attr("x", textGroupZero + textGroupWidth)
     .attr("y", (g) => y(restName(g.account)) + y.bandwidth());
 
   textGroup
     .append("line")
     .attr("stroke", "#ddd")
-    .attr("x1", x(0))
+    .attr("x1", 0)
     .attr("y1", (g) => y(restName(g.account)))
-    .attr("x2", x(0) + width + xirrTextWidth)
+    .attr("x2", width)
     .attr("y2", (g) => y(restName(g.account)));
 
   textGroup
@@ -256,7 +259,7 @@ function renderOverview(gains: Gain[]) {
     .attr("text-anchor", "end")
     .attr("alignment-baseline", "middle")
     .style("fill", (g) => (g.xirr < 0 ? z("loss") : z("gain")))
-    .attr("x", width + xirrTextWidth)
+    .attr("x", xirrWidth + xirrTextWidth)
     .attr("y", (g) => y(restName(g.account)) + y.bandwidth() / 2);
 
   const groups = g
@@ -361,7 +364,7 @@ function renderOverview(gains: Gain[]) {
         ["XIRR", [formatFloat(g.xirr), "has-text-weight-bold has-text-right"]]
       ]);
     })
-    .attr("x", x(0))
+    .attr("x", 0)
     .attr("y", (g) => y(restName(g.account)))
     .attr("height", y.bandwidth())
     .attr("width", width);

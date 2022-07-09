@@ -114,7 +114,6 @@ function renderOverview(gains: Gain[]) {
     );
   };
 
-  const maxInvestment = _.chain(gains).map(getInvestmentAmount).max().value();
   const maxX = _.chain(gains)
     .map((g) => getInvestmentAmount(g) + _.max([getGainAmount(g), 0]))
     .max()

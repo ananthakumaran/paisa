@@ -163,10 +163,9 @@ function renderOverview(gains: Gain[]) {
       d3
         .axisBottom(x)
         .tickSize(-height)
-        .tickFormat(
-          skipTicks(50, x(maxInvestment), x.ticks().length, formatCurrencyCrude)
-        )
+        .tickFormat(skipTicks(50, x, formatCurrencyCrude))
     );
+
   g.append("g")
     .attr("class", "axis y")
     .attr("transform", "translate(0," + height + ")")
@@ -174,9 +173,7 @@ function renderOverview(gains: Gain[]) {
       d3
         .axisBottom(x1)
         .tickSize(-height)
-        .tickFormat(
-          skipTicks(40, xirrWidth, x1.ticks().length, (n) => formatFloat(n, 1))
-        )
+        .tickFormat(skipTicks(40, x, (n) => formatFloat(n, 1)))
     );
 
   g.append("g").attr("class", "axis y dark").call(d3.axisLeft(y));

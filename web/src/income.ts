@@ -128,7 +128,7 @@ function renderIncomeTimeline(
       d3
         .axisBottom(x)
         .ticks(5)
-        .tickFormat(skipTicks(30, width, points.length, (d) => d.toString()))
+        .tickFormat(skipTicks(30, x, (d) => d.toString(), points.length))
     )
     .selectAll("text")
     .attr("y", 10)

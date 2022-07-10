@@ -1,6 +1,7 @@
 package server
 
 import (
+	"path/filepath"
 	"strings"
 	"time"
 
@@ -10,6 +11,7 @@ import (
 	"github.com/ananthakumaran/paisa/internal/model/posting"
 	"github.com/ananthakumaran/paisa/internal/service"
 	"github.com/gin-gonic/gin"
+	"github.com/spf13/viper"
 	"gorm.io/gorm"
 )
 
@@ -18,6 +20,19 @@ type Aggregate struct {
 	Account      string    `json:"account"`
 	Amount       float64   `json:"amount"`
 	MarketAmount float64   `json:"market_amount"`
+}
+
+type AllocationTargetConfig struct {
+	Name     string
+	Target   float64
+	Accounts []string
+}
+
+type AllocationTarget struct {
+	Name       string               `json:"name"`
+	Target     float64              `json:"target"`
+	Current    float64              `json:"current"`
+	Aggregates map[string]Aggregate `json:"aggregates"`
 }
 
 func GetAllocation(db *gorm.DB) gin.H {
@@ -34,7 +49,8 @@ func GetAllocation(db *gorm.DB) gin.H {
 	})
 	aggregates := computeAggregate(postings, now)
 	aggregates_timeline := computeAggregateTimeline(postings)
-	return gin.H{"aggregates": aggregates, "aggregates_timeline": aggregates_timeline}
+	allocation_targets := computeAllocationTargets(postings)
+	return gin.H{"aggregates": aggregates, "aggregates_timeline": aggregates_timeline, "allocation_targets": allocation_targets}
 }
 
 func computeAggregateTimeline(postings []posting.Posting) []map[string]Aggregate {
@@ -53,6 +69,37 @@ func computeAggregateTimeline(postings []posting.Posting) []map[string]Aggregate
 		timeline = append(timeline, computeAggregate(pastPostings, start))
 	}
 	return timeline
+}
+
+func computeAllocationTargets(postings []posting.Posting) []AllocationTarget {
+	var targetAllocations []AllocationTarget
+	var configs []AllocationTargetConfig
+	viper.UnmarshalKey("allocation_targets", &configs)
+
+	totalMarketAmount := lo.Reduce(postings, func(acc float64, p posting.Posting, _ int) float64 { return acc + p.MarketAmount }, 0.0)
+
+	for _, config := range configs {
+		targetAllocations = append(targetAllocations, computeAllocationTarget(postings, config, totalMarketAmount))
+	}
+
+	return targetAllocations
+}
+
+func computeAllocationTarget(postings []posting.Posting, config AllocationTargetConfig, total float64) AllocationTarget {
+	date := time.Now()
+	postings = lo.Filter(postings, func(p posting.Posting, _ int) bool {
+		return lo.SomeBy(config.Accounts, func(accountGlob string) bool {
+			match, err := filepath.Match(accountGlob, p.Account)
+			if err != nil {
+				log.Fatal("Invalid account value used in target_allocations", accountGlob, err)
+			}
+			return match
+		})
+	})
+
+	aggregates := computeAggregate(postings, date)
+	currentTotal := lo.Reduce(postings, func(acc float64, p posting.Posting, _ int) float64 { return acc + p.MarketAmount }, 0.0)
+	return AllocationTarget{Name: config.Name, Target: config.Target, Current: (currentTotal / total) * 100, Aggregates: aggregates}
 }
 
 func computeAggregate(postings []posting.Posting, date time.Time) map[string]Aggregate {

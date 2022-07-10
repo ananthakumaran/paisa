@@ -10,3 +10,4 @@
 # Reference Guide
 
 - [Accounts](accounts.md)
+- [Allocation Targets](allocation-targets.md)

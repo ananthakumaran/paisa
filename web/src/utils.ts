@@ -48,6 +48,13 @@ export interface Aggregate {
   timestamp: dayjs.Dayjs;
 }
 
+export interface AllocationTarget {
+  name: string;
+  target: number;
+  current: number;
+  aggregates: { [key: string]: Aggregate };
+}
+
 export interface Income {
   date: string;
   postings: Posting[];
@@ -77,6 +84,7 @@ export function ajax(route: "/api/gain"): Promise<{
 export function ajax(route: "/api/allocation"): Promise<{
   aggregates: { [key: string]: Aggregate };
   aggregates_timeline: { [key: string]: Aggregate }[];
+  allocation_targets: AllocationTarget[];
 }>;
 export function ajax(route: "/api/income"): Promise<{
   income_timeline: Income[];

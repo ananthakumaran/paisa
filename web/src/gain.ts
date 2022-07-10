@@ -71,10 +71,10 @@ function renderTable(gain: Gain) {
 
 function renderOverview(gains: Gain[]) {
   gains = _.sortBy(gains, (g) => g.account);
-  const BAR_HEIGHT = 13;
+  const BAR_HEIGHT = 15;
   const id = "#d3-gain-overview";
   const svg = d3.select(id),
-    margin = { top: 40, right: 40, bottom: 80, left: 150 },
+    margin = { top: 5, right: 20, bottom: 30, left: 150 },
     width =
       document.getElementById(id.substring(1)).parentElement.clientWidth -
       margin.left -
@@ -92,7 +92,7 @@ function renderOverview(gains: Gain[]) {
     .range([0, y.bandwidth()])
     .domain(["0", "1"])
     .paddingInner(0)
-    .paddingOuter(0);
+    .paddingOuter(0.1);
 
   const keys = ["balance", "investment", "withdrawal", "gain", "loss"];
   const colors = ["#1f77b4", "#17becf", "#ff7f0e", "#b2df8a", "#fb9a99"];
@@ -153,7 +153,7 @@ function renderOverview(gains: Gain[]) {
     .text("XIRR")
     .attr("text-anchor", "middle")
     .attr("x", xirrWidth / 2)
-    .attr("y", height + 40);
+    .attr("y", height + 30);
 
   g.append("g")
     .attr("class", "axis y")
@@ -304,6 +304,7 @@ function renderOverview(gains: Gain[]) {
     .attr("height", y1.bandwidth())
     .attr("width", (d) => x(d[0][1]) - x(d[0][0]));
 
+  const paddingTop = (y1.range()[1] - y1.bandwidth() * 2) / 2;
   g.append("g")
     .selectAll("rect")
     .data(gains)
@@ -311,8 +312,8 @@ function renderOverview(gains: Gain[]) {
     .append("rect")
     .attr("fill", (g) => (g.xirr < 0 ? z("loss") : z("gain")))
     .attr("x", (g) => (g.xirr < 0 ? x1(g.xirr) : x1(0)))
-    .attr("y", (g) => y(restName(g.account)))
-    .attr("height", y.bandwidth())
+    .attr("y", (g) => y(restName(g.account)) + paddingTop)
+    .attr("height", y.bandwidth() - paddingTop * 2)
     .attr("width", (g) => Math.abs(x1(0) - x1(g.xirr)));
 
   g.append("g")

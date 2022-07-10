@@ -44,6 +44,15 @@ func generateConfigFile(cwd string) {
 	config := `
 journal_path: "%s"
 db_path: "%s"
+allocation_targets:
+  - name: Debt
+    target: 40
+    accounts:
+      - Asset:Debt:*
+  - name: Equity
+    target: 60
+    accounts:
+      - Asset:Equity:*
 commodities:
   - name: NIFTY
     type: mutualfund

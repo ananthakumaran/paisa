@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Accounts - ₹ Paisa</title>
+        <title>Allocation Targets - ₹ Paisa</title>
         <!-- Custom HTML head -->
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="">
@@ -75,7 +75,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="introduction.html">Introduction</a></li><li class="chapter-item expanded affix "><li class="part-title">Getting Started</li><li class="chapter-item expanded "><a href="installation.html"><strong aria-hidden="true">1.</strong> Installation</a></li><li class="chapter-item expanded "><a href="tutorial.html"><strong aria-hidden="true">2.</strong> Tutorial</a></li><li class="chapter-item expanded affix "><li class="part-title">Reference Guide</li><li class="chapter-item expanded "><a href="accounts.html" class="active"><strong aria-hidden="true">3.</strong> Accounts</a></li><li class="chapter-item expanded "><a href="allocation-targets.html"><strong aria-hidden="true">4.</strong> Allocation Targets</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="introduction.html">Introduction</a></li><li class="chapter-item expanded affix "><li class="part-title">Getting Started</li><li class="chapter-item expanded "><a href="installation.html"><strong aria-hidden="true">1.</strong> Installation</a></li><li class="chapter-item expanded "><a href="tutorial.html"><strong aria-hidden="true">2.</strong> Tutorial</a></li><li class="chapter-item expanded affix "><li class="part-title">Reference Guide</li><li class="chapter-item expanded "><a href="accounts.html"><strong aria-hidden="true">3.</strong> Accounts</a></li><li class="chapter-item expanded "><a href="allocation-targets.html" class="active"><strong aria-hidden="true">4.</strong> Allocation Targets</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -134,34 +134,29 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="accounts"><a class="header" href="#accounts">Accounts</a></h1>
-<p>Even though <strong>ledger</strong> doesn't have any Account naming convention,
-<strong>paisa</strong> makes lot of assumptions and expects you to follow the same
-naming convention.</p>
-<h3 id="asset"><a class="header" href="#asset">Asset</a></h3>
-<p>All your assets should go under <code>Asset:</code>. The level of granularity is
-up to you. The recommended convention is to use
-<code>Asset:{instrument_type}:{instrument_name}</code>. The instrument type may
-be <code>Cash</code>, <code>Equity</code>, <code>Debt</code>, etc. The instrument name may be the name of
-the fund, stock, etc</p>
-<h3 id="income"><a class="header" href="#income">Income</a></h3>
-<p>All your income should come from <code>Income:</code>.</p>
-<ul>
-<li><code>Income:Salary:{company}</code> - salary debit account</li>
-<li><code>Income:Interest:{name}</code> - interest debit account</li>
-</ul>
-<h3 id="tax"><a class="header" href="#tax">Tax</a></h3>
-<p>Income tax paid to government should be credited to <code>Tax</code> account</p>
+                        <h1 id="allocation-targets"><a class="header" href="#allocation-targets">Allocation Targets</a></h1>
+<p>Paisa allows you to set a allocation target for a group of
+accounts. The allocation page shows how far your current allocation is
+from the allocation target. For example, to keep a 40:60 split between
+debt and equity, add the following configuration to the <code>paisa.yaml</code>
+file. The account name can have <code>*</code> which matches any characters</p>
+<pre><code class="language-yaml">allocation_targets:
+  - name: Debt
+    target: 40
+    accounts:
+      - Asset:Debt:*
+  - name: Equity
+    target: 60
+    accounts:
+      - Asset:Equity:*
+</code></pre>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="tutorial.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="accounts.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
-                            </a>
-                            <a rel="next" href="allocation-targets.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                                <i class="fa fa-angle-right"></i>
                             </a>
                         <div style="clear: both"></div>
                     </nav>
@@ -169,11 +164,8 @@ the fund, stock, etc</p>
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="tutorial.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="accounts.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
-                    </a>
-                    <a rel="next" href="allocation-targets.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                        <i class="fa fa-angle-right"></i>
                     </a>
             </nav>
 

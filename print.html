@@ -76,7 +76,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="introduction.html">Introduction</a></li><li class="chapter-item expanded affix "><li class="part-title">Getting Started</li><li class="chapter-item expanded "><a href="installation.html"><strong aria-hidden="true">1.</strong> Installation</a></li><li class="chapter-item expanded "><a href="tutorial.html"><strong aria-hidden="true">2.</strong> Tutorial</a></li><li class="chapter-item expanded affix "><li class="part-title">Reference Guide</li><li class="chapter-item expanded "><a href="accounts.html"><strong aria-hidden="true">3.</strong> Accounts</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="introduction.html">Introduction</a></li><li class="chapter-item expanded affix "><li class="part-title">Getting Started</li><li class="chapter-item expanded "><a href="installation.html"><strong aria-hidden="true">1.</strong> Installation</a></li><li class="chapter-item expanded "><a href="tutorial.html"><strong aria-hidden="true">2.</strong> Tutorial</a></li><li class="chapter-item expanded affix "><li class="part-title">Reference Guide</li><li class="chapter-item expanded "><a href="accounts.html"><strong aria-hidden="true">3.</strong> Accounts</a></li><li class="chapter-item expanded "><a href="allocation-targets.html"><strong aria-hidden="true">4.</strong> Allocation Targets</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -333,6 +333,22 @@ the fund, stock, etc</p>
 </ul>
 <h3 id="tax"><a class="header" href="#tax">Tax</a></h3>
 <p>Income tax paid to government should be credited to <code>Tax</code> account</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="allocation-targets"><a class="header" href="#allocation-targets">Allocation Targets</a></h1>
+<p>Paisa allows you to set a allocation target for a group of
+accounts. The allocation page shows how far your current allocation is
+from the allocation target. For example, to keep a 40:60 split between
+debt and equity, add the following configuration to the <code>paisa.yaml</code>
+file. The account name can have <code>*</code> which matches any characters</p>
+<pre><code class="language-yaml">allocation_targets:
+  - name: Debt
+    target: 40
+    accounts:
+      - Asset:Debt:*
+  - name: Equity
+    target: 60
+    accounts:
+      - Asset:Equity:*
+</code></pre>
 
                     </main>
 

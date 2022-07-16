@@ -11,21 +11,13 @@ import (
 )
 
 type interestCache struct {
-	sync.Mutex
-	loaded   bool
+	sync.Once
 	postings map[time.Time][]posting.Posting
 }
 
 var icache interestCache
 
 func loadInterestCache(db *gorm.DB) {
-	icache.Lock()
-	defer icache.Unlock()
-
-	if icache.loaded {
-		return
-	}
-
 	var postings []posting.Posting
 	result := db.Where("account like ?", "Income:Interest:%").Find(&postings)
 	if result.Error != nil {
@@ -33,15 +25,14 @@ func loadInterestCache(db *gorm.DB) {
 	}
 
 	icache.postings = lo.GroupBy(postings, func(p posting.Posting) time.Time { return p.Date })
-	icache.loaded = true
 }
 
 func IsInterest(db *gorm.DB, p posting.Posting) bool {
+	icache.Do(func() { loadInterestCache(db) })
+
 	if p.Commodity != "INR" {
 		return false
 	}
-
-	loadInterestCache(db)
 
 	for _, ip := range icache.postings[p.Date] {
 		if ip.Date.Equal(p.Date) &&

@@ -14,21 +14,13 @@ import (
 )
 
 type priceCache struct {
-	sync.Mutex
-	loaded     bool
+	sync.Once
 	pricesTree map[string]*btree.BTree
 }
 
 var pcache priceCache
 
 func loadPriceCache(db *gorm.DB) {
-	pcache.Lock()
-	defer pcache.Unlock()
-
-	if pcache.loaded {
-		return
-	}
-
 	var prices []price.Price
 	result := db.Find(&prices)
 	if result.Error != nil {
@@ -58,12 +50,11 @@ func loadPriceCache(db *gorm.DB) {
 			}
 		}
 	}
-
-	pcache.loaded = true
 }
 
 func GetMarketPrice(db *gorm.DB, p posting.Posting, date time.Time) float64 {
-	loadPriceCache(db)
+	pcache.Do(func() { loadPriceCache(db) })
+
 	if p.Commodity == "INR" {
 		return p.Amount
 	}

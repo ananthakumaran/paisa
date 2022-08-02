@@ -2,6 +2,8 @@ name: Release
 
 on:
   push:
+    branches:
+      - ci/*
     tags:
       - '*'
 
@@ -37,6 +39,30 @@ jobs:
         ./node_modules/.bin/esbuild web/src/index.ts --bundle --outfile=web/static/dist.js
         go build
         cp paisa paisa-darwin-amd64
+    - name: Release
+      uses: softprops/action-gh-release@v1
+      with:
+        draft: true
+        files: |
+          paisa-*
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  windows-binary:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v2.4.0
+    - uses: actions/setup-node@v3
+      with:
+        node-version: 17
+    - uses: actions/setup-go@v3
+      with:
+        go-version: '1.18.1'
+    - run: |
+        choco install sqlite
+        npm install
+        ./node_modules/.bin/esbuild web/src/index.ts --bundle --outfile=web/static/dist.js
+        go build
+        cp paisa.exe paisa-windows-amd64.exe
     - name: Release
       uses: softprops/action-gh-release@v1
       with:

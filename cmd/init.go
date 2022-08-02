@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
-	"path"
+	"path/filepath"
 
 	"time"
 
@@ -40,10 +40,10 @@ func init() {
 }
 
 func generateConfigFile(cwd string) {
-	configFilePath := path.Join(cwd, "paisa.yaml")
+	configFilePath := filepath.Join(cwd, "paisa.yaml")
 	config := `
-journal_path: "%s"
-db_path: "%s"
+journal_path: '%s'
+db_path: '%s'
 allocation_targets:
   - name: Debt
     target: 40
@@ -65,8 +65,8 @@ commodities:
     code: 119533
 `
 	log.Info("Generating config file: ", configFilePath)
-	journalFilePath := path.Join(cwd, "personal.ledger")
-	dbFilePath := path.Join(cwd, "paisa.db")
+	journalFilePath := filepath.Join(cwd, "personal.ledger")
+	dbFilePath := filepath.Join(cwd, "paisa.db")
 	err := ioutil.WriteFile(configFilePath, []byte(fmt.Sprintf(config, journalFilePath, dbFilePath)), 0644)
 	if err != nil {
 		log.Fatal(err)
@@ -82,7 +82,6 @@ func loadPrices(schemeCode string, commodityName string, pricesTree map[string]*
 	pricesTree[commodityName] = btree.New(2)
 	for _, price := range prices {
 		pricesTree[commodityName].ReplaceOrInsert(*price)
-
 	}
 }
 
@@ -132,7 +131,6 @@ func emitEquityMutualFund(file *os.File, start time.Time, pricesTree map[string]
 		multiplier = -1.0
 	}
 	pc := utils.BTreeDescendFirstLessOrEqual(pricesTree["NIFTY"], price.Price{Date: start})
-	log.Info(pc)
 	_, err := file.WriteString(fmt.Sprintf(`
 %s Mutual Fund Nifty
     Asset:Equity:NIFTY   %s NIFTY @ %s INR
@@ -171,7 +169,7 @@ func emitDebtMutualFund(file *os.File, start time.Time, pricesTree map[string]*b
 }
 
 func generateJournalFile(cwd string) {
-	journalFilePath := path.Join(cwd, "personal.ledger")
+	journalFilePath := filepath.Join(cwd, "personal.ledger")
 	log.Info("Generating journal file: ", journalFilePath)
 	ledgerFile, err := os.OpenFile(journalFilePath, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0644)
 	if err != nil {

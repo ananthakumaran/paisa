@@ -47,25 +47,34 @@ function renderTransactions(postings: Posting[]) {
       let market = "",
         change = "",
         changePercentage = "",
-        changeClass = "";
+        changeClass = "",
+        price = "",
+        units = "";
       if (p.commodity !== "INR") {
-        market = formatCurrency(p.market_amount);
-        const changeAmount = p.market_amount - p.amount;
-        if (changeAmount > 0) {
-          changeClass = "has-text-success";
-        } else if (changeAmount < 0) {
-          changeClass = "has-text-danger";
+        units = formatFloat(p.quantity, 4);
+        price = formatCurrency(Math.abs(p.amount / p.quantity), 4);
+        const days = dayjs().diff(p.timestamp, "days");
+        if (p.quantity > 0 && days > 0) {
+          market = formatCurrency(p.market_amount);
+          const changeAmount = p.market_amount - p.amount;
+          if (changeAmount > 0) {
+            changeClass = "has-text-success";
+          } else if (changeAmount < 0) {
+            changeClass = "has-text-danger";
+          }
+          const perYear = 365 / days;
+          changePercentage = formatFloat(
+            (changeAmount / p.amount) * 100 * perYear
+          );
+          change = formatCurrency(changeAmount);
         }
-        const perYear = 365 / dayjs().diff(p.timestamp, "days");
-        changePercentage = formatFloat(
-          (changeAmount / p.amount) * 100 * perYear
-        );
-        change = formatCurrency(changeAmount);
       }
       return `
        <td>${p.timestamp.format("DD MMM YYYY")}</td>
        <td>${p.account}</td>
        <td class='has-text-right'>${purchase}</td>
+       <td class='has-text-right'>${units}</td>
+       <td class='has-text-right'>${price}</td>
        <td class='has-text-right'>${market}</td>
        <td class='${changeClass} has-text-right'>${change}</td>
        <td class='${changeClass} has-text-right'>${changePercentage}</td>

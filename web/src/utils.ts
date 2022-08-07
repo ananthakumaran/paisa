@@ -9,7 +9,7 @@ export interface Posting {
   payee: string;
   account: string;
   commodity: string;
-  quanity: number;
+  quantity: number;
   amount: number;
   market_amount: number;
 
@@ -98,12 +98,15 @@ export async function ajax(route: string) {
 
 const obscure = false;
 
-export function formatCurrency(value: number) {
+export function formatCurrency(value: number, precision = 0) {
   if (obscure) {
     return "00";
   }
 
-  return Math.round(value).toLocaleString("hi");
+  return value.toLocaleString("hi", {
+    minimumFractionDigits: precision,
+    maximumFractionDigits: precision
+  });
 }
 
 export function formatCurrencyCrude(value: number) {

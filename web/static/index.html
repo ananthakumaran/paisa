@@ -246,22 +246,31 @@
     </section>
     <section class="section tab-ledger">
       <div class="container is-fluid">
-        <nav class="level">
-          <div class="level-left">
-            <div class="level-item">
-              <p class="subtitle is-5">
-                Postings
-              </p>
-            </div>
-            <div class="level-item">
-              <div class="field">
-                <p class="control">
-                  <input class="d3-posting-filter input" style="width: 440px" type="text" placeholder="filter account">
-                </p>
+        <div class="columns">
+          <div class="column is-6">
+            <nav class="level">
+              <div class="level-left">
+                <div class="level-item">
+                  <p class="subtitle is-5">
+                    Postings
+                  </p>
+                </div>
+                <div class="level-item">
+                  <div class="field">
+                    <p class="control">
+                      <input class="d3-posting-filter input" style="width: 440px" type="text" placeholder="filter account">
+                    </p>
+                  </div>
+                </div>
               </div>
-            </div>
+            </nav>
           </div>
-        </nav>
+          <div class="column is-6">
+            <p class="subtitle is-5">
+              Holdings
+            </p>
+          </div>
+        </div>
         <div class="columns">
           <div class="column is-6">
             <table class="table is-narrow is-fullwidth">
@@ -270,6 +279,8 @@
                   <th>Date</th>
                   <th>Account</th>
                   <th class='has-text-right'>Amount</th>
+                  <th class='has-text-right'>Units</th>
+                  <th class='has-text-right'>Unit Price</th>
                   <th class='has-text-right'>Market Value</th>
                   <th class='has-text-right'>Change</th>
                   <th class='has-text-right'>CAGR</th>

@@ -14,6 +14,7 @@ in pkgs.mkShell {
     pkgs.sqlite
     pinned.nodejs-17_x
     pkgs.mdbook
+    pkgs.pkgsCross.mingwW64.buildPackages.gcc
   ];
 
   shellHook = ''

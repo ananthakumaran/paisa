@@ -20,22 +20,22 @@ tracked as a commodity. Few example transactions can be found below.
     Checking
 ```
 
-**paisa** comes with inbuilt support for fetching the latest price of some
-commodities like mutual fund. For others, it will try to use the
-latest purchase price specified in the journal. For example, when you
-enter the second NPS transaction on `2019/02/21`, the valuation of
-your existing holdings will be adjusted based on the new purchase
-price.
+**paisa** comes with inbuilt support for fetching the latest price of
+some commodities like mutual fund and NPS. For others, it will try to
+use the latest purchase price specified in the journal. For example,
+when you enter the second NPS transaction on `2019/02/21`, the
+valuation of your existing holdings will be adjusted based on the new
+purchase price.
 
 ## Mutual Fund
 
-To automatically track the latest value of your mutual fund holdings,
+To automatically track the latest value of your mutual funds holdings,
 you need to link the commodity and the fund scheme code.
 
 ```yaml
 commodities:
   - name: NIFTY      # commodity name
-    type: mutualfund # type (only mutualfund supported as of now)
+    type: mutualfund # type
     code: 120716     # mutual fund scheme code
   - name: NIFTY_JR
     type: mutualfund
@@ -53,6 +53,31 @@ INFO Using cached results; pass '-u' to update the cache
 ✔ ICICI Prudential Asset Management Company Limited
 ✔ ICICI Prudential Nifty Next 50 Index Fund - Direct Plan -  Growth
 INFO Mutual Fund Scheme Code: 120684
+```
+
+## NPS
+
+To automatically track the latest value of your nps funds holdings,
+you need to link the commodity and the fund scheme code.
+
+```yaml
+commodities:
+  - name: NPS_HDFC_E      # commodity name
+    type: nps             # type
+    code: SM008002        # nps fund scheme code
+```
+
+The example config above links NPS fund commodity with their
+respective NPS fund scheme code. The scheme code can be found using
+the *search* command.
+
+```
+❯ paisa search nps
+INFO Using config file: /home/john/finance/paisa.yaml
+INFO Using cached results; pass '-u' to update the cache
+✔ HDFC Pension Management Company Limited
+✔ HDFC PENSION MANAGEMENT COMPANY LIMITED SCHEME C - TIER I
+INFO NPS Fund Scheme Code: SM008002
 ```
 
 ## Updates

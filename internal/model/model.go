@@ -1,12 +1,11 @@
 package model
 
 import (
-	"strconv"
-
 	"github.com/ananthakumaran/paisa/internal/ledger"
 	"github.com/ananthakumaran/paisa/internal/model/posting"
 	"github.com/ananthakumaran/paisa/internal/model/price"
 	"github.com/ananthakumaran/paisa/internal/scraper/mutualfund"
+	"github.com/ananthakumaran/paisa/internal/scraper/nps"
 	"github.com/logrusorgru/aurora"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
@@ -20,11 +19,11 @@ func Sync(db *gorm.DB) {
 	posting.UpsertAll(db, postings)
 
 	db.AutoMigrate(&price.Price{})
-	log.Info("Fetching mutual fund history")
+	log.Info("Fetching commodities price history")
 	type Commodity struct {
 		Name string
 		Type string
-		Code int
+		Code string
 	}
 
 	var commodities []Commodity
@@ -32,8 +31,17 @@ func Sync(db *gorm.DB) {
 	for _, commodity := range commodities {
 		name := commodity.Name
 		log.Info("Fetching commodity ", aurora.Bold(name))
-		schemeCode := strconv.Itoa(commodity.Code)
-		prices, err := mutualfund.GetNav(schemeCode, name)
+		schemeCode := commodity.Code
+		var prices []*price.Price
+		var err error
+
+		switch commodity.Type {
+		case string(price.MutualFund):
+			prices, err = mutualfund.GetNav(schemeCode, name)
+		case string(price.NPS):
+			prices, err = nps.GetNav(schemeCode, name)
+		}
+
 		if err != nil {
 			log.Fatal(err)
 		}

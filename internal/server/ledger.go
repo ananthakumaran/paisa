@@ -17,6 +17,8 @@ type Breakdown struct {
 	InvestmentAmount float64 `json:"investment_amount"`
 	WithdrawalAmount float64 `json:"withdrawal_amount"`
 	MarketAmount     float64 `json:"market_amount"`
+	BalanceUnits     float64 `json:"balance_units"`
+	LatestPrice      float64 `json:"latest_price"`
 	XIRR             float64 `json:"xirr"`
 }
 
@@ -38,14 +40,15 @@ func computeBreakdown(db *gorm.DB, postings []posting.Posting) map[string]Breakd
 		var parts []string
 		for _, part := range strings.Split(p.Account, ":") {
 			parts = append(parts, part)
-			accounts[strings.Join(parts, ":")] = true
+			accounts[strings.Join(parts, ":")] = false
 		}
+		accounts[p.Account] = true
 
 	}
 
 	result := make(map[string]Breakdown)
 
-	for group := range accounts {
+	for group, leaf := range accounts {
 		ps := lo.Filter(postings, func(p posting.Posting, _ int) bool { return strings.HasPrefix(p.Account, group) })
 		investmentAmount := lo.Reduce(ps, func(acc float64, p posting.Posting, _ int) float64 {
 			if p.Amount < 0 || service.IsInterest(db, p) {
@@ -62,9 +65,18 @@ func computeBreakdown(db *gorm.DB, postings []posting.Posting) map[string]Breakd
 			}
 		}, 0.0)
 		marketAmount := lo.Reduce(ps, func(acc float64, p posting.Posting, _ int) float64 { return acc + p.MarketAmount }, 0.0)
+		var balanceUnits float64
+		if leaf {
+			balanceUnits = lo.Reduce(ps, func(acc float64, p posting.Posting, _ int) float64 {
+				if p.Commodity != "INR" {
+					return acc + p.Quantity
+				}
+				return 0.0
+			}, 0.0)
+		}
 
 		xirr := service.XIRR(db, ps)
-		breakdown := Breakdown{InvestmentAmount: investmentAmount, WithdrawalAmount: withdrawalAmount, MarketAmount: marketAmount, XIRR: xirr, Group: group}
+		breakdown := Breakdown{InvestmentAmount: investmentAmount, WithdrawalAmount: withdrawalAmount, MarketAmount: marketAmount, XIRR: xirr, Group: group, BalanceUnits: balanceUnits}
 		result[group] = breakdown
 	}
 

@@ -35,6 +35,7 @@ export interface Breakdown {
   group: string;
   investment_amount: number;
   withdrawal_amount: number;
+  balance_units: number;
   market_amount: number;
   xirr: number;
 }

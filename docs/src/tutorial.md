@@ -13,13 +13,13 @@ content
 
 ```go
 2022/01/01 Salary
-    Income:Salary                              -100,000 INR
+    Income:Salary:Acme                         -100,000 INR
     Checking                                    100,000 INR
 ```
 
 **ledger** follows the double-entry accounting system. In simple terms, it
 tracks the movement of money from debit account to credit
-account. Here `Income:Salary` is the debit account and
+account. Here `Income:Salary:Acme` is the debit account and
 `Checking` is the credit account. The date at which the
 transaction took place and a description of the transaction is written
 in the first line followed by the list of credit or debit
@@ -30,15 +30,15 @@ accounts must be zero.
 
 ```go
 2022/01/01 Salary
-    Income:Salary                              -100,000 INR
+    Income:Salary:Acme                         -100,000 INR
     Checking                                    100,000 INR
 
 2022/02/01 Salary
-    Income:Salary                              -100,000 INR
+    Income:Salary:Acme                         -100,000 INR
     Checking                                    100,000 INR
 
 2022/03/01 Salary
-    Income:Salary                              -100,000 INR
+    Income:Salary:Acme                         -100,000 INR
     Checking                                    100,000 INR
 ```
 
@@ -55,17 +55,17 @@ we could represent it as follows
 
 ```go
 2022/01/01 Salary
-    Income:Salary                              -100,000 INR
+    Income:Salary:Acme                         -100,000 INR
     Checking                                     88,000 INR
     Asset:Debt:EPF                               12,000 INR
 
 2022/02/01 Salary
-    Income:Salary                              -100,000 INR
+    Income:Salary:Acme                         -100,000 INR
     Checking                                     88,000 INR
     Asset:Debt:EPF                               12,000 INR
 
 2022/03/01 Salary
-    Income:Salary                              -100,000 INR
+    Income:Salary:Acme                         -100,000 INR
     Checking                                     88,000 INR
     Asset:Debt:EPF                               12,000 INR
 ```
@@ -144,10 +144,10 @@ commodities:
     code: 120684
 ```
 
-**paisa** can fetch the latest price of mutual fund commodity as of
-today. For other types of commodities, the purchase/sell price of the
-last transaction would be considered the latest price. The code is the
-scheme code of the fund. The *search* command can be used to find
+**paisa** can fetch the latest price of mutual funds and nps funds as
+of today. For other types of commodities, the purchase/sell price of
+the last transaction would be considered the latest price. The code is
+the scheme code of the fund. The *search* command can be used to find
 scheme code
 
 ```shell
@@ -173,7 +173,7 @@ the serve command.
 ❯ paisa update
 INFO Using config file: /home/john/finance/paisa.yaml
 INFO Syncing transactions from journal
-INFO Fetching mutual fund history
+INFO Fetching commodities price history
 INFO Fetching commodity NIFTY
 INFO Fetching commodity NIFTY_JR
 ❯ paisa serve

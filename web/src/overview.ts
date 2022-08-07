@@ -6,12 +6,13 @@ import {
   ajax,
   formatCurrency,
   formatCurrencyCrude,
+  formatFloat,
   Overview,
   setHtml
 } from "./utils";
 
 export default async function () {
-  const { overview_timeline: points } = await ajax("/api/overview");
+  const { overview_timeline: points, xirr: xirr } = await ajax("/api/overview");
   _.each(points, (n) => (n.timestamp = dayjs(n.date)));
 
   const current = _.last(points);
@@ -26,6 +27,7 @@ export default async function () {
   setHtml("investment", formatCurrency(current.investment_amount));
   setHtml("withdrawal", formatCurrency(current.withdrawal_amount));
   setHtml("gains", formatCurrency(current.gain_amount));
+  setHtml("xirr", formatFloat(xirr));
 
   renderOverview(points, document.getElementById("d3-overview-timeline"));
 }

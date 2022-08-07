@@ -26,8 +26,10 @@ func GetOverview(db *gorm.DB) gin.H {
 		log.Fatal(result.Error)
 	}
 
+	postings = service.PopulateMarketPrice(db, postings)
 	overviewTimeline := computeOverviewTimeline(db, postings)
-	return gin.H{"overview_timeline": overviewTimeline}
+	xirr := service.XIRR(db, postings)
+	return gin.H{"overview_timeline": overviewTimeline, "xirr": xirr}
 }
 
 func computeOverviewTimeline(db *gorm.DB, postings []posting.Posting) []Overview {

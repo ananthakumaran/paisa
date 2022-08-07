@@ -77,7 +77,7 @@ export function ajax(
 ): Promise<{ postings: Posting[]; breakdowns: Breakdown[] }>;
 export function ajax(route: "/api/overview"): Promise<{
   overview_timeline: Overview[];
-  overview_timeline_breakdown: { [key: string]: Overview[] };
+  xirr: number;
 }>;
 export function ajax(route: "/api/gain"): Promise<{
   gain_timeline_breakdown: Gain[];
@@ -118,7 +118,7 @@ export function formatCurrencyCrude(value: number) {
     unit = "";
   if (Math.abs(value) < 100000) {
     (x = value / 1000), (unit = "K");
-  } else if (Math.abs(value) <= 10000000) {
+  } else if (Math.abs(value) < 10000000) {
     (x = value / 100000), (unit = "L");
   } else {
     (x = value / 10000000), (unit = "C");

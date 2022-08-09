@@ -22,7 +22,7 @@ func Sync(db *gorm.DB) {
 	log.Info("Fetching commodities price history")
 	type Commodity struct {
 		Name string
-		Type string
+		Type price.CommodityType
 		Code string
 	}
 
@@ -36,9 +36,9 @@ func Sync(db *gorm.DB) {
 		var err error
 
 		switch commodity.Type {
-		case string(price.MutualFund):
+		case price.MutualFund:
 			prices, err = mutualfund.GetNav(schemeCode, name)
-		case string(price.NPS):
+		case price.NPS:
 			prices, err = nps.GetNav(schemeCode, name)
 		}
 
@@ -46,6 +46,6 @@ func Sync(db *gorm.DB) {
 			log.Fatal(err)
 		}
 
-		price.UpsertAll(db, price.MutualFund, schemeCode, prices)
+		price.UpsertAll(db, commodity.Type, schemeCode, prices)
 	}
 }

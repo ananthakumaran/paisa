@@ -226,10 +226,9 @@ we could represent it as follows</p>
     Checking                                     88,000 INR
     Asset:Debt:EPF                               12,000 INR
 </code></pre>
-<pre><code class="language-shell">❯ ledger -f personal.ledger balance Asset
-         300,000 INR  Asset
-          36,000 INR    Debt:EPF
-         264,000 INR    Savings
+<pre><code class="language-shell">❯ ledger -f personal.ledger balance Asset Checking
+          36,000 INR  Asset:Debt:EPF
+         264,000 INR  Checking
 --------------------
          300,000 INR
 </code></pre>
@@ -256,6 +255,15 @@ month.</p>
 <p>Let's consider <code>148.0865 NIFTY @ 67.5281 INR</code>. Here NIFTY is the name
 of the commodity and we have bought 148.0865 units at 67.5281 INR per
 unit.</p>
+<pre><code>❯ ledger -f personal.ledger balance Asset --market
+          94,615 INR  Asset
+          36,000 INR    Debt:EPF
+          58,615 INR    Equity
+          29,539 INR      NIFTY
+          29,076 INR      NIFTY_JR
+--------------------
+          94,615 INR
+</code></pre>
 <h2 id="interest"><a class="header" href="#interest">Interest</a></h2>
 <p>There are many instruments like EPF, FD, etc that pay interest at
 regular intervals. We can treat it as just another transaction.</p>

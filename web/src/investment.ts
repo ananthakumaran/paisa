@@ -7,6 +7,7 @@ import {
   forEachMonth,
   formatCurrency,
   formatCurrencyCrude,
+  formatFloat,
   Posting,
   secondName,
   skipTicks,
@@ -25,6 +26,13 @@ export default async function () {
   });
   renderMonthlyInvestmentTimeline(postings);
   renderYearlyInvestmentTimeline(yearlyCards);
+  renderYearlyCards(yearlyCards);
+}
+
+function financialYear(card: YearlyCard) {
+  return `${card.start_date_timestamp.format(
+    "YYYY"
+  )}-${card.end_date_timestamp.format("YYYY")}`;
 }
 
 function renderMonthlyInvestmentTimeline(postings: Posting[]) {
@@ -273,9 +281,7 @@ function renderYearlyInvestmentTimeline(yearlyCards: YearlyCard[]) {
     points.push(
       _.merge(
         {
-          year: `${card.start_date_timestamp.format(
-            "YYYY"
-          )}-${card.end_date_timestamp.format("YYYY")}`,
+          year: financialYear(card),
           postings: postings
         },
         defaultValues,
@@ -383,4 +389,75 @@ function renderYearlyInvestmentTimeline(yearlyCards: YearlyCard[]) {
     .scale(z);
 
   svg.select(".legendOrdinal").call(legendOrdinal as any);
+}
+
+function renderYearlyCards(yearlyCards: YearlyCard[]) {
+  const id = "#d3-yearly-investment-cards";
+  const root = d3.select(id);
+
+  const card = root
+    .selectAll("div.column")
+    .data(_.reverse(yearlyCards))
+    .enter()
+    .append("div")
+    .attr("class", "column is-4")
+    .append("div")
+    .attr("class", "card");
+
+  card
+    .append("header")
+    .attr("class", "card-header")
+    .append("p")
+    .attr("class", "card-header-title")
+    .text((c) => financialYear(c));
+
+  card
+    .append("div")
+    .attr("class", "card-content p-1")
+    .append("div")
+    .attr("class", "content")
+    .html((card) => {
+      return `
+<table class="table is-narrow is-fullwidth is-size-7">
+  <tbody>
+    <tr>
+      <td>Gross Salary Income</td>
+      <td class='has-text-right has-text-weigh-bold'>${formatCurrency(
+        card.gross_salary_income
+      )}</td>
+    </tr>
+    <tr>
+      <td>Gross Other Income</td>
+      <td class='has-text-right has-text-weigh-bold'>${formatCurrency(
+        card.gross_other_income
+      )}</td>
+    </tr>
+    <tr>
+      <td>Net Tax</td>
+      <td class='has-text-right has-text-weigh-bold'>${formatCurrency(
+        card.net_tax
+      )}</td>
+    </tr>
+    <tr>
+      <td>Net Income</td>
+      <td class='has-text-right has-text-weigh-bold'>${formatCurrency(
+        card.net_income
+      )}</td>
+    </tr>
+    <tr>
+      <td>Net Investment</td>
+      <td class='has-text-right has-text-weigh-bold'>${formatCurrency(
+        card.net_investment
+      )}</td>
+    </tr>
+    <tr>
+      <td>Savings Rate</td>
+      <td class='has-text-right has-text-weigh-bold'>${formatFloat(
+        (card.net_investment / card.net_income) * 100
+      )}</td>
+    </tr>
+  </tbody>
+</table>
+`;
+    });
 }

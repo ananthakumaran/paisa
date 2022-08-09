@@ -73,6 +73,11 @@ export interface YearlyCard {
   start_date: string;
   end_date: string;
   postings: Posting[];
+  net_tax: number;
+  gross_salary_income: number;
+  gross_other_income: number;
+  net_income: number;
+  net_investment: number;
 
   start_date_timestamp: dayjs.Dayjs;
   end_date_timestamp: dayjs.Dayjs;

@@ -69,9 +69,18 @@ export interface Tax {
   postings: Posting[];
 }
 
+export interface YearlyCard {
+  start_date: string;
+  end_date: string;
+  postings: Posting[];
+
+  start_date_timestamp: dayjs.Dayjs;
+  end_date_timestamp: dayjs.Dayjs;
+}
+
 export function ajax(
   route: "/api/investment"
-): Promise<{ postings: Posting[] }>;
+): Promise<{ postings: Posting[]; yearly_cards: YearlyCard[] }>;
 export function ajax(
   route: "/api/ledger"
 ): Promise<{ postings: Posting[]; breakdowns: Breakdown[] }>;

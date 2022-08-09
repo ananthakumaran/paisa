@@ -72,10 +72,9 @@ we could represent it as follows
 
 
 ```shell
-❯ ledger -f personal.ledger balance Asset
-         300,000 INR  Asset
-          36,000 INR    Debt:EPF
-         264,000 INR    Savings
+❯ ledger -f personal.ledger balance Asset Checking
+          36,000 INR  Asset:Debt:EPF
+         264,000 INR  Checking
 --------------------
          300,000 INR
 ```
@@ -107,6 +106,17 @@ month.
 Let's consider `148.0865 NIFTY @ 67.5281 INR`. Here NIFTY is the name
 of the commodity and we have bought 148.0865 units at 67.5281 INR per
 unit.
+
+```
+❯ ledger -f personal.ledger balance Asset --market
+          94,615 INR  Asset
+          36,000 INR    Debt:EPF
+          58,615 INR    Equity
+          29,539 INR      NIFTY
+          29,076 INR      NIFTY_JR
+--------------------
+          94,615 INR
+```
 
 ## Interest
 

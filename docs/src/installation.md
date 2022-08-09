@@ -1,6 +1,7 @@
 # Installation
 
-* Follow the installation instruction in [ledger](https://www.ledger-cli.org/download.html) site and install **ledger**
+* Follow the installation instruction in [ledger](https://www.ledger-cli.org/download.html) site and install
+  **ledger**. Windows users can install ledger via [chocolatey](https://community.chocolatey.org/packages/ledger).
 * Download the latest prebuilt [binary](https://github.com/ananthakumaran/paisa/releases/latest)
 
 ## Quick Start

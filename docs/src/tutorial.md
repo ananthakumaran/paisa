@@ -57,23 +57,23 @@ we could represent it as follows
 2022/01/01 Salary
     Income:Salary:Acme                         -100,000 INR
     Checking                                     88,000 INR
-    Asset:Debt:EPF                               12,000 INR
+    Assets:Debt:EPF                              12,000 INR
 
 2022/02/01 Salary
     Income:Salary:Acme                         -100,000 INR
     Checking                                     88,000 INR
-    Asset:Debt:EPF                               12,000 INR
+    Assets:Debt:EPF                              12,000 INR
 
 2022/03/01 Salary
     Income:Salary:Acme                         -100,000 INR
     Checking                                     88,000 INR
-    Asset:Debt:EPF                               12,000 INR
+    Assets:Debt:EPF                              12,000 INR
 ```
 
 
 ```shell
-❯ ledger -f personal.ledger balance Asset Checking
-          36,000 INR  Asset:Debt:EPF
+❯ ledger -f personal.ledger balance Assets Checking
+          36,000 INR  Assets:Debt:EPF
          264,000 INR  Checking
 --------------------
          300,000 INR
@@ -89,18 +89,18 @@ month.
 ```go
 2018/01/01 Investment
     Checking                                     -20,000 INR
-    Asset:Equity:NIFTY          148.0865 NIFTY @ 67.5281 INR
-    Asset:Equity:NIFTY_JR    358.6659 NIFTY_JR @ 27.8811 INR
+    Assets:Equity:NIFTY         148.0865 NIFTY @ 67.5281 INR
+    Assets:Equity:NIFTY_JR   358.6659 NIFTY_JR @ 27.8811 INR
 
 2018/02/01 Investment
     Checking                                     -20,000 INR
-    Asset:Equity:NIFTY          140.2870 NIFTY @ 71.2824 INR
-    Asset:Equity:NIFTY_JR    363.2242 NIFTY_JR @ 27.5312 INR
+    Assets:Equity:NIFTY         140.2870 NIFTY @ 71.2824 INR
+    Assets:Equity:NIFTY_JR   363.2242 NIFTY_JR @ 27.5312 INR
 
 2018/03/01 Investment
     Checking                                     -20,000 INR
-    Asset:Equity:NIFTY          147.5908 NIFTY @ 67.7549 INR
-    Asset:Equity:NIFTY_JR    378.4323 NIFTY_JR @ 26.4248 INR
+    Assets:Equity:NIFTY         147.5908 NIFTY @ 67.7549 INR
+    Assets:Equity:NIFTY_JR   378.4323 NIFTY_JR @ 26.4248 INR
 ```
 
 Let's consider `148.0865 NIFTY @ 67.5281 INR`. Here NIFTY is the name
@@ -108,8 +108,8 @@ of the commodity and we have bought 148.0865 units at 67.5281 INR per
 unit.
 
 ```
-❯ ledger -f personal.ledger balance Asset --market
-          94,615 INR  Asset
+❯ ledger -f personal.ledger balance Assets --market
+          94,615 INR  Assets
           36,000 INR    Debt:EPF
           58,615 INR    Equity
           29,539 INR      NIFTY
@@ -126,7 +126,7 @@ regular intervals. We can treat it as just another transaction.
 ```go
 2022/03/31 EPF Interest
     Income:Interest:EPF                         -15,000 INR
-    Asset:Debt:EPF                               15,000 INR
+    Assets:Debt:EPF                              15,000 INR
 ```
 
 ## Config

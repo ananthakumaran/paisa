@@ -21,7 +21,7 @@ type Overview struct {
 
 func GetOverview(db *gorm.DB) gin.H {
 	var postings []posting.Posting
-	result := db.Where("account like ?", "Asset:%").Order("date ASC").Find(&postings)
+	result := db.Where("account like ?", "Assets:%").Order("date ASC").Find(&postings)
 	if result.Error != nil {
 		log.Fatal(result.Error)
 	}

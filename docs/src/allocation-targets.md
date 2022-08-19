@@ -11,9 +11,9 @@ allocation_targets:
   - name: Debt
     target: 40
     accounts:
-      - Asset:Debt:*
+      - Assets:Debt:*
   - name: Equity
     target: 60
     accounts:
-      - Asset:Equity:*
+      - Assets:Equity:*
 ```

@@ -6,17 +6,17 @@ tracked as a commodity. Few example transactions can be found below.
 
 ```go
 2019/02/18 NPS
-    Asset:Equity:NPS:SBI:E            15.9378 NPS_SBI_E @ 23.5289 INR
+    Assets:Equity:NPS:SBI:E           15.9378 NPS_SBI_E @ 23.5289 INR
 ;// account name                      units   commodity   purchase price
 ;//                                           name        per unit
     Checking
 
 2019/02/21 NPS
-    Asset:Equity:NPS:SBI:E            1557.2175 NPS_SBI_E @ 23.8406 INR
+    Assets:Equity:NPS:SBI:E           1557.2175 NPS_SBI_E @ 23.8406 INR
     Checking
 
 2020/06/25 Gold
-    Asset:Gold                        40 GOLD @ 4650 INR
+    Assets:Gold                       40 GOLD @ 4650 INR
     Checking
 ```
 

@@ -30,7 +30,7 @@ func GetLedger(db *gorm.DB) gin.H {
 	}
 
 	postings = service.PopulateMarketPrice(db, postings)
-	breakdowns := computeBreakdown(db, lo.Filter(postings, func(p posting.Posting, _ int) bool { return strings.HasPrefix(p.Account, "Asset:") }))
+	breakdowns := computeBreakdown(db, lo.Filter(postings, func(p posting.Posting, _ int) bool { return strings.HasPrefix(p.Account, "Assets:") }))
 	return gin.H{"postings": postings, "breakdowns": breakdowns}
 }
 

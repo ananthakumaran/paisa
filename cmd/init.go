@@ -48,11 +48,11 @@ allocation_targets:
   - name: Debt
     target: 40
     accounts:
-      - Asset:Debt:*
+      - Assets:Debt:*
   - name: Equity
     target: 60
     accounts:
-      - Asset:Equity:*
+      - Assets:Equity:*
 commodities:
   - name: NIFTY
     type: mutualfund
@@ -102,7 +102,7 @@ func emitSalary(file *os.File, start time.Time) {
 	_, err := file.WriteString(fmt.Sprintf(`
 %s Salary
     Income:Salary:%s
-    Asset:Debt:EPF                  %s INR
+    Assets:Debt:EPF                 %s INR
     Tax                             %s INR
     Checking                        %s INR
 `, start.Format("2006/01/02"), company, formatFloat(salary*0.12), formatFloat(salary*0.20), formatFloat(salary*0.68)))
@@ -114,7 +114,7 @@ func emitSalary(file *os.File, start time.Time) {
 		_, err = file.WriteString(fmt.Sprintf(`
 %s EPF Interest
     Income:Interest:EPF
-    Asset:Debt:EPF                  %s INR
+    Assets:Debt:EPF                 %s INR
 `, start.Format("2006/01/02"), formatFloat(salary*0.12*((float64(start.Year())-START_YEAR)*12)*0.075)))
 
 		if err != nil {
@@ -133,7 +133,7 @@ func emitEquityMutualFund(file *os.File, start time.Time, pricesTree map[string]
 	pc := utils.BTreeDescendFirstLessOrEqual(pricesTree["NIFTY"], price.Price{Date: start})
 	_, err := file.WriteString(fmt.Sprintf(`
 %s Mutual Fund Nifty
-    Asset:Equity:NIFTY   %s NIFTY @ %s INR
+    Assets:Equity:NIFTY  %s NIFTY @ %s INR
     Checking
 `, start.Format("2006/01/02"), formatFloat(10000/pc.Value*multiplier), formatFloat(pc.Value)))
 	if err != nil {
@@ -143,7 +143,7 @@ func emitEquityMutualFund(file *os.File, start time.Time, pricesTree map[string]
 	pc = utils.BTreeDescendFirstLessOrEqual(pricesTree["NIFTY_JR"], price.Price{Date: start})
 	_, err = file.WriteString(fmt.Sprintf(`
 %s Mutual Fund Nifty Next 50
-    Asset:Equity:NIFTY_JR   %s NIFTY_JR @ %s INR
+    Assets:Equity:NIFTY_JR  %s NIFTY_JR @ %s INR
     Checking
 `, start.Format("2006/01/02"), formatFloat(10000/pc.Value*multiplier), formatFloat(pc.Value)))
 	if err != nil {
@@ -160,7 +160,7 @@ func emitDebtMutualFund(file *os.File, start time.Time, pricesTree map[string]*b
 	pc := utils.BTreeDescendFirstLessOrEqual(pricesTree["ABCBF"], price.Price{Date: start})
 	_, err := file.WriteString(fmt.Sprintf(`
 %s Mutual Fund Birla Corporate Fund
-    Asset:Debt:ABCBF   %s ABCBF @ %s INR
+    Assets:Debt:ABCBF  %s ABCBF @ %s INR
     Checking
 `, start.Format("2006/01/02"), formatFloat(10000/pc.Value*multiplier), formatFloat(pc.Value)))
 	if err != nil {

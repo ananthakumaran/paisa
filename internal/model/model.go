@@ -12,12 +12,14 @@ import (
 	"gorm.io/gorm"
 )
 
-func Sync(db *gorm.DB) {
+func SyncJournal(db *gorm.DB) {
 	db.AutoMigrate(&posting.Posting{})
 	log.Info("Syncing transactions from journal")
 	postings, _ := ledger.Parse(viper.GetString("journal_path"))
 	posting.UpsertAll(db, postings)
+}
 
+func SyncCommodities(db *gorm.DB) {
 	db.AutoMigrate(&price.Price{})
 	log.Info("Fetching commodities price history")
 	type Commodity struct {

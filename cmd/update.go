@@ -9,6 +9,9 @@ import (
 	"gorm.io/gorm"
 )
 
+var updateJournal bool
+var updateCommodities bool
+
 var updateCmd = &cobra.Command{
 	Use:   "update",
 	Short: "Sync journal data",
@@ -17,10 +20,21 @@ var updateCmd = &cobra.Command{
 		if err != nil {
 			log.Fatal(err)
 		}
-		model.Sync(db)
+
+		syncAll := !updateJournal && !updateCommodities
+
+		if syncAll || updateJournal {
+			model.SyncJournal(db)
+		}
+
+		if syncAll || updateCommodities {
+			model.SyncCommodities(db)
+		}
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(updateCmd)
+	updateCmd.Flags().BoolVarP(&updateJournal, "journal", "j", false, "update journal")
+	updateCmd.Flags().BoolVarP(&updateCommodities, "commodity", "c", false, "update commodities")
 }

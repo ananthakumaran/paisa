@@ -107,8 +107,8 @@
     </section>
     <section class="section tab-investment">
       <div class="container is-fluid">
-        <div class="columns">
-          <div class="column is-6">
+        <div class="columns is-flex-wrap-wrap">
+          <div class="column is-full-tablet is-half-fullhd">
             <div class="p-3">
               <svg id="d3-yearly-investment-timeline" width="100%"></svg>
             </div>
@@ -116,8 +116,8 @@
               <p class="heading">Financial Year Investment Timeline</p>
             </div>
           </div>
-          <div class="column is-6">
-            <div class="columns is-mobile is-flex-wrap-wrap" id="d3-yearly-investment-cards">
+          <div class="column is-full-tablet is-half-fullhd">
+            <div class="columns is-flex-wrap-wrap" id="d3-yearly-investment-cards">
             </div>
           </div>
         </div>
@@ -256,7 +256,33 @@
     <section class="section tab-ledger">
       <div class="container is-fluid">
         <div class="columns">
-          <div class="column is-6">
+          <div class="column is-12">
+            <p class="subtitle is-12">
+              Holdings
+            </p>
+          </div>
+        </div>
+        <div class="columns">
+          <div class="column is-12">
+            <table class="table is-narrow is-fullwidth">
+              <thead>
+                <tr>
+                  <th>Account</th>
+                  <th class='has-text-right'>Investment Amount</th>
+                  <th class='has-text-right'>Withdrawal Amount</th>
+                  <th class='has-text-right'>Balance Units</th>
+                  <th class='has-text-right'>Market Value</th>
+                  <th class='has-text-right'>Change</th>
+                  <th class='has-text-right'>XIRR</th>
+                </tr>
+              </thead>
+              <tbody class="d3-postings-breakdown">
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="columns">
+          <div class="column is-12">
             <nav class="level">
               <div class="level-left">
                 <div class="level-item">
@@ -274,14 +300,9 @@
               </div>
             </nav>
           </div>
-          <div class="column is-6">
-            <p class="subtitle is-5">
-              Holdings
-            </p>
-          </div>
         </div>
         <div class="columns">
-          <div class="column is-6">
+          <div class="column is-12">
             <table class="table is-narrow is-fullwidth">
               <thead>
                 <tr>
@@ -296,23 +317,6 @@
                 </tr>
               </thead>
               <tbody class="d3-postings">
-              </tbody>
-            </table>
-          </div>
-          <div class="column is-6">
-            <table class="table is-narrow is-fullwidth">
-              <thead>
-                <tr>
-                  <th>Account</th>
-                  <th class='has-text-right'>Investment Amount</th>
-                  <th class='has-text-right'>Withdrawal Amount</th>
-                  <th class='has-text-right'>Balance Units</th>
-                  <th class='has-text-right'>Market Value</th>
-                  <th class='has-text-right'>Change</th>
-                  <th class='has-text-right'>XIRR</th>
-                </tr>
-              </thead>
-              <tbody class="d3-postings-breakdown">
               </tbody>
             </table>
           </div>

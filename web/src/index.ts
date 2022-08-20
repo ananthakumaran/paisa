@@ -58,3 +58,8 @@ if (!_.isEmpty(window.location.hash)) {
 } else {
   $("#overview").trigger("click");
 }
+
+$(".navbar-burger").on("click", function () {
+  $(".navbar-burger").toggleClass("is-active");
+  $(".navbar-menu").toggleClass("is-active");
+});

@@ -41,7 +41,7 @@ function renderTable(gain: Gain) {
     return `
 <tr>
   <td>Account</td>
-  <td class='has-text-right has-text-weight-bold'>${gain.account}</td>
+  <td class='has-text-right has-text-weight-bold'>${restName(gain.account)}</td>
 </tr>
 <tr>
   <td>Investment</td>
@@ -382,14 +382,16 @@ function renderPerAccountOverview(gains: Gain[]) {
 
   const columns = divs.enter().append("div").attr("class", "columns");
 
-  const leftColumn = columns.append("div").attr("class", "column is-2");
+  const leftColumn = columns
+    .append("div")
+    .attr("class", "column is-4 is-3-desktop is-2-fullhd");
   leftColumn
     .append("table")
     .attr("class", "table is-narrow is-fullwidth is-size-7")
     .append("tbody")
     .each(renderTable);
 
-  const rightColumn = columns.append("div").attr("class", "column is-10");
+  const rightColumn = columns.append("div").attr("class", "column");
   rightColumn
     .append("svg")
     .attr("width", "100%")

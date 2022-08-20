@@ -106,6 +106,9 @@ export function ajax(route: "/api/income"): Promise<{
   income_timeline: Income[];
   tax_timeline: Tax[];
 }>;
+export function ajax(route: "/api/expense"): Promise<{
+  expenses: Posting[];
+}>;
 export async function ajax(route: string) {
   const response = await fetch(route);
   return await response.json();

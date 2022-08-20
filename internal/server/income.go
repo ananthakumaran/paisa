@@ -29,7 +29,7 @@ func GetIncome(db *gorm.DB) gin.H {
 	}
 
 	var taxPostings []posting.Posting
-	result = db.Where("account = ?", "Tax").Order("date ASC").Find(&taxPostings)
+	result = db.Where("account = ?", "Expenses:Tax").Order("date ASC").Find(&taxPostings)
 	if result.Error != nil {
 		log.Fatal(result.Error)
 	}

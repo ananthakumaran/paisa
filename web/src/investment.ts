@@ -16,15 +16,15 @@ import {
 } from "./utils";
 
 export default async function () {
-  const { postings: postings, yearly_cards: yearlyCards } = await ajax(
+  const { assets: assets, yearly_cards: yearlyCards } = await ajax(
     "/api/investment"
   );
-  _.each(postings, (p) => (p.timestamp = dayjs(p.date)));
+  _.each(assets, (p) => (p.timestamp = dayjs(p.date)));
   _.each(yearlyCards, (c) => {
     c.start_date_timestamp = dayjs(c.start_date);
     c.end_date_timestamp = dayjs(c.end_date);
   });
-  renderMonthlyInvestmentTimeline(postings);
+  renderMonthlyInvestmentTimeline(assets);
   renderYearlyInvestmentTimeline(yearlyCards);
   renderYearlyCards(yearlyCards);
 }
@@ -433,7 +433,7 @@ function renderYearlyCards(yearlyCards: YearlyCard[]) {
       )}</td>
     </tr>
     <tr>
-      <td>Net Tax</td>
+      <td>Tax</td>
       <td class='has-text-right has-text-weigh-bold'>${formatCurrency(
         card.net_tax
       )}</td>
@@ -445,7 +445,13 @@ function renderYearlyCards(yearlyCards: YearlyCard[]) {
       )}</td>
     </tr>
     <tr>
-      <td>Net Investment</td>
+      <td>Net Expense</td>
+      <td class='has-text-right has-text-weigh-bold'>${formatCurrency(
+        card.net_expense
+      )}</td>
+    </tr>
+    <tr>
+      <td>Investment</td>
       <td class='has-text-right has-text-weigh-bold'>${formatCurrency(
         card.net_investment
       )}</td>

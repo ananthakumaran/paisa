@@ -5,7 +5,6 @@ import (
 	"time"
 
 	"github.com/ananthakumaran/paisa/internal/model/posting"
-	"github.com/ananthakumaran/paisa/internal/service"
 	"github.com/ananthakumaran/paisa/internal/utils"
 	"github.com/gin-gonic/gin"
 	"github.com/samber/lo"
@@ -22,24 +21,24 @@ type YearlyCard struct {
 	NetTax            float64           `json:"net_tax"`
 	NetIncome         float64           `json:"net_income"`
 	NetInvestment     float64           `json:"net_investment"`
+	NetExpense        float64           `json:"net_expense"`
 }
 
 func GetInvestment(db *gorm.DB) gin.H {
-	var postings []posting.Posting
+	var assets []posting.Posting
 	var incomes []posting.Posting
-	var taxes []posting.Posting
-	result := db.Where("account like ? order by date asc", "Assets:%").Find(&postings)
+	var expenses []posting.Posting
+	result := db.Where("account like ? order by date asc", "Assets:%").Find(&assets)
 	if result.Error != nil {
 		log.Fatal(result.Error)
 	}
-	postings = lo.Filter(postings, func(p posting.Posting, _ int) bool { return !service.IsInterest(db, p) })
 
 	result = db.Where("account like ? order by date asc", "Income:%").Find(&incomes)
 	if result.Error != nil {
 		log.Fatal(result.Error)
 	}
 
-	result = db.Where("account = ? order by date asc", "Tax").Find(&taxes)
+	result = db.Where("account like ? order by date asc", "Expenses:%").Find(&expenses)
 	if result.Error != nil {
 		log.Fatal(result.Error)
 	}
@@ -50,10 +49,10 @@ func GetInvestment(db *gorm.DB) gin.H {
 		log.Fatal(result.Error)
 	}
 
-	return gin.H{"postings": postings, "yearly_cards": computeYearlyCard(p.Date, postings, taxes, incomes)}
+	return gin.H{"assets": assets, "yearly_cards": computeYearlyCard(p.Date, assets, expenses, incomes)}
 }
 
-func computeYearlyCard(start time.Time, assets []posting.Posting, taxes []posting.Posting, incomes []posting.Posting) []YearlyCard {
+func computeYearlyCard(start time.Time, assets []posting.Posting, expenses []posting.Posting, incomes []posting.Posting) []YearlyCard {
 	var yearlyCards []YearlyCard = make([]YearlyCard, 0)
 
 	if len(assets) == 0 {
@@ -71,12 +70,19 @@ func computeYearlyCard(start time.Time, assets []posting.Posting, taxes []postin
 		}
 
 		var currentYearTaxes []posting.Posting = make([]posting.Posting, 0)
-		for len(taxes) > 0 && utils.IsWithDate(taxes[0].Date, start, yearEnd) {
-			p, taxes = taxes[0], taxes[1:]
-			currentYearTaxes = append(currentYearTaxes, p)
+		var currentYearExpenses []posting.Posting = make([]posting.Posting, 0)
+
+		for len(expenses) > 0 && utils.IsWithDate(expenses[0].Date, start, yearEnd) {
+			p, expenses = expenses[0], expenses[1:]
+			if p.Account == "Expenses:Tax" {
+				currentYearTaxes = append(currentYearTaxes, p)
+			} else {
+				currentYearExpenses = append(currentYearExpenses, p)
+			}
 		}
 
 		netTax := lo.SumBy(currentYearTaxes, func(p posting.Posting) float64 { return p.Amount })
+		netExpense := lo.SumBy(currentYearExpenses, func(p posting.Posting) float64 { return p.Amount })
 
 		var currentYearIncomes []posting.Posting = make([]posting.Posting, 0)
 		for len(incomes) > 0 && utils.IsWithDate(incomes[0].Date, start, yearEnd) {
@@ -110,6 +116,7 @@ func computeYearlyCard(start time.Time, assets []posting.Posting, taxes []postin
 			GrossOtherIncome:  grossOtherIncome,
 			NetIncome:         grossSalaryIncome + grossOtherIncome - netTax,
 			NetInvestment:     netInvestment,
+			NetExpense:        netExpense,
 		})
 
 	}

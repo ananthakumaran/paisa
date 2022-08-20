@@ -78,6 +78,7 @@ export interface YearlyCard {
   gross_other_income: number;
   net_income: number;
   net_investment: number;
+  net_expense: number;
 
   start_date_timestamp: dayjs.Dayjs;
   end_date_timestamp: dayjs.Dayjs;
@@ -85,7 +86,7 @@ export interface YearlyCard {
 
 export function ajax(
   route: "/api/investment"
-): Promise<{ postings: Posting[]; yearly_cards: YearlyCard[] }>;
+): Promise<{ assets: Posting[]; yearly_cards: YearlyCard[] }>;
 export function ajax(
   route: "/api/ledger"
 ): Promise<{ postings: Posting[]; breakdowns: Breakdown[] }>;

@@ -21,4 +21,4 @@ All your income should come from `Income:`.
 
 ### Tax
 
-Income tax paid to government should be credited to `Tax` account
+Income tax paid to government should be credited to `Expenses:Tax` account

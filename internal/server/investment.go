@@ -28,7 +28,7 @@ func GetInvestment(db *gorm.DB) gin.H {
 	var assets []posting.Posting
 	var incomes []posting.Posting
 	var expenses []posting.Posting
-	result := db.Where("account like ? order by date asc", "Assets:%").Find(&assets)
+	result := db.Where("account like ? and account != ? order by date asc", "Assets:%", "Assets:Checking").Find(&assets)
 	if result.Error != nil {
 		log.Fatal(result.Error)
 	}

@@ -30,7 +30,9 @@ func GetLedger(db *gorm.DB) gin.H {
 	}
 
 	postings = service.PopulateMarketPrice(db, postings)
-	breakdowns := computeBreakdown(db, lo.Filter(postings, func(p posting.Posting, _ int) bool { return strings.HasPrefix(p.Account, "Assets:") }))
+	breakdowns := computeBreakdown(db, lo.Filter(postings, func(p posting.Posting, _ int) bool {
+		return strings.HasPrefix(p.Account, "Assets:")
+	}))
 	return gin.H{"postings": postings, "breakdowns": breakdowns}
 }
 
@@ -51,14 +53,14 @@ func computeBreakdown(db *gorm.DB, postings []posting.Posting) map[string]Breakd
 	for group, leaf := range accounts {
 		ps := lo.Filter(postings, func(p posting.Posting, _ int) bool { return strings.HasPrefix(p.Account, group) })
 		investmentAmount := lo.Reduce(ps, func(acc float64, p posting.Posting, _ int) float64 {
-			if p.Amount < 0 || service.IsInterest(db, p) {
+			if p.Account == "Assets:Checking" || p.Amount < 0 || service.IsInterest(db, p) {
 				return acc
 			} else {
 				return acc + p.Amount
 			}
 		}, 0.0)
 		withdrawalAmount := lo.Reduce(ps, func(acc float64, p posting.Posting, _ int) float64 {
-			if p.Amount > 0 || service.IsInterest(db, p) {
+			if p.Account == "Assets:Checking" || p.Amount > 0 || service.IsInterest(db, p) {
 				return acc
 			} else {
 				return acc + -p.Amount

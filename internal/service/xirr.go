@@ -9,6 +9,7 @@ import (
 )
 
 func XIRR(db *gorm.DB, ps []posting.Posting) float64 {
+	ps = lo.Filter(ps, func(p posting.Posting, _ int) bool { return p.Account != "Assets:Checking" })
 	today := time.Now()
 	marketAmount := lo.Reduce(ps, func(acc float64, p posting.Posting, _ int) float64 { return acc + p.MarketAmount }, 0.0)
 	payments := lo.Reverse(lo.Map(ps, func(p posting.Posting, _ int) xirr.Payment {

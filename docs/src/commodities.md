@@ -9,15 +9,15 @@ tracked as a commodity. Few example transactions can be found below.
     Assets:Equity:NPS:SBI:E           15.9378 NPS_SBI_E @ 23.5289 INR
 ;// account name                      units   commodity   purchase price
 ;//                                           name        per unit
-    Checking
+    Assets:Checking
 
 2019/02/21 NPS
     Assets:Equity:NPS:SBI:E           1557.2175 NPS_SBI_E @ 23.8406 INR
-    Checking
+    Assets:Checking
 
 2020/06/25 Gold
     Assets:Gold                       40 GOLD @ 4650 INR
-    Checking
+    Assets:Checking
 ```
 
 **paisa** comes with inbuilt support for fetching the latest price of

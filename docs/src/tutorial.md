@@ -14,13 +14,13 @@ content
 ```go
 2022/01/01 Salary
     Income:Salary:Acme                         -100,000 INR
-    Checking                                    100,000 INR
+    Assets:Checking                             100,000 INR
 ```
 
 **ledger** follows the double-entry accounting system. In simple terms, it
 tracks the movement of money from debit account to credit
 account. Here `Income:Salary:Acme` is the debit account and
-`Checking` is the credit account. The date at which the
+`Assets:Checking` is the credit account. The date at which the
 transaction took place and a description of the transaction is written
 in the first line followed by the list of credit or debit
 entry. Account [naming conventions](./accounts.md) are explained later. The `:` in the account name
@@ -31,23 +31,23 @@ accounts must be zero.
 ```go
 2022/01/01 Salary
     Income:Salary:Acme                         -100,000 INR
-    Checking                                    100,000 INR
+    Assets:Checking                             100,000 INR
 
 2022/02/01 Salary
     Income:Salary:Acme                         -100,000 INR
-    Checking                                    100,000 INR
+    Assets:Checking                             100,000 INR
 
 2022/03/01 Salary
     Income:Salary:Acme                         -100,000 INR
-    Checking                                    100,000 INR
+    Assets:Checking                             100,000 INR
 ```
 
 let's add few more entries. The total balance in your savings account
 could be found by
 
 ```go
-❯ ledger -f personal.ledger balance Checking
-300,000 INR  Checking
+❯ ledger -f personal.ledger balance Assets:Checking
+300,000 INR  Assets:Checking
 ```
 
 Let's say your company deducts 12,000 INR and contributes it to EPF,
@@ -56,25 +56,25 @@ we could represent it as follows
 ```go
 2022/01/01 Salary
     Income:Salary:Acme                         -100,000 INR
-    Checking                                     88,000 INR
+    Assets:Checking                              88,000 INR
     Assets:Debt:EPF                              12,000 INR
 
 2022/02/01 Salary
     Income:Salary:Acme                         -100,000 INR
-    Checking                                     88,000 INR
+    Assets:Checking                              88,000 INR
     Assets:Debt:EPF                              12,000 INR
 
 2022/03/01 Salary
     Income:Salary:Acme                         -100,000 INR
-    Checking                                     88,000 INR
+    Assets:Checking                              88,000 INR
     Assets:Debt:EPF                              12,000 INR
 ```
 
 
 ```shell
-❯ ledger -f personal.ledger balance Assets Checking
+❯ ledger -f personal.ledger balance Assets
           36,000 INR  Assets:Debt:EPF
-         264,000 INR  Checking
+         264,000 INR  Assets:Checking
 --------------------
          300,000 INR
 ```
@@ -88,17 +88,17 @@ month.
 
 ```go
 2018/01/01 Investment
-    Checking                                     -20,000 INR
+    Assets:Checking                              -20,000 INR
     Assets:Equity:NIFTY         148.0865 NIFTY @ 67.5281 INR
     Assets:Equity:NIFTY_JR   358.6659 NIFTY_JR @ 27.8811 INR
 
 2018/02/01 Investment
-    Checking                                     -20,000 INR
+    Assets:Checking                              -20,000 INR
     Assets:Equity:NIFTY         140.2870 NIFTY @ 71.2824 INR
     Assets:Equity:NIFTY_JR   363.2242 NIFTY_JR @ 27.5312 INR
 
 2018/03/01 Investment
-    Checking                                     -20,000 INR
+    Assets:Checking                              -20,000 INR
     Assets:Equity:NIFTY         147.5908 NIFTY @ 67.7549 INR
     Assets:Equity:NIFTY_JR   378.4323 NIFTY_JR @ 26.4248 INR
 ```

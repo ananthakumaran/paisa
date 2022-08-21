@@ -103,8 +103,8 @@ func emitSalary(file *os.File, start time.Time) {
 %s Salary
     Income:Salary:%s
     Assets:Debt:EPF                 %s INR
-    Tax                             %s INR
-    Checking                        %s INR
+    Expenses:Tax                    %s INR
+    Assets:Checking                 %s INR
 `, start.Format("2006/01/02"), company, formatFloat(salary*0.12), formatFloat(salary*0.20), formatFloat(salary*0.68)))
 	if err != nil {
 		log.Fatal(err)
@@ -134,7 +134,7 @@ func emitEquityMutualFund(file *os.File, start time.Time, pricesTree map[string]
 	_, err := file.WriteString(fmt.Sprintf(`
 %s Mutual Fund Nifty
     Assets:Equity:NIFTY  %s NIFTY @ %s INR
-    Checking
+    Assets:Checking
 `, start.Format("2006/01/02"), formatFloat(10000/pc.Value*multiplier), formatFloat(pc.Value)))
 	if err != nil {
 		log.Fatal(err)
@@ -144,7 +144,7 @@ func emitEquityMutualFund(file *os.File, start time.Time, pricesTree map[string]
 	_, err = file.WriteString(fmt.Sprintf(`
 %s Mutual Fund Nifty Next 50
     Assets:Equity:NIFTY_JR  %s NIFTY_JR @ %s INR
-    Checking
+    Assets:Checking
 `, start.Format("2006/01/02"), formatFloat(10000/pc.Value*multiplier), formatFloat(pc.Value)))
 	if err != nil {
 		log.Fatal(err)
@@ -161,7 +161,7 @@ func emitDebtMutualFund(file *os.File, start time.Time, pricesTree map[string]*b
 	_, err := file.WriteString(fmt.Sprintf(`
 %s Mutual Fund Birla Corporate Fund
     Assets:Debt:ABCBF  %s ABCBF @ %s INR
-    Checking
+    Assets:Checking
 `, start.Format("2006/01/02"), formatFloat(10000/pc.Value*multiplier), formatFloat(pc.Value)))
 	if err != nil {
 		log.Fatal(err)

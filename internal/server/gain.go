@@ -18,7 +18,7 @@ type Gain struct {
 
 func GetGain(db *gorm.DB) gin.H {
 	var postings []posting.Posting
-	result := db.Where("account like ?", "Assets:%").Order("date ASC").Find(&postings)
+	result := db.Where("account like ? and account != ?", "Assets:%", "Assets:Checking").Order("date ASC").Find(&postings)
 	if result.Error != nil {
 		log.Fatal(result.Error)
 	}

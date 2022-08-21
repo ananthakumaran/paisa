@@ -24,8 +24,10 @@ export default async function () {
         current.withdrawal_amount
     )
   );
-  setHtml("investment", formatCurrency(current.investment_amount));
-  setHtml("withdrawal", formatCurrency(current.withdrawal_amount));
+  setHtml(
+    "investment",
+    formatCurrency(current.investment_amount - current.withdrawal_amount)
+  );
   setHtml("gains", formatCurrency(current.gain_amount));
   setHtml("xirr", formatFloat(xirr));
 
@@ -48,22 +50,20 @@ function renderOverview(points: Overview[], element: Element) {
   const colors = ["#b2df8a", "#fb9a99"];
   const areaScale = d3.scaleOrdinal().domain(areaKeys).range(colors);
 
-  const lineKeys = ["networth", "investment", "withdrawal"];
+  const lineKeys = ["networth", "investment"];
   const lineScale = d3
     .scaleOrdinal<string>()
     .domain(lineKeys)
     .range(["#1f77b4", "#17becf", "#ff7f0e"]);
+
+  const positions = _.flatMap(points, (p) => [
+    p.gain_amount + p.investment_amount - p.withdrawal_amount,
+    p.investment_amount - p.withdrawal_amount
+  ]);
+  positions.push(0);
+
   const x = d3.scaleTime().range([0, width]).domain([start, end]),
-    y = d3
-      .scaleLinear()
-      .range([height, 0])
-      .domain([
-        0,
-        d3.max<Overview, number>(
-          points,
-          (d) => d.gain_amount + d.investment_amount
-        )
-      ]),
+    y = d3.scaleLinear().range([height, 0]).domain(d3.extent(positions)),
     z = d3.scaleOrdinal<string>(colors).domain(areaKeys);
 
   const area = (y0, y1) =>
@@ -103,7 +103,7 @@ function renderOverview(points: Overview[], element: Element) {
     .attr(
       "d",
       area(height, (d) => {
-        return y(d.gain_amount + d.investment_amount);
+        return y(d.gain_amount + d.investment_amount - d.withdrawal_amount);
       })
     );
 
@@ -115,7 +115,7 @@ function renderOverview(points: Overview[], element: Element) {
     .attr(
       "d",
       area(0, (d) => {
-        return y(d.gain_amount + d.investment_amount);
+        return y(d.gain_amount + d.investment_amount - d.withdrawal_amount);
       })
     );
 
@@ -130,7 +130,7 @@ function renderOverview(points: Overview[], element: Element) {
     .attr(
       "d",
       area(0, (d) => {
-        return y(d.investment_amount);
+        return y(d.investment_amount - d.withdrawal_amount);
       })
     );
 
@@ -145,7 +145,7 @@ function renderOverview(points: Overview[], element: Element) {
     .attr(
       "d",
       area(height, (d) => {
-        return y(d.investment_amount);
+        return y(d.investment_amount - d.withdrawal_amount);
       })
     );
 
@@ -159,21 +159,7 @@ function renderOverview(points: Overview[], element: Element) {
         .line<Overview>()
         .curve(d3.curveBasis)
         .x((d) => x(d.timestamp))
-        .y((d) => y(d.investment_amount))
-    );
-
-  layer
-    .append("path")
-    .style("stroke", lineScale("withdrawal"))
-    .style("fill", "none")
-    .attr(
-      "d",
-      d3
-        .line<Overview>()
-        .curve(d3.curveBasis)
-        .defined((d) => d.withdrawal_amount > 0)
-        .x((d) => x(d.timestamp))
-        .y((d) => y(d.withdrawal_amount))
+        .y((d) => y(d.investment_amount - d.withdrawal_amount))
     );
 
   layer
@@ -192,7 +178,7 @@ function renderOverview(points: Overview[], element: Element) {
   svg
     .append("g")
     .attr("class", "legendOrdinal")
-    .attr("transform", "translate(365,3)");
+    .attr("transform", "translate(265,3)");
 
   const legendOrdinal = legend
     .legendColor()

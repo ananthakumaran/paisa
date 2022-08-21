@@ -114,14 +114,24 @@ function renderBreakdowns(breakdowns: Breakdown[]) {
        <td style='max-width: 200px; overflow: hidden;'>${indent}${lastName(
         b.group
       )}</td>
-       <td class='has-text-right'>${formatCurrency(b.investment_amount)}</td>
-       <td class='has-text-right'>${formatCurrency(b.withdrawal_amount)}</td>
+       <td class='has-text-right'>${
+         b.investment_amount != 0 ? formatCurrency(b.investment_amount) : ""
+       }</td>
+       <td class='has-text-right'>${
+         b.withdrawal_amount != 0 ? formatCurrency(b.withdrawal_amount) : ""
+       }</td>
        <td class='has-text-right'>${
          b.balance_units > 0 ? formatFloat(b.balance_units, 4) : ""
        }</td>
-       <td class='has-text-right'>${formatCurrency(b.market_amount)}</td>
-       <td class='${changeClass} has-text-right'>${formatCurrency(gain)}</td>
-       <td class='${changeClass} has-text-right'>${formatFloat(b.xirr)}</td>
+       <td class='has-text-right'>${
+         b.market_amount != 0 ? formatCurrency(b.market_amount) : ""
+       }</td>
+       <td class='${changeClass} has-text-right'>${
+        b.investment_amount != 0 && gain != 0 ? formatCurrency(gain) : ""
+      }</td>
+       <td class='${changeClass} has-text-right'>${
+        b.xirr > 0.0001 ? formatFloat(b.xirr) : ""
+      }</td>
       `;
     });
 }

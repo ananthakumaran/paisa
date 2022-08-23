@@ -65,13 +65,15 @@ func computeOverviewTimeline(db *gorm.DB, postings []posting.Posting) []Overview
 			}
 		}, 0)
 
-		gain := lo.Reduce(pastPostings, func(agg float64, p posting.Posting, _ int) float64 {
+		balance := lo.Reduce(pastPostings, func(agg float64, p posting.Posting, _ int) float64 {
 			if service.IsInterest(db, p) {
 				return p.Amount + agg
 			} else {
-				return service.GetMarketPrice(db, p, start) - p.Amount + agg
+				return service.GetMarketPrice(db, p, start) + agg
 			}
 		}, 0)
+
+		gain := balance + withdrawal - investment
 		networths = append(networths, Overview{Date: start, InvestmentAmount: investment, WithdrawalAmount: withdrawal, GainAmount: gain})
 	}
 	return networths

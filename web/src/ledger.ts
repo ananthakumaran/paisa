@@ -130,7 +130,7 @@ function renderBreakdowns(breakdowns: Breakdown[]) {
         b.investment_amount != 0 && gain != 0 ? formatCurrency(gain) : ""
       }</td>
        <td class='${changeClass} has-text-right'>${
-        b.xirr > 0.0001 ? formatFloat(b.xirr) : ""
+        b.xirr > 0.0001 || b.xirr < -0.0001 ? formatFloat(b.xirr) : ""
       }</td>
       `;
     });

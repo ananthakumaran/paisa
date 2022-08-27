@@ -11,6 +11,12 @@ There are four types of account namely
 1. Income
 1. Expenses
 
+![Flow](images/flow.png)
+
+Money flows from Income to Assets, from Assets to either Expenses,
+Liabilities or other Assets, from Liabilities to Expenses.
+
+
 ### Checking
 
 Your checking account should be named `Assets:Checking`.

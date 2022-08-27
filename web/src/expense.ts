@@ -283,7 +283,6 @@ function renderCurrentExpensesBreakdown(
     .attr("alignment-baseline", "middle")
     .attr("x", width + 125)
     .attr("y", function (d) {
-      console.log(sprintf("|%7.2f|", (d.total / total) * 100));
       return y(d.category) + y.bandwidth() / 2;
     })
     .style("white-space", "pre")

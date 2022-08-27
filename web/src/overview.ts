@@ -51,6 +51,7 @@ function renderOverview(points: Overview[], element: Element) {
   const areaScale = d3.scaleOrdinal().domain(areaKeys).range(colors);
 
   const lineKeys = ["networth", "investment"];
+  const labels = ["Net Worth", "Net Investment"];
   const lineScale = d3
     .scaleOrdinal<string>()
     .domain(lineKeys)
@@ -203,7 +204,7 @@ function renderOverview(points: Overview[], element: Element) {
     .labelOffset(22)
     .shapeHeight(3)
     .shapeWidth(25)
-    .labels(lineKeys)
+    .labels(labels)
     .scale(lineScale);
 
   svg.select(".legendLine").call(legendLine as any);

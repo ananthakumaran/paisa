@@ -108,6 +108,12 @@ export function ajax(route: "/api/income"): Promise<{
 }>;
 export function ajax(route: "/api/expense"): Promise<{
   expenses: Posting[];
+  current_month: {
+    expenses: Posting[];
+    incomes: Posting[];
+    investments: Posting[];
+    taxes: Posting[];
+  };
 }>;
 export async function ajax(route: string) {
   const response = await fetch(route);
@@ -119,6 +125,11 @@ const obscure = false;
 export function formatCurrency(value: number, precision = 0) {
   if (obscure) {
     return "00";
+  }
+
+  // minus 0
+  if (1 / value === -Infinity) {
+    value = 0;
   }
 
   return value.toLocaleString("hi", {

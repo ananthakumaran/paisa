@@ -22,10 +22,10 @@
       <div class="navbar-menu">
         <div class="navbar-start">
           <a id="overview" class="navbar-item is-active">Overview</a>
+          <a id="expense" class="navbar-item">Expense</a>
           <a id="investment" class="navbar-item">Investment</a>
           <a id="gain" class="navbar-item">Gain</a>
           <a id="income" class="navbar-item">Income</a>
-          <a id="expense" class="navbar-item">Expense</a>
           <a id="allocation" class="navbar-item">Allocation</a>
           <a id="ledger" class="navbar-item">Ledger</a>
         </div>
@@ -313,6 +313,54 @@
               <tbody class="d3-postings">
               </tbody>
             </table>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="section tab-expense">
+      <div class="container is-fluid">
+        <div class="columns">
+          <div class="column is-full">
+            <div class="p-3 has-text-centered">
+              <p class="heading d3-current-month is-size-4"></p>
+            </div>
+          </div>
+        </div>
+        <div class="columns is-flex-wrap-wrap">
+          <div class="column is-full-tablet is-half-fullhd">
+            <div class="p-3">
+              <nav class="level">
+                <div class="level-item has-text-centered">
+                  <div>
+                    <p class="heading">Income</p>
+                    <p class="d3-current-month-income title"></p>
+                  </div>
+                </div>
+                <div class="level-item has-text-centered">
+                  <div>
+                    <p class="heading">Tax</p>
+                    <p class="d3-current-month-tax title"></p>
+                  </div>
+                </div>
+                <div class="level-item has-text-centered">
+                  <div>
+                    <p class="heading">Net Investment</p>
+                    <p class="d3-current-month-investment title has-text-success"></p>
+                  </div>
+                </div>
+                <div class="level-item has-text-centered">
+                  <div>
+                    <p class="heading">Expenses</p>
+                    <p class="d3-current-month-expenses title has-text-danger"></p>
+                  </div>
+                </div>
+              </nav>
+            </div>
+          </div>
+          <div class="column is-full-tablet is-half-fullhd">
+            <div class="p-3">
+              <svg id="d3-current-month-breakdown" width="100%"></svg>
+            </div>
           </div>
         </div>
       </div>

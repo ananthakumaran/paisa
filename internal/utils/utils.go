@@ -29,13 +29,17 @@ func EndOfFinancialYear(date time.Time) time.Time {
 }
 
 func BeginningOfMonth(date time.Time) time.Time {
-	return date.AddDate(0, 0, -date.Day()+1)
+	return toDate(date.AddDate(0, 0, -date.Day()+1))
 }
 
 func EndOfMonth(date time.Time) time.Time {
-	return date.AddDate(0, 1, -date.Day())
+	return toDate(date.AddDate(0, 1, -date.Day()))
 }
 
 func IsWithDate(date time.Time, start time.Time, end time.Time) bool {
 	return (date.Equal(start) || date.After(start)) && (date.Before(end) || date.Equal(end))
+}
+
+func toDate(date time.Time) time.Time {
+	return time.Date(date.Year(), date.Month(), date.Day(), 0, 0, 0, 0, time.UTC)
 }

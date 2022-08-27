@@ -4,6 +4,17 @@ Even though **ledger** doesn't have any Account naming convention,
 **paisa** makes lot of assumptions and expects you to follow the same
 naming convention.
 
+There are four types of account namely
+
+1. Assets
+1. Liabilities
+1. Income
+1. Expenses
+
+### Checking
+
+Your checking account should be named `Assets:Checking`.
+
 ### Assets
 
 All your assets should go under `Assets:`. The level of granularity is
@@ -22,3 +33,7 @@ All your income should come from `Income:`.
 ### Tax
 
 Income tax paid to government should be credited to `Expenses:Tax` account
+
+### Expenses
+
+All your expenses should go to `Expenses:{category}` accounts.

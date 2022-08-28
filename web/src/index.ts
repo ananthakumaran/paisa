@@ -1,3 +1,7 @@
+// css
+
+import "clusterize.js/clusterize.css";
+
 import tippy, { followCursor, Instance } from "tippy.js";
 import dayjs from "dayjs";
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";

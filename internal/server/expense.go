@@ -22,7 +22,7 @@ func GetExpense(db *gorm.DB) gin.H {
 	end := utils.EndOfMonth(now)
 
 	var currentExpenses []posting.Posting
-	result = db.Debug().Where("account like ? and account != ? and date >= ? and date <= ? order by date asc", "Expenses:%", "Expenses:Tax", start, end).Find(&currentExpenses)
+	result = db.Where("account like ? and account != ? and date >= ? and date <= ? order by date asc", "Expenses:%", "Expenses:Tax", start, end).Find(&currentExpenses)
 	if result.Error != nil {
 		log.Fatal(result.Error)
 	}

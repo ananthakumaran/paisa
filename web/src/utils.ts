@@ -210,12 +210,12 @@ export function depth(account: string) {
 export function skipTicks<Domain>(
   minWidth: number,
   scale: d3.AxisScale<Domain>,
-  cb: (data: d3.AxisDomain, index: number) => string,
-  ticks?: number
+  cb: (data: d3.AxisDomain, index: number) => string
 ) {
   const range = scale.range();
   const width = Math.abs(range[1] - range[0]);
-  const points = ticks ? ticks : (scale as any).ticks().length;
+  const s = scale as any;
+  const points = s.ticks ? s.ticks().length : s.domain().length;
   return function (data: d3.AxisDomain, index: number) {
     let skip = Math.round((minWidth * points) / width);
     skip = Math.max(1, skip);

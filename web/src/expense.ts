@@ -167,7 +167,7 @@ function renderMonthlyExpensesTimeline(
       d3
         .axisBottom(x)
         .ticks(5)
-        .tickFormat(skipTicks(30, x, (d) => d.toString(), points.length))
+        .tickFormat(skipTicks(30, x, (d) => d.toString()))
     )
     .selectAll("text")
     .attr("y", 10)

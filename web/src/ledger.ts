@@ -35,6 +35,7 @@ function renderTransactions(postings: Posting[]) {
   const rows = _.map(postings, (p) => {
     const purchase = formatCurrency(p.amount);
     let market = "",
+      date = p.timestamp.format("DD MMM YYYY"),
       change = "",
       changePercentage = "",
       changeClass = "",
@@ -61,7 +62,7 @@ function renderTransactions(postings: Posting[]) {
     }
     const markup = `
 <tr class="${p.timestamp.month() % 2 == 0 ? "has-background-white-ter" : ""}">
-       <td>${p.timestamp.format("DD MMM YYYY")}</td>
+       <td>${date}</td>
        <td>${p.payee}</td>
        <td>${p.account}</td>
        <td class='has-text-right'>${purchase}</td>
@@ -73,6 +74,7 @@ function renderTransactions(postings: Posting[]) {
 </tr>
 `;
     return {
+      date: date,
       markup: markup,
       posting: p
     };
@@ -89,7 +91,7 @@ function renderTransactions(postings: Posting[]) {
 }
 
 function filterTransactions(
-  rows: { posting: Posting; markup: string }[],
+  rows: { date: string; posting: Posting; markup: string }[],
   filter: string
 ) {
   let filterRegex = new RegExp(".*", "i");
@@ -100,7 +102,9 @@ function filterTransactions(
   return _.filter(
     rows,
     (r) =>
-      filterRegex.test(r.posting.account) || filterRegex.test(r.posting.payee)
+      filterRegex.test(r.posting.account) ||
+      filterRegex.test(r.posting.payee) ||
+      filterRegex.test(r.date)
   );
 }
 

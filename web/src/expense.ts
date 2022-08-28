@@ -1,7 +1,7 @@
 import * as d3 from "d3";
 import legend from "d3-svg-legend";
 import { sprintf } from "sprintf-js";
-import dayjs from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 import _ from "lodash";
 import {
   ajax,
@@ -19,31 +19,82 @@ import {
 export default async function () {
   const {
     expenses: expenses,
-    current_month: {
-      expenses: current_expenses,
-      incomes: current_incomes,
-      investments: current_investments,
-      taxes: current_taxes
+    month_wise: {
+      expenses: grouped_expenses,
+      incomes: grouped_incomes,
+      investments: grouped_investments,
+      taxes: grouped_taxes
     }
   } = await ajax("/api/expense");
-  _.each(expenses, (p) => (p.timestamp = dayjs(p.date)));
-  _.each(current_expenses, (p) => (p.timestamp = dayjs(p.date)));
-  _.each(current_incomes, (p) => (p.timestamp = dayjs(p.date)));
-  const z = renderMonthlyExpensesTimeline(expenses);
-  renderCurrentExpensesBreakdown(current_expenses, z);
 
-  setHtml("current-month", dayjs().format("MMMM YYYY"));
-  setHtml("current-month-income", sum(current_incomes, -1));
-  setHtml("current-month-tax", sum(current_taxes));
-  setHtml("current-month-expenses", sum(current_expenses));
-  setHtml("current-month-investment", sum(current_investments));
+  let minDate = dayjs();
+  _.each(expenses, (p) => (p.timestamp = dayjs(p.date)));
+  const parseDate = (group: { [key: string]: Posting[] }) => {
+    _.each(group, (ps) => {
+      _.each(ps, (p) => {
+        p.timestamp = dayjs(p.date);
+        if (p.timestamp.isBefore(minDate)) {
+          minDate = p.timestamp;
+        }
+      });
+    });
+  };
+  parseDate(grouped_expenses);
+  parseDate(grouped_incomes);
+  parseDate(grouped_investments);
+  parseDate(grouped_taxes);
+
+  const max = dayjs().format("YYYY-MM");
+  const min = minDate.format("YYYY-MM");
+  const input = d3.select<HTMLInputElement, never>("#d3-current-month");
+  input.attr("max", max);
+  input.attr("min", min);
+
+  const z = renderMonthlyExpensesTimeline(expenses, input.node());
+  const renderer = renderCurrentExpensesBreakdown(z);
+
+  const selectMonth = (month) => {
+    renderSelectedMonth(
+      renderer,
+      grouped_expenses[month] || [],
+      grouped_incomes[month] || [],
+      grouped_taxes[month] || [],
+      grouped_investments[month] || []
+    );
+  };
+
+  input.on("input", (event) => {
+    selectMonth(event.srcElement.value);
+  });
+
+  input.attr("value", max);
+  selectMonth(max);
+  input.node().focus();
+  input.node().select();
+}
+
+function renderSelectedMonth(
+  renderer: (ps: Posting[]) => void,
+  expenses: Posting[],
+  incomes: Posting[],
+  taxes: Posting[],
+  investments: Posting[]
+) {
+  renderer(expenses);
+  setHtml("current-month-income", sum(incomes, -1));
+  setHtml("current-month-tax", sum(taxes));
+  setHtml("current-month-expenses", sum(expenses));
+  setHtml("current-month-investment", sum(investments));
 }
 
 function sum(postings: Posting[], sign = 1) {
   return formatCurrency(sign * _.sumBy(postings, (p) => p.amount));
 }
 
-function renderMonthlyExpensesTimeline(postings: Posting[]) {
+function renderMonthlyExpensesTimeline(
+  postings: Posting[],
+  dateSelector: HTMLInputElement
+) {
   const id = "#d3-expense-timeline";
   const timeFormat = "MMM-YYYY";
   const MAX_BAR_WIDTH = 40;
@@ -75,6 +126,7 @@ function renderMonthlyExpensesTimeline(postings: Posting[]) {
 
   const points: {
     month: string;
+    timestamp: Dayjs;
     [key: string]: number | string | dayjs.Dayjs;
   }[] = [];
 
@@ -89,6 +141,7 @@ function renderMonthlyExpensesTimeline(postings: Posting[]) {
     points.push(
       _.merge(
         {
+          timestamp: month,
           month: month.format(timeFormat),
           postings: postings
         },
@@ -145,6 +198,11 @@ function renderMonthlyExpensesTimeline(postings: Posting[]) {
     })
     .enter()
     .append("rect")
+    .on("click", (event, data) => {
+      const timestamp: Dayjs = data.data.timestamp as any;
+      dateSelector.value = timestamp.format("YYYY-MM");
+      dateSelector.dispatchEvent(new Event("input", { bubbles: true }));
+    })
     .attr("data-tippy-content", (d) => {
       return tooltip(
         _.flatMap(groups, (key) => {
@@ -193,13 +251,12 @@ function renderMonthlyExpensesTimeline(postings: Posting[]) {
 }
 
 function renderCurrentExpensesBreakdown(
-  postings: Posting[],
   z: d3.ScaleOrdinal<string, string, never>
 ) {
   const id = "#d3-current-month-breakdown";
   const BAR_HEIGHT = 20;
   const svg = d3.select(id),
-    margin = { top: 0, right: 150, bottom: 20, left: 80 },
+    margin = { top: 10, right: 160, bottom: 20, left: 100 },
     width =
       document.getElementById(id.substring(1)).parentElement.clientWidth -
       margin.left -
@@ -208,92 +265,168 @@ function renderCurrentExpensesBreakdown(
       .append("g")
       .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-  if (_.isEmpty(postings)) {
-    svg.style("display", "none");
-    return;
-  }
-
-  const categories = _.chain(postings)
-    .groupBy((p) => restName(p.account))
-    .mapValues((ps, category) => {
-      return {
-        category: category,
-        postings: ps,
-        total: _.sumBy(ps, (p) => p.amount)
-      };
-    })
-    .value();
-  const keys = _.chain(categories)
-    .sortBy((c) => c.total)
-    .map((c) => c.category)
-    .value();
-
-  const points = _.values(categories);
-  const total = _.sumBy(points, (p) => p.total);
-
-  const height = BAR_HEIGHT * keys.length;
-  svg.attr("height", height + margin.top + margin.bottom);
-
   const x = d3.scaleLinear().range([0, width]);
-  const y = d3.scaleBand().range([height, 0]).paddingInner(0.1).paddingOuter(0);
+  const y = d3.scaleBand().paddingInner(0.1).paddingOuter(0);
 
-  y.domain(keys);
-  x.domain([0, d3.max(points, (p) => p.total)]);
+  const xAxis = g.append("g").attr("class", "axis y");
+  const yAxis = g.append("g").attr("class", "axis y dark");
 
-  g.append("g")
-    .attr("class", "axis y")
-    .attr("transform", "translate(0," + height + ")")
-    .call(d3.axisBottom(x).tickSize(-height).tickFormat(formatCurrencyCrude));
+  const bar = g.append("g");
 
-  g.append("g").attr("class", "axis y dark").call(d3.axisLeft(y));
+  return (postings: Posting[]) => {
+    const categories = _.chain(postings)
+      .groupBy((p) => restName(p.account))
+      .mapValues((ps, category) => {
+        return {
+          category: category,
+          postings: ps,
+          total: _.sumBy(ps, (p) => p.amount)
+        };
+      })
+      .value();
+    const keys = _.chain(categories)
+      .sortBy((c) => c.total)
+      .map((c) => c.category)
+      .value();
 
-  const bar = g.append("g").selectAll("rect").data(points).enter();
+    const points = _.values(categories);
+    const total = _.sumBy(points, (p) => p.total);
 
-  bar
-    .append("rect")
-    .attr("fill", function (d) {
-      return z(d.category);
-    })
-    .attr("data-tippy-content", (d) => {
-      return tooltip(
-        d.postings.map((p) => {
-          return [
-            p.timestamp.format("DD MMM YYYY"),
-            p.payee,
-            [formatCurrency(p.amount), "has-text-weight-bold has-text-right"]
-          ];
-        })
+    const height = BAR_HEIGHT * keys.length;
+    svg.attr("height", height + margin.top + margin.bottom);
+
+    y.domain(keys);
+    x.domain([0, d3.max(points, (p) => p.total)]);
+    y.range([height, 0]);
+
+    const t = svg.transition().duration(750);
+
+    xAxis
+      .attr("transform", "translate(0," + height + ")")
+      .transition(t)
+      .call(
+        d3
+          .axisBottom(x)
+          .tickSize(-height)
+          .tickFormat(skipTicks(60, x, formatCurrencyCrude))
       );
-    })
-    .attr("x", x(0))
-    .attr("y", function (d) {
-      return (
-        y(d.category) +
-        (y.bandwidth() - Math.min(y.bandwidth(), BAR_HEIGHT)) / 2
-      );
-    })
-    .attr("width", function (d) {
-      return x(d.total);
-    })
-    .attr("height", y.bandwidth());
 
-  bar
-    .append("text")
-    .attr("text-anchor", "end")
-    .attr("alignment-baseline", "middle")
-    .attr("x", width + 125)
-    .attr("y", function (d) {
-      return y(d.category) + y.bandwidth() / 2;
-    })
-    .style("white-space", "pre")
-    .style("font-size", "12px")
-    .attr("fill", "#666")
-    .attr("class", "is-family-monospace")
-    .text(
-      (d) =>
-        `${formatCurrency(d.total)} ${sprintf(
-          "%6.2f",
-          (d.total / total) * 100
-        )}%`
-    );
+    yAxis.transition(t).call(d3.axisLeft(y));
+
+    bar
+      .selectAll("rect")
+      .data(points, (p: any) => p.category)
+      .join(
+        (enter) =>
+          enter
+            .append("rect")
+            .attr("fill", function (d) {
+              return z(d.category);
+            })
+            .attr("data-tippy-content", (d) => {
+              return tooltip(
+                d.postings.map((p) => {
+                  return [
+                    p.timestamp.format("DD MMM YYYY"),
+                    [p.payee, "is-clipped"],
+                    [
+                      formatCurrency(p.amount),
+                      "has-text-weight-bold has-text-right"
+                    ]
+                  ];
+                })
+              );
+            })
+            .attr("x", x(0))
+            .attr("y", function (d) {
+              return (
+                y(d.category) +
+                (y.bandwidth() - Math.min(y.bandwidth(), BAR_HEIGHT)) / 2
+              );
+            })
+            .attr("width", function (d) {
+              return x(d.total);
+            })
+            .attr("height", y.bandwidth()),
+
+        (update) =>
+          update
+            .attr("fill", function (d) {
+              return z(d.category);
+            })
+            .attr("data-tippy-content", (d) => {
+              return tooltip(
+                d.postings.map((p) => {
+                  return [
+                    p.timestamp.format("DD MMM YYYY"),
+                    [p.payee, "is-clipped"],
+                    [
+                      formatCurrency(p.amount),
+                      "has-text-weight-bold has-text-right"
+                    ]
+                  ];
+                })
+              );
+            })
+            .transition(t)
+            .attr("x", x(0))
+            .attr("y", function (d) {
+              return (
+                y(d.category) +
+                (y.bandwidth() - Math.min(y.bandwidth(), BAR_HEIGHT)) / 2
+              );
+            })
+            .attr("width", function (d) {
+              return x(d.total);
+            })
+            .attr("height", y.bandwidth()),
+
+        (exit) => exit.remove()
+      );
+
+    bar
+      .selectAll("text")
+      .data(points, (p: any) => p.category)
+      .join(
+        (enter) =>
+          enter
+            .append("text")
+            .attr("text-anchor", "end")
+            .attr("alignment-baseline", "middle")
+            .attr("y", function (d) {
+              return y(d.category) + y.bandwidth() / 2;
+            })
+            .attr("x", width + 135)
+            .style("white-space", "pre")
+            .style("font-size", "13px")
+            .style("font-weight", "bold")
+            .attr("fill", function (d) {
+              return z(d.category);
+            })
+            .attr("class", "is-family-monospace")
+            .text(
+              (d) =>
+                `${formatCurrency(d.total)} ${sprintf(
+                  "%6.2f",
+                  (d.total / total) * 100
+                )}%`
+            ),
+        (update) =>
+          update
+            .text(
+              (d) =>
+                `${formatCurrency(d.total)} ${sprintf(
+                  "%6.2f",
+                  (d.total / total) * 100
+                )}%`
+            )
+            .transition(t)
+            .attr("y", function (d) {
+              return y(d.category) + y.bandwidth() / 2;
+            }),
+        (exit) => exit.remove()
+      );
+
+    return;
+  };
 }

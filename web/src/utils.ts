@@ -108,11 +108,11 @@ export function ajax(route: "/api/income"): Promise<{
 }>;
 export function ajax(route: "/api/expense"): Promise<{
   expenses: Posting[];
-  current_month: {
-    expenses: Posting[];
-    incomes: Posting[];
-    investments: Posting[];
-    taxes: Posting[];
+  month_wise: {
+    expenses: { [key: string]: Posting[] };
+    incomes: { [key: string]: Posting[] };
+    investments: { [key: string]: Posting[] };
+    taxes: { [key: string]: Posting[] };
   };
 }>;
 export async function ajax(route: string) {
@@ -265,5 +265,5 @@ export function tooltip(rows: Array<Array<string | [string, string]>>) {
       return `<tr>${cells}</tr>`;
     })
     .join("\n");
-  return `<table class='table is-narrow is-size-7'><tbody>${trs}</tbody></table>`;
+  return `<table class='table is-narrow is-size-7 popup-table'><tbody>${trs}</tbody></table>`;
 }

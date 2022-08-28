@@ -2,7 +2,7 @@
 
 import "clusterize.js/clusterize.css";
 
-import tippy, { followCursor, Instance } from "tippy.js";
+import { followCursor, Instance, delegate } from "tippy.js";
 import dayjs from "dayjs";
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
 import $ from "jquery";
@@ -39,8 +39,15 @@ function toggleTab(id: string) {
   $(`section.tab-${id}`).show();
   tabs[id]().then(function () {
     tippyInstances.forEach((t) => t.destroy());
-    tippyInstances = tippy(`section.tab-${id} [data-tippy-content]`, {
+    tippyInstances = delegate(`section.tab-${id}`, {
+      target: "[data-tippy-content]",
       theme: "light",
+      onShow: (instance) => {
+        instance.setContent(
+          instance.reference.getAttribute("data-tippy-content")
+        );
+      },
+      maxWidth: "none",
       delay: 0,
       allowHTML: true,
       followCursor: true,

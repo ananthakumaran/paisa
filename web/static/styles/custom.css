@@ -80,3 +80,10 @@ body {
 #d3-allocation-category, #d3-allocation-value {
     position: relative;
 }
+
+.popup-table td {
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}

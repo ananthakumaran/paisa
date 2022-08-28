@@ -34,8 +34,9 @@ export default async function () {
 function renderTransactions(postings: Posting[]) {
   const rows = _.map(postings, (p) => {
     const purchase = formatCurrency(p.amount);
+    const date = p.timestamp.format("DD MMM YYYY");
+
     let market = "",
-      date = p.timestamp.format("DD MMM YYYY"),
       change = "",
       changePercentage = "",
       changeClass = "",

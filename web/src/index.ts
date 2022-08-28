@@ -1,6 +1,8 @@
 // css
 
 import "clusterize.js/clusterize.css";
+import "bulma/css/bulma.css";
+import "../static/styles/custom.css";
 
 import { followCursor, Instance, delegate } from "tippy.js";
 import dayjs from "dayjs";

@@ -231,6 +231,10 @@ function renderAllocation(aggregates: { [key: string]: Aggregate }) {
 }
 
 function renderPartition(element: HTMLElement, aggregates, hierarchy) {
+  if (_.isEmpty(aggregates)) {
+    return;
+  }
+
   const div = d3.select(element),
     margin = { top: 0, right: 0, bottom: 0, left: 20 },
     width = element.parentElement.clientWidth - margin.left - margin.right,

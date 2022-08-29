@@ -163,6 +163,13 @@ export function formatFloat(value, precision = 2) {
   return sprintf(`%.${precision}f`, value);
 }
 
+export function formatFixedWidthFloat(value, width, precision = 2) {
+  if (obscure) {
+    value = 0;
+  }
+  return sprintf(`%${width}.${precision}f`, value);
+}
+
 export function forEachMonth(
   start: dayjs.Dayjs,
   end: dayjs.Dayjs,

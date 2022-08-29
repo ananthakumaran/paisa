@@ -6,6 +6,7 @@ import _ from "lodash";
 import {
   ajax,
   forEachMonth,
+  formatFixedWidthFloat,
   formatCurrency,
   formatCurrencyCrude,
   Posting,
@@ -406,18 +407,18 @@ function renderCurrentExpensesBreakdown(
             .attr("class", "is-family-monospace")
             .text(
               (d) =>
-                `${formatCurrency(d.total)} ${sprintf(
-                  "%6.2f",
-                  (d.total / total) * 100
+                `${formatCurrency(d.total)} ${formatFixedWidthFloat(
+                  (d.total / total) * 100,
+                  6
                 )}%`
             ),
         (update) =>
           update
             .text(
               (d) =>
-                `${formatCurrency(d.total)} ${sprintf(
-                  "%6.2f",
-                  (d.total / total) * 100
+                `${formatCurrency(d.total)} ${formatFixedWidthFloat(
+                  (d.total / total) * 100,
+                  6
                 )}%`
             )
             .transition(t)

@@ -2,23 +2,12 @@ import * as d3 from "d3";
 import dayjs from "dayjs";
 import _ from "lodash";
 import Clusturize from "clusterize.js";
-import {
-  ajax,
-  Breakdown,
-  depth,
-  formatCurrency,
-  formatFloat,
-  lastName,
-  Posting
-} from "./utils";
+import { ajax, formatCurrency, formatFloat, Posting } from "./utils";
 
 export default async function () {
-  const { postings: postings, breakdowns: breakdowns } = await ajax(
-    "/api/ledger"
-  );
+  const { postings: postings } = await ajax("/api/ledger");
   _.each(postings, (p) => (p.timestamp = dayjs(p.date)));
 
-  renderBreakdowns(breakdowns);
   const { rows, clusterTable } = renderTransactions(postings);
 
   d3.select("input.d3-posting-filter").on(
@@ -107,49 +96,4 @@ function filterTransactions(
       filterRegex.test(r.posting.payee) ||
       filterRegex.test(r.date)
   );
-}
-
-function renderBreakdowns(breakdowns: Breakdown[]) {
-  const tbody = d3.select(".d3-postings-breakdown");
-  const trs = tbody.selectAll("tr").data(Object.values(breakdowns));
-
-  trs.exit().remove();
-  trs
-    .enter()
-    .append("tr")
-    .merge(trs as any)
-    .html((b) => {
-      let changeClass = "";
-
-      const gain = b.market_amount + b.withdrawal_amount - b.investment_amount;
-      if (gain > 0) {
-        changeClass = "has-text-success";
-      } else if (gain < 0) {
-        changeClass = "has-text-danger";
-      }
-      const indent = _.repeat("&emsp;&emsp;", depth(b.group) - 1);
-      return `
-       <td style='max-width: 200px; overflow: hidden;'>${indent}${lastName(
-        b.group
-      )}</td>
-       <td class='has-text-right'>${
-         b.investment_amount != 0 ? formatCurrency(b.investment_amount) : ""
-       }</td>
-       <td class='has-text-right'>${
-         b.withdrawal_amount != 0 ? formatCurrency(b.withdrawal_amount) : ""
-       }</td>
-       <td class='has-text-right'>${
-         b.balance_units > 0 ? formatFloat(b.balance_units, 4) : ""
-       }</td>
-       <td class='has-text-right'>${
-         b.market_amount != 0 ? formatCurrency(b.market_amount) : ""
-       }</td>
-       <td class='${changeClass} has-text-right'>${
-        b.investment_amount != 0 && gain != 0 ? formatCurrency(gain) : ""
-      }</td>
-       <td class='${changeClass} has-text-right'>${
-        b.xirr > 0.0001 || b.xirr < -0.0001 ? formatFloat(b.xirr) : ""
-      }</td>
-      `;
-    });
 }

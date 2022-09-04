@@ -21,11 +21,22 @@
         <div class="navbar-start">
           <a id="overview" class="navbar-item is-active">Overview</a>
           <a id="expense" class="navbar-item">Expense</a>
-          <a id="investment" class="navbar-item">Investment</a>
-          <a id="gain" class="navbar-item">Gain</a>
+          <div class="navbar-item has-dropdown is-hoverable">
+            <a class="navbar-link">Assets</a>
+            <div class="navbar-dropdown">
+              <a id="investment" class="navbar-item">Investment</a>
+              <a id="gain" class="navbar-item">Gain</a>
+              <a id="allocation" class="navbar-item">Allocation</a>
+            </div>
+          </div>
           <a id="income" class="navbar-item">Income</a>
-          <a id="allocation" class="navbar-item">Allocation</a>
-          <a id="ledger" class="navbar-item">Ledger</a>
+          <div class="navbar-item has-dropdown is-hoverable">
+            <a class="navbar-link">Ledger</a>
+            <div class="navbar-dropdown">
+              <a id="holding" class="navbar-item">Holding</a>
+              <a id="journal" class="navbar-item">Journal</a>
+            </div>
+          </div>
         </div>
       </div>
     </nav>
@@ -245,7 +256,7 @@
         </div>
       </div>
     </section>
-    <section class="section tab-ledger">
+    <section class="section tab-holding">
       <div class="container is-fluid">
         <div class="columns">
           <div class="column is-12">
@@ -273,6 +284,10 @@
             </table>
           </div>
         </div>
+      </div>
+    </section>
+    <section class="section tab-journal">
+      <div class="container is-fluid">
         <div class="columns">
           <div class="column is-12">
             <nav class="level">

@@ -15,7 +15,8 @@ import "tippy.js/themes/light.css";
 
 import allocation from "./allocation";
 import investment from "./investment";
-import ledger from "./ledger";
+import holding from "./holding";
+import journal from "./journal";
 import overview from "./overview";
 import gain from "./gain";
 import income from "./income";
@@ -25,7 +26,8 @@ const tabs = {
   overview: _.once(overview),
   investment: _.once(investment),
   allocation: _.once(allocation),
-  ledger: _.once(ledger),
+  holding: _.once(holding),
+  journal: _.once(journal),
   gain: _.once(gain),
   income: _.once(income),
   expense: _.once(expense)
@@ -39,6 +41,7 @@ function toggleTab(id: string) {
     $(`section.tab-${tab}`).hide();
   });
   $(`section.tab-${id}`).show();
+  $(window).scrollTop(0);
   tabs[id]().then(function () {
     tippyInstances.forEach((t) => t.destroy());
     tippyInstances = delegate(`section.tab-${id}`, {
@@ -60,10 +63,15 @@ function toggleTab(id: string) {
 
 $("a.navbar-item").on("click", function () {
   const id = $(this).attr("id");
-  toggleTab(id);
   window.location.hash = id;
-  $(".navbar-item").removeClass("is-active");
+  toggleTab(id);
+  $(".navbar-item, .navbar-link").removeClass("is-active");
   $(this).addClass("is-active");
+  $(this)
+    .closest(".has-dropdown.navbar-item")
+    .find(".navbar-link")
+    .addClass("is-active");
+  return false;
 });
 
 if (!_.isEmpty(window.location.hash)) {

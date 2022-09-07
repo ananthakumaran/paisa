@@ -17,12 +17,12 @@ const (
 )
 
 type Price struct {
-	ID            uint `gorm:"primaryKey"`
-	Date          time.Time
-	CommodityType CommodityType
-	CommodityID   string
-	CommodityName string
-	Value         float64
+	ID            uint          `gorm:"primaryKey" json:"id"`
+	Date          time.Time     `json:"date"`
+	CommodityType CommodityType `json:"commodity_type"`
+	CommodityID   string        `json:"commodity_id"`
+	CommodityName string        `json:"commodity_name"`
+	Value         float64       `json:"value"`
 }
 
 func (p Price) Less(o btree.Item) bool {

@@ -21,6 +21,7 @@ import overview from "./overview";
 import gain from "./gain";
 import income from "./income";
 import expense from "./expense";
+import price from "./price";
 
 const tabs = {
   overview: _.once(overview),
@@ -30,7 +31,8 @@ const tabs = {
   journal: _.once(journal),
   gain: _.once(gain),
   income: _.once(income),
-  expense: _.once(expense)
+  expense: _.once(expense),
+  price: _.once(price)
 };
 
 let tippyInstances: Instance[] = [];

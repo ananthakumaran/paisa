@@ -1,0 +1,11 @@
+paisa.db
+paisa.yaml
+paisa
+web/static/dist*
+node_modules
+example.ledger
+personal.ledger
+Dockerfile
+fly.toml
+.dockerignore
+.gitignore

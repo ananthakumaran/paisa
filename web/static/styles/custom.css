@@ -87,3 +87,10 @@ body {
     text-overflow: ellipsis;
     white-space: nowrap;
 }
+
+@media only screen and (max-width: 768px) {
+    .column, .section {
+        padding-right: 0;
+        padding-left: 0;
+    }
+}

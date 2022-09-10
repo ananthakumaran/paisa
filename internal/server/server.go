@@ -44,6 +44,9 @@ func Listen(db *gorm.DB) {
 	router.GET("/api/price", func(c *gin.Context) {
 		c.JSON(200, GetPrices(db))
 	})
+	router.GET("/api/harvest", func(c *gin.Context) {
+		c.JSON(200, GetHarvest(db))
+	})
 	log.Info("Listening on 7500")
 	err := router.Run(":7500")
 	if err != nil {

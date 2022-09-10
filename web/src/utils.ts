@@ -96,6 +96,43 @@ export interface YearlyCard {
   end_date_timestamp: dayjs.Dayjs;
 }
 
+export interface FYCapitalGain {
+  gain: number;
+  units: number;
+  purchase_price: number;
+  sell_price: number;
+}
+export interface HarvestBreakdown {
+  units: number;
+  purchase_date: string;
+  purchase_price: number;
+  purchase_unit_price: number;
+  grandfather_unit_price: number;
+  current_price: number;
+  unrealized_gain: number;
+  taxable_unrealized_gain: number;
+}
+
+export interface Harvestable {
+  total_units: number;
+  harvestable_units: number;
+  unrealized_gain: number;
+  taxable_unrealized_gain: number;
+  current_unit_price: number;
+  grandfather_unit_price: number;
+  current_unit_date: string;
+  harvest_breakdown: HarvestBreakdown[];
+}
+
+export interface CapitalGain {
+  account: string;
+  fy: { [key: string]: FYCapitalGain };
+  harvestable: Harvestable;
+}
+
+export function ajax(
+  route: "/api/harvest"
+): Promise<{ capital_gains: CapitalGain[] }>;
 export function ajax(
   route: "/api/investment"
 ): Promise<{ assets: Posting[]; yearly_cards: YearlyCard[] }>;

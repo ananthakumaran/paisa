@@ -20,6 +20,11 @@ func (q *Query) Desc() *Query {
 	return q
 }
 
+func (q *Query) Commodities(commodities []string) *Query {
+	q.context = q.context.Where("commodity in ?", commodities)
+	return q
+}
+
 func (q *Query) Like(account string) *Query {
 	q.context = q.context.Where("account like ?", account)
 	return q
@@ -32,7 +37,7 @@ func (q *Query) NotLike(account string) *Query {
 
 func (q *Query) All() []posting.Posting {
 	var postings []posting.Posting
-	result := q.context.Order("date ASC").Find(&postings)
+	result := q.context.Order("date " + q.order).Find(&postings)
 	if result.Error != nil {
 		log.Fatal(result.Error)
 	}

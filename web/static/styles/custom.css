@@ -94,3 +94,13 @@ body {
         padding-left: 0;
     }
 }
+
+.adjustable-input {
+    width: 80px;
+    font-weight: bold;
+    font-size: 0.75rem !important;
+    margin-left: 5px;
+    padding-top: 0;
+    padding-bottom: 0;
+    height: 1.3rem;
+}

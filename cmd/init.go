@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 	"io/ioutil"
+	"math"
 	"os"
 	"path/filepath"
 
@@ -48,6 +49,7 @@ type GeneratorState struct {
 	Ledger       *os.File
 	YearlySalary float64
 	Rent         float64
+	NiftyBalance float64
 }
 
 var pricesTree map[string]*btree.BTree
@@ -70,12 +72,17 @@ commodities:
   - name: NIFTY
     type: mutualfund
     code: 120716
+    harvest: 365
+    grandfather: 2018-01-31
   - name: NIFTY_JR
     type: mutualfund
     code: 120684
+    harvest: 365
+    grandfather: 2018-01-31
   - name: ABCBF
     type: mutualfund
     code: 119533
+    harvest: 1095
   - name: NPS_HDFC_E
     type: nps
     code: SM008001
@@ -106,16 +113,25 @@ func emitTransaction(file *os.File, date time.Time, payee string, from string, t
 	}
 }
 
-func emitCommodityBuy(file *os.File, date time.Time, commodity string, from string, to string, amount float64) {
+func emitCommodityBuy(file *os.File, date time.Time, commodity string, from string, to string, amount float64) float64 {
 	pc := utils.BTreeDescendFirstLessOrEqual(pricesTree[commodity], price.Price{Date: date})
+	units := amount / pc.Value
 	_, err := file.WriteString(fmt.Sprintf(`
 %s Investment
     %s                      %s %s @    %s INR
     %s
-`, date.Format("2006/01/02"), to, formatFloat(amount/pc.Value), commodity, formatFloat(pc.Value), from))
+`, date.Format("2006/01/02"), to, formatFloat(units), commodity, formatFloat(pc.Value), from))
 	if err != nil {
 		log.Fatal(err)
 	}
+	return units
+}
+
+func emitCommoditySell(file *os.File, date time.Time, commodity string, from string, to string, amount float64, availableUnits float64) float64 {
+	pc := utils.BTreeDescendFirstLessOrEqual(pricesTree[commodity], price.Price{Date: date})
+	requiredUnits := amount / pc.Value
+	units := math.Min(availableUnits, requiredUnits)
+	return emitCommodityBuy(file, date, commodity, from, to, -units*pc.Value)
 }
 
 func loadPrices(schemeCode string, commodityType price.CommodityType, commodityName string, pricesTree map[string]*btree.BTree) {
@@ -208,6 +224,7 @@ func emitSalary(state *GeneratorState, start time.Time) {
 	emitCommodityBuy(state.Ledger, start, "NPS_HDFC_E", salaryAccount, "Assets:Debt:NPS:HDFC:E", nps*0.75)
 	emitCommodityBuy(state.Ledger, start, "NPS_HDFC_C", salaryAccount, "Assets:Equity:NPS:HDFC:C", nps*0.15)
 	emitCommodityBuy(state.Ledger, start, "NPS_HDFC_G", salaryAccount, "Assets:Equity:NPS:HDFC:G", nps*0.10)
+
 }
 
 func emitExpense(state *GeneratorState, start time.Time) {
@@ -244,13 +261,18 @@ func emitInvestment(state *GeneratorState, start time.Time) {
 	debt := roundToK(state.Balance * 0.3)
 
 	state.Balance -= equity1
-	emitCommodityBuy(state.Ledger, start, "NIFTY", "Assets:Checking", "Assets:Equity:NIFTY", equity1)
+	state.NiftyBalance += emitCommodityBuy(state.Ledger, start, "NIFTY", "Assets:Checking", "Assets:Equity:NIFTY", equity1)
 
 	state.Balance -= equity2
 	emitCommodityBuy(state.Ledger, start, "NIFTY_JR", "Assets:Checking", "Assets:Equity:NIFTY_JR", equity2)
 
 	state.Balance -= debt
 	emitCommodityBuy(state.Ledger, start, "ABCBF", "Assets:Checking", "Assets:Debt:ABCBF", debt)
+
+	if start.Month() == time.March {
+		state.NiftyBalance += emitCommoditySell(state.Ledger, start.AddDate(0, 0, 15), "NIFTY", "Assets:Checking", "Assets:Equity:NIFTY", 75000, state.NiftyBalance)
+	}
+
 }
 
 func generateJournalFile(cwd string) {

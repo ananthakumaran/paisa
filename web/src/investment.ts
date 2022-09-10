@@ -423,43 +423,43 @@ function renderYearlyCards(yearlyCards: YearlyCard[]) {
   <tbody>
     <tr>
       <td>Gross Salary Income</td>
-      <td class='has-text-right has-text-weigh-bold'>${formatCurrency(
+      <td class='has-text-right has-text-weight-bold'>${formatCurrency(
         card.gross_salary_income
       )}</td>
     </tr>
     <tr>
       <td>Gross Other Income</td>
-      <td class='has-text-right has-text-weigh-bold'>${formatCurrency(
+      <td class='has-text-right has-text-weight-bold'>${formatCurrency(
         card.gross_other_income
       )}</td>
     </tr>
     <tr>
       <td>Tax</td>
-      <td class='has-text-right has-text-weigh-bold'>${formatCurrency(
+      <td class='has-text-right has-text-weight-bold'>${formatCurrency(
         card.net_tax
       )}</td>
     </tr>
     <tr>
       <td>Net Income</td>
-      <td class='has-text-right has-text-weigh-bold'>${formatCurrency(
+      <td class='has-text-right has-text-weight-bold'>${formatCurrency(
         card.net_income
       )}</td>
     </tr>
     <tr>
       <td>Net Expense</td>
-      <td class='has-text-right has-text-weigh-bold'>${formatCurrency(
+      <td class='has-text-right has-text-weight-bold'>${formatCurrency(
         card.net_expense
       )}</td>
     </tr>
     <tr>
       <td>Investment</td>
-      <td class='has-text-right has-text-weigh-bold'>${formatCurrency(
+      <td class='has-text-right has-text-weight-bold'>${formatCurrency(
         card.net_investment
       )}</td>
     </tr>
     <tr>
       <td>Savings Rate</td>
-      <td class='has-text-right has-text-weigh-bold'>${formatFloat(
+      <td class='has-text-right has-text-weight-bold'>${formatFloat(
         (card.net_investment / card.net_income) * 100
       )}</td>
     </tr>

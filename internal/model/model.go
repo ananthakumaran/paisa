@@ -2,6 +2,7 @@ package model
 
 import (
 	"github.com/ananthakumaran/paisa/internal/ledger"
+	"github.com/ananthakumaran/paisa/internal/model/commodity"
 	"github.com/ananthakumaran/paisa/internal/model/posting"
 	"github.com/ananthakumaran/paisa/internal/model/price"
 	"github.com/ananthakumaran/paisa/internal/scraper/mutualfund"
@@ -22,14 +23,7 @@ func SyncJournal(db *gorm.DB) {
 func SyncCommodities(db *gorm.DB) {
 	db.AutoMigrate(&price.Price{})
 	log.Info("Fetching commodities price history")
-	type Commodity struct {
-		Name string
-		Type price.CommodityType
-		Code string
-	}
-
-	var commodities []Commodity
-	viper.UnmarshalKey("commodities", &commodities)
+	commodities := commodity.All()
 	for _, commodity := range commodities {
 		name := commodity.Name
 		log.Info("Fetching commodity ", aurora.Bold(name))

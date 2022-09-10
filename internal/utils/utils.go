@@ -1,8 +1,10 @@
 package utils
 
 import (
-	"github.com/google/btree"
+	"fmt"
 	"time"
+
+	"github.com/google/btree"
 )
 
 func BTreeDescendFirstLessOrEqual[I btree.Item](tree *btree.BTree, item I) I {
@@ -13,6 +15,15 @@ func BTreeDescendFirstLessOrEqual[I btree.Item](tree *btree.BTree, item I) I {
 	})
 
 	return hit
+}
+
+func FY(date time.Time) string {
+	if date.Month() < time.April {
+		return fmt.Sprintf("%d-%d", date.Year()+1, date.Year())
+	} else {
+		return fmt.Sprintf("%d-%d", date.Year(), date.Year()+1)
+	}
+
 }
 
 func BeginningOfFinancialYear(date time.Time) time.Time {

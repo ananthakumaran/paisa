@@ -18,6 +18,16 @@ type Posting struct {
 	MarketAmount float64 `gorm:"-:all" json:"market_amount"`
 }
 
+func (p *Posting) Price() float64 {
+	return p.Amount / p.Quantity
+}
+
+func (p *Posting) AddQuantity(quantity float64) {
+	price := p.Price()
+	p.Quantity += quantity
+	p.Amount = p.Quantity * price
+}
+
 func UpsertAll(db *gorm.DB, postings []*Posting) {
 	err := db.Transaction(func(tx *gorm.DB) error {
 		err := tx.Exec("DELETE FROM postings").Error

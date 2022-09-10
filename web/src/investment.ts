@@ -8,6 +8,7 @@ import {
   formatCurrency,
   formatCurrencyCrude,
   formatFloat,
+  generateColorScheme,
   Posting,
   secondName,
   skipTicks,
@@ -132,7 +133,7 @@ function renderMonthlyInvestmentTimeline(postings: Posting[]) {
     )
   ]);
 
-  const z = d3.scaleOrdinal<string>().range(d3.schemeCategory10);
+  const z = generateColorScheme(groups);
 
   g.append("g")
     .attr("class", "axis x")
@@ -312,7 +313,7 @@ function renderYearlyInvestmentTimeline(yearlyCards: YearlyCard[]) {
     )
   ]);
 
-  const z = d3.scaleOrdinal<string>().range(d3.schemeCategory10);
+  const z = generateColorScheme(groups);
 
   g.append("g")
     .attr("class", "axis y")

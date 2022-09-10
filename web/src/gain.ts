@@ -1,7 +1,9 @@
+import chroma from "chroma-js";
 import * as d3 from "d3";
 import legend from "d3-svg-legend";
 import dayjs from "dayjs";
 import _ from "lodash";
+import COLORS from "./colors";
 import {
   ajax,
   formatCurrency,
@@ -26,13 +28,13 @@ export default async function () {
 }
 
 const areaKeys = ["gain", "loss"];
-const colors = ["#b2df8a", "#fb9a99"];
+const colors = [COLORS.gain, COLORS.loss];
 const areaScale = d3.scaleOrdinal<string>().domain(areaKeys).range(colors);
 const lineKeys = ["balance", "investment", "withdrawal"];
 const lineScale = d3
   .scaleOrdinal<string>()
   .domain(lineKeys)
-  .range(["#1f77b4", "#17becf", "#ff7f0e"]);
+  .range([COLORS.primary, COLORS.secondary, COLORS.tertiary]);
 
 function renderTable(gain: Gain) {
   const tbody = d3.select(this);
@@ -95,7 +97,13 @@ function renderOverview(gains: Gain[]) {
     .paddingOuter(0.1);
 
   const keys = ["balance", "investment", "withdrawal", "gain", "loss"];
-  const colors = ["#1f77b4", "#17becf", "#ff7f0e", "#b2df8a", "#fb9a99"];
+  const colors = [
+    COLORS.primary,
+    COLORS.secondary,
+    COLORS.tertiary,
+    COLORS.gain,
+    COLORS.loss
+  ];
   const z = d3.scaleOrdinal<string>(colors).domain(keys);
 
   const getInvestmentAmount = (g: Gain) =>
@@ -203,7 +211,9 @@ function renderOverview(gains: Gain[]) {
     .text((g) => formatCurrency(getGainAmount(g)))
     .attr("alignment-baseline", "hanging")
     .attr("text-anchor", "end")
-    .style("fill", (g) => (getGainAmount(g) > 0 ? z("gain") : "none"))
+    .style("fill", (g) =>
+      getGainAmount(g) > 0 ? chroma(z("gain")).darken().hex() : "none"
+    )
     .attr("dx", "-3")
     .attr("dy", "3")
     .attr("x", textGroupZero + (textGroupWidth * 2) / 3)
@@ -223,7 +233,9 @@ function renderOverview(gains: Gain[]) {
     .append("text")
     .text((g) => formatCurrency(getGainAmount(g)))
     .attr("text-anchor", "end")
-    .style("fill", (g) => (getGainAmount(g) < 0 ? z("loss") : "none"))
+    .style("fill", (g) =>
+      getGainAmount(g) < 0 ? chroma(z("loss")).darken().hex() : "none"
+    )
     .attr("dx", "-3")
     .attr("dy", "-3")
     .attr("x", textGroupZero + (textGroupWidth * 2) / 3)
@@ -254,7 +266,11 @@ function renderOverview(gains: Gain[]) {
     .text((g) => formatFloat(g.xirr))
     .attr("text-anchor", "end")
     .attr("alignment-baseline", "middle")
-    .style("fill", (g) => (g.xirr < 0 ? z("loss") : z("gain")))
+    .style("fill", (g) =>
+      g.xirr < 0
+        ? chroma(z("loss")).darken().hex()
+        : chroma(z("gain")).darken().hex()
+    )
     .attr("x", xirrWidth + xirrTextWidth)
     .attr("y", (g) => y(restName(g.account)) + y.bandwidth() / 2);
 

@@ -2,6 +2,7 @@ import * as d3 from "d3";
 import legend from "d3-svg-legend";
 import dayjs from "dayjs";
 import _ from "lodash";
+import COLORS from "./colors";
 import {
   ajax,
   formatCurrency,
@@ -22,13 +23,19 @@ export default async function () {
       current.investment_amount +
         current.gain_amount -
         current.withdrawal_amount
-    )
+    ),
+    COLORS.primary
   );
   setHtml(
     "investment",
-    formatCurrency(current.investment_amount - current.withdrawal_amount)
+    formatCurrency(current.investment_amount - current.withdrawal_amount),
+    COLORS.secondary
   );
-  setHtml("gains", formatCurrency(current.gain_amount));
+  setHtml(
+    "gains",
+    formatCurrency(current.gain_amount),
+    current.gain_amount >= 0 ? COLORS.gainText : COLORS.lossText
+  );
   setHtml("xirr", formatFloat(xirr));
 
   renderOverview(points, document.getElementById("d3-overview-timeline"));
@@ -47,7 +54,7 @@ function renderOverview(points: Overview[], element: Element) {
       .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
   const areaKeys = ["gain", "loss"];
-  const colors = ["#b2df8a", "#fb9a99"];
+  const colors = [COLORS.gain, COLORS.loss];
   const areaScale = d3.scaleOrdinal().domain(areaKeys).range(colors);
 
   const lineKeys = ["networth", "investment"];
@@ -55,7 +62,7 @@ function renderOverview(points: Overview[], element: Element) {
   const lineScale = d3
     .scaleOrdinal<string>()
     .domain(lineKeys)
-    .range(["#1f77b4", "#17becf", "#ff7f0e"]);
+    .range([COLORS.primary, COLORS.secondary]);
 
   const positions = _.flatMap(points, (p) => [
     p.gain_amount + p.investment_amount - p.withdrawal_amount,

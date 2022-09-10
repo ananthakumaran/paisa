@@ -1,7 +1,7 @@
 import * as d3 from "d3";
 import legend from "d3-svg-legend";
-import { sprintf } from "sprintf-js";
 import dayjs, { Dayjs } from "dayjs";
+import chroma from "chroma-js";
 import _ from "lodash";
 import {
   ajax,
@@ -14,8 +14,10 @@ import {
   secondName,
   setHtml,
   skipTicks,
-  tooltip
+  tooltip,
+  generateColorScheme
 } from "./utils";
+import COLORS from "./colors";
 
 export default async function () {
   const {
@@ -82,10 +84,10 @@ function renderSelectedMonth(
   investments: Posting[]
 ) {
   renderer(expenses);
-  setHtml("current-month-income", sum(incomes, -1));
-  setHtml("current-month-tax", sum(taxes));
-  setHtml("current-month-expenses", sum(expenses));
-  setHtml("current-month-investment", sum(investments));
+  setHtml("current-month-income", sum(incomes, -1), COLORS.gainText);
+  setHtml("current-month-tax", sum(taxes), COLORS.lossText);
+  setHtml("current-month-expenses", sum(expenses), COLORS.lossText);
+  setHtml("current-month-investment", sum(investments), COLORS.secondary);
 }
 
 function sum(postings: Posting[], sign = 1) {
@@ -159,7 +161,7 @@ function renderMonthlyExpensesTimeline(
   x.domain(points.map((p) => p.month));
   y.domain([0, d3.max(points, sum)]);
 
-  const z = d3.scaleOrdinal<string>().range(d3.schemeCategory10);
+  const z = generateColorScheme(groups);
 
   g.append("g")
     .attr("class", "axis x")
@@ -401,8 +403,8 @@ function renderCurrentExpensesBreakdown(
             .style("white-space", "pre")
             .style("font-size", "13px")
             .style("font-weight", "bold")
-            .attr("fill", function (d) {
-              return z(d.category);
+            .style("fill", function (d) {
+              return chroma(z(d.category)).darken(0.8).hex();
             })
             .attr("class", "is-family-monospace")
             .text(

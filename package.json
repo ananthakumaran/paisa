@@ -5,6 +5,8 @@
     "@types/jquery": "^3.5.14",
     "@types/lodash": "^4.14.181",
     "@types/sprintf-js": "^1.1.2",
+    "bulma": "^0.9.4",
+    "chroma-js": "^2.4.2",
     "clusterize.js": "^0.19.0",
     "d3": "^7.4.0",
     "d3-svg-legend": "^2.25.6",
@@ -13,10 +15,10 @@
     "jquery": "^3.6.0",
     "lodash": "^4.17.21",
     "sprintf-js": "^1.1.2",
-    "tippy.js": "^6.3.7",
-    "bulma": "^0.9.4"
+    "tippy.js": "^6.3.7"
   },
   "devDependencies": {
+    "@types/chroma-js": "^2.1.4",
     "@typescript-eslint/eslint-plugin": "^5.22.0",
     "@typescript-eslint/parser": "^5.22.0",
     "eslint": "^8.15.0",

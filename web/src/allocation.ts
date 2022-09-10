@@ -15,8 +15,10 @@ import {
   secondName,
   textColor,
   tooltip,
-  skipTicks
+  skipTicks,
+  generateColorScheme
 } from "./utils";
+import COLORS from "./colors";
 
 export default async function () {
   const {
@@ -55,7 +57,7 @@ function renderAllocationTarget(allocationTargets: AllocationTarget[]) {
 
   const keys = ["target", "current"];
   const colorKeys = ["target", "current", "diff"];
-  const colors = ["#1f77b4", "#17becf", "#4a4a4a"];
+  const colors = [COLORS.primary, COLORS.secondary, COLORS.diff];
 
   const y = d3.scaleBand().range([0, height]).paddingInner(0).paddingOuter(0);
   y.domain(allocationTargets.map((t) => t.name));
@@ -244,7 +246,7 @@ function renderPartition(element: HTMLElement, aggregates, hierarchy) {
     return formatFloat((d.value / root.value) * 100) + "%";
   };
 
-  const color = rainbowScale(_.keys(aggregates));
+  const color = generateColorScheme(_.keys(aggregates));
 
   const stratify = d3
     .stratify<Aggregate>()
@@ -373,7 +375,7 @@ function renderAllocationTimeline(
         0,
         d3.max(d3.map(points, (p) => d3.max(_.values(_.omit(p, "date")))))
       ]),
-    z = d3.scaleOrdinal(d3.schemeCategory10).domain(assets);
+    z = generateColorScheme(assets);
 
   const line = (group) =>
     d3

@@ -2,10 +2,12 @@ import * as d3 from "d3";
 import legend from "d3-svg-legend";
 import dayjs from "dayjs";
 import _ from "lodash";
+import COLORS from "./colors";
 import {
   ajax,
   formatCurrency,
   formatCurrencyCrude,
+  generateColorScheme,
   Income,
   Posting,
   restName,
@@ -27,8 +29,8 @@ export default async function () {
 
   const netTax = _.sumBy(taxes, (t) => _.sumBy(t.postings, (p) => p.amount));
 
-  setHtml("gross-income", formatCurrency(grossIncome));
-  setHtml("net-tax", formatCurrency(netTax));
+  setHtml("gross-income", formatCurrency(grossIncome), COLORS.gainText);
+  setHtml("net-tax", formatCurrency(netTax), COLORS.lossText);
 }
 
 function renderMonthlyInvestmentTimeline(incomes: Income[]) {
@@ -119,7 +121,7 @@ function renderIncomeTimeline(
     )
   ]);
 
-  const z = d3.scaleOrdinal<string>().range(d3.schemeCategory10);
+  const z = generateColorScheme(groupKeys);
 
   g.append("g")
     .attr("class", "axis x")

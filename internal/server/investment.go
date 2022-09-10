@@ -5,10 +5,10 @@ import (
 	"time"
 
 	"github.com/ananthakumaran/paisa/internal/model/posting"
+	"github.com/ananthakumaran/paisa/internal/query"
 	"github.com/ananthakumaran/paisa/internal/utils"
 	"github.com/gin-gonic/gin"
 	"github.com/samber/lo"
-	log "github.com/sirupsen/logrus"
 	"gorm.io/gorm"
 )
 
@@ -25,29 +25,10 @@ type YearlyCard struct {
 }
 
 func GetInvestment(db *gorm.DB) gin.H {
-	var assets []posting.Posting
-	var incomes []posting.Posting
-	var expenses []posting.Posting
-	result := db.Where("account like ? and account != ? order by date asc", "Assets:%", "Assets:Checking").Find(&assets)
-	if result.Error != nil {
-		log.Fatal(result.Error)
-	}
-
-	result = db.Where("account like ? order by date asc", "Income:%").Find(&incomes)
-	if result.Error != nil {
-		log.Fatal(result.Error)
-	}
-
-	result = db.Where("account like ? order by date asc", "Expenses:%").Find(&expenses)
-	if result.Error != nil {
-		log.Fatal(result.Error)
-	}
-
-	var p posting.Posting
-	result = db.Order("date ASC").First(&p)
-	if result.Error != nil {
-		log.Fatal(result.Error)
-	}
+	assets := query.Init(db).Like("Assets:%").NotLike("Assets:Checking").All()
+	incomes := query.Init(db).Like("Income:%").All()
+	expenses := query.Init(db).Like("Expenses:%").All()
+	p := query.Init(db).First()
 
 	return gin.H{"assets": assets, "yearly_cards": computeYearlyCard(p.Date, assets, expenses, incomes)}
 }

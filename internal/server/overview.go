@@ -3,9 +3,8 @@ package server
 import (
 	"time"
 
-	log "github.com/sirupsen/logrus"
-
 	"github.com/ananthakumaran/paisa/internal/model/posting"
+	"github.com/ananthakumaran/paisa/internal/query"
 	"github.com/ananthakumaran/paisa/internal/service"
 	"github.com/gin-gonic/gin"
 	"github.com/samber/lo"
@@ -20,11 +19,7 @@ type Overview struct {
 }
 
 func GetOverview(db *gorm.DB) gin.H {
-	var postings []posting.Posting
-	result := db.Where("account like ?", "Assets:%").Order("date ASC").Find(&postings)
-	if result.Error != nil {
-		log.Fatal(result.Error)
-	}
+	postings := query.Init(db).Like("Assets:%").All()
 
 	postings = service.PopulateMarketPrice(db, postings)
 	overviewTimeline := computeOverviewTimeline(db, postings)

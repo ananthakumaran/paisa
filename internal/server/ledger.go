@@ -4,9 +4,9 @@ import (
 	"strings"
 
 	"github.com/samber/lo"
-	log "github.com/sirupsen/logrus"
 
 	"github.com/ananthakumaran/paisa/internal/model/posting"
+	"github.com/ananthakumaran/paisa/internal/query"
 	"github.com/ananthakumaran/paisa/internal/service"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
@@ -23,11 +23,7 @@ type Breakdown struct {
 }
 
 func GetLedger(db *gorm.DB) gin.H {
-	var postings []posting.Posting
-	result := db.Order("date DESC").Find(&postings)
-	if result.Error != nil {
-		log.Fatal(result.Error)
-	}
+	postings := query.Init(db).Desc().All()
 
 	postings = service.PopulateMarketPrice(db, postings)
 	breakdowns := computeBreakdown(db, lo.Filter(postings, func(p posting.Posting, _ int) bool {

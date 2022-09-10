@@ -4,9 +4,9 @@ import (
 	"time"
 
 	"github.com/ananthakumaran/paisa/internal/model/posting"
+	"github.com/ananthakumaran/paisa/internal/query"
 	"github.com/ananthakumaran/paisa/internal/utils"
 	"github.com/gin-gonic/gin"
-	log "github.com/sirupsen/logrus"
 	"gorm.io/gorm"
 )
 
@@ -22,17 +22,8 @@ type Tax struct {
 }
 
 func GetIncome(db *gorm.DB) gin.H {
-	var incomePostings []posting.Posting
-	result := db.Where("account like ?", "Income:%").Order("date ASC").Find(&incomePostings)
-	if result.Error != nil {
-		log.Fatal(result.Error)
-	}
-
-	var taxPostings []posting.Posting
-	result = db.Where("account = ?", "Expenses:Tax").Order("date ASC").Find(&taxPostings)
-	if result.Error != nil {
-		log.Fatal(result.Error)
-	}
+	incomePostings := query.Init(db).Like("Income:%").All()
+	taxPostings := query.Init(db).Like("Expenses:Tax").All()
 	return gin.H{"income_timeline": computeIncomeTimeline(incomePostings), "tax_timeline": computeTaxTimeline(taxPostings)}
 }
 

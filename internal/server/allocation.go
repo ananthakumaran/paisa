@@ -9,6 +9,7 @@ import (
 	log "github.com/sirupsen/logrus"
 
 	"github.com/ananthakumaran/paisa/internal/model/posting"
+	"github.com/ananthakumaran/paisa/internal/query"
 	"github.com/ananthakumaran/paisa/internal/service"
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
@@ -36,11 +37,7 @@ type AllocationTarget struct {
 }
 
 func GetAllocation(db *gorm.DB) gin.H {
-	var postings []posting.Posting
-	result := db.Where("account like ?", "Assets:%").Order("date ASC").Find(&postings)
-	if result.Error != nil {
-		log.Fatal(result.Error)
-	}
+	postings := query.Init(db).Like("Assets:%").All()
 
 	now := time.Now()
 	postings = lo.Map(postings, func(p posting.Posting, _ int) posting.Posting {

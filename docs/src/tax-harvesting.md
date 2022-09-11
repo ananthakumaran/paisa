@@ -1,6 +1,6 @@
 # Tax Harvesting
 
-Mutual Funds gains are subject to capital gains tax. The taxation rate
+Mutual Fund gains are subject to capital gains tax. The taxation rate
 itself differs based on how long you hold your investment, whether
 it's debt or equity, whether you have more than 1 Lakh gains in a year
 etc. To further complicate things, there might be exit load

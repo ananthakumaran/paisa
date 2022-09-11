@@ -128,11 +128,11 @@ func emitCommodityBuy(file *os.File, date time.Time, commodity string, from stri
 	return units
 }
 
-func emitCommoditySell(file *os.File, date time.Time, commodity string, from string, to string, amount float64, availableUnits float64) float64 {
+func emitCommoditySell(file *os.File, date time.Time, commodity string, from string, to string, amount float64, availableUnits float64) (float64, float64) {
 	pc := utils.BTreeDescendFirstLessOrEqual(pricesTree[commodity], price.Price{Date: date})
 	requiredUnits := amount / pc.Value
 	units := math.Min(availableUnits, requiredUnits)
-	return emitCommodityBuy(file, date, commodity, from, to, -units*pc.Value)
+	return emitCommodityBuy(file, date, commodity, from, to, -units*pc.Value), units * pc.Value
 }
 
 func loadPrices(schemeCode string, commodityType price.CommodityType, commodityName string, pricesTree map[string]*btree.BTree) {
@@ -271,7 +271,9 @@ func emitInvestment(state *GeneratorState, start time.Time) {
 	emitCommodityBuy(state.Ledger, start, "ABCBF", "Assets:Checking", "Assets:Debt:ABCBF", debt)
 
 	if start.Month() == time.March {
-		state.NiftyBalance += emitCommoditySell(state.Ledger, start.AddDate(0, 0, 15), "NIFTY", "Assets:Checking", "Assets:Equity:NIFTY", 75000, state.NiftyBalance)
+		units, amount := emitCommoditySell(state.Ledger, start.AddDate(0, 0, 15), "NIFTY", "Assets:Checking", "Assets:Equity:NIFTY", 75000, state.NiftyBalance)
+		state.NiftyBalance += units
+		state.Balance += amount
 	}
 
 }

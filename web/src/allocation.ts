@@ -29,12 +29,18 @@ export default async function () {
   _.each(aggregatesTimeline, (aggregates) =>
     _.each(aggregates, (a) => (a.timestamp = dayjs(a.date)))
   );
-  renderAllocationTarget(allocationTargets);
-  renderAllocation(aggregates);
+
+  const color = generateColorScheme(_.keys(aggregates));
+
+  renderAllocationTarget(allocationTargets, color);
+  renderAllocation(aggregates, color);
   renderAllocationTimeline(aggregatesTimeline);
 }
 
-function renderAllocationTarget(allocationTargets: AllocationTarget[]) {
+function renderAllocationTarget(
+  allocationTargets: AllocationTarget[],
+  color: d3.ScaleOrdinal<string, string>
+) {
   const id = "#d3-allocation-target";
 
   if (_.isEmpty(allocationTargets)) {
@@ -214,24 +220,34 @@ function renderAllocationTarget(allocationTargets: AllocationTarget[]) {
     .style("position", "relative")
     .attr("height", y1.bandwidth() * 2)
     .each(function (t) {
-      renderPartition(this, t.aggregates, d3.treemap());
+      renderPartition(this, t.aggregates, d3.treemap(), color);
     });
 }
 
-function renderAllocation(aggregates: { [key: string]: Aggregate }) {
+function renderAllocation(
+  aggregates: { [key: string]: Aggregate },
+  color: d3.ScaleOrdinal<string, string>
+) {
   renderPartition(
     document.getElementById("d3-allocation-category"),
     aggregates,
-    d3.partition()
+    d3.partition(),
+    color
   );
   renderPartition(
     document.getElementById("d3-allocation-value"),
     aggregates,
-    d3.treemap()
+    d3.treemap(),
+    color
   );
 }
 
-function renderPartition(element: HTMLElement, aggregates, hierarchy) {
+function renderPartition(
+  element: HTMLElement,
+  aggregates,
+  hierarchy,
+  color: d3.ScaleOrdinal<string, string>
+) {
   if (_.isEmpty(aggregates)) {
     return;
   }
@@ -244,8 +260,6 @@ function renderPartition(element: HTMLElement, aggregates, hierarchy) {
   const percent = (d) => {
     return formatFloat((d.value / root.value) * 100) + "%";
   };
-
-  const color = generateColorScheme(_.keys(aggregates));
 
   const stratify = d3
     .stratify<Aggregate>()

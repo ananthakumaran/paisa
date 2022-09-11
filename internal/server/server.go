@@ -13,7 +13,6 @@ func Listen(db *gorm.DB) {
 	gin.SetMode(gin.ReleaseMode)
 
 	router := gin.Default()
-	router.SetTrustedProxies(nil)
 	router.GET("/static/*filepath", func(c *gin.Context) {
 		c.FileFromFS(c.Request.URL.Path, http.FS(web.Static))
 	})

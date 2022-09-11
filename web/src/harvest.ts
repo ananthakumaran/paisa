@@ -44,7 +44,7 @@ function renderHarvestables(capital_gains: CapitalGain[]) {
       const [units, amount, taxableGain] = unitsRequired(cg, 100000);
       self.append("span").html("Redeeming&nbsp;");
       const unitsSpan = self.append("span").text(formatFloat(units));
-      self.append("span").html("&nbsp;(amount ₹");
+      self.append("span").html("&nbsp;units (amount ₹");
       const amountSpan = self.append("span").text(formatCurrency(amount));
       self.append("span").html(")&nbsp;will result in <b>taxable</b> gain ₹");
       self

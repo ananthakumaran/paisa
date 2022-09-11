@@ -59,7 +59,7 @@ func FindScheme(db *gorm.DB, pfm string, schemeName string) Scheme {
 	var scheme Scheme
 	result := db.Where("pfm_name = ? and scheme_name = ?", pfm, schemeName).First(&scheme)
 	if result.Error != nil {
-		log.Fatal(result)
+		log.Fatal(result.Error)
 	}
 	return scheme
 }

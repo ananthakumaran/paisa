@@ -3,15 +3,16 @@ package nps
 import (
 	"encoding/json"
 	"fmt"
+	log "github.com/sirupsen/logrus"
 	"io/ioutil"
-	"time"
-
 	"net/http"
+	"time"
 
 	"github.com/ananthakumaran/paisa/internal/model/price"
 )
 
 func GetNav(schemeCode string, commodityName string) ([]*price.Price, error) {
+	log.Info("Fetching NPS Fund nav from Purified Bytes")
 	url := fmt.Sprintf("https://nps.purifiedbytes.com/api/schemes/%s/nav.json", schemeCode)
 	resp, err := http.Get(url)
 	if err != nil {

@@ -58,7 +58,7 @@ func FindScheme(db *gorm.DB, amc string, NAVName string) Scheme {
 	var scheme Scheme
 	result := db.Where("amc = ? and nav_name = ?", amc, NAVName).First(&scheme)
 	if result.Error != nil {
-		log.Fatal(result)
+		log.Fatal(result.Error)
 	}
 	return scheme
 }

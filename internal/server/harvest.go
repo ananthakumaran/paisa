@@ -3,6 +3,7 @@ package server
 import (
 	"time"
 
+	"github.com/ananthakumaran/paisa/internal/model/cii"
 	c "github.com/ananthakumaran/paisa/internal/model/commodity"
 	"github.com/ananthakumaran/paisa/internal/model/posting"
 	"github.com/ananthakumaran/paisa/internal/query"
@@ -48,7 +49,8 @@ type CapitalGain struct {
 	Harvestable Harvestable              `json:"harvestable"`
 }
 
-var EQUITY_GRANDFATHER_DATE, _ = time.Parse("2006-01-02", "2018-01-31")
+var EQUITY_GRANDFATHER_DATE, _ = time.Parse("2006-01-02", "2018-02-01")
+var CII_START_DATE, _ = time.Parse("2006-01-02", "2001-03-31")
 
 func GetHarvest(db *gorm.DB) gin.H {
 	commodities := lo.Filter(c.All(), func(c c.Commodity, _ int) bool {
@@ -117,6 +119,10 @@ func computeCapitalGains(db *gorm.DB, account string, commodity c.Commodity, pos
 			taxableGain := gain
 			if grandfather && p.Date.Before(EQUITY_GRANDFATHER_DATE) {
 				taxableGain = grandfatherUnitPrice*p.Quantity - p.Amount
+			}
+
+			if commodity.TaxCategory == c.Debt && p.Date.After(CII_START_DATE) {
+				taxableGain = currentPrice.Value*p.Quantity - (p.Amount*float64(cii.GetIndex(db, utils.FY(today))))/float64(cii.GetIndex(db, utils.FY(p.Date)))
 			}
 			harvestable.HarvestableUnits += p.Quantity
 			harvestable.UnrealizedGain += gain

@@ -73,16 +73,17 @@ commodities:
     type: mutualfund
     code: 120716
     harvest: 365
-    grandfather: 2018-01-31
+    tax_category: equity
   - name: NIFTY_JR
     type: mutualfund
     code: 120684
     harvest: 365
-    grandfather: 2018-01-31
+    tax_category: equity
   - name: ABCBF
     type: mutualfund
     code: 119533
     harvest: 1095
+    tax_category: debt
   - name: NPS_HDFC_E
     type: nps
     code: SM008001

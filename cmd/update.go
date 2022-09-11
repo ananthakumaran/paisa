@@ -30,6 +30,10 @@ var updateCmd = &cobra.Command{
 		if syncAll || updateCommodities {
 			model.SyncCommodities(db)
 		}
+
+		if syncAll {
+			model.SyncCII(db)
+		}
 	},
 }
 

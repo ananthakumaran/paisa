@@ -3,16 +3,17 @@ package mutualfund
 import (
 	"encoding/json"
 	"fmt"
+	log "github.com/sirupsen/logrus"
 	"io/ioutil"
+	"net/http"
 	"strconv"
 	"time"
-
-	"net/http"
 
 	"github.com/ananthakumaran/paisa/internal/model/price"
 )
 
 func GetNav(schemeCode string, commodityName string) ([]*price.Price, error) {
+	log.Info("Fetching Mutual Fund nav from mfapi.in")
 	url := fmt.Sprintf("https://api.mfapi.in/mf/%s", schemeCode)
 	resp, err := http.Get(url)
 	if err != nil {

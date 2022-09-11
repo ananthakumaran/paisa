@@ -2,9 +2,11 @@ package model
 
 import (
 	"github.com/ananthakumaran/paisa/internal/ledger"
+	"github.com/ananthakumaran/paisa/internal/model/cii"
 	"github.com/ananthakumaran/paisa/internal/model/commodity"
 	"github.com/ananthakumaran/paisa/internal/model/posting"
 	"github.com/ananthakumaran/paisa/internal/model/price"
+	"github.com/ananthakumaran/paisa/internal/scraper/india"
 	"github.com/ananthakumaran/paisa/internal/scraper/mutualfund"
 	"github.com/ananthakumaran/paisa/internal/scraper/nps"
 	"github.com/logrusorgru/aurora"
@@ -47,4 +49,14 @@ func SyncCommodities(db *gorm.DB) {
 
 		price.UpsertAll(db, commodity.Type, schemeCode, prices)
 	}
+}
+
+func SyncCII(db *gorm.DB) {
+	db.AutoMigrate(&cii.CII{})
+	log.Info("Fetching taxation related info")
+	ciis, err := india.GetCostInflationIndex()
+	if err != nil {
+		log.Fatal(err)
+	}
+	cii.UpsertAll(db, ciis)
 }

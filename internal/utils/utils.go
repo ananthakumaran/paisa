@@ -19,9 +19,9 @@ func BTreeDescendFirstLessOrEqual[I btree.Item](tree *btree.BTree, item I) I {
 
 func FY(date time.Time) string {
 	if date.Month() < time.April {
-		return fmt.Sprintf("%d-%d", date.Year()+1, date.Year())
+		return fmt.Sprintf("%d-%d", date.Year()+1, date.Year()%100)
 	} else {
-		return fmt.Sprintf("%d-%d", date.Year(), date.Year()+1)
+		return fmt.Sprintf("%d-%d", date.Year(), (date.Year()+1)%100)
 	}
 
 }

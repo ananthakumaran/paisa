@@ -6,12 +6,19 @@ import (
 	"github.com/spf13/viper"
 )
 
+type TaxCategoryType string
+
+const (
+	Debt   TaxCategoryType = "debt"
+	Equity TaxCategoryType = "equity"
+)
+
 type Commodity struct {
 	Name        string
 	Type        price.CommodityType
 	Code        string
 	Harvest     int
-	Grandfather string
+	TaxCategory TaxCategoryType `mapstructure:"tax_category"`
 }
 
 func All() []Commodity {

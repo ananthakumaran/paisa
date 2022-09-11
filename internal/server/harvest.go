@@ -3,7 +3,7 @@ package server
 import (
 	"time"
 
-	"github.com/ananthakumaran/paisa/internal/model/commodity"
+	c "github.com/ananthakumaran/paisa/internal/model/commodity"
 	"github.com/ananthakumaran/paisa/internal/model/posting"
 	"github.com/ananthakumaran/paisa/internal/query"
 	"github.com/ananthakumaran/paisa/internal/service"
@@ -26,7 +26,6 @@ type HarvestBreakdown struct {
 	PurchasePrice         float64   `json:"purchase_price"`
 	CurrentPrice          float64   `json:"current_price"`
 	PurchaseUnitPrice     float64   `json:"purchase_unit_price"`
-	GrandfatherUnitPrice  float64   `json:"grandfather_unit_price"`
 	UnrealizedGain        float64   `json:"unrealized_gain"`
 	TaxableUnrealizedGain float64   `json:"taxable_unrealized_gain"`
 }
@@ -44,24 +43,27 @@ type Harvestable struct {
 
 type CapitalGain struct {
 	Account     string                   `json:"account"`
+	TaxCategory string                   `json:"tax_category"`
 	FY          map[string]FYCapitalGain `json:"fy"`
 	Harvestable Harvestable              `json:"harvestable"`
 }
 
+var EQUITY_GRANDFATHER_DATE, _ = time.Parse("2006-01-02", "2018-01-31")
+
 func GetHarvest(db *gorm.DB) gin.H {
-	commodities := lo.Filter(commodity.All(), func(c commodity.Commodity, _ int) bool {
+	commodities := lo.Filter(c.All(), func(c c.Commodity, _ int) bool {
 		return c.Harvest > 0
 	})
-	postings := query.Init(db).Like("Assets:%").Commodities(lo.Map(commodities, func(c commodity.Commodity, _ int) string { return c.Name })).All()
+	postings := query.Init(db).Like("Assets:%").Commodities(lo.Map(commodities, func(c c.Commodity, _ int) string { return c.Name })).All()
 	byAccount := lo.GroupBy(postings, func(p posting.Posting) string { return p.Account })
 	capitalGains := lo.MapValues(byAccount, func(postings []posting.Posting, account string) CapitalGain {
-		return computeCapitalGains(db, account, commodity.FindByName(postings[0].Commodity), postings)
+		return computeCapitalGains(db, account, c.FindByName(postings[0].Commodity), postings)
 	})
 	return gin.H{"capital_gains": capitalGains}
 }
 
-func computeCapitalGains(db *gorm.DB, account string, commodity commodity.Commodity, postings []posting.Posting) CapitalGain {
-	capitalGain := CapitalGain{Account: account, FY: make(map[string]FYCapitalGain)}
+func computeCapitalGains(db *gorm.DB, account string, commodity c.Commodity, postings []posting.Posting) CapitalGain {
+	capitalGain := CapitalGain{Account: account, TaxCategory: string(commodity.TaxCategory), FY: make(map[string]FYCapitalGain)}
 	var available []posting.Posting
 	for _, p := range postings {
 		if p.Quantity > 0 {
@@ -92,22 +94,18 @@ func computeCapitalGains(db *gorm.DB, account string, commodity commodity.Commod
 		}
 	}
 
-	var grandfatherDate time.Time
-	var err error
 	grandfather := false
-	if commodity.Grandfather != "" {
-		grandfatherDate, err = time.Parse("2006-01-02", commodity.Grandfather)
-		if err == nil {
-			grandfather = true
-		}
+	if commodity.TaxCategory == c.Equity {
+		grandfather = true
 	}
 
 	today := time.Now()
 	currentPrice := service.GetUnitPrice(db, commodity.Name, today)
 	grandfatherUnitPrice := 0.0
 	if grandfather {
-		grandfatherPrice := service.GetUnitPrice(db, commodity.Name, grandfatherDate)
+		grandfatherPrice := service.GetUnitPrice(db, commodity.Name, EQUITY_GRANDFATHER_DATE)
 		grandfatherUnitPrice = grandfatherPrice.Value
+
 	}
 
 	harvestable := Harvestable{HarvestBreakdown: []HarvestBreakdown{}, CurrentUnitPrice: currentPrice.Value, CurrentUnitDate: currentPrice.Date, GrandfatherUnitPrice: grandfatherUnitPrice}
@@ -117,7 +115,7 @@ func computeCapitalGains(db *gorm.DB, account string, commodity commodity.Commod
 		if p.Date.Before(cutoff) {
 			gain := currentPrice.Value*p.Quantity - p.Amount
 			taxableGain := gain
-			if grandfather && p.Date.Before(grandfatherDate) {
+			if grandfather && p.Date.Before(EQUITY_GRANDFATHER_DATE) {
 				taxableGain = grandfatherUnitPrice*p.Quantity - p.Amount
 			}
 			harvestable.HarvestableUnits += p.Quantity
@@ -129,7 +127,6 @@ func computeCapitalGains(db *gorm.DB, account string, commodity commodity.Commod
 				PurchasePrice:         p.Amount,
 				CurrentPrice:          currentPrice.Value * p.Quantity,
 				PurchaseUnitPrice:     p.Price(),
-				GrandfatherUnitPrice:  grandfatherUnitPrice,
 				UnrealizedGain:        gain,
 				TaxableUnrealizedGain: taxableGain,
 			})

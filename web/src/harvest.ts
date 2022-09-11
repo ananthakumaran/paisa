@@ -96,10 +96,8 @@ function renderHarvestables(capital_gains: CapitalGain[]) {
       )}</td>
     </tr>
     <tr>
-      <td>Grandfathered Unit Price</td>
-      <td class='has-text-right has-text-weight-bold'>${formatFloat(
-        h.grandfather_unit_price
-      )}</td>
+      <td>Tax Category</td>
+      <td class='has-text-right'>${cg.tax_category}</td>
     </tr>
     <tr>
       <td>Current Unit Price</td>

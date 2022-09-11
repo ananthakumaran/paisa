@@ -107,7 +107,6 @@ export interface HarvestBreakdown {
   purchase_date: string;
   purchase_price: number;
   purchase_unit_price: number;
-  grandfather_unit_price: number;
   current_price: number;
   unrealized_gain: number;
   taxable_unrealized_gain: number;
@@ -126,6 +125,7 @@ export interface Harvestable {
 
 export interface CapitalGain {
   account: string;
+  tax_category: string;
   fy: { [key: string]: FYCapitalGain };
   harvestable: Harvestable;
 }

@@ -12,3 +12,4 @@
 - [Accounts](accounts.md)
 - [Commodities](commodities.md)
 - [Allocation Targets](allocation-targets.md)
+- [Tax Harvesting](tax-harvesting.md)

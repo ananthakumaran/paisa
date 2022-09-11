@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Introduction - ₹ Paisa</title>
+        <title>Tax Harvesting - ₹ Paisa</title>
         <!-- Custom HTML head -->
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="">
@@ -75,7 +75,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="introduction.html" class="active">Introduction</a></li><li class="chapter-item expanded affix "><li class="part-title">Getting Started</li><li class="chapter-item expanded "><a href="installation.html"><strong aria-hidden="true">1.</strong> Installation</a></li><li class="chapter-item expanded "><a href="tutorial.html"><strong aria-hidden="true">2.</strong> Tutorial</a></li><li class="chapter-item expanded affix "><li class="part-title">Reference Guide</li><li class="chapter-item expanded "><a href="accounts.html"><strong aria-hidden="true">3.</strong> Accounts</a></li><li class="chapter-item expanded "><a href="commodities.html"><strong aria-hidden="true">4.</strong> Commodities</a></li><li class="chapter-item expanded "><a href="allocation-targets.html"><strong aria-hidden="true">5.</strong> Allocation Targets</a></li><li class="chapter-item expanded "><a href="tax-harvesting.html"><strong aria-hidden="true">6.</strong> Tax Harvesting</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="introduction.html">Introduction</a></li><li class="chapter-item expanded affix "><li class="part-title">Getting Started</li><li class="chapter-item expanded "><a href="installation.html"><strong aria-hidden="true">1.</strong> Installation</a></li><li class="chapter-item expanded "><a href="tutorial.html"><strong aria-hidden="true">2.</strong> Tutorial</a></li><li class="chapter-item expanded affix "><li class="part-title">Reference Guide</li><li class="chapter-item expanded "><a href="accounts.html"><strong aria-hidden="true">3.</strong> Accounts</a></li><li class="chapter-item expanded "><a href="commodities.html"><strong aria-hidden="true">4.</strong> Commodities</a></li><li class="chapter-item expanded "><a href="allocation-targets.html"><strong aria-hidden="true">5.</strong> Allocation Targets</a></li><li class="chapter-item expanded "><a href="tax-harvesting.html" class="active"><strong aria-hidden="true">6.</strong> Tax Harvesting</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -134,23 +134,52 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="introduction"><a class="header" href="#introduction">Introduction</a></h1>
-<p><strong>Paisa</strong> is a command line tool and WebGUI to manage personal
-finance, specially tailored for Indians. It builds on top of the
-<a href="https://www.ledger-cli.org/">ledger</a> double entry accounting tool.</p>
-<ul>
-<li>Your financial data never leaves your system.</li>
-<li>The journal and config information are stored in plain text files
-that can be easily version controlled.</li>
-<li>Can track the latest market price of Mutual Funds and NPS Funds holdings.</li>
-</ul>
+                        <h1 id="tax-harvesting"><a class="header" href="#tax-harvesting">Tax Harvesting</a></h1>
+<p>Mutual Funds gains are subject to capital gains tax. The taxation rate
+itself differs based on how long you hold your investment, whether
+it's debt or equity, whether you have more than 1 Lakh gains in a year
+etc. To further complicate things, there might be exit load
+applicable.</p>
+<p>Paisa takes a generic approach and let the user configure when a
+commodity is safe to harvest. There are two fields related to tax
+harvesting.</p>
+<ol>
+<li>
+<p>harvest - specifies the number of days after which the commodity is
+eligible for tax harvesting. This should be set based on fund exit
+load, fund category etc</p>
+</li>
+<li>
+<p>tax_category - The value can be either <code>equity</code> or <code>debt</code>. Based on
+which various rules like grandfathering, cost inflation index
+adjustment, etc. would be applied.</p>
+</li>
+</ol>
+<pre><code class="language-yaml">commodities:
+  - name: NIFTY
+    type: mutualfund
+    code: 120716
+    harvest: 365
+    tax_category: equity
+  - name: ABSTF
+    type: mutualfund
+    code: 119533
+    harvest: 1095
+    tax_category: debt
+</code></pre>
+<p>The tax harvest page will show the list of accounts eligible for
+harvesting.</p>
+<h2 id="multiple-folios"><a class="header" href="#multiple-folios">Multiple Folios</a></h2>
+<p>Paisa uses FIFO method within an Account. If you have multiple folios,
+this might result in incorrect values. The issue can be solved by
+using a different Account for each folio.</p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="next" href="installation.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                                <i class="fa fa-angle-right"></i>
+                            <a rel="prev" href="allocation-targets.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
                             </a>
                         <div style="clear: both"></div>
                     </nav>
@@ -158,8 +187,8 @@ that can be easily version controlled.</li>
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="next" href="installation.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                        <i class="fa fa-angle-right"></i>
+                    <a rel="prev" href="allocation-targets.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
                     </a>
             </nav>
 

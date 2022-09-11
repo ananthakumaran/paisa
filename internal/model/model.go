@@ -16,7 +16,10 @@ import (
 func SyncJournal(db *gorm.DB) {
 	db.AutoMigrate(&posting.Posting{})
 	log.Info("Syncing transactions from journal")
-	postings, _ := ledger.Parse(viper.GetString("journal_path"))
+	postings, err := ledger.Parse(viper.GetString("journal_path"))
+	if err != nil {
+		log.Fatal(err)
+	}
 	posting.UpsertAll(db, postings)
 }
 

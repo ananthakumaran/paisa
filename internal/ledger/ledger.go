@@ -31,7 +31,9 @@ func Parse(journalPath string) ([]*posting.Posting, error) {
 		return nil, err
 	}
 
-	reader := csv.NewReader(&output)
+	// https://github.com/ledger/ledger/issues/2007
+	fixedOutput := bytes.ReplaceAll(output.Bytes(), []byte(`\"`), []byte(`""`))
+	reader := csv.NewReader(bytes.NewBuffer(fixedOutput))
 	records, err := reader.ReadAll()
 	if err != nil {
 		return nil, err

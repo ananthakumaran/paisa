@@ -11,7 +11,6 @@ import {
   formatFloat,
   lastName,
   parentName,
-  rainbowScale,
   secondName,
   textColor,
   tooltip,

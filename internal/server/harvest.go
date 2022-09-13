@@ -73,7 +73,7 @@ func computeCapitalGains(db *gorm.DB, account string, commodity c.Commodity, pos
 		} else {
 			quantity := -p.Quantity
 			purchasePrice := 0.0
-			for quantity > 0 {
+			for quantity > 0 && len(available) > 0 {
 				first := available[0]
 				if first.Quantity > quantity {
 					purchasePrice += quantity * first.Price()

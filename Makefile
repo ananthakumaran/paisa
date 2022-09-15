@@ -11,7 +11,7 @@ sample:
 	go build && ./paisa init && ./paisa update && ./paisa serve
 
 publish:
-	nix-shell --run 'cd docs && mdbook build'
+	nix develop --command bash -c 'cd docs && mdbook build'
 
 lint:
 	./node_modules/.bin/prettier --check web/src

@@ -30,6 +30,11 @@ func (q *Query) Like(account string) *Query {
 	return q
 }
 
+func (q *Query) OrLike(account string) *Query {
+	q.context = q.context.Or("account like ?", account)
+	return q
+}
+
 func (q *Query) NotLike(account string) *Query {
 	q.context = q.context.Where("account not like ?", account)
 	return q

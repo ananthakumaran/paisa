@@ -130,9 +130,17 @@ export interface CapitalGain {
   harvestable: Harvestable;
 }
 
+export interface Issue {
+  level: string;
+  summary: string;
+  description: string;
+  details: string;
+}
+
 export function ajax(
   route: "/api/harvest"
 ): Promise<{ capital_gains: CapitalGain[] }>;
+export function ajax(route: "/api/diagnosis"): Promise<{ issues: Issue[] }>;
 export function ajax(
   route: "/api/investment"
 ): Promise<{ assets: Posting[]; yearly_cards: YearlyCard[] }>;

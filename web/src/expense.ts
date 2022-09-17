@@ -125,16 +125,42 @@ function renderMonthlyExpensesTimeline(
 
   const start = _.min(_.map(postings, (p) => p.timestamp)),
     end = dayjs().startOf("month");
-  const ts = _.groupBy(postings, (p) => p.timestamp.format(timeFormat));
+  const ms = _.groupBy(postings, (p) => p.timestamp.format(timeFormat));
+  const ys = _.chain(postings)
+    .groupBy((p) => p.timestamp.format("YYYY"))
+    .map((ps, k) => {
+      const trend = _.chain(ps)
+        .groupBy((p) => secondName(p.account))
+        .map((ps, g) => {
+          let months = 12;
+          if (start.format("YYYY") == k) {
+            months -= start.month();
+          }
 
-  const points: {
+          if (end.format("YYYY") == k) {
+            months -= 11 - end.month();
+          }
+
+          return [g, _.sum(_.map(ps, (p) => p.amount)) / months];
+        })
+        .fromPairs()
+        .value();
+
+      return [k, _.merge({}, defaultValues, trend)];
+    })
+    .fromPairs()
+    .value();
+
+  interface Point {
     month: string;
     timestamp: Dayjs;
     [key: string]: number | string | dayjs.Dayjs;
-  }[] = [];
+  }
+
+  const points: Point[] = [];
 
   forEachMonth(start, end, (month) => {
-    const postings = ts[month.format(timeFormat)] || [];
+    const postings = ms[month.format(timeFormat)] || [];
     const values = _.chain(postings)
       .groupBy((t) => secondName(t.account))
       .map((postings, key) => [key, _.sum(_.map(postings, (p) => p.amount))])
@@ -146,7 +172,8 @@ function renderMonthlyExpensesTimeline(
         {
           timestamp: month,
           month: month.format(timeFormat),
-          postings: postings
+          postings: postings,
+          trend: {}
         },
         defaultValues,
         values
@@ -157,58 +184,12 @@ function renderMonthlyExpensesTimeline(
   const x = d3.scaleBand().range([0, width]).paddingInner(0.1).paddingOuter(0);
   const y = d3.scaleLinear().range([height, 0]);
 
-  const sum = (p) => _.sum(_.map(groups, (k) => p[k]));
-  x.domain(points.map((p) => p.month));
-  y.domain([0, d3.max(points, sum)]);
-
   const z = generateColorScheme(groups);
 
-  g.append("g")
-    .attr("class", "axis x")
-    .attr("transform", "translate(0," + height + ")")
-    .call(
-      d3
-        .axisBottom(x)
-        .ticks(5)
-        .tickFormat(skipTicks(30, x, (d) => d.toString()))
-    )
-    .selectAll("text")
-    .attr("y", 10)
-    .attr("x", -8)
-    .attr("dy", ".35em")
-    .attr("transform", "rotate(-45)")
-    .style("text-anchor", "end");
-
-  g.append("g")
-    .attr("class", "axis y")
-    .call(d3.axisLeft(y).tickSize(-width).tickFormat(formatCurrencyCrude));
-
-  g.append("g")
-    .selectAll("g")
-    .data(
-      d3.stack().offset(d3.stackOffsetDiverging).keys(groups)(
-        points as { [key: string]: number }[]
-      )
-    )
-    .enter()
-    .append("g")
-    .attr("fill", function (d) {
-      return z(d.key);
-    })
-    .selectAll("rect")
-    .data(function (d) {
-      return d;
-    })
-    .enter()
-    .append("rect")
-    .on("click", (event, data) => {
-      const timestamp: Dayjs = data.data.timestamp as any;
-      dateSelector.value = timestamp.format("YYYY-MM");
-      dateSelector.dispatchEvent(new Event("input", { bubbles: true }));
-    })
-    .attr("data-tippy-content", (d) => {
+  const tooltipContent = (allowedGroups: string[]) => {
+    return (d) => {
       return tooltip(
-        _.flatMap(groups, (key) => {
+        _.flatMap(allowedGroups, (key) => {
           const total = (d.data as any)[key];
           if (total > 0) {
             return [
@@ -221,20 +202,133 @@ function renderMonthlyExpensesTimeline(
           return [];
         })
       );
-    })
-    .attr("x", function (d) {
-      return (
-        x((d.data as any).month) +
-        (x.bandwidth() - Math.min(x.bandwidth(), MAX_BAR_WIDTH)) / 2
+    };
+  };
+
+  const xAxis = g.append("g").attr("class", "axis x");
+  const yAxis = g.append("g").attr("class", "axis y");
+
+  const bars = g.append("g");
+  const line = g
+    .append("path")
+    .attr("stroke", COLORS.primary)
+    .attr("stroke-width", "2px")
+    .attr("stroke-dasharray", "5,5");
+
+  const render = (allowedGroups: string[]) => {
+    const sum = (p) => _.sum(_.map(allowedGroups, (k) => p[k]));
+    x.domain(points.map((p) => p.month));
+    y.domain([0, d3.max(points, sum)]);
+
+    const t = svg.transition().duration(750);
+    xAxis
+      .attr("transform", "translate(0," + height + ")")
+      .transition(t)
+      .call(
+        d3
+          .axisBottom(x)
+          .ticks(5)
+          .tickFormat(skipTicks(30, x, (d) => d.toString()))
+      )
+      .selectAll("text")
+      .attr("y", 10)
+      .attr("x", -8)
+      .attr("dy", ".35em")
+      .attr("transform", "rotate(-45)")
+      .style("text-anchor", "end");
+
+    yAxis
+      .transition(t)
+      .call(d3.axisLeft(y).tickSize(-width).tickFormat(formatCurrencyCrude));
+
+    line
+      .transition(t)
+      .attr(
+        "d",
+        d3
+          .line<Point>()
+          .curve(d3.curveStepAfter)
+          .x((p) => x(p.month))
+          .y((p) => {
+            const total = _.chain(ys[p.timestamp.format("YYYY")])
+              .pick(allowedGroups)
+              .values()
+              .sum()
+              .value();
+
+            return y(total);
+          })(points)
+      )
+      .attr("fill", "none");
+
+    bars
+      .selectAll("g")
+      .data(
+        d3.stack().offset(d3.stackOffsetDiverging).keys(allowedGroups)(
+          points as { [key: string]: number }[]
+        ),
+        (d: any) => d.key
+      )
+      .join(
+        (enter) =>
+          enter.append("g").attr("fill", function (d) {
+            return z(d.key);
+          }),
+        (update) => update.transition(t),
+        (exit) =>
+          exit
+            .selectAll("rect")
+            .transition(t)
+            .attr("y", y.range()[0])
+            .attr("height", 0)
+            .remove()
+      )
+      .selectAll("rect")
+      .data(function (d) {
+        return d;
+      })
+      .join(
+        (enter) =>
+          enter
+            .append("rect")
+            .attr("class", "zoomable")
+            .on("click", (event, data) => {
+              const timestamp: Dayjs = data.data.timestamp as any;
+              dateSelector.value = timestamp.format("YYYY-MM");
+              dateSelector.dispatchEvent(new Event("input", { bubbles: true }));
+            })
+            .attr("data-tippy-content", tooltipContent(allowedGroups))
+            .attr("x", function (d) {
+              return (
+                x((d.data as any).month) +
+                (x.bandwidth() - Math.min(x.bandwidth(), MAX_BAR_WIDTH)) / 2
+              );
+            })
+            .attr("width", Math.min(x.bandwidth(), MAX_BAR_WIDTH))
+            .attr("y", y.range()[0])
+            .transition(t)
+            .attr("y", function (d) {
+              return y(d[1]);
+            })
+            .attr("height", function (d) {
+              return y(d[0]) - y(d[1]);
+            }),
+        (update) =>
+          update
+            .attr("data-tippy-content", tooltipContent(allowedGroups))
+            .transition(t)
+            .attr("y", function (d) {
+              return y(d[1]);
+            })
+            .attr("height", function (d) {
+              return y(d[0]) - y(d[1]);
+            }),
+        (exit) => exit.transition(t).remove()
       );
-    })
-    .attr("y", function (d) {
-      return y(d[1]);
-    })
-    .attr("height", function (d) {
-      return y(d[0]) - y(d[1]);
-    })
-    .attr("width", Math.min(x.bandwidth(), MAX_BAR_WIDTH));
+  };
+
+  let selectedGroups = groups;
+  render(selectedGroups);
 
   svg
     .append("g")
@@ -247,6 +341,18 @@ function renderMonthlyExpensesTimeline(
     .orient("horizontal")
     .shapePadding(100)
     .labels(groups)
+    .on("cellclick", function () {
+      const group = this.__data__;
+      if (selectedGroups.length == 1 && selectedGroups[0] == group) {
+        selectedGroups = groups;
+        d3.selectAll(".legendOrdinal .cell .label").attr("fill", "#000");
+      } else {
+        selectedGroups = [group];
+        d3.selectAll(".legendOrdinal .cell .label").attr("fill", "#ccc");
+        d3.select(this).selectAll(".label").attr("fill", "#000");
+      }
+      render(selectedGroups);
+    })
     .scale(z);
 
   svg.select(".legendOrdinal").call(legendOrdinal as any);
@@ -277,6 +383,11 @@ function renderCurrentExpensesBreakdown(
   const bar = g.append("g");
 
   return (postings: Posting[]) => {
+    interface Point {
+      category: string;
+      postings: Posting[];
+      total: number;
+    }
     const categories = _.chain(postings)
       .groupBy((p) => restName(p.account))
       .mapValues((ps, category) => {
@@ -316,6 +427,18 @@ function renderCurrentExpensesBreakdown(
 
     yAxis.transition(t).call(d3.axisLeft(y));
 
+    const tooltipContent = (d: Point) => {
+      return tooltip(
+        d.postings.map((p) => {
+          return [
+            p.timestamp.format("DD MMM YYYY"),
+            [p.payee, "is-clipped"],
+            [formatCurrency(p.amount), "has-text-weight-bold has-text-right"]
+          ];
+        })
+      );
+    };
+
     bar
       .selectAll("rect")
       .data(points, (p: any) => p.category)
@@ -326,20 +449,7 @@ function renderCurrentExpensesBreakdown(
             .attr("fill", function (d) {
               return z(d.category);
             })
-            .attr("data-tippy-content", (d) => {
-              return tooltip(
-                d.postings.map((p) => {
-                  return [
-                    p.timestamp.format("DD MMM YYYY"),
-                    [p.payee, "is-clipped"],
-                    [
-                      formatCurrency(p.amount),
-                      "has-text-weight-bold has-text-right"
-                    ]
-                  ];
-                })
-              );
-            })
+            .attr("data-tippy-content", tooltipContent)
             .attr("x", x(0))
             .attr("y", function (d) {
               return (
@@ -357,20 +467,7 @@ function renderCurrentExpensesBreakdown(
             .attr("fill", function (d) {
               return z(d.category);
             })
-            .attr("data-tippy-content", (d) => {
-              return tooltip(
-                d.postings.map((p) => {
-                  return [
-                    p.timestamp.format("DD MMM YYYY"),
-                    [p.payee, "is-clipped"],
-                    [
-                      formatCurrency(p.amount),
-                      "has-text-weight-bold has-text-right"
-                    ]
-                  ];
-                })
-              );
-            })
+            .attr("data-tippy-content", tooltipContent)
             .transition(t)
             .attr("x", x(0))
             .attr("y", function (d) {

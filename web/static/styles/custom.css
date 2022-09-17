@@ -105,3 +105,12 @@ body {
     padding-right: 0;
     height: 1.3rem;
 }
+
+
+#d3-expense-timeline .cell {
+    cursor: pointer;
+}
+
+.zoomable {
+    cursor: zoom-in;
+}

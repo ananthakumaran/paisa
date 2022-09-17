@@ -213,6 +213,7 @@ function renderMonthlyExpensesTimeline(
     .append("path")
     .attr("stroke", COLORS.primary)
     .attr("stroke-width", "2px")
+    .attr("stroke-linecap", "round")
     .attr("stroke-dasharray", "5,5");
 
   const render = (allowedGroups: string[]) => {

@@ -40,29 +40,49 @@ function renderHarvestables(capital_gains: CapitalGain[]) {
     .append("div")
     .attr("class", "card-header-icon")
     .style("flex-grow", "1")
+    .style("cursor", "auto")
     .append("div")
     .each(function (cg) {
       const self = d3.select(this);
-      const [units, amount, taxableGain] = unitsRequired(cg, 100000);
-      self.append("span").html("Redeeming&nbsp;");
+      const [units, amount, taxableGain] = unitsRequiredFromGain(cg, 100000);
+      self.append("span").html("If you redeem&nbsp;");
       const unitsSpan = self.append("span").text(formatFloat(units));
-      self.append("span").html("&nbsp;units (amount ₹");
-      const amountSpan = self.append("span").text(formatCurrency(amount));
-      self.append("span").html(")&nbsp;will result in <b>taxable</b> gain ₹");
+      self.append("span").html("&nbsp;units you will get ₹");
+      const amountInput = self
+        .append("input")
+        .attr("class", "input is-small adjustable-input")
+        .attr("type", "number")
+        .attr("value", round(amount))
+        .attr("step", "1000")
+        .on("input", (event) => {
+          const [units, amount, taxableGain] = unitsRequiredFromAmount(
+            cg,
+            parseInt(event.srcElement.value)
+          );
+
+          unitsSpan.text(formatFloat(units));
+          (taxableGainInput.node() as HTMLInputElement).value =
+            round(taxableGain).toString();
+          event.srcElement.value = round(amount);
+        });
       self
+        .append("span")
+        .html("&nbsp; and your <b>taxable</b> gain would be ₹");
+      const taxableGainInput = self
         .append("input")
         .attr("class", "input is-small adjustable-input")
         .attr("type", "number")
         .attr("value", round(taxableGain))
         .attr("step", "1000")
         .on("input", (event) => {
-          const [units, amount, taxableGain] = unitsRequired(
+          const [units, amount, taxableGain] = unitsRequiredFromGain(
             cg,
-            event.srcElement.value
+            parseInt(event.srcElement.value)
           );
           unitsSpan.text(formatFloat(units));
           event.srcElement.value = round(taxableGain);
-          amountSpan.text(formatCurrency(amount));
+          (amountInput.node() as HTMLInputElement).value =
+            round(amount).toString();
         });
     });
 
@@ -137,7 +157,7 @@ function renderHarvestables(capital_gains: CapitalGain[]) {
     .append("div")
     .attr("class", "table-container")
     .style("overflow-y", "auto")
-    .style("max-height", "210px")
+    .style("max-height", "245px")
     .append("table")
     .attr("class", "table");
 
@@ -182,7 +202,7 @@ function renderHarvestables(capital_gains: CapitalGain[]) {
     });
 }
 
-function unitsRequired(
+function unitsRequiredFromGain(
   cg: CapitalGain,
   taxableGain: number
 ): [number, number, number] {
@@ -203,6 +223,30 @@ function unitsRequired(
       units += u;
       amount += u * cg.harvestable.current_unit_price;
       gain = taxableGain;
+    }
+  }
+  return [units, amount, gain];
+}
+
+function unitsRequiredFromAmount(
+  cg: CapitalGain,
+  expectedAmount: number
+): [number, number, number] {
+  let gain = 0;
+  let amount = 0;
+  let units = 0;
+  const available = _.clone(cg.harvestable.harvest_breakdown);
+  while (expectedAmount > amount && available.length > 0) {
+    const breakdown = available.shift();
+    if (breakdown.current_price < expectedAmount - amount) {
+      gain += breakdown.taxable_unrealized_gain;
+      units += breakdown.units;
+      amount += breakdown.current_price;
+    } else {
+      const u = (expectedAmount - amount) / cg.harvestable.current_unit_price;
+      units += u;
+      amount = expectedAmount;
+      gain += u * (breakdown.taxable_unrealized_gain / breakdown.units);
     }
   }
   return [units, amount, gain];

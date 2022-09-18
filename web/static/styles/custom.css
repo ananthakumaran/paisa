@@ -96,13 +96,16 @@ body {
 }
 
 .adjustable-input {
+    border: none;
+    border-bottom: 1px solid #ccc;
+    box-shadow: none;
     width: 80px;
-    font-weight: bold;
-    font-size: 0.75rem !important;
+    font-size: 1em !important;
     margin-left: 5px;
     padding-top: 0;
     padding-bottom: 0;
     padding-right: 0;
+    padding-left: 5px;
     height: 1.3rem;
 }
 

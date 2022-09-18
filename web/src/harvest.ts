@@ -1,12 +1,14 @@
 import * as d3 from "d3";
 import dayjs from "dayjs";
 import _, { round } from "lodash";
+import COLORS from "./colors";
 import {
   ajax,
   CapitalGain,
   formatCurrency,
   formatFloat,
-  restName
+  restName,
+  tooltip
 } from "./utils";
 
 export default async function () {
@@ -81,23 +83,30 @@ function renderHarvestables(capital_gains: CapitalGain[]) {
     .append("div")
     .attr("class", "columns");
 
-  content
-    .append("div")
-    .attr("class", "column is-4")
-    .html((cg) => {
-      const h = cg.harvestable;
-      return `
+  const summary = content.append("div").attr("class", "column is-4");
+
+  summary.append("div").each(renderSingleBar);
+
+  summary.append("div").html((cg) => {
+    const h = cg.harvestable;
+    return `
 <table class="table is-narrow is-fullwidth">
   <tbody>
     <tr>
-      <td>Units</td>
+      <td>Balance Units</td>
       <td class='has-text-right has-text-weight-bold'>${formatFloat(
+        h.total_units
+      )}</td>
+    </tr>
+    <tr>
+      <td>Harvestable Units</td>
+      <td class='has-text-right has-text-weight-bold has-text-success'>${formatFloat(
         h.harvestable_units
       )}</td>
     </tr>
     <tr>
       <td>Tax Category</td>
-      <td class='has-text-right'>${cg.tax_category}</td>
+      <td class='has-text-right is-uppercase'>${cg.tax_category}</td>
     </tr>
     <tr>
       <td>Current Unit Price</td>
@@ -120,7 +129,7 @@ function renderHarvestables(capital_gains: CapitalGain[]) {
   </tbody>
 </table>
 `;
-    });
+  });
 
   const table = content
     .append("div")
@@ -197,4 +206,73 @@ function unitsRequired(
     }
   }
   return [units, amount, gain];
+}
+
+function renderSingleBar(cg: CapitalGain) {
+  const selection = d3.select(this);
+  const svg = selection.append("svg");
+  const harvestable = cg.harvestable;
+
+  const height = 20;
+  const margin = { top: 20, right: 0, bottom: 20, left: 0 },
+    width = selection.node().clientWidth - margin.left - margin.right,
+    g = svg
+      .append("g")
+      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+  svg
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom);
+
+  const x = d3
+    .scaleLinear()
+    .range([0, width])
+    .domain([0, harvestable.total_units]);
+
+  const non_harvestable_units =
+    harvestable.total_units - harvestable.harvestable_units;
+
+  g.attr("data-tippy-content", () => {
+    return tooltip([
+      [
+        ["Type", "has-text-weight-bold"],
+        ["Units", "has-text-weight-bold has-text-right"],
+        ["Percentage", "has-text-weight-bold has-text-right"]
+      ],
+      [
+        "Harvestable",
+        [formatFloat(harvestable.harvestable_units), "has-text-right"],
+        [
+          formatFloat(
+            (harvestable.harvestable_units / harvestable.total_units) * 100
+          ),
+          "has-text-right"
+        ]
+      ],
+      [
+        "Non Harvestable",
+        [formatFloat(non_harvestable_units), "has-text-right"],
+        [
+          formatFloat((non_harvestable_units / harvestable.total_units) * 100),
+          "has-text-right"
+        ]
+      ]
+    ]);
+  });
+
+  g.selectAll("rect")
+    .data([
+      { start: 0, end: harvestable.harvestable_units, color: COLORS.gainText },
+      {
+        start: harvestable.harvestable_units,
+        end: harvestable.total_units,
+        color: COLORS.tertiary
+      }
+    ])
+    .join("rect")
+    .attr("fill", (d) => d.color)
+    .attr("x", (d) => x(d.start))
+    .attr("width", (d) => x(d.end) - x(d.start))
+    .attr("y", 0)
+    .attr("height", height);
 }

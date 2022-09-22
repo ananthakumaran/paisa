@@ -139,7 +139,14 @@
 <li>Follow the installation instruction in <a href="https://www.ledger-cli.org/download.html">ledger</a> site and install
 <strong>ledger</strong>. Windows users can install ledger via <a href="https://community.chocolatey.org/packages/ledger">chocolatey</a>.</li>
 <li>Download the latest prebuilt <a href="https://github.com/ananthakumaran/paisa/releases/latest">binary</a></li>
+<li>Once downloaded, you can perform the following steps to install
+it.</li>
 </ul>
+<pre><code class="language-shell">❯ mv paisa-* paisa
+❯ chmod u+x paisa
+❯ xattr -dr com.apple.quarantine paisa # applicable only on Mac
+❯ mv paisa /usr/lobal/bin
+</code></pre>
 <h2 id="quick-start"><a class="header" href="#quick-start">Quick Start</a></h2>
 <p>Run the following commands to checkout <strong>paisa</strong> features. Read the
 tutorial to understand the details.</p>

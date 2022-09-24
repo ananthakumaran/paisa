@@ -3,6 +3,7 @@ const COLORS = {
   gainText: "#48c78e",
   loss: "#fb9a99",
   lossText: "#f14668",
+  warn: "#f4a261",
   primary: "#1f77b4",
   secondary: "#17becf",
   tertiary: "#ff7f0e",

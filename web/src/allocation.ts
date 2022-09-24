@@ -18,6 +18,7 @@ import {
   generateColorScheme
 } from "./utils";
 import COLORS from "./colors";
+import chroma from "chroma-js";
 
 export default async function () {
   const {
@@ -75,6 +76,11 @@ function renderAllocationTarget(
     .paddingOuter(0.1);
 
   const z = d3.scaleOrdinal<string>(colors).domain(colorKeys);
+
+  const z1 = d3
+    .scaleThreshold<number, string>()
+    .domain([5, 10, 15])
+    .range([COLORS.gain, COLORS.warn, COLORS.loss, COLORS.loss]);
 
   const maxX = _.chain(allocationTargets)
     .flatMap((t) => [t.current, t.target])
@@ -172,7 +178,11 @@ function renderAllocationTarget(
     .text((t) => formatFloat(t.current - t.target))
     .attr("text-anchor", "end")
     .attr("alignment-baseline", "middle")
-    .style("fill", z("diff"))
+    .style("fill", (t) =>
+      chroma(z1(Math.abs(t.current - t.target)))
+        .darken()
+        .hex()
+    )
     .attr("x", textGroupZero + (textGroupWidth * 3) / 3)
     .attr("y", (t) => y(t.name) + y.bandwidth() / 2);
 
@@ -182,24 +192,25 @@ function renderAllocationTarget(
     .data(allocationTargets)
     .enter()
     .append("g")
-    .attr("class", "group")
-    .attr("transform", (t) => "translate(0," + y(t.name) + ")");
+    .attr("class", "group");
 
   groups
-    .selectAll("g")
-    .data((t) => [
-      { key: "target", value: t.target },
-      { key: "current", value: t.current }
-    ])
-    .enter()
     .append("rect")
-    .attr("fill", (d) => {
-      return z(d.key);
-    })
-    .attr("x", x1(0))
-    .attr("y", (d) => y1(d.key))
-    .attr("height", y1.bandwidth())
-    .attr("width", (d) => x1(d.value));
+    .attr("fill", (d) => z1(Math.abs(d.target - d.current)))
+    .attr("x", (d) => x1(d3.min([d.target, d.current])))
+    .attr("y", (d) => y(d.name) + y.bandwidth() / 4)
+    .attr("height", y.bandwidth() / 2)
+    .attr("width", (d) => x1(Math.abs(d.target - d.current)));
+
+  groups
+    .append("line")
+    .attr("stroke-width", 3)
+    .attr("stroke-linecap", "round")
+    .attr("stroke", z("target"))
+    .attr("x1", (d) => x1(d.target))
+    .attr("x2", (d) => x1(d.target))
+    .attr("y1", (d) => y(d.name) + y.bandwidth() / 8)
+    .attr("y2", (d) => y(d.name) + (y.bandwidth() / 8) * 7);
 
   const paddingTop = (y1.range()[1] - y1.bandwidth() * 2) / 2;
   d3.select("#d3-allocation-target-treemap")

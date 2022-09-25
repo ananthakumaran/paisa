@@ -493,7 +493,7 @@ function renderCurrentExpensesBreakdown(
           enter
             .append("text")
             .attr("text-anchor", "end")
-            .attr("alignment-baseline", "middle")
+            .attr("dominant-baseline", "middle")
             .attr("y", function (d) {
               return y(d.category) + y.bandwidth() / 2;
             })

@@ -159,7 +159,7 @@ function renderAllocationTarget(
     .append("text")
     .text((t) => formatFloat(t.target))
     .attr("text-anchor", "end")
-    .attr("alignment-baseline", "middle")
+    .attr("dominant-baseline", "middle")
     .style("fill", z("target"))
     .attr("x", textGroupZero + (textGroupWidth * 1) / 3)
     .attr("y", (t) => y(t.name) + y.bandwidth() / 2);
@@ -168,7 +168,7 @@ function renderAllocationTarget(
     .append("text")
     .text((t) => formatFloat(t.current))
     .attr("text-anchor", "end")
-    .attr("alignment-baseline", "middle")
+    .attr("dominant-baseline", "middle")
     .style("fill", z("current"))
     .attr("x", textGroupZero + (textGroupWidth * 2) / 3)
     .attr("y", (t) => y(t.name) + y.bandwidth() / 2);
@@ -177,7 +177,7 @@ function renderAllocationTarget(
     .append("text")
     .text((t) => formatFloat(t.current - t.target))
     .attr("text-anchor", "end")
-    .attr("alignment-baseline", "middle")
+    .attr("dominant-baseline", "middle")
     .style("fill", (t) =>
       chroma(z1(Math.abs(t.current - t.target)))
         .darken()

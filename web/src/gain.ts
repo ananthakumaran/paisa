@@ -196,7 +196,7 @@ function renderOverview(gains: Gain[]) {
   textGroup
     .append("text")
     .text((g) => formatCurrency(getInvestmentAmount(g)))
-    .attr("alignment-baseline", "hanging")
+    .attr("dominant-baseline", "hanging")
     .attr("text-anchor", "end")
     .style("fill", (g) =>
       getInvestmentAmount(g) > 0 ? z("investment") : "none"
@@ -209,7 +209,7 @@ function renderOverview(gains: Gain[]) {
   textGroup
     .append("text")
     .text((g) => formatCurrency(getGainAmount(g)))
-    .attr("alignment-baseline", "hanging")
+    .attr("dominant-baseline", "hanging")
     .attr("text-anchor", "end")
     .style("fill", (g) =>
       getGainAmount(g) > 0 ? chroma(z("gain")).darken().hex() : "none"
@@ -265,7 +265,7 @@ function renderOverview(gains: Gain[]) {
     .append("text")
     .text((g) => formatFloat(g.xirr))
     .attr("text-anchor", "end")
-    .attr("alignment-baseline", "middle")
+    .attr("dominant-baseline", "middle")
     .style("fill", (g) =>
       g.xirr < 0
         ? chroma(z("loss")).darken().hex()

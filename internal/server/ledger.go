@@ -8,6 +8,7 @@ import (
 	"github.com/ananthakumaran/paisa/internal/model/posting"
 	"github.com/ananthakumaran/paisa/internal/query"
 	"github.com/ananthakumaran/paisa/internal/service"
+	"github.com/ananthakumaran/paisa/internal/utils"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
@@ -47,7 +48,7 @@ func computeBreakdown(db *gorm.DB, postings []posting.Posting) map[string]Breakd
 	result := make(map[string]Breakdown)
 
 	for group, leaf := range accounts {
-		ps := lo.Filter(postings, func(p posting.Posting, _ int) bool { return strings.HasPrefix(p.Account, group) })
+		ps := lo.Filter(postings, func(p posting.Posting, _ int) bool { return utils.IsSameOrParent(p.Account, group) })
 		investmentAmount := lo.Reduce(ps, func(acc float64, p posting.Posting, _ int) float64 {
 			if p.Account == "Assets:Checking" || p.Amount < 0 || service.IsInterest(db, p) {
 				return acc

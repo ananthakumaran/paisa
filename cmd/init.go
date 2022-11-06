@@ -235,6 +235,7 @@ func emitExpense(state *GeneratorState, start time.Time) {
 
 	emit := func(payee string, account string, amount float64, fuzz float64) {
 		actualAmount := roundToK(percentRange(int(fuzz*100), 100) * amount)
+		start = start.AddDate(0, 0, 1)
 		emitTransaction(state.Ledger, start, payee, "Assets:Checking", account, actualAmount)
 		state.Balance -= actualAmount
 	}

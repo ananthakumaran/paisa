@@ -370,42 +370,65 @@
     </section>
     <section class="section tab-expense">
       <div class="container is-fluid">
-        <div class="columns">
-          <div class="column is-full pb-0">
-            <div class="has-text-right">
-              <input style="width: 175px" class="input is-medium is-size-6" required type="month" id="d3-current-month">
+        <div class="columns is-flex-wrap-wrap">
+          <div class="column is-3">
+            <div class="columns is-flex-wrap-wrap">
+              <div class="column is-full">
+                <div class="p-3">
+                  <nav class="level">
+                    <div class="level-item has-text-centered">
+                      <div>
+                        <p class="heading">Income</p>
+                        <p class="d3-current-month-income title"></p>
+                      </div>
+                    </div>
+                    <div class="level-item has-text-centered">
+                      <div>
+                        <p class="heading">Tax</p>
+                        <p class="d3-current-month-tax title"></p>
+                      </div>
+                    </div>
+                  </nav>
+                </div>
+              </div>
+              <div class="column is-full">
+                <div class="p-3">
+                  <nav class="level">
+                    <div class="level-item has-text-centered">
+                      <div>
+                        <p class="heading">Net Investment</p>
+                        <p class="d3-current-month-investment title"></p>
+                      </div>
+                    </div>
+                    <div class="level-item has-text-centered">
+                      <div>
+                        <p class="heading">Expenses</p>
+                        <p class="d3-current-month-expenses title"></p>
+                      </div>
+                    </div>
+                  </nav>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="columns is-flex-wrap-wrap">
-          <div class="column is-full-tablet is-half-fullhd">
+          <div class="column is-3">
             <div class="p-3">
-              <nav class="level">
-                <div class="level-item has-text-centered">
-                  <div>
-                    <p class="heading">Income</p>
-                    <p class="d3-current-month-income title"></p>
-                  </div>
+              <div id="d3-current-month-expense-calendar" class="d3-calendar">
+                <div class="has-text-centered py-1">
+                  <input style="width: 175px" class="input is-medium is-size-6" required type="month" id="d3-current-month">
                 </div>
-                <div class="level-item has-text-centered">
-                  <div>
-                    <p class="heading">Tax</p>
-                    <p class="d3-current-month-tax title"></p>
-                  </div>
+                <div class="weekdays">
+                  <div>Sun</div>
+                  <div>Mon</div>
+                  <div>Tue</div>
+                  <div>Wed</div>
+                  <div>Thu</div>
+                  <div>Fri</div>
+                  <div>Sat</div>
                 </div>
-                <div class="level-item has-text-centered">
-                  <div>
-                    <p class="heading">Net Investment</p>
-                    <p class="d3-current-month-investment title"></p>
-                  </div>
+                <div class="days">
                 </div>
-                <div class="level-item has-text-centered">
-                  <div>
-                    <p class="heading">Expenses</p>
-                    <p class="d3-current-month-expenses title"></p>
-                  </div>
-                </div>
-              </nav>
+              </div>
             </div>
           </div>
           <div class="column is-full-tablet is-half-fullhd">

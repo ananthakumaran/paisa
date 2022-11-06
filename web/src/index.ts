@@ -54,9 +54,12 @@ function toggleTab(id: string) {
       target: "[data-tippy-content]",
       theme: "light",
       onShow: (instance) => {
-        instance.setContent(
-          instance.reference.getAttribute("data-tippy-content")
-        );
+        const content = instance.reference.getAttribute("data-tippy-content");
+        if (!_.isEmpty(content)) {
+          instance.setContent(content);
+        } else {
+          return false;
+        }
       },
       maxWidth: "none",
       delay: 0,

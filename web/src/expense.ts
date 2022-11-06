@@ -1,4 +1,5 @@
 import * as d3 from "d3";
+import $ from "jquery";
 import legend from "d3-svg-legend";
 import dayjs, { Dayjs } from "dayjs";
 import chroma from "chroma-js";
@@ -53,10 +54,19 @@ export default async function () {
   input.attr("max", max);
   input.attr("min", min);
 
-  const z = renderMonthlyExpensesTimeline(expenses, input.node());
+  const { z, groups } = renderMonthlyExpensesTimeline(expenses, input.node());
   const renderer = renderCurrentExpensesBreakdown(z);
 
-  const selectMonth = (month) => {
+  const state = { month: max, groups: groups };
+
+  $(document).on("onGroupSelected", function (_event, { groups }) {
+    state.groups = groups;
+    changeState();
+  });
+
+  const changeState = () => {
+    const month = state.month;
+    renderCalendar(month, grouped_expenses[month], z, state.groups);
     renderSelectedMonth(
       renderer,
       grouped_expenses[month] || [],
@@ -67,13 +77,104 @@ export default async function () {
   };
 
   input.on("input", (event) => {
-    selectMonth(event.srcElement.value);
+    state.month = event.srcElement.value;
+    changeState();
   });
 
   input.attr("value", max);
-  selectMonth(max);
+  changeState();
   input.node().focus();
   input.node().select();
+}
+
+function renderCalendar(
+  month: string,
+  expenses: Posting[],
+  z: d3.ScaleOrdinal<string, string, never>,
+  groups: string[]
+) {
+  const id = "#d3-current-month-expense-calendar";
+  const monthStart = dayjs(month, "YYYY-MM");
+  const monthEnd = monthStart.endOf("month");
+  const weekStart = monthStart.startOf("week");
+  const weekEnd = monthEnd.endOf("week");
+
+  const expensesByDay = {};
+  const days: Dayjs[] = [];
+  let d = weekStart;
+  while (d.isSameOrBefore(weekEnd)) {
+    days.push(d);
+    expensesByDay[d.format("YYYY-MM-DD")] = _.filter(
+      expenses,
+      (e) =>
+        e.timestamp.isSame(d, "day") && _.includes(groups, restName(e.account))
+    );
+
+    d = d.add(1, "day");
+  }
+
+  const root = d3.select(id);
+  const dayDivs = root.select("div.days").selectAll("div").data(days);
+
+  const tooltipContent = (d: Dayjs) => {
+    const es = expensesByDay[d.format("YYYY-MM-DD")];
+    if (_.isEmpty(es)) {
+      return null;
+    }
+    return tooltip(
+      es.map((p) => {
+        return [
+          p.timestamp.format("DD MMM YYYY"),
+          [p.payee, "is-clipped"],
+          [formatCurrency(p.amount), "has-text-weight-bold has-text-right"]
+        ];
+      })
+    );
+  };
+
+  const dayDiv = dayDivs
+    .join("div")
+    .attr("class", "date p-1")
+    .style("position", "relative")
+    .attr("data-tippy-content", tooltipContent)
+    .style("visibility", (d) =>
+      d.isBefore(monthStart) || d.isAfter(monthEnd) ? "hidden" : "visible"
+    );
+
+  dayDiv
+    .selectAll("span")
+    .data((d) => [d])
+    .join("span")
+    .style("position", "absolute")
+    .text((d) => d.date().toString());
+
+  const width = 35;
+  const height = 35;
+
+  dayDiv
+    .selectAll("svg")
+    .data((d) => [d])
+    .join("svg")
+    .attr("width", width)
+    .attr("height", height)
+    .attr("viewBox", [-width / 2, -height / 2, width, height])
+    .attr("style", "max-width: 100%; height: auto; height: intrinsic;")
+    .selectAll("path")
+    .data((d) => {
+      const dayExpenses = expensesByDay[d.format("YYYY-MM-DD")];
+      return d3
+        .pie<Posting>()
+        .value((p) => p.amount)
+        .sort((a, b) => a.account.localeCompare(b.account))(dayExpenses);
+    })
+    .join("path")
+    .attr("fill", function (d) {
+      const category = restName(d.data.account);
+      return z(category);
+    })
+    .attr("d", (arc) => {
+      return d3.arc().innerRadius(13).outerRadius(17)(arc as any);
+    });
 }
 
 function renderSelectedMonth(
@@ -154,7 +255,7 @@ function renderMonthlyExpensesTimeline(
   interface Point {
     month: string;
     timestamp: Dayjs;
-    [key: string]: number | string | dayjs.Dayjs;
+    [key: string]: number | string | Dayjs;
   }
 
   const points: Point[] = [];
@@ -352,12 +453,13 @@ function renderMonthlyExpensesTimeline(
         d3.selectAll(".legendOrdinal .cell .label").attr("fill", "#ccc");
         d3.select(this).selectAll(".label").attr("fill", "#000");
       }
+      $(document).trigger("onGroupSelected", { groups: selectedGroups });
       render(selectedGroups);
     })
     .scale(z);
 
   svg.select(".legendOrdinal").call(legendOrdinal as any);
-  return z;
+  return { z: z, groups: groups };
 }
 
 function renderCurrentExpensesBreakdown(

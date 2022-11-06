@@ -117,3 +117,34 @@ body {
 .zoomable {
     cursor: zoom-in;
 }
+
+.d3-calendar .days, .d3-calendar .weekdays {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    padding: 0;
+    color: #4a4a4a;
+}
+
+.d3-calendar .weekdays div {
+    background: #f5f5f5;
+    display: flex;
+    justify-content: center;
+    padding: 5px;
+    flex: 14.28571%;
+    margin: 0.1rem 0;
+    align-items: center;
+}
+
+.d3-calendar .days .date {
+    display: flex;
+    justify-content: center;
+    flex: 14.28571%;
+    margin: 0.1rem 0;
+    align-items: center;
+}
+
+.section {
+    padding: 1.5rem !important;
+}

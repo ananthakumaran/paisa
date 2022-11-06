@@ -9,7 +9,7 @@ it.
 ❯ mv paisa-* paisa
 ❯ chmod u+x paisa
 ❯ xattr -dr com.apple.quarantine paisa # applicable only on Mac
-❯ mv paisa /usr/lobal/bin
+❯ mv paisa /usr/local/bin
 ```
 
 ## Quick Start

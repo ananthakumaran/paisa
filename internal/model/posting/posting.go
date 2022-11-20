@@ -22,6 +22,10 @@ func (p *Posting) Price() float64 {
 	return p.Amount / p.Quantity
 }
 
+func (p *Posting) AddAmount(amount float64) {
+	p.Amount += amount
+}
+
 func (p *Posting) AddQuantity(quantity float64) {
 	price := p.Price()
 	p.Quantity += quantity

@@ -68,6 +68,14 @@ allocation_targets:
     target: 60
     accounts:
       - Assets:Equity:*
+schedule_al:
+  - code: bank
+    accounts:
+      - Assets:Checking
+  - code: share
+    accounts:
+      - Assets:Equity:*
+      - Assets:Debt:*
 commodities:
   - name: NIFTY
     type: mutualfund

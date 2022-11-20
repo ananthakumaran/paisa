@@ -1,13 +1,12 @@
 package server
 
 import (
-	"path/filepath"
 	"strings"
 	"time"
 
 	"github.com/samber/lo"
-	log "github.com/sirupsen/logrus"
 
+	"github.com/ananthakumaran/paisa/internal/accounting"
 	"github.com/ananthakumaran/paisa/internal/model/posting"
 	"github.com/ananthakumaran/paisa/internal/query"
 	"github.com/ananthakumaran/paisa/internal/service"
@@ -84,16 +83,7 @@ func computeAllocationTargets(postings []posting.Posting) []AllocationTarget {
 
 func computeAllocationTarget(postings []posting.Posting, config AllocationTargetConfig, total float64) AllocationTarget {
 	date := time.Now()
-	postings = lo.Filter(postings, func(p posting.Posting, _ int) bool {
-		return lo.SomeBy(config.Accounts, func(accountGlob string) bool {
-			match, err := filepath.Match(accountGlob, p.Account)
-			if err != nil {
-				log.Fatal("Invalid account value used in target_allocations", accountGlob, err)
-			}
-			return match
-		})
-	})
-
+	postings = accounting.FilterByGlob(postings, config.Accounts)
 	aggregates := computeAggregate(postings, date)
 	currentTotal := lo.Reduce(postings, func(acc float64, p posting.Posting, _ int) float64 { return acc + p.MarketAmount }, 0.0)
 	return AllocationTarget{Name: config.Name, Target: config.Target, Current: (currentTotal / total) * 100, Aggregates: aggregates}

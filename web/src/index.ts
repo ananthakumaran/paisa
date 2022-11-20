@@ -23,6 +23,7 @@ import income from "./income";
 import expense from "./expense";
 import price from "./price";
 import harvest from "./harvest";
+import scheduleAL from "./schedule_al";
 import doctor from "./doctor";
 
 const tabs = {
@@ -36,6 +37,7 @@ const tabs = {
   expense: _.once(expense),
   price: _.once(price),
   harvest: _.once(harvest),
+  schedule_al: _.once(scheduleAL),
   doctor: _.once(doctor)
 };
 

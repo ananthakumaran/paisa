@@ -43,6 +43,7 @@
             <a class="navbar-link">Tax</a>
             <div class="navbar-dropdown">
               <a id="harvest" class="navbar-item">Harvest</a>
+              <a id="schedule_al" class="navbar-item">Schedule AL</a>
             </div>
           </div>
           <a id="doctor" class="navbar-item">Doctor</a>
@@ -465,6 +466,35 @@
           </div>
         </div>
         <div class="columns is-flex-wrap-wrap" id="d3-harvestables">
+        </div>
+      </div>
+    </section>
+    <section class="section tab-schedule_al">
+      <div class="container is-fluid">
+        <div class="container is-fluid">
+          <div class="columns">
+            <div class="column is-12">
+              <p class="subtitle is-12">
+                Schedule AL as on <span class="d3-schedule-al-date has-text-weight-bold"></span>
+              </p>
+            </div>
+          </div>
+          <div class="columns">
+            <div class="column is-12">
+              <table class="table is-narrow is-fullwidth">
+                <thead>
+                  <tr>
+                    <th>Code</th>
+                    <th>Section</th>
+                    <th>Details</th>
+                    <th class='has-text-right'>Amount</th>
+                  </tr>
+                </thead>
+                <tbody class="d3-schedule-al">
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
       </div>
     </section>

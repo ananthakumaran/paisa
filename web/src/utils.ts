@@ -137,9 +137,24 @@ export interface Issue {
   details: string;
 }
 
+export interface ScheduleALSection {
+  code: string;
+  section: string;
+  details: string;
+}
+
+export interface ScheduleALEntry {
+  section: ScheduleALSection;
+  amount: number;
+}
+
 export function ajax(
   route: "/api/harvest"
 ): Promise<{ capital_gains: CapitalGain[] }>;
+export function ajax(route: "/api/schedule_al"): Promise<{
+  schedule_al_entries: ScheduleALEntry[];
+  date: string;
+}>;
 export function ajax(route: "/api/diagnosis"): Promise<{ issues: Issue[] }>;
 export function ajax(
   route: "/api/investment"

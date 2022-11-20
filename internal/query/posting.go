@@ -42,7 +42,7 @@ func (q *Query) NotLike(account string) *Query {
 
 func (q *Query) All() []posting.Posting {
 	var postings []posting.Posting
-	result := q.context.Order("date " + q.order).Find(&postings)
+	result := q.context.Order("date " + q.order + ", amount desc").Find(&postings)
 	if result.Error != nil {
 		log.Fatal(result.Error)
 	}
@@ -51,7 +51,7 @@ func (q *Query) All() []posting.Posting {
 
 func (q *Query) First() posting.Posting {
 	var posting posting.Posting
-	result := q.context.Order("date " + q.order).First(&posting)
+	result := q.context.Order("date " + q.order + ", amount desc").First(&posting)
 	if result.Error != nil {
 		log.Fatal(result.Error)
 	}

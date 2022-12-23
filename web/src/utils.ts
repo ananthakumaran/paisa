@@ -245,7 +245,12 @@ export function formatPercentage(value, precision = 0) {
     value = 0;
   }
 
-  return Number(value).toLocaleString(undefined, {
+  // minus 0
+  if (1 / value === -Infinity) {
+    value = 0;
+  }
+
+  return value.toLocaleString("hi", {
     style: "percent",
     minimumFractionDigits: precision
   });

@@ -186,21 +186,27 @@ function renderSelectedMonth(
   investments: Posting[]
 ) {
   renderer(expenses);
-  setHtml("current-month-income", sum(incomes, -1), COLORS.gainText);
-  setHtml("current-month-tax", sum(taxes), COLORS.lossText);
-  setHtml("current-month-expenses", sum(expenses), COLORS.lossText);
-  setHtml("current-month-investment", sum(investments), COLORS.secondary);
+  setHtml("current-month-income", sumCurrency(incomes, -1), COLORS.gainText);
+  setHtml("current-month-tax", sumCurrency(taxes), COLORS.lossText);
+  setHtml("current-month-expenses", sumCurrency(expenses), COLORS.lossText);
+  setHtml(
+    "current-month-investment",
+    sumCurrency(investments),
+    COLORS.secondary
+  );
+  const savingsRate = sum(investments) / (sum(incomes, -1) - sum(taxes));
   setHtml(
     "current-month-savings-rate",
-    formatPercentage(
-      _.sumBy(investments, "amount") /
-        (-1 * _.sumBy(incomes, "amount") - _.sumBy(taxes, "amount"))
-    ),
-    COLORS.primary
+    formatPercentage(savingsRate),
+    COLORS.secondary
   );
 }
 
 function sum(postings: Posting[], sign = 1) {
+  return sign * _.sumBy(postings, (p) => p.amount);
+}
+
+function sumCurrency(postings: Posting[], sign = 1) {
   return formatCurrency(sign * _.sumBy(postings, (p) => p.amount));
 }
 

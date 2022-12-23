@@ -236,6 +236,21 @@ export function formatFloat(value, precision = 2) {
   return sprintf(`%.${precision}f`, value);
 }
 
+export function formatPercentage(value, precision = 0) {
+  if (obscure) {
+    return "00";
+  }
+
+  if (!Number.isFinite(value)) {
+    value = 0;
+  }
+
+  return Number(value).toLocaleString(undefined, {
+    style: "percent",
+    minimumFractionDigits: precision
+  });
+}
+
 export function formatFixedWidthFloat(value, width, precision = 2) {
   if (obscure) {
     value = 0;

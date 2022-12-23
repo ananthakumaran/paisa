@@ -9,6 +9,7 @@ import {
   forEachMonth,
   formatFixedWidthFloat,
   formatCurrency,
+  formatPercentage,
   formatCurrencyCrude,
   Posting,
   restName,
@@ -189,6 +190,14 @@ function renderSelectedMonth(
   setHtml("current-month-tax", sum(taxes), COLORS.lossText);
   setHtml("current-month-expenses", sum(expenses), COLORS.lossText);
   setHtml("current-month-investment", sum(investments), COLORS.secondary);
+  setHtml(
+    "current-month-savings-rate",
+    formatPercentage(
+      _.sumBy(investments, "amount") /
+        (-1 * _.sumBy(incomes, "amount") - _.sumBy(taxes, "amount"))
+    ),
+    COLORS.primary
+  );
 }
 
 function sum(postings: Posting[], sign = 1) {

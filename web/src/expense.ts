@@ -196,7 +196,7 @@ function renderSelectedMonth(
       _.sumBy(investments, "amount") /
         (-1 * _.sumBy(incomes, "amount") - _.sumBy(taxes, "amount"))
     ),
-    COLORS.primary
+    COLORS.secondary
   );
 }
 

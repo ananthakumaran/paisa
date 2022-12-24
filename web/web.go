@@ -4,7 +4,7 @@ import (
 	"embed"
 )
 
-//go:embed static/*
+//go:embed all:static/*
 var Static embed.FS
 
 //go:embed static/index.html

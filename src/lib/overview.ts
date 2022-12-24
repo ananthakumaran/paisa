@@ -3,32 +3,7 @@ import legend from "d3-svg-legend";
 import dayjs from "dayjs";
 import _ from "lodash";
 import COLORS from "./colors";
-import { ajax, formatCurrency, formatCurrencyCrude, formatFloat, Overview, setHtml } from "./utils";
-
-function init() {
-  const { overview_timeline: points, xirr: xirr } = await ajax("/api/overview");
-  _.each(points, (n) => (n.timestamp = dayjs(n.date)));
-
-  const current = _.last(points);
-  setHtml(
-    "networth",
-    formatCurrency(current.investment_amount + current.gain_amount - current.withdrawal_amount),
-    COLORS.primary
-  );
-  setHtml(
-    "investment",
-    formatCurrency(current.investment_amount - current.withdrawal_amount),
-    COLORS.secondary
-  );
-  setHtml(
-    "gains",
-    formatCurrency(current.gain_amount),
-    current.gain_amount >= 0 ? COLORS.gainText : COLORS.lossText
-  );
-  setHtml("xirr", formatFloat(xirr));
-
-  renderOverview(points, document.getElementById("d3-overview-timeline"));
-}
+import { formatCurrencyCrude, type Overview } from "./utils";
 
 export function renderOverview(points: Overview[], element: Element) {
   const start = _.min(_.map(points, (p) => p.timestamp)),

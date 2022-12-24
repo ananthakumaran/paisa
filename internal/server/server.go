@@ -13,8 +13,8 @@ func Listen(db *gorm.DB) {
 	gin.SetMode(gin.ReleaseMode)
 
 	router := gin.Default()
-	router.GET("/static/*filepath", func(c *gin.Context) {
-		c.FileFromFS(c.Request.URL.Path, http.FS(web.Static))
+	router.GET("/_app/*filepath", func(c *gin.Context) {
+		c.FileFromFS("/static"+c.Request.URL.Path, http.FS(web.Static))
 	})
 	router.GET("/", func(c *gin.Context) {
 		c.Data(http.StatusOK, "text/html; charset=utf-8", []byte(web.Index))

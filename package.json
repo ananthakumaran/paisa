@@ -10,8 +10,7 @@
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
     "lint": "prettier --plugin-search-dir . --check . && eslint .",
-    "format": "prettier --plugin-search-dir . --write .",
-    "sync": "svelte-kit sync"
+    "format": "prettier --plugin-search-dir . --write ."
   },
   "dependencies": {
     "@sveltejs/adapter-static": "^1.0.0",

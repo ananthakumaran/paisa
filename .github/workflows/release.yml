@@ -17,7 +17,7 @@ jobs:
         nix_path: nixpkgs=channel:nixos-unstable
     - run: |
         nix develop --command npm install
-        nix develop --command ./node_modules/.bin/esbuild web/src/index.ts --bundle --outfile=web/static/dist.js
+        nix develop --command npm run build
         nix develop --command go build
         cp paisa paisa-linux-amd64
     - name: Release
@@ -36,7 +36,7 @@ jobs:
         brew update
         brew install --force --overwrite go sqlite3
         npm install
-        ./node_modules/.bin/esbuild web/src/index.ts --bundle --outfile=web/static/dist.js
+        npm run build
         go build
         cp paisa paisa-darwin-amd64
     - name: Release
@@ -60,7 +60,7 @@ jobs:
     - run: |
         choco install sqlite
         npm install
-        ./node_modules/.bin/esbuild web/src/index.ts --bundle --outfile=web/static/dist.js
+        npm run build
         go build
         cp paisa.exe paisa-windows-amd64.exe
     - name: Release

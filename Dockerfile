@@ -2,7 +2,7 @@ FROM node:18-alpine3.16 as web
 WORKDIR /usr/src/paisa
 COPY . .
 RUN npm install && \
-    ./node_modules/.bin/esbuild web/src/index.ts --bundle --outfile=web/static/dist.js
+    PAISA_HOST=https://paisa-demo.ananthakumaran.in npm run build
 
 FROM golang:1.18-alpine3.16 as go
 WORKDIR /usr/src/paisa

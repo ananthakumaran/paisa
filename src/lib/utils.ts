@@ -1,5 +1,5 @@
 import chroma from "chroma-js";
-import dayjs from "dayjs";
+import type dayjs from "dayjs";
 import { sprintf } from "sprintf-js";
 import _ from "lodash";
 import * as d3 from "d3";
@@ -148,9 +148,7 @@ export interface ScheduleALEntry {
   amount: number;
 }
 
-export function ajax(
-  route: "/api/harvest"
-): Promise<{ capital_gains: CapitalGain[] }>;
+export function ajax(route: "/api/harvest"): Promise<{ capital_gains: CapitalGain[] }>;
 export function ajax(route: "/api/schedule_al"): Promise<{
   schedule_al_entries: ScheduleALEntry[];
   date: string;
@@ -336,25 +334,8 @@ export function generateColorScheme(domain: string[]) {
       4: ["#66c2a5", "#fc8d62", "#8da0cb", "#e78ac3"],
       5: ["#66c2a5", "#fc8d62", "#8da0cb", "#e78ac3", "#a6d854"],
       6: ["#66c2a5", "#fc8d62", "#8da0cb", "#e78ac3", "#a6d854", "#ffd92f"],
-      7: [
-        "#8dd3c7",
-        "#ffed6f",
-        "#bebada",
-        "#fb8072",
-        "#80b1d3",
-        "#fdb462",
-        "#b3de69"
-      ],
-      8: [
-        "#8dd3c7",
-        "#ffed6f",
-        "#bebada",
-        "#fb8072",
-        "#80b1d3",
-        "#fdb462",
-        "#b3de69",
-        "#fccde5"
-      ],
+      7: ["#8dd3c7", "#ffed6f", "#bebada", "#fb8072", "#80b1d3", "#fdb462", "#b3de69"],
+      8: ["#8dd3c7", "#ffed6f", "#bebada", "#fb8072", "#80b1d3", "#fdb462", "#b3de69", "#fccde5"],
       9: [
         "#8dd3c7",
         "#ffed6f",
@@ -432,9 +413,7 @@ export function rainbowScale(keys: string[]) {
     .scaleLinear()
     .domain([0, _.size(keys) - 1])
     .range([0, 0.9]);
-  return d3
-    .scaleOrdinal(_.map(keys, (_value, i) => d3.interpolateRainbow(x(i))))
-    .domain(keys);
+  return d3.scaleOrdinal(_.map(keys, (_value, i) => d3.interpolateRainbow(x(i)))).domain(keys);
 }
 
 export function textColor(backgroundColor: string) {

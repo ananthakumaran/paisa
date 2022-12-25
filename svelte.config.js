@@ -1,6 +1,9 @@
 import adapter from "@sveltejs/adapter-static";
 import { vitePreprocess } from "@sveltejs/kit/vite";
 
+// https://github.com/sveltejs/kit/issues/3998
+const host = process.env["PAISA_HOST"] || "http://localhost:7500";
+
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
   // Consult https://kit.svelte.dev/docs/integrations#preprocessors
@@ -10,7 +13,7 @@ const config = {
   kit: {
     adapter: adapter({ pages: "web/static", assets: "web/static", out: "web/static" }),
     paths: {
-      assets: "http://localhost:7500/static",
+      assets: host + "/static",
       base: ""
     }
   }

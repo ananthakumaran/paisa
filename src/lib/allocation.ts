@@ -1,11 +1,9 @@
-import $ from "jquery";
 import * as d3 from "d3";
 import legend from "d3-svg-legend";
 import dayjs from "dayjs";
 import _ from "lodash";
 import {
   type Aggregate,
-  ajax,
   type AllocationTarget,
   formatCurrency,
   formatFloat,
@@ -20,24 +18,6 @@ import {
 import COLORS from "./colors";
 import chroma from "chroma-js";
 
-export default async function () {
-  const {
-    aggregates: aggregates,
-    aggregates_timeline: aggregatesTimeline,
-    allocation_targets: allocationTargets
-  } = await ajax("/api/allocation");
-  _.each(aggregates, (a) => (a.timestamp = dayjs(a.date)));
-  _.each(aggregatesTimeline, (aggregates) =>
-    _.each(aggregates, (a) => (a.timestamp = dayjs(a.date)))
-  );
-
-  const color = generateColorScheme(_.keys(aggregates));
-
-  renderAllocationTarget(allocationTargets, color);
-  renderAllocation(aggregates, color);
-  renderAllocationTimeline(aggregatesTimeline);
-}
-
 export function renderAllocationTarget(
   allocationTargets: AllocationTarget[],
   color: d3.ScaleOrdinal<string, string>
@@ -45,7 +25,6 @@ export function renderAllocationTarget(
   const id = "#d3-allocation-target";
 
   if (_.isEmpty(allocationTargets)) {
-    $(id).closest(".container").hide();
     return;
   }
   allocationTargets = _.sortBy(allocationTargets, (t) => t.name);

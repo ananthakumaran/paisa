@@ -1,5 +1,36 @@
 <script lang="ts">
   import { page } from "$app/stores";
+  import { afterNavigate, beforeNavigate } from "$app/navigation";
+  import { followCursor, type Instance, delegate } from "tippy.js";
+  import _ from "lodash";
+
+  let isBurger: boolean = null;
+  let tippyInstances: Instance[] = [];
+
+  beforeNavigate(() => {
+    tippyInstances.forEach((t) => t.destroy());
+  });
+
+  afterNavigate(() => {
+    isBurger = null;
+    tippyInstances = delegate("section", {
+      target: "[data-tippy-content]",
+      theme: "light",
+      onShow: (instance) => {
+        const content = instance.reference.getAttribute("data-tippy-content");
+        if (!_.isEmpty(content)) {
+          instance.setContent(content);
+        } else {
+          return false;
+        }
+      },
+      maxWidth: "none",
+      delay: 0,
+      allowHTML: true,
+      followCursor: true,
+      plugins: [followCursor]
+    });
+  });
 </script>
 
 <nav class="navbar is-light" aria-label="main navigation">
@@ -8,9 +39,12 @@
     <a
       role="button"
       class="navbar-burger"
+      class:is-active={isBurger === true}
+      on:click={(_e) => (isBurger = !isBurger)}
       aria-label="menu"
       aria-expanded="false"
       data-target="navbarBasicExample"
+      href="#"
     >
       <span aria-hidden="true" />
       <span aria-hidden="true" />
@@ -18,7 +52,7 @@
     </a>
   </div>
 
-  <div class="navbar-menu">
+  <div class="navbar-menu" class:is-active={isBurger === true}>
     <div class="navbar-start">
       <a id="overview" class="navbar-item" href="/" class:is-active={$page.url.pathname === "/"}
         >Overview</a

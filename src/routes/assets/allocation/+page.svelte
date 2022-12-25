@@ -7,7 +7,9 @@
   import { ajax, generateColorScheme } from "$lib/utils";
   import dayjs from "dayjs";
   import _ from "lodash";
-  import { onMount } from "svelte";
+  import { onMount, tick } from "svelte";
+
+  let showAllocation = false;
 
   onMount(async () => {
     const {
@@ -22,13 +24,18 @@
 
     const color = generateColorScheme(_.keys(aggregates));
 
+    if (!_.isEmpty(allocationTargets)) {
+      showAllocation = true;
+    }
+    await tick();
+
     renderAllocationTarget(allocationTargets, color);
     renderAllocation(aggregates, color);
     renderAllocationTimeline(aggregatesTimeline);
   });
 </script>
 
-<section class="section tab-allocation">
+<section class="section tab-allocation" style={showAllocation ? "" : "display: none"}>
   <div class="container is-fluid">
     <div class="columns">
       <div class="column is-12 has-text-centered">

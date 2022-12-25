@@ -1,5 +1,4 @@
 import * as d3 from "d3";
-import $ from "jquery";
 import legend from "d3-svg-legend";
 import dayjs, { Dayjs } from "dayjs";
 import chroma from "chroma-js";
@@ -377,8 +376,6 @@ export function renderMonthlyExpensesTimeline(
         d3.select(this).selectAll(".label").attr("fill", "#000");
       }
 
-      $(document).trigger("onGroupSelected", { groups: selectedGroups });
-      console.log(selectedGroups);
       render(selectedGroups);
     })
     .scale(z);

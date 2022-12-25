@@ -1,7 +1,7 @@
 <script lang="ts">
-  import { ajax, formatCurrency, formatFloat } from "../lib/utils";
-  import COLORS from "../lib/colors";
-  import { renderOverview } from "../lib/overview";
+  import { ajax, formatCurrency, formatFloat } from "$lib/utils";
+  import COLORS from "$lib/colors";
+  import { renderOverview } from "$lib/overview";
   import _ from "lodash";
   import dayjs from "dayjs";
 

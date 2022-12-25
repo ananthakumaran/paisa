@@ -53,7 +53,12 @@
           <a id="schedule_al" class="navbar-item">Schedule AL</a>
         </div>
       </div>
-      <a id="doctor" class="navbar-item">Doctor</a>
+      <a
+        id="doctor"
+        class="navbar-item"
+        href="/doctor"
+        class:is-active={$page.url.pathname === "/doctor"}>Doctor</a
+      >
     </div>
   </div>
 </nav>

@@ -2,13 +2,13 @@
   import { onMount } from "svelte";
   import dayjs from "dayjs";
   import _ from "lodash";
-  import { ajax, type Posting } from "../../lib/utils";
+  import { ajax, type Posting } from "$lib/utils";
   import {
     renderMonthlyExpensesTimeline,
     renderCurrentExpensesBreakdown,
     renderCalendar,
     renderSelectedMonth
-  } from "../../lib/expense";
+  } from "$lib/expense";
   import { month } from "../../store";
   import { writable } from "svelte/store";
 

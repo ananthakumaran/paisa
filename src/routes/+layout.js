@@ -1,3 +1,8 @@
 export const prerender = true;
-import 'bulma/css/bulma.css';
-import '../app.css';
+export const ssr = false;
+
+import "bulma/css/bulma.css";
+import "../app.css";
+import dayjs from "dayjs";
+import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
+dayjs.extend(isSameOrBefore);

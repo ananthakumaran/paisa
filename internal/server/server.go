@@ -16,9 +16,6 @@ func Listen(db *gorm.DB) {
 	router.GET("/_app/*filepath", func(c *gin.Context) {
 		c.FileFromFS("/static"+c.Request.URL.Path, http.FS(web.Static))
 	})
-	router.GET("/", func(c *gin.Context) {
-		c.Data(http.StatusOK, "text/html; charset=utf-8", []byte(web.Index))
-	})
 	router.GET("/api/overview", func(c *gin.Context) {
 		c.JSON(200, GetOverview(db))
 	})
@@ -51,6 +48,10 @@ func Listen(db *gorm.DB) {
 	})
 	router.GET("/api/diagnosis", func(c *gin.Context) {
 		c.JSON(200, GetDiagnosis(db))
+	})
+
+	router.NoRoute(func(c *gin.Context) {
+		c.Data(http.StatusOK, "text/html; charset=utf-8", []byte(web.Index))
 	})
 
 	log.Info("Listening on 7500")

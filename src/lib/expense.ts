@@ -5,13 +5,12 @@ import dayjs, { Dayjs } from "dayjs";
 import chroma from "chroma-js";
 import _ from "lodash";
 import {
-  ajax,
   forEachMonth,
   formatFixedWidthFloat,
   formatCurrency,
   formatPercentage,
   formatCurrencyCrude,
-  Posting,
+  type Posting,
   restName,
   secondName,
   setHtml,
@@ -20,75 +19,9 @@ import {
   generateColorScheme
 } from "./utils";
 import COLORS from "./colors";
+import type { Writable } from "svelte/store";
 
-export default async function () {
-  const {
-    expenses: expenses,
-    month_wise: {
-      expenses: grouped_expenses,
-      incomes: grouped_incomes,
-      investments: grouped_investments,
-      taxes: grouped_taxes
-    }
-  } = await ajax("/api/expense");
-
-  let minDate = dayjs();
-  _.each(expenses, (p) => (p.timestamp = dayjs(p.date)));
-  const parseDate = (group: { [key: string]: Posting[] }) => {
-    _.each(group, (ps) => {
-      _.each(ps, (p) => {
-        p.timestamp = dayjs(p.date);
-        if (p.timestamp.isBefore(minDate)) {
-          minDate = p.timestamp;
-        }
-      });
-    });
-  };
-  parseDate(grouped_expenses);
-  parseDate(grouped_incomes);
-  parseDate(grouped_investments);
-  parseDate(grouped_taxes);
-
-  const max = dayjs().format("YYYY-MM");
-  const min = minDate.format("YYYY-MM");
-  const input = d3.select<HTMLInputElement, never>("#d3-current-month");
-  input.attr("max", max);
-  input.attr("min", min);
-
-  const { z, groups } = renderMonthlyExpensesTimeline(expenses, input.node());
-  const renderer = renderCurrentExpensesBreakdown(z);
-
-  const state = { month: max, groups: groups };
-
-  $(document).on("onGroupSelected", function (_event, { groups }) {
-    state.groups = groups;
-    changeState();
-  });
-
-  const changeState = () => {
-    const month = state.month;
-    renderCalendar(month, grouped_expenses[month], z, state.groups);
-    renderSelectedMonth(
-      renderer,
-      grouped_expenses[month] || [],
-      grouped_incomes[month] || [],
-      grouped_taxes[month] || [],
-      grouped_investments[month] || []
-    );
-  };
-
-  input.on("input", (event) => {
-    state.month = event.srcElement.value;
-    changeState();
-  });
-
-  input.attr("value", max);
-  changeState();
-  input.node().focus();
-  input.node().select();
-}
-
-function renderCalendar(
+export function renderCalendar(
   month: string,
   expenses: Posting[],
   z: d3.ScaleOrdinal<string, string, never>,
@@ -107,8 +40,7 @@ function renderCalendar(
     days.push(d);
     expensesByDay[d.format("YYYY-MM-DD")] = _.filter(
       expenses,
-      (e) =>
-        e.timestamp.isSame(d, "day") && _.includes(groups, restName(e.account))
+      (e) => e.timestamp.isSame(d, "day") && _.includes(groups, restName(e.account))
     );
 
     d = d.add(1, "day");
@@ -178,7 +110,7 @@ function renderCalendar(
     });
 }
 
-function renderSelectedMonth(
+export function renderSelectedMonth(
   renderer: (ps: Posting[]) => void,
   expenses: Posting[],
   incomes: Posting[],
@@ -189,17 +121,9 @@ function renderSelectedMonth(
   setHtml("current-month-income", sumCurrency(incomes, -1), COLORS.gainText);
   setHtml("current-month-tax", sumCurrency(taxes), COLORS.lossText);
   setHtml("current-month-expenses", sumCurrency(expenses), COLORS.lossText);
-  setHtml(
-    "current-month-investment",
-    sumCurrency(investments),
-    COLORS.secondary
-  );
+  setHtml("current-month-investment", sumCurrency(investments), COLORS.secondary);
   const savingsRate = sum(investments) / (sum(incomes, -1) - sum(taxes));
-  setHtml(
-    "current-month-savings-rate",
-    formatPercentage(savingsRate),
-    COLORS.secondary
-  );
+  setHtml("current-month-savings-rate", formatPercentage(savingsRate), COLORS.secondary);
 }
 
 function sum(postings: Posting[], sign = 1) {
@@ -210,9 +134,10 @@ function sumCurrency(postings: Posting[], sign = 1) {
   return formatCurrency(sign * _.sumBy(postings, (p) => p.amount));
 }
 
-function renderMonthlyExpensesTimeline(
+export function renderMonthlyExpensesTimeline(
   postings: Posting[],
-  dateSelector: HTMLInputElement
+  groupsStore: Writable<string[]>,
+  monthStore: Writable<string>
 ) {
   const id = "#d3-expense-timeline";
   const timeFormat = "MMM-YYYY";
@@ -224,9 +149,7 @@ function renderMonthlyExpensesTimeline(
       margin.left -
       margin.right,
     height = +svg.attr("height") - margin.top - margin.bottom,
-    g = svg
-      .append("g")
-      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
   const groups = _.chain(postings)
     .map((p) => secondName(p.account))
@@ -308,12 +231,7 @@ function renderMonthlyExpensesTimeline(
         _.flatMap(allowedGroups, (key) => {
           const total = (d.data as any)[key];
           if (total > 0) {
-            return [
-              [
-                key,
-                [formatCurrency(total), "has-text-weight-bold has-text-right"]
-              ]
-            ];
+            return [[key, [formatCurrency(total), "has-text-weight-bold has-text-right"]]];
           }
           return [];
         })
@@ -333,6 +251,7 @@ function renderMonthlyExpensesTimeline(
     .attr("stroke-dasharray", "5,5");
 
   const render = (allowedGroups: string[]) => {
+    groupsStore.set(allowedGroups);
     const sum = (p) => _.sum(_.map(allowedGroups, (k) => p[k]));
     x.domain(points.map((p) => p.month));
     y.domain([0, d3.max(points, sum)]);
@@ -354,9 +273,7 @@ function renderMonthlyExpensesTimeline(
       .attr("transform", "rotate(-45)")
       .style("text-anchor", "end");
 
-    yAxis
-      .transition(t)
-      .call(d3.axisLeft(y).tickSize(-width).tickFormat(formatCurrencyCrude));
+    yAxis.transition(t).call(d3.axisLeft(y).tickSize(-width).tickFormat(formatCurrencyCrude));
 
     line
       .transition(t)
@@ -393,12 +310,7 @@ function renderMonthlyExpensesTimeline(
           }),
         (update) => update.transition(t),
         (exit) =>
-          exit
-            .selectAll("rect")
-            .transition(t)
-            .attr("y", y.range()[0])
-            .attr("height", 0)
-            .remove()
+          exit.selectAll("rect").transition(t).attr("y", y.range()[0]).attr("height", 0).remove()
       )
       .selectAll("rect")
       .data(function (d) {
@@ -411,8 +323,7 @@ function renderMonthlyExpensesTimeline(
             .attr("class", "zoomable")
             .on("click", (event, data) => {
               const timestamp: Dayjs = data.data.timestamp as any;
-              dateSelector.value = timestamp.format("YYYY-MM");
-              dateSelector.dispatchEvent(new Event("input", { bubbles: true }));
+              monthStore.set(timestamp.format("YYYY-MM"));
             })
             .attr("data-tippy-content", tooltipContent(allowedGroups))
             .attr("x", function (d) {
@@ -447,10 +358,7 @@ function renderMonthlyExpensesTimeline(
   let selectedGroups = groups;
   render(selectedGroups);
 
-  svg
-    .append("g")
-    .attr("class", "legendOrdinal")
-    .attr("transform", "translate(40,0)");
+  svg.append("g").attr("class", "legendOrdinal").attr("transform", "translate(40,0)");
 
   const legendOrdinal = legend
     .legendColor()
@@ -468,18 +376,18 @@ function renderMonthlyExpensesTimeline(
         d3.selectAll(".legendOrdinal .cell .label").attr("fill", "#ccc");
         d3.select(this).selectAll(".label").attr("fill", "#000");
       }
+
       $(document).trigger("onGroupSelected", { groups: selectedGroups });
+      console.log(selectedGroups);
       render(selectedGroups);
     })
     .scale(z);
 
   svg.select(".legendOrdinal").call(legendOrdinal as any);
-  return { z: z, groups: groups };
+  return { z: z };
 }
 
-function renderCurrentExpensesBreakdown(
-  z: d3.ScaleOrdinal<string, string, never>
-) {
+export function renderCurrentExpensesBreakdown(z: d3.ScaleOrdinal<string, string, never>) {
   const id = "#d3-current-month-breakdown";
   const BAR_HEIGHT = 20;
   const svg = d3.select(id),
@@ -488,9 +396,7 @@ function renderCurrentExpensesBreakdown(
       document.getElementById(id.substring(1)).parentElement.clientWidth -
       margin.left -
       margin.right,
-    g = svg
-      .append("g")
-      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
   const x = d3.scaleLinear().range([0, width]);
   const y = d3.scaleBand().paddingInner(0.1).paddingOuter(0);
@@ -536,12 +442,7 @@ function renderCurrentExpensesBreakdown(
     xAxis
       .attr("transform", "translate(0," + height + ")")
       .transition(t)
-      .call(
-        d3
-          .axisBottom(x)
-          .tickSize(-height)
-          .tickFormat(skipTicks(60, x, formatCurrencyCrude))
-      );
+      .call(d3.axisBottom(x).tickSize(-height).tickFormat(skipTicks(60, x, formatCurrencyCrude)));
 
     yAxis.transition(t).call(d3.axisLeft(y));
 
@@ -570,10 +471,7 @@ function renderCurrentExpensesBreakdown(
             .attr("data-tippy-content", tooltipContent)
             .attr("x", x(0))
             .attr("y", function (d) {
-              return (
-                y(d.category) +
-                (y.bandwidth() - Math.min(y.bandwidth(), BAR_HEIGHT)) / 2
-              );
+              return y(d.category) + (y.bandwidth() - Math.min(y.bandwidth(), BAR_HEIGHT)) / 2;
             })
             .attr("width", function (d) {
               return x(d.total);
@@ -589,10 +487,7 @@ function renderCurrentExpensesBreakdown(
             .transition(t)
             .attr("x", x(0))
             .attr("y", function (d) {
-              return (
-                y(d.category) +
-                (y.bandwidth() - Math.min(y.bandwidth(), BAR_HEIGHT)) / 2
-              );
+              return y(d.category) + (y.bandwidth() - Math.min(y.bandwidth(), BAR_HEIGHT)) / 2;
             })
             .attr("width", function (d) {
               return x(d.total);
@@ -624,19 +519,13 @@ function renderCurrentExpensesBreakdown(
             .attr("class", "is-family-monospace")
             .text(
               (d) =>
-                `${formatCurrency(d.total)} ${formatFixedWidthFloat(
-                  (d.total / total) * 100,
-                  6
-                )}%`
+                `${formatCurrency(d.total)} ${formatFixedWidthFloat((d.total / total) * 100, 6)}%`
             ),
         (update) =>
           update
             .text(
               (d) =>
-                `${formatCurrency(d.total)} ${formatFixedWidthFloat(
-                  (d.total / total) * 100,
-                  6
-                )}%`
+                `${formatCurrency(d.total)} ${formatFixedWidthFloat((d.total / total) * 100, 6)}%`
             )
             .transition(t)
             .attr("y", function (d) {

@@ -7,7 +7,6 @@
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
     "skipLibCheck": true,
-    "sourceMap": true,
-    "importsNotUsedAsValues": "preserve"
+    "sourceMap": true
   }
 }

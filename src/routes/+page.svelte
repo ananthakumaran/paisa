@@ -1,25 +1,18 @@
 <script lang="ts">
-  import {
-    ajax,
-    formatCurrency,
-    formatCurrencyCrude,
-    formatFloat,
-    Overview,
-    setHtml
-  } from "../lib/utils";
+  import { ajax, formatCurrency, formatFloat } from "../lib/utils";
   import COLORS from "../lib/colors";
   import { renderOverview } from "../lib/overview";
   import _ from "lodash";
   import dayjs from "dayjs";
 
-  import { onMount, tick } from "svelte";
+  import { onMount } from "svelte";
 
   let networth = 0;
   let investment = 0;
   let gain = 0;
   let xirr = 0;
   let loaded = false;
-  let svg;
+  let svg: Element;
 
   onMount(async () => {
     const result = await ajax("/api/overview");

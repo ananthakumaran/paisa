@@ -2,21 +2,9 @@ import * as d3 from "d3";
 import dayjs from "dayjs";
 import _, { round } from "lodash";
 import COLORS from "./colors";
-import {
-  ajax,
-  CapitalGain,
-  formatCurrency,
-  formatFloat,
-  restName,
-  tooltip
-} from "./utils";
+import { type CapitalGain, formatCurrency, formatFloat, restName, tooltip } from "./utils";
 
-export default async function () {
-  const { capital_gains: capital_gains } = await ajax("/api/harvest");
-  renderHarvestables(capital_gains);
-}
-
-function renderHarvestables(capital_gains: CapitalGain[]) {
+export function renderHarvestables(capital_gains: CapitalGain[]) {
   const id = "#d3-harvestables";
   const root = d3.select(id);
 
@@ -61,13 +49,10 @@ function renderHarvestables(capital_gains: CapitalGain[]) {
           );
 
           unitsSpan.text(formatFloat(units));
-          (taxableGainInput.node() as HTMLInputElement).value =
-            round(taxableGain).toString();
+          (taxableGainInput.node() as HTMLInputElement).value = round(taxableGain).toString();
           event.srcElement.value = round(amount);
         });
-      self
-        .append("span")
-        .html("&nbsp; and your <b>taxable</b> gain would be ₹");
+      self.append("span").html("&nbsp; and your <b>taxable</b> gain would be ₹");
       const taxableGainInput = self
         .append("input")
         .attr("class", "input is-small adjustable-input")
@@ -81,19 +66,14 @@ function renderHarvestables(capital_gains: CapitalGain[]) {
           );
           unitsSpan.text(formatFloat(units));
           event.srcElement.value = round(taxableGain);
-          (amountInput.node() as HTMLInputElement).value =
-            round(amount).toString();
+          (amountInput.node() as HTMLInputElement).value = round(amount).toString();
         });
     });
 
   header
     .append("span")
     .attr("class", "card-header-icon")
-    .text(
-      (cg) =>
-        "price as on " +
-        dayjs(cg.harvestable.current_unit_date).format("DD MMM YYYY")
-    );
+    .text((cg) => "price as on " + dayjs(cg.harvestable.current_unit_date).format("DD MMM YYYY"));
 
   const content = card
     .append("div")
@@ -114,9 +94,7 @@ function renderHarvestables(capital_gains: CapitalGain[]) {
   <tbody>
     <tr>
       <td>Balance Units</td>
-      <td class='has-text-right has-text-weight-bold'>${formatFloat(
-        h.total_units
-      )}</td>
+      <td class='has-text-right has-text-weight-bold'>${formatFloat(h.total_units)}</td>
     </tr>
     <tr>
       <td>Harvestable Units</td>
@@ -130,15 +108,11 @@ function renderHarvestables(capital_gains: CapitalGain[]) {
     </tr>
     <tr>
       <td>Current Unit Price</td>
-      <td class='has-text-right has-text-weight-bold'>${formatFloat(
-        h.current_unit_price
-      )}</td>
+      <td class='has-text-right has-text-weight-bold'>${formatFloat(h.current_unit_price)}</td>
     </tr>
     <tr>
       <td>Unrealized Gain / Loss</td>
-      <td class='has-text-right has-text-weight-bold'>${formatCurrency(
-        h.unrealized_gain
-      )}</td>
+      <td class='has-text-right has-text-weight-bold'>${formatCurrency(h.unrealized_gain)}</td>
     </tr>
     <tr>
       <td>Taxable Unrealized Gain / Loss</td>
@@ -184,16 +158,12 @@ function renderHarvestables(capital_gains: CapitalGain[]) {
     .html((breakdown) => {
       return `
 <tr>
-  <td style="white-space: nowrap">${dayjs(breakdown.purchase_date).format(
-    "DD MMM YYYY"
-  )}</td>
+  <td style="white-space: nowrap">${dayjs(breakdown.purchase_date).format("DD MMM YYYY")}</td>
   <td class='has-text-right'>${formatFloat(breakdown.units)}</td>
   <td class='has-text-right'>${formatCurrency(breakdown.purchase_price)}</td>
   <td class='has-text-right'>${formatFloat(breakdown.purchase_unit_price)}</td>
   <td class='has-text-right'>${formatCurrency(breakdown.current_price)}</td>
-  <td class='has-text-right has-text-weight-bold'>${formatCurrency(
-    breakdown.unrealized_gain
-  )}</td>
+  <td class='has-text-right has-text-weight-bold'>${formatCurrency(breakdown.unrealized_gain)}</td>
   <td class='has-text-right has-text-weight-bold'>${formatCurrency(
     breakdown.taxable_unrealized_gain
   )}</td>
@@ -202,10 +172,7 @@ function renderHarvestables(capital_gains: CapitalGain[]) {
     });
 }
 
-function unitsRequiredFromGain(
-  cg: CapitalGain,
-  taxableGain: number
-): [number, number, number] {
+function unitsRequiredFromGain(cg: CapitalGain, taxableGain: number): [number, number, number] {
   let gain = 0;
   let amount = 0;
   let units = 0;
@@ -217,9 +184,7 @@ function unitsRequiredFromGain(
       units += breakdown.units;
       amount += breakdown.current_price;
     } else {
-      const u =
-        ((taxableGain - gain) * breakdown.units) /
-        breakdown.taxable_unrealized_gain;
+      const u = ((taxableGain - gain) * breakdown.units) / breakdown.taxable_unrealized_gain;
       units += u;
       amount += u * cg.harvestable.current_unit_price;
       gain = taxableGain;
@@ -260,21 +225,15 @@ function renderSingleBar(cg: CapitalGain) {
   const height = 20;
   const margin = { top: 20, right: 0, bottom: 20, left: 0 },
     width = selection.node().clientWidth - margin.left - margin.right,
-    g = svg
-      .append("g")
-      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
   svg
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom);
 
-  const x = d3
-    .scaleLinear()
-    .range([0, width])
-    .domain([0, harvestable.total_units]);
+  const x = d3.scaleLinear().range([0, width]).domain([0, harvestable.total_units]);
 
-  const non_harvestable_units =
-    harvestable.total_units - harvestable.harvestable_units;
+  const non_harvestable_units = harvestable.total_units - harvestable.harvestable_units;
 
   g.attr("data-tippy-content", () => {
     return tooltip([
@@ -287,19 +246,14 @@ function renderSingleBar(cg: CapitalGain) {
         "Harvestable",
         [formatFloat(harvestable.harvestable_units), "has-text-right"],
         [
-          formatFloat(
-            (harvestable.harvestable_units / harvestable.total_units) * 100
-          ),
+          formatFloat((harvestable.harvestable_units / harvestable.total_units) * 100),
           "has-text-right"
         ]
       ],
       [
         "Non Harvestable",
         [formatFloat(non_harvestable_units), "has-text-right"],
-        [
-          formatFloat((non_harvestable_units / harvestable.total_units) * 100),
-          "has-text-right"
-        ]
+        [formatFloat((non_harvestable_units / harvestable.total_units) * 100), "has-text-right"]
       ]
     ]);
   });

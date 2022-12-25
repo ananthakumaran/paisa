@@ -47,9 +47,14 @@
         </div>
       </div>
       <div class="navbar-item has-dropdown is-hoverable">
-        <a class="navbar-link">Tax</a>
+        <a class="navbar-link" class:is-active={$page.url.pathname.startsWith("/tax/")}>Tax</a>
         <div class="navbar-dropdown">
-          <a id="harvest" class="navbar-item">Harvest</a>
+          <a
+            id="harvest"
+            class="navbar-item"
+            href="/tax/harvest"
+            class:is-active={$page.url.pathname === "/tax/harvest"}>Harvest</a
+          >
           <a id="schedule_al" class="navbar-item">Schedule AL</a>
         </div>
       </div>

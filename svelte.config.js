@@ -8,7 +8,11 @@ const config = {
   preprocess: vitePreprocess(),
 
   kit: {
-    adapter: adapter({ pages: "web/static", assets: "web/static", out: "web/static" })
+    adapter: adapter({ pages: "web/static", assets: "web/static", out: "web/static" }),
+    paths: {
+      assets: "http://localhost:7500/static",
+      base: ""
+    }
   }
 };
 

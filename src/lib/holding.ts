@@ -1,20 +1,8 @@
 import * as d3 from "d3";
 import _ from "lodash";
-import {
-  ajax,
-  Breakdown,
-  depth,
-  formatCurrency,
-  formatFloat,
-  lastName
-} from "./utils";
+import { type Breakdown, depth, formatCurrency, formatFloat, lastName } from "./utils";
 
-export default async function () {
-  const { breakdowns: breakdowns } = await ajax("/api/ledger");
-  renderBreakdowns(breakdowns);
-}
-
-function renderBreakdowns(breakdowns: Breakdown[]) {
+export function renderBreakdowns(breakdowns: Breakdown[]) {
   const tbody = d3.select(".d3-postings-breakdown");
   const trs = tbody.selectAll("tr").data(Object.values(breakdowns));
 
@@ -34,18 +22,14 @@ function renderBreakdowns(breakdowns: Breakdown[]) {
       }
       const indent = _.repeat("&emsp;&emsp;", depth(b.group) - 1);
       return `
-       <td style='max-width: 200px; overflow: hidden;'>${indent}${lastName(
-        b.group
-      )}</td>
+       <td style='max-width: 200px; overflow: hidden;'>${indent}${lastName(b.group)}</td>
        <td class='has-text-right'>${
          b.investment_amount != 0 ? formatCurrency(b.investment_amount) : ""
        }</td>
        <td class='has-text-right'>${
          b.withdrawal_amount != 0 ? formatCurrency(b.withdrawal_amount) : ""
        }</td>
-       <td class='has-text-right'>${
-         b.balance_units > 0 ? formatFloat(b.balance_units, 4) : ""
-       }</td>
+       <td class='has-text-right'>${b.balance_units > 0 ? formatFloat(b.balance_units, 4) : ""}</td>
        <td class='has-text-right'>${
          b.market_amount != 0 ? formatCurrency(b.market_amount) : ""
        }</td>

@@ -5,27 +5,15 @@ import dayjs from "dayjs";
 import _ from "lodash";
 import COLORS from "./colors";
 import {
-  ajax,
   formatCurrency,
   formatCurrencyCrude,
   formatFloat,
-  Gain,
-  Overview,
+  type Gain,
+  type Overview,
   tooltip,
   skipTicks,
   restName
 } from "./utils";
-
-export default async function () {
-  const { gain_timeline_breakdown: gains } = await ajax("/api/gain");
-  _.each(gains, (g) =>
-    _.each(g.overview_timeline, (o) => (o.timestamp = dayjs(o.date)))
-  );
-
-  renderLegend();
-  renderOverview(gains);
-  renderPerAccountOverview(gains);
-}
 
 const areaKeys = ["gain", "loss"];
 const colors = [COLORS.gain, COLORS.loss];
@@ -71,7 +59,7 @@ function renderTable(gain: Gain) {
   });
 }
 
-function renderOverview(gains: Gain[]) {
+export function renderOverview(gains: Gain[]) {
   gains = _.sortBy(gains, (g) => g.account);
   const BAR_HEIGHT = 15;
   const id = "#d3-gain-overview";
@@ -82,9 +70,7 @@ function renderOverview(gains: Gain[]) {
       margin.left -
       margin.right,
     height = gains.length * BAR_HEIGHT * 2,
-    g = svg
-      .append("g")
-      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
   svg.attr("height", height + margin.top + margin.bottom);
 
   const y = d3.scaleBand().range([0, height]).paddingInner(0).paddingOuter(0);
@@ -97,29 +83,17 @@ function renderOverview(gains: Gain[]) {
     .paddingOuter(0.1);
 
   const keys = ["balance", "investment", "withdrawal", "gain", "loss"];
-  const colors = [
-    COLORS.primary,
-    COLORS.secondary,
-    COLORS.tertiary,
-    COLORS.gain,
-    COLORS.loss
-  ];
+  const colors = [COLORS.primary, COLORS.secondary, COLORS.tertiary, COLORS.gain, COLORS.loss];
   const z = d3.scaleOrdinal<string>(colors).domain(keys);
 
-  const getInvestmentAmount = (g: Gain) =>
-    _.last(g.overview_timeline).investment_amount;
+  const getInvestmentAmount = (g: Gain) => _.last(g.overview_timeline).investment_amount;
 
   const getGainAmount = (g: Gain) => _.last(g.overview_timeline).gain_amount;
-  const getWithdrawalAmount = (g: Gain) =>
-    _.last(g.overview_timeline).withdrawal_amount;
+  const getWithdrawalAmount = (g: Gain) => _.last(g.overview_timeline).withdrawal_amount;
 
   const getBalanceAmount = (g: Gain) => {
     const current = _.last(g.overview_timeline);
-    return (
-      current.investment_amount +
-      current.gain_amount -
-      current.withdrawal_amount
-    );
+    return current.investment_amount + current.gain_amount - current.withdrawal_amount;
   };
 
   const maxX = _.chain(gains)
@@ -166,12 +140,7 @@ function renderOverview(gains: Gain[]) {
   g.append("g")
     .attr("class", "axis y")
     .attr("transform", "translate(0," + height + ")")
-    .call(
-      d3
-        .axisBottom(x)
-        .tickSize(-height)
-        .tickFormat(skipTicks(60, x, formatCurrencyCrude))
-    );
+    .call(d3.axisBottom(x).tickSize(-height).tickFormat(skipTicks(60, x, formatCurrencyCrude)));
 
   g.append("g")
     .attr("class", "axis y")
@@ -198,9 +167,7 @@ function renderOverview(gains: Gain[]) {
     .text((g) => formatCurrency(getInvestmentAmount(g)))
     .attr("dominant-baseline", "hanging")
     .attr("text-anchor", "end")
-    .style("fill", (g) =>
-      getInvestmentAmount(g) > 0 ? z("investment") : "none"
-    )
+    .style("fill", (g) => (getInvestmentAmount(g) > 0 ? z("investment") : "none"))
     .attr("dx", "-3")
     .attr("dy", "3")
     .attr("x", textGroupZero + textGroupWidth / 3)
@@ -211,9 +178,7 @@ function renderOverview(gains: Gain[]) {
     .text((g) => formatCurrency(getGainAmount(g)))
     .attr("dominant-baseline", "hanging")
     .attr("text-anchor", "end")
-    .style("fill", (g) =>
-      getGainAmount(g) > 0 ? chroma(z("gain")).darken().hex() : "none"
-    )
+    .style("fill", (g) => (getGainAmount(g) > 0 ? chroma(z("gain")).darken().hex() : "none"))
     .attr("dx", "-3")
     .attr("dy", "3")
     .attr("x", textGroupZero + (textGroupWidth * 2) / 3)
@@ -233,9 +198,7 @@ function renderOverview(gains: Gain[]) {
     .append("text")
     .text((g) => formatCurrency(getGainAmount(g)))
     .attr("text-anchor", "end")
-    .style("fill", (g) =>
-      getGainAmount(g) < 0 ? chroma(z("loss")).darken().hex() : "none"
-    )
+    .style("fill", (g) => (getGainAmount(g) < 0 ? chroma(z("loss")).darken().hex() : "none"))
     .attr("dx", "-3")
     .attr("dy", "-3")
     .attr("x", textGroupZero + (textGroupWidth * 2) / 3)
@@ -245,9 +208,7 @@ function renderOverview(gains: Gain[]) {
     .append("text")
     .text((g) => formatCurrency(getWithdrawalAmount(g)))
     .attr("text-anchor", "end")
-    .style("fill", (g) =>
-      getWithdrawalAmount(g) > 0 ? z("withdrawal") : "none"
-    )
+    .style("fill", (g) => (getWithdrawalAmount(g) > 0 ? z("withdrawal") : "none"))
     .attr("dx", "-3")
     .attr("dy", "-3")
     .attr("x", textGroupZero + textGroupWidth)
@@ -267,9 +228,7 @@ function renderOverview(gains: Gain[]) {
     .attr("text-anchor", "end")
     .attr("dominant-baseline", "middle")
     .style("fill", (g) =>
-      g.xirr < 0
-        ? chroma(z("loss")).darken().hex()
-        : chroma(z("gain")).darken().hex()
+      g.xirr < 0 ? chroma(z("loss")).darken().hex() : chroma(z("gain")).darken().hex()
     )
     .attr("x", xirrWidth + xirrTextWidth)
     .attr("y", (g) => y(restName(g.account)) + y.bandwidth() / 2);
@@ -344,32 +303,18 @@ function renderOverview(gains: Gain[]) {
         ["Account", [g.account, "has-text-weight-bold has-text-right"]],
         [
           "Investment",
-          [
-            formatCurrency(current.investment_amount),
-            "has-text-weight-bold has-text-right"
-          ]
+          [formatCurrency(current.investment_amount), "has-text-weight-bold has-text-right"]
         ],
         [
           "Withdrawal",
-          [
-            formatCurrency(current.withdrawal_amount),
-            "has-text-weight-bold has-text-right"
-          ]
+          [formatCurrency(current.withdrawal_amount), "has-text-weight-bold has-text-right"]
         ],
-        [
-          "Gain",
-          [
-            formatCurrency(current.gain_amount),
-            "has-text-weight-bold has-text-right"
-          ]
-        ],
+        ["Gain", [formatCurrency(current.gain_amount), "has-text-weight-bold has-text-right"]],
         [
           "Balance",
           [
             formatCurrency(
-              current.investment_amount +
-                current.gain_amount -
-                current.withdrawal_amount
+              current.investment_amount + current.gain_amount - current.withdrawal_amount
             ),
             "has-text-weight-bold has-text-right"
           ]
@@ -383,10 +328,8 @@ function renderOverview(gains: Gain[]) {
     .attr("width", width);
 }
 
-function renderPerAccountOverview(gains: Gain[]) {
-  const start = _.min(
-      _.flatMap(gains, (g) => _.map(g.overview_timeline, (o) => o.timestamp))
-    ),
+export function renderPerAccountOverview(gains: Gain[]) {
+  const start = _.min(_.flatMap(gains, (g) => _.map(g.overview_timeline, (o) => o.timestamp))),
     end = dayjs();
 
   const divs = d3
@@ -398,9 +341,7 @@ function renderPerAccountOverview(gains: Gain[]) {
 
   const columns = divs.enter().append("div").attr("class", "columns");
 
-  const leftColumn = columns
-    .append("div")
-    .attr("class", "column is-4 is-3-desktop is-2-fullhd");
+  const leftColumn = columns.append("div").attr("class", "column is-4 is-3-desktop is-2-fullhd");
   leftColumn
     .append("table")
     .attr("class", "table is-narrow is-fullwidth is-size-7")
@@ -426,21 +367,13 @@ function renderOverviewSmall(
     margin = { top: 5, right: 80, bottom: 20, left: 40 },
     width = element.parentElement.clientWidth - margin.left - margin.right,
     height = +svg.attr("height") - margin.top - margin.bottom,
-    g = svg
-      .append("g")
-      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
   const x = d3.scaleTime().range([0, width]).domain(xDomain),
     y = d3
       .scaleLinear()
       .range([height, 0])
-      .domain([
-        0,
-        d3.max<Overview, number>(
-          points,
-          (d) => d.gain_amount + d.investment_amount
-        )
-      ]),
+      .domain([0, d3.max<Overview, number>(points, (d) => d.gain_amount + d.investment_amount)]),
     z = d3.scaleOrdinal<string>(colors).domain(areaKeys);
 
   const area = (y0, y1) =>
@@ -459,22 +392,13 @@ function renderOverviewSmall(
   g.append("g")
     .attr("class", "axis y")
     .attr("transform", `translate(${width},0)`)
-    .call(
-      d3.axisRight(y).ticks(5).tickPadding(5).tickFormat(formatCurrencyCrude)
-    );
+    .call(d3.axisRight(y).ticks(5).tickPadding(5).tickFormat(formatCurrencyCrude));
 
   g.append("g")
     .attr("class", "axis y")
-    .call(
-      d3.axisLeft(y).ticks(5).tickSize(-width).tickFormat(formatCurrencyCrude)
-    );
+    .call(d3.axisLeft(y).ticks(5).tickSize(-width).tickFormat(formatCurrencyCrude));
 
-  const layer = g
-    .selectAll(".layer")
-    .data([points])
-    .enter()
-    .append("g")
-    .attr("class", "layer");
+  const layer = g.selectAll(".layer").data([points]).enter().append("g").attr("class", "layer");
 
   const clipAboveID = _.uniqueId("clip-above");
   layer
@@ -502,10 +426,7 @@ function renderOverviewSmall(
 
   layer
     .append("path")
-    .attr(
-      "clip-path",
-      `url(${new URL("#" + clipAboveID, window.location.toString())})`
-    )
+    .attr("clip-path", `url(${new URL("#" + clipAboveID, window.location.toString())})`)
     .style("fill", z("gain"))
     .style("opacity", "0.8")
     .attr(
@@ -517,10 +438,7 @@ function renderOverviewSmall(
 
   layer
     .append("path")
-    .attr(
-      "clip-path",
-      `url(${new URL("#" + clipBelowID, window.location.toString())})`
-    )
+    .attr("clip-path", `url(${new URL("#" + clipBelowID, window.location.toString())})`)
     .style("fill", z("loss"))
     .style("opacity", "0.8")
     .attr(
@@ -571,12 +489,9 @@ function renderOverviewSmall(
     );
 }
 
-function renderLegend() {
+export function renderLegend() {
   const svg = d3.select("#d3-gain-legend");
-  svg
-    .append("g")
-    .attr("class", "legendOrdinal")
-    .attr("transform", "translate(280,3)");
+  svg.append("g").attr("class", "legendOrdinal").attr("transform", "translate(280,3)");
 
   const legendOrdinal = legend
     .legendColor()
@@ -588,10 +503,7 @@ function renderLegend() {
 
   svg.select(".legendOrdinal").call(legendOrdinal as any);
 
-  svg
-    .append("g")
-    .attr("class", "legendLine")
-    .attr("transform", "translate(30,3)");
+  svg.append("g").attr("class", "legendLine").attr("transform", "translate(30,3)");
 
   const legendLine = legend
     .legendColor()

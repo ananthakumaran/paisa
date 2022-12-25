@@ -1,15 +1,7 @@
 import * as d3 from "d3";
-import dayjs from "dayjs";
-import _ from "lodash";
-import { ajax, Price, formatCurrency } from "./utils";
+import { type Price, formatCurrency } from "./utils";
 
-export default async function () {
-  const { prices: prices } = await ajax("/api/price");
-  _.each(prices, (p) => (p.timestamp = dayjs(p.date)));
-  renderPrices(prices);
-}
-
-function renderPrices(prices: Price[]) {
+export function renderPrices(prices: Price[]) {
   const tbody = d3.select(".d3-prices");
   const trs = tbody.selectAll("tr").data(prices);
 

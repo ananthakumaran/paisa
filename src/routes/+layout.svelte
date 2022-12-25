@@ -30,20 +30,57 @@
         class:is-active={$page.url.pathname === "/expense"}>Expense</a
       >
       <div class="navbar-item has-dropdown is-hoverable">
-        <a class="navbar-link">Assets</a>
+        <a class="navbar-link" class:is-active={$page.url.pathname.startsWith("/assets/")}>Assets</a
+        >
         <div class="navbar-dropdown">
-          <a id="investment" class="navbar-item">Investment</a>
-          <a id="gain" class="navbar-item">Gain</a>
-          <a id="allocation" class="navbar-item">Allocation</a>
+          <a
+            id="investment"
+            class="navbar-item"
+            href="/assets/investment"
+            class:is-active={$page.url.pathname === "/assets/investment"}>Investment</a
+          >
+          <a
+            id="gain"
+            class="navbar-item"
+            href="/assets/gain"
+            class:is-active={$page.url.pathname === "/assets/gain"}>Gain</a
+          >
+          <a
+            id="allocation"
+            class="navbar-item"
+            href="/assets/allocation"
+            class:is-active={$page.url.pathname === "/assets/allocation"}>Allocation</a
+          >
         </div>
       </div>
-      <a id="income" class="navbar-item">Income</a>
+      <a
+        id="income"
+        class="navbar-item"
+        href="/income"
+        class:is-active={$page.url.pathname === "/income"}>Income</a
+      >
       <div class="navbar-item has-dropdown is-hoverable">
-        <a class="navbar-link">Ledger</a>
+        <a class="navbar-link" class:is-active={$page.url.pathname.startsWith("/ledger/")}>Ledger</a
+        >
         <div class="navbar-dropdown">
-          <a id="holding" class="navbar-item">Holding</a>
-          <a id="journal" class="navbar-item">Journal</a>
-          <a id="price" class="navbar-item">Price</a>
+          <a
+            id="holding"
+            class="navbar-item"
+            href="/ledger/holding"
+            class:is-active={$page.url.pathname === "/ledger/holding"}>Holding</a
+          >
+          <a
+            id="journal"
+            class="navbar-item"
+            href="/ledger/journal"
+            class:is-active={$page.url.pathname === "/ledger/journal"}>Journal</a
+          >
+          <a
+            id="price"
+            class="navbar-item"
+            href="/ledger/price"
+            class:is-active={$page.url.pathname === "/ledger/price"}>Price</a
+          >
         </div>
       </div>
       <div class="navbar-item has-dropdown is-hoverable">

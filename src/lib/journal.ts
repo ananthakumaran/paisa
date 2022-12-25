@@ -1,26 +1,9 @@
-import * as d3 from "d3";
 import dayjs from "dayjs";
 import _ from "lodash";
 import Clusturize from "clusterize.js";
-import { ajax, formatCurrency, formatFloat, Posting } from "./utils";
+import { formatCurrency, formatFloat, type Posting } from "./utils";
 
-export default async function () {
-  const { postings: postings } = await ajax("/api/ledger");
-  _.each(postings, (p) => (p.timestamp = dayjs(p.date)));
-
-  const { rows, clusterTable } = renderTransactions(postings);
-
-  d3.select("input.d3-posting-filter").on(
-    "input",
-    _.debounce((event) => {
-      const text = event.srcElement.value;
-      const filtered = filterTransactions(rows, text);
-      clusterTable.update(_.map(filtered, (r) => r.markup));
-    }, 100)
-  );
-}
-
-function renderTransactions(postings: Posting[]) {
+export function renderTransactions(postings: Posting[]) {
   const rows = _.map(postings, (p) => {
     const purchase = formatCurrency(p.amount);
     const date = p.timestamp.format("DD MMM YYYY");
@@ -44,9 +27,7 @@ function renderTransactions(postings: Posting[]) {
           changeClass = "has-text-danger";
         }
         const perYear = 365 / days;
-        changePercentage = formatFloat(
-          (changeAmount / p.amount) * 100 * perYear
-        );
+        changePercentage = formatFloat((changeAmount / p.amount) * 100 * perYear);
         change = formatCurrency(changeAmount);
       }
     }
@@ -80,7 +61,7 @@ function renderTransactions(postings: Posting[]) {
   return { rows, clusterTable };
 }
 
-function filterTransactions(
+export function filterTransactions(
   rows: { date: string; posting: Posting; markup: string }[],
   filter: string
 ) {

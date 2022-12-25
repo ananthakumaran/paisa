@@ -3,40 +3,23 @@ import legend from "d3-svg-legend";
 import dayjs from "dayjs";
 import _ from "lodash";
 import {
-  ajax,
   forEachMonth,
   formatCurrency,
   formatCurrencyCrude,
   formatFloat,
   generateColorScheme,
-  Posting,
+  type Posting,
   secondName,
   skipTicks,
   tooltip,
-  YearlyCard
+  type YearlyCard
 } from "./utils";
 
-export default async function () {
-  const { assets: assets, yearly_cards: yearlyCards } = await ajax(
-    "/api/investment"
-  );
-  _.each(assets, (p) => (p.timestamp = dayjs(p.date)));
-  _.each(yearlyCards, (c) => {
-    c.start_date_timestamp = dayjs(c.start_date);
-    c.end_date_timestamp = dayjs(c.end_date);
-  });
-  renderMonthlyInvestmentTimeline(assets);
-  renderYearlyInvestmentTimeline(yearlyCards);
-  renderYearlyCards(yearlyCards);
-}
-
 function financialYear(card: YearlyCard) {
-  return `${card.start_date_timestamp.format(
-    "YYYY"
-  )}-${card.end_date_timestamp.format("YYYY")}`;
+  return `${card.start_date_timestamp.format("YYYY")}-${card.end_date_timestamp.format("YYYY")}`;
 }
 
-function renderMonthlyInvestmentTimeline(postings: Posting[]) {
+export function renderMonthlyInvestmentTimeline(postings: Posting[]) {
   const id = "#d3-investment-timeline";
   const timeFormat = "MMM-YYYY";
   const MAX_BAR_WIDTH = 40;
@@ -47,9 +30,7 @@ function renderMonthlyInvestmentTimeline(postings: Posting[]) {
       margin.left -
       margin.right,
     height = +svg.attr("height") - margin.top - margin.bottom,
-    g = svg
-      .append("g")
-      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
   const groups = _.chain(postings)
     .map((p) => secondName(p.account))
@@ -187,8 +168,7 @@ function renderMonthlyInvestmentTimeline(postings: Posting[]) {
     })
     .attr("x", function (d) {
       return (
-        x((d.data as any).month) +
-        (x.bandwidth() - Math.min(x.bandwidth(), MAX_BAR_WIDTH)) / 2
+        x((d.data as any).month) + (x.bandwidth() - Math.min(x.bandwidth(), MAX_BAR_WIDTH)) / 2
       );
     })
     .attr("y", function (d) {
@@ -199,10 +179,7 @@ function renderMonthlyInvestmentTimeline(postings: Posting[]) {
     })
     .attr("width", Math.min(x.bandwidth(), MAX_BAR_WIDTH));
 
-  svg
-    .append("g")
-    .attr("class", "legendOrdinal")
-    .attr("transform", "translate(40,0)");
+  svg.append("g").attr("class", "legendOrdinal").attr("transform", "translate(40,0)");
 
   const legendOrdinal = legend
     .legendColor()
@@ -215,7 +192,7 @@ function renderMonthlyInvestmentTimeline(postings: Posting[]) {
   svg.select(".legendOrdinal").call(legendOrdinal as any);
 }
 
-function renderYearlyInvestmentTimeline(yearlyCards: YearlyCard[]) {
+export function renderYearlyInvestmentTimeline(yearlyCards: YearlyCard[]) {
   const id = "#d3-yearly-investment-timeline";
   const BAR_HEIGHT = 20;
   const svg = d3.select(id),
@@ -224,9 +201,7 @@ function renderYearlyInvestmentTimeline(yearlyCards: YearlyCard[]) {
       document.getElementById(id.substring(1)).parentElement.clientWidth -
       margin.left -
       margin.right,
-    g = svg
-      .append("g")
-      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
   const groups = _.chain(yearlyCards)
     .flatMap((c) => c.postings)
@@ -351,10 +326,7 @@ function renderYearlyInvestmentTimeline(yearlyCards: YearlyCard[]) {
             return [
               [
                 k.replace("-credit", "").replace("-debit", ""),
-                [
-                  formatCurrency(d.data[k]),
-                  "has-text-weight-bold has-text-right"
-                ]
+                [formatCurrency(d.data[k]), "has-text-weight-bold has-text-right"]
               ]
             ];
           }),
@@ -366,20 +338,14 @@ function renderYearlyInvestmentTimeline(yearlyCards: YearlyCard[]) {
       return x(d[0]);
     })
     .attr("y", function (d) {
-      return (
-        y((d.data as any).year) +
-        (y.bandwidth() - Math.min(y.bandwidth(), BAR_HEIGHT)) / 2
-      );
+      return y((d.data as any).year) + (y.bandwidth() - Math.min(y.bandwidth(), BAR_HEIGHT)) / 2;
     })
     .attr("width", function (d) {
       return x(d[1]) - x(d[0]);
     })
     .attr("height", y.bandwidth());
 
-  svg
-    .append("g")
-    .attr("class", "legendOrdinal")
-    .attr("transform", "translate(40,0)");
+  svg.append("g").attr("class", "legendOrdinal").attr("transform", "translate(40,0)");
 
   const legendOrdinal = legend
     .legendColor()
@@ -392,7 +358,7 @@ function renderYearlyInvestmentTimeline(yearlyCards: YearlyCard[]) {
   svg.select(".legendOrdinal").call(legendOrdinal as any);
 }
 
-function renderYearlyCards(yearlyCards: YearlyCard[]) {
+export function renderYearlyCards(yearlyCards: YearlyCard[]) {
   const id = "#d3-yearly-investment-cards";
   const root = d3.select(id);
 
@@ -435,27 +401,19 @@ function renderYearlyCards(yearlyCards: YearlyCard[]) {
     </tr>
     <tr>
       <td>Tax</td>
-      <td class='has-text-right has-text-weight-bold'>${formatCurrency(
-        card.net_tax
-      )}</td>
+      <td class='has-text-right has-text-weight-bold'>${formatCurrency(card.net_tax)}</td>
     </tr>
     <tr>
       <td>Net Income</td>
-      <td class='has-text-right has-text-weight-bold'>${formatCurrency(
-        card.net_income
-      )}</td>
+      <td class='has-text-right has-text-weight-bold'>${formatCurrency(card.net_income)}</td>
     </tr>
     <tr>
       <td>Net Expense</td>
-      <td class='has-text-right has-text-weight-bold'>${formatCurrency(
-        card.net_expense
-      )}</td>
+      <td class='has-text-right has-text-weight-bold'>${formatCurrency(card.net_expense)}</td>
     </tr>
     <tr>
       <td>Investment</td>
-      <td class='has-text-right has-text-weight-bold'>${formatCurrency(
-        card.net_investment
-      )}</td>
+      <td class='has-text-right has-text-weight-bold'>${formatCurrency(card.net_investment)}</td>
     </tr>
     <tr>
       <td>Savings Rate</td>

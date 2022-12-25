@@ -4,9 +4,9 @@ import legend from "d3-svg-legend";
 import dayjs from "dayjs";
 import _ from "lodash";
 import {
-  Aggregate,
+  type Aggregate,
   ajax,
-  AllocationTarget,
+  type AllocationTarget,
   formatCurrency,
   formatFloat,
   lastName,
@@ -38,7 +38,7 @@ export default async function () {
   renderAllocationTimeline(aggregatesTimeline);
 }
 
-function renderAllocationTarget(
+export function renderAllocationTarget(
   allocationTargets: AllocationTarget[],
   color: d3.ScaleOrdinal<string, string>
 ) {
@@ -52,13 +52,10 @@ function renderAllocationTarget(
   const BAR_HEIGHT = 25;
   const svg = d3.select(id),
     margin = { top: 20, right: 0, bottom: 10, left: 150 },
-    fullWidth = document.getElementById(id.substring(1)).parentElement
-      .clientWidth,
+    fullWidth = document.getElementById(id.substring(1)).parentElement.clientWidth,
     width = fullWidth - margin.left - margin.right,
     height = allocationTargets.length * BAR_HEIGHT * 2,
-    g = svg
-      .append("g")
-      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
   svg.attr("height", height + margin.top + margin.bottom);
 
   const keys = ["target", "current"];
@@ -92,9 +89,7 @@ function renderAllocationTarget(
   const textGroupMargin = 20;
   const textGroupZero = targetWidth + targetMargin;
 
-  const x = d3
-    .scaleLinear()
-    .range([textGroupZero + textGroupWidth + textGroupMargin, width]);
+  const x = d3.scaleLinear().range([textGroupZero + textGroupWidth + textGroupMargin, width]);
   x.domain([0, maxX]);
   const x1 = d3.scaleLinear().range([0, targetWidth]).domain([0, maxX]);
 
@@ -229,13 +224,13 @@ function renderAllocationTarget(
     .style("width", x.range()[1] - x.range()[0] + "px")
     .append("div")
     .style("position", "relative")
-    .attr("height", y1.bandwidth() * 2)
+    .style("height", y1.bandwidth() * 2 + "px")
     .each(function (t) {
       renderPartition(this, t.aggregates, d3.treemap(), color);
     });
 }
 
-function renderAllocation(
+export function renderAllocation(
   aggregates: { [key: string]: Aggregate },
   color: d3.ScaleOrdinal<string, string>
 ) {
@@ -245,12 +240,7 @@ function renderAllocation(
     d3.partition(),
     color
   );
-  renderPartition(
-    document.getElementById("d3-allocation-value"),
-    aggregates,
-    d3.treemap(),
-    color
-  );
+  renderPartition(document.getElementById("d3-allocation-value"), aggregates, d3.treemap(), color);
 }
 
 function renderPartition(
@@ -266,7 +256,7 @@ function renderPartition(
   const div = d3.select(element),
     margin = { top: 0, right: 0, bottom: 0, left: 20 },
     width = element.parentElement.clientWidth - margin.left - margin.right,
-    height = +div.attr("height") - margin.top - margin.bottom;
+    height = +div.style("height").replace("px", "") - margin.top - margin.bottom;
 
   const percent = (d) => {
     return formatFloat((d.value / root.value) * 100) + "%";
@@ -296,10 +286,7 @@ function renderPartition(
     .attr("data-tippy-content", (d) => {
       return tooltip([
         ["Account", [d.id, "has-text-right"]],
-        [
-          "MarketAmount",
-          [formatCurrency(d.value), "has-text-weight-bold has-text-right"]
-        ],
+        ["MarketAmount", [formatCurrency(d.value), "has-text-weight-bold has-text-right"]],
         ["Percentage", [percent(d), "has-text-weight-bold has-text-right"]]
       ]);
     })
@@ -322,9 +309,7 @@ function renderPartition(
     .text(percent);
 }
 
-function renderAllocationTimeline(
-  aggregatesTimeline: { [key: string]: Aggregate }[]
-) {
+export function renderAllocationTimeline(aggregatesTimeline: { [key: string]: Aggregate }[]) {
   const timeline = _.map(aggregatesTimeline, (aggregates) => {
     return _.chain(aggregates)
       .values()
@@ -364,10 +349,7 @@ function renderAllocationTimeline(
     if (total == 0) {
       return;
     }
-    const kvs = _.map(aggregates, (a) => [
-      a.account,
-      (a.market_amount / total) * 100
-    ]);
+    const kvs = _.map(aggregates, (a) => [a.account, (a.market_amount / total) * 100]);
     points.push(
       _.merge(
         {
@@ -382,23 +364,17 @@ function renderAllocationTimeline(
   const svg = d3.select("#d3-allocation-timeline"),
     margin = { top: 40, right: 60, bottom: 20, left: 35 },
     width =
-      document.getElementById("d3-allocation-timeline").parentElement
-        .clientWidth -
+      document.getElementById("d3-allocation-timeline").parentElement.clientWidth -
       margin.left -
       margin.right,
     height = +svg.attr("height") - margin.top - margin.bottom,
-    g = svg
-      .append("g")
-      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
   const x = d3.scaleTime().range([0, width]).domain([start, end]),
     y = d3
       .scaleLinear()
       .range([height, 0])
-      .domain([
-        0,
-        d3.max(d3.map(points, (p) => d3.max(_.values(_.omit(p, "date")))))
-      ]),
+      .domain([0, d3.max(d3.map(points, (p) => d3.max(_.values(_.omit(p, "date")))))]),
     z = generateColorScheme(assets);
 
   const line = (group) =>
@@ -427,12 +403,7 @@ function renderAllocationTimeline(
     .attr("transform", `translate(${width},0)`)
     .call(d3.axisRight(y).tickFormat((y) => `${y}%`));
 
-  const layer = g
-    .selectAll(".layer")
-    .data(assets)
-    .enter()
-    .append("g")
-    .attr("class", "layer");
+  const layer = g.selectAll(".layer").data(assets).enter().append("g").attr("class", "layer");
 
   layer
     .append("path")
@@ -441,10 +412,7 @@ function renderAllocationTimeline(
     .attr("stroke-width", "2")
     .attr("d", (group) => line(group)(points));
 
-  svg
-    .append("g")
-    .attr("class", "legendOrdinal")
-    .attr("transform", "translate(40,0)");
+  svg.append("g").attr("class", "legendOrdinal").attr("transform", "translate(40,0)");
 
   const legendOrdinal = legend
     .legendColor()

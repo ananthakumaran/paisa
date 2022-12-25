@@ -1,47 +1,22 @@
 import * as d3 from "d3";
 import legend from "d3-svg-legend";
-import dayjs from "dayjs";
 import _ from "lodash";
-import COLORS from "./colors";
 import {
-  ajax,
   formatCurrency,
   formatCurrencyCrude,
   generateColorScheme,
-  Income,
-  Posting,
+  type Income,
+  type Posting,
   restName,
-  setHtml,
   skipTicks,
   tooltip
 } from "./utils";
 
-export default async function () {
-  const { income_timeline: incomes, tax_timeline: taxes } = await ajax(
-    "/api/income"
-  );
-  _.each(incomes, (i) => (i.timestamp = dayjs(i.date)));
-  renderMonthlyInvestmentTimeline(incomes);
-
-  const grossIncome = _.sumBy(incomes, (i) =>
-    _.sumBy(i.postings, (p) => -p.amount)
-  );
-
-  const netTax = _.sumBy(taxes, (t) => _.sumBy(t.postings, (p) => p.amount));
-
-  setHtml("gross-income", formatCurrency(grossIncome), COLORS.gainText);
-  setHtml("net-tax", formatCurrency(netTax), COLORS.lossText);
-}
-
-function renderMonthlyInvestmentTimeline(incomes: Income[]) {
+export function renderMonthlyInvestmentTimeline(incomes: Income[]) {
   renderIncomeTimeline(incomes, "#d3-income-timeline", "MMM-YYYY");
 }
 
-function renderIncomeTimeline(
-  incomes: Income[],
-  id: string,
-  timeFormat: string
-) {
+function renderIncomeTimeline(incomes: Income[], id: string, timeFormat: string) {
   const MAX_BAR_WIDTH = 40;
   const svg = d3.select(id),
     margin = { top: 60, right: 30, bottom: 80, left: 40 },
@@ -50,9 +25,7 @@ function renderIncomeTimeline(
       margin.left -
       margin.right,
     height = +svg.attr("height") - margin.top - margin.bottom,
-    g = svg
-      .append("g")
-      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
   const postings = _.flatMap(incomes, (i) => i.postings);
   const groupKeys = _.chain(postings)
@@ -175,8 +148,7 @@ function renderIncomeTimeline(
     })
     .attr("x", function (d) {
       return (
-        x((d.data as any).month) +
-        (x.bandwidth() - Math.min(x.bandwidth(), MAX_BAR_WIDTH)) / 2
+        x((d.data as any).month) + (x.bandwidth() - Math.min(x.bandwidth(), MAX_BAR_WIDTH)) / 2
       );
     })
     .attr("y", function (d) {

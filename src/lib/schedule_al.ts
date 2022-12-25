@@ -1,17 +1,7 @@
 import * as d3 from "d3";
-import dayjs from "dayjs";
-import { ajax, formatCurrency, ScheduleALEntry, setHtml } from "./utils";
+import { formatCurrency, type ScheduleALEntry } from "./utils";
 
-export default async function () {
-  const { schedule_al_entries: scheduleALEntries, date: date } = await ajax(
-    "/api/schedule_al"
-  );
-
-  setHtml("schedule-al-date", dayjs(date).format("DD MMM YYYY"));
-  renderBreakdowns(scheduleALEntries);
-}
-
-function renderBreakdowns(scheduleALEntries: ScheduleALEntry[]) {
+export function renderBreakdowns(scheduleALEntries: ScheduleALEntry[]) {
   const tbody = d3.select(".d3-schedule-al");
   const trs = tbody.selectAll("tr").data(Object.values(scheduleALEntries));
 

@@ -55,7 +55,12 @@
             href="/tax/harvest"
             class:is-active={$page.url.pathname === "/tax/harvest"}>Harvest</a
           >
-          <a id="schedule_al" class="navbar-item">Schedule AL</a>
+          <a
+            id="schedule_al"
+            class="navbar-item"
+            href="/tax/schedule_al"
+            class:is-active={$page.url.pathname === "/tax/schedule_al"}>Schedule AL</a
+          >
         </div>
       </div>
       <a

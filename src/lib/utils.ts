@@ -426,7 +426,25 @@ export function textColor(backgroundColor: string) {
   return "white";
 }
 
-export function tooltip(rows: Array<Array<string | [string, string]>>) {
+export function tooltip(
+  rows: Array<Array<string | string[]>>,
+  options: {
+    total?: string;
+  } = {}
+) {
+  if (options.total && rows.length > 0) {
+    const totalRow: Array<string | string[]> = [
+      ["Total", "has-text-weight-bold"],
+      [options.total, "has-text-weight-bold has-text-right"]
+    ];
+
+    for (let i = 2; i < rows[0].length; i++) {
+      totalRow.unshift("");
+    }
+
+    rows.push(totalRow);
+  }
+
   const trs = rows
     .map((r) => {
       const cells = r

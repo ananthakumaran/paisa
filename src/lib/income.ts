@@ -137,6 +137,7 @@ function renderIncomeTimeline(incomes: Income[], id: string, timeFormat: string)
     .append("rect")
     .attr("data-tippy-content", (d) => {
       const postings: Posting[] = (d.data as any).postings;
+      const total = _.sumBy(postings, (p) => -p.amount);
       return tooltip(
         _.sortBy(
           postings.map((p) => [
@@ -144,7 +145,8 @@ function renderIncomeTimeline(incomes: Income[], id: string, timeFormat: string)
             [formatCurrency(-p.amount), "has-text-weight-bold has-text-right"]
           ]),
           (r) => r[0]
-        )
+        ),
+        { total: formatCurrency(total) }
       );
     })
     .attr("x", function (d) {

@@ -32,7 +32,7 @@ export function renderCalendar(
   const weekStart = monthStart.startOf("week");
   const weekEnd = monthEnd.endOf("week");
 
-  const expensesByDay = {};
+  const expensesByDay: Record<string, Posting[]> = {};
   const days: Dayjs[] = [];
   let d = weekStart;
   while (d.isSameOrBefore(weekEnd)) {
@@ -53,6 +53,7 @@ export function renderCalendar(
     if (_.isEmpty(es)) {
       return null;
     }
+    const total = _.sumBy(es, (p) => p.amount);
     return tooltip(
       es.map((p) => {
         return [
@@ -60,7 +61,8 @@ export function renderCalendar(
           [p.payee, "is-clipped"],
           [formatCurrency(p.amount), "has-text-weight-bold has-text-right"]
         ];
-      })
+      }),
+      { total: formatCurrency(total) }
     );
   };
 
@@ -226,14 +228,17 @@ export function renderMonthlyExpensesTimeline(
 
   const tooltipContent = (allowedGroups: string[]) => {
     return (d) => {
+      let grandTotal = 0;
       return tooltip(
         _.flatMap(allowedGroups, (key) => {
           const total = (d.data as any)[key];
           if (total > 0) {
+            grandTotal += total;
             return [[key, [formatCurrency(total), "has-text-weight-bold has-text-right"]]];
           }
           return [];
-        })
+        }),
+        { total: formatCurrency(grandTotal) }
       );
     };
   };
@@ -444,6 +449,7 @@ export function renderCurrentExpensesBreakdown(z: d3.ScaleOrdinal<string, string
     yAxis.transition(t).call(d3.axisLeft(y));
 
     const tooltipContent = (d: Point) => {
+      const total = _.sumBy(d.postings, (p) => p.amount);
       return tooltip(
         d.postings.map((p) => {
           return [
@@ -451,7 +457,8 @@ export function renderCurrentExpensesBreakdown(z: d3.ScaleOrdinal<string, string
             [p.payee, "is-clipped"],
             [formatCurrency(p.amount), "has-text-weight-bold has-text-right"]
           ];
-        })
+        }),
+        { total: formatCurrency(total) }
       );
     };
 

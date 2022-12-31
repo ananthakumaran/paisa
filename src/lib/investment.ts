@@ -156,6 +156,7 @@ export function renderMonthlyInvestmentTimeline(postings: Posting[]) {
     .append("rect")
     .attr("data-tippy-content", (d) => {
       const postings: Posting[] = (d.data as any).postings;
+      const total = _.sumBy(postings, (p) => p.amount);
       return tooltip(
         _.sortBy(
           postings.map((p) => [
@@ -163,7 +164,8 @@ export function renderMonthlyInvestmentTimeline(postings: Posting[]) {
             [formatCurrency(p.amount), "has-text-weight-bold has-text-right"]
           ]),
           (r) => r[0]
-        )
+        ),
+        { total: formatCurrency(total) }
       );
     })
     .attr("x", function (d) {
@@ -316,6 +318,7 @@ export function renderYearlyInvestmentTimeline(yearlyCards: YearlyCard[]) {
     .enter()
     .append("rect")
     .attr("data-tippy-content", (d) => {
+      let grandTotal = 0;
       return tooltip(
         _.sortBy(
           groupKeys.flatMap((k) => {
@@ -323,15 +326,17 @@ export function renderYearlyInvestmentTimeline(yearlyCards: YearlyCard[]) {
             if (total == 0) {
               return [];
             }
+            grandTotal += total;
             return [
               [
                 k.replace("-credit", "").replace("-debit", ""),
-                [formatCurrency(d.data[k]), "has-text-weight-bold has-text-right"]
+                [formatCurrency(total), "has-text-weight-bold has-text-right"]
               ]
             ];
           }),
           (r) => r[0]
-        )
+        ),
+        { total: formatCurrency(grandTotal) }
       );
     })
     .attr("x", function (d) {

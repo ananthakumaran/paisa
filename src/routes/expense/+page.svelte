@@ -21,7 +21,7 @@
     grouped_incomes,
     grouped_investments,
     grouped_taxes,
-    min;
+    min: string;
 
   $: if (grouped_expenses) {
     renderCalendar($month, grouped_expenses[$month], z, $groups);

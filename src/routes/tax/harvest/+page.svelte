@@ -4,8 +4,8 @@
   import { onMount } from "svelte";
 
   onMount(async () => {
-    const { capital_gains: capital_gains } = await ajax("/api/harvest");
-    renderHarvestables(capital_gains);
+    const { harvestables: harvestables } = await ajax("/api/harvest");
+    renderHarvestables(Object.values(harvestables));
   });
 </script>
 

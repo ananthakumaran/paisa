@@ -14,13 +14,6 @@ import (
 	"gorm.io/gorm"
 )
 
-type FYCapitalGain struct {
-	Gain          float64 `json:"gain"`
-	Units         float64 `json:"units"`
-	PurchasePrice float64 `json:"purchase_price"`
-	SellPrice     float64 `json:"sell_price"`
-}
-
 type HarvestBreakdown struct {
 	Units                 float64   `json:"units"`
 	PurchaseDate          time.Time `json:"purchase_date"`
@@ -32,6 +25,8 @@ type HarvestBreakdown struct {
 }
 
 type Harvestable struct {
+	Account               string             `json:"account"`
+	TaxCategory           string             `json:"tax_category"`
 	TotalUnits            float64            `json:"total_units"`
 	HarvestableUnits      float64            `json:"harvestable_units"`
 	UnrealizedGain        float64            `json:"unrealized_gain"`
@@ -40,13 +35,6 @@ type Harvestable struct {
 	CurrentUnitPrice      float64            `json:"current_unit_price"`
 	GrandfatherUnitPrice  float64            `json:"grandfather_unit_price"`
 	CurrentUnitDate       time.Time          `json:"current_unit_date"`
-}
-
-type CapitalGain struct {
-	Account     string                   `json:"account"`
-	TaxCategory string                   `json:"tax_category"`
-	FY          map[string]FYCapitalGain `json:"fy"`
-	Harvestable Harvestable              `json:"harvestable"`
 }
 
 var EQUITY_GRANDFATHER_DATE, _ = time.Parse("2006-01-02", "2018-02-01")
@@ -58,41 +46,30 @@ func GetHarvest(db *gorm.DB) gin.H {
 	})
 	postings := query.Init(db).Like("Assets:%").Commodities(lo.Map(commodities, func(c c.Commodity, _ int) string { return c.Name })).All()
 	byAccount := lo.GroupBy(postings, func(p posting.Posting) string { return p.Account })
-	capitalGains := lo.MapValues(byAccount, func(postings []posting.Posting, account string) CapitalGain {
-		return computeCapitalGains(db, account, c.FindByName(postings[0].Commodity), postings)
+	harvestables := lo.MapValues(byAccount, func(postings []posting.Posting, account string) Harvestable {
+		return computeHarvestable(db, account, c.FindByName(postings[0].Commodity), postings)
 	})
-	return gin.H{"capital_gains": capitalGains}
+	return gin.H{"harvestables": harvestables}
 }
 
-func computeCapitalGains(db *gorm.DB, account string, commodity c.Commodity, postings []posting.Posting) CapitalGain {
-	capitalGain := CapitalGain{Account: account, TaxCategory: string(commodity.TaxCategory), FY: make(map[string]FYCapitalGain)}
+func computeHarvestable(db *gorm.DB, account string, commodity c.Commodity, postings []posting.Posting) Harvestable {
 	var available []posting.Posting
 	for _, p := range postings {
 		if p.Quantity > 0 {
 			available = append(available, p)
 		} else {
 			quantity := -p.Quantity
-			purchasePrice := 0.0
 			for quantity > 0 && len(available) > 0 {
 				first := available[0]
 				if first.Quantity > quantity {
-					purchasePrice += quantity * first.Price()
 					first.AddQuantity(-quantity)
 					available[0] = first
 					quantity = 0
 				} else {
-					purchasePrice += quantity * first.Price()
 					quantity -= first.Quantity
 					available = available[1:]
 				}
 			}
-			fy := utils.FY(p.Date)
-			fyCapitalGain := capitalGain.FY[fy]
-			fyCapitalGain.Gain += (-p.Amount - purchasePrice)
-			fyCapitalGain.Units += -p.Quantity
-			fyCapitalGain.PurchasePrice += purchasePrice
-			fyCapitalGain.SellPrice += -p.Amount
-			capitalGain.FY[fy] = fyCapitalGain
 
 		}
 	}
@@ -111,7 +88,7 @@ func computeCapitalGains(db *gorm.DB, account string, commodity c.Commodity, pos
 
 	}
 
-	harvestable := Harvestable{HarvestBreakdown: []HarvestBreakdown{}, CurrentUnitPrice: currentPrice.Value, CurrentUnitDate: currentPrice.Date, GrandfatherUnitPrice: grandfatherUnitPrice}
+	harvestable := Harvestable{Account: account, TaxCategory: string(commodity.TaxCategory), HarvestBreakdown: []HarvestBreakdown{}, CurrentUnitPrice: currentPrice.Value, CurrentUnitDate: currentPrice.Date, GrandfatherUnitPrice: grandfatherUnitPrice}
 	cutoff := time.Now().AddDate(0, 0, -commodity.Harvest)
 	for _, p := range available {
 		harvestable.TotalUnits += p.Quantity
@@ -139,6 +116,5 @@ func computeCapitalGains(db *gorm.DB, account string, commodity c.Commodity, pos
 			})
 		}
 	}
-	capitalGain.Harvestable = harvestable
-	return capitalGain
+	return harvestable
 }

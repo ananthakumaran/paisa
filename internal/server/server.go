@@ -43,6 +43,11 @@ func Listen(db *gorm.DB) {
 	router.GET("/api/harvest", func(c *gin.Context) {
 		c.JSON(200, GetHarvest(db))
 	})
+
+	router.GET("/api/capital_gains", func(c *gin.Context) {
+		c.JSON(200, GetCapitalGains(db))
+	})
+
 	router.GET("/api/schedule_al", func(c *gin.Context) {
 		c.JSON(200, GetScheduleAL(db))
 	})

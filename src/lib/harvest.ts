@@ -2,15 +2,15 @@ import * as d3 from "d3";
 import dayjs from "dayjs";
 import _, { round } from "lodash";
 import COLORS from "./colors";
-import { type CapitalGain, formatCurrency, formatFloat, restName, tooltip } from "./utils";
+import { formatCurrency, formatFloat, restName, tooltip, type Harvestable } from "./utils";
 
-export function renderHarvestables(capital_gains: CapitalGain[]) {
+export function renderHarvestables(harvestables: Harvestable[]) {
   const id = "#d3-harvestables";
   const root = d3.select(id);
 
   const card = root
     .selectAll("div.column")
-    .data(_.filter(capital_gains, (cg) => cg.harvestable.harvestable_units > 0))
+    .data(_.filter(harvestables, (harvestable) => harvestable.harvestable_units > 0))
     .enter()
     .append("div")
     .attr("class", "column is-12")
@@ -22,7 +22,7 @@ export function renderHarvestables(capital_gains: CapitalGain[]) {
   header
     .append("p")
     .attr("class", "card-header-title")
-    .text((cg) => restName(cg.account));
+    .text((h) => restName(h.account));
 
   header
     .append("div")
@@ -30,9 +30,9 @@ export function renderHarvestables(capital_gains: CapitalGain[]) {
     .style("flex-grow", "1")
     .style("cursor", "auto")
     .append("div")
-    .each(function (cg) {
+    .each(function (h) {
       const self = d3.select(this);
-      const [units, amount, taxableGain] = unitsRequiredFromGain(cg, 100000);
+      const [units, amount, taxableGain] = unitsRequiredFromGain(h, 100000);
       self.append("span").html("If you redeem&nbsp;");
       const unitsSpan = self.append("span").text(formatFloat(units));
       self.append("span").html("&nbsp;units you will get ₹");
@@ -44,7 +44,7 @@ export function renderHarvestables(capital_gains: CapitalGain[]) {
         .attr("step", "1000")
         .on("input", (event) => {
           const [units, amount, taxableGain] = unitsRequiredFromAmount(
-            cg,
+            h,
             parseInt(event.srcElement.value)
           );
 
@@ -61,7 +61,7 @@ export function renderHarvestables(capital_gains: CapitalGain[]) {
         .attr("step", "1000")
         .on("input", (event) => {
           const [units, amount, taxableGain] = unitsRequiredFromGain(
-            cg,
+            h,
             parseInt(event.srcElement.value)
           );
           unitsSpan.text(formatFloat(units));
@@ -73,7 +73,9 @@ export function renderHarvestables(capital_gains: CapitalGain[]) {
   header
     .append("span")
     .attr("class", "card-header-icon")
-    .text((cg) => "price as on " + dayjs(cg.harvestable.current_unit_date).format("DD MMM YYYY"));
+    .text(
+      (harvestable) => "price as on " + dayjs(harvestable.current_unit_date).format("DD MMM YYYY")
+    );
 
   const content = card
     .append("div")
@@ -87,8 +89,7 @@ export function renderHarvestables(capital_gains: CapitalGain[]) {
 
   summary.append("div").each(renderSingleBar);
 
-  summary.append("div").html((cg) => {
-    const h = cg.harvestable;
+  summary.append("div").html((h) => {
     return `
 <table class="table is-narrow is-fullwidth">
   <tbody>
@@ -104,7 +105,7 @@ export function renderHarvestables(capital_gains: CapitalGain[]) {
     </tr>
     <tr>
       <td>Tax Category</td>
-      <td class='has-text-right is-uppercase'>${cg.tax_category}</td>
+      <td class='has-text-right is-uppercase'>${h.tax_category}</td>
     </tr>
     <tr>
       <td>Current Unit Price</td>
@@ -150,8 +151,8 @@ export function renderHarvestables(capital_gains: CapitalGain[]) {
   table
     .append("tbody")
     .selectAll("tr")
-    .data((cg) => {
-      return cg.harvestable.harvest_breakdown;
+    .data((harvestable) => {
+      return harvestable.harvest_breakdown;
     })
     .enter()
     .append("tr")
@@ -172,11 +173,14 @@ export function renderHarvestables(capital_gains: CapitalGain[]) {
     });
 }
 
-function unitsRequiredFromGain(cg: CapitalGain, taxableGain: number): [number, number, number] {
+function unitsRequiredFromGain(
+  harvestable: Harvestable,
+  taxableGain: number
+): [number, number, number] {
   let gain = 0;
   let amount = 0;
   let units = 0;
-  const available = _.clone(cg.harvestable.harvest_breakdown);
+  const available = _.clone(harvestable.harvest_breakdown);
   while (taxableGain > gain && available.length > 0) {
     const breakdown = available.shift();
     if (breakdown.taxable_unrealized_gain < taxableGain - gain) {
@@ -186,7 +190,7 @@ function unitsRequiredFromGain(cg: CapitalGain, taxableGain: number): [number, n
     } else {
       const u = ((taxableGain - gain) * breakdown.units) / breakdown.taxable_unrealized_gain;
       units += u;
-      amount += u * cg.harvestable.current_unit_price;
+      amount += u * harvestable.current_unit_price;
       gain = taxableGain;
     }
   }
@@ -194,13 +198,13 @@ function unitsRequiredFromGain(cg: CapitalGain, taxableGain: number): [number, n
 }
 
 function unitsRequiredFromAmount(
-  cg: CapitalGain,
+  harvestable: Harvestable,
   expectedAmount: number
 ): [number, number, number] {
   let gain = 0;
   let amount = 0;
   let units = 0;
-  const available = _.clone(cg.harvestable.harvest_breakdown);
+  const available = _.clone(harvestable.harvest_breakdown);
   while (expectedAmount > amount && available.length > 0) {
     const breakdown = available.shift();
     if (breakdown.current_price < expectedAmount - amount) {
@@ -208,7 +212,7 @@ function unitsRequiredFromAmount(
       units += breakdown.units;
       amount += breakdown.current_price;
     } else {
-      const u = (expectedAmount - amount) / cg.harvestable.current_unit_price;
+      const u = (expectedAmount - amount) / harvestable.current_unit_price;
       units += u;
       amount = expectedAmount;
       gain += u * (breakdown.taxable_unrealized_gain / breakdown.units);
@@ -217,10 +221,9 @@ function unitsRequiredFromAmount(
   return [units, amount, gain];
 }
 
-function renderSingleBar(cg: CapitalGain) {
+function renderSingleBar(harvestable: Harvestable) {
   const selection = d3.select(this);
   const svg = selection.append("svg");
-  const harvestable = cg.harvestable;
 
   const height = 20;
   const margin = { top: 20, right: 0, bottom: 20, left: 0 },

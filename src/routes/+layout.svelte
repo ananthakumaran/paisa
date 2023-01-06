@@ -126,6 +126,12 @@
             class:is-active={$page.url.pathname === "/tax/harvest"}>Harvest</a
           >
           <a
+            id="capital_gains"
+            class="navbar-item"
+            href="/tax/capital_gains"
+            class:is-active={$page.url.pathname === "/tax/capital_gains"}>Capital Gains</a
+          >
+          <a
             id="schedule_al"
             class="navbar-item"
             href="/tax/schedule_al"

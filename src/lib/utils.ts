@@ -98,6 +98,9 @@ export interface YearlyCard {
 
 export interface FYCapitalGain {
   gain: number;
+  taxable_gain: number;
+  short_term_tax: number;
+  long_term_tax: number;
   units: number;
   purchase_price: number;
   sell_price: number;
@@ -113,6 +116,8 @@ export interface HarvestBreakdown {
 }
 
 export interface Harvestable {
+  account: string;
+  tax_category: string;
   total_units: number;
   harvestable_units: number;
   unrealized_gain: number;
@@ -127,7 +132,6 @@ export interface CapitalGain {
   account: string;
   tax_category: string;
   fy: { [key: string]: FYCapitalGain };
-  harvestable: Harvestable;
 }
 
 export interface Issue {
@@ -148,7 +152,12 @@ export interface ScheduleALEntry {
   amount: number;
 }
 
-export function ajax(route: "/api/harvest"): Promise<{ capital_gains: CapitalGain[] }>;
+export function ajax(
+  route: "/api/harvest"
+): Promise<{ harvestables: Record<string, Harvestable[]> }>;
+export function ajax(
+  route: "/api/capital_gains"
+): Promise<{ capital_gains: Record<string, CapitalGain> }>;
 export function ajax(route: "/api/schedule_al"): Promise<{
   schedule_al_entries: ScheduleALEntry[];
   date: string;

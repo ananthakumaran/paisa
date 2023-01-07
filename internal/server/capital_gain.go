@@ -11,14 +11,24 @@ import (
 	"gorm.io/gorm"
 )
 
+type PostingPair struct {
+	Purchase     posting.Posting `json:"purchase"`
+	Sell         posting.Posting `json:"sell"`
+	Gain         float64         `json:"gain"`
+	TaxableGain  float64         `json:"taxable_gain"`
+	ShortTermTax float64         `json:"short_term_tax"`
+	LongTermTax  float64         `json:"long_term_tax"`
+}
+
 type FYCapitalGain struct {
-	Gain          float64 `json:"gain"`
-	TaxableGain   float64 `json:"taxable_gain"`
-	ShortTermTax  float64 `json:"short_term_tax"`
-	LongTermTax   float64 `json:"long_term_tax"`
-	Units         float64 `json:"units"`
-	PurchasePrice float64 `json:"purchase_price"`
-	SellPrice     float64 `json:"sell_price"`
+	Gain          float64       `json:"gain"`
+	TaxableGain   float64       `json:"taxable_gain"`
+	ShortTermTax  float64       `json:"short_term_tax"`
+	LongTermTax   float64       `json:"long_term_tax"`
+	Units         float64       `json:"units"`
+	PurchasePrice float64       `json:"purchase_price"`
+	SellPrice     float64       `json:"sell_price"`
+	PostingPairs  []PostingPair `json:"posting_pairs"`
 }
 
 type CapitalGain struct {
@@ -47,13 +57,16 @@ func computeCapitalGains(db *gorm.DB, account string, commodity c.Commodity, pos
 			available = append(available, p)
 		} else {
 			quantity := -p.Quantity
+			gain := 0.0
 			taxableGain := 0.0
 			shortTermTax := 0.0
 			longTermTax := 0.0
 			purchasePrice := 0.0
+			postingPairs := make([]PostingPair, 0)
 			for quantity > 0 && len(available) > 0 {
 				first := available[0]
 				q := 0.0
+
 				if first.Quantity > quantity {
 					first.AddQuantity(-quantity)
 					q = quantity
@@ -66,21 +79,25 @@ func computeCapitalGains(db *gorm.DB, account string, commodity c.Commodity, pos
 				}
 
 				purchasePrice += q * first.Price()
-				t, s, l := tax.Calculate(db, q, commodity, first.Price(), first.Date, p.Price(), p.Date)
+				g, t, s, l := tax.Calculate(db, q, commodity, first.Price(), first.Date, p.Price(), p.Date)
+				gain += g
 				taxableGain += t
 				shortTermTax += s
 				longTermTax += l
+				postingPair := PostingPair{Purchase: first.WithQuantity(q), Sell: p.WithQuantity(-q), Gain: g, TaxableGain: t, ShortTermTax: s, LongTermTax: l}
+				postingPairs = append(postingPairs, postingPair)
 
 			}
 			fy := utils.FY(p.Date)
 			fyCapitalGain := capitalGain.FY[fy]
-			fyCapitalGain.Gain += (-p.Amount - purchasePrice)
+			fyCapitalGain.Gain += gain
 			fyCapitalGain.TaxableGain += taxableGain
 			fyCapitalGain.LongTermTax += longTermTax
 			fyCapitalGain.ShortTermTax += shortTermTax
 			fyCapitalGain.Units += -p.Quantity
 			fyCapitalGain.PurchasePrice += purchasePrice
 			fyCapitalGain.SellPrice += -p.Amount
+			fyCapitalGain.PostingPairs = append(fyCapitalGain.PostingPairs, postingPairs...)
 
 			capitalGain.FY[fy] = fyCapitalGain
 

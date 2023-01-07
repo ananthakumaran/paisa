@@ -1,15 +1,16 @@
 ---
 name: Bug report
-about: Create a report to help us improve
+about: Please use Discussions for Feature Request
 title: ''
 labels: ''
 assignees: ''
 
 ---
 
-** NOTE **
+**NOTE**
 
-If have a feature request, create a new [discussion](https://github.com/ananthakumaran/paisa/discussions), issue tracker is reserve for actual bugs
+If have a feature request, create a new [discussion](https://github.com/ananthakumaran/paisa/discussions), Issue is
+reserved for bugs only.
 
 **Describe the bug**
 A clear and concise description of what the bug is.

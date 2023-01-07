@@ -13,6 +13,7 @@
     "format": "prettier --plugin-search-dir . --write ."
   },
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.0",
     "@sveltejs/adapter-static": "^1.0.0",
     "@types/clusterize.js": "^0.18.1",
     "@types/d3": "^7.1.0",

@@ -1,12 +1,12 @@
 import chroma from "chroma-js";
-import type dayjs from "dayjs";
+import dayjs from "dayjs";
 import { sprintf } from "sprintf-js";
 import _ from "lodash";
 import * as d3 from "d3";
 
 export interface Posting {
   id: string;
-  date: string;
+  date: dayjs.Dayjs;
   payee: string;
   account: string;
   commodity: string;
@@ -96,6 +96,15 @@ export interface YearlyCard {
   end_date_timestamp: dayjs.Dayjs;
 }
 
+export interface PostingPair {
+  purchase: Posting;
+  sell: Posting;
+  gain: number;
+  taxable_gain: number;
+  short_term_tax: number;
+  long_term_tax: number;
+}
+
 export interface FYCapitalGain {
   gain: number;
   taxable_gain: number;
@@ -104,6 +113,7 @@ export interface FYCapitalGain {
   units: number;
   purchase_price: number;
   sell_price: number;
+  posting_pairs: PostingPair[];
 }
 export interface HarvestBreakdown {
   units: number;
@@ -152,9 +162,7 @@ export interface ScheduleALEntry {
   amount: number;
 }
 
-export function ajax(
-  route: "/api/harvest"
-): Promise<{ harvestables: Record<string, Harvestable[]> }>;
+export function ajax(route: "/api/harvest"): Promise<{ harvestables: Record<string, Harvestable> }>;
 export function ajax(
   route: "/api/capital_gains"
 ): Promise<{ capital_gains: Record<string, CapitalGain> }>;
@@ -197,7 +205,17 @@ export function ajax(route: "/api/expense"): Promise<{
 }>;
 export async function ajax(route: string) {
   const response = await fetch(route);
-  return await response.json();
+  const body = await response.text();
+  return JSON.parse(body, (key, value) => {
+    if (
+      _.isString(value) &&
+      /date/.test(key) &&
+      /^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$/.test(value)
+    ) {
+      return dayjs(value);
+    }
+    return value;
+  });
 }
 
 const obscure = false;

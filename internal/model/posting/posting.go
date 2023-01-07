@@ -32,6 +32,13 @@ func (p *Posting) AddQuantity(quantity float64) {
 	p.Amount = p.Quantity * price
 }
 
+func (p Posting) WithQuantity(quantity float64) Posting {
+	clone := p
+	clone.Quantity = quantity
+	clone.Amount = quantity * p.Price()
+	return clone
+}
+
 func UpsertAll(db *gorm.DB, postings []*Posting) {
 	err := db.Transaction(func(tx *gorm.DB) error {
 		err := tx.Exec("DELETE FROM postings").Error

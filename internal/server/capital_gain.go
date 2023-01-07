@@ -1,8 +1,10 @@
 package server
 
 import (
+	"github.com/ananthakumaran/paisa/internal/model/commodity"
 	c "github.com/ananthakumaran/paisa/internal/model/commodity"
 	"github.com/ananthakumaran/paisa/internal/model/posting"
+	"github.com/ananthakumaran/paisa/internal/model/price"
 	"github.com/ananthakumaran/paisa/internal/query"
 	"github.com/ananthakumaran/paisa/internal/tax"
 	"github.com/ananthakumaran/paisa/internal/utils"
@@ -39,7 +41,8 @@ type CapitalGain struct {
 
 func GetCapitalGains(db *gorm.DB) gin.H {
 	commodities := lo.Filter(c.All(), func(c c.Commodity, _ int) bool {
-		return c.Harvest > 0
+		return c.Type == price.MutualFund &&
+			(c.TaxCategory == commodity.Debt || c.TaxCategory == commodity.Equity)
 	})
 	postings := query.Init(db).Like("Assets:%").Commodities(lo.Map(commodities, func(c c.Commodity, _ int) string { return c.Name })).All()
 	byAccount := lo.GroupBy(postings, func(p posting.Posting) string { return p.Account })

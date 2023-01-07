@@ -14,4 +14,5 @@
 - [Allocation Targets](allocation-targets.md)
 - [Tax](tax.md)
   - [Tax Harvesting](tax-harvesting.md)
+  - [Capital Gains](capital-gains.md)
   - [Schedule AL](schedule-al.md)

@@ -32,6 +32,8 @@ export function renderCalendar(
   const weekStart = monthStart.startOf("week");
   const weekEnd = monthEnd.endOf("week");
 
+  const alpha = d3.scaleLinear().range([0.3, 1]);
+
   const expensesByDay: Record<string, Posting[]> = {};
   const days: Dayjs[] = [];
   let d = weekStart;
@@ -44,6 +46,10 @@ export function renderCalendar(
 
     d = d.add(1, "day");
   }
+
+  const expensesByDayTotal = _.mapValues(expensesByDay, (ps) => _.sumBy(ps, (p) => p.amount));
+
+  alpha.domain(d3.extent(_.values(expensesByDayTotal)));
 
   const root = d3.select(id);
   const dayDivs = root.select("div.days").selectAll("div").data(days);
@@ -76,14 +82,35 @@ export function renderCalendar(
     );
 
   dayDiv
-    .selectAll("span")
+    .selectAll("span.day")
     .data((d) => [d])
     .join("span")
+    .attr("class", "day has-text-grey-light")
     .style("position", "absolute")
     .text((d) => d.date().toString());
 
+  dayDiv
+    .selectAll("span.total")
+    .data((d) => [d])
+    .join("span")
+    .attr("class", "total is-size-7 has-text-weight-bold")
+    .style("position", "absolute")
+    .style("bottom", "-5px")
+    .style("color", (d) =>
+      chroma(COLORS.lossText)
+        .alpha(alpha(expensesByDayTotal[d.format("YYYY-MM-DD")]))
+        .hex()
+    )
+    .text((d) => {
+      const total = expensesByDayTotal[d.format("YYYY-MM-DD")];
+      if (total > 0) {
+        return formatCurrencyCrude(total);
+      }
+      return "";
+    });
+
   const width = 35;
-  const height = 35;
+  const height = 50;
 
   dayDiv
     .selectAll("svg")

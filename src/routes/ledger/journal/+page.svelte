@@ -1,11 +1,11 @@
 <script lang="ts">
   import { filterTransactions, renderTransactions } from "$lib/journal";
-  import { ajax } from "$lib/utils";
+  import { ajax, type Posting } from "$lib/utils";
   import dayjs from "dayjs";
   import _ from "lodash";
   import { onMount } from "svelte";
 
-  let rows, clusterTable;
+  let rows: { date: string; posting: Posting; markup: string }[], clusterTable: any;
 
   const handleInput = _.debounce((event) => {
     const filter = event.srcElement.value;

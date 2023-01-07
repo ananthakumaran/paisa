@@ -108,7 +108,7 @@ export function renderAllocationTarget(
       d3
         .axisBottom(x1)
         .tickSize(-height)
-        .tickFormat(skipTicks(40, x, (n) => formatFloat(n, 0)))
+        .tickFormat(skipTicks(40, x, (n: number) => formatFloat(n, 0)))
     );
 
   g.append("g").attr("class", "axis y dark").call(d3.axisLeft(y));
@@ -210,7 +210,7 @@ export function renderAllocationTarget(
 }
 
 export function renderAllocation(
-  aggregates: { [key: string]: Aggregate },
+  aggregates: Record<string, Aggregate>,
   color: d3.ScaleOrdinal<string, string>
 ) {
   renderPartition(
@@ -224,8 +224,8 @@ export function renderAllocation(
 
 function renderPartition(
   element: HTMLElement,
-  aggregates,
-  hierarchy,
+  aggregates: Record<string, Aggregate>,
+  hierarchy: any,
   color: d3.ScaleOrdinal<string, string>
 ) {
   if (_.isEmpty(aggregates)) {
@@ -237,7 +237,7 @@ function renderPartition(
     width = element.parentElement.clientWidth - margin.left - margin.right,
     height = +div.style("height").replace("px", "") - margin.top - margin.bottom;
 
-  const percent = (d) => {
+  const percent = (d: d3.HierarchyNode<Aggregate>) => {
     return formatFloat((d.value / root.value) * 100) + "%";
   };
 
@@ -356,7 +356,7 @@ export function renderAllocationTimeline(aggregatesTimeline: { [key: string]: Ag
       .domain([0, d3.max(d3.map(points, (p) => d3.max(_.values(_.omit(p, "date")))))]),
     z = generateColorScheme(assets);
 
-  const line = (group) =>
+  const line = (group: string) =>
     d3
       .line<Point>()
       .curve(d3.curveLinear)

@@ -49,11 +49,12 @@ function renderIncomeTimeline(incomes: Income[], id: string, timeFormat: string)
     _.map(groupKeys, () => 0)
   );
 
-  let points: {
+  interface Point {
     date: dayjs.Dayjs;
     month: string;
     [key: string]: number | string | dayjs.Dayjs;
-  }[] = [];
+  }
+  let points: Point[] = [];
 
   points = _.map(incomes, (i) => {
     const values = _.chain(i.postings)
@@ -76,7 +77,7 @@ function renderIncomeTimeline(incomes: Income[], id: string, timeFormat: string)
   const x = d3.scaleBand().range([0, width]).paddingInner(0.1).paddingOuter(0);
   const y = d3.scaleLinear().range([height, 0]);
 
-  const sum = (filter) => (p) =>
+  const sum = (filter: (n: number) => boolean) => (p: Point) =>
     _.sum(
       _.filter(
         _.map(groupKeys, (k) => p[k]),
@@ -174,7 +175,7 @@ function renderIncomeTimeline(incomes: Income[], id: string, timeFormat: string)
     .shape("rect")
     .orient("horizontal")
     .shapePadding(LEGEND_PADDING)
-    .labels(({ i }) => {
+    .labels(({ i }: { i: number }) => {
       return groupTotal[groupKeys[i]];
     })
     .scale(z);

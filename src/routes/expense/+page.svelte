@@ -14,13 +14,13 @@
 
   const max = dayjs().format("YYYY-MM");
   let groups = writable([]);
-  let z,
-    renderer,
-    expenses,
-    grouped_expenses,
-    grouped_incomes,
-    grouped_investments,
-    grouped_taxes,
+  let z: d3.ScaleOrdinal<string, string, never>,
+    renderer: (ps: Posting[]) => void,
+    expenses: Posting[],
+    grouped_expenses: Record<string, Posting[]>,
+    grouped_incomes: Record<string, Posting[]>,
+    grouped_investments: Record<string, Posting[]>,
+    grouped_taxes: Record<string, Posting[]>,
     min: string;
 
   $: if (grouped_expenses) {

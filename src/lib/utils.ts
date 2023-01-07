@@ -254,14 +254,14 @@ export function formatCurrencyCrude(value: number) {
   return sprintf(`%.${precision}f %s`, x, unit);
 }
 
-export function formatFloat(value, precision = 2) {
+export function formatFloat(value: number, precision = 2) {
   if (obscure) {
     return "00";
   }
   return sprintf(`%.${precision}f`, value);
 }
 
-export function formatPercentage(value, precision = 0) {
+export function formatPercentage(value: number, precision = 0) {
   if (obscure) {
     return "00";
   }
@@ -281,7 +281,7 @@ export function formatPercentage(value, precision = 0) {
   });
 }
 
-export function formatFixedWidthFloat(value, width, precision = 2) {
+export function formatFixedWidthFloat(value: number, width: number, precision = 2) {
   if (obscure) {
     value = 0;
   }

@@ -48,10 +48,11 @@ export function renderMonthlyInvestmentTimeline(postings: Posting[]) {
     end = dayjs().startOf("month");
   const ts = _.groupBy(postings, (p) => p.timestamp.format(timeFormat));
 
-  const points: {
+  interface Point {
     month: string;
     [key: string]: number | string | dayjs.Dayjs;
-  }[] = [];
+  }
+  const points: Point[] = [];
 
   forEachMonth(start, end, (month) => {
     const postings = ts[month.format(timeFormat)] || [];
@@ -95,7 +96,7 @@ export function renderMonthlyInvestmentTimeline(postings: Posting[]) {
   const x = d3.scaleBand().range([0, width]).paddingInner(0.1).paddingOuter(0);
   const y = d3.scaleLinear().range([height, 0]);
 
-  const sum = (filter) => (p) =>
+  const sum = (filter: (n: number) => boolean) => (p: Point) =>
     _.sum(
       _.filter(
         _.map(groupKeys, (k) => p[k]),
@@ -224,10 +225,11 @@ export function renderYearlyInvestmentTimeline(yearlyCards: YearlyCard[]) {
   const height = BAR_HEIGHT * (end.year() - start.year());
   svg.attr("height", height + margin.top + margin.bottom);
 
-  const points: {
+  interface Point {
     year: string;
     [key: string]: number | string | dayjs.Dayjs;
-  }[] = [];
+  }
+  const points: Point[] = [];
 
   _.each(yearlyCards, (card) => {
     const postings = card.postings;
@@ -271,7 +273,7 @@ export function renderYearlyInvestmentTimeline(yearlyCards: YearlyCard[]) {
   const x = d3.scaleLinear().range([0, width]);
   const y = d3.scaleBand().range([height, 0]).paddingInner(0.1).paddingOuter(0);
 
-  const sum = (filter) => (p) =>
+  const sum = (filter: (n: number) => boolean) => (p: Point) =>
     _.sum(
       _.filter(
         _.map(groupKeys, (k) => p[k]),

@@ -1,8 +1,6 @@
 <script lang="ts">
   import { formatCurrency, formatFloat, type CapitalGain, type FYCapitalGain } from "$lib/utils";
-  import { active } from "d3";
   import _ from "lodash";
-  import { get } from "svelte/store";
   import CapitalGainDetailCard from "./CapitalGainDetailCard.svelte";
   import Toggleable from "./Toggleable.svelte";
 

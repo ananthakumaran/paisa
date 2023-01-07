@@ -254,7 +254,7 @@ export function renderMonthlyExpensesTimeline(
   const z = generateColorScheme(groups);
 
   const tooltipContent = (allowedGroups: string[]) => {
-    return (d) => {
+    return (d: d3.SeriesPoint<Record<string, number>>) => {
       let grandTotal = 0;
       return tooltip(
         _.flatMap(allowedGroups, (key) => {
@@ -283,7 +283,7 @@ export function renderMonthlyExpensesTimeline(
 
   const render = (allowedGroups: string[]) => {
     groupsStore.set(allowedGroups);
-    const sum = (p) => _.sum(_.map(allowedGroups, (k) => p[k]));
+    const sum = (p: Point) => _.sum(_.map(allowedGroups, (k) => p[k]));
     x.domain(points.map((p) => p.month));
     y.domain([0, d3.max(points, sum)]);
 
@@ -352,7 +352,7 @@ export function renderMonthlyExpensesTimeline(
           enter
             .append("rect")
             .attr("class", "zoomable")
-            .on("click", (event, data) => {
+            .on("click", (_event, data) => {
               const timestamp: Dayjs = data.data.timestamp as any;
               monthStore.set(timestamp.format("YYYY-MM"));
             })

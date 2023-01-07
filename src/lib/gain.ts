@@ -149,7 +149,7 @@ export function renderOverview(gains: Gain[]) {
       d3
         .axisBottom(x1)
         .tickSize(-height)
-        .tickFormat(skipTicks(40, x1, (n) => formatFloat(n, 1)))
+        .tickFormat(skipTicks(40, x1, (n: number) => formatFloat(n, 1)))
     );
 
   g.append("g").attr("class", "axis y dark").call(d3.axisLeft(y));
@@ -376,7 +376,7 @@ function renderOverviewSmall(
       .domain([0, d3.max<Overview, number>(points, (d) => d.gain_amount + d.investment_amount)]),
     z = d3.scaleOrdinal<string>(colors).domain(areaKeys);
 
-  const area = (y0, y1) =>
+  const area = (y0: number, y1: (d: Overview) => number) =>
     d3
       .area<Overview>()
       .curve(d3.curveBasis)

@@ -36,7 +36,7 @@ export function renderOverview(points: Overview[], element: Element) {
     y = d3.scaleLinear().range([height, 0]).domain(d3.extent(positions)),
     z = d3.scaleOrdinal<string>(colors).domain(areaKeys);
 
-  const area = (y0, y1) =>
+  const area = (y0: number, y1: (d: Overview) => number) =>
     d3
       .area<Overview>()
       .curve(d3.curveBasis)

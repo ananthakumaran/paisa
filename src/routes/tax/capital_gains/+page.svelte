@@ -16,6 +16,7 @@
       .flatMap((c) => _.keys(c.fy))
       .uniq()
       .sort()
+      .reverse()
       .value();
 
     capitalGains = _.values(capital_gains);

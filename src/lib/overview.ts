@@ -1,11 +1,22 @@
 import * as d3 from "d3";
+import { Delaunay } from "d3";
 import legend from "d3-svg-legend";
 import dayjs from "dayjs";
 import _ from "lodash";
+import tippy from "tippy.js";
 import COLORS from "./colors";
-import { formatCurrencyCrude, type Overview } from "./utils";
+import { formatCurrency } from "./utils";
+import { formatCurrencyCrude, tooltip, type Overview } from "./utils";
 
-export function renderOverview(points: Overview[], element: Element) {
+function networth(d: Overview) {
+  return d.investment_amount + d.gain_amount - d.withdrawal_amount;
+}
+
+function investment(d: Overview) {
+  return d.investment_amount - d.withdrawal_amount;
+}
+
+export function renderOverview(points: Overview[], element: Element): () => void {
   const start = _.min(_.map(points, (p) => p.timestamp)),
     end = dayjs();
 
@@ -118,7 +129,7 @@ export function renderOverview(points: Overview[], element: Element) {
         .line<Overview>()
         .curve(d3.curveBasis)
         .x((d) => x(d.timestamp))
-        .y((d) => y(d.investment_amount - d.withdrawal_amount))
+        .y((d) => y(investment(d)))
     );
 
   layer
@@ -131,8 +142,61 @@ export function renderOverview(points: Overview[], element: Element) {
         .line<Overview>()
         .curve(d3.curveBasis)
         .x((d) => x(d.timestamp))
-        .y((d) => y(d.investment_amount + d.gain_amount - d.withdrawal_amount))
+        .y((d) => y(networth(d)))
     );
+
+  const hoverCircle = layer.append("circle").attr("r", "3").attr("fill", "none");
+  const t = tippy(hoverCircle.node(), { theme: "light", delay: 0, allowHTML: true });
+
+  const networthVoronoiPoints = _.map(points, (d) => [x(d.timestamp), y(networth(d))]);
+  const investmentVoronoiPoints = _.map(points, (d) => [x(d.timestamp), y(investment(d))]);
+  const voronoi = Delaunay.from(networthVoronoiPoints.concat(investmentVoronoiPoints)).voronoi([
+    0,
+    0,
+    width,
+    height
+  ]);
+
+  layer
+    .append("g")
+    .selectAll("path")
+    .data(
+      points.map((p) => ["networth", p]).concat(points.map((p) => ["investment", p])) as [
+        string,
+        Overview
+      ][]
+    )
+    .enter()
+    .append("path")
+    .style("pointer-events", "all")
+    .style("fill", "none")
+    .attr("d", (_, i) => {
+      return voronoi.renderCell(i);
+    })
+    .on("mouseover", (_, [pointType, d]) => {
+      hoverCircle
+        .attr("cx", x(d.timestamp))
+        .attr("cy", y(pointType == "networth" ? networth(d) : investment(d)))
+        .attr("fill", lineScale(pointType));
+
+      t.setProps({
+        placement: pointType == "networth" ? "top" : "bottom",
+        content: tooltip([
+          ["Date", d.timestamp.format("DD MMM YYYY")],
+          ["Net Worth", [formatCurrency(networth(d)), "has-text-weight-bold has-text-right"]],
+          [
+            "Net Investment",
+            [formatCurrency(investment(d)), "has-text-weight-bold has-text-right"]
+          ],
+          ["Gain / Loss", [formatCurrency(d.gain_amount), "has-text-weight-bold has-text-right"]]
+        ])
+      });
+      t.show();
+    })
+    .on("mouseout", () => {
+      t.hide();
+      hoverCircle.attr("fill", "none");
+    });
 
   svg.append("g").attr("class", "legendOrdinal").attr("transform", "translate(265,3)");
 
@@ -160,4 +224,8 @@ export function renderOverview(points: Overview[], element: Element) {
     .scale(lineScale);
 
   svg.select(".legendLine").call(legendLine as any);
+
+  return () => {
+    t.destroy();
+  };
 }

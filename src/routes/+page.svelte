@@ -5,7 +5,7 @@
   import _ from "lodash";
   import dayjs from "dayjs";
 
-  import { onMount } from "svelte";
+  import { onDestroy, onMount } from "svelte";
 
   let networth = 0;
   let investment = 0;
@@ -13,7 +13,11 @@
   let xirr = 0;
   let loaded = false;
   let svg: Element;
+  let destroyCallback: () => void;
 
+  onDestroy(async () => {
+    destroyCallback();
+  });
   onMount(async () => {
     const result = await ajax("/api/overview");
     const points = result.overview_timeline;
@@ -27,7 +31,7 @@
     xirr = result.xirr;
     loaded = true;
 
-    renderOverview(points, svg);
+    destroyCallback = renderOverview(points, svg);
   });
 </script>
 

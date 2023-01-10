@@ -80,13 +80,18 @@
               <nav class="level">
                 <div class="level-item has-text-centered">
                   <div>
-                    <p class="heading">Income</p>
+                    <p class="heading is-flex is-justify-content-space-between">Income</p>
                     <p class="d3-current-month-income title" />
                   </div>
                 </div>
                 <div class="level-item has-text-centered">
                   <div>
-                    <p class="heading">Tax</p>
+                    <p class="heading is-flex is-justify-content-space-between">
+                      <span>Tax</span><span
+                        title="Tax Rate"
+                        class="tag ml-2 has-text-weight-semibold d3-current-month-tax-rate"
+                      />
+                    </p>
                     <p class="d3-current-month-tax title" />
                   </div>
                 </div>
@@ -98,7 +103,7 @@
               <nav class="level">
                 <div class="level-item has-text-centered">
                   <div>
-                    <p class="heading">
+                    <p class="heading is-flex is-justify-content-space-between">
                       <span>Net Investment</span><span
                         title="Savings Rate"
                         class="tag ml-2 has-text-weight-semibold d3-current-month-savings-rate"
@@ -109,7 +114,12 @@
                 </div>
                 <div class="level-item has-text-centered">
                   <div>
-                    <p class="heading">Expenses</p>
+                    <p class="heading is-flex is-justify-content-space-between">
+                      <span>Expenses</span><span
+                        title="Expenses Rate"
+                        class="tag ml-2 has-text-weight-semibold d3-current-month-expenses-rate"
+                      />
+                    </p>
                     <p class="d3-current-month-expenses title" />
                   </div>
                 </div>

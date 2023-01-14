@@ -210,8 +210,11 @@ export function ajax(route: "/api/expense"): Promise<{
     taxes: { [key: string]: Posting[] };
   };
 }>;
-export async function ajax(route: string) {
-  const response = await fetch(route);
+
+export async function ajax(route: "/api/sync", options?: RequestInit): Promise<any>;
+
+export async function ajax(route: string, options?: RequestInit) {
+  const response = await fetch(route, options);
   const body = await response.text();
   return JSON.parse(body, (key, value) => {
     if (

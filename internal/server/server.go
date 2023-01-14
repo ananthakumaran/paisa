@@ -17,6 +17,9 @@ func Listen(db *gorm.DB) {
 	router.GET("/static/*filepath", func(c *gin.Context) {
 		c.FileFromFS(c.Request.URL.Path, http.FS(web.Static))
 	})
+	router.POST("/api/sync", func(c *gin.Context) {
+		c.JSON(200, Sync(db))
+	})
 	router.GET("/api/overview", func(c *gin.Context) {
 		c.JSON(200, GetOverview(db))
 	})

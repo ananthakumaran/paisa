@@ -3,6 +3,7 @@
   import { afterNavigate, beforeNavigate } from "$app/navigation";
   import { followCursor, type Instance, delegate } from "tippy.js";
   import _ from "lodash";
+  import Sync from "$lib/components/Sync.svelte";
 
   let isBurger: boolean = null;
   let tippyInstances: Instance[] = [];
@@ -13,7 +14,7 @@
 
   afterNavigate(() => {
     isBurger = null;
-    tippyInstances = delegate("section", {
+    tippyInstances = delegate("section,nav", {
       target: "[data-tippy-content]",
       theme: "light",
       onShow: (instance) => {
@@ -158,6 +159,15 @@
         href="/doctor"
         class:is-active={$page.url.pathname === "/doctor"}>Doctor</a
       >
+    </div>
+    <div class="navbar-end">
+      <div class="navbar-item">
+        <div class="field is-grouped">
+          <p class="control">
+            <Sync />
+          </p>
+        </div>
+      </div>
     </div>
   </div>
 </nav>

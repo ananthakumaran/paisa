@@ -40,6 +40,11 @@ func (q *Query) NotLike(account string) *Query {
 	return q
 }
 
+func (q *Query) Where(query interface{}, args ...interface{}) *Query {
+	q.context = q.context.Where(query, args...)
+	return q
+}
+
 func (q *Query) All() []posting.Posting {
 	var postings []posting.Posting
 	result := q.context.Order("date " + q.order + ", amount desc").Find(&postings)

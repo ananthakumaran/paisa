@@ -95,3 +95,9 @@ func CostBalance(postings []posting.Posting) float64 {
 	})
 
 }
+
+func CurrentBalance(postings []posting.Posting) float64 {
+	return lo.SumBy(postings, func(p posting.Posting) float64 {
+		return p.MarketAmount
+	})
+}

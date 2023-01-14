@@ -162,6 +162,13 @@ export interface ScheduleALEntry {
   amount: number;
 }
 
+export interface RetirementProgress {
+  savings_total: number;
+  swr: number;
+  yearly_expense: number;
+}
+
+export function ajax(route: "/api/retirement/progress"): Promise<RetirementProgress>;
 export function ajax(route: "/api/harvest"): Promise<{ harvestables: Record<string, Harvestable> }>;
 export function ajax(
   route: "/api/capital_gains"

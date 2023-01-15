@@ -10,11 +10,11 @@ import {
   formatPercentage,
   formatCurrencyCrude,
   type Posting,
-  restName,
   setHtml,
   skipTicks,
   tooltip,
-  generateColorScheme
+  generateColorScheme,
+  secondName
 } from "./utils";
 import COLORS from "./colors";
 import type { Writable } from "svelte/store";
@@ -40,7 +40,7 @@ export function renderCalendar(
     days.push(d);
     expensesByDay[d.format("YYYY-MM-DD")] = _.filter(
       expenses,
-      (e) => e.timestamp.isSame(d, "day") && _.includes(groups, restName(e.account))
+      (e) => e.timestamp.isSame(d, "day") && _.includes(groups, expenseGroup(e))
     );
 
     d = d.add(1, "day");
@@ -129,8 +129,7 @@ export function renderCalendar(
     })
     .join("path")
     .attr("fill", function (d) {
-      const category = restName(d.data.account);
-      return z(category);
+      return z(expenseGroup(d.data));
     })
     .attr("d", (arc) => {
       return d3.arc().innerRadius(13).outerRadius(17)(arc as any);
@@ -182,11 +181,7 @@ export function renderMonthlyExpensesTimeline(
     height = +svg.attr("height") - margin.top - margin.bottom,
     g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-  const groups = _.chain(postings)
-    .map((p) => restName(p.account))
-    .uniq()
-    .sort()
-    .value();
+  const groups = _.chain(postings).map(expenseGroup).uniq().sort().value();
 
   const defaultValues = _.zipObject(
     groups,
@@ -200,7 +195,7 @@ export function renderMonthlyExpensesTimeline(
     .groupBy((p) => p.timestamp.format("YYYY"))
     .map((ps, k) => {
       const trend = _.chain(ps)
-        .groupBy((p) => restName(p.account))
+        .groupBy(expenseGroup)
         .map((ps, g) => {
           let months = 12;
           if (start.format("YYYY") == k) {
@@ -232,7 +227,7 @@ export function renderMonthlyExpensesTimeline(
   forEachMonth(start, end, (month) => {
     const postings = ms[month.format(timeFormat)] || [];
     const values = _.chain(postings)
-      .groupBy((t) => restName(t.account))
+      .groupBy(expenseGroup)
       .map((postings, key) => [key, _.sum(_.map(postings, (p) => p.amount))])
       .fromPairs()
       .value();
@@ -445,7 +440,7 @@ export function renderCurrentExpensesBreakdown(z: d3.ScaleOrdinal<string, string
       total: number;
     }
     const categories = _.chain(postings)
-      .groupBy((p) => restName(p.account))
+      .groupBy(expenseGroup)
       .mapValues((ps, category) => {
         return {
           category: category,
@@ -570,4 +565,8 @@ export function renderCurrentExpensesBreakdown(z: d3.ScaleOrdinal<string, string
 
     return;
   };
+}
+
+function expenseGroup(posting: Posting) {
+  return secondName(posting.account);
 }

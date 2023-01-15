@@ -11,7 +11,6 @@ import {
   formatCurrencyCrude,
   type Posting,
   restName,
-  secondName,
   setHtml,
   skipTicks,
   tooltip,
@@ -184,7 +183,7 @@ export function renderMonthlyExpensesTimeline(
     g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
   const groups = _.chain(postings)
-    .map((p) => secondName(p.account))
+    .map((p) => restName(p.account))
     .uniq()
     .sort()
     .value();
@@ -201,7 +200,7 @@ export function renderMonthlyExpensesTimeline(
     .groupBy((p) => p.timestamp.format("YYYY"))
     .map((ps, k) => {
       const trend = _.chain(ps)
-        .groupBy((p) => secondName(p.account))
+        .groupBy((p) => restName(p.account))
         .map((ps, g) => {
           let months = 12;
           if (start.format("YYYY") == k) {
@@ -233,7 +232,7 @@ export function renderMonthlyExpensesTimeline(
   forEachMonth(start, end, (month) => {
     const postings = ms[month.format(timeFormat)] || [];
     const values = _.chain(postings)
-      .groupBy((t) => secondName(t.account))
+      .groupBy((t) => restName(t.account))
       .map((postings, key) => [key, _.sum(_.map(postings, (p) => p.amount))])
       .fromPairs()
       .value();

@@ -4,6 +4,7 @@
   import { followCursor, type Instance, delegate } from "tippy.js";
   import _ from "lodash";
   import Sync from "$lib/components/Sync.svelte";
+  import Spinner from "$lib/components/Spinner.svelte";
 
   let isBurger: boolean = null;
   let tippyInstances: Instance[] = [];
@@ -172,4 +173,6 @@
   </div>
 </nav>
 
-<slot />
+<Spinner>
+  <slot />
+</Spinner>

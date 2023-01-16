@@ -11,7 +11,6 @@
   let investment = 0;
   let gain = 0;
   let xirr = 0;
-  let loaded = false;
   let svg: Element;
   let destroyCallback: () => void;
 
@@ -29,53 +28,50 @@
     investment = current.investment_amount - current.withdrawal_amount;
     gain = current.gain_amount;
     xirr = result.xirr;
-    loaded = true;
 
     destroyCallback = renderOverview(points, svg);
   });
 </script>
 
-{#if loaded}
-  <section class="section tab-overview">
-    <div class="container">
-      <nav class="level">
-        <div class="level-item has-text-centered">
-          <div>
-            <p class="heading">Net worth</p>
-            <p class="title" style="background-color: {COLORS.primary};">
-              {formatCurrency(networth)}
-            </p>
-          </div>
+<section class="section tab-overview">
+  <div class="container">
+    <nav class="level">
+      <div class="level-item has-text-centered">
+        <div>
+          <p class="heading">Net worth</p>
+          <p class="title" style="background-color: {COLORS.primary};">
+            {formatCurrency(networth)}
+          </p>
         </div>
-        <div class="level-item has-text-centered">
-          <div>
-            <p class="heading">Net Investment</p>
-            <p class="title" style="background-color: {COLORS.secondary};">
-              {formatCurrency(investment)}
-            </p>
-          </div>
+      </div>
+      <div class="level-item has-text-centered">
+        <div>
+          <p class="heading">Net Investment</p>
+          <p class="title" style="background-color: {COLORS.secondary};">
+            {formatCurrency(investment)}
+          </p>
         </div>
-        <div class="level-item has-text-centered">
-          <div>
-            <p class="heading">Gain / Loss</p>
-            <p
-              class="title"
-              style="background-color: {gain >= 0 ? COLORS.gainText : COLORS.lossText};"
-            >
-              {formatCurrency(gain)}
-            </p>
-          </div>
+      </div>
+      <div class="level-item has-text-centered">
+        <div>
+          <p class="heading">Gain / Loss</p>
+          <p
+            class="title"
+            style="background-color: {gain >= 0 ? COLORS.gainText : COLORS.lossText};"
+          >
+            {formatCurrency(gain)}
+          </p>
         </div>
-        <div class="level-item has-text-centered">
-          <div>
-            <p class="heading">XIRR</p>
-            <p class="title has-text-black">{formatFloat(xirr)}</p>
-          </div>
+      </div>
+      <div class="level-item has-text-centered">
+        <div>
+          <p class="heading">XIRR</p>
+          <p class="title has-text-black">{formatFloat(xirr)}</p>
         </div>
-      </nav>
-    </div>
-  </section>
-{/if}
+      </div>
+    </nav>
+  </div>
+</section>
 
 <section class="section tab-overview">
   <div class="container is-fluid">

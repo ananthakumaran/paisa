@@ -3,6 +3,7 @@ import dayjs from "dayjs";
 import { sprintf } from "sprintf-js";
 import _ from "lodash";
 import * as d3 from "d3";
+import { loading } from "../store";
 
 export interface Posting {
   id: string;
@@ -214,8 +215,10 @@ export function ajax(route: "/api/expense"): Promise<{
 export async function ajax(route: "/api/sync", options?: RequestInit): Promise<any>;
 
 export async function ajax(route: string, options?: RequestInit) {
+  loading.set(true);
   const response = await fetch(route, options);
   const body = await response.text();
+  loading.set(false);
   return JSON.parse(body, (key, value) => {
     if (
       _.isString(value) &&

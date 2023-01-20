@@ -27,6 +27,10 @@ func loadInterestCache(db *gorm.DB) {
 	icache.postings = lo.GroupBy(postings, func(p posting.Posting) time.Time { return p.Date })
 }
 
+func ClearInterestCache() {
+	icache = interestCache{}
+}
+
 func IsInterest(db *gorm.DB, p posting.Posting) bool {
 	icache.Do(func() { loadInterestCache(db) })
 

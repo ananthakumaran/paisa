@@ -52,6 +52,10 @@ func loadPriceCache(db *gorm.DB) {
 	}
 }
 
+func ClearPriceCache() {
+	pcache = priceCache{}
+}
+
 func GetUnitPrice(db *gorm.DB, commodity string, date time.Time) price.Price {
 	pcache.Do(func() { loadPriceCache(db) })
 

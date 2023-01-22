@@ -1,7 +1,7 @@
 import chroma from "chroma-js";
 import * as d3 from "d3";
 import legend from "d3-svg-legend";
-import dayjs from "dayjs";
+import type dayjs from "dayjs";
 import _ from "lodash";
 import COLORS from "$lib/colors";
 import {

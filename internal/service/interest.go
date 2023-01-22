@@ -1,12 +1,13 @@
 package service
 
 import (
+	"strings"
 	"sync"
 	"time"
 
 	"github.com/ananthakumaran/paisa/internal/model/posting"
+	"github.com/ananthakumaran/paisa/internal/query"
 	"github.com/samber/lo"
-	log "github.com/sirupsen/logrus"
 	"gorm.io/gorm"
 )
 
@@ -18,12 +19,7 @@ type interestCache struct {
 var icache interestCache
 
 func loadInterestCache(db *gorm.DB) {
-	var postings []posting.Posting
-	result := db.Where("account like ?", "Income:Interest:%").Find(&postings)
-	if result.Error != nil {
-		log.Fatal(result.Error)
-	}
-
+	postings := query.Init(db).Like("Income:Interest:%").All()
 	icache.postings = lo.GroupBy(postings, func(p posting.Posting) time.Time { return p.Date })
 }
 
@@ -36,6 +32,10 @@ func IsInterest(db *gorm.DB, p posting.Posting) bool {
 
 	if p.Commodity != "INR" {
 		return false
+	}
+
+	if strings.HasPrefix(p.Account, "Expenses:Interest:") {
+		return true
 	}
 
 	for _, ip := range icache.postings[p.Date] {

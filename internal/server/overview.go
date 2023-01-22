@@ -19,7 +19,7 @@ type Overview struct {
 }
 
 func GetOverview(db *gorm.DB) gin.H {
-	postings := query.Init(db).Like("Assets:%").All()
+	postings := query.Init(db).Like("Assets:%").OrLike("Liabilities:%").All()
 
 	postings = service.PopulateMarketPrice(db, postings)
 	overviewTimeline := computeOverviewTimeline(db, postings)

@@ -40,6 +40,11 @@ func (q *Query) NotLike(account string) *Query {
 	return q
 }
 
+func (q *Query) Or(query interface{}, args ...interface{}) *Query {
+	q.context = q.context.Or(query, args...)
+	return q
+}
+
 func (q *Query) Where(query interface{}, args ...interface{}) *Query {
 	q.context = q.context.Where(query, args...)
 	return q

@@ -53,7 +53,7 @@ func init() {
 			Issue: Issue{
 				Level:       ERROR,
 				Summary:     "Debit Entry",
-				Description: "Accounts like Expenses or Liabilities should never have debit entry."},
+				Description: "Expense Account should never have debit entry."},
 			Predicate: ruleNonDebitAccount}}
 }
 
@@ -96,7 +96,7 @@ func ruleNonCreditAccount(db *gorm.DB) []error {
 
 func ruleNonDebitAccount(db *gorm.DB) []error {
 	errs := make([]error, 0)
-	incomes := query.Init(db).Like("Expenses:%").OrLike("Liabilities:%").All()
+	incomes := query.Init(db).Like("Expenses:%").All()
 	for _, p := range incomes {
 		if p.Amount < -0.01 {
 			errs = append(errs, errors.New(fmt.Sprintf("<b>%.4f</b> got debited from <b>%s</b> on %s", p.Amount, p.Account, p.Date.Format(DATE_FORMAT))))

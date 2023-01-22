@@ -3,6 +3,7 @@ package server
 import (
 	"net/http"
 
+	"github.com/ananthakumaran/paisa/internal/server/liabilities"
 	"github.com/ananthakumaran/paisa/internal/server/retirement"
 	"github.com/ananthakumaran/paisa/web"
 	"github.com/gin-gonic/gin"
@@ -61,6 +62,10 @@ func Listen(db *gorm.DB) {
 
 	router.GET("/api/retirement/progress", func(c *gin.Context) {
 		c.JSON(200, retirement.GetRetirementProgress(db))
+	})
+
+	router.GET("/api/liabilities/interest", func(c *gin.Context) {
+		c.JSON(200, liabilities.GetInterest(db))
 	})
 
 	router.NoRoute(func(c *gin.Context) {

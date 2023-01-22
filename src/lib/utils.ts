@@ -44,6 +44,19 @@ export interface Gain {
   xirr: number;
 }
 
+export interface InterestOverview {
+  date: dayjs.Dayjs;
+  drawn_amount: number;
+  repaid_amount: number;
+  interest_amount: number;
+}
+
+export interface Interest {
+  account: string;
+  overview_timeline: InterestOverview[];
+  apr: number;
+}
+
 export interface Breakdown {
   group: string;
   investment_amount: number;
@@ -210,6 +223,10 @@ export function ajax(route: "/api/expense"): Promise<{
     investments: { [key: string]: Posting[] };
     taxes: { [key: string]: Posting[] };
   };
+}>;
+
+export function ajax(route: "/api/liabilities/interest"): Promise<{
+  interest_timeline_breakdown: Interest[];
 }>;
 
 export async function ajax(route: "/api/sync", options?: RequestInit): Promise<any>;

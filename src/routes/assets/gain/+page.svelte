@@ -45,21 +45,3 @@
     </div>
   </div>
 </section>
-<section class="section tab-income">
-  <div class="container">
-    <nav class="level">
-      <div class="level-item has-text-centered">
-        <div>
-          <p class="heading">Gross Income</p>
-          <p class="d3-gross-income title" />
-        </div>
-      </div>
-      <div class="level-item has-text-centered">
-        <div>
-          <p class="heading">Net Tax</p>
-          <p class="d3-net-tax title" />
-        </div>
-      </div>
-    </nav>
-  </div>
-</section>

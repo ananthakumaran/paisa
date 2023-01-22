@@ -88,6 +88,18 @@
           >
         </div>
       </div>
+      <div class="navbar-item has-dropdown is-hoverable">
+        <a class="navbar-link" class:is-active={$page.url.pathname.startsWith("/liabilities/")}
+          >Liabilities</a
+        >
+        <div class="navbar-dropdown">
+          <a
+            class="navbar-item"
+            href="/liabilities/interest"
+            class:is-active={$page.url.pathname === "/liabilities/interest"}>Interest</a
+          >
+        </div>
+      </div>
       <a
         id="income"
         class="navbar-item"

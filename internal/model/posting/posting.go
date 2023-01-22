@@ -1,21 +1,28 @@
 package posting
 
 import (
+	"strings"
+	"time"
+
 	log "github.com/sirupsen/logrus"
 	"gorm.io/gorm"
-	"time"
 )
 
 type Posting struct {
-	ID        uint      `gorm:"primaryKey" json:"id"`
-	Date      time.Time `json:"date"`
-	Payee     string    `json:"payee"`
-	Account   string    `json:"account"`
-	Commodity string    `json:"commodity"`
-	Quantity  float64   `json:"quantity"`
-	Amount    float64   `json:"amount"`
+	ID            uint      `gorm:"primaryKey" json:"id"`
+	TransactionID string    `json:"transaction_id"`
+	Date          time.Time `json:"date"`
+	Payee         string    `json:"payee"`
+	Account       string    `json:"account"`
+	Commodity     string    `json:"commodity"`
+	Quantity      float64   `json:"quantity"`
+	Amount        float64   `json:"amount"`
 
 	MarketAmount float64 `gorm:"-:all" json:"market_amount"`
+}
+
+func (p *Posting) RestName() string {
+	return strings.Join(strings.Split(p.Account, ":")[1:], ":")
 }
 
 func (p *Posting) Price() float64 {

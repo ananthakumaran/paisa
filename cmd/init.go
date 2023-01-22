@@ -64,6 +64,13 @@ retirement:
   savings:
     - Assets:Debt:*
     - Assets:Equity:*
+  expenses:
+    - Expenses:Rent
+    - Expenses:Utilities
+    - Expenses:Shopping
+    - Expenses:Restaurants
+    - Expenses:Food
+    - Expenses:Interest:*
 allocation_targets:
   - name: Debt
     target: 40

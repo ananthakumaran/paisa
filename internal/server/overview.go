@@ -1,6 +1,7 @@
 package server
 
 import (
+	"math"
 	"time"
 
 	"github.com/ananthakumaran/paisa/internal/model/posting"
@@ -70,6 +71,10 @@ func computeOverviewTimeline(db *gorm.DB, postings []posting.Posting) []Overview
 
 		gain := balance + withdrawal - investment
 		networths = append(networths, Overview{Date: start, InvestmentAmount: investment, WithdrawalAmount: withdrawal, GainAmount: gain})
+
+		if len(postings) == 0 && math.Abs(balance) < 0.01 {
+			break
+		}
 	}
 	return networths
 }

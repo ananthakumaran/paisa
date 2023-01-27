@@ -28,6 +28,7 @@
     "dayjs": "^1.11.0",
     "esbuild": "^0.14.29",
     "lodash": "^4.17.21",
+    "sass": "^1.57.1",
     "sprintf-js": "^1.1.2",
     "svelte-language-server": "^0.15.0",
     "tippy.js": "^6.3.7"

@@ -1,7 +1,7 @@
 .PHONY: docs
 
 serve:
-	./node_modules/.bin/nodemon --signal SIGTERM --watch '.' --ext go,js,css,html --exec 'go run . serve || exit 1'
+	./node_modules/.bin/nodemon --signal SIGTERM --delay 2000ms --watch '.' --ext go,js,css,html --exec 'go run . serve || exit 1'
 watch:
 	npm run "build:watch"
 docs:

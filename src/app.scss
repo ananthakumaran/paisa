@@ -1,21 +1,22 @@
 $fa-font-path: "../node_modules/@fortawesome/fontawesome-free/webfonts";
 
-$family-sans-serif: BlinkMacSystemFont, -apple-system, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", "Helvetica", "Arial", sans-serif, "Font Awesome 6 Free Solid";
+$family-sans-serif: BlinkMacSystemFont, -apple-system, "Segoe UI", "Roboto", "Oxygen", "Ubuntu",
+  "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", "Helvetica", "Arial", sans-serif,
+  "Font Awesome 6 Free Solid";
 
 @import "@fortawesome/fontawesome-free/scss/fontawesome.scss";
 @import "@fortawesome/fontawesome-free/scss/regular.scss";
 @import "@fortawesome/fontawesome-free/scss/solid.scss";
 
-
 @import "bulma/sass/utilities/_all.sass";
 
 @font-face {
-  font-family: 'Font Awesome 6 Free Solid';
+  font-family: "Font Awesome 6 Free Solid";
   font-style: normal;
   font-weight: 900;
   font-display: $fa-font-display;
-  src: url('#{$fa-font-path}/fa-solid-900.woff2') format('woff2'),
-    url('#{$fa-font-path}/fa-solid-900.ttf') format('truetype');
+  src: url("#{$fa-font-path}/fa-solid-900.woff2") format("woff2"),
+    url("#{$fa-font-path}/fa-solid-900.ttf") format("truetype");
 }
 
 @import "bulma/bulma.sass";
@@ -46,7 +47,8 @@ body {
     fill: #aaa;
   }
 
-  path.domain, line {
+  path.domain,
+  line {
     fill: none;
     stroke: #ccc;
     shape-rendering: crispEdges;
@@ -90,7 +92,6 @@ body {
 #d3-breakdown .legendOrdinal .label {
   font-size: 8px;
 }
-
 
 #d3-salary-timeline .x.axis > g.tick {
   display: none;
@@ -186,10 +187,9 @@ body {
   padding: 1.5rem !important;
 }
 
-.navbar-item, .navbar-link {
+.navbar-item,
+.navbar-link {
   &.is-active {
     font-weight: 600;
   }
 }
-
-

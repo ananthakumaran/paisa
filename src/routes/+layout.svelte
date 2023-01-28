@@ -35,7 +35,7 @@
   });
 </script>
 
-<nav class="navbar" aria-label="main navigation">
+<nav class="navbar is-transparent" aria-label="main navigation">
   <div class="navbar-brand">
     <span class="navbar-item is-size-4 has-text-weight-medium">₹ Paisa</span>
     <a
@@ -67,7 +67,7 @@
       <div class="navbar-item has-dropdown is-hoverable">
         <a class="navbar-link" class:is-active={$page.url.pathname.startsWith("/assets/")}>Assets</a
         >
-        <div class="navbar-dropdown">
+        <div class="navbar-dropdown is-boxed">
           <a
             id="investment"
             class="navbar-item"
@@ -92,7 +92,7 @@
         <a class="navbar-link" class:is-active={$page.url.pathname.startsWith("/liabilities/")}
           >Liabilities</a
         >
-        <div class="navbar-dropdown">
+        <div class="navbar-dropdown is-boxed">
           <a
             class="navbar-item"
             href="/liabilities/interest"
@@ -109,7 +109,7 @@
       <div class="navbar-item has-dropdown is-hoverable">
         <a class="navbar-link" class:is-active={$page.url.pathname.startsWith("/ledger/")}>Ledger</a
         >
-        <div class="navbar-dropdown">
+        <div class="navbar-dropdown is-boxed">
           <a
             id="holding"
             class="navbar-item"
@@ -132,7 +132,7 @@
       </div>
       <div class="navbar-item has-dropdown is-hoverable">
         <a class="navbar-link" class:is-active={$page.url.pathname.startsWith("/tax/")}>Tax</a>
-        <div class="navbar-dropdown">
+        <div class="navbar-dropdown is-boxed">
           <a
             id="harvest"
             class="navbar-item"
@@ -157,7 +157,7 @@
         <a class="navbar-link" class:is-active={$page.url.pathname.startsWith("/retirement/")}
           >Retirement</a
         >
-        <div class="navbar-dropdown">
+        <div class="navbar-dropdown is-boxed">
           <a
             id="retirement_progress"
             class="navbar-item"

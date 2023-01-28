@@ -179,6 +179,16 @@ body {
   align-items: center;
 }
 
+// BULMA overrides
+
 .section {
   padding: 1.5rem !important;
 }
+
+.navbar-item, .navbar-link {
+  &.is-active {
+    font-weight: 600;
+  }
+}
+
+

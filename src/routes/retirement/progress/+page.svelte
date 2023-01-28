@@ -1,5 +1,6 @@
 <script lang="ts">
   import COLORS from "$lib/colors";
+  import Progress from "$lib/components/Progress.svelte";
   import { ajax, formatCurrency, formatFloat, formatPercentage } from "$lib/utils";
   import { onMount } from "svelte";
 
@@ -63,35 +64,12 @@
 </section>
 
 <section class="section">
-  <div class="container is-fluid">
-    <div style="position: relative;">
-      <progress class="progress is-success is-large" value={progressPercent} max="100"
-        >{progressPercent}%</progress
-      >
-      <span
-        class="has-text-weight-bold progress-percent {progressPercent < 10 && 'less-than-10'}"
-        style="left: {progressPercent}%;">{formatPercentage(progressPercent / 100, 2)}</span
-      >
-    </div>
-  </div>
+  <Progress {progressPercent} />
 </section>
 
 <style>
   .level-item p.title {
     padding: 5px;
     color: white;
-  }
-
-  span.progress-percent {
-    position: absolute;
-    top: 0;
-    margin-left: -50px;
-    margin-top: 2px;
-    color: white;
-  }
-
-  span.progress-percent.less-than-10 {
-    margin-left: 5px;
-    color: #0a0a0a;
   }
 </style>

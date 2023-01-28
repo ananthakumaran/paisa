@@ -15,20 +15,26 @@ import (
 )
 
 type RetirementConfig struct {
-	Swr      float64
-	Expenses []string
-	Savings  []string
+	Swr            float64
+	YearlyExpenses float64 `mapstructure:"yearly_expenses"`
+	Expenses       []string
+	Savings        []string
 }
 
 func GetRetirementProgress(db *gorm.DB) gin.H {
-	var config RetirementConfig = RetirementConfig{Swr: 4, Savings: []string{"Assets:*"}, Expenses: []string{"Expenses:*"}}
+	var config RetirementConfig = RetirementConfig{Swr: 4, Savings: []string{"Assets:*"}, Expenses: []string{"Expenses:*"}, YearlyExpenses: 0}
 	viper.UnmarshalKey("retirement", &config)
 
 	savings := accounting.FilterByGlob(query.Init(db).Like("Assets:%").All(), config.Savings)
 	savings = service.PopulateMarketPrice(db, savings)
 	savingsTotal := accounting.CurrentBalance(savings)
 
-	return gin.H{"savings_total": savingsTotal, "swr": config.Swr, "yearly_expense": calculateAverageExpense(db, config)}
+	yearlyExpenses := config.YearlyExpenses
+	if !(yearlyExpenses > 0) {
+		yearlyExpenses = calculateAverageExpense(db, config)
+	}
+
+	return gin.H{"savings_total": savingsTotal, "swr": config.Swr, "yearly_expense": yearlyExpenses}
 }
 
 func calculateAverageExpense(db *gorm.DB, config RetirementConfig) float64 {

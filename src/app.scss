@@ -1,4 +1,22 @@
+$fa-font-path: "../node_modules/@fortawesome/fontawesome-free/webfonts";
+
+@import "@fortawesome/fontawesome-free/scss/fontawesome.scss";
+@import "@fortawesome/fontawesome-free/scss/regular.scss";
+@import "@fortawesome/fontawesome-free/scss/solid.scss";
+
+$family-sans-serif: BlinkMacSystemFont, -apple-system, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", "Helvetica", "Arial", sans-serif, "Font Awesome 6 Free Solid";
+
 @import "bulma/sass/utilities/_all.sass";
+
+@font-face {
+  font-family: 'Font Awesome 6 Free Solid';
+  font-style: normal;
+  font-weight: 900;
+  font-display: $fa-font-display;
+  src: url('#{$fa-font-path}/fa-solid-900.woff2') format('woff2'),
+    url('#{$fa-font-path}/fa-solid-900.ttf') format('truetype');
+}
+
 @import "bulma/bulma.sass";
 
 :focus {
@@ -9,31 +27,48 @@ body {
   font-size: 14px;
 }
 
-.axis text {
-  font-size: 10px;
-  fill: #aaa;
-}
-
 .inline-text text {
   font-size: 12px;
   font-weight: bold;
 }
 
-.axis.dark text {
-  font-size: 12px;
-  fill: #666;
-}
+.axis {
+  font-family: $family-sans-serif;
 
-.axis path.domain,
-.axis line {
-  fill: none;
-  stroke: #ccc;
-  shape-rendering: crispEdges;
-}
+  &.dark text {
+    fill: #666;
+    font-size: 12px;
+  }
 
-.axis .tick line {
-  stroke: #dedede;
-  shape-rendering: crispEdges;
+  text {
+    font-size: 10px;
+    fill: #aaa;
+  }
+
+  path.domain, line {
+    fill: none;
+    stroke: #ccc;
+    shape-rendering: crispEdges;
+  }
+
+  .tick line {
+    stroke: #dedede;
+    shape-rendering: crispEdges;
+  }
+
+  &.y {
+    line {
+      stroke: #f5f5f5;
+    }
+
+    path.domain {
+      display: none;
+    }
+
+    &.keep-domain path.domain {
+      display: block;
+    }
+  }
 }
 
 .legendOrdinal .label,
@@ -45,6 +80,7 @@ body {
   text-transform: uppercase;
   font-weight: normal;
   color: #4a4a4a;
+  fill: #4a4a4a;
 }
 
 #d3-investment-timeline .legendOrdinal .label,
@@ -54,17 +90,6 @@ body {
   font-size: 8px;
 }
 
-.y.axis line {
-  stroke: #f5f5f5;
-}
-
-.y.axis path.domain {
-  display: none;
-}
-
-.y.axis.keep-domain path.domain {
-  display: block;
-}
 
 #d3-salary-timeline .x.axis > g.tick {
   display: none;

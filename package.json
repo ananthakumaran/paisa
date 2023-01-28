@@ -13,7 +13,7 @@
     "format": "prettier --plugin-search-dir . --write ."
   },
   "dependencies": {
-    "@fortawesome/fontawesome-free": "^5.0",
+    "@fortawesome/fontawesome-free": "^6.0",
     "@sveltejs/adapter-static": "^1.0.0",
     "@types/clusterize.js": "^0.18.1",
     "@types/d3": "^7.1.0",
@@ -30,6 +30,7 @@
     "lodash": "^4.17.21",
     "sass": "^1.57.1",
     "sprintf-js": "^1.1.2",
+    "stemmer": "^2.0.1",
     "svelte-language-server": "^0.15.0",
     "tippy.js": "^6.3.7"
   },

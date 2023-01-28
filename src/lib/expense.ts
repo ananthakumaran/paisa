@@ -14,10 +14,13 @@ import {
   skipTicks,
   tooltip,
   generateColorScheme,
-  secondName
+  secondName,
+  restName,
+  firstName
 } from "./utils";
 import COLORS from "./colors";
 import type { Writable } from "svelte/store";
+import { iconify } from "./icon";
 
 export function renderCalendar(
   month: string,
@@ -63,6 +66,7 @@ export function renderCalendar(
       es.map((p) => {
         return [
           p.timestamp.format("DD MMM YYYY"),
+          [iconify(restName(p.account), { group: firstName(p.account) })],
           [p.payee, "is-clipped"],
           [formatCurrency(p.amount), "has-text-weight-bold has-text-right"]
         ];
@@ -259,7 +263,12 @@ export function renderMonthlyExpensesTimeline(
           const total = (d.data as any)[key];
           if (total > 0) {
             grandTotal += total;
-            return [[key, [formatCurrency(total), "has-text-weight-bold has-text-right"]]];
+            return [
+              [
+                iconify(key, { group: "Expenses" }),
+                [formatCurrency(total), "has-text-weight-bold has-text-right"]
+              ]
+            ];
           }
           return [];
         }),
@@ -394,7 +403,9 @@ export function renderMonthlyExpensesTimeline(
     .shape("rect")
     .orient("horizontal")
     .shapePadding(100)
-    .labels(groups)
+    .labels(({ i, generatedLabels }: { i: number; generatedLabels: string[] }) => {
+      return iconify(generatedLabels[i], { group: "Expenses" });
+    })
     .on("cellclick", function () {
       const group = this.__data__;
       if (selectedGroups.length == 1 && selectedGroups[0] == group) {
@@ -471,7 +482,9 @@ export function renderCurrentExpensesBreakdown(z: d3.ScaleOrdinal<string, string
       .transition(t)
       .call(d3.axisBottom(x).tickSize(-height).tickFormat(skipTicks(60, x, formatCurrencyCrude)));
 
-    yAxis.transition(t).call(d3.axisLeft(y));
+    yAxis
+      .transition(t)
+      .call(d3.axisLeft(y).tickFormat((g) => iconify(g, { group: "Expenses", suffix: true })));
 
     const tooltipContent = (d: Point) => {
       const total = _.sumBy(d.postings, (p) => p.amount);
@@ -526,6 +539,9 @@ export function renderCurrentExpensesBreakdown(z: d3.ScaleOrdinal<string, string
         (exit) => exit.remove()
       );
 
+    const rightLabel = (d: Point) =>
+      `${formatCurrency(d.total)} ${formatFixedWidthFloat((d.total / total) * 100, 6)}%`;
+
     bar
       .selectAll("text")
       .data(points, (p: any) => p.category)
@@ -546,16 +562,10 @@ export function renderCurrentExpensesBreakdown(z: d3.ScaleOrdinal<string, string
               return chroma(z(d.category)).darken(0.8).hex();
             })
             .attr("class", "is-family-monospace")
-            .text(
-              (d) =>
-                `${formatCurrency(d.total)} ${formatFixedWidthFloat((d.total / total) * 100, 6)}%`
-            ),
+            .text(rightLabel),
         (update) =>
           update
-            .text(
-              (d) =>
-                `${formatCurrency(d.total)} ${formatFixedWidthFloat((d.total / total) * 100, 6)}%`
-            )
+            .text(rightLabel)
             .transition(t)
             .attr("y", function (d) {
               return y(d.category) + y.bandwidth() / 2;

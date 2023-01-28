@@ -342,6 +342,10 @@ export function forEachYear(
   }
 }
 
+export function firstName(account: string) {
+  return _.first(account.split(":"));
+}
+
 export function lastName(account: string) {
   return _.last(account.split(":"));
 }

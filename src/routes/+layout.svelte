@@ -42,7 +42,7 @@
       role="button"
       class="navbar-burger"
       class:is-active={isBurger === true}
-      on:click={(_e) => (isBurger = !isBurger)}
+      on:click|preventDefault={(_e) => (isBurger = !isBurger)}
       aria-label="menu"
       aria-expanded="false"
       data-target="navbarBasicExample"

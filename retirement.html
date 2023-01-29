@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Tax - ₹ Paisa</title>
+        <title>Retirement - ₹ Paisa</title>
         <!-- Custom HTML head -->
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="">
@@ -75,7 +75,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="introduction.html">Introduction</a></li><li class="chapter-item expanded affix "><li class="part-title">Getting Started</li><li class="chapter-item expanded "><a href="installation.html"><strong aria-hidden="true">1.</strong> Installation</a></li><li class="chapter-item expanded "><a href="tutorial.html"><strong aria-hidden="true">2.</strong> Tutorial</a></li><li class="chapter-item expanded affix "><li class="part-title">Reference Guide</li><li class="chapter-item expanded "><a href="accounts.html"><strong aria-hidden="true">3.</strong> Accounts</a></li><li class="chapter-item expanded "><a href="commodities.html"><strong aria-hidden="true">4.</strong> Commodities</a></li><li class="chapter-item expanded "><a href="allocation-targets.html"><strong aria-hidden="true">5.</strong> Allocation Targets</a></li><li class="chapter-item expanded "><a href="tax.html" class="active"><strong aria-hidden="true">6.</strong> Tax</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="tax-harvesting.html"><strong aria-hidden="true">6.1.</strong> Tax Harvesting</a></li><li class="chapter-item expanded "><a href="capital-gains.html"><strong aria-hidden="true">6.2.</strong> Capital Gains</a></li><li class="chapter-item expanded "><a href="schedule-al.html"><strong aria-hidden="true">6.3.</strong> Schedule AL</a></li></ol></li><li class="chapter-item expanded "><a href="retirement.html"><strong aria-hidden="true">7.</strong> Retirement</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="introduction.html">Introduction</a></li><li class="chapter-item expanded affix "><li class="part-title">Getting Started</li><li class="chapter-item expanded "><a href="installation.html"><strong aria-hidden="true">1.</strong> Installation</a></li><li class="chapter-item expanded "><a href="tutorial.html"><strong aria-hidden="true">2.</strong> Tutorial</a></li><li class="chapter-item expanded affix "><li class="part-title">Reference Guide</li><li class="chapter-item expanded "><a href="accounts.html"><strong aria-hidden="true">3.</strong> Accounts</a></li><li class="chapter-item expanded "><a href="commodities.html"><strong aria-hidden="true">4.</strong> Commodities</a></li><li class="chapter-item expanded "><a href="allocation-targets.html"><strong aria-hidden="true">5.</strong> Allocation Targets</a></li><li class="chapter-item expanded "><a href="tax.html"><strong aria-hidden="true">6.</strong> Tax</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="tax-harvesting.html"><strong aria-hidden="true">6.1.</strong> Tax Harvesting</a></li><li class="chapter-item expanded "><a href="capital-gains.html"><strong aria-hidden="true">6.2.</strong> Capital Gains</a></li><li class="chapter-item expanded "><a href="schedule-al.html"><strong aria-hidden="true">6.3.</strong> Schedule AL</a></li></ol></li><li class="chapter-item expanded "><a href="retirement.html" class="active"><strong aria-hidden="true">7.</strong> Retirement</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -134,26 +134,51 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="tax"><a class="header" href="#tax">Tax</a></h1>
-<p>Paisa provides few features to help with tax filing and tax
-optimization.</p>
-<h2 id="disclaimer"><a class="header" href="#disclaimer">Disclaimer</a></h2>
-<p>The author of this tool is not an accountant, the calculations are
-made based on their interpretation of rules and regulation. This tool
-is distributed free hoping it would be useful. The users are advised
-to consult a tax accountant before making any decision based on the
-information provided here. Check the <a href="https://github.com/ananthakumaran/paisa/blob/master/LICENSE">LICENSE</a> of paisa for more
-details.</p>
+                        <h1 id="retirement"><a class="header" href="#retirement">Retirement</a></h1>
+<p>Paisa will help you plan your retirement and track your progress. The
+first part is figuring out what should be your retirement corpus. This
+will be your target. Instead of specifying the amount explicitly, you
+can specify your expected yearly expenses and the safe withdrawal
+rate.</p>
+<pre><code class="language-yaml">retirement:
+    swr: 3.3
+    yearly_expenses: 1100000
+</code></pre>
+<p>If you use paisa to track expenses, instead of specifying the
+<code>yearly_expenses</code>, you can specify the list of accounts. Paisa will
+take the average of the last 3 year expenses</p>
+<pre><code class="language-yaml">retirement:
+  swr: 2
+  expenses:
+    - Expenses:Entertainment
+    - Expenses:Gift
+    - Expenses:Insurance
+    - Expenses:Misc
+    - Expenses:Shopping
+    - Expenses:Utilities
+</code></pre>
+<p>Now that the target is specified, you need to specify the list of
+accounts where you keep your retirement savings.</p>
+<pre><code class="language-yaml">retirement:
+  swr: 2
+  expenses:
+    - Expenses:Entertainment
+    - Expenses:Gift
+    - Expenses:Insurance
+    - Expenses:Misc
+    - Expenses:Shopping
+    - Expenses:Utilities
+  savings:
+    - Assets:Equity:*
+    - Assets:Debt:*
+</code></pre>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="allocation-targets.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="schedule-al.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
-                            </a>
-                            <a rel="next" href="tax-harvesting.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                                <i class="fa fa-angle-right"></i>
                             </a>
                         <div style="clear: both"></div>
                     </nav>
@@ -161,11 +186,8 @@ details.</p>
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="allocation-targets.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="schedule-al.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
-                    </a>
-                    <a rel="next" href="tax-harvesting.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                        <i class="fa fa-angle-right"></i>
                     </a>
             </nav>
 

@@ -76,7 +76,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="introduction.html">Introduction</a></li><li class="chapter-item expanded affix "><li class="part-title">Getting Started</li><li class="chapter-item expanded "><a href="installation.html"><strong aria-hidden="true">1.</strong> Installation</a></li><li class="chapter-item expanded "><a href="tutorial.html"><strong aria-hidden="true">2.</strong> Tutorial</a></li><li class="chapter-item expanded affix "><li class="part-title">Reference Guide</li><li class="chapter-item expanded "><a href="accounts.html"><strong aria-hidden="true">3.</strong> Accounts</a></li><li class="chapter-item expanded "><a href="commodities.html"><strong aria-hidden="true">4.</strong> Commodities</a></li><li class="chapter-item expanded "><a href="allocation-targets.html"><strong aria-hidden="true">5.</strong> Allocation Targets</a></li><li class="chapter-item expanded "><a href="tax.html"><strong aria-hidden="true">6.</strong> Tax</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="tax-harvesting.html"><strong aria-hidden="true">6.1.</strong> Tax Harvesting</a></li><li class="chapter-item expanded "><a href="capital-gains.html"><strong aria-hidden="true">6.2.</strong> Capital Gains</a></li><li class="chapter-item expanded "><a href="schedule-al.html"><strong aria-hidden="true">6.3.</strong> Schedule AL</a></li></ol></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="introduction.html">Introduction</a></li><li class="chapter-item expanded affix "><li class="part-title">Getting Started</li><li class="chapter-item expanded "><a href="installation.html"><strong aria-hidden="true">1.</strong> Installation</a></li><li class="chapter-item expanded "><a href="tutorial.html"><strong aria-hidden="true">2.</strong> Tutorial</a></li><li class="chapter-item expanded affix "><li class="part-title">Reference Guide</li><li class="chapter-item expanded "><a href="accounts.html"><strong aria-hidden="true">3.</strong> Accounts</a></li><li class="chapter-item expanded "><a href="commodities.html"><strong aria-hidden="true">4.</strong> Commodities</a></li><li class="chapter-item expanded "><a href="allocation-targets.html"><strong aria-hidden="true">5.</strong> Allocation Targets</a></li><li class="chapter-item expanded "><a href="tax.html"><strong aria-hidden="true">6.</strong> Tax</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="tax-harvesting.html"><strong aria-hidden="true">6.1.</strong> Tax Harvesting</a></li><li class="chapter-item expanded "><a href="capital-gains.html"><strong aria-hidden="true">6.2.</strong> Capital Gains</a></li><li class="chapter-item expanded "><a href="schedule-al.html"><strong aria-hidden="true">6.3.</strong> Schedule AL</a></li></ol></li><li class="chapter-item expanded "><a href="retirement.html"><strong aria-hidden="true">7.</strong> Retirement</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -553,6 +553,44 @@ previous financial year.</p>
           - Assets:Equity:*
           - Assets:Debt:*
 
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="retirement"><a class="header" href="#retirement">Retirement</a></h1>
+<p>Paisa will help you plan your retirement and track your progress. The
+first part is figuring out what should be your retirement corpus. This
+will be your target. Instead of specifying the amount explicitly, you
+can specify your expected yearly expenses and the safe withdrawal
+rate.</p>
+<pre><code class="language-yaml">retirement:
+    swr: 3.3
+    yearly_expenses: 1100000
+</code></pre>
+<p>If you use paisa to track expenses, instead of specifying the
+<code>yearly_expenses</code>, you can specify the list of accounts. Paisa will
+take the average of the last 3 year expenses</p>
+<pre><code class="language-yaml">retirement:
+  swr: 2
+  expenses:
+    - Expenses:Entertainment
+    - Expenses:Gift
+    - Expenses:Insurance
+    - Expenses:Misc
+    - Expenses:Shopping
+    - Expenses:Utilities
+</code></pre>
+<p>Now that the target is specified, you need to specify the list of
+accounts where you keep your retirement savings.</p>
+<pre><code class="language-yaml">retirement:
+  swr: 2
+  expenses:
+    - Expenses:Entertainment
+    - Expenses:Gift
+    - Expenses:Insurance
+    - Expenses:Misc
+    - Expenses:Shopping
+    - Expenses:Utilities
+  savings:
+    - Assets:Equity:*
+    - Assets:Debt:*
 </code></pre>
 
                     </main>

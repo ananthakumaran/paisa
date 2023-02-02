@@ -1,13 +1,16 @@
 package accounting
 
 import (
+	"sort"
 	"time"
 
 	"path/filepath"
 
 	"github.com/ananthakumaran/paisa/internal/model/posting"
+	"github.com/ananthakumaran/paisa/internal/service"
 	"github.com/samber/lo"
 	log "github.com/sirupsen/logrus"
+	"gorm.io/gorm"
 )
 
 type Balance struct {
@@ -100,4 +103,35 @@ func CurrentBalance(postings []posting.Posting) float64 {
 	return lo.SumBy(postings, func(p posting.Posting) float64 {
 		return p.MarketAmount
 	})
+}
+
+type Point struct {
+	Date  time.Time `json:"date"`
+	Value float64   `json:"value"`
+}
+
+func RunningBalance(db *gorm.DB, postings []posting.Posting) []Point {
+	sort.Slice(postings, func(i, j int) bool { return postings[i].Date.Before(postings[j].Date) })
+	var series []Point
+
+	if len(postings) == 0 {
+		return series
+	}
+
+	var p posting.Posting
+	var pastPostings []posting.Posting
+
+	end := time.Now()
+	for start := postings[0].Date; start.Before(end); start = start.AddDate(0, 0, 1) {
+		for len(postings) > 0 && (postings[0].Date.Before(start) || postings[0].Date.Equal(start)) {
+			p, postings = postings[0], postings[1:]
+			pastPostings = append(pastPostings, p)
+		}
+
+		balance := lo.SumBy(pastPostings, func(p posting.Posting) float64 {
+			return service.GetMarketPrice(db, p, start)
+		})
+		series = append(series, Point{Date: start, Value: balance})
+	}
+	return series
 }

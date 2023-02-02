@@ -34,7 +34,7 @@ func GetRetirementProgress(db *gorm.DB) gin.H {
 		yearlyExpenses = calculateAverageExpense(db, config)
 	}
 
-	return gin.H{"savings_total": savingsTotal, "swr": config.Swr, "yearly_expense": yearlyExpenses}
+	return gin.H{"savings_timeline": accounting.RunningBalance(db, savings), "savings_total": savingsTotal, "swr": config.Swr, "yearly_expense": yearlyExpenses}
 }
 
 func calculateAverageExpense(db *gorm.DB, config RetirementConfig) float64 {

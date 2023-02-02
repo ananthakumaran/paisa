@@ -176,8 +176,20 @@ export interface ScheduleALEntry {
   amount: number;
 }
 
+export interface Point {
+  date: dayjs.Dayjs;
+  value: number;
+}
+
+export interface Forecast {
+  date: dayjs.Dayjs;
+  value: number;
+  error: number;
+}
+
 export interface RetirementProgress {
   savings_total: number;
+  savings_timeline: Point[];
   swr: number;
   yearly_expense: number;
 }

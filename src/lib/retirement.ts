@@ -1,11 +1,16 @@
 import type { Arima } from "arima/async";
 import * as d3 from "d3";
-import _, { first, isEmpty, last } from "lodash";
+import _, { first, isEmpty, last, takeRight } from "lodash";
+import tippy, { type Placement } from "tippy.js";
 import COLORS from "./colors";
-import type { Forecast, Point } from "./utils";
-import { formatCurrencyCrude } from "./utils";
+import { formatCurrencyCrude, type Forecast, type Point } from "./utils";
 
-export function renderProgress(points: Point[], predictions: Forecast[], element: Element) {
+export function renderProgress(
+  points: Point[],
+  predictions: Forecast[],
+  breakPoints: Point[],
+  element: Element
+) {
   const start = first(points).date,
     end = last(predictions).date;
   const positions = _.map(points.concat(predictions), (p) => p.value);
@@ -63,7 +68,7 @@ export function renderProgress(points: Point[], predictions: Forecast[], element
         .line<Point>()
         .curve(d3.curveBasis)
         .x((d) => x(d.date))
-        .y((d) => y(d.value))(predictions)
+        .y((d) => y(d.value))(takeRight(points, 1).concat(predictions))
     );
 
   g.append("path")
@@ -78,6 +83,47 @@ export function renderProgress(points: Point[], predictions: Forecast[], element
         .y0((d) => y(d.value - d.error / 2))
         .y1((d) => y(d.value + d.error / 2))(predictions)
     );
+
+  g.append("g")
+    .selectAll("circle")
+    .data(breakPoints)
+    .join("circle")
+    .attr("r", "3")
+    .style("pointer-events", "none")
+    .attr("fill", COLORS.tertiary)
+    .attr("class", "axis x")
+    .attr("data-tippy-placement", (_d, i) => ["top-end", "top", "bottom", "top-start"][i])
+    .attr("data-tippy-content", (d, i) => {
+      return `
+<div class='has-text-centered'>${formatCurrencyCrude(d.value)} (${
+        (i + 1) * 25
+      }%)<br />${d.date.format("DD MMM YYYY")}</div>
+`;
+    })
+    .attr("cx", (p) => x(p.date))
+    .attr("cy", (p) => y(p.value));
+
+  const instances = tippy("circle[data-tippy-content]", {
+    onShow: (instance) => {
+      const content = instance.reference.getAttribute("data-tippy-content");
+      if (!_.isEmpty(content)) {
+        instance.setContent(content);
+        instance.setProps({
+          placement: instance.reference.getAttribute("data-tippy-placement") as Placement
+        });
+      } else {
+        return false;
+      }
+    },
+    hideOnClick: false,
+    allowHTML: true
+  });
+
+  instances.forEach((i) => i.show());
+
+  return () => {
+    instances.forEach((i) => i.destroy());
+  };
 }
 
 export function forecast(points: Point[], target: number, ARIMA: typeof Arima): Forecast[] {
@@ -95,6 +141,9 @@ export function forecast(points: Point[], target: number, ARIMA: typeof Arima): 
   let i = 1;
   while (i < 10) {
     const [predictions, errors] = arima.predict(predictYears * i * 365);
+    if (isEmpty(predictions)) {
+      return [];
+    }
     if (last(predictions) > target) {
       const predictionsTimeline: Forecast[] = [];
       let start = last(points).date;
@@ -108,4 +157,18 @@ export function forecast(points: Point[], target: number, ARIMA: typeof Arima): 
     i++;
   }
   return [];
+}
+
+export function findBreakPoints(points: Point[], target: number): Point[] {
+  const result: Point[] = [];
+  let i = 1;
+  while (i <= 4 && !isEmpty(points)) {
+    const p = points.shift();
+    if (p.value > target * (i / 4)) {
+      result.push(p);
+      i++;
+    }
+  }
+
+  return result;
 }

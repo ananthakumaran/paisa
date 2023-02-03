@@ -2,9 +2,10 @@
   import COLORS from "$lib/colors";
   import Progress from "$lib/components/Progress.svelte";
   import { ajax, formatCurrency, formatFloat, type Point } from "$lib/utils";
-  import { onMount } from "svelte";
+  import { onMount, tick, onDestroy } from "svelte";
   import ARIMAPromise from "arima/async";
-  import { forecast, renderProgress } from "$lib/retirement";
+  import { forecast, renderProgress, findBreakPoints } from "$lib/retirement";
+  import { isEmpty } from "lodash";
 
   let svg: Element;
   let savingsTotal = 0,
@@ -12,7 +13,14 @@
     swr = 0,
     yearlyExpense = 0,
     progressPercent = 0,
-    savingsTimeline: Point[] = [];
+    skipProgress = true,
+    breakPoints: Point[] = [],
+    savingsTimeline: Point[] = [],
+    destroyCallback = () => {};
+
+  onDestroy(async () => {
+    destroyCallback();
+  });
 
   onMount(async () => {
     ({
@@ -26,7 +34,13 @@
 
     const ARIMA = await ARIMAPromise;
     const predictionsTimeline = forecast(savingsTimeline, targetSavings, ARIMA);
-    renderProgress(savingsTimeline, predictionsTimeline, svg);
+    if (isEmpty(predictionsTimeline)) {
+      return;
+    }
+    skipProgress = false;
+    await tick();
+    breakPoints = findBreakPoints(savingsTimeline.concat(predictionsTimeline), targetSavings);
+    destroyCallback = renderProgress(savingsTimeline, predictionsTimeline, breakPoints, svg);
   });
 </script>
 
@@ -76,7 +90,7 @@
   <Progress {progressPercent} />
 </section>
 
-<section class="section tab-retirement-progress">
+<section class="section tab-retirement-progress" class:is-hidden={skipProgress}>
   <div class="container is-fluid">
     <div class="columns">
       <div class="column is-12">

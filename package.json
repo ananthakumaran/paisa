@@ -33,6 +33,7 @@
     "sprintf-js": "^1.1.2",
     "stemmer": "^2.0.1",
     "svelte-language-server": "^0.15.0",
+    "svelte-tiny-virtual-list": "^2.0.5",
     "tippy.js": "^6.3.7"
   },
   "devDependencies": {

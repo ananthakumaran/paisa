@@ -18,6 +18,13 @@ export interface Posting {
   timestamp: dayjs.Dayjs;
 }
 
+export interface Transaction {
+  id: string;
+  date: dayjs.Dayjs;
+  payee: string;
+  postings: Posting[];
+}
+
 export interface Price {
   id: string;
   date: string;
@@ -211,6 +218,7 @@ export function ajax(
   route: "/api/ledger"
 ): Promise<{ postings: Posting[]; breakdowns: Breakdown[] }>;
 export function ajax(route: "/api/price"): Promise<{ prices: Price[] }>;
+export function ajax(route: "/api/transaction"): Promise<{ transactions: Transaction[] }>;
 export function ajax(route: "/api/overview"): Promise<{
   overview_timeline: Overview[];
   xirr: number;

@@ -34,6 +34,22 @@ body {
   font-weight: bold;
 }
 
+.is-bordered-bottom {
+  border-bottom: 1px solid hsl(0deg, 0%, 86%);
+}
+
+.is-bordered-top {
+  border-top: 1px solid hsl(0deg, 0%, 86%);
+}
+
+.is-bordered-right {
+  border-right: 1px solid hsl(0deg, 0%, 86%);
+}
+
+.is-bordered-left {
+  border-left: 1px solid hsl(0deg, 0%, 86%);
+}
+
 .axis {
   font-family: $family-sans-serif;
 

@@ -4,6 +4,7 @@ export const ssr = false;
 import "../app.scss";
 import "tippy.js/dist/tippy.css";
 import "tippy.js/themes/light.css";
+import "clusterize.js/clusterize.css";
 
 import dayjs from "dayjs";
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";

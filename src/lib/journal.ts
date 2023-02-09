@@ -2,6 +2,7 @@ import dayjs from "dayjs";
 import _ from "lodash";
 import Clusturize from "clusterize.js";
 import { formatCurrency, formatFloat, type Posting } from "./utils";
+import { iconify } from "./icon";
 
 export function renderTransactions(postings: Posting[]) {
   const rows = _.map(postings, (p) => {
@@ -35,7 +36,7 @@ export function renderTransactions(postings: Posting[]) {
 <tr class="${p.timestamp.month() % 2 == 0 ? "has-background-white-ter" : ""}">
        <td>${date}</td>
        <td>${p.payee}</td>
-       <td>${p.account}</td>
+       <td>${iconify(p.account)}</td>
        <td class='has-text-right'>${purchase}</td>
        <td class='has-text-right'>${units}</td>
        <td class='has-text-right'>${price}</td>

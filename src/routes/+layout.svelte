@@ -117,6 +117,12 @@
             class:is-active={$page.url.pathname === "/ledger/holding"}>Holding</a
           >
           <a
+            id="transaction"
+            class="navbar-item"
+            href="/ledger/transaction"
+            class:is-active={$page.url.pathname === "/ledger/transaction"}>Transactions</a
+          >
+          <a
             id="journal"
             class="navbar-item"
             href="/ledger/journal"

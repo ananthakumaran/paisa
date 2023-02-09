@@ -1,5 +1,6 @@
 import * as d3 from "d3";
 import _ from "lodash";
+import { iconText } from "./icon";
 import { type Breakdown, depth, formatCurrency, formatFloat, lastName } from "./utils";
 
 export function renderBreakdowns(breakdowns: Breakdown[]) {
@@ -22,7 +23,9 @@ export function renderBreakdowns(breakdowns: Breakdown[]) {
       }
       const indent = _.repeat("&emsp;&emsp;", depth(b.group) - 1);
       return `
-       <td style='max-width: 200px; overflow: hidden;'>${indent}${lastName(b.group)}</td>
+       <td style='max-width: 200px; overflow: hidden;'>${indent}${iconText(b.group)} ${lastName(
+        b.group
+      )}</td>
        <td class='has-text-right'>${
          b.investment_amount != 0 ? formatCurrency(b.investment_amount) : ""
        }</td>

@@ -18,7 +18,7 @@
     </div>
     <div class="columns">
       <div class="column is-12">
-        <table class="table is-narrow is-fullwidth">
+        <table class="table is-narrow is-fullwidth is-hoverable">
           <thead>
             <tr>
               <th>Account</th>

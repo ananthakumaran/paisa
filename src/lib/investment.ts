@@ -392,7 +392,7 @@ export function renderYearlyCards(yearlyCards: YearlyCard[]) {
     .attr("class", "content")
     .html((card) => {
       return `
-<table class="table is-narrow is-fullwidth is-size-7">
+<table class="table is-narrow is-fullwidth is-size-7 is-hoverable">
   <tbody>
     <tr>
       <td>Gross Salary Income</td>

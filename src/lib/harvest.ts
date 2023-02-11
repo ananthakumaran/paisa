@@ -91,7 +91,7 @@ export function renderHarvestables(harvestables: Harvestable[]) {
 
   summary.append("div").html((h) => {
     return `
-<table class="table is-narrow is-fullwidth">
+<table class="table is-narrow is-fullwidth is-hoverable">
   <tbody>
     <tr>
       <td>Balance Units</td>
@@ -134,7 +134,7 @@ export function renderHarvestables(harvestables: Harvestable[]) {
     .style("overflow-y", "auto")
     .style("max-height", "245px")
     .append("table")
-    .attr("class", "table");
+    .attr("class", "table is-hoverable");
 
   table.append("thead").html(`
 <tr>

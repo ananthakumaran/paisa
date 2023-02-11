@@ -6,6 +6,8 @@
   import ARIMAPromise from "arima/async";
   import { forecast, renderProgress, findBreakPoints } from "$lib/retirement";
   import { isEmpty } from "lodash";
+  import LevelItem from "$lib/components/LevelItem.svelte";
+  import { color } from "d3";
 
   let svg: Element;
   let savingsTotal = 0,
@@ -47,14 +49,14 @@
 <section class="section">
   <div class="container">
     <nav class="level">
-      <div class="level-item has-text-centered">
-        <div>
-          <p class="heading">Current Savings</p>
-          <p class="title" style="background-color: {COLORS.primary};">
-            {formatCurrency(savingsTotal)}
-          </p>
-        </div>
-      </div>
+      <LevelItem
+        title="Current Savings"
+        value={formatCurrency(savingsTotal)}
+        color={COLORS.primary}
+        subtitle="X times Yearly Expenses"
+        subvalue="{formatFloat(savingsTotal / yearlyExpense, 0)}x"
+        subcolor={COLORS.primary}
+      />
       <div class="level-item has-text-centered">
         <div>
           <p class="heading">Yearly Expenses</p>
@@ -63,19 +65,14 @@
           </p>
         </div>
       </div>
-      <div class="level-item has-text-centered">
-        <div>
-          <p class="heading">Target Savings</p>
-          <p
-            class="title"
-            style="background-color: {targetSavings <= savingsTotal
-              ? COLORS.gainText
-              : COLORS.lossText};"
-          >
-            {formatCurrency(targetSavings)}
-          </p>
-        </div>
-      </div>
+      <LevelItem
+        title="Target Savings"
+        value={formatCurrency(targetSavings)}
+        color={targetSavings <= savingsTotal ? COLORS.gainText : COLORS.lossText}
+        subtitle="X times Yearly Expenses"
+        subvalue="{formatFloat(targetSavings / yearlyExpense, 0)}x"
+        subcolor={targetSavings <= savingsTotal ? COLORS.gainText : COLORS.lossText}
+      />
       <div class="level-item has-text-centered">
         <div>
           <p class="heading">SWR</p>

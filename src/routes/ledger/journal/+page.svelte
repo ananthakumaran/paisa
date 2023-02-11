@@ -53,7 +53,7 @@
         id="d3-postings-container"
         style="max-height: calc(100vh - 200px); min-height: calc(100vh - 200px)"
       >
-        <table class="table is-narrow is-fullwidth">
+        <table class="table is-narrow is-fullwidth is-hoverable">
           <thead>
             <tr>
               <th>Date</th>

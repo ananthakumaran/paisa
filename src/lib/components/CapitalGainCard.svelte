@@ -28,7 +28,7 @@
       <div class="content">
         <div class="columns">
           <div class="column is-4">
-            <table class="table is-narrow is-fullwidth">
+            <table class="table is-narrow is-fullwidth is-hoverable">
               <tbody>
                 <tr>
                   <td>Withdrawn</td>

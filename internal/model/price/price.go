@@ -14,6 +14,7 @@ type CommodityType string
 const (
 	MutualFund CommodityType = "mutualfund"
 	NPS        CommodityType = "nps"
+	Stock      CommodityType = "stock"
 )
 
 type Price struct {

@@ -9,6 +9,7 @@ import (
 	"github.com/ananthakumaran/paisa/internal/scraper/india"
 	"github.com/ananthakumaran/paisa/internal/scraper/mutualfund"
 	"github.com/ananthakumaran/paisa/internal/scraper/nps"
+	"github.com/ananthakumaran/paisa/internal/scraper/stock"
 	"github.com/logrusorgru/aurora"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
@@ -32,22 +33,24 @@ func SyncCommodities(db *gorm.DB) {
 	for _, commodity := range commodities {
 		name := commodity.Name
 		log.Info("Fetching commodity ", aurora.Bold(name))
-		schemeCode := commodity.Code
+		code := commodity.Code
 		var prices []*price.Price
 		var err error
 
 		switch commodity.Type {
 		case price.MutualFund:
-			prices, err = mutualfund.GetNav(schemeCode, name)
+			prices, err = mutualfund.GetNav(code, name)
 		case price.NPS:
-			prices, err = nps.GetNav(schemeCode, name)
+			prices, err = nps.GetNav(code, name)
+		case price.Stock:
+			prices, err = stock.GetHistory(code, name)
 		}
 
 		if err != nil {
 			log.Fatal(err)
 		}
 
-		price.UpsertAll(db, commodity.Type, schemeCode, prices)
+		price.UpsertAll(db, commodity.Type, code, prices)
 	}
 }
 

@@ -5,7 +5,7 @@ import dayjs from "dayjs";
 import _ from "lodash";
 import tippy from "tippy.js";
 import COLORS from "./colors";
-import { formatCurrency } from "./utils";
+import { formatCurrency, isMobile } from "./utils";
 import { formatCurrencyCrude, tooltip, type Overview } from "./utils";
 
 function networth(d: Overview) {
@@ -21,7 +21,8 @@ export function renderOverview(points: Overview[], element: Element): () => void
     end = dayjs();
 
   const svg = d3.select(element),
-    margin = { top: 40, right: 80, bottom: 20, left: 40 },
+    right = isMobile() ? 10 : 80,
+    margin = { top: 40, right: right, bottom: 20, left: 40 },
     width = element.parentElement.clientWidth - margin.left - margin.right,
     height = +svg.attr("height") - margin.top - margin.bottom,
     g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
@@ -60,10 +61,12 @@ export function renderOverview(points: Overview[], element: Element): () => void
     .attr("transform", "translate(0," + height + ")")
     .call(d3.axisBottom(x));
 
-  g.append("g")
-    .attr("class", "axis y")
-    .attr("transform", `translate(${width},0)`)
-    .call(d3.axisRight(y).tickPadding(5).tickFormat(formatCurrencyCrude));
+  if (!isMobile()) {
+    g.append("g")
+      .attr("class", "axis y")
+      .attr("transform", `translate(${width},0)`)
+      .call(d3.axisRight(y).tickPadding(5).tickFormat(formatCurrencyCrude));
+  }
 
   g.append("g")
     .attr("class", "axis y")

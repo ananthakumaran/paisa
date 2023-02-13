@@ -300,7 +300,12 @@ export function formatCurrencyCrude(value: number) {
   } else {
     (x = value / 10000000), (unit = "C");
   }
-  const precision = 2;
+  let precision = 2;
+  if (x == Math.round(x)) {
+    precision = 0;
+  } else if (x * 10 == Math.round(x * 10)) {
+    precision = 1;
+  }
   return sprintf(`%.${precision}f %s`, x, unit);
 }
 
@@ -542,4 +547,8 @@ export function tooltip(
     })
     .join("\n");
   return `<table class='table is-narrow is-size-7 popup-table'><tbody>${trs}</tbody></table>`;
+}
+
+export function isMobile() {
+  return window.innerWidth < 1024;
 }

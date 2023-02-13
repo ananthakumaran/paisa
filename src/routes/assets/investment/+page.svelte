@@ -42,10 +42,10 @@
   <div class="container is-fluid">
     <div class="columns is-flex-wrap-wrap">
       <div class="column is-full-tablet is-half-fullhd">
-        <div class="p-3">
+        <div class="py-3">
           <svg id="d3-yearly-investment-timeline" width="100%" />
         </div>
-        <div class="p-3 has-text-centered">
+        <div class="py-3 has-text-centered">
           <p class="heading">Financial Year Investment Timeline</p>
         </div>
       </div>

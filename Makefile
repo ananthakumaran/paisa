@@ -1,7 +1,10 @@
 .PHONY: docs
 
+develop:
+	./node_modules/.bin/concurrently --names "GO,JS" -c "auto" "make serve" "npm run dev"
+
 serve:
-	./node_modules/.bin/nodemon --signal SIGTERM --delay 2000ms --watch '.' --ext go,js,css,html --exec 'go run . serve || exit 1'
+	./node_modules/.bin/nodemon --signal SIGTERM --delay 2000ms --watch '.' --ext go --exec 'go run . serve || exit 1'
 watch:
 	npm run "build:watch"
 docs:

@@ -199,7 +199,7 @@ export function renderYearlyInvestmentTimeline(yearlyCards: YearlyCard[]) {
   const id = "#d3-yearly-investment-timeline";
   const BAR_HEIGHT = 20;
   const svg = d3.select(id),
-    margin = { top: 40, right: 20, bottom: 20, left: 80 },
+    margin = { top: 40, right: 20, bottom: 20, left: 70 },
     width =
       document.getElementById(id.substring(1)).parentElement.clientWidth -
       margin.left -

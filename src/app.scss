@@ -209,3 +209,14 @@ body {
     font-weight: 600;
   }
 }
+
+@include touch {
+  .section {
+    padding: 0.5rem 0.2rem !important;
+  }
+
+  .container.is-fluid {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}

@@ -17,4 +17,4 @@ request.
 
 ## License
 
-This software is licensed under [the MIT license](./LICENSE).
+This software is licensed under [the AGPL 3 or later license](./COPYING).

@@ -3,6 +3,7 @@ package ledger
 import (
 	"bytes"
 	"encoding/csv"
+	"regexp"
 
 	"os/exec"
 	"strconv"
@@ -12,6 +13,40 @@ import (
 
 	"github.com/ananthakumaran/paisa/internal/model/posting"
 )
+
+type LedgerFileError struct {
+	LineFrom uint64 `json:"line_from"`
+	LineTo   uint64 `json:"line_to"`
+	Error    string `json:"error"`
+	Message  string `json:"message"`
+}
+
+func ValidateFile(journalPath string) ([]LedgerFileError, error) {
+	errors := []LedgerFileError{}
+	_, err := exec.LookPath("ledger")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	command := exec.Command("ledger", "-f", journalPath, "balance")
+	var output, error bytes.Buffer
+	command.Stdout = &output
+	command.Stderr = &error
+	err = command.Run()
+	if err == nil {
+		return errors, nil
+	}
+
+	re := regexp.MustCompile(`(?m)While parsing file "[^"]+", line ([0-9]+):\s*\n(?:(?:While|>).*\n)*((?:.*\n)*?Error: .*\n)`)
+
+	matches := re.FindAllStringSubmatch(error.String(), -1)
+
+	for _, match := range matches {
+		line, _ := strconv.ParseUint(match[1], 10, 64)
+		errors = append(errors, LedgerFileError{LineFrom: line, LineTo: line, Message: match[2]})
+	}
+	return errors, err
+}
 
 func Parse(journalPath string) ([]*posting.Posting, error) {
 	var postings []*posting.Posting

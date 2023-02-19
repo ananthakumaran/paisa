@@ -215,6 +215,20 @@ export interface RetirementProgress {
   yearly_expense: number;
 }
 
+export interface LedgerFile {
+  name: string;
+  content: string;
+}
+
+export interface LedgerFileError {
+  line_from: number;
+  line_to: number;
+  error: string;
+  message: string;
+}
+
+const BACKGROUND = ["/api/editor/validate", "/api/editor/save"];
+
 export function ajax(route: "/api/retirement/progress"): Promise<RetirementProgress>;
 export function ajax(route: "/api/harvest"): Promise<{ harvestables: Record<string, Harvestable> }>;
 export function ajax(
@@ -278,13 +292,31 @@ export function ajax(route: "/api/liabilities/interest"): Promise<{
   interest_timeline_breakdown: Interest[];
 }>;
 
+export function ajax(route: "/api/editor/files"): Promise<{
+  files: LedgerFile[];
+}>;
+
+export function ajax(
+  route: "/api/editor/validate",
+  options?: RequestInit
+): Promise<{ errors: LedgerFileError[] }>;
+
+export function ajax(
+  route: "/api/editor/save",
+  options?: RequestInit
+): Promise<{ errors: LedgerFileError[]; saved: boolean }>;
+
 export async function ajax(route: "/api/sync", options?: RequestInit): Promise<any>;
 
 export async function ajax(route: string, options?: RequestInit) {
-  loading.set(true);
+  if (!_.includes(BACKGROUND, route)) {
+    loading.set(true);
+  }
   const response = await fetch(route, options);
   const body = await response.text();
-  loading.set(false);
+  if (!_.includes(BACKGROUND, route)) {
+    loading.set(false);
+  }
   return JSON.parse(body, (key, value) => {
     if (
       _.isString(value) &&

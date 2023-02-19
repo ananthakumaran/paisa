@@ -65,7 +65,8 @@
       ]
     },
     { label: "Retirement", href: "/retirement/progress", help: "retirement" },
-    { label: "Doctor", href: "/doctor" }
+    { label: "Doctor", href: "/doctor" },
+    { label: "Editor", href: "/editor", tag: "alpha" }
   ];
 
   let selectedLink: Link = null;
@@ -160,6 +161,12 @@
               ><span class="icon is-small">
                 <i class="fas fa-question fa-border" />
               </span></a
+            >
+          {/if}
+
+          {#if selectedLink.tag}
+            <span style="font-size: 0.6rem" class="tag is-rounded is-warning"
+              >{selectedLink.tag}</span
             >
           {/if}
         </li>

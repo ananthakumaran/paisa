@@ -233,3 +233,14 @@ body {
     padding-right: 1rem;
   }
 }
+
+.cm-editor {
+  max-height: calc(100vh - 225px);
+}
+.cm-scroller {
+  overflow: auto;
+}
+
+.cm-focused {
+  outline: none !important;
+}

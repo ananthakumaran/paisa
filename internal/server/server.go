@@ -89,6 +89,30 @@ func Listen(db *gorm.DB) {
 		c.JSON(200, liabilities.GetBalance(db))
 	})
 
+	router.GET("/api/editor/files", func(c *gin.Context) {
+		c.JSON(200, GetFiles())
+	})
+
+	router.POST("/api/editor/validate", func(c *gin.Context) {
+		var ledgerFile LedgerFile
+		if err := c.ShouldBindJSON(&ledgerFile); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+
+		c.JSON(200, ValidateFile(ledgerFile))
+	})
+
+	router.POST("/api/editor/save", func(c *gin.Context) {
+		var ledgerFile LedgerFile
+		if err := c.ShouldBindJSON(&ledgerFile); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+
+		c.JSON(200, SaveFile(ledgerFile))
+	})
+
 	router.NoRoute(func(c *gin.Context) {
 		c.Data(http.StatusOK, "text/html; charset=utf-8", []byte(web.Index))
 	})

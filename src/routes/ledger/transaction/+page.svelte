@@ -1,10 +1,9 @@
 <script lang="ts">
-  import { ajax, formatCurrency, type Transaction } from "$lib/utils";
+  import { ajax, type Transaction } from "$lib/utils";
   import { filterTransactions } from "$lib/transaction";
   import _ from "lodash";
   import { onMount } from "svelte";
   import VirtualList from "svelte-tiny-virtual-list";
-  import { iconify } from "$lib/icon";
   import Postings from "$lib/components/Postings.svelte";
 
   let transactions: Transaction[] = [];

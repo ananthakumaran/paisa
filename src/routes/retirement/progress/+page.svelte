@@ -7,7 +7,6 @@
   import { forecast, renderProgress, findBreakPoints } from "$lib/retirement";
   import { isEmpty } from "lodash";
   import LevelItem from "$lib/components/LevelItem.svelte";
-  import { color } from "d3";
 
   let svg: Element;
   let savingsTotal = 0,

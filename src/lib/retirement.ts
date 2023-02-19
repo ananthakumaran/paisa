@@ -116,7 +116,8 @@ export function renderProgress(
       }
     },
     hideOnClick: false,
-    allowHTML: true
+    allowHTML: true,
+    appendTo: element.parentElement
   });
 
   instances.forEach((i) => i.show());

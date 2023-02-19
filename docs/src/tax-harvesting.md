@@ -1,10 +1,10 @@
 # Tax Harvesting
 
-Mutual Fund gains are subject to capital gains tax. The taxation rate
-itself differs based on how long you hold your investment, whether
-it's debt or equity, whether you have more than 1 Lakh gains in a year
-etc. To further complicate things, there might be exit load
-applicable.
+Gains from asset types like Mutual Fund, Stock are subject to capital
+gains tax. The taxation rate itself differs based on how long you hold
+your investment, whether it's debt or equity, whether you have more
+than 1 Lakh gains in a year etc. To further complicate things, there
+might be exit load applicable.
 
 Paisa takes a generic approach and let the user configure when a
 commodity is safe to harvest. There are two fields related to tax

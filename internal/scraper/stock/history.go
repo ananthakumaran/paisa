@@ -92,7 +92,7 @@ func GetHistory(ticker string, commodityName string) ([]*price.Price, error) {
 }
 
 func getTicker(ticker string) (*Response, error) {
-	url := fmt.Sprintf("https://query2.finance.yahoo.com/v8/finance/chart/%s?interval=1d&range=max", ticker)
+	url := fmt.Sprintf("https://query2.finance.yahoo.com/v8/finance/chart/%s?interval=1d&range=50y", ticker)
 	resp, err := http.Get(url)
 	if err != nil {
 		return nil, err

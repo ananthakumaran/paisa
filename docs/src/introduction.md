@@ -8,7 +8,7 @@ finance, specially tailored for Indians. It builds on top of the
 * The journal and config information are stored in plain text files
   that can be easily version controlled. You can collaborate with
   others by giving access to the files.
-* Can track the latest market price of Mutual Funds and NPS Funds
-  holdings.
-* Can show the Mutual Fund units eligible for LTCG and help you plan
-  Tax Harvesting.
+* Can track the latest market price of your Mutual Fund, NPS Fund
+  and Stock holdings.
+* Can show the Mutual Fund and Stock holdings eligible for LTCG and
+  help you plan Tax Harvesting.

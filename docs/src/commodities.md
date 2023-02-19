@@ -80,6 +80,21 @@ INFO Using cached results; pass '-u' to update the cache
 INFO NPS Fund Scheme Code: SM008002
 ```
 
+## Stock
+
+To automatically track the latest value of your stock holdings,
+you need to link the commodity and the stock ticker name.
+
+```yaml
+commodities:
+  - name: APPLE           # commodity name
+    type: stock           # type
+    code: AAPL            # stock ticker code
+```
+
+Stock prices are fetched from yahoo finance website. The ticker code
+should match the code used in yahoo.
+
 ## Updates
 
 **paisa** fetches the latest price of the commodities only when

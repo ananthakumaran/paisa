@@ -21,8 +21,8 @@ type Posting struct {
 	MarketAmount float64 `gorm:"-:all" json:"market_amount"`
 }
 
-func (p *Posting) RestName() string {
-	return strings.Join(strings.Split(p.Account, ":")[1:], ":")
+func (p *Posting) RestName(level int) string {
+	return strings.Join(strings.Split(p.Account, ":")[level:], ":")
 }
 
 func (p *Posting) Price() float64 {

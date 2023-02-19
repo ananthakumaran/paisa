@@ -69,6 +69,12 @@
         >
         <div class="navbar-dropdown is-boxed">
           <a
+            id="asset-balance"
+            class="navbar-item"
+            href="/assets/balance"
+            class:is-active={$page.url.pathname === "/assets/balance"}>Balance</a
+          >
+          <a
             id="investment"
             class="navbar-item"
             href="/assets/investment"
@@ -95,6 +101,12 @@
         <div class="navbar-dropdown is-boxed">
           <a
             class="navbar-item"
+            href="/liabilities/balance"
+            class:is-active={$page.url.pathname === "/liabilities/balance"}>Balance</a
+          >
+
+          <a
+            class="navbar-item"
             href="/liabilities/interest"
             class:is-active={$page.url.pathname === "/liabilities/interest"}>Interest</a
           >
@@ -110,12 +122,6 @@
         <a class="navbar-link" class:is-active={$page.url.pathname.startsWith("/ledger/")}>Ledger</a
         >
         <div class="navbar-dropdown is-boxed">
-          <a
-            id="holding"
-            class="navbar-item"
-            href="/ledger/holding"
-            class:is-active={$page.url.pathname === "/ledger/holding"}>Holding</a
-          >
           <a
             id="transaction"
             class="navbar-item"

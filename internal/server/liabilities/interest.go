@@ -30,10 +30,10 @@ func GetInterest(db *gorm.DB) gin.H {
 	postings := query.Init(db).Like("Liabilities:%").All()
 	expenses := query.Init(db).Like("Expenses:Interest:%").All()
 	postings = service.PopulateMarketPrice(db, postings)
-	byAccount := lo.GroupBy(postings, func(p posting.Posting) string { return p.RestName() })
+	byAccount := lo.GroupBy(postings, func(p posting.Posting) string { return p.RestName(1) })
 	var interests []Interest
 	for account, ps := range byAccount {
-		es := lo.Filter(expenses, func(e posting.Posting, _ int) bool { return e.RestName() == "Interest:"+account })
+		es := lo.Filter(expenses, func(e posting.Posting, _ int) bool { return e.RestName(1) == "Interest:"+account })
 		ps = append(ps, es...)
 		interests = append(interests, Interest{Account: "Liabilities:" + account, APR: service.APR(db, ps), OverviewTimeline: computeOverviewTimeline(db, ps)})
 	}

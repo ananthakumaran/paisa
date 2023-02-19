@@ -11,6 +11,7 @@ const ICONS: Record<string, [string, string]> = {
   gold: ["\uf70b", "ring"],
   realest: ["\uf015", "house"],
   hous: ["\uf015", "house"],
+  homeloan: ["\uf015", "house"],
   liabil: ["\uf09d", "credit-card"],
   expens: ["\uf555", "wallet"],
   incom: ["\uf1ad", "building"],

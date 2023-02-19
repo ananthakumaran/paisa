@@ -64,13 +64,22 @@ export interface Interest {
   apr: number;
 }
 
-export interface Breakdown {
+export interface AssetBreakdown {
   group: string;
   investment_amount: number;
   withdrawal_amount: number;
   balance_units: number;
   market_amount: number;
   xirr: number;
+}
+
+export interface LiabilityBreakdown {
+  group: string;
+  drawn_amount: number;
+  repaid_amount: number;
+  interest_amount: number;
+  balance_amount: number;
+  apr: number;
 }
 
 export interface Aggregate {
@@ -214,9 +223,11 @@ export function ajax(route: "/api/diagnosis"): Promise<{ issues: Issue[] }>;
 export function ajax(
   route: "/api/investment"
 ): Promise<{ assets: Posting[]; yearly_cards: YearlyCard[] }>;
+export function ajax(route: "/api/ledger"): Promise<{ postings: Posting[] }>;
+export function ajax(route: "/api/assets/balance"): Promise<{ asset_breakdowns: AssetBreakdown[] }>;
 export function ajax(
-  route: "/api/ledger"
-): Promise<{ postings: Posting[]; breakdowns: Breakdown[] }>;
+  route: "/api/liabilities/balance"
+): Promise<{ liability_breakdowns: LiabilityBreakdown[] }>;
 export function ajax(route: "/api/price"): Promise<{ prices: Price[] }>;
 export function ajax(route: "/api/transaction"): Promise<{ transactions: Transaction[] }>;
 export function ajax(route: "/api/overview"): Promise<{

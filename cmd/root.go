@@ -28,7 +28,7 @@ func init() {
 }
 
 func initConfig() {
-	log.SetFormatter(&log.TextFormatter{DisableTimestamp: true})
+	log.SetFormatter(&log.TextFormatter{DisableTimestamp: true, ForceColors: true})
 
 	currentCommand, _, _ := rootCmd.Find(os.Args[1:])
 	if currentCommand.Name() == "init" {

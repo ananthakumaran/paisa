@@ -7,10 +7,21 @@ import (
 	"gorm.io/gorm"
 )
 
-func Sync(db *gorm.DB) gin.H {
-	model.SyncJournal(db)
-	model.SyncCommodities(db)
-	model.SyncCII(db)
+type SyncRequest struct {
+	Journal bool `json:"journal"`
+	Prices  bool `json:"prices"`
+}
+
+func Sync(db *gorm.DB, request SyncRequest) gin.H {
+	if request.Journal {
+		model.SyncJournal(db)
+	}
+
+	if request.Prices {
+		model.SyncCommodities(db)
+		model.SyncCII(db)
+	}
+
 	service.ClearInterestCache()
 	service.ClearPriceCache()
 	return gin.H{"success": true}

@@ -86,7 +86,10 @@
   <Progress {progressPercent} />
 </section>
 
-<section class="section tab-retirement-progress" class:is-hidden={skipProgress}>
+<section
+  class="section tab-retirement-progress"
+  style="visibility: {skipProgress ? 'hidden' : 'visible'};"
+>
   <div class="container is-fluid">
     <div class="columns">
       <div class="column is-12">

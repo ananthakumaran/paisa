@@ -20,7 +20,13 @@ func Listen(db *gorm.DB) {
 		c.FileFromFS(c.Request.URL.Path, http.FS(web.Static))
 	})
 	router.POST("/api/sync", func(c *gin.Context) {
-		c.JSON(200, Sync(db))
+		var syncRequest SyncRequest
+		if err := c.ShouldBindJSON(&syncRequest); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+
+		c.JSON(200, Sync(db, syncRequest))
 	})
 	router.GET("/api/overview", func(c *gin.Context) {
 		c.JSON(200, GetOverview(db))

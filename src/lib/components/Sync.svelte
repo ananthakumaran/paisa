@@ -26,6 +26,7 @@
     <div class="dropdown-content">
       <a on:click={(_e) => sync({ journal: true })} class="dropdown-item">Sync Journal</a>
       <a on:click={(_e) => sync({ prices: true })} class="dropdown-item">Update Prices</a>
+      <a on:click={(_e) => sync({ portfolios: true })} class="dropdown-item">Update Portfolios</a>
     </div>
   </div>
 </div>

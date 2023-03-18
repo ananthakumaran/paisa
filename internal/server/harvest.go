@@ -44,7 +44,7 @@ func GetHarvest(db *gorm.DB) gin.H {
 	commodities := lo.Filter(c.All(), func(c c.Commodity, _ int) bool {
 		return c.Harvest > 0
 	})
-	postings := query.Init(db).Like("Assets:%").Commodities(lo.Map(commodities, func(c c.Commodity, _ int) string { return c.Name })).All()
+	postings := query.Init(db).Like("Assets:%").Commodities(commodities).All()
 	byAccount := lo.GroupBy(postings, func(p posting.Posting) string { return p.Account })
 	harvestables := lo.MapValues(byAccount, func(postings []posting.Posting, account string) Harvestable {
 		return computeHarvestable(db, account, c.FindByName(postings[0].Commodity), postings)

@@ -8,8 +8,9 @@ import (
 )
 
 type SyncRequest struct {
-	Journal bool `json:"journal"`
-	Prices  bool `json:"prices"`
+	Journal    bool `json:"journal"`
+	Prices     bool `json:"prices"`
+	Portfolios bool `json:"portfolios"`
 }
 
 func Sync(db *gorm.DB, request SyncRequest) gin.H {
@@ -20,6 +21,10 @@ func Sync(db *gorm.DB, request SyncRequest) gin.H {
 	if request.Prices {
 		model.SyncCommodities(db)
 		model.SyncCII(db)
+	}
+
+	if request.Portfolios {
+		model.SyncPortfolios(db)
 	}
 
 	service.ClearInterestCache()

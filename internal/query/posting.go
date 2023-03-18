@@ -1,7 +1,9 @@
 package query
 
 import (
+	"github.com/ananthakumaran/paisa/internal/model/commodity"
 	"github.com/ananthakumaran/paisa/internal/model/posting"
+	"github.com/samber/lo"
 	log "github.com/sirupsen/logrus"
 	"gorm.io/gorm"
 )
@@ -20,8 +22,8 @@ func (q *Query) Desc() *Query {
 	return q
 }
 
-func (q *Query) Commodities(commodities []string) *Query {
-	q.context = q.context.Where("commodity in ?", commodities)
+func (q *Query) Commodities(commodities []commodity.Commodity) *Query {
+	q.context = q.context.Where("commodity in ?", lo.Map(commodities, func(c commodity.Commodity, _ int) string { return c.Name }))
 	return q
 }
 

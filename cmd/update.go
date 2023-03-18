@@ -11,6 +11,7 @@ import (
 
 var updateJournal bool
 var updateCommodities bool
+var updatePortfolios bool
 
 var updateCmd = &cobra.Command{
 	Use:   "update",
@@ -21,7 +22,7 @@ var updateCmd = &cobra.Command{
 			log.Fatal(err)
 		}
 
-		syncAll := !updateJournal && !updateCommodities
+		syncAll := !updateJournal && !updateCommodities && !updatePortfolios
 
 		if syncAll || updateJournal {
 			model.SyncJournal(db)
@@ -29,6 +30,10 @@ var updateCmd = &cobra.Command{
 
 		if syncAll || updateCommodities {
 			model.SyncCommodities(db)
+		}
+
+		if syncAll || updatePortfolios {
+			model.SyncPortfolios(db)
 		}
 
 		if syncAll {
@@ -41,4 +46,5 @@ func init() {
 	rootCmd.AddCommand(updateCmd)
 	updateCmd.Flags().BoolVarP(&updateJournal, "journal", "j", false, "update journal")
 	updateCmd.Flags().BoolVarP(&updateCommodities, "commodity", "c", false, "update commodities")
+	updateCmd.Flags().BoolVarP(&updatePortfolios, "portfolio", "p", false, "update portfolios")
 }

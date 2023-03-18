@@ -91,6 +91,20 @@ export interface Aggregate {
   timestamp: dayjs.Dayjs;
 }
 
+export interface CommodityBreakdown {
+  name: string;
+  amount: number;
+  percentage: number;
+}
+
+export interface PortfolioAggregate {
+  name: string;
+  id: string;
+  amount: number;
+  percentage: number;
+  breakdowns: CommodityBreakdown[];
+}
+
 export interface AllocationTarget {
   name: string;
   target: number;
@@ -241,6 +255,9 @@ export function ajax(route: "/api/allocation"): Promise<{
   aggregates: { [key: string]: Aggregate };
   aggregates_timeline: { [key: string]: Aggregate }[];
   allocation_targets: AllocationTarget[];
+}>;
+export function ajax(route: "/api/portfolio_allocation"): Promise<{
+  portfolio_aggregates: PortfolioAggregate;
 }>;
 export function ajax(route: "/api/income"): Promise<{
   income_timeline: Income[];

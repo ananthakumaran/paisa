@@ -3,6 +3,7 @@ package cmd
 import (
 	mutualfund "github.com/ananthakumaran/paisa/internal/model/mutualfund/scheme"
 	nps "github.com/ananthakumaran/paisa/internal/model/nps/scheme"
+	"github.com/ananthakumaran/paisa/internal/model/portfolio"
 	"github.com/ananthakumaran/paisa/internal/model/posting"
 	"github.com/ananthakumaran/paisa/internal/model/price"
 	"github.com/ananthakumaran/paisa/internal/server"
@@ -22,6 +23,7 @@ var serveCmd = &cobra.Command{
 		db.AutoMigrate(&mutualfund.Scheme{})
 		db.AutoMigrate(&posting.Posting{})
 		db.AutoMigrate(&price.Price{})
+		db.AutoMigrate(&portfolio.Portfolio{})
 
 		if err != nil {
 			log.Fatal(err)

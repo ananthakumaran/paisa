@@ -50,6 +50,9 @@ func Listen(db *gorm.DB) {
 	router.GET("/api/allocation", func(c *gin.Context) {
 		c.JSON(200, GetAllocation(db))
 	})
+	router.GET("/api/portfolio_allocation", func(c *gin.Context) {
+		c.JSON(200, GetPortfolioAllocation(db))
+	})
 	router.GET("/api/ledger", func(c *gin.Context) {
 		c.JSON(200, GetLedger(db))
 	})

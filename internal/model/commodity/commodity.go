@@ -31,3 +31,7 @@ func FindByName(name string) Commodity {
 	c, _ := lo.Find(All(), func(c Commodity) bool { return c.Name == name })
 	return c
 }
+
+func FindByType(commodityType price.CommodityType) []Commodity {
+	return lo.Filter(All(), func(c Commodity, _ int) bool { return c.Type == commodityType })
+}

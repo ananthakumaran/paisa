@@ -4,6 +4,7 @@ import (
 	"github.com/ananthakumaran/paisa/internal/ledger"
 	"github.com/ananthakumaran/paisa/internal/model/cii"
 	"github.com/ananthakumaran/paisa/internal/model/commodity"
+	"github.com/ananthakumaran/paisa/internal/model/portfolio"
 	"github.com/ananthakumaran/paisa/internal/model/posting"
 	"github.com/ananthakumaran/paisa/internal/model/price"
 	"github.com/ananthakumaran/paisa/internal/scraper/india"
@@ -62,4 +63,21 @@ func SyncCII(db *gorm.DB) {
 		log.Fatal(err)
 	}
 	cii.UpsertAll(db, ciis)
+}
+
+func SyncPortfolios(db *gorm.DB) {
+	db.AutoMigrate(&portfolio.Portfolio{})
+	log.Info("Fetching commodities portfolio")
+	commodities := commodity.FindByType(price.MutualFund)
+	for _, commodity := range commodities {
+		name := commodity.Name
+		log.Info("Fetching portfolio for ", aurora.Bold(name))
+		portfolios, err := mutualfund.GetPortfolio(commodity.Code, commodity.Name)
+
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		portfolio.UpsertAll(db, commodity.Type, commodity.Code, portfolios)
+	}
 }

@@ -92,6 +92,12 @@
             href="/assets/allocation"
             class:is-active={$page.url.pathname === "/assets/allocation"}>Allocation</a
           >
+          <a
+            id="portfolio"
+            class="navbar-item"
+            href="/assets/portfolio"
+            class:is-active={$page.url.pathname === "/assets/portfolio"}>Stock Portfolio</a
+          >
         </div>
       </div>
       <div class="navbar-item has-dropdown is-hoverable">

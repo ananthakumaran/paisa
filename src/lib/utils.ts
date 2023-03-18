@@ -257,7 +257,7 @@ export function ajax(route: "/api/allocation"): Promise<{
   allocation_targets: AllocationTarget[];
 }>;
 export function ajax(route: "/api/portfolio_allocation"): Promise<{
-  portfolio_aggregates: PortfolioAggregate;
+  portfolio_aggregates: PortfolioAggregate[];
 }>;
 export function ajax(route: "/api/income"): Promise<{
   income_timeline: Income[];

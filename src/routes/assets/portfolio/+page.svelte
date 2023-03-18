@@ -1,15 +1,11 @@
 <script lang="ts">
   import { renderPortfolioBreakdown } from "$lib/portfolio";
-  import { ajax, generateColorScheme } from "$lib/utils";
-  import dayjs from "dayjs";
+  import { ajax } from "$lib/utils";
   import _ from "lodash";
-  import { onMount, tick } from "svelte";
-
-  let showAllocation = false;
+  import { onMount } from "svelte";
 
   onMount(async () => {
     const { portfolio_aggregates: pas } = await ajax("/api/portfolio_allocation");
-
     renderPortfolioBreakdown(pas);
   });
 </script>

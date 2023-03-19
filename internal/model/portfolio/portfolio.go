@@ -10,8 +10,9 @@ type Portfolio struct {
 	ID                uint                `gorm:"primaryKey" json:"id"`
 	CommodityType     price.CommodityType `json:"commodity_type"`
 	ParentCommodityID string              `json:"parent_commodity_id"`
-	CommodityID       string              `json:"commodity_id"`
-	CommodityName     string              `json:"commodity_name"`
+	SecurityID        string              `json:"security_id"`
+	SecurityName      string              `json:"security_name"`
+	SecurityType      string              `json:"security_type"`
 	Percentage        float64             `json:"percentage"`
 }
 

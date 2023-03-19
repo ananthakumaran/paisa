@@ -21,7 +21,7 @@ export function renderPortfolioBreakdown(portfolioAggregates: PortfolioAggregate
 
   const commodityNames = _.chain(portfolioAggregates)
     .flatMap((pa) => pa.breakdowns)
-    .map((b) => b.name)
+    .map((b) => b.commodity_name)
     .uniq()
     .value();
 
@@ -67,7 +67,7 @@ export function renderPortfolioBreakdown(portfolioAggregates: PortfolioAggregate
     .data(portfolioAggregates)
     .enter()
     .append("rect")
-    .attr("fill", COLORS.tertiary)
+    .attr("fill", COLORS.primary)
     .attr("data-tippy-content", "")
     .attr("x", x1(0))
     .attr("y", function (d) {
@@ -135,7 +135,7 @@ export function renderPortfolioBreakdown(portfolioAggregates: PortfolioAggregate
     .text((t) => formatFloat(t.percentage))
     .attr("text-anchor", "end")
     .attr("dominant-baseline", "middle")
-    .style("fill", COLORS.tertiary)
+    .style("fill", COLORS.primary)
     .attr("x", textGroupZero + textGroupWidth / 2)
     .attr("y", (t) => y(t.id) + BAR_HEIGHT / 2);
 
@@ -182,15 +182,16 @@ function renderPartition(
   }
 
   const rootBreakdown: CommodityBreakdown = {
+    security_id: "",
     percentage: 0,
-    name: "root",
+    commodity_name: "root",
     amount: pa.amount
   };
 
   breakdowns.unshift(rootBreakdown);
 
   const byName: Record<string, CommodityBreakdown> = _.chain(breakdowns)
-    .map((b) => [b.name, b])
+    .map((b) => [b.commodity_name, b])
     .fromPairs()
     .value();
 
@@ -205,8 +206,8 @@ function renderPartition(
 
   const stratify = d3
     .stratify<CommodityBreakdown>()
-    .id((d) => d.name)
-    .parentId((d) => (d.name == "root" ? null : "root"));
+    .id((d) => d.commodity_name)
+    .parentId((d) => (d.commodity_name == "root" ? null : "root"));
 
   const partition = hierarchy.size([width, height]).round(true);
 
@@ -218,16 +219,19 @@ function renderPartition(
 
   partition(root);
 
-  const cell = div
-    .selectAll(".node")
-    .data(root.descendants())
+  const nodes = div.selectAll(".node").data(root.descendants());
+
+  nodes.exit().remove();
+
+  const cell = nodes
     .enter()
     .append("div")
     .attr("class", "node")
     .attr("data-tippy-content", (d) => {
       const breakdown = byName[d.id];
       return tooltip([
-        ["Commodity", [d.id, "has-text-right"]],
+        ["Commodity", [breakdown.commodity_name, "has-text-right"]],
+        ["Commodity ID", [breakdown.security_id, "has-text-right"]],
         ["Amount", [formatCurrency(breakdown.amount), "has-text-weight-bold has-text-right"]],
         ["Percentage", [percent(d), "has-text-weight-bold has-text-right"]]
       ]);
@@ -247,5 +251,8 @@ function renderPartition(
 }
 
 function formatCommodityName(name: string) {
-  return name.replaceAll(/([*]|EQ - |\.$)/g, "");
+  return name.replaceAll(
+    /([*]|EQ - |\bINC\b|\bInc\b|\bLTD\b|\bLtd\b|\bLt\b|\bLimited\b|\bLIMITED\b|[., ]+$)/g,
+    ""
+  );
 }

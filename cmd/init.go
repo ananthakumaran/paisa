@@ -94,9 +94,9 @@ commodities:
     code: 120716
     harvest: 365
     tax_category: equity
-  - name: NIFTY_JR
+  - name: PPFAS
     type: mutualfund
-    code: 120684
+    code: 122639
     harvest: 365
     tax_category: equity
   - name: ABCBF
@@ -353,7 +353,7 @@ func emitInvestment(state *GeneratorState, start time.Time) {
 	state.NiftyBalance += emitCommodityBuy(state.Ledger, start, "NIFTY", "Assets:Checking", "Assets:Equity:NIFTY", equity1)
 
 	state.Balance -= equity2
-	emitCommodityBuy(state.Ledger, start, "NIFTY_JR", "Assets:Checking", "Assets:Equity:NIFTY_JR", equity2)
+	emitCommodityBuy(state.Ledger, start, "PPFAS", "Assets:Checking", "Assets:Equity:PPFAS", equity2)
 
 	state.Balance -= debt
 	emitCommodityBuy(state.Ledger, start, "ABCBF", "Assets:Checking", "Assets:Debt:ABCBF", debt)
@@ -382,7 +382,7 @@ func generateJournalFile(cwd string) {
 
 	pricesTree = make(map[string]*btree.BTree)
 	loadPrices("120716", price.MutualFund, "NIFTY", pricesTree)
-	loadPrices("120684", price.MutualFund, "NIFTY_JR", pricesTree)
+	loadPrices("122639", price.MutualFund, "PPFAS", pricesTree)
 	loadPrices("119533", price.MutualFund, "ABCBF", pricesTree)
 	loadPrices("SM008001", price.NPS, "NPS_HDFC_E", pricesTree)
 	loadPrices("SM008002", price.NPS, "NPS_HDFC_C", pricesTree)

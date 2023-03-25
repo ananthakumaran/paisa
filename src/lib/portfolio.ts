@@ -183,6 +183,8 @@ function renderPartition(
 
   const rootBreakdown: CommodityBreakdown = {
     security_id: "",
+    security_name: "",
+    security_type: "",
     percentage: 0,
     commodity_name: "root",
     amount: pa.amount

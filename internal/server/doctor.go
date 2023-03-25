@@ -3,10 +3,12 @@ package server
 import (
 	"errors"
 	"fmt"
+	"math"
 
 	"github.com/ananthakumaran/paisa/internal/accounting"
 	"github.com/ananthakumaran/paisa/internal/model/posting"
 	"github.com/ananthakumaran/paisa/internal/query"
+	"github.com/ananthakumaran/paisa/internal/service"
 	"github.com/gin-gonic/gin"
 	"github.com/samber/lo"
 	"gorm.io/gorm"
@@ -54,7 +56,13 @@ func init() {
 				Level:       ERROR,
 				Summary:     "Debit Entry",
 				Description: "Expense Account should never have debit entry."},
-			Predicate: ruleNonDebitAccount}}
+			Predicate: ruleNonDebitAccount},
+		{
+			Issue: Issue{
+				Level:       WARN,
+				Summary:     "Unit Price Mismatch",
+				Description: "Unit price used in the journal doesn't match the price fetched from external system."},
+			Predicate: ruleJournalPriceMismatch}}
 }
 
 func GetDiagnosis(db *gorm.DB) gin.H {
@@ -100,6 +108,21 @@ func ruleNonDebitAccount(db *gorm.DB) []error {
 	for _, p := range incomes {
 		if p.Amount < -0.01 {
 			errs = append(errs, errors.New(fmt.Sprintf("<b>%.4f</b> got debited from <b>%s</b> on %s", p.Amount, p.Account, p.Date.Format(DATE_FORMAT))))
+		}
+	}
+	return errs
+}
+
+func ruleJournalPriceMismatch(db *gorm.DB) []error {
+	errs := make([]error, 0)
+	postings := query.Init(db).Desc().All()
+	for _, p := range postings {
+		if p.Commodity != "INR" {
+			externalPrice := service.GetUnitPrice(db, p.Commodity, p.Date)
+			diff := math.Abs(externalPrice.Value - p.Price())
+			if diff >= 0.0001 {
+				errs = append(errs, errors.New(fmt.Sprintf("%s\t%s\t%.4f @ <b>%.4f</b> INR <br />doesn't match the price %s <b>%.4f</b> fetched from external system", p.Date.Format(DATE_FORMAT), p.Account, p.Quantity, p.Price(), externalPrice.Date.Format(DATE_FORMAT), externalPrice.Value)))
+			}
 		}
 	}
 	return errs

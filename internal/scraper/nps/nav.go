@@ -39,9 +39,11 @@ func GetNav(schemeCode string, commodityName string) ([]*price.Price, error) {
 		return nil, err
 	}
 
+	loc, _ := time.LoadLocation("UTC")
+
 	var prices []*price.Price
 	for _, data := range result.Data {
-		date, err := time.Parse("2006-01-02", data.Date)
+		date, err := time.ParseInLocation("2006-01-02", data.Date, loc)
 		if err != nil {
 			return nil, err
 		}

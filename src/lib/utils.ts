@@ -93,7 +93,9 @@ export interface Aggregate {
 
 export interface CommodityBreakdown {
   commodity_name: string;
+  security_name: string;
   security_id: string;
+  security_type: string;
   amount: number;
   percentage: number;
 }

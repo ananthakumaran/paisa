@@ -231,7 +231,8 @@ function renderPartition(
       const breakdown = byName[d.id];
       return tooltip([
         ["Commodity", [breakdown.commodity_name, "has-text-right"]],
-        ["Commodity ID", [breakdown.security_id, "has-text-right"]],
+        ["Security ID", [breakdown.security_id, "has-text-right"]],
+        ["Security Type", [breakdown.security_type, "has-text-right"]],
         ["Amount", [formatCurrency(breakdown.amount), "has-text-weight-bold has-text-right"]],
         ["Percentage", [percent(d), "has-text-weight-bold has-text-right"]]
       ]);

@@ -186,6 +186,15 @@ export function renderAllocationTarget(
     .attr("y1", (d) => y(d.name) + y.bandwidth() / 8)
     .attr("y2", (d) => y(d.name) + (y.bandwidth() / 8) * 7);
 
+  groups
+    .append("polygon")
+    .attr(
+      "transform",
+      (d) => "translate(" + x1(d.target) + "," + (y(d.name) + y.bandwidth() / 8) + ")"
+    )
+    .attr("points", "0 0, 0 15, 20 6")
+    .attr("fill", z("target"));
+
   const paddingTop = (y1.range()[1] - y1.bandwidth() * 2) / 2;
   d3.select("#d3-allocation-target-treemap")
     .append("div")

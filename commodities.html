@@ -197,16 +197,6 @@ INFO Using cached results; pass '-u' to update the cache
 ✔ HDFC PENSION MANAGEMENT COMPANY LIMITED SCHEME C - TIER I
 INFO NPS Fund Scheme Code: SM008002
 </code></pre>
-<h2 id="stock"><a class="header" href="#stock">Stock</a></h2>
-<p>To automatically track the latest value of your stock holdings,
-you need to link the commodity and the stock ticker name.</p>
-<pre><code class="language-yaml">commodities:
-  - name: APPLE           # commodity name
-    type: stock           # type
-    code: AAPL            # stock ticker code
-</code></pre>
-<p>Stock prices are fetched from yahoo finance website. The ticker code
-should match the code used in yahoo.</p>
 <h2 id="updates"><a class="header" href="#updates">Updates</a></h2>
 <p><strong>paisa</strong> fetches the latest price of the commodities only when
 <em>update</em> command is used. Make sure to run <code>paisa update</code> command

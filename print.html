@@ -144,10 +144,10 @@ finance, specially tailored for Indians. It builds on top of the
 <li>The journal and config information are stored in plain text files
 that can be easily version controlled. You can collaborate with
 others by giving access to the files.</li>
-<li>Can track the latest market price of Mutual Funds and NPS Funds
-holdings.</li>
-<li>Can show the Mutual Fund units eligible for LTCG and help you plan
-Tax Harvesting.</li>
+<li>Can track the latest market price of your Mutual Fund, NPS Fund
+and Stock holdings.</li>
+<li>Can show the Mutual Fund and Stock holdings eligible for LTCG and
+help you plan Tax Harvesting.</li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="installation"><a class="header" href="#installation">Installation</a></h1>
 <ul>
@@ -431,6 +431,16 @@ INFO Using cached results; pass '-u' to update the cache
 ✔ HDFC PENSION MANAGEMENT COMPANY LIMITED SCHEME C - TIER I
 INFO NPS Fund Scheme Code: SM008002
 </code></pre>
+<h2 id="stock"><a class="header" href="#stock">Stock</a></h2>
+<p>To automatically track the latest value of your stock holdings,
+you need to link the commodity and the stock ticker name.</p>
+<pre><code class="language-yaml">commodities:
+  - name: APPLE           # commodity name
+    type: stock           # type
+    code: AAPL            # stock ticker code
+</code></pre>
+<p>Stock prices are fetched from yahoo finance website. The ticker code
+should match the code used in yahoo.</p>
 <h2 id="updates"><a class="header" href="#updates">Updates</a></h2>
 <p><strong>paisa</strong> fetches the latest price of the commodities only when
 <em>update</em> command is used. Make sure to run <code>paisa update</code> command
@@ -460,14 +470,14 @@ optimization.</p>
 made based on their interpretation of rules and regulation. This tool
 is distributed free hoping it would be useful. The users are advised
 to consult a tax accountant before making any decision based on the
-information provided here. Check the <a href="https://github.com/ananthakumaran/paisa/blob/master/LICENSE">LICENSE</a> of paisa for more
+information provided here. Check the <a href="https://github.com/ananthakumaran/paisa/blob/master/COPYING">LICENSE</a> of paisa for more
 details.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="tax-harvesting"><a class="header" href="#tax-harvesting">Tax Harvesting</a></h1>
-<p>Mutual Fund gains are subject to capital gains tax. The taxation rate
-itself differs based on how long you hold your investment, whether
-it's debt or equity, whether you have more than 1 Lakh gains in a year
-etc. To further complicate things, there might be exit load
-applicable.</p>
+<p>Gains from asset types like Mutual Fund, Stock are subject to capital
+gains tax. The taxation rate itself differs based on how long you hold
+your investment, whether it's debt or equity, whether you have more
+than 1 Lakh gains in a year etc. To further complicate things, there
+might be exit load applicable.</p>
 <p>Paisa takes a generic approach and let the user configure when a
 commodity is safe to harvest. There are two fields related to tax
 harvesting.</p>

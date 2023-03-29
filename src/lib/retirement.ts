@@ -128,15 +128,28 @@ export function renderProgress(
 }
 
 export function forecast(points: Point[], target: number, ARIMA: typeof Arima): Forecast[] {
+  const configs = [
+    { p: 3, d: 0, q: 1, s: 0 },
+    { p: 2, d: 0, q: 1, s: 0 }
+  ];
+
+  for (const config of configs) {
+    const forecast = doForecast(config, points, target, ARIMA);
+    if (!_.isEmpty(forecast)) {
+      return forecast;
+    }
+  }
+  return [];
+}
+
+function doForecast(
+  config: object,
+  points: Point[],
+  target: number,
+  ARIMA: typeof Arima
+): Forecast[] {
   const values = points.map((p) => p.value);
-  const arima = new ARIMA({
-    p: 3,
-    d: 0,
-    q: 1,
-    s: 0,
-    // auto: true,
-    verbose: false
-  }).train(values);
+  const arima = new ARIMA(config).train(values);
 
   const predictYears = 3;
   let i = 1;
@@ -151,6 +164,14 @@ export function forecast(points: Point[], target: number, ARIMA: typeof Arima): 
       while (!isEmpty(predictions)) {
         start = start.add(1, "day");
         const point = { date: start, value: predictions.shift(), error: Math.sqrt(errors.shift()) };
+        if (
+          point.value > 1e20 ||
+          point.value < -1e20 ||
+          point.error > 1e20 ||
+          point.value < -1e20
+        ) {
+          return [];
+        }
         predictionsTimeline.push(point);
       }
       return predictionsTimeline;

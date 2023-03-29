@@ -20,12 +20,13 @@ func GetPortfolio(schemeCode string, commodityName string) ([]*portfolio.Portfol
 SELECT coalesce(nullIf(i.issuer, ''), nullIf(i.name, ''), p.name) as name,
        p.isin as isin,
        p.percentage_to_nav as percentage_to_nav,
-       nullIf(i.type, '') as type
+       nullIf(i.type, '') as type,
+       nullIf(i.rating, '') as rating
 FROM latest_portfolio p
 JOIN scheme s ON p.fund_id = s.fund_id
 LEFT JOIN security i ON p.isin = i.isin
 WHERE s.code = %s
-      AND s.category != 'Hybrid Scheme - Arbitrage Fund'
+      AND s.category not in ('Hybrid Scheme - Arbitrage Fund', 'Other Scheme - FoF Overseas', 'Other Scheme - Other  ETFs', 'Other Scheme - FoF Domestic')
       AND p.percentage_to_nav > 0
 `
 	query := fmt.Sprintf(q, schemeCode)
@@ -50,6 +51,7 @@ WHERE s.code = %s
 		PercentageToNav float64 `json:"percentage_to_nav"`
 		ISIN            string  `json:"isin"`
 		Type            string  `json:"type"`
+		Rating          string  `json:"rating"`
 	}
 	type Result struct {
 		Data []Data
@@ -70,6 +72,7 @@ WHERE s.code = %s
 			SecurityID:        data.ISIN,
 			Percentage:        data.PercentageToNav,
 			ParentCommodityID: schemeCode,
+			SecurityRating:    data.Rating,
 			SecurityType:      data.Type}
 		portfolios = append(portfolios, &portfolio)
 	}

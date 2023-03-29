@@ -13,6 +13,7 @@ type Portfolio struct {
 	SecurityID        string              `json:"security_id"`
 	SecurityName      string              `json:"security_name"`
 	SecurityType      string              `json:"security_type"`
+	SecurityRating    string              `json:"security_rating"`
 	Percentage        float64             `json:"percentage"`
 }
 
@@ -45,4 +46,14 @@ func GetPortfolios(db *gorm.DB, parentCommodityID string) []Portfolio {
 		log.Fatal(result.Error)
 	}
 	return portfolios
+}
+
+func GetAllParentCommodityIDs(db *gorm.DB) []string {
+	var parentCommodityIDs []string
+	result := db.Model(&Portfolio{}).Distinct().Pluck("parent_commodity_id", &parentCommodityIDs)
+
+	if result.Error != nil {
+		log.Fatal(result.Error)
+	}
+	return parentCommodityIDs
 }

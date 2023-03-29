@@ -7,6 +7,7 @@
   interface Link {
     label: string;
     href: string;
+    tag?: string;
     help?: string;
     children?: Link[];
   }
@@ -21,7 +22,7 @@
         { label: "Investment", href: "/investment" },
         { label: "Gain", href: "/gain" },
         { label: "Allocation", href: "/allocation", help: "allocation-targets" },
-        { label: "Stock Portfolio", href: "/portfolio" }
+        { label: "Stock Portfolio", href: "/portfolio", tag: "alpha" }
       ]
     },
     {
@@ -162,6 +163,12 @@
               ><span class="icon is-small">
                 <i class="fas fa-question fa-border" />
               </span></a
+            >
+          {/if}
+
+          {#if selectedSubLink.tag}
+            <span style="font-size: 0.6rem" class="tag is-rounded is-warning"
+              >{selectedSubLink.tag}</span
             >
           {/if}
         </li>

@@ -5,13 +5,32 @@
   import { onMount } from "svelte";
 
   onMount(async () => {
-    const { portfolio_aggregates: pas } = await ajax("/api/portfolio_allocation");
-    renderPortfolioBreakdown(pas);
+    const {
+      name_and_security_type: nas,
+      security_type: st,
+      rating: r
+    } = await ajax("/api/portfolio_allocation");
+
+    renderPortfolioBreakdown("#d3-portfolio-security-type", st);
+    renderPortfolioBreakdown("#d3-portfolio-security-rating", r);
+    renderPortfolioBreakdown("#d3-portfolio", nas);
   });
 </script>
 
 <section class="section tab-portfolio">
   <div class="container is-fluid">
+    <div class="columns">
+      <div class="column is-12 has-text-centered">
+        <div id="d3-portfolio-security-rating-treemap" style="width: 100%; position: relative" />
+        <svg id="d3-portfolio-security-rating" width="100%" />
+      </div>
+    </div>
+    <div class="columns">
+      <div class="column is-12 has-text-centered">
+        <div id="d3-portfolio-security-type-treemap" style="width: 100%; position: relative" />
+        <svg id="d3-portfolio-security-type" width="100%" />
+      </div>
+    </div>
     <div class="columns">
       <div class="column is-12 has-text-centered">
         <div id="d3-portfolio-treemap" style="width: 100%; position: relative" />

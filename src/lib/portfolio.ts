@@ -12,9 +12,7 @@ import {
 } from "./utils";
 import COLORS from "./colors";
 
-export function renderPortfolioBreakdown(portfolioAggregates: PortfolioAggregate[]) {
-  const id = "#d3-portfolio";
-
+export function renderPortfolioBreakdown(id: string, portfolioAggregates: PortfolioAggregate[]) {
   if (_.isEmpty(portfolioAggregates)) {
     return;
   }
@@ -58,6 +56,7 @@ export function renderPortfolioBreakdown(portfolioAggregates: PortfolioAggregate
   x.domain([0, maxX]);
   const x1 = d3.scaleLinear().range([0, targetWidth]).domain([0, maxX]);
 
+  const z = generateColorScheme(_.uniq(_.map(portfolioAggregates, (p) => p.sub_group)));
   const paddingTop = (BAR_HEIGHT - y.bandwidth()) / 2;
 
   svg
@@ -67,7 +66,7 @@ export function renderPortfolioBreakdown(portfolioAggregates: PortfolioAggregate
     .data(portfolioAggregates)
     .enter()
     .append("rect")
-    .attr("fill", COLORS.primary)
+    .attr("fill", (d) => z(d.sub_group))
     .attr("data-tippy-content", "")
     .attr("x", x1(0))
     .attr("y", function (d) {
@@ -107,12 +106,12 @@ export function renderPortfolioBreakdown(portfolioAggregates: PortfolioAggregate
       d3
         .axisTop(x1)
         .tickSize(height)
-        .tickFormat(skipTicks(40, x, (n: number) => formatFloat(n, 0)))
+        .tickFormat(skipTicks(40, x, (n: number) => formatFloat(n, 1)))
     );
 
   g.append("g")
     .attr("class", "axis y dark")
-    .call(d3.axisLeft(y).tickFormat((id) => formatCommodityName(byID[id].name)));
+    .call(d3.axisLeft(y).tickFormat((id) => formatCommodityName(byID[id].group)));
 
   const textGroup = g
     .append("g")
@@ -148,7 +147,7 @@ export function renderPortfolioBreakdown(portfolioAggregates: PortfolioAggregate
     .attr("x", textGroupZero + textGroupWidth)
     .attr("y", (t) => y(t.id) + BAR_HEIGHT / 2);
 
-  d3.select("#d3-portfolio-treemap")
+  d3.select(id + "-treemap")
     .append("div")
     .style("height", height + margin.top + margin.bottom + "px")
     .style("position", "absolute")

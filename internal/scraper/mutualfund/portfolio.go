@@ -21,7 +21,8 @@ SELECT coalesce(nullIf(i.issuer, ''), nullIf(i.name, ''), p.name) as name,
        p.isin as isin,
        p.percentage_to_nav as percentage_to_nav,
        nullIf(i.type, '') as type,
-       nullIf(i.rating, '') as rating
+       nullIf(i.rating, '') as rating,
+       nullIf(i.industry, '') as industry
 FROM latest_portfolio p
 JOIN scheme s ON p.fund_id = s.fund_id
 LEFT JOIN security i ON p.isin = i.isin
@@ -52,6 +53,7 @@ WHERE s.code = %s
 		ISIN            string  `json:"isin"`
 		Type            string  `json:"type"`
 		Rating          string  `json:"rating"`
+		Industry        string  `json:"industry"`
 	}
 	type Result struct {
 		Data []Data
@@ -73,6 +75,7 @@ WHERE s.code = %s
 			Percentage:        data.PercentageToNav,
 			ParentCommodityID: schemeCode,
 			SecurityRating:    data.Rating,
+			SecurityIndustry:  data.Industry,
 			SecurityType:      data.Type}
 		portfolios = append(portfolios, &portfolio)
 	}

@@ -1,5 +1,6 @@
 import * as d3 from "d3";
 import _ from "lodash";
+import legend from "d3-svg-legend";
 import {
   formatCurrency,
   formatFloat,
@@ -10,9 +11,12 @@ import {
   type PortfolioAggregate,
   type CommodityBreakdown
 } from "./utils";
-import COLORS from "./colors";
 
-export function renderPortfolioBreakdown(id: string, portfolioAggregates: PortfolioAggregate[]) {
+export function renderPortfolioBreakdown(
+  id: string,
+  portfolioAggregates: PortfolioAggregate[],
+  showLegend: boolean = false
+) {
   if (_.isEmpty(portfolioAggregates)) {
     return;
   }
@@ -32,7 +36,7 @@ export function renderPortfolioBreakdown(id: string, portfolioAggregates: Portfo
 
   const BAR_HEIGHT = 25;
   const svg = d3.select(id),
-    margin = { top: 20, right: 0, bottom: 10, left: 350 },
+    margin = { top: showLegend ? 60 : 20, right: 0, bottom: 10, left: 350 },
     fullWidth = document.getElementById(id.substring(1)).parentElement.clientWidth,
     width = fullWidth - margin.left - margin.right,
     height = portfolioAggregates.length * BAR_HEIGHT,
@@ -56,8 +60,27 @@ export function renderPortfolioBreakdown(id: string, portfolioAggregates: Portfo
   x.domain([0, maxX]);
   const x1 = d3.scaleLinear().range([0, targetWidth]).domain([0, maxX]);
 
-  const z = generateColorScheme(_.uniq(_.map(portfolioAggregates, (p) => p.sub_group)));
+  const groups = _.chain(portfolioAggregates)
+    .map((p) => p.sub_group)
+    .uniq()
+    .sort()
+    .value();
+  const z = generateColorScheme(groups);
   const paddingTop = (BAR_HEIGHT - y.bandwidth()) / 2;
+
+  if (showLegend) {
+    svg.append("g").attr("class", "legendOrdinal").attr("transform", "translate(280,3)");
+
+    const legendOrdinal = legend
+      .legendColor()
+      .shape("rect")
+      .orient("horizontal")
+      .shapePadding(70)
+      .labels(groups)
+      .scale(z);
+
+    svg.select(".legendOrdinal").call(legendOrdinal as any);
+  }
 
   svg
     .append("g")
@@ -134,7 +157,7 @@ export function renderPortfolioBreakdown(id: string, portfolioAggregates: Portfo
     .text((t) => formatFloat(t.percentage))
     .attr("text-anchor", "end")
     .attr("dominant-baseline", "middle")
-    .style("fill", COLORS.primary)
+    .style("fill", "#333")
     .attr("x", textGroupZero + textGroupWidth / 2)
     .attr("y", (t) => y(t.id) + BAR_HEIGHT / 2);
 
@@ -143,7 +166,7 @@ export function renderPortfolioBreakdown(id: string, portfolioAggregates: Portfo
     .text((t) => formatCurrency(t.amount))
     .attr("text-anchor", "end")
     .attr("dominant-baseline", "middle")
-    .style("fill", "#000")
+    .style("fill", "#333")
     .attr("x", textGroupZero + textGroupWidth)
     .attr("y", (t) => y(t.id) + BAR_HEIGHT / 2);
 
@@ -232,8 +255,7 @@ function renderPartition(
       const breakdown = byName[d.id];
       return tooltip([
         ["Commodity", [breakdown.commodity_name, "has-text-right"]],
-        ["Security ID", [breakdown.security_id, "has-text-right"]],
-        ["Security Type", [breakdown.security_type, "has-text-right"]],
+        ["Security Count", [breakdown.security_id.split(",").length.toString(), "has-text-right"]],
         ["Amount", [formatCurrency(breakdown.amount), "has-text-weight-bold has-text-right"]],
         ["Percentage", [percent(d), "has-text-weight-bold has-text-right"]]
       ]);

@@ -264,6 +264,7 @@ export function ajax(route: "/api/portfolio_allocation"): Promise<{
   name_and_security_type: PortfolioAggregate[];
   security_type: PortfolioAggregate[];
   rating: PortfolioAggregate[];
+  industry: PortfolioAggregate[];
 }>;
 export function ajax(route: "/api/income"): Promise<{
   income_timeline: Income[];

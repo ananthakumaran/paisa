@@ -21,6 +21,7 @@ type PortfolioDimension struct {
 	GroupFn    func(CommodityBreakdown) string
 	SubGroup   string
 	SubGroupFn func(CommodityBreakdown) string
+	FilterFn   func(CommodityBreakdown, int) bool
 }
 
 type CommodityBreakdown struct {
@@ -28,6 +29,7 @@ type CommodityBreakdown struct {
 	CommodityName     string  `json:"commodity_name"`
 	SecurityName      string  `json:"security_name"`
 	SecurityRating    string  `json:"security_rating"`
+	SecurityIndustry  string  `json:"security_industry"`
 	Percentage        float64 `json:"percentage"`
 	SecurityID        string  `json:"security_id"`
 	SecurityType      string  `json:"security_type"`
@@ -54,10 +56,12 @@ func GetPortfolioAllocation(db *gorm.DB) gin.H {
 		balance := accounting.CurrentBalance(ps)
 		return computePortfolioAggregate(db, commodity, balance)
 	})
-	total := accounting.CurrentBalance(postings)
 
 	return gin.H{
 		"name_and_security_type": rollupPortfolioAggregate(PortfolioDimension{
+			FilterFn: func(c CommodityBreakdown, _ int) bool {
+				return true
+			},
 			Group: "SecurityName",
 			GroupFn: func(c CommodityBreakdown) string {
 				return c.SecurityName
@@ -65,8 +69,11 @@ func GetPortfolioAllocation(db *gorm.DB) gin.H {
 			SubGroup: "SecurityType",
 			SubGroupFn: func(c CommodityBreakdown) string {
 				return orUnknown(c.SecurityType)
-			}}, cbs, total),
+			}}, cbs),
 		"security_type": rollupPortfolioAggregate(PortfolioDimension{
+			FilterFn: func(c CommodityBreakdown, _ int) bool {
+				return true
+			},
 			Group: "SecurityType",
 			GroupFn: func(c CommodityBreakdown) string {
 				return orUnknown(c.SecurityType)
@@ -74,8 +81,11 @@ func GetPortfolioAllocation(db *gorm.DB) gin.H {
 			SubGroup: "SecurityType",
 			SubGroupFn: func(c CommodityBreakdown) string {
 				return orUnknown(c.SecurityType)
-			}}, cbs, total),
+			}}, cbs),
 		"rating": rollupPortfolioAggregate(PortfolioDimension{
+			FilterFn: func(c CommodityBreakdown, _ int) bool {
+				return c.SecurityType == "debt"
+			},
 			Group: "Rating",
 			GroupFn: func(c CommodityBreakdown) string {
 				return orUnknown(c.SecurityRating)
@@ -83,7 +93,19 @@ func GetPortfolioAllocation(db *gorm.DB) gin.H {
 			SubGroup: "Rating",
 			SubGroupFn: func(c CommodityBreakdown) string {
 				return orUnknown(c.SecurityRating)
-			}}, cbs, total),
+			}}, cbs),
+		"industry": rollupPortfolioAggregate(PortfolioDimension{
+			FilterFn: func(c CommodityBreakdown, _ int) bool {
+				return c.SecurityType == "equity"
+			},
+			Group: "Industry",
+			GroupFn: func(c CommodityBreakdown) string {
+				return orUnknown(c.SecurityIndustry)
+			},
+			SubGroup: "Industry",
+			SubGroupFn: func(c CommodityBreakdown) string {
+				return orUnknown(c.SecurityIndustry)
+			}}, cbs),
 	}
 }
 
@@ -99,6 +121,7 @@ func computePortfolioAggregate(db *gorm.DB, commodityName string, total float64)
 			Amount:            amount,
 			SecurityID:        p.SecurityID,
 			SecurityRating:    p.SecurityRating,
+			SecurityIndustry:  p.SecurityIndustry,
 			SecurityType:      p.SecurityType}
 	})
 }
@@ -117,11 +140,14 @@ func mergeBreakdowns(cbs []CommodityBreakdown) []CommodityBreakdown {
 			Amount:            lo.SumBy(bs, func(b CommodityBreakdown) float64 { return b.Amount }),
 			SecurityID:        strings.Join(lo.Map(bs, func(b CommodityBreakdown, _ int) string { return b.SecurityID }), ","),
 			SecurityRating:    bs[0].SecurityRating,
+			SecurityIndustry:  bs[0].SecurityIndustry,
 			SecurityType:      bs[0].SecurityType}
 	})
 }
 
-func rollupPortfolioAggregate(dimension PortfolioDimension, cbs []CommodityBreakdown, total float64) []PortfolioAggregate {
+func rollupPortfolioAggregate(dimension PortfolioDimension, cbs []CommodityBreakdown) []PortfolioAggregate {
+	cbs = lo.Filter(cbs, dimension.FilterFn)
+	total := lo.SumBy(cbs, func(b CommodityBreakdown) float64 { return b.Amount })
 	grouped := lo.GroupBy(cbs, func(c CommodityBreakdown) string {
 		return strings.Join([]string{dimension.GroupFn(c), dimension.SubGroupFn(c)}, ":")
 	})

@@ -14,6 +14,7 @@ type Portfolio struct {
 	SecurityName      string              `json:"security_name"`
 	SecurityType      string              `json:"security_type"`
 	SecurityRating    string              `json:"security_rating"`
+	SecurityIndustry  string              `json:"security_industry"`
 	Percentage        float64             `json:"percentage"`
 }
 

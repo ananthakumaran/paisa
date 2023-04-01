@@ -46,5 +46,5 @@ func init() {
 	rootCmd.AddCommand(updateCmd)
 	updateCmd.Flags().BoolVarP(&updateJournal, "journal", "j", false, "update journal")
 	updateCmd.Flags().BoolVarP(&updateCommodities, "commodity", "c", false, "update commodities")
-	updateCmd.Flags().BoolVarP(&updatePortfolios, "portfolio", "p", false, "update portfolios")
+	updateCmd.Flags().BoolVarP(&updatePortfolios, "portfolio", "p", false, "update mutualfund portfolios")
 }

@@ -58,6 +58,7 @@ func GetPortfolioAllocation(db *gorm.DB) gin.H {
 	})
 
 	return gin.H{
+		"commodities": lo.Keys(byCommodity),
 		"name_and_security_type": rollupPortfolioAggregate(PortfolioDimension{
 			FilterFn: func(c CommodityBreakdown, _ int) bool {
 				return true

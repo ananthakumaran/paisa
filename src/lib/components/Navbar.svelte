@@ -22,7 +22,7 @@
         { label: "Investment", href: "/investment" },
         { label: "Gain", href: "/gain" },
         { label: "Allocation", href: "/allocation", help: "allocation-targets" },
-        { label: "Analysis", href: "/analysis", tag: "alpha" }
+        { label: "Analysis", href: "/analysis", tag: "alpha", help: "analysis" }
       ]
     },
     {

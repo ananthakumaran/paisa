@@ -17,3 +17,4 @@
   - [Capital Gains](capital-gains.md)
   - [Schedule AL](schedule-al.md)
 - [Retirement](retirement.md)
+- [Analysis](analysis.md)

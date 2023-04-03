@@ -35,6 +35,11 @@ func UpsertAll(db *gorm.DB, ciis []*CII) {
 func GetIndex(db *gorm.DB, financialYear string) uint {
 	var cii CII
 	result := db.Where("financial_year = ?", financialYear).First(&cii)
+	if result.Error == gorm.ErrRecordNotFound {
+		log.Warnf("Cost Inflation Index not found for %s. Falling back to latest available value", financialYear)
+		result = db.Order("cost_inflation_index desc").First(&cii)
+	}
+
 	if result.Error != nil {
 		log.Fatal(result.Error)
 	}

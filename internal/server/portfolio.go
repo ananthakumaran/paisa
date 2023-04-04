@@ -51,14 +51,21 @@ func GetPortfolioAllocation(db *gorm.DB) gin.H {
 	postings := query.Init(db).Like("Assets:%").Commodities(commodities).All()
 	postings = service.PopulateMarketPrice(db, postings)
 	byCommodity := lo.GroupBy(postings, func(p posting.Posting) string { return p.Commodity })
+
+	supportedCommodities := lo.Keys(byCommodity)
+
 	cbs := lo.FlatMap(lo.Keys(byCommodity), func(commodity string, _ int) []CommodityBreakdown {
 		ps := byCommodity[commodity]
 		balance := accounting.CurrentBalance(ps)
+		if balance <= 0.0001 {
+			supportedCommodities = lo.Without(supportedCommodities, commodity)
+			return []CommodityBreakdown{}
+		}
 		return computePortfolioAggregate(db, commodity, balance)
 	})
 
 	return gin.H{
-		"commodities": lo.Keys(byCommodity),
+		"commodities": supportedCommodities,
 		"name_and_security_type": rollupPortfolioAggregate(PortfolioDimension{
 			FilterFn: func(c CommodityBreakdown, _ int) bool {
 				return true

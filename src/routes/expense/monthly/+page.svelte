@@ -9,10 +9,9 @@
     renderCalendar,
     renderSelectedMonth
   } from "$lib/expense";
-  import { month } from "../../store";
+  import { month } from "../../../store";
   import { writable } from "svelte/store";
 
-  const max = dayjs().format("YYYY-MM");
   let groups = writable([]);
   let z: d3.ScaleOrdinal<string, string, never>,
     renderer: (ps: Posting[]) => void,
@@ -20,8 +19,7 @@
     grouped_expenses: Record<string, Posting[]>,
     grouped_incomes: Record<string, Posting[]>,
     grouped_investments: Record<string, Posting[]>,
-    grouped_taxes: Record<string, Posting[]>,
-    min: string;
+    grouped_taxes: Record<string, Posting[]>;
 
   $: if (grouped_expenses) {
     renderCalendar($month, grouped_expenses[$month], z, $groups);
@@ -45,15 +43,11 @@
       }
     } = await ajax("/api/expense"));
 
-    let minDate = dayjs();
     _.each(expenses, (p) => (p.timestamp = dayjs(p.date)));
     const parseDate = (group: { [key: string]: Posting[] }) => {
       _.each(group, (ps) => {
         _.each(ps, (p) => {
           p.timestamp = dayjs(p.date);
-          if (p.timestamp.isBefore(minDate)) {
-            minDate = p.timestamp;
-          }
         });
       });
     };
@@ -61,8 +55,6 @@
     parseDate(grouped_incomes);
     parseDate(grouped_investments);
     parseDate(grouped_taxes);
-
-    min = minDate.format("YYYY-MM");
 
     ({ z } = renderMonthlyExpensesTimeline(expenses, groups, month));
 
@@ -76,7 +68,7 @@
       <div class="column is-3">
         <div class="columns is-flex-wrap-wrap">
           <div class="column is-full">
-            <div class="p-3">
+            <div class="px-3">
               <nav class="level">
                 <div class="level-item has-text-centered">
                   <div>
@@ -129,21 +121,8 @@
         </div>
       </div>
       <div class="column is-3">
-        <div class="p-3">
+        <div class="px-3">
           <div id="d3-current-month-expense-calendar" class="d3-calendar">
-            <div class="has-text-centered py-1">
-              <input
-                style="width: 175px"
-                class="input is-medium is-size-6"
-                required
-                type="month"
-                id="d3-current-month"
-                bind:value={$month}
-                {max}
-                {min}
-                autofocus
-              />
-            </div>
             <div class="weekdays">
               <div>Sun</div>
               <div>Mon</div>
@@ -158,7 +137,7 @@
         </div>
       </div>
       <div class="column is-full-tablet is-half-fullhd">
-        <div class="p-3">
+        <div class="px-3">
           <svg id="d3-current-month-breakdown" width="100%" />
         </div>
       </div>

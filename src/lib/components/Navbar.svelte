@@ -1,19 +1,28 @@
 <script lang="ts">
   import { page } from "$app/stores";
+  import dayjs from "dayjs";
   import Sync from "$lib/components/Sync.svelte";
+  import { month } from "../../store";
   import _ from "lodash";
   export let isBurger: boolean = null;
+
+  const max = dayjs().format("YYYY-MM");
 
   interface Link {
     label: string;
     href: string;
     tag?: string;
     help?: string;
+    monthPicker?: boolean;
     children?: Link[];
   }
   const links: Link[] = [
     { label: "Overview", href: "/" },
-    { label: "Expenses", href: "/expense" },
+    {
+      label: "Expenses",
+      href: "/expense",
+      children: [{ label: "Monthly", href: "/monthly", monthPicker: true }]
+    },
     {
       label: "Assets",
       href: "/assets",
@@ -131,51 +140,67 @@
   </div>
 </nav>
 
-{#if selectedLink}
-  <nav
-    style="margin-left: 12px;"
-    class="breadcrumb has-chevron-separator mb-0 is-small"
-    aria-label="breadcrumbs"
-  >
-    <ul>
-      <li>
-        <a class="is-inactive">{selectedLink.label}</a>
-        {#if selectedLink.help}
-          <a
-            style="margin-left: -10px;"
-            class="p-0"
-            href={`https://ananthakumaran.in/paisa/${selectedLink.help}.html`}
-            ><span class="icon is-small">
-              <i class="fas fa-question fa-border" />
-            </span></a
-          >
-        {/if}
-      </li>
-      {#if selectedSubLink}
+<div class="is-flex is-justify-content-space-between">
+  {#if selectedLink}
+    <nav
+      style="margin-left: 12px;"
+      class="breadcrumb has-chevron-separator mb-0 is-small"
+      aria-label="breadcrumbs"
+    >
+      <ul>
         <li>
-          <a class="is-inactive">{selectedSubLink.label}</a>
-
-          {#if selectedSubLink.help}
+          <a class="is-inactive">{selectedLink.label}</a>
+          {#if selectedLink.help}
             <a
               style="margin-left: -10px;"
               class="p-0"
-              href={`https://ananthakumaran.in/paisa/${selectedSubLink.help}.html`}
+              href={`https://ananthakumaran.in/paisa/${selectedLink.help}.html`}
               ><span class="icon is-small">
                 <i class="fas fa-question fa-border" />
               </span></a
             >
           {/if}
-
-          {#if selectedSubLink.tag}
-            <span style="font-size: 0.6rem" class="tag is-rounded is-warning"
-              >{selectedSubLink.tag}</span
-            >
-          {/if}
         </li>
-      {/if}
-    </ul>
-  </nav>
-{/if}
+        {#if selectedSubLink}
+          <li>
+            <a class="is-inactive">{selectedSubLink.label}</a>
+
+            {#if selectedSubLink.help}
+              <a
+                style="margin-left: -10px;"
+                class="p-0"
+                href={`https://ananthakumaran.in/paisa/${selectedSubLink.help}.html`}
+                ><span class="icon is-small">
+                  <i class="fas fa-question fa-border" />
+                </span></a
+              >
+            {/if}
+
+            {#if selectedSubLink.tag}
+              <span style="font-size: 0.6rem" class="tag is-rounded is-warning"
+                >{selectedSubLink.tag}</span
+              >
+            {/if}
+          </li>
+        {/if}
+      </ul>
+    </nav>
+  {/if}
+
+  {#if selectedSubLink?.monthPicker || selectedLink?.monthPicker}
+    <div class="mr-3 has-text-centered">
+      <input
+        style="width: 125px"
+        class="input is-small"
+        required
+        type="month"
+        id="d3-current-month"
+        bind:value={$month}
+        {max}
+      />
+    </div>
+  {/if}
+</div>
 
 <style lang="scss">
   .breadcrumb.has-chevron-separator li + li::before {

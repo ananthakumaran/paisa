@@ -429,7 +429,7 @@ export function renderCurrentExpensesBreakdown(z: d3.ScaleOrdinal<string, string
   const id = "#d3-current-month-breakdown";
   const BAR_HEIGHT = 20;
   const svg = d3.select(id),
-    margin = { top: 10, right: 160, bottom: 20, left: 100 },
+    margin = { top: 0, right: 160, bottom: 20, left: 100 },
     width =
       document.getElementById(id.substring(1)).parentElement.clientWidth -
       margin.left -

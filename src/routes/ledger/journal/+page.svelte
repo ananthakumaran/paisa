@@ -1,7 +1,6 @@
 <script lang="ts">
   import { filterTransactions, renderTransactions } from "$lib/journal";
   import { ajax, type Posting } from "$lib/utils";
-  import dayjs from "dayjs";
   import _ from "lodash";
   import { onMount } from "svelte";
 
@@ -15,8 +14,6 @@
 
   onMount(async () => {
     const { postings: postings } = await ajax("/api/ledger");
-    _.each(postings, (p) => (p.timestamp = dayjs(p.date)));
-
     ({ rows, clusterTable } = renderTransactions(postings));
   });
 </script>

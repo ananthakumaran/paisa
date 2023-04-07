@@ -15,7 +15,7 @@ export function renderPrices(prices: Price[]) {
        <td>${p.commodity_name}</td>
        <td>${p.commodity_type}</td>
        <td>${p.commodity_id}</td>
-       <td>${p.timestamp.format("DD MMM YYYY")}</td>
+       <td>${p.date.format("DD MMM YYYY")}</td>
        <td class='has-text-right'>${formatCurrency(p.value, 4)}</td>
       `;
     });

@@ -329,7 +329,7 @@ export function renderOverview(gains: Gain[]) {
 }
 
 export function renderPerAccountOverview(gains: Gain[]) {
-  const start = _.min(_.flatMap(gains, (g) => _.map(g.overview_timeline, (o) => o.timestamp))),
+  const start = _.min(_.flatMap(gains, (g) => _.map(g.overview_timeline, (o) => o.date))),
     end = dayjs();
 
   const divs = d3
@@ -380,7 +380,7 @@ function renderOverviewSmall(
     d3
       .area<Overview>()
       .curve(d3.curveBasis)
-      .x((d) => x(d.timestamp))
+      .x((d) => x(d.date))
       .y0(y0)
       .y1(y1);
 
@@ -457,7 +457,7 @@ function renderOverviewSmall(
       d3
         .line<Overview>()
         .curve(d3.curveBasis)
-        .x((d) => x(d.timestamp))
+        .x((d) => x(d.date))
         .y((d) => y(d.investment_amount))
     );
 
@@ -471,7 +471,7 @@ function renderOverviewSmall(
         .line<Overview>()
         .curve(d3.curveBasis)
         .defined((d) => d.withdrawal_amount > 0)
-        .x((d) => x(d.timestamp))
+        .x((d) => x(d.date))
         .y((d) => y(d.withdrawal_amount))
     );
 
@@ -484,7 +484,7 @@ function renderOverviewSmall(
       d3
         .line<Overview>()
         .curve(d3.curveBasis)
-        .x((d) => x(d.timestamp))
+        .x((d) => x(d.date))
         .y((d) => y(d.investment_amount + d.gain_amount - d.withdrawal_amount))
     );
 }

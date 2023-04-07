@@ -13,5 +13,16 @@ func GetExpense(db *gorm.DB) gin.H {
 	investments := query.Init(db).Like("Assets:%").NotLike("Assets:Checking").All()
 	taxes := query.Init(db).Like("Expenses:Tax").All()
 
-	return gin.H{"expenses": expenses, "month_wise": gin.H{"expenses": posting.GroupByMonth(expenses), "incomes": posting.GroupByMonth(incomes), "investments": posting.GroupByMonth(investments), "taxes": posting.GroupByMonth(taxes)}}
+	return gin.H{
+		"expenses": expenses,
+		"month_wise": gin.H{
+			"expenses":    posting.GroupByMonth(expenses),
+			"incomes":     posting.GroupByMonth(incomes),
+			"investments": posting.GroupByMonth(investments),
+			"taxes":       posting.GroupByMonth(taxes)},
+		"year_wise": gin.H{
+			"expenses":    posting.GroupByFY(expenses),
+			"incomes":     posting.GroupByFY(incomes),
+			"investments": posting.GroupByFY(investments),
+			"taxes":       posting.GroupByFY(taxes)}}
 }

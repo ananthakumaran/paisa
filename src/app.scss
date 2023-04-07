@@ -164,7 +164,8 @@ body {
   height: 1.3rem;
 }
 
-#d3-expense-timeline .cell {
+#d3-monthly-expense-timeline .cell,
+#d3-yearly-expense-timeline .cell {
   cursor: pointer;
 }
 
@@ -173,6 +174,7 @@ body {
 }
 
 .d3-calendar .days,
+.d3-calendar .months,
 .d3-calendar .weekdays {
   display: flex;
   flex-direction: row;
@@ -196,6 +198,14 @@ body {
   display: flex;
   justify-content: center;
   flex: 14.28571%;
+  margin: 0.1rem 0;
+  align-items: center;
+}
+
+.d3-calendar .months .month {
+  display: flex;
+  justify-content: center;
+  flex: 33.33%;
   margin: 0.1rem 0;
   align-items: center;
 }

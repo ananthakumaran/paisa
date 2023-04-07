@@ -2,13 +2,11 @@
   import COLORS from "$lib/colors";
   import { renderMonthlyInvestmentTimeline } from "$lib/income";
   import { ajax, formatCurrency, setHtml } from "$lib/utils";
-  import dayjs from "dayjs";
   import _ from "lodash";
   import { onMount } from "svelte";
 
   onMount(async () => {
     const { income_timeline: incomes, tax_timeline: taxes } = await ajax("/api/income");
-    _.each(incomes, (i) => (i.timestamp = dayjs(i.date)));
     renderMonthlyInvestmentTimeline(incomes);
 
     const grossIncome = _.sumBy(incomes, (i) => _.sumBy(i.postings, (p) => -p.amount));

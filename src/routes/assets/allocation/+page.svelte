@@ -5,7 +5,6 @@
     renderAllocationTimeline
   } from "$lib/allocation";
   import { ajax, generateColorScheme } from "$lib/utils";
-  import dayjs from "dayjs";
   import _ from "lodash";
   import { onMount, tick } from "svelte";
 
@@ -17,11 +16,6 @@
       aggregates_timeline: aggregatesTimeline,
       allocation_targets: allocationTargets
     } = await ajax("/api/allocation");
-    _.each(aggregates, (a) => (a.timestamp = dayjs(a.date)));
-    _.each(aggregatesTimeline, (aggregates) =>
-      _.each(aggregates, (a) => (a.timestamp = dayjs(a.date)))
-    );
-
     const color = generateColorScheme(_.keys(aggregates));
 
     if (!_.isEmpty(allocationTargets)) {

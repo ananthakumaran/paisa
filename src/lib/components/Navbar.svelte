@@ -1,12 +1,10 @@
 <script lang="ts">
   import { page } from "$app/stores";
-  import dayjs from "dayjs";
   import Sync from "$lib/components/Sync.svelte";
-  import { month } from "../../store";
+  import { month, year, dateMax, dateMin } from "../../store";
   import _ from "lodash";
+  import { financialYear, forEachFinancialYear } from "$lib/utils";
   export let isBurger: boolean = null;
-
-  const max = dayjs().format("YYYY-MM");
 
   interface Link {
     label: string;
@@ -14,6 +12,7 @@
     tag?: string;
     help?: string;
     monthPicker?: boolean;
+    financialYearPicker?: boolean;
     children?: Link[];
   }
   const links: Link[] = [
@@ -21,7 +20,10 @@
     {
       label: "Expenses",
       href: "/expense",
-      children: [{ label: "Monthly", href: "/monthly", monthPicker: true }]
+      children: [
+        { label: "Monthly", href: "/monthly", monthPicker: true },
+        { label: "Yearly", href: "/yearly", financialYearPicker: true }
+      ]
     },
     {
       label: "Assets",
@@ -86,7 +88,7 @@
   }
 </script>
 
-<nav class="navbar is-transparent" aria-label="main navigation">
+<nav class="navbar is-transparent is-light" aria-label="main navigation">
   <div class="navbar-brand">
     <span class="navbar-item is-size-4 has-text-weight-medium">₹ Paisa</span>
     <a
@@ -140,7 +142,7 @@
   </div>
 </nav>
 
-<div class="is-flex is-justify-content-space-between">
+<div class="mt-2 is-flex is-justify-content-space-between">
   {#if selectedLink}
     <nav
       style="margin-left: 12px;"
@@ -196,8 +198,21 @@
         type="month"
         id="d3-current-month"
         bind:value={$month}
-        {max}
+        max={$dateMax.format("YYYY-MM")}
+        min={$dateMin.format("YYYY-MM")}
       />
+    </div>
+  {/if}
+
+  {#if selectedSubLink?.financialYearPicker || selectedLink?.financialYearPicker}
+    <div class="mr-3 has-text-centered">
+      <div class="select is-small">
+        <select bind:value={$year}>
+          {#each forEachFinancialYear($dateMin, $dateMax).reverse() as fy}
+            <option>{financialYear(fy)}</option>
+          {/each}
+        </select>
+      </div>
     </div>
   {/if}
 </div>

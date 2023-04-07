@@ -65,8 +65,8 @@ function renderIncomeTimeline(incomes: Income[], id: string, timeFormat: string)
 
     return _.merge(
       {
-        month: i.timestamp.format(timeFormat),
-        date: i.timestamp,
+        month: i.date.format(timeFormat),
+        date: i.date,
         postings: i.postings
       },
       defaultValues,

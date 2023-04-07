@@ -24,7 +24,14 @@ func FY(date time.Time) string {
 	} else {
 		return fmt.Sprintf("%d-%d", date.Year(), (date.Year()+1)%100)
 	}
+}
 
+func FYHuman(date time.Time) string {
+	if date.Month() < time.April {
+		return fmt.Sprintf("%d - %d", date.Year()-1, date.Year()%100)
+	} else {
+		return fmt.Sprintf("%d - %d", date.Year(), (date.Year()+1)%100)
+	}
 }
 
 func BeginningOfFinancialYear(date time.Time) time.Time {

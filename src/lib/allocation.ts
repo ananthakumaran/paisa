@@ -309,7 +309,7 @@ export function renderAllocationTimeline(aggregatesTimeline: { [key: string]: Ag
           account: group,
           amount: _.sum(_.map(aggregates, (a) => a.amount)),
           market_amount: _.sum(_.map(aggregates, (a) => a.market_amount)),
-          timestamp: aggregates[0].timestamp
+          timestamp: aggregates[0].date
         };
       })
       .value();

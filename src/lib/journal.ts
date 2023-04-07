@@ -7,7 +7,7 @@ import { iconify } from "./icon";
 export function renderTransactions(postings: Posting[]) {
   const rows = _.map(postings, (p) => {
     const purchase = formatCurrency(p.amount);
-    const date = p.timestamp.format("DD MMM YYYY");
+    const date = p.date.format("DD MMM YYYY");
 
     let market = "",
       change = "",
@@ -18,7 +18,7 @@ export function renderTransactions(postings: Posting[]) {
     if (p.commodity !== "INR") {
       units = formatFloat(p.quantity, 4);
       price = formatCurrency(Math.abs(p.amount / p.quantity), 4);
-      const days = dayjs().diff(p.timestamp, "days");
+      const days = dayjs().diff(p.date, "days");
       if (p.quantity > 0 && days > 0) {
         market = formatCurrency(p.market_amount);
         const changeAmount = p.market_amount - p.amount;
@@ -33,7 +33,7 @@ export function renderTransactions(postings: Posting[]) {
       }
     }
     const markup = `
-<tr class="${p.timestamp.month() % 2 == 0 ? "has-background-white-ter" : ""}">
+<tr class="${p.date.month() % 2 == 0 ? "has-background-white-ter" : ""}">
        <td>${date}</td>
        <td>${p.payee}</td>
        <td>${iconify(p.account)}</td>

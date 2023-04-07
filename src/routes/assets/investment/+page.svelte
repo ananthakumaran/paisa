@@ -5,17 +5,11 @@
     renderYearlyInvestmentTimeline
   } from "$lib/investment";
   import { ajax } from "$lib/utils";
-  import dayjs from "dayjs";
   import _ from "lodash";
   import { onMount } from "svelte";
 
   onMount(async () => {
     const { assets: assets, yearly_cards: yearlyCards } = await ajax("/api/investment");
-    _.each(assets, (p) => (p.timestamp = dayjs(p.date)));
-    _.each(yearlyCards, (c) => {
-      c.start_date_timestamp = dayjs(c.start_date);
-      c.end_date_timestamp = dayjs(c.end_date);
-    });
     renderMonthlyInvestmentTimeline(assets);
     renderYearlyInvestmentTimeline(yearlyCards);
     renderYearlyCards(yearlyCards);

@@ -3,8 +3,6 @@
   import COLORS from "$lib/colors";
   import { renderOverview } from "$lib/overview";
   import _ from "lodash";
-  import dayjs from "dayjs";
-
   import { onDestroy, onMount } from "svelte";
 
   let networth = 0;
@@ -20,8 +18,6 @@
   onMount(async () => {
     const result = await ajax("/api/overview");
     const points = result.overview_timeline;
-
-    _.each(points, (n) => (n.timestamp = dayjs(n.date)));
 
     const current = _.last(points);
     networth = current.investment_amount + current.gain_amount - current.withdrawal_amount;

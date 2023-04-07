@@ -17,7 +17,7 @@ function investment(d: Overview) {
 }
 
 export function renderOverview(points: Overview[], element: Element): () => void {
-  const start = _.min(_.map(points, (p) => p.timestamp)),
+  const start = _.min(_.map(points, (p) => p.date)),
     end = dayjs();
 
   const svg = d3.select(element),
@@ -52,7 +52,7 @@ export function renderOverview(points: Overview[], element: Element): () => void
     d3
       .area<Overview>()
       .curve(d3.curveBasis)
-      .x((d) => x(d.timestamp))
+      .x((d) => x(d.date))
       .y0(y0)
       .y1(y1);
 
@@ -131,7 +131,7 @@ export function renderOverview(points: Overview[], element: Element): () => void
       d3
         .line<Overview>()
         .curve(d3.curveBasis)
-        .x((d) => x(d.timestamp))
+        .x((d) => x(d.date))
         .y((d) => y(investment(d)))
     );
 
@@ -144,15 +144,15 @@ export function renderOverview(points: Overview[], element: Element): () => void
       d3
         .line<Overview>()
         .curve(d3.curveBasis)
-        .x((d) => x(d.timestamp))
+        .x((d) => x(d.date))
         .y((d) => y(networth(d)))
     );
 
   const hoverCircle = layer.append("circle").attr("r", "3").attr("fill", "none");
   const t = tippy(hoverCircle.node(), { theme: "light", delay: 0, allowHTML: true });
 
-  const networthVoronoiPoints = _.map(points, (d) => [x(d.timestamp), y(networth(d))]);
-  const investmentVoronoiPoints = _.map(points, (d) => [x(d.timestamp), y(investment(d))]);
+  const networthVoronoiPoints = _.map(points, (d) => [x(d.date), y(networth(d))]);
+  const investmentVoronoiPoints = _.map(points, (d) => [x(d.date), y(investment(d))]);
   const voronoi = Delaunay.from(networthVoronoiPoints.concat(investmentVoronoiPoints)).voronoi([
     0,
     0,
@@ -178,14 +178,14 @@ export function renderOverview(points: Overview[], element: Element): () => void
     })
     .on("mouseover", (_, [pointType, d]) => {
       hoverCircle
-        .attr("cx", x(d.timestamp))
+        .attr("cx", x(d.date))
         .attr("cy", y(pointType == "networth" ? networth(d) : investment(d)))
         .attr("fill", lineScale(pointType));
 
       t.setProps({
         placement: pointType == "networth" ? "top" : "bottom",
         content: tooltip([
-          ["Date", d.timestamp.format("DD MMM YYYY")],
+          ["Date", d.date.format("DD MMM YYYY")],
           ["Net Worth", [formatCurrency(networth(d)), "has-text-weight-bold has-text-right"]],
           [
             "Net Investment",

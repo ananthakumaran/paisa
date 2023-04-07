@@ -14,8 +14,6 @@ export interface Posting {
   quantity: number;
   amount: number;
   market_amount: number;
-
-  timestamp: dayjs.Dayjs;
 }
 
 export interface Transaction {
@@ -27,22 +25,18 @@ export interface Transaction {
 
 export interface Price {
   id: string;
-  date: string;
+  date: dayjs.Dayjs;
   commodity_type: string;
   commodity_id: string;
   commodity_name: string;
   value: number;
-
-  timestamp: dayjs.Dayjs;
 }
 
 export interface Overview {
-  date: string;
+  date: dayjs.Dayjs;
   investment_amount: number;
   withdrawal_amount: number;
   gain_amount: number;
-
-  timestamp: dayjs.Dayjs;
 }
 
 export interface Gain {
@@ -83,12 +77,10 @@ export interface LiabilityBreakdown {
 }
 
 export interface Aggregate {
-  date: string;
+  date: dayjs.Dayjs;
   account: string;
   amount: number;
   market_amount: number;
-
-  timestamp: dayjs.Dayjs;
 }
 
 export interface CommodityBreakdown {
@@ -117,10 +109,8 @@ export interface AllocationTarget {
 }
 
 export interface Income {
-  date: string;
+  date: dayjs.Dayjs;
   postings: Posting[];
-
-  timestamp: dayjs.Dayjs;
 }
 
 export interface Tax {
@@ -130,8 +120,8 @@ export interface Tax {
 }
 
 export interface YearlyCard {
-  start_date: string;
-  end_date: string;
+  start_date: dayjs.Dayjs;
+  end_date: dayjs.Dayjs;
   postings: Posting[];
   net_tax: number;
   gross_salary_income: number;
@@ -139,9 +129,6 @@ export interface YearlyCard {
   net_income: number;
   net_investment: number;
   net_expense: number;
-
-  start_date_timestamp: dayjs.Dayjs;
-  end_date_timestamp: dayjs.Dayjs;
 }
 
 export interface PostingPair {
@@ -279,6 +266,12 @@ export function ajax(route: "/api/expense"): Promise<{
     investments: { [key: string]: Posting[] };
     taxes: { [key: string]: Posting[] };
   };
+  year_wise: {
+    expenses: { [key: string]: Posting[] };
+    incomes: { [key: string]: Posting[] };
+    investments: { [key: string]: Posting[] };
+    taxes: { [key: string]: Posting[] };
+  };
 }>;
 
 export function ajax(route: "/api/liabilities/interest"): Promise<{
@@ -323,6 +316,10 @@ export function formatCurrency(value: number, precision = 0) {
 }
 
 export function formatCurrencyCrude(value: number) {
+  return formatCurrencyCrudeWithPrecision(value, -1);
+}
+
+export function formatCurrencyCrudeWithPrecision(value: number, precision: number) {
   if (obscure) {
     return "00";
   }
@@ -336,11 +333,14 @@ export function formatCurrencyCrude(value: number) {
   } else {
     (x = value / 10000000), (unit = "C");
   }
-  let precision = 2;
-  if (x == Math.round(x)) {
-    precision = 0;
-  } else if (x * 10 == Math.round(x * 10)) {
-    precision = 1;
+
+  if (precision < 0) {
+    precision = 2;
+    if (x == Math.round(x)) {
+      precision = 0;
+    } else if (x * 10 == Math.round(x * 10)) {
+      precision = 1;
+    }
   }
   return sprintf(`%.${precision}f %s`, x, unit);
 }
@@ -401,6 +401,28 @@ export function forEachYear(
     cb(current);
     current = current.add(1, "year");
   }
+}
+
+export function forEachFinancialYear(
+  start: dayjs.Dayjs,
+  end: dayjs.Dayjs,
+  cb?: (current: dayjs.Dayjs) => any
+) {
+  let current = start;
+  if (current.month() < 3) {
+    current = current.year(current.year() - 1);
+  }
+  current = current.month(3).date(1);
+
+  const years: dayjs.Dayjs[] = [];
+  while (current.isSameOrBefore(end, "month")) {
+    if (cb) {
+      cb(current);
+    }
+    years.push(current);
+    current = current.add(1, "year");
+  }
+  return years;
 }
 
 export function firstName(account: string) {
@@ -587,4 +609,12 @@ export function tooltip(
 
 export function isMobile() {
   return window.innerWidth < 1024;
+}
+
+export function financialYear(date: dayjs.Dayjs) {
+  if (date.month() < 3) {
+    return `${date.year() - 1} - ${date.year() % 100}`;
+  } else {
+    return `${date.year()} - ${(date.year() + 1) % 100}`;
+  }
 }

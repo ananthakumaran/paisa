@@ -129,8 +129,8 @@ export function renderProgress(
 
 export function forecast(points: Point[], target: number, ARIMA: typeof Arima): Forecast[] {
   const configs = [
-    { p: 3, d: 0, q: 1, s: 0 },
-    { p: 2, d: 0, q: 1, s: 0 }
+    { p: 3, d: 0, q: 1, s: 0, verbose: false },
+    { p: 2, d: 0, q: 1, s: 0, verbose: false }
   ];
 
   for (const config of configs) {

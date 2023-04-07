@@ -16,7 +16,7 @@ import {
 } from "./utils";
 
 function financialYear(card: YearlyCard) {
-  return `${card.start_date_timestamp.format("YYYY")}-${card.end_date_timestamp.format("YYYY")}`;
+  return `${card.start_date.format("YYYY")}-${card.end_date.format("YYYY")}`;
 }
 
 export function renderMonthlyInvestmentTimeline(postings: Posting[]) {
@@ -44,9 +44,9 @@ export function renderMonthlyInvestmentTimeline(postings: Posting[]) {
     _.map(groupKeys, () => 0)
   );
 
-  const start = _.min(_.map(postings, (p) => p.timestamp)),
+  const start = _.min(_.map(postings, (p) => p.date)),
     end = dayjs().startOf("month");
-  const ts = _.groupBy(postings, (p) => p.timestamp.format(timeFormat));
+  const ts = _.groupBy(postings, (p) => p.date.format(timeFormat));
 
   interface Point {
     month: string;
@@ -219,8 +219,8 @@ export function renderYearlyInvestmentTimeline(yearlyCards: YearlyCard[]) {
     _.map(groupKeys, () => 0)
   );
 
-  const start = _.min(_.map(yearlyCards, (c) => c.start_date_timestamp)),
-    end = _.max(_.map(yearlyCards, (c) => c.end_date_timestamp));
+  const start = _.min(_.map(yearlyCards, (c) => c.start_date)),
+    end = _.max(_.map(yearlyCards, (c) => c.end_date));
 
   const height = BAR_HEIGHT * (end.year() - start.year());
   svg.attr("height", height + margin.top + margin.bottom);

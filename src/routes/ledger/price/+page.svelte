@@ -1,13 +1,11 @@
 <script lang="ts">
   import { renderPrices } from "$lib/price";
   import { ajax } from "$lib/utils";
-  import dayjs from "dayjs";
   import _ from "lodash";
   import { onMount } from "svelte";
 
   onMount(async () => {
     const { prices: prices } = await ajax("/api/price");
-    _.each(prices, (p) => (p.timestamp = dayjs(p.date)));
     renderPrices(prices);
   });
 </script>

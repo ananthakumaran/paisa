@@ -1,13 +1,11 @@
 <script lang="ts">
   import { renderLegend, renderOverview, renderPerAccountOverview } from "$lib/gain";
   import { ajax } from "$lib/utils";
-  import dayjs from "dayjs";
   import _ from "lodash";
   import { onMount } from "svelte";
 
   onMount(async () => {
     const { gain_timeline_breakdown: gains } = await ajax("/api/gain");
-    _.each(gains, (g) => _.each(g.overview_timeline, (o) => (o.timestamp = dayjs(o.date))));
 
     renderLegend();
     renderOverview(gains);

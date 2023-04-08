@@ -404,11 +404,11 @@ export function renderMonthlyExpensesTimeline(
       const group = this.__data__;
       if (selectedGroups.length == 1 && selectedGroups[0] == group) {
         selectedGroups = groups;
-        d3.selectAll(".legendOrdinal .cell .label").attr("fill", "#000");
+        svg.selectAll(".legendOrdinal .cell .label").style("fill", "#4a4a4a");
       } else {
         selectedGroups = [group];
-        d3.selectAll(".legendOrdinal .cell .label").attr("fill", "#ccc");
-        d3.select(this).selectAll(".label").attr("fill", "#000");
+        svg.selectAll(".legendOrdinal .cell .label").style("fill", "#ccc");
+        d3.select(this).selectAll(".label").style("fill", "#4a4a4a");
       }
 
       render(selectedGroups);

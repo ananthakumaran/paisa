@@ -10,7 +10,7 @@
   let name_and_security_type: PortfolioAggregate[] = [];
   let rating: PortfolioAggregate[] = [];
   let industry: PortfolioAggregate[] = [];
-
+  let isEmpty = false;
   let color: any;
 
   let securityTypeR: any,
@@ -22,6 +22,13 @@
     ({ name_and_security_type, security_type, rating, industry, commodities } = await ajax(
       "/api/portfolio_allocation"
     ));
+
+    if (_.isEmpty(commodities)) {
+      isEmpty = true;
+      return;
+    } else {
+      isEmpty = false;
+    }
 
     selectedCommodities = [...commodities];
     securityTypeR = renderPortfolioBreakdown("#d3-portfolio-security-type", security_type);
@@ -38,6 +45,23 @@
     portfolioR(filterCommodityBreakdowns(name_and_security_type, selectedCommodities), color);
   }
 </script>
+
+<section class="section tab-interest" class:is-hidden={!isEmpty}>
+  <div class="container is-fluid">
+    <div class="columns is-centered">
+      <div class="column is-4 has-text-centered">
+        <article class="message is-warning">
+          <div class="message-body">
+            <strong>Oops!</strong> Looks like mutual fund portfolio data is not available<br /><br
+            />
+            Use the <strong>Update Mutual Fund Portfolios</strong> menu option at the right corner to
+            update the data.
+          </div>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>
 
 <section class="section tab-portfolio">
   <div class="container is-fluid">

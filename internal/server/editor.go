@@ -75,7 +75,9 @@ func ValidateFile(file LedgerFile) gin.H {
 }
 
 func validateFile(file LedgerFile) ([]ledger.LedgerFileError, error) {
-	tmpfile, err := ioutil.TempFile("", "paisa-")
+	path := viper.GetString("journal_path")
+
+	tmpfile, err := ioutil.TempFile(filepath.Dir(path), "paisa-tmp-")
 	if err != nil {
 		log.Fatal(err)
 	}

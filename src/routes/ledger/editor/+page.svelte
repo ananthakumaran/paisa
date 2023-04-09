@@ -1,8 +1,9 @@
 <script lang="ts">
-  import { createEditor, moveToEnd, moveToLine } from "$lib/editor";
+  import { createEditor, editorState, moveToEnd, moveToLine } from "$lib/editor";
   import { ajax, type LedgerFile } from "$lib/utils";
-  import type { EditorView } from "codemirror";
+  import { redo, undo } from "@codemirror/commands";
   import * as toast from "bulma-toast";
+  import type { EditorView } from "codemirror";
   import _ from "lodash";
   import { onMount } from "svelte";
 
@@ -38,6 +39,8 @@
         type: "is-success",
         dismissible: true
       });
+
+      $editorState = _.assign({}, $editorState, { hasUnsavedChanges: false });
     }
 
     if (!_.isEmpty(errors)) {
@@ -65,7 +68,12 @@
             {#each files as file}
               <li class:is-active={file.name == selectedFile}>
                 <a on:click={(_e) => (selectedFile = file.name)}>
-                  <span>{file.name}</span>
+                  <span
+                    >{file.name}
+                    {#if file.name == selectedFile && $editorState.hasUnsavedChanges}
+                      <span class="ml-1 tag is-danger">unsaved</span>
+                    {/if}
+                  </span>
                 </a>
               </li>
             {/each}
@@ -74,17 +82,54 @@
       </div>
     </div>
     <div class="columuns">
-      <div class="column is-12 px-0 pt-0">
-        <div class="field has-addons">
+      <div class="column is-12 px-0 pt-0 is-flex is-align-items-center">
+        <div class="field has-addons mb-0">
           <p class="control">
-            <button class="button is-small" on:click={(_e) => save()}>
+            <button
+              class="button is-small"
+              disabled={$editorState.hasUnsavedChanges == false}
+              on:click={(_e) => save()}
+            >
               <span class="icon is-small">
                 <i class="fas fa-floppy-disk" />
               </span>
               <span>Save</span>
             </button>
           </p>
+          <p class="control">
+            <button
+              class="button is-small"
+              disabled={$editorState.undoDepth == 0}
+              on:click={(_e) => undo(editor)}
+            >
+              <span class="icon is-small">
+                <i class="fas fa-arrow-left" />
+              </span>
+              <span>Undo</span>
+            </button>
+          </p>
+          <p class="control">
+            <button
+              class="button is-small"
+              disabled={$editorState.redoDepth == 0}
+              on:click={(_e) => redo(editor)}
+            >
+              <span>Redo</span>
+              <span class="icon is-small">
+                <i class="fas fa-arrow-right" />
+              </span>
+            </button>
+          </p>
         </div>
+        {#if $editorState.errors.length > 0}
+          <div class="control">
+            <a on:click={(_e) => moveToLine(editor, $editorState.errors[0].line_from)}
+              ><span class="ml-1 tag is-danger is-light"
+                >{$editorState.errors.length} error(s) found</span
+              ></a
+            >
+          </div>
+        {/if}
       </div>
     </div>
     <div class="columns">

@@ -1,11 +1,28 @@
-import { ajax, type LedgerFile } from "$lib/utils";
+import { ajax, type LedgerFile, type LedgerFileError } from "$lib/utils";
 import { ledger } from "$lib/parser";
 import { StreamLanguage } from "@codemirror/language";
 import { placeholder, keymap } from "@codemirror/view";
 import { basicSetup, EditorView } from "codemirror";
-import { indentWithTab } from "@codemirror/commands";
+import { indentWithTab, history, undoDepth, redoDepth } from "@codemirror/commands";
 import { linter, lintGutter, type Diagnostic } from "@codemirror/lint";
 import _ from "lodash";
+import { writable } from "svelte/store";
+
+interface EditorState {
+  hasUnsavedChanges: boolean;
+  undoDepth: number;
+  redoDepth: number;
+  errors: LedgerFileError[];
+}
+
+const initialEditorState: EditorState = {
+  hasUnsavedChanges: false,
+  undoDepth: 0,
+  redoDepth: 0,
+  errors: []
+};
+
+export const editorState = writable(initialEditorState);
 
 async function lint(editor: EditorView): Promise<Diagnostic[]> {
   const doc = editor.state.doc;
@@ -13,6 +30,9 @@ async function lint(editor: EditorView): Promise<Diagnostic[]> {
     method: "POST",
     body: JSON.stringify({ name: "", content: editor.state.doc.toString() })
   });
+
+  editorState.update((current) => _.assign({}, current, { errors: response.errors }));
+
   return _.map(response.errors, (error) => {
     const lineFrom = doc.line(error.line_from);
     const lineTo = doc.line(error.line_to);
@@ -26,6 +46,8 @@ async function lint(editor: EditorView): Promise<Diagnostic[]> {
 }
 
 export function createEditor(file: LedgerFile, dom: Element) {
+  editorState.set(initialEditorState);
+
   return new EditorView({
     extensions: [
       basicSetup,
@@ -36,7 +58,17 @@ export function createEditor(file: LedgerFile, dom: Element) {
       EditorView.contentAttributes.of({ "data-enable-grammarly": "false" }),
       StreamLanguage.define(ledger),
       lintGutter(),
-      linter(lint)
+      linter(lint),
+      history(),
+      EditorView.updateListener.of((viewUpdate) => {
+        editorState.update((current) =>
+          _.merge({}, current, {
+            hasUnsavedChanges: current.hasUnsavedChanges || viewUpdate.docChanged,
+            undoDepth: undoDepth(viewUpdate.state),
+            redoDepth: redoDepth(viewUpdate.state)
+          })
+        );
+      })
     ],
     doc: file.content,
     parent: dom

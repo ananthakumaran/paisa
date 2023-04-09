@@ -90,7 +90,7 @@ func Listen(db *gorm.DB) {
 	})
 
 	router.GET("/api/editor/files", func(c *gin.Context) {
-		c.JSON(200, GetFiles())
+		c.JSON(200, GetFiles(db))
 	})
 
 	router.POST("/api/editor/validate", func(c *gin.Context) {

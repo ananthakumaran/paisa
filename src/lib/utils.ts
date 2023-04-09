@@ -294,6 +294,9 @@ export function ajax(route: "/api/liabilities/interest"): Promise<{
 
 export function ajax(route: "/api/editor/files"): Promise<{
   files: LedgerFile[];
+  accounts: string[];
+  commodities: string[];
+  payees: string[];
 }>;
 
 export function ajax(

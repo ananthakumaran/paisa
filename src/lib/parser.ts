@@ -3,25 +3,32 @@ import type { StreamParser, StringStream } from "@codemirror/language";
 const DATE = /^\d{4}[/-]\d{2}[/-]\d{2}/;
 const AMOUNT = /^[+-]?(?:[0-9,])+(\.(?:[0-9,])+)?/;
 const KEYWORDS = /^(?:commodity)/;
-const UNIT = /^(?:INR)/;
+const COMMODITY = /^[A-Za-z]*/;
 const ACCOUNT = /^[A-Za-z]([A-Za-z0-9:])*/;
 
 interface State {
   inTransaction: boolean;
   inPosting: boolean;
   inInclude: boolean;
+  accountConsumed: boolean;
 }
 
 export const ledger: StreamParser<State> = {
   name: "ledger",
   startState: function () {
     return {
+      accountConsumed: false,
       inTransaction: false,
       inPosting: false,
       inInclude: false
     };
   },
   token: function (stream: StringStream, state: State) {
+    if (stream.sol()) {
+      state.inTransaction = false;
+      state.accountConsumed = false;
+    }
+
     if (stream.eatSpace()) return null;
 
     if (stream.match("include")) {
@@ -36,7 +43,6 @@ export const ledger: StreamParser<State> = {
     }
 
     if (stream.match(KEYWORDS)) return "keyword";
-    if (stream.match(UNIT)) return "unit";
 
     if (stream.match(DATE)) {
       state.inTransaction = true;
@@ -63,8 +69,13 @@ export const ledger: StreamParser<State> = {
       return "strong";
     }
 
-    if (state.inPosting && stream.match(ACCOUNT)) {
+    if (state.inPosting && !state.accountConsumed && stream.match(ACCOUNT)) {
+      state.accountConsumed = true;
       return "string";
+    }
+
+    if (state.inPosting && state.accountConsumed && stream.match(COMMODITY)) {
+      return "unit";
     }
 
     if (ch == "@") {

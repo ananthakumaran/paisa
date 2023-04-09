@@ -3,10 +3,11 @@ import { ledger } from "$lib/parser";
 import { StreamLanguage } from "@codemirror/language";
 import { placeholder, keymap } from "@codemirror/view";
 import { basicSetup, EditorView } from "codemirror";
-import { indentWithTab, history, undoDepth, redoDepth } from "@codemirror/commands";
+import { insertTab, history, undoDepth, redoDepth } from "@codemirror/commands";
 import { linter, lintGutter, type Diagnostic } from "@codemirror/lint";
 import _ from "lodash";
 import { writable } from "svelte/store";
+import { autocompletion, completeFromList, ifIn } from "@codemirror/autocomplete";
 
 interface EditorState {
   hasUnsavedChanges: boolean;
@@ -45,13 +46,17 @@ async function lint(editor: EditorView): Promise<Diagnostic[]> {
   });
 }
 
-export function createEditor(file: LedgerFile, dom: Element) {
+export function createEditor(
+  file: LedgerFile,
+  dom: Element,
+  autocompletions: Record<string, string[]>
+) {
   editorState.set(initialEditorState);
 
   return new EditorView({
     extensions: [
+      keymap.of([{ key: "Tab", run: insertTab }]),
       basicSetup,
-      keymap.of([indentWithTab]),
       placeholder(
         "2023/01/27 Description\n\t Income:Salary:Globex   100,000 INR\n\t Assets:Checking"
       ),
@@ -60,6 +65,9 @@ export function createEditor(file: LedgerFile, dom: Element) {
       lintGutter(),
       linter(lint),
       history(),
+      autocompletion({
+        override: _.map(autocompletions, (options, node) => ifIn([node], completeFromList(options)))
+      }),
       EditorView.updateListener.of((viewUpdate) => {
         editorState.update((current) =>
           _.merge({}, current, {

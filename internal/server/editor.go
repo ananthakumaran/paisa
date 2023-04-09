@@ -8,9 +8,11 @@ import (
 	"os"
 
 	"github.com/ananthakumaran/paisa/internal/ledger"
+	"github.com/ananthakumaran/paisa/internal/model/posting"
 	"github.com/gin-gonic/gin"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
+	"gorm.io/gorm"
 )
 
 type LedgerFile struct {
@@ -18,7 +20,14 @@ type LedgerFile struct {
 	Content string `json:"content"`
 }
 
-func GetFiles() gin.H {
+func GetFiles(db *gorm.DB) gin.H {
+	var accounts []string
+	var payees []string
+	var commodities []string
+	db.Model(&posting.Posting{}).Distinct().Pluck("Account", &accounts)
+	db.Model(&posting.Posting{}).Distinct().Pluck("Payee", &payees)
+	db.Model(&posting.Posting{}).Distinct().Pluck("Commodity", &commodities)
+
 	path := viper.GetString("journal_path")
 
 	files := []*LedgerFile{}
@@ -29,7 +38,7 @@ func GetFiles() gin.H {
 		files = append(files, readLedgerFile(path))
 	}
 
-	return gin.H{"files": files}
+	return gin.H{"files": files, "accounts": accounts, "payees": payees, "commodities": commodities}
 }
 
 func SaveFile(file LedgerFile) gin.H {

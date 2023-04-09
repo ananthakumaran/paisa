@@ -11,9 +11,12 @@
   let editor: EditorView;
   let files: LedgerFile[] = [];
   let selectedFile: string = null;
+  let accounts: string[] = [];
+  let commodities: string[] = [];
+  let payees: string[] = [];
 
   onMount(async () => {
-    ({ files } = await ajax("/api/editor/files"));
+    ({ files, accounts, commodities, payees } = await ajax("/api/editor/files"));
     if (!_.isEmpty(files)) {
       selectedFile = files[0].name;
     }
@@ -54,7 +57,11 @@
     }
     const file = _.find(files, (f) => f.name == selectedFile);
 
-    editor = createEditor(file, editorDom);
+    editor = createEditor(file, editorDom, {
+      string: accounts,
+      strong: payees,
+      unit: commodities
+    });
     moveToEnd(editor);
   }
 </script>

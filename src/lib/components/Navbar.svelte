@@ -49,6 +49,7 @@
       label: "Ledger",
       href: "/ledger",
       children: [
+        { label: "Editor", href: "/editor", tag: "alpha" },
         { label: "Transactions", href: "/transaction" },
         { label: "Journal", href: "/journal" },
         { label: "Price", href: "/price" }
@@ -65,8 +66,7 @@
       ]
     },
     { label: "Retirement", href: "/retirement/progress", help: "retirement" },
-    { label: "Doctor", href: "/doctor" },
-    { label: "Editor", href: "/editor", tag: "alpha" }
+    { label: "Doctor", href: "/doctor" }
   ];
 
   let selectedLink: Link = null;

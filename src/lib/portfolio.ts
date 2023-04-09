@@ -68,8 +68,6 @@ export function renderPortfolioBreakdown(
     .sort()
     .value();
 
-  const z = generateColorScheme(groups);
-
   const legendg = svg.append("g");
   const aggregatesg = svg.append("g");
 
@@ -98,6 +96,11 @@ export function renderPortfolioBreakdown(
   const treemapg = treemap.append("div");
 
   let rendered = false;
+
+  let z: d3.ScaleOrdinal<string, string, never> = null;
+  if (!_.isEmpty(groups)) {
+    z = generateColorScheme(groups);
+  }
 
   return (portfolioAggregates: PortfolioAggregate[], color: d3.ScaleOrdinal<string, string>) => {
     if (_.isEmpty(portfolioAggregates)) {

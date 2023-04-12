@@ -218,6 +218,7 @@ export interface RetirementProgress {
 export interface LedgerFile {
   name: string;
   content: string;
+  versions: string[];
 }
 
 export interface LedgerFileError {
@@ -227,7 +228,12 @@ export interface LedgerFileError {
   message: string;
 }
 
-const BACKGROUND = ["/api/editor/validate", "/api/editor/save"];
+const BACKGROUND = [
+  "/api/editor/validate",
+  "/api/editor/save",
+  "/api/editor/file",
+  "/api/editor/file/delete_backups"
+];
 
 export function ajax(route: "/api/retirement/progress"): Promise<RetirementProgress>;
 export function ajax(route: "/api/harvest"): Promise<{ harvestables: Record<string, Harvestable> }>;
@@ -307,7 +313,17 @@ export function ajax(
 export function ajax(
   route: "/api/editor/save",
   options?: RequestInit
-): Promise<{ errors: LedgerFileError[]; saved: boolean }>;
+): Promise<{ errors: LedgerFileError[]; saved: boolean; file: LedgerFile }>;
+
+export function ajax(
+  route: "/api/editor/file",
+  options?: RequestInit
+): Promise<{ file: LedgerFile }>;
+
+export function ajax(
+  route: "/api/editor/file/delete_backups",
+  options?: RequestInit
+): Promise<{ file: LedgerFile }>;
 
 export async function ajax(route: "/api/sync", options?: RequestInit): Promise<any>;
 

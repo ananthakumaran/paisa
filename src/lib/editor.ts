@@ -47,7 +47,7 @@ async function lint(editor: EditorView): Promise<Diagnostic[]> {
 }
 
 export function createEditor(
-  file: LedgerFile,
+  content: string,
   dom: Element,
   autocompletions: Record<string, string[]>
 ) {
@@ -70,7 +70,7 @@ export function createEditor(
       }),
       EditorView.updateListener.of((viewUpdate) => {
         editorState.update((current) =>
-          _.merge({}, current, {
+          _.assign({}, current, {
             hasUnsavedChanges: current.hasUnsavedChanges || viewUpdate.docChanged,
             undoDepth: undoDepth(viewUpdate.state),
             redoDepth: redoDepth(viewUpdate.state)
@@ -78,7 +78,7 @@ export function createEditor(
         );
       })
     ],
-    doc: file.content,
+    doc: content,
     parent: dom
   });
 }
@@ -97,5 +97,11 @@ export function moveToLine(editor: EditorView, lineNumber: number) {
     editor.state.update({
       effects: EditorView.scrollIntoView(line.from, { y: "center" })
     })
+  );
+}
+
+export function updateContent(editor: EditorView, content: string) {
+  editor.dispatch(
+    editor.state.update({ changes: { from: 0, to: editor.state.doc.length, insert: content } })
   );
 }

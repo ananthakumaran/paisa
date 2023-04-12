@@ -93,6 +93,26 @@ func Listen(db *gorm.DB) {
 		c.JSON(200, GetFiles(db))
 	})
 
+	router.POST("/api/editor/file", func(c *gin.Context) {
+		var ledgerFile LedgerFile
+		if err := c.ShouldBindJSON(&ledgerFile); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+
+		c.JSON(200, GetFile(ledgerFile))
+	})
+
+	router.POST("/api/editor/file/delete_backups", func(c *gin.Context) {
+		var ledgerFile LedgerFile
+		if err := c.ShouldBindJSON(&ledgerFile); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+
+		c.JSON(200, DeleteBackups(ledgerFile))
+	})
+
 	router.POST("/api/editor/validate", func(c *gin.Context) {
 		var ledgerFile LedgerFile
 		if err := c.ShouldBindJSON(&ledgerFile); err != nil {

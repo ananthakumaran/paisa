@@ -1,4 +1,4 @@
-import { ajax, type LedgerFile, type LedgerFileError } from "$lib/utils";
+import { ajax, type LedgerFileError } from "$lib/utils";
 import { ledger } from "$lib/parser";
 import { StreamLanguage } from "@codemirror/language";
 import { placeholder, keymap } from "@codemirror/view";

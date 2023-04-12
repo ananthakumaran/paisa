@@ -171,10 +171,10 @@ export function renderAllocationTarget(
   groups
     .append("rect")
     .attr("fill", (d) => z1(Math.abs(d.target - d.current)))
-    .attr("x", (d) => x1(d3.min([d.target, d.current])))
+    .attr("x", x1(0))
     .attr("y", (d) => y(d.name) + y.bandwidth() / 4)
     .attr("height", y.bandwidth() / 2)
-    .attr("width", (d) => x1(Math.abs(d.target - d.current)));
+    .attr("width", (d) => x1(d.current));
 
   groups
     .append("line")

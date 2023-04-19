@@ -18,7 +18,7 @@
 
 <table
   style="margin-bottom: -1px; margin-top: -1px"
-  class="table is-fullwidth is-bordered-bottom is-bordered-top is-narrow is-striped is-hoverable"
+  class="table is-fullwidth is-narrow is-striped is-hoverable"
 >
   <tbody>
     {#each postings as p}

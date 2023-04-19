@@ -24,7 +24,7 @@
 
   const itemSize = (i: number) => {
     const t = filtered[i];
-    return 50 + Math.max(credits(t).length, debits(t).length) * 30;
+    return 2 + Math.max(credits(t).length, debits(t).length) * 30;
   };
 
   onMount(async () => {
@@ -70,20 +70,17 @@
         <div slot="item" let:index let:style {style}>
           {@const t = filtered[index]}
           <div class="column is-12">
-            <div class="columns is-flex-wrap-wrap">
-              <div class="column is-full pb-0 px-0">
-                <span
-                  style="display: inline-block"
-                  class="is-bordered-left is-bordered-top is-bordered-right p-2"
-                >
+            <div class="columns is-flex-wrap-wrap transaction">
+              <div class="column is-3 py-0">
+                <div class="description is-size-7">
                   <b>{t.date.format("DD MMM YYYY")}</b>
-                  <span>{t.payee}</span>
-                </span>
+                  <span title={t.payee}>{t.payee}</span>
+                </div>
               </div>
-              <div class="column is-half py-0 is-bordered-bottom is-bordered-top is-bordered-left">
+              <div class="column is-4 py-0">
                 <Postings postings={debits(t)} />
               </div>
-              <div class="column is-half py-0 is-bordered-bottom is-bordered-top is-bordered-right">
+              <div class="column is-5 py-0">
                 <Postings postings={credits(t)} />
               </div>
             </div>
@@ -93,3 +90,16 @@
     </div>
   </div>
 </section>
+
+<style lang="scss">
+  .transaction {
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 1px;
+  }
+
+  .description {
+    display: inline-block;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+</style>

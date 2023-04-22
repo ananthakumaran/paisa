@@ -228,6 +228,22 @@ export interface LedgerFileError {
   message: string;
 }
 
+export interface Node {
+  id: number;
+  name: string;
+}
+
+export interface Link {
+  source: number;
+  target: number;
+  value: number;
+}
+
+export interface Graph {
+  nodes: Node[];
+  links: Link[];
+}
+
 const BACKGROUND = [
   "/api/editor/validate",
   "/api/editor/save",
@@ -292,6 +308,7 @@ export function ajax(route: "/api/expense"): Promise<{
     investments: { [key: string]: Posting[] };
     taxes: { [key: string]: Posting[] };
   };
+  graph: { [key: string]: Graph };
 }>;
 
 export function ajax(route: "/api/liabilities/interest"): Promise<{

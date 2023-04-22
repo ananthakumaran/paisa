@@ -16,3 +16,12 @@ declare module "arima/async" {
   const P: Promise<typeof Arima>;
   export default P;
 }
+
+declare module "d3-sankey-circular" {
+  export function sankeyCircular(): any;
+  export function sankeyJustify(): any;
+}
+
+declare module "d3-path-arrows" {
+  export function pathArrows(): any;
+}

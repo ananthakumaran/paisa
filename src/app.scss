@@ -53,6 +53,10 @@ body {
   border-left: 1px solid hsl(0deg, 0%, 86%);
 }
 
+svg text {
+  font-family: $family-sans-serif;
+}
+
 .axis {
   font-family: $family-sans-serif;
 
@@ -91,6 +95,10 @@ body {
       display: block;
     }
   }
+}
+
+.g-arrow path {
+  opacity: 0.5;
 }
 
 .legendOrdinal .label,

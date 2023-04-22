@@ -22,7 +22,8 @@
       href: "/expense",
       children: [
         { label: "Monthly", href: "/monthly", monthPicker: true },
-        { label: "Yearly", href: "/yearly", financialYearPicker: true }
+        { label: "Yearly", href: "/yearly", financialYearPicker: true },
+        { label: "Cash Flow", href: "/flow", tag: "alpha", financialYearPicker: true }
       ]
     },
     {

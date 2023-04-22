@@ -20,7 +20,7 @@
     <div class="columns">
       <div class="column is-12 has-text-centered">
         <div>
-          We have found <b class="d3-diagnosis-count" /> potential issue(s).
+          <b class="d3-diagnosis-count" /> potential issue(s) found.
         </div>
       </div>
     </div>

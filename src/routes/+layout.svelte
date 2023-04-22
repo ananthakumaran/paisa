@@ -1,20 +1,23 @@
 <script lang="ts">
   import { afterNavigate, beforeNavigate } from "$app/navigation";
-  import { followCursor, type Instance, delegate } from "tippy.js";
+  import { followCursor, delegate, hideAll } from "tippy.js";
   import _ from "lodash";
   import Spinner from "$lib/components/Spinner.svelte";
   import Navbar from "$lib/components/Navbar.svelte";
+  import { willClearTippy } from "../store";
 
   let isBurger: boolean = null;
-  let tippyInstances: Instance[] = [];
 
-  beforeNavigate(() => {
-    tippyInstances.forEach((t) => t.destroy());
-  });
+  function clearTippy() {
+    hideAll();
+  }
+
+  willClearTippy.subscribe(clearTippy);
+  beforeNavigate(clearTippy);
 
   afterNavigate(() => {
     isBurger = null;
-    tippyInstances = delegate("section,nav", {
+    delegate("section,nav", {
       target: "[data-tippy-content]",
       theme: "light",
       onShow: (instance) => {

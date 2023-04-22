@@ -10,3 +10,5 @@ export const dateMin = writable(dayjs("1980", "YYYY"));
 export const dateMax = writable(dayjs());
 
 export const loading = writable(false);
+
+export const willClearTippy = writable(0);

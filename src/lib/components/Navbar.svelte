@@ -50,6 +50,7 @@
       label: "Ledger",
       href: "/ledger",
       children: [
+        { label: "Import", href: "/import", tag: "alpha" },
         { label: "Editor", href: "/editor", tag: "alpha" },
         { label: "Transactions", href: "/transaction" },
         { label: "Journal", href: "/journal" },

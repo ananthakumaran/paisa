@@ -2,6 +2,7 @@ package server
 
 import (
 	"github.com/ananthakumaran/paisa/internal/model"
+	"github.com/ananthakumaran/paisa/internal/prediction"
 	"github.com/ananthakumaran/paisa/internal/service"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
@@ -29,5 +30,6 @@ func Sync(db *gorm.DB, request SyncRequest) gin.H {
 
 	service.ClearInterestCache()
 	service.ClearPriceCache()
+	prediction.ClearCache()
 	return gin.H{"success": true}
 }

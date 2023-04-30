@@ -1,7 +1,6 @@
 package liabilities
 
 import (
-	"fmt"
 	"sort"
 	"strings"
 
@@ -79,7 +78,6 @@ func computeBreakdown(db *gorm.DB, postings, expenses []posting.Posting) map[str
 		interest := balance + repaid - drawn
 
 		apr := service.APR(db, ps)
-		fmt.Println(group, apr)
 		breakdown := AssetBreakdown{DrawnAmount: drawn, RepaidAmount: repaid, BalanceAmount: balance, APR: apr, Group: group, InterestAmount: interest}
 		result[group] = breakdown
 	}

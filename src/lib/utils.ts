@@ -58,6 +58,14 @@ export interface Interest {
   apr: number;
 }
 
+export interface AccountTfIdf {
+  tf_idf: Record<string, Record<string, number>>;
+  index: {
+    docs: Record<string, Record<string, number>>;
+    tokens: Record<string, Record<string, number>>;
+  };
+}
+
 export interface AssetBreakdown {
   group: string;
   investment_amount: number;
@@ -315,6 +323,8 @@ export function ajax(route: "/api/liabilities/interest"): Promise<{
   interest_timeline_breakdown: Interest[];
 }>;
 
+export function ajax(route: "/api/account/tf_idf"): Promise<AccountTfIdf>;
+
 export function ajax(route: "/api/editor/files"): Promise<{
   files: LedgerFile[];
   accounts: string[];
@@ -357,7 +367,7 @@ export async function ajax(route: string, options?: RequestInit) {
     if (
       _.isString(value) &&
       /date/.test(key) &&
-      /^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$/.test(value)
+      /^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(Z|[+-][0-9]{2}:[0-9]{2})$/.test(value)
     ) {
       return dayjs(value);
     }

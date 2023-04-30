@@ -1,6 +1,6 @@
 import { writable } from "svelte/store";
 
-import { financialYear } from "$lib/utils";
+import { financialYear, type AccountTfIdf } from "$lib/utils";
 import dayjs from "dayjs";
 
 export const month = writable(dayjs().format("YYYY-MM"));
@@ -12,3 +12,5 @@ export const dateMax = writable(dayjs());
 export const loading = writable(false);
 
 export const willClearTippy = writable(0);
+
+export const accountTfIdf = writable<AccountTfIdf>(null);

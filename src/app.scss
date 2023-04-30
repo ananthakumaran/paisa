@@ -242,7 +242,15 @@ svg text {
   }
 }
 
-.cm-editor {
+.template-editor .cm-editor {
+  height: 200px;
+}
+
+.preview-editor .cm-editor {
+  max-height: calc(100vh - 350px);
+}
+
+.editor .cm-editor {
   max-height: calc(100vh - 225px);
 }
 .cm-scroller {

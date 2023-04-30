@@ -54,7 +54,6 @@
       toast.toast({
         message: `Failed to save ${selectedFile.name}`,
         type: "is-danger",
-        dismissible: true,
         duration: 5000
       });
       if (!_.isEmpty(errors)) {
@@ -63,8 +62,7 @@
     } else {
       toast.toast({
         message: `Saved ${selectedFile.name}`,
-        type: "is-success",
-        dismissible: true
+        type: "is-success"
       });
       filesMap[file.name] = file;
       selectedFile = file;
@@ -80,9 +78,11 @@
       }
 
       editor = createEditor(selectedFile.content, editorDom, {
-        string: accounts,
-        strong: payees,
-        unit: commodities
+        autocompletions: {
+          string: accounts,
+          strong: payees,
+          unit: commodities
+        }
       });
       moveToEnd(editor);
     }

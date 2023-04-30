@@ -25,3 +25,7 @@ declare module "d3-sankey-circular" {
 declare module "d3-path-arrows" {
   export function pathArrows(): any;
 }
+
+declare module "compute-cosine-similarity" {
+  export default function similarity(a: number[], b: number[]): number;
+}

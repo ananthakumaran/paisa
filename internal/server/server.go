@@ -3,6 +3,7 @@ package server
 import (
 	"net/http"
 
+	"github.com/ananthakumaran/paisa/internal/prediction"
 	"github.com/ananthakumaran/paisa/internal/server/assets"
 	"github.com/ananthakumaran/paisa/internal/server/liabilities"
 	"github.com/ananthakumaran/paisa/internal/server/retirement"
@@ -131,6 +132,10 @@ func Listen(db *gorm.DB) {
 		}
 
 		c.JSON(200, SaveFile(ledgerFile))
+	})
+
+	router.GET("/api/account/tf_idf", func(c *gin.Context) {
+		c.JSON(200, prediction.GetTfIdf(db))
 	})
 
 	router.NoRoute(func(c *gin.Context) {

@@ -3,6 +3,7 @@ package server
 import (
 	"net/http"
 
+	"github.com/ananthakumaran/paisa/internal/model/template"
 	"github.com/ananthakumaran/paisa/internal/prediction"
 	"github.com/ananthakumaran/paisa/internal/server/assets"
 	"github.com/ananthakumaran/paisa/internal/server/liabilities"
@@ -136,6 +137,31 @@ func Listen(db *gorm.DB) {
 
 	router.GET("/api/account/tf_idf", func(c *gin.Context) {
 		c.JSON(200, prediction.GetTfIdf(db))
+	})
+
+	router.GET("/api/templates", func(c *gin.Context) {
+		c.JSON(200, gin.H{"templates": template.All(db)})
+	})
+
+	router.POST("/api/templates/upsert", func(c *gin.Context) {
+		var t template.Template
+		if err := c.ShouldBindJSON(&t); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+
+		c.JSON(200, template.Upsert(db, t.Name, t.Content))
+	})
+
+	router.POST("/api/templates/delete", func(c *gin.Context) {
+		var t template.Template
+		if err := c.ShouldBindJSON(&t); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+
+		template.Delete(db, t.ID)
+		c.JSON(200, gin.H{})
 	})
 
 	router.NoRoute(func(c *gin.Context) {

@@ -5,7 +5,7 @@ import _ from "lodash";
 const KEYWORDS = /^(?:[#/](?:if|with|true|false))/;
 const HELPERS = new RegExp(`^(?:(?:${_.keys(helpers).join("|")}))`); //;
 const NAMES = /^(?:ROW)/;
-const COLUMN = /^(?:\.[A-Z])/;
+const COLUMN = /^(?:\.[A-Z]|[A-Z] )/;
 
 export const handlebars: StreamParser<object> = {
   name: "handlebars",

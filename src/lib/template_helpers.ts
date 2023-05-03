@@ -55,10 +55,6 @@ function findMatch(query: string) {
 export default {
   eq: (v1: any, v2: any) => v1 === v2,
   ne: (v1: any, v2: any) => v1 !== v2,
-  lt: (v1: any, v2: any) => v1 < v2,
-  gt: (v1: any, v2: any) => v1 > v2,
-  lte: (v1: any, v2: any) => v1 <= v2,
-  gte: (v1: any, v2: any) => v1 >= v2,
   not: (pred: any) => !pred,
   and(...args: any[]) {
     return Array.prototype.every.call(Array.prototype.slice.call(args, 0, -1), Boolean);
@@ -103,6 +99,20 @@ export default {
   },
   date(str: string, format: string) {
     return dayjs(str, format).format("YYYY/MM/DD");
+  },
+  findAbove(column: string, options: any) {
+    const regexp = new RegExp(options.hash.regexp || ".*");
+    let i: number = options.data.root.ROW.index;
+    while (i >= 0) {
+      const row = options.data.root.SHEET[i];
+      const cell = row[column] || "";
+      const match = cell.match(regexp);
+      if (match) {
+        return cell;
+      }
+      i--;
+    }
+    return null;
   },
   acronym(str: string) {
     return _.chain(str.split(" "))

@@ -6,6 +6,7 @@ import (
 	"github.com/ananthakumaran/paisa/internal/model/portfolio"
 	"github.com/ananthakumaran/paisa/internal/model/posting"
 	"github.com/ananthakumaran/paisa/internal/model/price"
+	"github.com/ananthakumaran/paisa/internal/model/template"
 	"github.com/ananthakumaran/paisa/internal/server"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
@@ -24,6 +25,7 @@ var serveCmd = &cobra.Command{
 		db.AutoMigrate(&posting.Posting{})
 		db.AutoMigrate(&price.Price{})
 		db.AutoMigrate(&portfolio.Portfolio{})
+		db.AutoMigrate(&template.Template{})
 
 		if err != nil {
 			log.Fatal(err)

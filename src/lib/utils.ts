@@ -252,11 +252,21 @@ export interface Graph {
   links: Link[];
 }
 
+export interface Template {
+  id: number;
+  name: string;
+  content: string;
+  template_type: string;
+}
+
 const BACKGROUND = [
   "/api/editor/validate",
   "/api/editor/save",
   "/api/editor/file",
-  "/api/editor/file/delete_backups"
+  "/api/editor/file/delete_backups",
+  "/api/templates",
+  "/api/templates/upsert",
+  "/api/templates/delete"
 ];
 
 export function ajax(route: "/api/retirement/progress"): Promise<RetirementProgress>;
@@ -324,6 +334,9 @@ export function ajax(route: "/api/liabilities/interest"): Promise<{
 }>;
 
 export function ajax(route: "/api/account/tf_idf"): Promise<AccountTfIdf>;
+export function ajax(route: "/api/templates"): Promise<{ templates: Template[] }>;
+export function ajax(route: "/api/templates/upsert", options?: RequestInit): Promise<Template>;
+export function ajax(route: "/api/templates/delete", options?: RequestInit): Promise<void>;
 
 export function ajax(route: "/api/editor/files"): Promise<{
   files: LedgerFile[];
@@ -352,7 +365,7 @@ export function ajax(
   options?: RequestInit
 ): Promise<{ file: LedgerFile }>;
 
-export async function ajax(route: "/api/sync", options?: RequestInit): Promise<any>;
+export function ajax(route: "/api/sync", options?: RequestInit): Promise<any>;
 
 export async function ajax(route: string, options?: RequestInit) {
   if (!_.includes(BACKGROUND, route)) {

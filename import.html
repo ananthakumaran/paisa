@@ -1,0 +1,371 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Import - ₹ Paisa</title>
+        <!-- Custom HTML head -->
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="introduction.html">Introduction</a></li><li class="chapter-item expanded affix "><li class="part-title">Getting Started</li><li class="chapter-item expanded "><a href="installation.html"><strong aria-hidden="true">1.</strong> Installation</a></li><li class="chapter-item expanded "><a href="tutorial.html"><strong aria-hidden="true">2.</strong> Tutorial</a></li><li class="chapter-item expanded affix "><li class="part-title">Reference Guide</li><li class="chapter-item expanded "><a href="accounts.html"><strong aria-hidden="true">3.</strong> Accounts</a></li><li class="chapter-item expanded "><a href="commodities.html"><strong aria-hidden="true">4.</strong> Commodities</a></li><li class="chapter-item expanded "><a href="allocation-targets.html"><strong aria-hidden="true">5.</strong> Allocation Targets</a></li><li class="chapter-item expanded "><a href="tax.html"><strong aria-hidden="true">6.</strong> Tax</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="tax-harvesting.html"><strong aria-hidden="true">6.1.</strong> Tax Harvesting</a></li><li class="chapter-item expanded "><a href="capital-gains.html"><strong aria-hidden="true">6.2.</strong> Capital Gains</a></li><li class="chapter-item expanded "><a href="schedule-al.html"><strong aria-hidden="true">6.3.</strong> Schedule AL</a></li></ol></li><li class="chapter-item expanded "><a href="retirement.html"><strong aria-hidden="true">7.</strong> Retirement</a></li><li class="chapter-item expanded "><a href="analysis.html"><strong aria-hidden="true">8.</strong> Analysis</a></li><li class="chapter-item expanded "><a href="import.html" class="active"><strong aria-hidden="true">9.</strong> Import</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">₹ Paisa</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="import"><a class="header" href="#import">Import</a></h1>
+<p>Paisa provides ability to convert <strong>CSV</strong> or <strong>TXT</strong> files to Ledger
+file format. The import page is made of three components.</p>
+<ol>
+<li>
+<p>File Preview - You can drag and drop files here to preview the
+contents.</p>
+</li>
+<li>
+<p>Ledger Preview - This is where the converted ledger file will be
+shown.</p>
+</li>
+<li>
+<p>Template Editor - This is where you can edit the template.</p>
+</li>
+</ol>
+<p>Each row in the CSV file is converted to a transaction in the
+ledger. This conversion is controlled by the template.</p>
+<pre><code class="language-handlebars">{{#if (and (isDate ROW.A &quot;DD/MM/YYYY&quot;) (isBlank ROW.G))}}
+ {{date ROW.A &quot;DD/MM/YYYY&quot;}} {{ROW.C}}
+    {{predictAccount prefix=&quot;Expenses&quot;}}		{{ROW.F}} INR
+    Assets:Checking
+{{/if}}
+</code></pre>
+<p>Let's break this down. The first line is a conditional statement. It
+checks if the row has a date in the first column. You can refer any
+column using their alphabets. The second line constructs the
+transaction header. The third line constructs the first posting. The
+fourth line constructs the second posting.</p>
+<p>Effectively a single row in the CSV file is converted to a single
+transaction like this.</p>
+<pre><code>2023/03/28 AMAZON HTTP://WWW.AM IN
+    Expenses:Shopping		249.00 INR
+    Assets:Checking
+</code></pre>
+<p>The template is written in <a href="https://handlebarsjs.com/">Handlebars</a>. Paisa provides a few
+helper functions to make it easier to write the template.</p>
+<h4 id="template-management"><a class="header" href="#template-management">Template Management</a></h4>
+<p>Paisa ships with a few builtin templates. You can also create your
+own. To create a new template, edit the template and click on the
+<code>Save As</code> button.</p>
+<blockquote>
+<p>The import system is designed to be extensible. If you are unable to
+create a template suitable for your CSV file, please open an issue
+with a sample CSV file.</p>
+</blockquote>
+<h4 id="template-data"><a class="header" href="#template-data">Template Data</a></h4>
+<ol>
+<li><strong>ROW</strong> - This is the current row being processed. You can refer to
+any column using their alphabets. For example, <code>ROW.A</code> refers to
+the first column, <code>ROW.B</code> refers to the second column and so
+on. The current row index is available as <code>ROW.index</code>.</li>
+</ol>
+<details>
+  <summary>Example</summary>
+<pre><code class="language-json">{
+  &quot;A&quot;: &quot;28/03/2023&quot;,
+  &quot;B&quot;: &quot;7357680821&quot;,
+  &quot;C&quot;: &quot;AMAZON HTTP://WWW.AM IN&quot;,
+  &quot;D&quot;: &quot;12&quot;,
+  &quot;E&quot;: &quot;0&quot;,
+  &quot;F&quot;: &quot;249.00&quot;,
+  &quot;G&quot;: &quot;&quot;,
+  &quot;index&quot;: 6
+}
+</code></pre>
+</details>
+<ol start="2">
+<li><strong>SHEET</strong> - This is the entire sheet. It is an array of rows. You
+can refer a specific cell using the following syntax <code>SHEET.5.A</code>.</li>
+</ol>
+<details>
+  <summary>Example</summary>
+<pre><code class="language-json">[
+    {
+        &quot;A&quot;: &quot;Accountno:&quot;,
+        &quot;B&quot;: &quot;49493xxx003030&quot;,
+        &quot;index&quot;: 0
+    },
+    {
+        &quot;A&quot;: &quot;Customer Name:&quot;,
+        &quot;B&quot;: &quot;MR John Doe&quot;,
+        &quot;index&quot;: 1
+    },
+    {
+        &quot;A&quot;: &quot;Address:&quot;,
+        &quot;B&quot;: &quot;1234, ABC Street, XYZ City, 123456&quot;,
+        &quot;index&quot;: 2
+    },
+    {
+        &quot;A&quot;: &quot;Transaction Details:&quot;,
+        &quot;index&quot;: 3
+    },
+    {
+        &quot;A&quot;: &quot;Date&quot;,
+        &quot;B&quot;: &quot;Sr.No.&quot;,
+        &quot;C&quot;: &quot;Transaction Details&quot;,
+        &quot;D&quot;: &quot;Reward Point Header&quot;,
+        &quot;E&quot;: &quot;Intl.Amount&quot;,
+        &quot;F&quot;: &quot;Amount(in Rs)&quot;,
+        &quot;G&quot;: &quot;BillingAmountSign&quot;,
+        &quot;index&quot;: 4
+    },
+    {
+        &quot;A&quot;: &quot;49493xxx003030&quot;,
+        &quot;index&quot;: 5
+    },
+    {
+        &quot;A&quot;: &quot;28/03/2023&quot;,
+        &quot;B&quot;: &quot;7357680821&quot;,
+        &quot;C&quot;: &quot;AMAZON HTTP://WWW.AM IN&quot;,
+        &quot;D&quot;: &quot;12&quot;,
+        &quot;E&quot;: &quot;0&quot;,
+        &quot;F&quot;: &quot;249.00&quot;,
+        &quot;G&quot;: &quot;&quot;,
+        &quot;index&quot;: 6
+    },
+    {
+        &quot;A&quot;: &quot;28/03/2023&quot;,
+        &quot;B&quot;: &quot;7357821997&quot;,
+        &quot;C&quot;: &quot;AMAZON HTTP://WWW.AM IN&quot;,
+        &quot;D&quot;: &quot;28&quot;,
+        &quot;E&quot;: &quot;0&quot;,
+        &quot;F&quot;: &quot;575.00&quot;,
+        &quot;G&quot;: &quot;&quot;,
+        &quot;index&quot;: 7
+    }
+]
+</code></pre>
+</details>
+<h4 id="template-helpers"><a class="header" href="#template-helpers">Template Helpers</a></h4>
+<ol>
+<li>
+<p><code>eq(a: any, b: any) =&gt; boolean</code> - Checks if the two values are
+equal.</p>
+</li>
+<li>
+<p><code>not(value: any) =&gt; boolean</code> - Negates the given value.</p>
+</li>
+<li>
+<p><code>and(...args: any[]): any</code> - Returns true if all the
+arguments are true.</p>
+</li>
+<li>
+<p><code>or(...args: any[]): any</code> - Returns true if any of the
+arguments are true.</p>
+</li>
+<li>
+<p><code>isDate(str: string, format: string): boolean</code> - Checks if the
+given string is a valid date in the given format. Refer <a href="https://day.js.org/docs/en/parse/string-format#list-of-all-available-parsing-tokens">Day.js</a>
+for the full list of supported formats.</p>
+</li>
+<li>
+<p><code>predictAccount(...corpus: string[], {prefix?: string}): string</code> -
+Predicts the account name based on your existing ledger file. The
+corpus provided will be matched with the existing transaction
+description and amount.</p>
+<p>If <code>corpus</code> is not provided, the entire <code>ROW</code> will be used</p>
+<p>The <code>prefix</code> is optional and will be used to filter out matching
+accounts. If no match is found, <code>Unknown</code> will be returned.</p>
+</li>
+</ol>
+<pre><code class="language-handlebars">{{predictAccount prefix=&quot;Income&quot;}}
+{{predictAccount ROW.C ROW.F prefix=&quot;Income&quot;}}
+</code></pre>
+<blockquote>
+<p>NOTE: prediction will only work if you have similar transactions in
+ledger file. It usually means, first time you have to manually fix
+the Unknown account and then subsequent imports will work</p>
+</blockquote>
+<ol start="7">
+<li>
+<p><code>isBlank(str: string): boolean</code> - Checks if the given string is
+blank.</p>
+</li>
+<li>
+<p><code>date(str: string, format: string): string</code> - Parses the given
+string as a date in the given format and returns the date in the
+format <code>YYYY/MM/DD</code>. Refer <a href="https://day.js.org/docs/en/parse/string-format#list-of-all-available-parsing-tokens">Day.js</a>
+for the full list of supported formats.</p>
+</li>
+<li>
+<p><code>findAbove(column: string, {regexp?: string}): any</code> - Finds the
+first cell above the current row in the given column. If <code>regexp</code> is
+provided, the search will continue till a match is found</p>
+</li>
+</ol>
+<pre><code class="language-handlebars">{{findAbove B regexp=&quot;LIMITED&quot;}}
+</code></pre>
+<ol start="10">
+<li>
+<p><code>acronym(str: string): string</code> - Returns the acronym of the given
+string that is suitable to be used as a commodity symbol. For
+example, <code>UTI Nifty Next 50 Index Growth Direct Plan</code> will be
+converted to <code>UNNI</code></p>
+</li>
+<li>
+<p><code>negate: (value: string) =&gt; number</code> - Negates the given value. For
+example, <code>negate(&quot;123.45&quot;)</code> will return <code>-123.45</code></p>
+</li>
+</ol>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="analysis.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="analysis.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+    </body>
+</html>

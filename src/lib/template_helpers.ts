@@ -53,9 +53,10 @@ function findMatch(query: string) {
 }
 
 export default {
-  eq: (v1: any, v2: any) => v1 === v2,
-  ne: (v1: any, v2: any) => v1 !== v2,
-  not: (pred: any) => !pred,
+  eq: (a: any, b: any) => a === b,
+  ne: (a: any, b: any) => a !== b,
+  not: (value: any) => !value,
+  negate: (value: string) => parseFloat(value) * -1,
   and(...args: any[]) {
     return Array.prototype.every.call(Array.prototype.slice.call(args, 0, -1), Boolean);
   },
@@ -70,6 +71,7 @@ export default {
   },
   predictAccount(...args: any) {
     const options = args.pop();
+
     let query: string;
     if (args.length === 0) {
       query = Object.values(options.data.root.ROW).join(" ");
@@ -86,13 +88,17 @@ export default {
         .join(" ");
     }
 
-    const prefix = options.hash.prefix || "";
+    const prefix: string = options.hash.prefix || "";
     const matches = findMatch(query);
     const match = _.find(matches, ([account]) => account.toString().startsWith(prefix));
     if (match) {
       return match[0];
     }
-    return prefix + ":Unknown";
+    if (prefix.endsWith(":")) {
+      return prefix + "Unknown";
+    } else {
+      return prefix + ":Unknown";
+    }
   },
   isBlank(str: string) {
     return _.isEmpty(str) || _.trim(str) === "";
@@ -101,7 +107,7 @@ export default {
     return dayjs(str, format).format("YYYY/MM/DD");
   },
   findAbove(column: string, options: any) {
-    const regexp = new RegExp(options.hash.regexp || ".*");
+    const regexp = new RegExp(options.hash.regexp || ".+");
     let i: number = options.data.root.ROW.index;
     while (i >= 0) {
       const row = options.data.root.SHEET[i];
@@ -119,7 +125,7 @@ export default {
       .filter((s) => !_.includes(STOP_WORDS, s.toLowerCase()))
       .map((s) => {
         if (s.match(/^[0-9]+$/)) {
-          return s.toUpperCase();
+          return "";
         }
         return s[0];
       })

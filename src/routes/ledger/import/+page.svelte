@@ -183,6 +183,12 @@
               label="name"
               itemId="id"
               searchable={true}
+              clearable={false}
+              --font-size="14px"
+              --item-hover-bg="none"
+              --item-hover-color="hsl(0deg, 0%, 4%)"
+              --item-is-active-bg="none"
+              --item-is-active-color="hsl(229deg, 53%, 53%)"
               on:change={(_e) => {
                 saveAsName = selectedTemplate.name;
               }}
@@ -192,7 +198,8 @@
                 <span class="tag is-small is-link is-light">{selection.template_type}</span>
               </div>
               <div slot="item" let:item>
-                {item.name} <span class="tag is-small is-link is-light">{item.template_type}</span>
+                <span class="name">{item.name}</span>
+                <span class="tag is-small is-link is-light">{item.template_type}</span>
               </div>
             </Select>
           </p>
@@ -276,7 +283,7 @@
               </tr>
               {#each data as row, ri}
                 <tr>
-                  <td class="has-background-light"><b>{ri + 1}</b></td>
+                  <td class="has-background-light"><b>{ri}</b></td>
                   {#each row as cell}
                     <td>{cell || ""}</td>
                   {/each}
@@ -296,7 +303,6 @@
     float: right;
     position: absolute;
     right: 0;
-    margin-right: 20px;
     z-index: 10;
   }
 

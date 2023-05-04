@@ -246,10 +246,6 @@ svg text {
   height: 200px;
 }
 
-.preview-editor .cm-editor {
-  max-height: calc(100vh - 350px);
-}
-
 .editor .cm-editor {
   max-height: calc(100vh - 225px);
 }
@@ -259,4 +255,10 @@ svg text {
 
 .cm-focused {
   outline: none !important;
+}
+
+.svelte-select {
+  .item.active span.name {
+    font-weight: bold;
+  }
 }

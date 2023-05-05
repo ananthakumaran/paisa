@@ -67,7 +67,7 @@ export default {
     if (!_.isString(str)) {
       return false;
     }
-    return dayjs(str, format).isValid();
+    return dayjs(_.trim(str), format, true).isValid();
   },
   predictAccount(...args: any) {
     const options = args.pop();
@@ -104,7 +104,7 @@ export default {
     return _.isEmpty(str) || _.trim(str) === "";
   },
   date(str: string, format: string) {
-    return dayjs(str, format).format("YYYY/MM/DD");
+    return dayjs(_.trim(str), format).format("YYYY/MM/DD");
   },
   findAbove(column: string, options: any) {
     const regexp = new RegExp(options.hash.regexp || ".+");

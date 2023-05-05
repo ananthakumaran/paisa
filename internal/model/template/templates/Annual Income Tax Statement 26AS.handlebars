@@ -1,5 +1,5 @@
-{{#if (isDate ROW.D "DD/MMM/YYYY")}}
-  {{date ROW.D "DD/MMM/YYYY"}} TDS deducted by {{findAbove B regexp="LIMITED"}}
+{{#if (isDate ROW.D "DD-MMM-YYYY")}}
+  {{date ROW.D "DD-MMM-YYYY"}} TDS deducted by {{findAbove B regexp="LIMITED"}}
   {{predictAccount prefix="Income"}}      {{ROW.J}} INR
   Expenses:Tax
 {{/if}}

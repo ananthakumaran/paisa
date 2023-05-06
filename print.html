@@ -617,8 +617,9 @@ not be 100% accurate. Before you make any decision based on this
 information, double check via different source.</p>
 </blockquote>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="import"><a class="header" href="#import">Import</a></h1>
-<p>Paisa provides ability to convert <strong>CSV</strong> or <strong>TXT</strong> files to Ledger
-file format. The import page is made of three components.</p>
+<p>Paisa provides ability to convert <strong>CSV</strong>, <strong>TXT</strong>, <strong>XLS</strong> or
+<strong>XLSX</strong> files to Ledger file format. The import page is made of three
+components.</p>
 <ol>
 <li>
 <p>File Preview - You can drag and drop files here to preview the
@@ -815,6 +816,11 @@ converted to <code>UNNI</code></p>
 <li>
 <p><code>negate: (value: string) =&gt; number</code> - Negates the given value. For
 example, <code>negate(&quot;123.45&quot;)</code> will return <code>-123.45</code></p>
+</li>
+<li>
+<p><code>replace(str: string, search: string, replace: string): string</code> -
+Replaces all the occurrences of <code>search</code> with <code>replace</code> in the
+given string.</p>
 </li>
 </ol>
 

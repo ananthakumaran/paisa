@@ -106,6 +106,12 @@ export default {
   date(str: string, format: string) {
     return dayjs(_.trim(str), format).format("YYYY/MM/DD");
   },
+  replace(str: string, search: string, replace: string) {
+    if (!_.isString(str)) {
+      return;
+    }
+    return str.replaceAll(search, replace);
+  },
   findAbove(column: string, options: any) {
     const regexp = new RegExp(options.hash.regexp || ".+");
     let i: number = options.data.root.ROW.index;

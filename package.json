@@ -46,7 +46,8 @@
     "svelte-language-server": "^0.15.0",
     "svelte-select": "^5.6.0",
     "svelte-tiny-virtual-list": "^2.0.5",
-    "tippy.js": "^6.3.7"
+    "tippy.js": "^6.3.7",
+    "xlsx": "https://cdn.sheetjs.com/xlsx-0.19.3/xlsx-0.19.3.tgz"
   },
   "devDependencies": {
     "@sveltejs/adapter-auto": "^1.0.0",

@@ -1,0 +1,10 @@
+{{#if (isDate ROW.A "DD MMM YYYY")}}
+  {{date ROW.A "DD MMM YYYY"}} {{ROW.C}}
+  {{#if (isBlank ROW.F)}}
+    {{predictAccount prefix="Expense"}}      {{replace ROW.E "," ""}} INR
+    Asset:Checking
+  {{else}}
+    Asset:Checking                           {{replace ROW.F "," ""}} INR
+    {{predictAccount prefix="Income"}}
+  {{/if}}
+{{/if}}

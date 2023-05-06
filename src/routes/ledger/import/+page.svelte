@@ -9,7 +9,7 @@
     updateContent as updatePreviewContent
   } from "$lib/editor";
   import Dropzone from "svelte-file-dropzone/Dropzone.svelte";
-  import Papa from "papaparse";
+  import { parse } from "$lib/sheet";
   import _ from "lodash";
   import type { EditorView } from "codemirror";
   import { onMount } from "svelte";
@@ -81,20 +81,6 @@
     $templateEditorState = _.assign({}, $templateEditorState, { hasUnsavedChanges: false });
   }
 
-  const papaPromise = (file: File) =>
-    new Promise((resolve, reject) => {
-      Papa.parse(file, {
-        skipEmptyLines: true,
-        complete: function (results) {
-          resolve(results);
-        },
-        error: function (error) {
-          reject(error);
-        },
-        delimitersToGuess: [",", "\t", "|", ";", Papa.RECORD_SEP, Papa.UNIT_SEP, "^"]
-      });
-    });
-
   let input: any;
 
   const COLUMN_REFS = _.chain(_.range(65, 90))
@@ -135,7 +121,7 @@
   async function handleFilesSelect(e: { detail: { acceptedFiles: File[] } }) {
     const { acceptedFiles } = e.detail;
 
-    const results: any = await papaPromise(acceptedFiles[0]);
+    const results = await parse(acceptedFiles[0]);
     data = results.data;
 
     rows = _.map(data, (row, i) => {
@@ -267,10 +253,10 @@
         <Dropzone
           multiple={false}
           inputElement={input}
-          accept=".csv,.txt"
+          accept=".csv,.txt,.xls,.xlsx"
           on:drop={handleFilesSelect}
         >
-          Drag 'n' drop CSV, TXT file here or click to select
+          Drag 'n' drop CSV, TXT, XLS, XLSX file here or click to select
         </Dropzone>
         {#if !_.isEmpty(data)}
           <div class="table-wrapper">

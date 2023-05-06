@@ -1,7 +1,8 @@
 # Import
 
-Paisa provides ability to convert **CSV** or **TXT** files to Ledger
-file format. The import page is made of three components.
+Paisa provides ability to convert **CSV**, **TXT**, **XLS** or
+**XLSX** files to Ledger file format. The import page is made of three
+components.
 
 1) File Preview - You can drag and drop files here to preview the
 contents.
@@ -198,3 +199,7 @@ provided, the search will continue till a match is found
 
 11) `negate: (value: string) => number` - Negates the given value. For
     example, `negate("123.45")` will return `-123.45`
+
+12) `replace(str: string, search: string, replace: string): string` -
+    Replaces all the occurrences of `search` with `replace` in the
+    given string.

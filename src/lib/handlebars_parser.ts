@@ -2,7 +2,7 @@ import type { StreamParser, StringStream } from "@codemirror/language";
 import helpers from "$lib/template_helpers";
 import _ from "lodash";
 
-const KEYWORDS = /^(?:[#/](?:if|with|true|false|unless|each))/;
+const KEYWORDS = /^(?:[#/](?:if|with|true|false|unless|each)|else)/;
 const HELPERS = new RegExp(
   `^(?:(?:${_.keys(helpers)
     .sort((a, b) => b.length - a.length)

@@ -4,6 +4,7 @@
   import { redo, undo } from "@codemirror/commands";
   import * as toast from "bulma-toast";
   import type { EditorView } from "codemirror";
+  import { format } from "$lib/journal";
   import _ from "lodash";
   import { onMount } from "svelte";
 
@@ -32,6 +33,13 @@
     });
 
     updateContent(editor, file.content);
+  }
+
+  async function pretty() {
+    const formatted = format(editor.state.doc.toString());
+    if (formatted != editor.state.doc.toString()) {
+      updateContent(editor, formatted);
+    }
   }
 
   async function deleteBackups() {
@@ -150,7 +158,16 @@
               </span>
             </button>
           </p>
+          <p class="control">
+            <button class="button is-small" on:click={(_e) => pretty()}>
+              <span class="icon is-small">
+                <i class="fas fa-code" />
+              </span>
+              <span>Prettify</span>
+            </button>
+          </p>
         </div>
+
         {#if !_.isEmpty(selectedFile?.versions)}
           <div class="field has-addons ml-2 mb-0">
             <p class="control">

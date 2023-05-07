@@ -154,11 +154,11 @@ commodities:
     code: 120684
 ```
 
-**paisa** can fetch the latest price of mutual funds and nps funds as
-of today. For other types of commodities, the purchase/sell price of
-the last transaction would be considered the latest price. The code is
-the scheme code of the fund. The *search* command can be used to find
-scheme code
+**paisa** can fetch the latest price of mutual funds, nps funds and
+stocks as of today. For other types of commodities, the purchase/sell
+price of the last transaction would be considered the latest
+price. The code is the scheme code of the fund. The *search* command
+can be used to find scheme code
 
 ```shell
 ❯ paisa search mutualfund

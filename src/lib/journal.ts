@@ -1,81 +1,64 @@
-import dayjs from "dayjs";
 import _ from "lodash";
-import Clusturize from "clusterize.js";
-import { formatCurrency, formatFloat, type Posting } from "./utils";
-import { iconify } from "./icon";
 
-export function renderTransactions(postings: Posting[]) {
-  const rows = _.map(postings, (p) => {
-    const purchase = formatCurrency(p.amount);
-    const date = p.date.format("DD MMM YYYY");
-
-    let market = "",
-      change = "",
-      changePercentage = "",
-      changeClass = "",
-      price = "",
-      units = "";
-    if (p.commodity !== "INR") {
-      units = formatFloat(p.quantity, 4);
-      price = formatCurrency(Math.abs(p.amount / p.quantity), 4);
-      const days = dayjs().diff(p.date, "days");
-      if (p.quantity > 0 && days > 0) {
-        market = formatCurrency(p.market_amount);
-        const changeAmount = p.market_amount - p.amount;
-        if (changeAmount > 0) {
-          changeClass = "has-text-success";
-        } else if (changeAmount < 0) {
-          changeClass = "has-text-danger";
-        }
-        const perYear = 365 / days;
-        changePercentage = formatFloat((changeAmount / p.amount) * 100 * perYear);
-        change = formatCurrency(changeAmount);
-      }
-    }
-    const markup = `
-<tr class="${p.date.month() % 2 == 0 ? "has-background-white-ter" : ""}">
-       <td>${date}</td>
-       <td>${p.payee}</td>
-       <td>${iconify(p.account)}</td>
-       <td class='has-text-right'>${purchase}</td>
-       <td class='has-text-right'>${units}</td>
-       <td class='has-text-right'>${price}</td>
-       <td class='has-text-right'>${market}</td>
-       <td class='${changeClass} has-text-right'>${change}</td>
-       <td class='${changeClass} has-text-right'>${changePercentage}</td>
-</tr>
-`;
-    return {
-      date: date,
-      markup: markup,
-      posting: p
-    };
-  });
-
-  const clusterTable = new Clusturize({
-    rows: _.map(rows, (r) => r.markup),
-    scrollId: "d3-postings-container",
-    contentId: "d3-postings",
-    rows_in_block: 100
-  });
-
-  return { rows, clusterTable };
+interface State {
+  inTransaction: boolean;
+  lines: string[];
 }
 
-export function filterTransactions(
-  rows: { date: string; posting: Posting; markup: string }[],
-  filter: string
-) {
-  let filterRegex = new RegExp(".*", "i");
-  if (filter) {
-    filterRegex = new RegExp(filter, "i");
+export function format(text: string) {
+  const state: State = { inTransaction: false, lines: [] };
+  return text
+    .split("\n")
+    .reduce((state: State, line: string) => {
+      state.lines.push(formatLine(line, state));
+      return state;
+    }, state)
+    .lines.join("\n");
+}
+
+function space(length: number) {
+  return " ".repeat(length);
+}
+
+const DATE = /^\d{4}[/-]\d{2}[/-]\d{2}/;
+
+// https://ledger-cli.org/doc/ledger3.html#Journal-Format
+function formatLine(line: string, state: State) {
+  if (line.match(DATE)) {
+    state.inTransaction = true;
+    return line;
   }
 
-  return _.filter(
-    rows,
-    (r) =>
-      filterRegex.test(r.posting.account) ||
-      filterRegex.test(r.posting.payee) ||
-      filterRegex.test(r.date)
+  if (_.isEmpty(_.trim(line)) || line.match(/^[^ \t]/)) {
+    state.inTransaction = false;
+  }
+
+  if (!state.inTransaction) {
+    return line;
+  }
+
+  const fullMatch = line.match(
+    /^[ \t]+(?<account>(?:[*!]\s+)?[^ \t;]+)[ \t]+(?<prefix>[^;]*?)(?<amount>[+-]?[.,0-9]+)(?<suffix>.*)$/
   );
+  if (fullMatch) {
+    const { account, prefix, amount, suffix } = fullMatch.groups;
+    if (account.length + prefix.length + amount.length <= 46) {
+      return (
+        space(4) +
+        account +
+        space(48 - account.length - prefix.length - amount.length) +
+        prefix +
+        amount +
+        suffix
+      );
+    }
+  }
+
+  const partialMatch = line.match(/^[ \t]+(?<account>(?:[*!]\s+)?[^ \t;]+)$/);
+  if (partialMatch) {
+    const { account } = partialMatch.groups;
+    return space(4) + account;
+  }
+
+  return line;
 }

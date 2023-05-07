@@ -203,3 +203,5 @@ provided, the search will continue till a match is found
 12) `replace(str: string, search: string, replace: string): string` -
     Replaces all the occurrences of `search` with `replace` in the
     given string.
+
+13) `trim(str: string): string` - Trims the given string.

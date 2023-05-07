@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { filterTransactions, renderTransactions } from "$lib/journal";
+  import { filterPostings, renderPostings } from "$lib/posting";
   import { ajax, type Posting } from "$lib/utils";
   import _ from "lodash";
   import { onMount } from "svelte";
@@ -8,13 +8,13 @@
 
   const handleInput = _.debounce((event) => {
     const filter = event.srcElement.value;
-    const filtered = filterTransactions(rows, filter);
+    const filtered = filterPostings(rows, filter);
     clusterTable.update(_.map(filtered, (r) => r.markup));
   }, 100);
 
   onMount(async () => {
     const { postings: postings } = await ajax("/api/ledger");
-    ({ rows, clusterTable } = renderTransactions(postings));
+    ({ rows, clusterTable } = renderPostings(postings));
   });
 </script>
 

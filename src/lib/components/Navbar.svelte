@@ -53,7 +53,7 @@
         { label: "Import", href: "/import", tag: "alpha", help: "import" },
         { label: "Editor", href: "/editor", tag: "alpha" },
         { label: "Transactions", href: "/transaction" },
-        { label: "Journal", href: "/journal" },
+        { label: "Postings", href: "/posting" },
         { label: "Price", href: "/price" }
       ]
     },

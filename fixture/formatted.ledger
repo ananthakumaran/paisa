@@ -1,0 +1,179 @@
+commodity INR
+    note Indian Rupee
+    format $100,000
+    nomarket
+    default
+
+2010-06-17 Sample
+    Assets:Bank                              $400.00
+    Income:Check1                           $-100.00  ; Payee: Person One
+    Income:Check2                           $-100.00  ; Payee: Person Two
+    Income:Check3                           $-100.00  ; Payee: Person Three
+    Income:Check4                           $-100.00  ; Payee: Person Four
+
+2012-03-09 Fill Wallet
+    Revenue                                   $20.00
+    Revenue                                    15.00 CAD
+    Assets:Cash
+
+2012-03-10 KFC
+    Expenses:Food                             $20.00
+    Assets:Cash                              $-20.00
+
+2012-03-10 KFC
+    Expenses:Food                             $20.00
+    Assets:Cash                              $-10.00
+    Liabilities:Credit                       $-10.00
+
+2012-03-10 KFC
+    Expenses:Food                             $20.00
+    Assets:Cash                              $-10.00
+    Liabilities:Credit        ; same as specifying $-10
+
+2012-03-10 KFC
+    Expenses:Food                             $20.00
+    Expenses:Tips                              $2.00
+    Assets:Cash                           EUR -10.00
+    Assets:Cash                           GBP -10.00
+    Liabilities:Credit
+
+2012-03-10 KFC
+    Expenses:Food                             $20.00
+    Expenses:Tips                              $2.00
+    Assets:Cash                           EUR -10.00
+    Assets:Cash                           GBP -10.00
+    Liabilities:Credit                       $-22.00
+    Liabilities:Credit                     EUR 10.00
+    Liabilities:Credit                     GBP 10.00
+
+2012-03-10 (#100) KFC
+    Expenses:Food                             $20.00
+    Assets:Checking
+
+2012-03-10 * KFC
+    Expenses:Food                             $20.00
+    Assets:Cash
+
+2012-03-10 ! KFC
+    Expenses:Food                              20.00 INR
+    Assets:Cash
+
+2012-03-10 * KFC
+    Expenses:Food                             $20.00
+    Assets:Cash
+
+2012-03-10 KFC
+    * Expenses:Food                           $20.00
+    * Assets:Cash
+
+2012-03-10 KFC
+    Liabilities:Credit                       $100.00
+    * Assets:Checking
+
+2012-03-10 * KFC                ; yum, chicken...
+    ; and more notes...
+    Expenses:Food                             $20.00
+    Assets:Cash
+
+2012-03-10 * KFC
+    ; just these notes...
+    Expenses:Food                             $20.00
+    Assets:Cash
+
+2012-03-10 * KFC
+    Expenses:Food                             $20.00  ; posting #1 note
+    Assets:Cash
+    ; posting #2 note, extra indentation is optional
+
+2012-03-10 * KFC
+    Expenses:Food                             $20.00
+    Assets:Cash
+    ; :TAG:
+
+2012-03-10 * KFC
+    Expenses:Food                             $20.00
+    Assets:Cash
+    ; :TAG1:TAG2:TAG3:
+
+2012-03-10 * KFC
+    Expenses:Food                             $20.00
+    Assets:Cash
+    ; MyTag: This is just a bogus value for MyTag
+
+2012-03-10 * KFC
+    Expenses:Food                             $20.00
+    Assets:Cash
+    ; AuxDate: 2012/02/30
+
+2012-03-10 * KFC
+    Expenses:Food                             $20.00
+    Assets:Cash
+    ; AuxDate:: [2012/02/28]
+
+2012-03-10 * KFC
+    Expenses:Food                             $20.00
+    Assets:Cash
+    (Budget:Food)                            $-20.00
+
+2012-03-10 * KFC
+    Expenses:Food                             $20.00
+    Assets:Cash
+    [Budget:Food]                            $-20.00
+    [Equity:Budgets]                          $20.00
+
+2012-03-10 * KFC
+    Expenses:Food                            ($10.00 + $20.00)  ; Ledger adds it up for you
+    Assets:Cash
+
+2012-03-10 KFC New York
+    Expenses:Food                             $20.00
+    Assets:Cash                              $-20.00 = $-370.00
+
+2012-03-10 KFC New York
+    Expenses:Food                             $20.00
+    Assets:Cash                              $-20.00
+
+2012-03-10 Adjustment
+    Assets:Cash                            = $500.00
+    Equity:Adjustments
+
+2012-03-10 My Broker
+    Assets:Brokerage                              10 AAPL
+    Assets:Brokerage:Cash                   $-500.00
+
+2012-03-10 My Broker
+    Assets:Brokerage                              10 AAPL @ $50.00
+    Assets:Brokerage:Cash                   $-500.00
+
+2012-03-10 My Broker
+    Assets:Brokerage                              (5 AAPL * 2) @ ($500.00 / 10)
+    Assets:Brokerage:Cash
+
+2012-03-10 My Broker
+    Assets:Brokerage                              10 AAPL @@ $500.00
+    Assets:Brokerage:Cash
+
+2012-03-11 KFC Montreal
+    Expenses:Food                              15.00 CAD
+    Assets:CashCAD                            -15.00 CAD = -15.00 CAD
+
+2012-03-11 KFC Montreal
+    Income:Acme
+    Assets:CashCAD                             15.00 CAD = 0
+
+2012-04-10 My Broker
+    Assets:Brokerage:Cash
+    Assets:Brokerage                             -10 AAPL @ $75.00
+
+2012-04-10 My Broker
+    Assets:Brokerage:Cash
+    Assets:Brokerage                             -10 AAPL {$50.00} @ $75.00
+
+2012-04-10 My Broker
+    Assets:Brokerage                              10 AAPL @ =$50.00
+    Assets:Brokerage:Cash                   $-500.00
+
+2012-04-10 My Broker
+    Assets:Brokerage:Cash                    $375.00
+    Assets:Brokerage                              -5 AAPL {$50.00} [2012-04-10] @@ $375.00
+    Income:CapitalGains                     $-125.00

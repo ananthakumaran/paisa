@@ -106,6 +106,9 @@ export default {
   date(str: string, format: string) {
     return dayjs(_.trim(str), format).format("YYYY/MM/DD");
   },
+  trim(str: string) {
+    return _.trim(str);
+  },
   replace(str: string, search: string, replace: string) {
     if (!_.isString(str)) {
       return;

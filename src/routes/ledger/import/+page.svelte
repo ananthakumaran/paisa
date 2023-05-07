@@ -1,5 +1,6 @@
 <script lang="ts">
   import Select from "svelte-select";
+  import { format } from "$lib/journal";
   import {
     createEditor as createTemplateEditor,
     editorState as templateEditorState
@@ -102,7 +103,7 @@
           }
         });
         preview = output.join("\n\n");
-        updatePreviewContent(previewEditor, preview);
+        updatePreviewContent(previewEditor, format(preview));
         lastTemplate = $templateEditorState.template;
         lastData = data;
       } catch (e) {

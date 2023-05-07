@@ -12,3 +12,7 @@ finance, specially tailored for Indians. It builds on top of the
   and Stock holdings.
 * Can show the Mutual Fund and Stock holdings eligible for LTCG and
   help you plan Tax Harvesting.
+* Can convert CSV or Excel sheets to Ledger journal.
+* Can help with retirement planning.
+* And many more visualizations to help you make any financial
+  decisions.

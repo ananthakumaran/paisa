@@ -15,3 +15,4 @@ jobs:
     - run: |
         nix develop --command npm install
         nix develop --command make lint
+        nix develop --command make test

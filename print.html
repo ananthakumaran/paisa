@@ -148,6 +148,10 @@ others by giving access to the files.</li>
 and Stock holdings.</li>
 <li>Can show the Mutual Fund and Stock holdings eligible for LTCG and
 help you plan Tax Harvesting.</li>
+<li>Can convert CSV or Excel sheets to Ledger journal.</li>
+<li>Can help with retirement planning.</li>
+<li>And many more visualizations to help you make any financial
+decisions.</li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="installation"><a class="header" href="#installation">Installation</a></h1>
 <ul>
@@ -303,11 +307,11 @@ commodities:
     type: mutualfund
     code: 120684
 </code></pre>
-<p><strong>paisa</strong> can fetch the latest price of mutual funds and nps funds as
-of today. For other types of commodities, the purchase/sell price of
-the last transaction would be considered the latest price. The code is
-the scheme code of the fund. The <em>search</em> command can be used to find
-scheme code</p>
+<p><strong>paisa</strong> can fetch the latest price of mutual funds, nps funds and
+stocks as of today. For other types of commodities, the purchase/sell
+price of the last transaction would be considered the latest
+price. The code is the scheme code of the fund. The <em>search</em> command
+can be used to find scheme code</p>
 <pre><code class="language-shell">❯ paisa search mutualfund
 INFO Using config file: /home/john/finance/paisa.yaml
 INFO Using cached results; pass '-u' to update the cache
@@ -821,6 +825,9 @@ example, <code>negate(&quot;123.45&quot;)</code> will return <code>-123.45</code
 <p><code>replace(str: string, search: string, replace: string): string</code> -
 Replaces all the occurrences of <code>search</code> with <code>replace</code> in the
 given string.</p>
+</li>
+<li>
+<p><code>trim(str: string): string</code> - Trims the given string.</p>
 </li>
 </ol>
 

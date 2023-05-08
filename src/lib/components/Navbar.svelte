@@ -64,7 +64,12 @@
       children: [
         { label: "Harvest", href: "/harvest", help: "tax-harvesting" },
         { label: "Capital Gains", href: "/capital_gains", help: "capital-gains" },
-        { label: "Schedule AL", href: "/schedule_al", help: "schedule-al" }
+        {
+          label: "Schedule AL",
+          href: "/schedule_al",
+          help: "schedule-al",
+          financialYearPicker: true
+        }
       ]
     },
     { label: "Retirement", href: "/retirement/progress", help: "retirement" },

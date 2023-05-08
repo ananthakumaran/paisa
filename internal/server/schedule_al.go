@@ -46,16 +46,36 @@ type ScheduleALEntry struct {
 	Amount  float64           `json:"amount"`
 }
 
+type ScheduleAL struct {
+	Entries []ScheduleALEntry `json:"entries"`
+	Date    time.Time         `json:"date"`
+}
+
 func GetScheduleAL(db *gorm.DB) gin.H {
+	postings := query.Init(db).Like("Assets:%").All()
+	var scheduleALs map[string]ScheduleAL = make(map[string]ScheduleAL)
+
+	start := time.Now().AddDate(1, 0, 0)
+
+	for {
+		start = utils.BeginningOfFinancialYear(start)
+		postings = lo.Filter(postings, func(p posting.Posting, _ int) bool { return p.Date.Before(start) })
+		if len(postings) == 0 {
+			break
+		}
+
+		start = start.AddDate(0, 0, -1)
+		scheduleALs[utils.FYHuman(start)] = ScheduleAL{Entries: computeScheduleAL(postings), Date: start}
+	}
+
+	return gin.H{"schedule_als": scheduleALs}
+}
+
+func computeScheduleAL(postings []posting.Posting) []ScheduleALEntry {
 	var configs []ScheduleALConfig
 	viper.UnmarshalKey("schedule_al", &configs)
-	now := time.Now()
 
-	postings := query.Init(db).Like("Assets:%").All()
-	time := utils.BeginningOfFinancialYear(now)
-	postings = lo.Filter(postings, func(p posting.Posting, _ int) bool { return p.Date.Before(time) })
-
-	entries := lo.Map(Sections, func(section ScheduleALSection, _ int) ScheduleALEntry {
+	return lo.Map(Sections, func(section ScheduleALSection, _ int) ScheduleALEntry {
 		config, found := lo.Find(configs, func(config ScheduleALConfig) bool {
 			return config.Code == section.Code
 		})
@@ -74,5 +94,5 @@ func GetScheduleAL(db *gorm.DB) gin.H {
 			Amount:  amount,
 		}
 	})
-	return gin.H{"schedule_al_entries": entries, "date": time.AddDate(0, 0, -1)}
+
 }

@@ -205,6 +205,11 @@ export interface ScheduleALEntry {
   amount: number;
 }
 
+export interface ScheduleAL {
+  entries: ScheduleALEntry[];
+  date: dayjs.Dayjs;
+}
+
 export interface Point {
   date: dayjs.Dayjs;
   value: number;
@@ -275,8 +280,7 @@ export function ajax(
   route: "/api/capital_gains"
 ): Promise<{ capital_gains: Record<string, CapitalGain> }>;
 export function ajax(route: "/api/schedule_al"): Promise<{
-  schedule_al_entries: ScheduleALEntry[];
-  date: string;
+  schedule_als: Record<string, ScheduleAL>;
 }>;
 export function ajax(route: "/api/diagnosis"): Promise<{ issues: Issue[] }>;
 export function ajax(

@@ -288,6 +288,7 @@ export function ajax(
 ): Promise<{ assets: Posting[]; yearly_cards: YearlyCard[] }>;
 export function ajax(route: "/api/ledger"): Promise<{ postings: Posting[] }>;
 export function ajax(route: "/api/assets/balance"): Promise<{ asset_breakdowns: AssetBreakdown[] }>;
+export function ajax(route: "/api/liabilities/repayment"): Promise<{ repayments: Posting[] }>;
 export function ajax(
   route: "/api/liabilities/balance"
 ): Promise<{ liability_breakdowns: LiabilityBreakdown[] }>;

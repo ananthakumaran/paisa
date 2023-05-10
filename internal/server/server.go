@@ -91,6 +91,10 @@ func Listen(db *gorm.DB) {
 		c.JSON(200, liabilities.GetBalance(db))
 	})
 
+	router.GET("/api/liabilities/repayment", func(c *gin.Context) {
+		c.JSON(200, liabilities.GetRepayment(db))
+	})
+
 	router.GET("/api/editor/files", func(c *gin.Context) {
 		c.JSON(200, GetFiles(db))
 	})

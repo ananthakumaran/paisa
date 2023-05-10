@@ -27,6 +27,11 @@ func (q *Query) Commodities(commodities []commodity.Commodity) *Query {
 	return q
 }
 
+func (q *Query) Credit() *Query {
+	q.context = q.context.Where("amount > 0")
+	return q
+}
+
 func (q *Query) Like(account string) *Query {
 	q.context = q.context.Where("account like ?", account)
 	return q

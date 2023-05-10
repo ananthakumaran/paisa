@@ -33,7 +33,7 @@
   });
 </script>
 
-<section class="section tab-interest" class:is-hidden={!isEmpty}>
+<section class="section" class:is-hidden={!isEmpty}>
   <div class="container is-fluid">
     <div class="columns is-centered">
       <div class="column is-4 has-text-centered">
@@ -47,7 +47,7 @@
   </div>
 </section>
 
-<section class="section tab-holding" class:is-hidden={isEmpty}>
+<section class="section" class:is-hidden={isEmpty}>
   <div class="container is-fluid">
     <div class="columns">
       <div class="column is-12">

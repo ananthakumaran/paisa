@@ -42,6 +42,7 @@
       href: "/liabilities",
       children: [
         { label: "Balance", href: "/balance" },
+        { label: "Repayment", href: "/repayment" },
         { label: "Interest", href: "/interest" }
       ]
     },

@@ -127,7 +127,7 @@ export interface Tax {
   postings: Posting[];
 }
 
-export interface YearlyCard {
+export interface InvestmentYearlyCard {
   start_date: dayjs.Dayjs;
   end_date: dayjs.Dayjs;
   postings: Posting[];
@@ -137,6 +137,15 @@ export interface YearlyCard {
   net_income: number;
   net_investment: number;
   net_expense: number;
+}
+
+export interface IncomeYearlyCard {
+  start_date: dayjs.Dayjs;
+  end_date: dayjs.Dayjs;
+  postings: Posting[];
+  net_tax: number;
+  gross_income: number;
+  net_income: number;
 }
 
 export interface PostingPair {
@@ -285,7 +294,7 @@ export function ajax(route: "/api/schedule_al"): Promise<{
 export function ajax(route: "/api/diagnosis"): Promise<{ issues: Issue[] }>;
 export function ajax(
   route: "/api/investment"
-): Promise<{ assets: Posting[]; yearly_cards: YearlyCard[] }>;
+): Promise<{ assets: Posting[]; yearly_cards: InvestmentYearlyCard[] }>;
 export function ajax(route: "/api/ledger"): Promise<{ postings: Posting[] }>;
 export function ajax(route: "/api/assets/balance"): Promise<{ asset_breakdowns: AssetBreakdown[] }>;
 export function ajax(route: "/api/liabilities/repayment"): Promise<{ repayments: Posting[] }>;
@@ -316,6 +325,7 @@ export function ajax(route: "/api/portfolio_allocation"): Promise<{
 export function ajax(route: "/api/income"): Promise<{
   income_timeline: Income[];
   tax_timeline: Tax[];
+  yearly_cards: IncomeYearlyCard[];
 }>;
 export function ajax(route: "/api/expense"): Promise<{
   expenses: Posting[];

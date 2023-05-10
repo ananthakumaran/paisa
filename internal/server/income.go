@@ -7,8 +7,18 @@ import (
 	"github.com/ananthakumaran/paisa/internal/query"
 	"github.com/ananthakumaran/paisa/internal/utils"
 	"github.com/gin-gonic/gin"
+	"github.com/samber/lo"
 	"gorm.io/gorm"
 )
+
+type IncomeYearlyCard struct {
+	StartDate   time.Time         `json:"start_date"`
+	EndDate     time.Time         `json:"end_date"`
+	Postings    []posting.Posting `json:"postings"`
+	GrossIncome float64           `json:"gross_income"`
+	NetTax      float64           `json:"net_tax"`
+	NetIncome   float64           `json:"net_income"`
+}
 
 type Income struct {
 	Date     time.Time         `json:"date"`
@@ -24,7 +34,9 @@ type Tax struct {
 func GetIncome(db *gorm.DB) gin.H {
 	incomePostings := query.Init(db).Like("Income:%").All()
 	taxPostings := query.Init(db).Like("Expenses:Tax").All()
-	return gin.H{"income_timeline": computeIncomeTimeline(incomePostings), "tax_timeline": computeTaxTimeline(taxPostings)}
+	p := query.Init(db).First()
+
+	return gin.H{"income_timeline": computeIncomeTimeline(incomePostings), "tax_timeline": computeTaxTimeline(taxPostings), "yearly_cards": computeIncomeYearlyCard(p.Date, taxPostings, incomePostings)}
 }
 
 func computeIncomeTimeline(postings []posting.Posting) []Income {
@@ -70,4 +82,40 @@ func computeTaxTimeline(postings []posting.Posting) []Tax {
 
 	}
 	return taxes
+}
+
+func computeIncomeYearlyCard(start time.Time, taxes []posting.Posting, incomes []posting.Posting) []IncomeYearlyCard {
+	var yearlyCards []IncomeYearlyCard = make([]IncomeYearlyCard, 0)
+
+	var p posting.Posting
+	end := time.Now()
+	for start = utils.BeginningOfFinancialYear(start); start.Before(end); start = start.AddDate(1, 0, 0) {
+		yearEnd := utils.EndOfFinancialYear(start)
+		var netTax float64 = 0
+		for len(taxes) > 0 && utils.IsWithDate(taxes[0].Date, start, yearEnd) {
+			p, taxes = taxes[0], taxes[1:]
+			netTax += p.Amount
+		}
+
+		var currentYearIncomes []posting.Posting = make([]posting.Posting, 0)
+		for len(incomes) > 0 && utils.IsWithDate(incomes[0].Date, start, yearEnd) {
+			p, incomes = incomes[0], incomes[1:]
+			currentYearIncomes = append(currentYearIncomes, p)
+		}
+
+		grossIncome := lo.SumBy(currentYearIncomes, func(p posting.Posting) float64 {
+			return -p.Amount
+		})
+
+		yearlyCards = append(yearlyCards, IncomeYearlyCard{
+			StartDate:   start,
+			EndDate:     yearEnd,
+			Postings:    currentYearIncomes,
+			NetTax:      netTax,
+			GrossIncome: grossIncome,
+			NetIncome:   grossIncome - netTax,
+		})
+
+	}
+	return yearlyCards
 }

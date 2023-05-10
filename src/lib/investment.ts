@@ -12,10 +12,10 @@ import {
   secondName,
   skipTicks,
   tooltip,
-  type YearlyCard
+  type InvestmentYearlyCard
 } from "./utils";
 
-function financialYear(card: YearlyCard) {
+function financialYear(card: InvestmentYearlyCard) {
   return `${card.start_date.format("YYYY")}-${card.end_date.format("YYYY")}`;
 }
 
@@ -195,7 +195,7 @@ export function renderMonthlyInvestmentTimeline(postings: Posting[]) {
   svg.select(".legendOrdinal").call(legendOrdinal as any);
 }
 
-export function renderYearlyInvestmentTimeline(yearlyCards: YearlyCard[]) {
+export function renderYearlyInvestmentTimeline(yearlyCards: InvestmentYearlyCard[]) {
   const id = "#d3-yearly-investment-timeline";
   const BAR_HEIGHT = 20;
   const svg = d3.select(id),
@@ -365,7 +365,7 @@ export function renderYearlyInvestmentTimeline(yearlyCards: YearlyCard[]) {
   svg.select(".legendOrdinal").call(legendOrdinal as any);
 }
 
-export function renderYearlyCards(yearlyCards: YearlyCard[]) {
+export function renderYearlyCards(yearlyCards: InvestmentYearlyCard[]) {
   const id = "#d3-yearly-investment-cards";
   const root = d3.select(id);
 

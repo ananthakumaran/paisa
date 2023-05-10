@@ -1,13 +1,24 @@
 <script lang="ts">
   import COLORS from "$lib/colors";
-  import { renderMonthlyInvestmentTimeline } from "$lib/income";
+  import {
+    renderMonthlyInvestmentTimeline,
+    renderYearlyIncomeTimeline,
+    renderYearlyTimelineOf
+  } from "$lib/income";
   import { ajax, formatCurrency, setHtml } from "$lib/utils";
   import _ from "lodash";
   import { onMount } from "svelte";
 
   onMount(async () => {
-    const { income_timeline: incomes, tax_timeline: taxes } = await ajax("/api/income");
+    const {
+      income_timeline: incomes,
+      tax_timeline: taxes,
+      yearly_cards: yearlyCards
+    } = await ajax("/api/income");
     renderMonthlyInvestmentTimeline(incomes);
+    renderYearlyIncomeTimeline(yearlyCards);
+    renderYearlyTimelineOf("Net Income", "net_income", COLORS.gain, yearlyCards);
+    renderYearlyTimelineOf("Net Tax", "net_tax", COLORS.loss, yearlyCards);
 
     const grossIncome = _.sumBy(incomes, (i) => _.sumBy(i.postings, (p) => -p.amount));
 
@@ -36,7 +47,7 @@
     </nav>
   </div>
 </section>
-<section class="section tab-income">
+<section class="section">
   <div class="container is-fluid">
     <div class="columns">
       <div class="column is-12">
@@ -47,6 +58,34 @@
       <div class="column is-12 has-text-centered">
         <div>
           <p class="heading">Monthly Income Timeline</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="section">
+  <div class="container is-fluid">
+    <div class="columns">
+      <div class="column is-one-third">
+        <div class="py-3">
+          <svg id="d3-yearly-income-timeline" width="100%" />
+        </div>
+      </div>
+      <div class="column is-one-third">
+        <div class="py-3">
+          <svg id="d3-yearly-net_income-timeline" width="100%" />
+        </div>
+      </div>
+      <div class="column is-one-third">
+        <div class="py-3">
+          <svg id="d3-yearly-net_tax-timeline" width="100%" />
+        </div>
+      </div>
+    </div>
+    <div class="columns">
+      <div class="column is-12 has-text-centered">
+        <div>
+          <p class="heading">Financial Year Income Timeline</p>
         </div>
       </div>
     </div>

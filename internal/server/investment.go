@@ -12,7 +12,7 @@ import (
 	"gorm.io/gorm"
 )
 
-type YearlyCard struct {
+type InvestmentYearlyCard struct {
 	StartDate         time.Time         `json:"start_date"`
 	EndDate           time.Time         `json:"end_date"`
 	Postings          []posting.Posting `json:"postings"`
@@ -33,11 +33,11 @@ func GetInvestment(db *gorm.DB) gin.H {
 	expenses := query.Init(db).Like("Expenses:%").All()
 	p := query.Init(db).First()
 
-	return gin.H{"assets": assets, "yearly_cards": computeYearlyCard(p.Date, assets, expenses, incomes)}
+	return gin.H{"assets": assets, "yearly_cards": computeInvestmentYearlyCard(p.Date, assets, expenses, incomes)}
 }
 
-func computeYearlyCard(start time.Time, assets []posting.Posting, expenses []posting.Posting, incomes []posting.Posting) []YearlyCard {
-	var yearlyCards []YearlyCard = make([]YearlyCard, 0)
+func computeInvestmentYearlyCard(start time.Time, assets []posting.Posting, expenses []posting.Posting, incomes []posting.Posting) []InvestmentYearlyCard {
+	var yearlyCards []InvestmentYearlyCard = make([]InvestmentYearlyCard, 0)
 
 	if len(assets) == 0 {
 		return yearlyCards
@@ -91,7 +91,7 @@ func computeYearlyCard(start time.Time, assets []posting.Posting, expenses []pos
 
 		netInvestment := lo.SumBy(currentYearPostings, func(p posting.Posting) float64 { return p.Amount })
 
-		yearlyCards = append(yearlyCards, YearlyCard{
+		yearlyCards = append(yearlyCards, InvestmentYearlyCard{
 			StartDate:         start,
 			EndDate:           yearEnd,
 			Postings:          currentYearPostings,

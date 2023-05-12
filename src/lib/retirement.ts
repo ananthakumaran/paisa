@@ -1,15 +1,24 @@
 import type { Arima } from "arima/async";
 import * as d3 from "d3";
+import { Delaunay } from "d3";
 import _, { first, isEmpty, last, takeRight } from "lodash";
 import tippy, { type Placement } from "tippy.js";
 import COLORS from "./colors";
-import { formatCurrencyCrude, type Forecast, type Point } from "./utils";
+import {
+  formatCurrency,
+  formatCurrencyCrude,
+  formatFloat,
+  tooltip,
+  type Forecast,
+  type Point
+} from "./utils";
 
 export function renderProgress(
   points: Point[],
   predictions: Forecast[],
   breakPoints: Point[],
-  element: Element
+  element: Element,
+  { targetSavings, yearlyExpense }: { targetSavings: number; yearlyExpense: number }
 ) {
   const start = first(points).date,
     end = last(predictions).date;
@@ -103,6 +112,45 @@ export function renderProgress(
     .attr("cx", (p) => x(p.date))
     .attr("cy", (p) => y(p.value));
 
+  const voronoiPoints = _.map(points.concat(predictions), (p) => [x(p.date), y(p.value)]);
+  const voronoi = Delaunay.from(voronoiPoints).voronoi([0, 0, width, height]);
+  const hoverCircle = g.append("circle").attr("r", "3").attr("fill", "none");
+  const t = tippy(hoverCircle.node(), { theme: "light", delay: 0, allowHTML: true });
+
+  g.append("g")
+    .selectAll("path")
+    .data(points.concat(predictions))
+    .enter()
+    .append("path")
+    .style("pointer-events", "all")
+    .style("fill", "none")
+    .attr("d", (_, i) => {
+      return voronoi.renderCell(i);
+    })
+    .on("mouseover", (_, d) => {
+      hoverCircle.attr("cx", x(d.date)).attr("cy", y(d.value)).attr("fill", COLORS.tertiary);
+
+      t.setProps({
+        placement: "top",
+        content: tooltip([
+          ["Date", d.date.format("DD MMM YYYY")],
+          ["Savings", [formatCurrency(d.value), "has-text-weight-bold has-text-right"]],
+          [
+            [formatFloat(d.value / yearlyExpense, 0) + "X", "has-text-weight-bold has-text-right"],
+            [
+              formatFloat((d.value / targetSavings) * 100) + "%",
+              "has-text-weight-bold has-text-right"
+            ]
+          ]
+        ])
+      });
+      t.show();
+    })
+    .on("mouseout", () => {
+      t.hide();
+      hoverCircle.attr("fill", "none");
+    });
+
   const instances = tippy("circle[data-tippy-content]", {
     onShow: (instance) => {
       const content = instance.reference.getAttribute("data-tippy-content");
@@ -123,6 +171,7 @@ export function renderProgress(
   instances.forEach((i) => i.show());
 
   return () => {
+    t.destroy();
     instances.forEach((i) => i.destroy());
   };
 }

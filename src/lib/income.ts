@@ -188,7 +188,7 @@ function renderIncomeTimeline(incomes: Income[], id: string, timeFormat: string)
 }
 
 function financialYear(card: IncomeYearlyCard) {
-  return `${card.start_date.format("YYYY")}-${card.end_date.format("YYYY")}`;
+  return `${card.start_date.format("YYYY")} - ${card.end_date.format("YY")}`;
 }
 
 export function renderYearlyIncomeTimeline(yearlyCards: IncomeYearlyCard[]) {

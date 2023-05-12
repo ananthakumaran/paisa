@@ -16,7 +16,7 @@ import {
 } from "./utils";
 
 function financialYear(card: InvestmentYearlyCard) {
-  return `${card.start_date.format("YYYY")}-${card.end_date.format("YYYY")}`;
+  return `${card.start_date.format("YYYY")} - ${card.end_date.format("YY")}`;
 }
 
 export function renderMonthlyInvestmentTimeline(postings: Posting[]) {

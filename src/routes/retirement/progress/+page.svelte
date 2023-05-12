@@ -41,7 +41,10 @@
     skipProgress = false;
     await tick();
     breakPoints = findBreakPoints(savingsTimeline.concat(predictionsTimeline), targetSavings);
-    destroyCallback = renderProgress(savingsTimeline, predictionsTimeline, breakPoints, svg);
+    destroyCallback = renderProgress(savingsTimeline, predictionsTimeline, breakPoints, svg, {
+      targetSavings,
+      yearlyExpense
+    });
   });
 </script>
 

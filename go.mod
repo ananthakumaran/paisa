@@ -5,7 +5,7 @@ go 1.18
 require (
 	github.com/ChizhovVadim/xirr v0.0.0-20210210181856-508bc36c62aa
 	github.com/gin-gonic/gin v1.8.1
-	github.com/google/btree v1.0.1
+	github.com/google/btree v1.1.2
 	github.com/logrusorgru/aurora v2.0.3+incompatible
 	github.com/manifoldco/promptui v0.9.0
 	github.com/samber/lo v1.25.0

@@ -18,6 +18,16 @@ func BTreeDescendFirstLessOrEqual[I btree.Item](tree *btree.BTree, item I) I {
 	return hit
 }
 
+func BTreeToSlice[I btree.Item](tree *btree.BTree) []I {
+	var items []I = make([]I, 0)
+	tree.Descend(func(item btree.Item) bool {
+		items = append(items, item.(I))
+		return true
+	})
+
+	return items
+}
+
 func FY(date time.Time) string {
 	if date.Month() < time.April {
 		return fmt.Sprintf("%d-%d", date.Year()-1, date.Year()%100)

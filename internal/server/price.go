@@ -8,7 +8,6 @@ import (
 	"github.com/ananthakumaran/paisa/internal/service"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
-	"time"
 )
 
 func GetPrices(db *gorm.DB) gin.H {
@@ -18,10 +17,9 @@ func GetPrices(db *gorm.DB) gin.H {
 		log.Fatal(result.Error)
 	}
 
-	today := time.Now()
-	var prices []price.Price
+	var prices = make(map[string][]price.Price)
 	for _, commodity := range commodities {
-		prices = append(prices, service.GetUnitPrice(db, commodity, today))
+		prices[commodity] = service.GetAllPrices(db, commodity)
 	}
 	return gin.H{"prices": prices}
 }

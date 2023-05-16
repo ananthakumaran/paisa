@@ -67,6 +67,16 @@ func GetUnitPrice(db *gorm.DB, commodity string, date time.Time) price.Price {
 	return utils.BTreeDescendFirstLessOrEqual(pt, price.Price{Date: date})
 }
 
+func GetAllPrices(db *gorm.DB, commodity string) []price.Price {
+	pcache.Do(func() { loadPriceCache(db) })
+
+	pt := pcache.pricesTree[commodity]
+	if pt == nil {
+		log.Fatal("Price not found ", commodity)
+	}
+	return utils.BTreeToSlice[price.Price](pt)
+}
+
 func GetMarketPrice(db *gorm.DB, p posting.Posting, date time.Time) float64 {
 	pcache.Do(func() { loadPriceCache(db) })
 

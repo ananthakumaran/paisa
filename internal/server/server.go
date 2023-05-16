@@ -136,7 +136,7 @@ func Listen(db *gorm.DB) {
 			return
 		}
 
-		c.JSON(200, SaveFile(ledgerFile))
+		c.JSON(200, SaveFile(db, ledgerFile))
 	})
 
 	router.GET("/api/account/tf_idf", func(c *gin.Context) {

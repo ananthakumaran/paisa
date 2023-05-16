@@ -65,7 +65,7 @@ func DeleteBackups(file LedgerFile) gin.H {
 	return gin.H{"file": readLedgerFileWithVersions(dir, filepath.Join(dir, file.Name))}
 }
 
-func SaveFile(file LedgerFile) gin.H {
+func SaveFile(db *gorm.DB, file LedgerFile) gin.H {
 	errors, err := validateFile(file)
 	if err != nil {
 		return gin.H{"errors": errors, "saved": false}
@@ -98,6 +98,8 @@ func SaveFile(file LedgerFile) gin.H {
 		log.Warn(err)
 		return gin.H{"errors": errors, "saved": false}
 	}
+
+	Sync(db, SyncRequest{Journal: true})
 
 	return gin.H{"errors": errors, "saved": true, "file": readLedgerFileWithVersions(dir, filePath)}
 }

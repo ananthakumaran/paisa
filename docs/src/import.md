@@ -142,15 +142,15 @@ own. To create a new template, edit the template and click on the
 
 #### Template Helpers
 
-1) `eq(a: any, b: any) => boolean` - Checks if the two values are
+1) `eq(a: any, b: any): boolean` - Checks if the two values are
    equal.
 
-2) `not(value: any) => boolean` - Negates the given value.
+2) `not(value: any): boolean` - Negates the given value.
 
-3) `and(...args: any[]): any` - Returns true if all the
+3) `and(...args: any[]): boolean` - Returns true if all the
    arguments are true.
 
-4) `or(...args: any[]): any` - Returns true if any of the
+4) `or(...args: any[]): boolean` - Returns true if any of the
    arguments are true.
 
 5) `isDate(str: string, format: string): boolean` - Checks if the
@@ -184,7 +184,7 @@ own. To create a new template, edit the template and click on the
    format `YYYY/MM/DD`. Refer [Day.js](https://day.js.org/docs/en/parse/string-format#list-of-all-available-parsing-tokens)
    for the full list of supported formats.
 
-9) `findAbove(column: string, {regexp?: string}): any` - Finds the
+9) `findAbove(column: string, {regexp?: string}): string` - Finds the
 first cell above the current row in the given column. If `regexp` is
 provided, the search will continue till a match is found
 
@@ -197,7 +197,7 @@ provided, the search will continue till a match is found
     example, `UTI Nifty Next 50 Index Growth Direct Plan` will be
     converted to `UNNI`
 
-11) `negate: (value: string) => number` - Negates the given value. For
+11) `negate(value: string): number` - Negates the given value. For
     example, `negate("123.45")` will return `-123.45`
 
 12) `replace(str: string, search: string, replace: string): string` -
@@ -205,3 +205,10 @@ provided, the search will continue till a match is found
     given string.
 
 13) `trim(str: string): string` - Trims the given string.
+
+14) `amount(str: string, {default?: string}): string` - Converts the given
+string to a valid amount. If the string is blank, the default value is
+used. Examples `(0.9534)` to `-0.9534`, `₹ 1,234.56` to `1234.56`
+
+15) `regexpTest(str: string, regexp: string): boolean` - Tests the
+    given string against the given regular expression.

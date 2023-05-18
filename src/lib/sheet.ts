@@ -1,5 +1,7 @@
 import Papa from "papaparse";
 import * as XLSX from "xlsx";
+import _ from "lodash";
+import { format } from "./journal";
 
 interface Result {
   data: string[][];
@@ -12,7 +14,36 @@ export function parse(file: File): Promise<Result> {
   } else if (extension === "xlsx" || extension === "xls") {
     return parseXLSX(file);
   }
-  throw new Error("Unsupported file type");
+  throw new Error(`Unsupported file type ${extension}`);
+}
+
+export function asRows(result: Result): Array<Record<string, any>> {
+  return _.map(result.data, (row, i) => {
+    return _.chain(row)
+      .map((cell, j) => {
+        return [String.fromCharCode(65 + j), cell];
+      })
+      .concat([["index", i as any]])
+      .fromPairs()
+      .value();
+  });
+}
+
+const COLUMN_REFS = _.chain(_.range(65, 90))
+  .map((i) => String.fromCharCode(i))
+  .map((a) => [a, a])
+  .fromPairs()
+  .value();
+
+export function render(rows: Array<Record<string, any>>, template: Handlebars.TemplateDelegate) {
+  const output: string[] = [];
+  _.each(rows, (row) => {
+    const rendered = _.trim(template(_.assign({ ROW: row, SHEET: rows }, COLUMN_REFS)));
+    if (!_.isEmpty(rendered)) {
+      output.push(rendered);
+    }
+  });
+  return format(output.join("\n\n"));
 }
 
 function parseCSV(file: File): Promise<Result> {

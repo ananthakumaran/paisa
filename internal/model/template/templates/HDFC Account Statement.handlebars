@@ -1,7 +1,7 @@
 {{#if (isDate ROW.A "DD/MM/YY")}}
   {{date ROW.A "DD/MM/YY"}} {{ROW.B}}
   {{#if (eq (trim ROW.E) "0.00")}}
-    {{predictAccount prefix="Expense"}}      {{trim ROW.D}} INR
+    {{predictAccount prefix="Expenses"}}      {{trim ROW.D}} INR
     Asset:Checking
   {{else}}
     Asset:Checking                           {{trim ROW.E}} INR

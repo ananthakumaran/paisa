@@ -20,6 +20,10 @@ function tokenize(s: string) {
 }
 
 function tfidf(query: string) {
+  if (accountTfIdf === null) {
+    return {};
+  }
+
   const { index } = get(accountTfIdf);
   const tokens = tokenize(query);
   return _.chain(tokens)
@@ -36,6 +40,10 @@ function tfidf(query: string) {
 }
 
 function findMatch(query: string) {
+  if (accountTfIdf === null) {
+    return [];
+  }
+
   const queryVector = tfidf(query);
   const { tf_idf, index } = get(accountTfIdf);
   const accounts = Object.keys(index.docs);
@@ -103,8 +111,19 @@ export default {
   isBlank(str: string) {
     return _.isEmpty(str) || _.trim(str) === "";
   },
+  amount(str: string, options: any) {
+    const amount = _.trim(str)
+      .replace(/\((.+)\)/, "-$1")
+      .replace(/[^0-9.-]/, "");
+
+    if (!isNaN(amount as any) && !isNaN(parseFloat(amount))) {
+      return amount;
+    }
+
+    return options.hash.default || "";
+  },
   date(str: string, format: string) {
-    return dayjs(_.trim(str), format).format("YYYY/MM/DD");
+    return dayjs(_.trim(str), format, true).format("YYYY/MM/DD");
   },
   trim(str: string) {
     return _.trim(str);
@@ -114,6 +133,13 @@ export default {
       return;
     }
     return str.replaceAll(search, replace);
+  },
+  regexpTest(str: string, regexp: string) {
+    if (!_.isString(str)) {
+      return;
+    }
+
+    return new RegExp(regexp).test(str);
   },
   findAbove(column: string, options: any) {
     const regexp = new RegExp(options.hash.regexp || ".+");

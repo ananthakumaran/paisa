@@ -1,6 +1,5 @@
 <script lang="ts">
   import Select from "svelte-select";
-  import { format } from "$lib/journal";
   import {
     createEditor as createTemplateEditor,
     editorState as templateEditorState
@@ -10,7 +9,7 @@
     updateContent as updatePreviewContent
   } from "$lib/editor";
   import Dropzone from "svelte-file-dropzone/Dropzone.svelte";
-  import { parse } from "$lib/sheet";
+  import { parse, asRows, render as renderJournal } from "$lib/sheet";
   import _ from "lodash";
   import type { EditorView } from "codemirror";
   import { onMount } from "svelte";
@@ -24,7 +23,6 @@
   let lastTemplate: any;
   let lastData: any;
   let preview = "";
-  let output: string[] = [];
   let columnCount: number;
   let data: any[][] = [];
   let rows: Array<Record<string, any>> = [];
@@ -84,26 +82,11 @@
 
   let input: any;
 
-  const COLUMN_REFS = _.chain(_.range(65, 90))
-    .map((i) => String.fromCharCode(i))
-    .map((a) => [a, a])
-    .fromPairs()
-    .value();
-
   $: if (!_.isEmpty(data) && $templateEditorState.template) {
     if (lastTemplate != $templateEditorState.template || lastData != data) {
-      output = [];
       try {
-        _.each(rows, (row) => {
-          const rendered = _.trim(
-            $templateEditorState.template(_.assign({ ROW: row, SHEET: rows }, COLUMN_REFS))
-          );
-          if (!_.isEmpty(rendered)) {
-            output.push(rendered);
-          }
-        });
-        preview = output.join("\n\n");
-        updatePreviewContent(previewEditor, format(preview));
+        preview = renderJournal(rows, $templateEditorState.template);
+        updatePreviewContent(previewEditor, preview);
         lastTemplate = $templateEditorState.template;
         lastData = data;
       } catch (e) {
@@ -124,16 +107,7 @@
 
     const results = await parse(acceptedFiles[0]);
     data = results.data;
-
-    rows = _.map(data, (row, i) => {
-      return _.chain(row)
-        .map((cell, j) => {
-          return [String.fromCharCode(65 + j), cell];
-        })
-        .concat([["index", i]])
-        .fromPairs()
-        .value();
-    });
+    rows = asRows(results);
 
     columnCount = _.maxBy(data, (row) => row.length).length;
     _.each(data, (row) => {

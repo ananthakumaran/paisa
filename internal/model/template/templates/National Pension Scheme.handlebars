@@ -1,0 +1,11 @@
+{{#if (and (isDate ROW.A "DD-MMM-YYYY") (not (isBlank ROW.J)))}}
+ {{date ROW.A "DD-MMM-YYYY"}} {{ROW.B}}
+    Assets:Equity:NPS		{{amount ROW.F default="0"}} NPS_E @ {{amount ROW.E default="0"}} INR
+    Assets:Debt:NPS_C		{{amount ROW.I default="0"}} NPS_C @ {{amount ROW.H default="0"}} INR
+    Assets:Debt:NPS_G		{{amount ROW.L default="0"}} NPS_G @ {{amount ROW.K default="0"}} INR
+    {{#if (regexpTest ROW.B ".*Billing.*")}}
+    Expenses:Charges:NPS
+    {{else}}
+    Assets:Checking
+    {{/if}}
+{{/if}}

@@ -1,0 +1,57 @@
+^Annual Tax Statement^
+
+File Creation Date^Permanent Account Number (PAN)^Current Status of PAN^Financial Year^Assessment Year^Name of Assessee^Address Line 1^Address Line 2^Address Line 3^Address Line 4^Address Line 5^Statecode^Pin Code
+30-04-2023^A000000000^ACTIVE^2022-2023^2023-2024^John Doe
+
+^PART-I - Details of Tax Deducted at Source^
+Sr. No.^Name of Deductor^TAN of Deductor^^^^^Total Amount Paid / Credited(Rs.)^Total Tax Deducted(Rs.)^Total TDS Deposited(Rs.)
+1^ACME PRIVATE LIMITED^B00000000^^^^^3855.00^1169.00^1169.00^
+^Sr. No.^Section^Transaction Date^Status of Booking^Date of Booking^Remarks^Amount Paid / Credited(Rs.)^Tax Deducted(Rs.)^TDS Deposited(Rs.)
+^1^192^27-Dec-2022^F^24-Jan-2023^-^489.00^225.00^225.00^
+^2^192^27-Nov-2022^F^24-Jan-2023^-^489.00^133.00^133.00^
+^3^192^27-Oct-2022^F^24-Jan-2023^-^489.00^133.00^133.00^
+^4^192^27-Sep-2022^F^19-Oct-2022^-^489.00^133.00^133.00^
+^5^192^27-Aug-2022^F^19-Oct-2022^-^489.00^133.00^133.00^
+^6^192^27-Jul-2022^F^19-Oct-2022^-^489.00^133.00^133.00^
+^7^192^27-Jun-2022^F^24-Jul-2022^-^489.00^133.00^133.00^
+^8^192^27-May-2022^F^24-Jul-2022^-^426.00^144.00^144.00^
+
+2^Globex PRIVATE LIMITED^P000000000^^^^^2430.00^525.00^525.00^
+^Sr. No.^Section^Transaction Date^Status of Booking^Date of Booking^Remarks^Amount Paid / Credited(Rs.)^Tax Deducted(Rs.)^TDS Deposited(Rs.)
+^1^192^25-May-2022^F^04-Aug-2022^-^1548.00^451.00^451.00^
+^2^192^25-Apr-2022^F^04-Aug-2022^-^882.00^74.00^74.00^
+
+
+^PART-II - Details of Tax Deducted at Source for 15G / 15H^
+Sr. No.^Name of Deductor^TAN of Deductor^^^^Total Amount Paid / Credited(Rs.)^Total Tax Deducted(Rs.)^Total TDS Deposited(Rs.)
+^^^*********** No Transactions Present **********^
+
+
+^PART-III - Details of Transactions under Proviso to section 194B/First Proviso to sub-section (1) of section 194R/ Proviso to sub-section(1) of section 194S
+Sr. No.^Name of Deductor^TAN of Deductor^^^^^Total Amount Paid / Credited(Rs.)
+^^^*********** No Transactions Present **********^
+
+
+^PART-IV - Details of Tax Deducted at Source  u/s 194IA/ 194IB /  194M/  194S (For Seller/Landlord of Property/Payee of resident contractors and professionals/ Payee of Virtual Digital Asset)^
+Sr. No.^Acknowledgement Number^Name of Deductor^PAN of Deductor^Transaction Date^Total Transaction Amount(Rs.)^Total TDS Deposited(Rs.)
+^^^*********** No Transactions Present **********^
+
+^PART-V - Details of Tax Collected at Source^
+Sr. No.^Name of Collector^TAN of Collector^^^^^Total Amount Paid / Debited(Rs.)^Total Tax Collected(Rs.)^Total TCS Deposited(Rs.)
+^^^*********** No Transactions Present **********^
+
+
+^PART-VI - Details of Paid Refund (For which source is CPC TDS. For other details refer AIS at E-filing portal)^
+Sr. No.^Assessment Year^Mode^Refund Issued^Nature of Refund^Amount of Refund(Rs.)^Interest(Rs.)^Date of Payment^Remarks
+^^^*********** No Transactions Present **********^
+
+
+^PART-VII - Details of Tax Deducted at Source  u/s 194IA/ 194IB /194M/194S (For Buyer/Tenant of Property /Payer of resident contractors and professionals/Payer of Virtual Digital Asset)^
+Sr. No.^Acknowledgement Number^Name of Deductee^PAN of Deductee^Transaction Date^Total Transaction Amount(Rs.)^Total TDS Deposited(Rs.)^Total Amount Deposited other than TDS(Rs.)
+^^^*********** No Transactions Present **********^
+
+^PART-VIII - TDS/TCS Defaults* (Processing of Statements)^
+Sr. No.^Financial Year^Short Payment^Short Deduction/Collection^Interest on TDS/TCS Payments default^Interest on TDS/TCS Deduction/Collection Default^Late Filing Fee u/s 234E^Interest u/s 220(2)^Total Default
+^^^*********** No Transactions Present **********^
+
+

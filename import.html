@@ -268,18 +268,18 @@ can refer a specific cell using the following syntax <code>SHEET.5.A</code>.</li
 <h4 id="template-helpers"><a class="header" href="#template-helpers">Template Helpers</a></h4>
 <ol>
 <li>
-<p><code>eq(a: any, b: any) =&gt; boolean</code> - Checks if the two values are
+<p><code>eq(a: any, b: any): boolean</code> - Checks if the two values are
 equal.</p>
 </li>
 <li>
-<p><code>not(value: any) =&gt; boolean</code> - Negates the given value.</p>
+<p><code>not(value: any): boolean</code> - Negates the given value.</p>
 </li>
 <li>
-<p><code>and(...args: any[]): any</code> - Returns true if all the
+<p><code>and(...args: any[]): boolean</code> - Returns true if all the
 arguments are true.</p>
 </li>
 <li>
-<p><code>or(...args: any[]): any</code> - Returns true if any of the
+<p><code>or(...args: any[]): boolean</code> - Returns true if any of the
 arguments are true.</p>
 </li>
 <li>
@@ -317,7 +317,7 @@ format <code>YYYY/MM/DD</code>. Refer <a href="https://day.js.org/docs/en/parse/
 for the full list of supported formats.</p>
 </li>
 <li>
-<p><code>findAbove(column: string, {regexp?: string}): any</code> - Finds the
+<p><code>findAbove(column: string, {regexp?: string}): string</code> - Finds the
 first cell above the current row in the given column. If <code>regexp</code> is
 provided, the search will continue till a match is found</p>
 </li>
@@ -332,7 +332,7 @@ example, <code>UTI Nifty Next 50 Index Growth Direct Plan</code> will be
 converted to <code>UNNI</code></p>
 </li>
 <li>
-<p><code>negate: (value: string) =&gt; number</code> - Negates the given value. For
+<p><code>negate(value: string): number</code> - Negates the given value. For
 example, <code>negate(&quot;123.45&quot;)</code> will return <code>-123.45</code></p>
 </li>
 <li>
@@ -342,6 +342,15 @@ given string.</p>
 </li>
 <li>
 <p><code>trim(str: string): string</code> - Trims the given string.</p>
+</li>
+<li>
+<p><code>amount(str: string, {default?: string}): string</code> - Converts the given
+string to a valid amount. If the string is blank, the default value is
+used. Examples <code>(0.9534)</code> to <code>-0.9534</code>, <code>₹ 1,234.56</code> to <code>1234.56</code></p>
+</li>
+<li>
+<p><code>regexpTest(str: string, regexp: string): boolean</code> - Tests the
+given string against the given regular expression.</p>
 </li>
 </ol>
 

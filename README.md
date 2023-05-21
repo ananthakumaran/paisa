@@ -11,9 +11,10 @@ A demo of the WebGUI can be found at [https://paisa-demo.ananthakumaran.in](http
 
 ## Status
 
-It's in very early stages of development. Feel free to open an issue
-if you found a bug or start a discussion if you have a feature
-request.
+I use it to track my personal finance. It's more like alpha product
+now, usable, but I might update things based on the feedback I
+receive. Feel free to open an issue if you found a bug or start a
+discussion if you have a feature request.
 
 ## License
 

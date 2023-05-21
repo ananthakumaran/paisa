@@ -56,7 +56,6 @@
     "@types/sprintf-js": "^1.1.2",
     "@typescript-eslint/eslint-plugin": "^5.45.0",
     "@typescript-eslint/parser": "^5.45.0",
-    "@web-std/file": "^3.0.2",
     "concurrently": "^7.6.0",
     "esbuild": "^0.14.29",
     "eslint": "^8.28.0",

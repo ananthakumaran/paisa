@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Schedule AL - ₹ Paisa</title>
+        <title>Ledger CLI - ₹ Paisa</title>
         <!-- Custom HTML head -->
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="">
@@ -75,7 +75,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="introduction.html">Introduction</a></li><li class="chapter-item expanded affix "><li class="part-title">Getting Started</li><li class="chapter-item expanded "><a href="installation.html"><strong aria-hidden="true">1.</strong> Installation</a></li><li class="chapter-item expanded "><a href="tutorial.html"><strong aria-hidden="true">2.</strong> Tutorial</a></li><li class="chapter-item expanded affix "><li class="part-title">Reference Guide</li><li class="chapter-item expanded "><a href="accounts.html"><strong aria-hidden="true">3.</strong> Accounts</a></li><li class="chapter-item expanded "><a href="commodities.html"><strong aria-hidden="true">4.</strong> Commodities</a></li><li class="chapter-item expanded "><a href="allocation-targets.html"><strong aria-hidden="true">5.</strong> Allocation Targets</a></li><li class="chapter-item expanded "><a href="tax.html"><strong aria-hidden="true">6.</strong> Tax</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="tax-harvesting.html"><strong aria-hidden="true">6.1.</strong> Tax Harvesting</a></li><li class="chapter-item expanded "><a href="capital-gains.html"><strong aria-hidden="true">6.2.</strong> Capital Gains</a></li><li class="chapter-item expanded "><a href="schedule-al.html" class="active"><strong aria-hidden="true">6.3.</strong> Schedule AL</a></li></ol></li><li class="chapter-item expanded "><a href="retirement.html"><strong aria-hidden="true">7.</strong> Retirement</a></li><li class="chapter-item expanded "><a href="analysis.html"><strong aria-hidden="true">8.</strong> Analysis</a></li><li class="chapter-item expanded "><a href="import.html"><strong aria-hidden="true">9.</strong> Import</a></li><li class="chapter-item expanded "><a href="ledger-cli.html"><strong aria-hidden="true">10.</strong> Ledger CLI</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="introduction.html">Introduction</a></li><li class="chapter-item expanded affix "><li class="part-title">Getting Started</li><li class="chapter-item expanded "><a href="installation.html"><strong aria-hidden="true">1.</strong> Installation</a></li><li class="chapter-item expanded "><a href="tutorial.html"><strong aria-hidden="true">2.</strong> Tutorial</a></li><li class="chapter-item expanded affix "><li class="part-title">Reference Guide</li><li class="chapter-item expanded "><a href="accounts.html"><strong aria-hidden="true">3.</strong> Accounts</a></li><li class="chapter-item expanded "><a href="commodities.html"><strong aria-hidden="true">4.</strong> Commodities</a></li><li class="chapter-item expanded "><a href="allocation-targets.html"><strong aria-hidden="true">5.</strong> Allocation Targets</a></li><li class="chapter-item expanded "><a href="tax.html"><strong aria-hidden="true">6.</strong> Tax</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="tax-harvesting.html"><strong aria-hidden="true">6.1.</strong> Tax Harvesting</a></li><li class="chapter-item expanded "><a href="capital-gains.html"><strong aria-hidden="true">6.2.</strong> Capital Gains</a></li><li class="chapter-item expanded "><a href="schedule-al.html"><strong aria-hidden="true">6.3.</strong> Schedule AL</a></li></ol></li><li class="chapter-item expanded "><a href="retirement.html"><strong aria-hidden="true">7.</strong> Retirement</a></li><li class="chapter-item expanded "><a href="analysis.html"><strong aria-hidden="true">8.</strong> Analysis</a></li><li class="chapter-item expanded "><a href="import.html"><strong aria-hidden="true">9.</strong> Import</a></li><li class="chapter-item expanded "><a href="ledger-cli.html" class="active"><strong aria-hidden="true">10.</strong> Ledger CLI</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -134,46 +134,19 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="schedule-al"><a class="header" href="#schedule-al">Schedule AL</a></h1>
-<p>As per the Indian Income tax law, citizens are obligated to report
-their entire Assets and Liabilities if the total income exceeds ₹50
-lakh. Paisa helps with the computation of the amount.</p>
-<div class="table-wrapper"><table><thead><tr><th>code</th><th>Section</th><th>Details</th></tr></thead><tbody>
-<tr><td>immovable</td><td>A (1)</td><td>Immovable Assets</td></tr>
-<tr><td>metal</td><td>B (1) (i)</td><td>Jewellery, bullion etc.</td></tr>
-<tr><td>art</td><td>B (1) (ii)</td><td>Archaeological collections, drawings, painting, sculpture or any work of art</td></tr>
-<tr><td>vechicle</td><td>B (1) (iii)</td><td>Vehicles, yachts, boats and aircrafts</td></tr>
-<tr><td>bank</td><td>B (1) (iv) (a)</td><td>Financial assets: Bank (including all deposits)</td></tr>
-<tr><td>share</td><td>B (1) (iv) (b)</td><td>Financial assets: Shares and securities</td></tr>
-<tr><td>insurance</td><td>B (1) (iv) (c)</td><td>Financial assets: Insurance policies</td></tr>
-<tr><td>loan</td><td>B (1) (iv) (d)</td><td>Financial assets: Loans and advances given</td></tr>
-<tr><td>cash</td><td>B (1) (iv) (e)</td><td>Financial assets: Cash in hand</td></tr>
-<tr><td>liability</td><td>C (1)</td><td>Liabilities</td></tr>
-</tbody></table>
-</div>
-<p>All you need to do is to specify the accounts that belong to each
-section. Paisa will compute the total as on the last day of the
-previous financial year.</p>
-<pre><code class="language-yaml">schedule_al:
-    - code: bank
-      accounts:
-          - Assets:Checking
-    - code: share
-      accounts:
-          - Assets:Equity:*
-          - Assets:Debt:*
-
+                        <h1 id="ledger-cli"><a class="header" href="#ledger-cli">Ledger CLI</a></h1>
+<p>Paisa is compatible with <a href="https://www.ledger-cli.org/download.html">ledger</a> and <a href="https://hledger.org/">hledger</a>. By default
+paisa will try to use <strong>ledger</strong>, if you prefer to use <strong>hledger</strong>
+instead, change the <code>ledger_cli</code> value in paisa.yaml</p>
+<pre><code class="language-yaml">ledger_cli: hledger
 </code></pre>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="capital-gains.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="import.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
-                            </a>
-                            <a rel="next" href="retirement.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                                <i class="fa fa-angle-right"></i>
                             </a>
                         <div style="clear: both"></div>
                     </nav>
@@ -181,11 +154,8 @@ previous financial year.</p>
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="capital-gains.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="import.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
-                    </a>
-                    <a rel="next" href="retirement.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                        <i class="fa fa-angle-right"></i>
                     </a>
             </nav>
 

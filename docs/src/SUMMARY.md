@@ -19,3 +19,4 @@
 - [Retirement](retirement.md)
 - [Analysis](analysis.md)
 - [Import](import.md)
+- [Ledger CLI](ledger-cli.md)

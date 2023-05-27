@@ -257,6 +257,10 @@ svg text {
   outline: none !important;
 }
 
+.cm-tooltip-hover {
+  font-family: monospace;
+}
+
 .svelte-select {
   .item.active span.name {
     font-weight: bold;

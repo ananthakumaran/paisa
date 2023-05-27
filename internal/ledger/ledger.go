@@ -11,7 +11,9 @@ import (
 
 	log "github.com/sirupsen/logrus"
 
+	"encoding/json"
 	"github.com/ananthakumaran/paisa/internal/model/posting"
+	"github.com/spf13/viper"
 )
 
 type LedgerFileError struct {
@@ -21,7 +23,23 @@ type LedgerFileError struct {
 	Message  string `json:"message"`
 }
 
-func ValidateFile(journalPath string) ([]LedgerFileError, error) {
+type Ledger interface {
+	ValidateFile(journalPath string) ([]LedgerFileError, error)
+	Parse(journalPath string) ([]*posting.Posting, error)
+}
+
+type LedgerCLI struct{}
+type HLedgerCLI struct{}
+
+func Cli() Ledger {
+	if viper.GetString("ledger_cli") == "hledger" {
+		return HLedgerCLI{}
+	}
+
+	return LedgerCLI{}
+}
+
+func (LedgerCLI) ValidateFile(journalPath string) ([]LedgerFileError, error) {
 	errors := []LedgerFileError{}
 	_, err := exec.LookPath("ledger")
 	if err != nil {
@@ -48,7 +66,7 @@ func ValidateFile(journalPath string) ([]LedgerFileError, error) {
 	return errors, err
 }
 
-func Parse(journalPath string) ([]*posting.Posting, error) {
+func (LedgerCLI) Parse(journalPath string) ([]*posting.Posting, error) {
 	var postings []*posting.Posting
 
 	_, err := exec.LookPath("ledger")
@@ -93,6 +111,114 @@ func Parse(journalPath string) ([]*posting.Posting, error) {
 
 		posting := posting.Posting{Date: date, Payee: record[1], Account: record[2], Commodity: record[3], Quantity: quantity, Amount: amount, TransactionID: record[6]}
 		postings = append(postings, &posting)
+
+	}
+
+	return postings, nil
+}
+
+func (HLedgerCLI) ValidateFile(journalPath string) ([]LedgerFileError, error) {
+	errors := []LedgerFileError{}
+	_, err := exec.LookPath("hledger")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	command := exec.Command("hledger", "-f", journalPath, "--auto", "check")
+	var output, error bytes.Buffer
+	command.Stdout = &output
+	command.Stderr = &error
+	err = command.Run()
+	if err == nil {
+		return errors, nil
+	}
+
+	re := regexp.MustCompile(`(?m)hledger: Error: [^:]*:([0-9:-]+)\n((?:.*\n)*)`)
+	matches := re.FindAllStringSubmatch(error.String(), -1)
+
+	for _, match := range matches {
+		lineRange := match[1]
+		var lineFrom uint64 = 1
+		var lineTo uint64 = 1
+
+		multiline := regexp.MustCompile(`^([0-9]+)-([0-9]+):?$`)
+		if multiline.MatchString(lineRange) {
+			lineMatch := multiline.FindStringSubmatch(lineRange)
+			lineFrom, _ = strconv.ParseUint(lineMatch[1], 10, 64)
+			lineTo, _ = strconv.ParseUint(lineMatch[2], 10, 64)
+		} else {
+			lineMatch := regexp.MustCompile(`^([0-9]+).*$`).FindStringSubmatch(lineRange)
+			lineFrom, _ = strconv.ParseUint(lineMatch[1], 10, 64)
+			lineTo = lineFrom
+		}
+
+		errors = append(errors, LedgerFileError{LineFrom: lineFrom, LineTo: lineTo, Message: match[2]})
+	}
+	return errors, err
+}
+
+func (HLedgerCLI) Parse(journalPath string) ([]*posting.Posting, error) {
+	var postings []*posting.Posting
+
+	_, err := exec.LookPath("hledger")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	command := exec.Command("hledger", "-f", journalPath, "--auto", "print", "-Ojson")
+	var output, error bytes.Buffer
+	command.Stdout = &output
+	command.Stderr = &error
+	err = command.Run()
+	if err != nil {
+		log.Fatal(error.String())
+		return nil, err
+	}
+
+	type Transaction struct {
+		Date        string `json:"tdate"`
+		Description string `json:"tdescription"`
+		ID          int64  `json:"tindex"`
+		Postings    []struct {
+			Account string `json:"paccount"`
+			Amount  []struct {
+				Commodity string `json:"acommodity"`
+				Quantity  struct {
+					Value float64 `json:"floatingPoint"`
+				} `json:"aquantity"`
+				Price struct {
+					Contents struct {
+						Quantity struct {
+							Value float64 `json:"floatingPoint"`
+						} `json:"aquantity"`
+					} `json:"contents"`
+				} `json:"aprice"`
+			} `json:"pamount"`
+		} `json:"tpostings"`
+	}
+
+	var transactions []Transaction
+	err = json.Unmarshal(output.Bytes(), &transactions)
+	if err != nil {
+		return nil, err
+	}
+
+	for _, t := range transactions {
+		date, err := time.Parse("2006-01-02", t.Date)
+		if err != nil {
+			return nil, err
+		}
+
+		for _, p := range t.Postings {
+			amount := p.Amount[0]
+			totalAmount := amount.Quantity.Value
+			if amount.Price.Contents.Quantity.Value != 0 {
+				totalAmount = amount.Price.Contents.Quantity.Value * amount.Quantity.Value
+			}
+			posting := posting.Posting{Date: date, Payee: t.Description, Account: p.Account, Commodity: amount.Commodity, Quantity: amount.Quantity.Value, Amount: totalAmount, TransactionID: strconv.FormatInt(t.ID, 10)}
+			postings = append(postings, &posting)
+
+		}
 
 	}
 

@@ -127,7 +127,7 @@ func validateFile(file LedgerFile) ([]ledger.LedgerFileError, error) {
 		log.Fatal(err)
 	}
 
-	return ledger.ValidateFile(tmpfile.Name())
+	return ledger.Cli().ValidateFile(tmpfile.Name())
 }
 
 func readLedgerFile(path string) *LedgerFile {

@@ -1,7 +1,9 @@
 # Installation
 
 * Follow the installation instruction on [ledger](https://www.ledger-cli.org/download.html) site and install
-  **ledger**. Windows users can install ledger via [chocolatey](https://community.chocolatey.org/packages/ledger).
+  **ledger**. Windows users can install ledger via
+  [chocolatey](https://community.chocolatey.org/packages/ledger). Paisa is also compatible with [hledger](https://hledger.org/install.html). Refer
+  [ledger cli](ledger-cli.md) page for more information.
 * Download the latest prebuilt [binary](https://github.com/ananthakumaran/paisa/releases/latest)
 * Once downloaded, you can perform the following steps to install
 it.

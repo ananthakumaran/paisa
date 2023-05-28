@@ -177,3 +177,12 @@ commodity INR
     Assets:Brokerage:Cash             $375.00
     Assets:Brokerage                  -5 AAPL {$50.00} [2012-04-10] @@ $375.00
     Income:CapitalGains            $-125.00
+
+2015/11/18 Acme repair company
+    Expenses:Maintenance:Washing machine              4000 Rs
+    Assets:Cash
+
+2015/11/20 Wil E Coyote
+    ; He's not going to be paying it back. Writing it off.
+    Equity                                     15000 INR
+    Loans:Wil E Coyote

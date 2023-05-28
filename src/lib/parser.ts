@@ -4,7 +4,7 @@ const DATE = /^\d{4}[/-]\d{2}[/-]\d{2}/;
 const AMOUNT = /^[+-]?(?:[0-9,])+(\.(?:[0-9,])+)?/;
 const KEYWORDS = /^(?:commodity)/;
 const COMMODITY = /^[A-Za-z]*/;
-const ACCOUNT = /^[A-Za-z]([A-Za-z0-9:])*/;
+const ACCOUNT = /^[^\][(); \t\n]((?!\s{2})[^\][();\t\n])*/;
 
 interface State {
   inTransaction: boolean;

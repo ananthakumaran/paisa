@@ -64,7 +64,7 @@ func computeBreakdown(db *gorm.DB, postings []posting.Posting) map[string]AssetB
 		var balanceUnits float64
 		if leaf {
 			balanceUnits = lo.Reduce(ps, func(acc float64, p posting.Posting, _ int) float64 {
-				if p.Commodity != "INR" {
+				if !utils.IsCurrency(p.Commodity) {
 					return acc + p.Quantity
 				}
 				return 0.0

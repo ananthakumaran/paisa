@@ -8,6 +8,7 @@ import (
 
 	"github.com/ananthakumaran/paisa/internal/model/posting"
 	"github.com/ananthakumaran/paisa/internal/service"
+	"github.com/ananthakumaran/paisa/internal/utils"
 	"github.com/samber/lo"
 	log "github.com/sirupsen/logrus"
 	"gorm.io/gorm"
@@ -49,7 +50,7 @@ func FilterByGlob(postings []posting.Posting, accounts []string) []posting.Posti
 func FIFO(postings []posting.Posting) []posting.Posting {
 	var available []posting.Posting
 	for _, p := range postings {
-		if p.Commodity == "INR" {
+		if utils.IsCurrency(p.Commodity) {
 			if p.Amount > 0 {
 				available = append(available, p)
 			} else {

@@ -60,6 +60,8 @@ func generateConfigFile(cwd string) {
 	config := `
 journal_path: '%s'
 db_path: '%s'
+ledger_cli: ledger
+default_currency: INR
 retirement:
   savings:
     - Assets:Debt:*

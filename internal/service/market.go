@@ -43,7 +43,7 @@ func loadPriceCache(db *gorm.DB) {
 	}
 
 	for commodityName, postings := range lo.GroupBy(postings, func(p posting.Posting) string { return p.Commodity }) {
-		if postings[0].Commodity != "INR" && pcache.pricesTree[commodityName] == nil {
+		if !utils.IsCurrency(postings[0].Commodity) && pcache.pricesTree[commodityName] == nil {
 			pcache.pricesTree[commodityName] = btree.New(2)
 			for _, p := range postings {
 				pcache.pricesTree[commodityName].ReplaceOrInsert(price.Price{Date: p.Date, CommodityID: p.Commodity, CommodityName: p.Commodity, Value: p.Amount / p.Quantity})
@@ -80,7 +80,7 @@ func GetAllPrices(db *gorm.DB, commodity string) []price.Price {
 func GetMarketPrice(db *gorm.DB, p posting.Posting, date time.Time) float64 {
 	pcache.Do(func() { loadPriceCache(db) })
 
-	if p.Commodity == "INR" {
+	if utils.IsCurrency(p.Commodity) {
 		return p.Amount
 	}
 

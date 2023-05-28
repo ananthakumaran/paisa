@@ -7,6 +7,7 @@ import (
 
 	"github.com/ananthakumaran/paisa/internal/model/posting"
 	"github.com/ananthakumaran/paisa/internal/query"
+	"github.com/ananthakumaran/paisa/internal/utils"
 	"github.com/samber/lo"
 	"gorm.io/gorm"
 )
@@ -30,7 +31,7 @@ func ClearInterestCache() {
 func IsInterest(db *gorm.DB, p posting.Posting) bool {
 	icache.Do(func() { loadInterestCache(db) })
 
-	if p.Commodity != "INR" {
+	if !utils.IsCurrency(p.Commodity) {
 		return false
 	}
 

@@ -10,6 +10,7 @@ import (
 	"github.com/google/btree"
 	log "github.com/sirupsen/logrus"
 
+	"github.com/ananthakumaran/paisa/internal/config"
 	"github.com/ananthakumaran/paisa/internal/model/price"
 	"github.com/ananthakumaran/paisa/internal/utils"
 )
@@ -60,9 +61,9 @@ func GetHistory(ticker string, commodityName string) ([]*price.Price, error) {
 	needExchangePrice := false
 	var exchangePrice *btree.BTree
 
-	if result.Meta.Currency != "INR" {
+	if !utils.IsCurrency(result.Meta.Currency) {
 		needExchangePrice = true
-		exchangeResponse, err := getTicker(fmt.Sprintf("%sINR=X", result.Meta.Currency))
+		exchangeResponse, err := getTicker(fmt.Sprintf("%s%s=X", config.DefaultCurrency(), result.Meta.Currency))
 		if err != nil {
 			return nil, err
 		}

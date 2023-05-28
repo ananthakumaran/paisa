@@ -31,3 +31,8 @@ windows:
 deploy:
 	docker build -t paisa .
 	fly deploy -i paisa:latest --local-only
+
+install:
+	npm run build
+	go build
+	cp paisa ~/.local/bin

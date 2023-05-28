@@ -5,6 +5,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/ananthakumaran/paisa/internal/config"
 	"github.com/google/btree"
 )
 
@@ -79,4 +80,8 @@ func IsSameOrParent(account string, comparison string) bool {
 	}
 
 	return strings.HasPrefix(account, comparison+":")
+}
+
+func IsCurrency(currency string) bool {
+	return currency == config.DefaultCurrency()
 }

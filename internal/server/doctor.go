@@ -6,9 +6,11 @@ import (
 	"math"
 
 	"github.com/ananthakumaran/paisa/internal/accounting"
+	"github.com/ananthakumaran/paisa/internal/config"
 	"github.com/ananthakumaran/paisa/internal/model/posting"
 	"github.com/ananthakumaran/paisa/internal/query"
 	"github.com/ananthakumaran/paisa/internal/service"
+	"github.com/ananthakumaran/paisa/internal/utils"
 	"github.com/gin-gonic/gin"
 	"github.com/samber/lo"
 	"gorm.io/gorm"
@@ -117,11 +119,11 @@ func ruleJournalPriceMismatch(db *gorm.DB) []error {
 	errs := make([]error, 0)
 	postings := query.Init(db).Desc().All()
 	for _, p := range postings {
-		if p.Commodity != "INR" {
+		if !utils.IsCurrency(p.Commodity) {
 			externalPrice := service.GetUnitPrice(db, p.Commodity, p.Date)
 			diff := math.Abs(externalPrice.Value - p.Price())
 			if diff >= 0.0001 {
-				errs = append(errs, errors.New(fmt.Sprintf("%s\t%s\t%.4f @ <b>%.4f</b> INR <br />doesn't match the price %s <b>%.4f</b> fetched from external system", p.Date.Format(DATE_FORMAT), p.Account, p.Quantity, p.Price(), externalPrice.Date.Format(DATE_FORMAT), externalPrice.Value)))
+				errs = append(errs, errors.New(fmt.Sprintf("%s\t%s\t%.4f @ <b>%.4f</b> %s <br />doesn't match the price %s <b>%.4f</b> fetched from external system", p.Date.Format(DATE_FORMAT), p.Account, p.Quantity, p.Price(), config.DefaultCurrency(), externalPrice.Date.Format(DATE_FORMAT), externalPrice.Value)))
 			}
 		}
 	}

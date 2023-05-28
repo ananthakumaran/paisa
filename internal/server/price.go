@@ -3,6 +3,7 @@ package server
 import (
 	log "github.com/sirupsen/logrus"
 
+	"github.com/ananthakumaran/paisa/internal/config"
 	"github.com/ananthakumaran/paisa/internal/model/posting"
 	"github.com/ananthakumaran/paisa/internal/model/price"
 	"github.com/ananthakumaran/paisa/internal/service"
@@ -12,7 +13,7 @@ import (
 
 func GetPrices(db *gorm.DB) gin.H {
 	var commodities []string
-	result := db.Model(&posting.Posting{}).Where("commodity != ?", "INR").Distinct().Pluck("commodity", &commodities)
+	result := db.Model(&posting.Posting{}).Where("commodity != ?", config.DefaultCurrency()).Distinct().Pluck("commodity", &commodities)
 	if result.Error != nil {
 		log.Fatal(result.Error)
 	}

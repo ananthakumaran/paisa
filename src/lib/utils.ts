@@ -137,6 +137,7 @@ export interface InvestmentYearlyCard {
   net_income: number;
   net_investment: number;
   net_expense: number;
+  savings_rate: number;
 }
 
 export interface IncomeYearlyCard {

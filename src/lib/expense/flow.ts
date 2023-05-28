@@ -29,6 +29,10 @@ export function renderFlow(graph: Graph) {
   willClearTippy.update((n) => n + 1);
   svg.selectAll("*").remove();
 
+  if (graph == null) {
+    return;
+  }
+
   const accounts = _.chain(graph.nodes)
     .map((n) => firstName(n.name))
     .uniq()

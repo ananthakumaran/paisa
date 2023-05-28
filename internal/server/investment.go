@@ -22,6 +22,7 @@ type InvestmentYearlyCard struct {
 	NetIncome         float64           `json:"net_income"`
 	NetInvestment     float64           `json:"net_investment"`
 	NetExpense        float64           `json:"net_expense"`
+	SavingsRate       float64           `json:"savings_rate"`
 }
 
 func GetInvestment(db *gorm.DB) gin.H {
@@ -91,6 +92,12 @@ func computeInvestmentYearlyCard(start time.Time, assets []posting.Posting, expe
 
 		netInvestment := lo.SumBy(currentYearPostings, func(p posting.Posting) float64 { return p.Amount })
 
+		netIncome := grossSalaryIncome + grossOtherIncome - netTax
+		var savingsRate float64 = 0
+		if netIncome != 0 {
+			savingsRate = (netInvestment / netIncome) * 100
+		}
+
 		yearlyCards = append(yearlyCards, InvestmentYearlyCard{
 			StartDate:         start,
 			EndDate:           yearEnd,
@@ -98,9 +105,10 @@ func computeInvestmentYearlyCard(start time.Time, assets []posting.Posting, expe
 			NetTax:            netTax,
 			GrossSalaryIncome: grossSalaryIncome,
 			GrossOtherIncome:  grossOtherIncome,
-			NetIncome:         grossSalaryIncome + grossOtherIncome - netTax,
+			NetIncome:         netIncome,
 			NetInvestment:     netInvestment,
 			NetExpense:        netExpense,
+			SavingsRate:       savingsRate,
 		})
 
 	}

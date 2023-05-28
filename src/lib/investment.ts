@@ -424,9 +424,7 @@ export function renderYearlyCards(yearlyCards: InvestmentYearlyCard[]) {
     </tr>
     <tr>
       <td>Savings Rate</td>
-      <td class='has-text-right has-text-weight-bold'>${formatFloat(
-        (card.net_investment / card.net_income) * 100
-      )}</td>
+      <td class='has-text-right has-text-weight-bold'>${formatFloat(card.savings_rate)}</td>
     </tr>
   </tbody>
 </table>

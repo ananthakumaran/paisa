@@ -9,6 +9,7 @@
   import { onMount, tick } from "svelte";
 
   let showAllocation = false;
+  let depth = 2;
 
   onMount(async () => {
     const {
@@ -16,7 +17,9 @@
       aggregates_timeline: aggregatesTimeline,
       allocation_targets: allocationTargets
     } = await ajax("/api/allocation");
-    const color = generateColorScheme(_.keys(aggregates));
+    const accounts = _.keys(aggregates);
+    const color = generateColorScheme(accounts);
+    depth = _.max(_.map(accounts, (account) => account.split(":").length));
 
     if (!_.isEmpty(allocationTargets)) {
       showAllocation = true;
@@ -50,7 +53,7 @@
   <div class="container is-fluid">
     <div class="columns">
       <div class="column is-12 has-text-centered">
-        <div id="d3-allocation-category" style="width: 100%; height: 500px" />
+        <div id="d3-allocation-category" style="width: 100%; height: {depth * 100}px" />
       </div>
     </div>
     <div class="columns">

@@ -20,3 +20,4 @@
 - [Analysis](analysis.md)
 - [Import](import.md)
 - [Ledger CLI](ledger-cli.md)
+- [Config](config.md)

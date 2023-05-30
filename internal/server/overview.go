@@ -8,7 +8,6 @@ import (
 	"github.com/ananthakumaran/paisa/internal/query"
 	"github.com/ananthakumaran/paisa/internal/service"
 	"github.com/gin-gonic/gin"
-	"github.com/samber/lo"
 	"gorm.io/gorm"
 )
 
@@ -45,29 +44,27 @@ func computeOverviewTimeline(db *gorm.DB, postings []posting.Posting) []Overview
 			pastPostings = append(pastPostings, p)
 		}
 
-		investment := lo.Reduce(pastPostings, func(agg float64, p posting.Posting, _ int) float64 {
-			if p.Amount < 0 || service.IsInterest(db, p) {
-				return agg
-			} else {
-				return p.Amount + agg
-			}
-		}, 0)
+		var investment float64 = 0
+		var withdrawal float64 = 0
+		var balance float64 = 0
 
-		withdrawal := lo.Reduce(pastPostings, func(agg float64, p posting.Posting, _ int) float64 {
-			if p.Amount > 0 || service.IsInterest(db, p) {
-				return agg
-			} else {
-				return -p.Amount + agg
-			}
-		}, 0)
+		for _, p := range pastPostings {
+			isInterest := service.IsInterest(db, p)
 
-		balance := lo.Reduce(pastPostings, func(agg float64, p posting.Posting, _ int) float64 {
-			if service.IsInterest(db, p) {
-				return p.Amount + agg
-			} else {
-				return service.GetMarketPrice(db, p, start) + agg
+			if p.Amount > 0 && !isInterest {
+				investment += p.Amount
 			}
-		}, 0)
+
+			if p.Amount < 0 && !isInterest {
+				withdrawal += -p.Amount
+			}
+
+			if isInterest {
+				balance += p.Amount
+			} else {
+				balance += service.GetMarketPrice(db, p, start)
+			}
+		}
 
 		gain := balance + withdrawal - investment
 		networths = append(networths, Overview{Date: start, InvestmentAmount: investment, WithdrawalAmount: withdrawal, GainAmount: gain})

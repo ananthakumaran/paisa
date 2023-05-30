@@ -1,6 +1,7 @@
 package model
 
 import (
+	"github.com/ananthakumaran/paisa/internal/config"
 	"github.com/ananthakumaran/paisa/internal/ledger"
 	"github.com/ananthakumaran/paisa/internal/model/cii"
 	"github.com/ananthakumaran/paisa/internal/model/commodity"
@@ -13,14 +14,13 @@ import (
 	"github.com/ananthakumaran/paisa/internal/scraper/stock"
 	"github.com/logrusorgru/aurora"
 	log "github.com/sirupsen/logrus"
-	"github.com/spf13/viper"
 	"gorm.io/gorm"
 )
 
 func SyncJournal(db *gorm.DB) {
 	db.AutoMigrate(&posting.Posting{})
 	log.Info("Syncing transactions from journal")
-	postings, err := ledger.Cli().Parse(viper.GetString("journal_path"))
+	postings, err := ledger.Cli().Parse(config.JournalPath())
 	if err != nil {
 		log.Fatal(err)
 	}

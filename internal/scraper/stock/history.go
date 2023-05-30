@@ -63,7 +63,7 @@ func GetHistory(ticker string, commodityName string) ([]*price.Price, error) {
 
 	if !utils.IsCurrency(result.Meta.Currency) {
 		needExchangePrice = true
-		exchangeResponse, err := getTicker(fmt.Sprintf("%s%s=X", config.DefaultCurrency(), result.Meta.Currency))
+		exchangeResponse, err := getTicker(fmt.Sprintf("%s%s=X", result.Meta.Currency, config.DefaultCurrency()))
 		if err != nil {
 			return nil, err
 		}

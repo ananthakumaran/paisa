@@ -8,7 +8,11 @@
 
   $: if (remainder == 0) {
     times = dropRight(times, 1);
-    remainder = 100;
+    if (progressPercent == 0) {
+      remainder = 0;
+    } else {
+      remainder = 100;
+    }
   }
 </script>
 

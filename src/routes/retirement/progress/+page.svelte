@@ -14,6 +14,8 @@
     swr = 0,
     yearlyExpense = 0,
     progressPercent = 0,
+    savingsX = 0,
+    targetX = 0,
     skipProgress = true,
     breakPoints: Point[] = [],
     savingsTimeline: Point[] = [],
@@ -31,7 +33,16 @@
       swr
     } = await ajax("/api/retirement/progress"));
     targetSavings = yearlyExpense * (100 / swr);
-    progressPercent = (savingsTotal / targetSavings) * 100;
+
+    if (yearlyExpense > 0) {
+      progressPercent = (savingsTotal / targetSavings) * 100;
+      savingsX = savingsTotal / yearlyExpense;
+      targetX = targetSavings / yearlyExpense;
+    }
+
+    if (targetX <= 0 || savingsX <= 0 || yearlyExpense <= 0) {
+      return;
+    }
 
     const ARIMA = await ARIMAPromise;
     const predictionsTimeline = forecast(savingsTimeline, targetSavings, ARIMA);
@@ -56,7 +67,7 @@
         value={formatCurrency(savingsTotal)}
         color={COLORS.primary}
         subtitle="X times Yearly Expenses"
-        subvalue="{formatFloat(savingsTotal / yearlyExpense, 0)}x"
+        subvalue="{formatFloat(savingsX, 0)}x"
         subcolor={COLORS.primary}
       />
       <div class="level-item has-text-centered">
@@ -72,7 +83,7 @@
         value={formatCurrency(targetSavings)}
         color={targetSavings <= savingsTotal ? COLORS.gainText : COLORS.lossText}
         subtitle="X times Yearly Expenses"
-        subvalue="{formatFloat(targetSavings / yearlyExpense, 0)}x"
+        subvalue="{formatFloat(targetX, 0)}x"
         subcolor={targetSavings <= savingsTotal ? COLORS.gainText : COLORS.lossText}
       />
       <div class="level-item has-text-centered">

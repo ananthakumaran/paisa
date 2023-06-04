@@ -680,6 +680,7 @@ export function textColor(backgroundColor: string) {
 export function tooltip(
   rows: Array<Array<string | string[]>>,
   options: {
+    header?: string;
     total?: string;
   } = {}
 ) {
@@ -696,6 +697,13 @@ export function tooltip(
     rows.push(totalRow);
   }
 
+  if (options.header && rows.length > 0) {
+    const headerRow: Array<string | string[]> = [
+      [options.header, "has-text-weight-bold has-text-centered", rows[0].length.toString()]
+    ];
+    rows.unshift(headerRow);
+  }
+
   const trs = rows
     .map((r) => {
       const cells = r
@@ -703,6 +711,9 @@ export function tooltip(
           if (typeof c == "string") {
             return `<td>${c}</td>`;
           } else {
+            if (c.length == 3) {
+              return `<td class='${c[1]}' colspan='${c[2]}'>${c[0]}</td>`;
+            }
             return `<td class='${c[1]}'>${c[0]}</td>`;
           }
         })

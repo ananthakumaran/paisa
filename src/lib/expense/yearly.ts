@@ -84,7 +84,7 @@ export function renderCalendar(
           [formatCurrency(amount), "has-text-weight-bold has-text-right"]
         ];
       }),
-      { total: formatCurrency(total) }
+      { total: formatCurrency(total), header: es[0].date.format("MMM YYYY") }
     );
   };
 
@@ -253,7 +253,10 @@ export function renderYearlyExpensesTimeline(
           }
           return [];
         }),
-        { total: formatCurrency(grandTotal) }
+        {
+          total: formatCurrency(grandTotal),
+          header: financialYear(d.data.timestamp as any)
+        }
       );
     };
   };
@@ -446,7 +449,10 @@ export function renderCurrentExpensesBreakdown(z: d3.ScaleOrdinal<string, string
             [formatCurrency(amount), "has-text-weight-bold has-text-right"]
           ];
         }),
-        { total: formatCurrency(total) }
+        {
+          total: formatCurrency(total),
+          header: `${financialYear(d.postings[0].date)} ${d.category}`
+        }
       );
     };
 

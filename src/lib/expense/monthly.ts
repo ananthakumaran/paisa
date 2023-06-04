@@ -65,13 +65,12 @@ export function renderCalendar(
     return tooltip(
       es.map((p) => {
         return [
-          p.date.format("DD MMM YYYY"),
           [iconify(restName(p.account), { group: firstName(p.account) })],
           [p.payee, "is-clipped"],
           [formatCurrency(p.amount), "has-text-weight-bold has-text-right"]
         ];
       }),
-      { total: formatCurrency(total) }
+      { total: formatCurrency(total), header: es[0].date.format("DD MMM YYYY") }
     );
   };
 
@@ -266,7 +265,7 @@ export function renderMonthlyExpensesTimeline(
           }
           return [];
         }),
-        { total: formatCurrency(grandTotal) }
+        { total: formatCurrency(grandTotal), header: (d.data.timestamp as any).format("MMM YYYY") }
       );
     };
   };
@@ -482,7 +481,10 @@ export function renderCurrentExpensesBreakdown(z: d3.ScaleOrdinal<string, string
             [formatCurrency(p.amount), "has-text-weight-bold has-text-right"]
           ];
         }),
-        { total: formatCurrency(total) }
+        {
+          total: formatCurrency(total),
+          header: `${d.postings[0].date.format("MMM YYYY")} ${d.category}`
+        }
       );
     };
 

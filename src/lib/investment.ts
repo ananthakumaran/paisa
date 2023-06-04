@@ -166,7 +166,7 @@ export function renderMonthlyInvestmentTimeline(postings: Posting[]) {
           ]),
           (r) => r[0]
         ),
-        { total: formatCurrency(total) }
+        { total: formatCurrency(total), header: postings[0]?.date.format("MMM YYYY") }
       );
     })
     .attr("x", function (d) {
@@ -338,7 +338,7 @@ export function renderYearlyInvestmentTimeline(yearlyCards: InvestmentYearlyCard
           }),
           (r) => r[0]
         ),
-        { total: formatCurrency(grandTotal) }
+        { total: formatCurrency(grandTotal), header: d.data.year as any }
       );
     })
     .attr("x", function (d) {

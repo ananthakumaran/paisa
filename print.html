@@ -76,7 +76,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="introduction.html">Introduction</a></li><li class="chapter-item expanded affix "><li class="part-title">Getting Started</li><li class="chapter-item expanded "><a href="installation.html"><strong aria-hidden="true">1.</strong> Installation</a></li><li class="chapter-item expanded "><a href="tutorial.html"><strong aria-hidden="true">2.</strong> Tutorial</a></li><li class="chapter-item expanded affix "><li class="part-title">Reference Guide</li><li class="chapter-item expanded "><a href="accounts.html"><strong aria-hidden="true">3.</strong> Accounts</a></li><li class="chapter-item expanded "><a href="commodities.html"><strong aria-hidden="true">4.</strong> Commodities</a></li><li class="chapter-item expanded "><a href="allocation-targets.html"><strong aria-hidden="true">5.</strong> Allocation Targets</a></li><li class="chapter-item expanded "><a href="tax.html"><strong aria-hidden="true">6.</strong> Tax</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="tax-harvesting.html"><strong aria-hidden="true">6.1.</strong> Tax Harvesting</a></li><li class="chapter-item expanded "><a href="capital-gains.html"><strong aria-hidden="true">6.2.</strong> Capital Gains</a></li><li class="chapter-item expanded "><a href="schedule-al.html"><strong aria-hidden="true">6.3.</strong> Schedule AL</a></li></ol></li><li class="chapter-item expanded "><a href="retirement.html"><strong aria-hidden="true">7.</strong> Retirement</a></li><li class="chapter-item expanded "><a href="analysis.html"><strong aria-hidden="true">8.</strong> Analysis</a></li><li class="chapter-item expanded "><a href="import.html"><strong aria-hidden="true">9.</strong> Import</a></li><li class="chapter-item expanded "><a href="ledger-cli.html"><strong aria-hidden="true">10.</strong> Ledger CLI</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="introduction.html">Introduction</a></li><li class="chapter-item expanded affix "><li class="part-title">Getting Started</li><li class="chapter-item expanded "><a href="installation.html"><strong aria-hidden="true">1.</strong> Installation</a></li><li class="chapter-item expanded "><a href="tutorial.html"><strong aria-hidden="true">2.</strong> Tutorial</a></li><li class="chapter-item expanded affix "><li class="part-title">Reference Guide</li><li class="chapter-item expanded "><a href="accounts.html"><strong aria-hidden="true">3.</strong> Accounts</a></li><li class="chapter-item expanded "><a href="commodities.html"><strong aria-hidden="true">4.</strong> Commodities</a></li><li class="chapter-item expanded "><a href="allocation-targets.html"><strong aria-hidden="true">5.</strong> Allocation Targets</a></li><li class="chapter-item expanded "><a href="tax.html"><strong aria-hidden="true">6.</strong> Tax</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="tax-harvesting.html"><strong aria-hidden="true">6.1.</strong> Tax Harvesting</a></li><li class="chapter-item expanded "><a href="capital-gains.html"><strong aria-hidden="true">6.2.</strong> Capital Gains</a></li><li class="chapter-item expanded "><a href="schedule-al.html"><strong aria-hidden="true">6.3.</strong> Schedule AL</a></li></ol></li><li class="chapter-item expanded "><a href="retirement.html"><strong aria-hidden="true">7.</strong> Retirement</a></li><li class="chapter-item expanded "><a href="analysis.html"><strong aria-hidden="true">8.</strong> Analysis</a></li><li class="chapter-item expanded "><a href="import.html"><strong aria-hidden="true">9.</strong> Import</a></li><li class="chapter-item expanded "><a href="ledger-cli.html"><strong aria-hidden="true">10.</strong> Ledger CLI</a></li><li class="chapter-item expanded "><a href="config.html"><strong aria-hidden="true">11.</strong> Config</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -846,6 +846,125 @@ given string against the given regular expression.</p>
 paisa will try to use <strong>ledger</strong>, if you prefer to use <strong>hledger</strong>
 instead, change the <code>ledger_cli</code> value in paisa.yaml</p>
 <pre><code class="language-yaml">ledger_cli: hledger
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="config-1"><a class="header" href="#config-1">Config</a></h1>
+<pre><code class="language-yaml"># Absolute path to your journal file. The main journal file can
+# refer other files using `include` as long as all the files are in
+# the same directory
+# REQUIRED
+journal_path: /home/john/finance/personal.ledger
+
+# Absolute path to your database file. The database file will be
+# created if it does not exist.
+# REQUIRED
+db_path: /home/ananthakumaran/work/repos/finance/paisa.db
+
+# The ledger client to use
+# OPTIONAL, DEFAULT: ledger, ENUM: ledger, hledger
+ledger_cli: hledger
+
+# The default currency to use. NOTE: Paisa doesn't handle multiple
+# currencies well.
+# OPTIONAL, DEFAULT: INR
+default_currency: INR
+
+## Retirement
+retirement:
+  # Safe Withdrawal Rate
+  # OPTIONAL, DEFAULT: 4
+  swr: 2
+  # List of expense accounts
+  # OPTIONAL, DEFAULT: Expenses:*
+  expenses:
+    - Expenses:Clothing
+    - Expenses:Education
+    - Expenses:Entertainment
+    - Expenses:Food
+    - Expenses:Gift
+    - Expenses:Insurance
+    - Expenses:Misc
+    - Expenses:Restaurant
+    - Expenses:Shopping
+    - Expenses:Utilities
+  # List of accounts where you keep retirement savings
+  # OPTIONAL, DEFAULT: Assets:*
+  savings:
+    - Assets:Equity:*
+    - Assets:Debt:*
+  # By default average of last 3 year expenses will be used to
+  # calculate your yearly expenses. This can be overriden by setting
+  # this config to positive value
+  # OPTIONAL, DEFAULT: 0
+  yearly_expenses: 0
+
+## Schedule AL
+# OPTIONAL, DEFAULT: []
+schedule_al:
+  # Code
+  # REQUIRED, ENUM: immovable, metal, art, vehicle, bank, share,
+  # insurance, loan, cash, liability
+  - code: metal
+    accounts:
+      - Assets:Gold
+  - code: bank
+    accounts:
+      - Assets:Checking
+      - Assets:Debt:Cash:FD
+  - code: share
+    accounts:
+      - Assets:Equity:*
+  - code: insurance
+    accounts:
+      - Assets:Debt:Insurance
+
+## Allocation Target
+# OPTIONAL, DEFAULT: []
+allocation_targets:
+  - name: Debt
+    target: 30
+    accounts:
+      - Assets:Debt:*
+      - Assets:Checking
+  - name: Equity
+    target: 60
+    accounts:
+      - Assets:Equity:*
+  - name: Equity Foreign
+    target: 20
+    accounts:
+      - Assets:Equity:NASDAQ
+  - name: Equity Index
+    target: 20
+    accounts:
+      - Assets:Equity:NIFTY
+  - name: Equity Active
+    target: 20
+    accounts:
+      - Assets:Equity:PPFAS
+  - name: Others
+    target: 10
+    accounts:
+      - Assets:Gold
+      - Assets:RealEstate
+
+## Commodities
+# OPTIONAL, DEFAULT: []
+commodities:
+  - name: NASDAQ
+    type: mutualfund
+    code: 145552
+    harvest: 1095
+    tax_category: debt
+  - name: NIFTY
+    type: mutualfund
+    code: 120716
+    harvest: 365
+    tax_category: equity
+  - name: APPLE
+    type: stock
+    code: AAPL
+    harvest: 1095
+    tax_category: debt
 </code></pre>
 
                     </main>

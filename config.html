@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Retirement - ₹ Paisa</title>
+        <title>Config - ₹ Paisa</title>
         <!-- Custom HTML head -->
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="">
@@ -75,7 +75,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="introduction.html">Introduction</a></li><li class="chapter-item expanded affix "><li class="part-title">Getting Started</li><li class="chapter-item expanded "><a href="installation.html"><strong aria-hidden="true">1.</strong> Installation</a></li><li class="chapter-item expanded "><a href="tutorial.html"><strong aria-hidden="true">2.</strong> Tutorial</a></li><li class="chapter-item expanded affix "><li class="part-title">Reference Guide</li><li class="chapter-item expanded "><a href="accounts.html"><strong aria-hidden="true">3.</strong> Accounts</a></li><li class="chapter-item expanded "><a href="commodities.html"><strong aria-hidden="true">4.</strong> Commodities</a></li><li class="chapter-item expanded "><a href="allocation-targets.html"><strong aria-hidden="true">5.</strong> Allocation Targets</a></li><li class="chapter-item expanded "><a href="tax.html"><strong aria-hidden="true">6.</strong> Tax</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="tax-harvesting.html"><strong aria-hidden="true">6.1.</strong> Tax Harvesting</a></li><li class="chapter-item expanded "><a href="capital-gains.html"><strong aria-hidden="true">6.2.</strong> Capital Gains</a></li><li class="chapter-item expanded "><a href="schedule-al.html"><strong aria-hidden="true">6.3.</strong> Schedule AL</a></li></ol></li><li class="chapter-item expanded "><a href="retirement.html" class="active"><strong aria-hidden="true">7.</strong> Retirement</a></li><li class="chapter-item expanded "><a href="analysis.html"><strong aria-hidden="true">8.</strong> Analysis</a></li><li class="chapter-item expanded "><a href="import.html"><strong aria-hidden="true">9.</strong> Import</a></li><li class="chapter-item expanded "><a href="ledger-cli.html"><strong aria-hidden="true">10.</strong> Ledger CLI</a></li><li class="chapter-item expanded "><a href="config.html"><strong aria-hidden="true">11.</strong> Config</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="introduction.html">Introduction</a></li><li class="chapter-item expanded affix "><li class="part-title">Getting Started</li><li class="chapter-item expanded "><a href="installation.html"><strong aria-hidden="true">1.</strong> Installation</a></li><li class="chapter-item expanded "><a href="tutorial.html"><strong aria-hidden="true">2.</strong> Tutorial</a></li><li class="chapter-item expanded affix "><li class="part-title">Reference Guide</li><li class="chapter-item expanded "><a href="accounts.html"><strong aria-hidden="true">3.</strong> Accounts</a></li><li class="chapter-item expanded "><a href="commodities.html"><strong aria-hidden="true">4.</strong> Commodities</a></li><li class="chapter-item expanded "><a href="allocation-targets.html"><strong aria-hidden="true">5.</strong> Allocation Targets</a></li><li class="chapter-item expanded "><a href="tax.html"><strong aria-hidden="true">6.</strong> Tax</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="tax-harvesting.html"><strong aria-hidden="true">6.1.</strong> Tax Harvesting</a></li><li class="chapter-item expanded "><a href="capital-gains.html"><strong aria-hidden="true">6.2.</strong> Capital Gains</a></li><li class="chapter-item expanded "><a href="schedule-al.html"><strong aria-hidden="true">6.3.</strong> Schedule AL</a></li></ol></li><li class="chapter-item expanded "><a href="retirement.html"><strong aria-hidden="true">7.</strong> Retirement</a></li><li class="chapter-item expanded "><a href="analysis.html"><strong aria-hidden="true">8.</strong> Analysis</a></li><li class="chapter-item expanded "><a href="import.html"><strong aria-hidden="true">9.</strong> Import</a></li><li class="chapter-item expanded "><a href="ledger-cli.html"><strong aria-hidden="true">10.</strong> Ledger CLI</a></li><li class="chapter-item expanded "><a href="config.html" class="active"><strong aria-hidden="true">11.</strong> Config</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -134,54 +134,132 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="retirement"><a class="header" href="#retirement">Retirement</a></h1>
-<p>Paisa will help you plan your retirement and track your progress. The
-first part is figuring out what should be your retirement corpus. This
-will be your target. Instead of specifying the amount explicitly, you
-can specify your expected yearly expenses and the safe withdrawal
-rate.</p>
-<pre><code class="language-yaml">retirement:
-    swr: 3.3
-    yearly_expenses: 1100000
-</code></pre>
-<p>If you use paisa to track expenses, instead of specifying the
-<code>yearly_expenses</code>, you can specify the list of accounts. Paisa will
-take the average of the last 3 year expenses</p>
-<pre><code class="language-yaml">retirement:
+                        <h1 id="config"><a class="header" href="#config">Config</a></h1>
+<pre><code class="language-yaml"># Absolute path to your journal file. The main journal file can
+# refer other files using `include` as long as all the files are in
+# the same directory
+# REQUIRED
+journal_path: /home/john/finance/personal.ledger
+
+# Absolute path to your database file. The database file will be
+# created if it does not exist.
+# REQUIRED
+db_path: /home/ananthakumaran/work/repos/finance/paisa.db
+
+# The ledger client to use
+# OPTIONAL, DEFAULT: ledger, ENUM: ledger, hledger
+ledger_cli: hledger
+
+# The default currency to use. NOTE: Paisa doesn't handle multiple
+# currencies well.
+# OPTIONAL, DEFAULT: INR
+default_currency: INR
+
+## Retirement
+retirement:
+  # Safe Withdrawal Rate
+  # OPTIONAL, DEFAULT: 4
   swr: 2
+  # List of expense accounts
+  # OPTIONAL, DEFAULT: Expenses:*
   expenses:
+    - Expenses:Clothing
+    - Expenses:Education
     - Expenses:Entertainment
+    - Expenses:Food
     - Expenses:Gift
     - Expenses:Insurance
     - Expenses:Misc
+    - Expenses:Restaurant
     - Expenses:Shopping
     - Expenses:Utilities
-</code></pre>
-<p>Now that the target is specified, you need to specify the list of
-accounts where you keep your retirement savings.</p>
-<pre><code class="language-yaml">retirement:
-  swr: 2
-  expenses:
-    - Expenses:Entertainment
-    - Expenses:Gift
-    - Expenses:Insurance
-    - Expenses:Misc
-    - Expenses:Shopping
-    - Expenses:Utilities
+  # List of accounts where you keep retirement savings
+  # OPTIONAL, DEFAULT: Assets:*
   savings:
     - Assets:Equity:*
     - Assets:Debt:*
+  # By default average of last 3 year expenses will be used to
+  # calculate your yearly expenses. This can be overriden by setting
+  # this config to positive value
+  # OPTIONAL, DEFAULT: 0
+  yearly_expenses: 0
+
+## Schedule AL
+# OPTIONAL, DEFAULT: []
+schedule_al:
+  # Code
+  # REQUIRED, ENUM: immovable, metal, art, vehicle, bank, share,
+  # insurance, loan, cash, liability
+  - code: metal
+    accounts:
+      - Assets:Gold
+  - code: bank
+    accounts:
+      - Assets:Checking
+      - Assets:Debt:Cash:FD
+  - code: share
+    accounts:
+      - Assets:Equity:*
+  - code: insurance
+    accounts:
+      - Assets:Debt:Insurance
+
+## Allocation Target
+# OPTIONAL, DEFAULT: []
+allocation_targets:
+  - name: Debt
+    target: 30
+    accounts:
+      - Assets:Debt:*
+      - Assets:Checking
+  - name: Equity
+    target: 60
+    accounts:
+      - Assets:Equity:*
+  - name: Equity Foreign
+    target: 20
+    accounts:
+      - Assets:Equity:NASDAQ
+  - name: Equity Index
+    target: 20
+    accounts:
+      - Assets:Equity:NIFTY
+  - name: Equity Active
+    target: 20
+    accounts:
+      - Assets:Equity:PPFAS
+  - name: Others
+    target: 10
+    accounts:
+      - Assets:Gold
+      - Assets:RealEstate
+
+## Commodities
+# OPTIONAL, DEFAULT: []
+commodities:
+  - name: NASDAQ
+    type: mutualfund
+    code: 145552
+    harvest: 1095
+    tax_category: debt
+  - name: NIFTY
+    type: mutualfund
+    code: 120716
+    harvest: 365
+    tax_category: equity
+  - name: APPLE
+    type: stock
+    code: AAPL
+    harvest: 1095
+    tax_category: debt
 </code></pre>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="schedule-al.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="ledger-cli.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
-                            </a>
-                            <a rel="next" href="analysis.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                                <i class="fa fa-angle-right"></i>
                             </a>
                         <div style="clear: both"></div>
                     </nav>
@@ -189,11 +267,8 @@ accounts where you keep your retirement savings.</p>
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="schedule-al.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="ledger-cli.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
-                    </a>
-                    <a rel="next" href="analysis.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                        <i class="fa fa-angle-right"></i>
                     </a>
             </nav>
 

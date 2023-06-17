@@ -117,5 +117,5 @@ commodities:
     type: stock
     code: AAPL
     harvest: 1095
-    tax_category: debt
+    tax_category: equity
 ```

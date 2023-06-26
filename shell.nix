@@ -2,7 +2,7 @@
 
 pkgs.mkShell {
   nativeBuildInputs = [
-    pkgs.go_1_19
+    pkgs.go_1_20
     pkgs.gotools
     pkgs.gopls
     pkgs.sqlite

@@ -12,13 +12,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2.4.0
-    - uses: cachix/install-nix-action@v20
+    - uses: actions/setup-node@v3
       with:
-        nix_path: nixpkgs=channel:nixos-unstable
+        node-version: 18
+    - uses: actions/setup-go@v3
+      with:
+        go-version: '1.20.5'
     - run: |
-        nix develop --command npm install
-        nix develop --command npm run build
-        nix develop --command go build
+        sudo apt-get install -y sqlite3
+        npm install
+        npm run build
+        go build
         cp paisa paisa-linux-amd64
     - name: Release
       uses: softprops/action-gh-release@v1
@@ -55,7 +59,7 @@ jobs:
         node-version: 18
     - uses: actions/setup-go@v3
       with:
-        go-version: '1.18.1'
+        go-version: '1.20.5'
     - run: |
         choco install sqlite
         npm install

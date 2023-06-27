@@ -1,6 +1,6 @@
 module github.com/ananthakumaran/paisa
 
-go 1.18
+go 1.20
 
 require (
 	github.com/ChizhovVadim/xirr v0.0.0-20210210181856-508bc36c62aa

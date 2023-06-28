@@ -98,7 +98,9 @@
 </section>
 
 <style lang="scss">
+  @import "bulma/sass/utilities/_all.sass";
+
   div.small-box:hover {
-    background-color: #f5f5f5;
+    background-color: $white-bis;
   }
 </style>

@@ -367,11 +367,11 @@ export function renderYearlyExpensesTimeline(
       const group = this.__data__;
       if (selectedGroups.length == 1 && selectedGroups[0] == group) {
         selectedGroups = groups;
-        svg.selectAll(".legendOrdinal .cell .label").style("fill", "#4a4a4a");
+        svg.selectAll(".legendOrdinal .cell .label").classed("selected", false);
       } else {
         selectedGroups = [group];
-        svg.selectAll(".legendOrdinal .cell .label").style("fill", "#ccc");
-        d3.select(this).selectAll(".label").style("fill", "#4a4a4a");
+        svg.selectAll(".legendOrdinal .cell .label").classed("selected", false);
+        d3.select(this).selectAll(".label").classed("selected", true);
       }
 
       render(selectedGroups);

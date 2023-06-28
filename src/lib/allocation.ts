@@ -73,14 +73,14 @@ export function renderAllocationTarget(
   const x1 = d3.scaleLinear().range([0, targetWidth]).domain([0, maxX]);
 
   g.append("line")
-    .attr("stroke", "#ddd")
+    .classed("svg-grey-lighter", true)
     .attr("x1", 0)
     .attr("y1", height)
     .attr("x2", width)
     .attr("y2", height);
 
   g.append("text")
-    .attr("fill", "#4a4a4a")
+    .classed("svg-text-grey", true)
     .text("Target")
     .attr("text-anchor", "end")
 
@@ -88,14 +88,14 @@ export function renderAllocationTarget(
     .attr("y", -5);
 
   g.append("text")
-    .attr("fill", "#4a4a4a")
+    .classed("svg-text-grey", true)
     .text("Current")
     .attr("text-anchor", "end")
     .attr("x", textGroupZero + (textGroupWidth * 2) / 3)
     .attr("y", -5);
 
   g.append("text")
-    .attr("fill", "#4a4a4a")
+    .classed("svg-text-grey", true)
     .text("Diff")
     .attr("text-anchor", "end")
     .attr("x", textGroupZero + textGroupWidth)
@@ -123,7 +123,7 @@ export function renderAllocationTarget(
 
   textGroup
     .append("line")
-    .attr("stroke", "#ddd")
+    .classed("svg-grey-lighter", true)
     .attr("x1", 0)
     .attr("y1", (t) => y(t.name))
     .attr("x2", width)

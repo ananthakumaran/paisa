@@ -71,17 +71,17 @@ export function renderPortfolioBreakdown(
   const legendg = svg.append("g");
   const aggregatesg = svg.append("g");
 
-  const lineg = g.append("line").attr("stroke", "#ddd");
+  const lineg = g.append("line").classed("svg-grey-lighter", true);
 
   g.append("text")
-    .attr("fill", "#4a4a4a")
+    .classed("svg-text-grey-light", true)
     .text("%")
     .attr("text-anchor", "end")
     .attr("x", textGroupZero + textGroupWidth / 2)
     .attr("y", -5);
 
   g.append("text")
-    .attr("fill", "#4a4a4a")
+    .classed("svg-text-grey-light", true)
     .text("Amount")
     .attr("text-anchor", "end")
     .attr("x", textGroupZero + textGroupWidth)
@@ -207,7 +207,7 @@ export function renderPortfolioBreakdown(
 
     textGroupEnter
       .append("line")
-      .attr("stroke", "#ddd")
+      .classed("svg-grey-lighter", true)
       .attr("x1", 0)
       .attr("y1", (t) => y(t.id))
       .attr("x2", width)
@@ -218,7 +218,7 @@ export function renderPortfolioBreakdown(
       .text((t) => formatFloat(t.percentage))
       .attr("text-anchor", "end")
       .attr("dominant-baseline", "middle")
-      .style("fill", "#333")
+      .classed("svg-text-grey-dark", true)
       .attr("x", textGroupZero + textGroupWidth / 2)
       .attr("y", (t) => y(t.id) + BAR_HEIGHT / 2);
 
@@ -227,7 +227,7 @@ export function renderPortfolioBreakdown(
       .text((t) => formatCurrency(t.amount))
       .attr("text-anchor", "end")
       .attr("dominant-baseline", "middle")
-      .style("fill", "#333")
+      .classed("svg-text-grey-dark", true)
       .attr("x", textGroupZero + textGroupWidth)
       .attr("y", (t) => y(t.id) + BAR_HEIGHT / 2);
 

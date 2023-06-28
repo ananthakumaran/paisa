@@ -130,7 +130,7 @@ export function renderFlow(graph: Graph) {
 
       return "middle";
     })
-    .attr("fill", "#4a4a4a")
+    .classed("svg-text-grey-dark", true)
     .text(
       (d: any) =>
         `${iconify(restName(d.name), { group: firstName(d.name) })} ${formatCurrencyCrude(d.value)}`

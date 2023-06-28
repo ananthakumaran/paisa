@@ -35,7 +35,9 @@
   </div>
 </div>
 
-<style>
+<style lang="scss">
+  @import "bulma/sass/utilities/_all.sass";
+
   span.progress-percent {
     position: absolute;
     top: 0;
@@ -46,6 +48,6 @@
 
   span.progress-percent.less-than-10 {
     margin-left: 5px;
-    color: #0a0a0a;
+    color: $black-ter;
   }
 </style>

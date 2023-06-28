@@ -38,53 +38,97 @@ body {
 }
 
 .is-bordered-bottom {
-  border-bottom: 1px solid hsl(0deg, 0%, 86%);
+  border-bottom: 1px solid $grey-lighter;
 }
 
 .is-bordered-top {
-  border-top: 1px solid hsl(0deg, 0%, 86%);
+  border-top: 1px solid $grey-lighter;
 }
 
 .is-bordered-right {
-  border-right: 1px solid hsl(0deg, 0%, 86%);
+  border-right: 1px solid $grey-lighter;
 }
 
 .is-bordered-left {
-  border-left: 1px solid hsl(0deg, 0%, 86%);
+  border-left: 1px solid $grey-lighter;
 }
 
 svg text {
   font-family: $family-sans-serif;
 }
 
+.svg-text-grey-lighter {
+  fill: $grey-lighter;
+}
+
+.svg-text-grey-light {
+  fill: $grey-light;
+}
+
+.svg-text-grey {
+  fill: $grey;
+}
+
+.svg-text-grey-darker {
+  fill: $grey-darker;
+}
+
+.svg-text-grey-dark {
+  fill: $grey-dark;
+}
+
+.svg-grey-light {
+  stroke: $grey-light;
+}
+
+.svg-grey-lighter {
+  stroke: $grey-lighter;
+}
+
+.svg-grey-lightest {
+  stroke: $grey-lightest;
+}
+
+.svg-grey {
+  stroke: $grey;
+}
+
+.svg-grey-dark {
+  stroke: $grey-dark;
+}
+
+.svg-grey-lighter {
+  stroke: $grey-lighter;
+}
+
 .axis {
   font-family: $family-sans-serif;
 
   &.dark text {
-    fill: #666;
+    fill: $grey;
     font-size: 12px;
   }
 
   text {
     font-size: 10px;
-    fill: #aaa;
+    fill: $grey-light;
   }
 
   path.domain,
   line {
     fill: none;
-    stroke: #ccc;
+    stroke: $grey-lighter;
     shape-rendering: crispEdges;
   }
 
   .tick line {
-    stroke: #dedede;
+    stroke: $white-ter;
     shape-rendering: crispEdges;
   }
 
   &.y {
     line {
-      stroke: #f5f5f5;
+      stroke: $white-bis;
     }
 
     path.domain {
@@ -109,8 +153,13 @@ svg text {
   margin-bottom: 5px;
   text-transform: uppercase;
   font-weight: normal;
-  color: #4a4a4a;
-  fill: #4a4a4a;
+  color: $grey;
+  fill: $grey;
+
+  &.selected {
+    fill: $grey-darker;
+    font-weight: bold;
+  }
 }
 
 #d3-investment-timeline .legendOrdinal .label,
@@ -160,7 +209,7 @@ svg text {
 
 .adjustable-input {
   border: none;
-  border-bottom: 1px solid #ccc;
+  border-bottom: 1px solid $grey-light;
   box-shadow: none;
   width: 80px;
   font-size: 1em !important;
@@ -182,7 +231,7 @@ svg text {
 }
 
 .d3-calendar .month-header {
-  background: #f5f5f5;
+  background: $white-bis;
   margin-bottom: -2px;
   font-weight: bold;
   padding-top: 3px;
@@ -196,11 +245,11 @@ svg text {
   flex-wrap: wrap;
   justify-content: space-around;
   padding: 0;
-  color: #4a4a4a;
+  color: $grey-dark;
 }
 
 .d3-calendar .weekdays div {
-  background: #f5f5f5;
+  background: $white-bis;
   display: flex;
   justify-content: center;
   padding: 5px;

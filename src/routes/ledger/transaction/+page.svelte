@@ -92,8 +92,10 @@
 </section>
 
 <style lang="scss">
+  @import "bulma/sass/utilities/_all.sass";
+
   .transaction {
-    border-bottom: 1px solid #ccc;
+    border-bottom: 1px solid $grey-lighter;
     padding-bottom: 1px;
   }
 

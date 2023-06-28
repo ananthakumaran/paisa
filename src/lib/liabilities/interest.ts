@@ -117,21 +117,21 @@ export function renderOverview(gains: Interest[]) {
     ]);
 
   g.append("line")
-    .attr("stroke", "#ddd")
+    .classed("svg-grey-lighter", true)
     .attr("x1", aprWidth + aprTextWidth + aprMargin / 2)
     .attr("y1", 0)
     .attr("x2", aprWidth + aprTextWidth + aprMargin / 2)
     .attr("y2", height);
 
   g.append("line")
-    .attr("stroke", "#ddd")
+    .classed("svg-grey-lighter", true)
     .attr("x1", 0)
     .attr("y1", height)
     .attr("x2", width)
     .attr("y2", height);
 
   g.append("text")
-    .attr("fill", "#4a4a4a")
+    .classed("svg-text-grey", true)
     .text("APR")
     .attr("text-anchor", "middle")
     .attr("x", aprWidth / 2)
@@ -216,7 +216,7 @@ export function renderOverview(gains: Interest[]) {
 
   textGroup
     .append("line")
-    .attr("stroke", "#ddd")
+    .classed("svg-grey-lighter", true)
     .attr("x1", 0)
     .attr("y1", (g) => y(restName(g.account)))
     .attr("x2", width)

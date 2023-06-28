@@ -1,7 +1,8 @@
 <script lang="ts">
+  import dayjs from "dayjs";
   import { onMount } from "svelte";
   import _ from "lodash";
-  import { ajax, type Posting } from "$lib/utils";
+  import { ajax, formatCurrency, restName, type Posting } from "$lib/utils";
   import {
     renderMonthlyExpensesTimeline,
     renderCurrentExpensesBreakdown,
@@ -10,6 +11,7 @@
   } from "$lib/expense/monthly";
   import { dateMin, month } from "../../../store";
   import { writable } from "svelte/store";
+  import { iconify } from "$lib/icon";
 
   let groups = writable([]);
   let z: d3.ScaleOrdinal<string, string, never>,
@@ -19,6 +21,16 @@
     grouped_incomes: Record<string, Posting[]>,
     grouped_investments: Record<string, Posting[]>,
     grouped_taxes: Record<string, Posting[]>;
+
+  let current_month_expenses: Posting[] = [];
+
+  $: {
+    current_month_expenses = _.chain((grouped_expenses && grouped_expenses[$month]) || [])
+      .filter((e) => _.includes($groups, restName(e.account)))
+      .sortBy((e) => e.date)
+      .reverse()
+      .value();
+  }
 
   $: if (grouped_expenses) {
     renderCalendar($month, grouped_expenses[$month], z, $groups);
@@ -61,13 +73,13 @@
           <div class="column is-full">
             <div class="px-3">
               <nav class="level">
-                <div class="level-item has-text-centered">
+                <div class="level-item is-narrow has-text-centered">
                   <div>
                     <p class="heading is-flex is-justify-content-space-between">Income</p>
                     <p class="d3-current-month-income title" />
                   </div>
                 </div>
-                <div class="level-item has-text-centered">
+                <div class="level-item is-narrow has-text-centered">
                   <div>
                     <p class="heading is-flex is-justify-content-space-between">
                       <span>Tax</span><span
@@ -84,7 +96,7 @@
           <div class="column is-full">
             <div class="p-3">
               <nav class="level">
-                <div class="level-item has-text-centered">
+                <div class="level-item is-narrow has-text-centered">
                   <div>
                     <p class="heading is-flex is-justify-content-space-between">
                       <span>Net Investment</span><span
@@ -95,7 +107,7 @@
                     <p class="d3-current-month-investment title" />
                   </div>
                 </div>
-                <div class="level-item has-text-centered">
+                <div class="level-item is-narrow has-text-centered">
                   <div>
                     <p class="heading is-flex is-justify-content-space-between">
                       <span>Expenses</span><span
@@ -109,44 +121,66 @@
               </nav>
             </div>
           </div>
-        </div>
-      </div>
-      <div class="column is-3">
-        <div class="px-3">
-          <div id="d3-current-month-expense-calendar" class="d3-calendar">
-            <div class="weekdays">
-              <div>Sun</div>
-              <div>Mon</div>
-              <div>Tue</div>
-              <div>Wed</div>
-              <div>Thu</div>
-              <div>Fri</div>
-              <div>Sat</div>
-            </div>
-            <div class="days" />
+          <div class="column is-full">
+            {#each current_month_expenses as expense}
+              <div class="box p-2 m-2">
+                <div class="is-flex is-flex-wrap-wrap is-justify-content-space-between">
+                  <div class="has-text-grey is-size-7">{expense.payee}</div>
+                  <div class="has-text-grey">
+                    <span class="icon is-small has-text-grey-light">
+                      <i class="fas fa-calendar" />
+                    </span>
+                    {expense.date.format("DD")}
+                  </div>
+                </div>
+                <hr class="m-1" />
+                <div class="is-flex is-flex-wrap-wrap is-justify-content-space-between">
+                  <div class="has-text-grey">
+                    {iconify(restName(expense.account), { group: "Expenses" })}
+                  </div>
+                  <div class="has-text-weight-bold is-size-6">
+                    {formatCurrency(expense.amount)}
+                  </div>
+                </div>
+              </div>
+            {/each}
           </div>
         </div>
       </div>
-      <div class="column is-full-tablet is-half-fullhd">
-        <div class="px-3">
-          <svg id="d3-current-month-breakdown" width="100%" />
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="section tab-expense">
-  <div class="container is-fluid">
-    <div class="columns">
-      <div class="column is-12">
-        <svg id="d3-monthly-expense-timeline" width="100%" height="500" />
-      </div>
-    </div>
-    <div class="columns">
-      <div class="column is-12 has-text-centered">
-        <div>
-          <p class="heading">Monthly Expenses</p>
+      <div class="column is-9">
+        <div class="columns is-flex-wrap-wrap">
+          <div class="column is-4">
+            <div class="px-3">
+              <div id="d3-current-month-expense-calendar" class="d3-calendar">
+                <div class="month-header has-text-centered">
+                  {dayjs($month, "YYYY-MM").format("MMMM")}
+                </div>
+                <div class="weekdays">
+                  <div>Sun</div>
+                  <div>Mon</div>
+                  <div>Tue</div>
+                  <div>Wed</div>
+                  <div>Thu</div>
+                  <div>Fri</div>
+                  <div>Sat</div>
+                </div>
+                <div class="days" />
+              </div>
+            </div>
+          </div>
+          <div class="column is-8">
+            <div class="px-3">
+              <svg id="d3-current-month-breakdown" width="100%" />
+            </div>
+          </div>
+          <div class="column is-full">
+            <svg id="d3-monthly-expense-timeline" width="100%" height="500" />
+          </div>
+          <div class="column is-full has-text-centered">
+            <div>
+              <p class="heading">Monthly Expenses</p>
+            </div>
+          </div>
         </div>
       </div>
     </div>

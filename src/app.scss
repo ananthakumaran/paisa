@@ -181,6 +181,13 @@ svg text {
   cursor: zoom-in;
 }
 
+.d3-calendar .month-header {
+  background: #f5f5f5;
+  margin-bottom: -2px;
+  font-weight: bold;
+  padding-top: 3px;
+}
+
 .d3-calendar .days,
 .d3-calendar .months,
 .d3-calendar .weekdays {

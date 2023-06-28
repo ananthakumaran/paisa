@@ -61,13 +61,13 @@
           <div class="column is-full">
             <div class="px-3">
               <nav class="level">
-                <div class="level-item has-text-centered">
+                <div class="level-item is-narrow has-text-centered">
                   <div>
                     <p class="heading is-flex is-justify-content-space-between">Income</p>
                     <p class="d3-current-year-income title" />
                   </div>
                 </div>
-                <div class="level-item has-text-centered">
+                <div class="level-item is-narrow has-text-centered">
                   <div>
                     <p class="heading is-flex is-justify-content-space-between">
                       <span>Tax</span><span
@@ -84,7 +84,7 @@
           <div class="column is-full">
             <div class="p-3">
               <nav class="level">
-                <div class="level-item has-text-centered">
+                <div class="level-item is-narrow has-text-centered">
                   <div>
                     <p class="heading is-flex is-justify-content-space-between">
                       <span>Net Investment</span><span
@@ -95,7 +95,7 @@
                     <p class="d3-current-year-investment title" />
                   </div>
                 </div>
-                <div class="level-item has-text-centered">
+                <div class="level-item is-narrow has-text-centered">
                   <div>
                     <p class="heading is-flex is-justify-content-space-between">
                       <span>Expenses</span><span

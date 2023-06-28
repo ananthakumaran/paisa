@@ -24,12 +24,16 @@ might be classified as Short Term or Long Term.
 ### Short Term Tax
 
 This would be a percentage of the Taxable Gain. The percentage varies
-based on the asset class. There are cases where the gain would be
-added to taxable income and charged **Slab** rate. In those cases,
-paisa uses 30% slab rate, users are requested to calculate the correct
-value from Taxable Gain and their slab rate.
+based on the asset class.
 
 ### Long Term Tax
 
 This would be a percentage of the Taxable Gain. The percentage varies
 based on the asset class.
+
+### Taxable at Slab Rate
+
+There are cases where the gain would be added to taxable income and
+charged **Slab** rate. Since the tax rate would depend on the person,
+the whole taxable amount is shown instead of the tax. You can multiply
+this with your slab rate to get the tax amount.

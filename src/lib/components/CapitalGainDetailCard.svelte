@@ -17,6 +17,7 @@
         <th class="has-text-right">Taxable Gain</th>
         <th class="has-text-right">Short Term Tax</th>
         <th class="has-text-right">Long Term Tax</th>
+        <th class="has-text-right">Taxable at Slab Rate</th>
       </tr>
     </thead>
     <tbody>
@@ -26,10 +27,11 @@
           <td class="has-text-right">{formatCurrency(pp.purchase.amount)}</td>
           <td>{pp.sell.date.format(DATE_FORMAT)}</td>
           <td class="has-text-right">{formatCurrency(-pp.sell.amount)}</td>
-          <td class="has-text-right has-text-weight-bold">{formatCurrency(pp.gain)}</td>
-          <td class="has-text-right has-text-weight-bold">{formatCurrency(pp.taxable_gain)}</td>
-          <td class="has-text-right has-text-weight-bold">{formatCurrency(pp.short_term_tax)}</td>
-          <td class="has-text-right has-text-weight-bold">{formatCurrency(pp.long_term_tax)}</td>
+          <td class="has-text-right has-text-weight-bold">{formatCurrency(pp.tax.gain)}</td>
+          <td class="has-text-right has-text-weight-bold">{formatCurrency(pp.tax.taxable)}</td>
+          <td class="has-text-right has-text-weight-bold">{formatCurrency(pp.tax.short_term)}</td>
+          <td class="has-text-right has-text-weight-bold">{formatCurrency(pp.tax.long_term)}</td>
+          <td class="has-text-right has-text-weight-bold">{formatCurrency(pp.tax.slab)}</td>
         </tr>
       {/each}
     </tbody>

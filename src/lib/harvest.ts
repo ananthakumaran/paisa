@@ -143,8 +143,11 @@ export function renderHarvestables(harvestables: Harvestable[]) {
   <th class='has-text-right'>Purchase Price</th>
   <th class='has-text-right'>Purchase Unit Price</th>
   <th class='has-text-right'>Current Price</th>
-  <th class='has-text-right'>Unrealized Gain</th>
-  <th class='has-text-right'>Taxable Unrealized Gain</th>
+  <th class='has-text-right'>Gain</th>
+  <th class='has-text-right'>Taxable Gain</th>
+  <th class='has-text-right'>Short Term Tax</th>
+  <th class='has-text-right'>Long Term Tax</th>
+  <th class='has-text-right'>Taxable at Slab Rate</th>
 </tr>
 `);
 
@@ -164,10 +167,11 @@ export function renderHarvestables(harvestables: Harvestable[]) {
   <td class='has-text-right'>${formatCurrency(breakdown.purchase_price)}</td>
   <td class='has-text-right'>${formatFloat(breakdown.purchase_unit_price)}</td>
   <td class='has-text-right'>${formatCurrency(breakdown.current_price)}</td>
-  <td class='has-text-right has-text-weight-bold'>${formatCurrency(breakdown.unrealized_gain)}</td>
-  <td class='has-text-right has-text-weight-bold'>${formatCurrency(
-    breakdown.taxable_unrealized_gain
-  )}</td>
+  <td class='has-text-right has-text-weight-bold'>${formatCurrency(breakdown.tax.gain)}</td>
+  <td class='has-text-right has-text-weight-bold'>${formatCurrency(breakdown.tax.taxable)}</td>
+  <td class='has-text-right has-text-weight-bold'>${formatCurrency(breakdown.tax.short_term)}</td>
+  <td class='has-text-right has-text-weight-bold'>${formatCurrency(breakdown.tax.long_term)}</td>
+  <td class='has-text-right has-text-weight-bold'>${formatCurrency(breakdown.tax.slab)}</td>
 </tr>
 `;
     });
@@ -183,12 +187,12 @@ function unitsRequiredFromGain(
   const available = _.clone(harvestable.harvest_breakdown);
   while (taxableGain > gain && available.length > 0) {
     const breakdown = available.shift();
-    if (breakdown.taxable_unrealized_gain < taxableGain - gain) {
-      gain += breakdown.taxable_unrealized_gain;
+    if (breakdown.tax.taxable < taxableGain - gain) {
+      gain += breakdown.tax.taxable;
       units += breakdown.units;
       amount += breakdown.current_price;
     } else {
-      const u = ((taxableGain - gain) * breakdown.units) / breakdown.taxable_unrealized_gain;
+      const u = ((taxableGain - gain) * breakdown.units) / breakdown.tax.taxable;
       units += u;
       amount += u * harvestable.current_unit_price;
       gain = taxableGain;
@@ -208,14 +212,14 @@ function unitsRequiredFromAmount(
   while (expectedAmount > amount && available.length > 0) {
     const breakdown = available.shift();
     if (breakdown.current_price < expectedAmount - amount) {
-      gain += breakdown.taxable_unrealized_gain;
+      gain += breakdown.tax.taxable;
       units += breakdown.units;
       amount += breakdown.current_price;
     } else {
       const u = (expectedAmount - amount) / harvestable.current_unit_price;
       units += u;
       amount = expectedAmount;
-      gain += u * (breakdown.taxable_unrealized_gain / breakdown.units);
+      gain += u * (breakdown.tax.taxable / breakdown.units);
     }
   }
   return [units, amount, gain];

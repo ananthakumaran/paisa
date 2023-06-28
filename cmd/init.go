@@ -95,12 +95,12 @@ commodities:
     type: mutualfund
     code: 120716
     harvest: 365
-    tax_category: equity
+    tax_category: equity65
   - name: PPFAS
     type: mutualfund
     code: 122639
     harvest: 365
-    tax_category: equity
+    tax_category: equity65
   - name: ABCBF
     type: mutualfund
     code: 119533

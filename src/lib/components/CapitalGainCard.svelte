@@ -11,10 +11,11 @@
 
   const total = {
     withdrawn: _.sumBy(fyGains, (fy) => fy.sell_price),
-    gain: _.sumBy(fyGains, (fy) => fy.gain),
-    taxableGain: _.sumBy(fyGains, (fy) => fy.taxable_gain),
-    shortTermTax: _.sumBy(fyGains, (fy) => fy.short_term_tax),
-    longTermTax: _.sumBy(fyGains, (fy) => fy.long_term_tax)
+    gain: _.sumBy(fyGains, (fy) => fy.tax.gain),
+    taxableGain: _.sumBy(fyGains, (fy) => fy.tax.taxable),
+    shortTermTax: _.sumBy(fyGains, (fy) => fy.tax.short_term),
+    longTermTax: _.sumBy(fyGains, (fy) => fy.tax.long_term),
+    slab: _.sumBy(fyGains, (fy) => fy.tax.slab)
   };
 </script>
 
@@ -60,6 +61,12 @@
                     >{formatCurrency(total["longTermTax"])}</td
                   >
                 </tr>
+                <tr>
+                  <td>Taxable at Slab Rate</td>
+                  <td class="has-text-right has-text-weight-bold"
+                    >{formatCurrency(total["slab"])}</td
+                  >
+                </tr>
               </tbody>
             </table>
           </div>
@@ -79,6 +86,7 @@
                   <th class="has-text-right">Taxable Gain</th>
                   <th class="has-text-right">Short Term Tax</th>
                   <th class="has-text-right">Long Term Tax</th>
+                  <th class="has-text-right">Taxable at Slat Rate</th>
                 </tr>
               </thead>
               <tbody>
@@ -113,20 +121,23 @@
                         <td class="has-text-right">{formatCurrency(fy.sell_price / fy.units, 4)}</td
                         >
                         <td class="has-text-right has-text-weight-bold"
-                          >{formatCurrency(fy.gain)}</td
+                          >{formatCurrency(fy.tax.gain)}</td
                         >
                         <td class="has-text-right has-text-weight-bold"
-                          >{formatCurrency(fy.taxable_gain)}</td
+                          >{formatCurrency(fy.tax.taxable)}</td
                         >
                         <td class="has-text-right has-text-weight-bold"
-                          >{formatCurrency(fy.short_term_tax)}</td
+                          >{formatCurrency(fy.tax.short_term)}</td
                         >
                         <td class="has-text-right has-text-weight-bold"
-                          >{formatCurrency(fy.long_term_tax)}</td
+                          >{formatCurrency(fy.tax.long_term)}</td
+                        >
+                        <td class="has-text-right has-text-weight-bold"
+                          >{formatCurrency(fy.tax.slab)}</td
                         >
                       </tr>
                       <tr slot="content">
-                        <td colspan="12" class="p-0">
+                        <td colspan="13" class="p-0">
                           <CapitalGainDetailCard fyCapitalGain={fy} />
                         </td>
                       </tr>

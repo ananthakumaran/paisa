@@ -9,8 +9,11 @@ import (
 type TaxCategoryType string
 
 const (
-	Debt   TaxCategoryType = "debt"
-	Equity TaxCategoryType = "equity"
+	Debt           TaxCategoryType = "debt"
+	Equity         TaxCategoryType = "equity"
+	Equity65       TaxCategoryType = "equity65"
+	Equity35       TaxCategoryType = "equity35"
+	UnlistedEquity TaxCategoryType = "unlisted_equity"
 )
 
 type Commodity struct {

@@ -149,20 +149,22 @@ export interface IncomeYearlyCard {
   net_income: number;
 }
 
+export interface Tax {
+  gain: number;
+  taxable: number;
+  short_term: number;
+  long_term: number;
+  slab: number;
+}
+
 export interface PostingPair {
   purchase: Posting;
   sell: Posting;
-  gain: number;
-  taxable_gain: number;
-  short_term_tax: number;
-  long_term_tax: number;
+  tax: Tax;
 }
 
 export interface FYCapitalGain {
-  gain: number;
-  taxable_gain: number;
-  short_term_tax: number;
-  long_term_tax: number;
+  tax: Tax;
   units: number;
   purchase_price: number;
   sell_price: number;
@@ -174,8 +176,7 @@ export interface HarvestBreakdown {
   purchase_price: number;
   purchase_unit_price: number;
   current_price: number;
-  unrealized_gain: number;
-  taxable_unrealized_gain: number;
+  tax: Tax;
 }
 
 export interface Harvestable {
@@ -186,7 +187,6 @@ export interface Harvestable {
   unrealized_gain: number;
   taxable_unrealized_gain: number;
   current_unit_price: number;
-  grandfather_unit_price: number;
   current_unit_date: string;
   harvest_breakdown: HarvestBreakdown[];
 }

@@ -6,7 +6,7 @@ import (
 	"github.com/ananthakumaran/paisa/internal/model/posting"
 	"github.com/ananthakumaran/paisa/internal/model/price"
 	"github.com/ananthakumaran/paisa/internal/query"
-	"github.com/ananthakumaran/paisa/internal/tax"
+	"github.com/ananthakumaran/paisa/internal/taxation"
 	"github.com/ananthakumaran/paisa/internal/utils"
 	"github.com/gin-gonic/gin"
 	"github.com/samber/lo"
@@ -14,22 +14,16 @@ import (
 )
 
 type PostingPair struct {
-	Purchase     posting.Posting `json:"purchase"`
-	Sell         posting.Posting `json:"sell"`
-	Gain         float64         `json:"gain"`
-	TaxableGain  float64         `json:"taxable_gain"`
-	ShortTermTax float64         `json:"short_term_tax"`
-	LongTermTax  float64         `json:"long_term_tax"`
+	Purchase posting.Posting `json:"purchase"`
+	Sell     posting.Posting `json:"sell"`
+	Tax      taxation.Tax    `json:"tax"`
 }
 
 type FYCapitalGain struct {
-	Gain          float64       `json:"gain"`
-	TaxableGain   float64       `json:"taxable_gain"`
-	ShortTermTax  float64       `json:"short_term_tax"`
-	LongTermTax   float64       `json:"long_term_tax"`
 	Units         float64       `json:"units"`
 	PurchasePrice float64       `json:"purchase_price"`
 	SellPrice     float64       `json:"sell_price"`
+	Tax           taxation.Tax  `json:"tax"`
 	PostingPairs  []PostingPair `json:"posting_pairs"`
 }
 
@@ -41,8 +35,8 @@ type CapitalGain struct {
 
 func GetCapitalGains(db *gorm.DB) gin.H {
 	commodities := lo.Filter(c.All(), func(c c.Commodity, _ int) bool {
-		return c.Type == price.MutualFund &&
-			(c.TaxCategory == commodity.Debt || c.TaxCategory == commodity.Equity)
+		return (c.Type == price.MutualFund || c.Type == price.Stock) &&
+			(c.TaxCategory == commodity.Debt || c.TaxCategory == commodity.Equity || c.TaxCategory == commodity.Equity65 || c.TaxCategory == commodity.Equity35 || c.TaxCategory == commodity.UnlistedEquity)
 	})
 	postings := query.Init(db).Like("Assets:%").Commodities(commodities).All()
 	byAccount := lo.GroupBy(postings, func(p posting.Posting) string { return p.Account })
@@ -60,10 +54,7 @@ func computeCapitalGains(db *gorm.DB, account string, commodity c.Commodity, pos
 			available = append(available, p)
 		} else {
 			quantity := -p.Quantity
-			gain := 0.0
-			taxableGain := 0.0
-			shortTermTax := 0.0
-			longTermTax := 0.0
+			totalTax := taxation.Tax{}
 			purchasePrice := 0.0
 			postingPairs := make([]PostingPair, 0)
 			for quantity > 0 && len(available) > 0 {
@@ -82,21 +73,15 @@ func computeCapitalGains(db *gorm.DB, account string, commodity c.Commodity, pos
 				}
 
 				purchasePrice += q * first.Price()
-				g, t, s, l := tax.Calculate(db, q, commodity, first.Price(), first.Date, p.Price(), p.Date)
-				gain += g
-				taxableGain += t
-				shortTermTax += s
-				longTermTax += l
-				postingPair := PostingPair{Purchase: first.WithQuantity(q), Sell: p.WithQuantity(-q), Gain: g, TaxableGain: t, ShortTermTax: s, LongTermTax: l}
+				tax := taxation.Calculate(db, q, commodity, first.Price(), first.Date, p.Price(), p.Date)
+				totalTax = taxation.Add(totalTax, tax)
+				postingPair := PostingPair{Purchase: first.WithQuantity(q), Sell: p.WithQuantity(-q), Tax: tax}
 				postingPairs = append(postingPairs, postingPair)
 
 			}
 			fy := utils.FY(p.Date)
 			fyCapitalGain := capitalGain.FY[fy]
-			fyCapitalGain.Gain += gain
-			fyCapitalGain.TaxableGain += taxableGain
-			fyCapitalGain.LongTermTax += longTermTax
-			fyCapitalGain.ShortTermTax += shortTermTax
+			fyCapitalGain.Tax = taxation.Add(fyCapitalGain.Tax, totalTax)
 			fyCapitalGain.Units += -p.Quantity
 			fyCapitalGain.PurchasePrice += purchasePrice
 			fyCapitalGain.SellPrice += -p.Amount

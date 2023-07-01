@@ -28,21 +28,21 @@
 
 <section class="section tab-schedule_al">
   <div class="container is-fluid">
-    <div class="container is-fluid">
-      {#if selectedScheduleAl}
-        <div class="columns">
-          <div class="column is-12">
-            <p class="subtitle is-12">
-              Schedule AL as on <span class="has-text-weight-bold"
-                >{selectedScheduleAl.date.format("DD MMM YYYY")}</span
-              >
-            </p>
-          </div>
-        </div>
-      {/if}
-
+    {#if selectedScheduleAl}
       <div class="columns">
         <div class="column is-12">
+          <p class="subtitle is-12">
+            Schedule AL as on <span class="has-text-weight-bold"
+              >{selectedScheduleAl.date.format("DD MMM YYYY")}</span
+            >
+          </p>
+        </div>
+      </div>
+    {/if}
+
+    <div class="columns">
+      <div class="column is-12">
+        <div class="box px-3" style="max-width: 1024px;">
           <table class="table is-narrow is-fullwidth is-hoverable">
             <thead>
               <tr>

@@ -343,7 +343,11 @@ export function renderPerAccountOverview(interests: Interest[]) {
 
   const columns = divs.enter().append("div").attr("class", "columns");
 
-  const leftColumn = columns.append("div").attr("class", "column is-4 is-3-desktop is-2-fullhd");
+  const leftColumn = columns
+    .append("div")
+    .attr("class", "column is-4 is-3-desktop is-2-fullhd")
+    .append("div")
+    .attr("class", "box px-3 py-5");
   leftColumn
     .append("table")
     .attr("class", "table is-narrow is-fullwidth is-size-7")
@@ -352,6 +356,8 @@ export function renderPerAccountOverview(interests: Interest[]) {
 
   const rightColumn = columns.append("div").attr("class", "column");
   rightColumn
+    .append("div")
+    .attr("class", "box")
     .append("svg")
     .attr("width", "100%")
     .attr("height", "150")

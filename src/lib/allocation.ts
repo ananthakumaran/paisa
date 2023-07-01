@@ -73,7 +73,7 @@ export function renderAllocationTarget(
   const x1 = d3.scaleLinear().range([0, targetWidth]).domain([0, maxX]);
 
   g.append("line")
-    .classed("svg-grey-lighter", true)
+    .classed("svg-grey-lightest", true)
     .attr("x1", 0)
     .attr("y1", height)
     .attr("x2", width)
@@ -123,7 +123,7 @@ export function renderAllocationTarget(
 
   textGroup
     .append("line")
-    .classed("svg-grey-lighter", true)
+    .classed("svg-grey-lightest", true)
     .attr("x1", 0)
     .attr("y1", (t) => y(t.name))
     .attr("x2", width)

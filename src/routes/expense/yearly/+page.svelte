@@ -59,7 +59,7 @@
       <div class="column is-3">
         <div class="columns is-flex-wrap-wrap">
           <div class="column is-full">
-            <div class="px-3">
+            <div>
               <nav class="level">
                 <div class="level-item is-narrow has-text-centered">
                   <div>
@@ -82,7 +82,7 @@
             </div>
           </div>
           <div class="column is-full">
-            <div class="p-3">
+            <div>
               <nav class="level">
                 <div class="level-item is-narrow has-text-centered">
                   <div>
@@ -112,29 +112,22 @@
         </div>
       </div>
       <div class="column is-3">
-        <div class="px-3">
+        <div class="px-3 box">
           <div id="d3-current-year-expense-calendar" class="d3-calendar">
             <div class="months" />
           </div>
         </div>
       </div>
       <div class="column is-full-tablet is-half-fullhd">
-        <div class="px-3">
+        <div class="px-3 box" style="height: 100%">
           <svg id="d3-current-year-breakdown" width="100%" />
         </div>
       </div>
-    </div>
-  </div>
-</section>
-
-<section class="section tab-expense">
-  <div class="container is-fluid">
-    <div class="columns">
       <div class="column is-12">
-        <svg id="d3-yearly-expense-timeline" width="100%" height="500" />
+        <div class="box">
+          <svg id="d3-yearly-expense-timeline" width="100%" height="500" />
+        </div>
       </div>
-    </div>
-    <div class="columns">
       <div class="column is-12 has-text-centered">
         <div>
           <p class="heading">Yearly Expenses</p>

@@ -22,7 +22,7 @@
       </div>
     </div>
     <div class="columns">
-      <div class="column is-12">
+      <div class="column is-12 box">
         <table class="table is-narrow is-fullwidth">
           <thead>
             <tr>

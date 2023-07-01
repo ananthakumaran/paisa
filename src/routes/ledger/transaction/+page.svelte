@@ -60,7 +60,7 @@
       </div>
     </div>
 
-    <div class="columns">
+    <div class="columns box">
       <VirtualList
         width="100%"
         height={window.innerHeight - 150}

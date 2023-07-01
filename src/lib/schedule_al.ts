@@ -15,7 +15,7 @@ export function renderBreakdowns(scheduleALEntries: ScheduleALEntry[]) {
        <td>${s.section.code}</td>
        <td>${s.section.section}</td>
        <td>${s.section.details}</td>
-       <td class='has-text-right'>${formatCurrency(s.amount)}</td>
+       <td class='has-text-right has-text-weight-bold'>${formatCurrency(s.amount)}</td>
       `;
     });
 }

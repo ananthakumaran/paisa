@@ -85,26 +85,37 @@
     </div>
     <div class="columns">
       <div class="column is-12 has-text-centered">
-        <div id="d3-portfolio-security-type-treemap" style="width: 100%; position: relative" />
-        <svg id="d3-portfolio-security-type" width="100%" />
+        <div class="box">
+          <div id="d3-portfolio-security-type-treemap" style="width: 100%; position: relative" />
+          <svg id="d3-portfolio-security-type" width="100%" />
+        </div>
       </div>
     </div>
     <div class="columns">
       <div class="column is-12 has-text-centered">
-        <div id="d3-portfolio-security-rating-treemap" style="width: 100%; position: relative" />
-        <svg id="d3-portfolio-security-rating" width="100%" />
+        <div class="box">
+          <div id="d3-portfolio-security-rating-treemap" style="width: 100%; position: relative" />
+          <svg id="d3-portfolio-security-rating" width="100%" />
+        </div>
       </div>
     </div>
     <div class="columns">
       <div class="column is-12 has-text-centered">
-        <div id="d3-portfolio-security-industry-treemap" style="width: 100%; position: relative" />
-        <svg id="d3-portfolio-security-industry" width="100%" />
+        <div class="box">
+          <div
+            id="d3-portfolio-security-industry-treemap"
+            style="width: 100%; position: relative"
+          />
+          <svg id="d3-portfolio-security-industry" width="100%" />
+        </div>
       </div>
     </div>
     <div class="columns">
       <div class="column is-12 has-text-centered">
-        <div id="d3-portfolio-treemap" style="width: 100%; position: relative" />
-        <svg id="d3-portfolio" width="100%" />
+        <div class="box">
+          <div id="d3-portfolio-treemap" style="width: 100%; position: relative" />
+          <svg id="d3-portfolio" width="100%" />
+        </div>
       </div>
     </div>
   </div>

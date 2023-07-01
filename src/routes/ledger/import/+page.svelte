@@ -136,103 +136,111 @@
   <div class="container is-fluid">
     <div class="columns">
       <div class="column is-5">
-        <div class="field mb-2">
-          <p class="control">
-            <Select
-              bind:value={selectedTemplate}
-              items={templates}
-              label="name"
-              itemId="id"
-              searchable={true}
-              clearable={false}
-              --font-size="14px"
-              --item-hover-bg="none"
-              --item-hover-color="hsl(0deg, 0%, 4%)"
-              --item-is-active-bg="none"
-              --item-is-active-color="hsl(229deg, 53%, 53%)"
-              on:change={(_e) => {
-                saveAsName = selectedTemplate.name;
-              }}
-            >
-              <div slot="selection" let:selection>
-                {selection.name}
-                <span class="tag is-small is-link is-light">{selection.template_type}</span>
-              </div>
-              <div slot="item" let:item>
-                <span class="name">{item.name}</span>
-                <span class="tag is-small is-link is-light">{item.template_type}</span>
-              </div>
-            </Select>
-          </p>
-        </div>
-
-        <div class="is-flex is-align-items-center">
-          <div class="field has-addons mb-0">
+        <div class="box px-3">
+          <div class="field mb-2">
             <p class="control">
-              <button
-                class="button is-small"
-                on:click={(_e) => save()}
-                disabled={$templateEditorState.hasUnsavedChanges == false}
+              <Select
+                bind:value={selectedTemplate}
+                items={templates}
+                label="name"
+                itemId="id"
+                searchable={true}
+                clearable={false}
+                --font-size="14px"
+                --item-hover-bg="none"
+                --item-hover-color="hsl(0deg, 0%, 4%)"
+                --item-is-active-bg="none"
+                --item-is-active-color="hsl(229deg, 53%, 53%)"
+                on:change={(_e) => {
+                  saveAsName = selectedTemplate.name;
+                }}
               >
-                <span class="icon is-small">
-                  <i class="fas fa-floppy-disk" />
-                </span>
-                <span>Save As</span>
-              </button>
-            </p>
-            <p class="control">
-              <input
-                style="width: 250px"
-                class="input is-small"
-                type="text"
-                bind:value={saveAsName}
-              />
+                <div slot="selection" let:selection>
+                  {selection.name}
+                  <span class="tag is-small is-link is-light">{selection.template_type}</span>
+                </div>
+                <div slot="item" let:item>
+                  <span class="name">{item.name}</span>
+                  <span class="tag is-small is-link is-light">{item.template_type}</span>
+                </div>
+              </Select>
             </p>
           </div>
 
-          <div class="field has-addons mb-0 ml-2">
-            <p class="control">
-              <button
-                class="button is-small is-danger"
-                on:click={(_e) => remove()}
-                disabled={$templateEditorState.hasUnsavedChanges == true ||
-                  selectedTemplate?.template_type == "builtin"}
-              >
-                <span class="icon is-small">
-                  <i class="fas fa-floppy-disk" />
-                </span>
-                <span>Delete</span>
-              </button>
-            </p>
-          </div>
-        </div>
+          <div class="is-flex is-align-items-center">
+            <div class="field has-addons mb-0">
+              <p class="control">
+                <button
+                  class="button is-small"
+                  on:click={(_e) => save()}
+                  disabled={$templateEditorState.hasUnsavedChanges == false}
+                >
+                  <span class="icon is-small">
+                    <i class="fas fa-floppy-disk" />
+                  </span>
+                  <span>Save As</span>
+                </button>
+              </p>
+              <p class="control">
+                <input
+                  style="width: 250px"
+                  class="input is-small"
+                  type="text"
+                  bind:value={saveAsName}
+                />
+              </p>
+            </div>
 
-        <div class="field has-addons" />
-        <div class="field">
-          <div class="control">
-            <div class="template-editor" bind:this={templateEditorDom} />
+            <div class="field has-addons mb-0 ml-2">
+              <p class="control">
+                <button
+                  class="button is-small is-danger"
+                  on:click={(_e) => remove()}
+                  disabled={$templateEditorState.hasUnsavedChanges == true ||
+                    selectedTemplate?.template_type == "builtin"}
+                >
+                  <span class="icon is-small">
+                    <i class="fas fa-floppy-disk" />
+                  </span>
+                  <span>Delete</span>
+                </button>
+              </p>
+            </div>
+          </div>
+
+          <div class="field has-addons" />
+        </div>
+        <div class="box py-0">
+          <div class="field">
+            <div class="control">
+              <div class="template-editor" bind:this={templateEditorDom} />
+            </div>
           </div>
         </div>
-        <div class="field">
-          <div class="control">
-            <button class="button is-small clipboard" on:click={copyToClipboard}>
-              <span class="icon is-small">
-                <i class="fas fa-copy" />
-              </span>
-            </button>
-            <div class="preview-editor" bind:this={previewEditorDom} />
+        <div class="box py-0">
+          <div class="field">
+            <div class="control">
+              <button class="button is-small clipboard" on:click={copyToClipboard}>
+                <span class="icon is-small">
+                  <i class="fas fa-copy" />
+                </span>
+              </button>
+              <div class="preview-editor" bind:this={previewEditorDom} />
+            </div>
           </div>
         </div>
       </div>
       <div class="column is-7">
-        <Dropzone
-          multiple={false}
-          inputElement={input}
-          accept=".csv,.txt,.xls,.xlsx"
-          on:drop={handleFilesSelect}
-        >
-          Drag 'n' drop CSV, TXT, XLS, XLSX file here or click to select
-        </Dropzone>
+        <div class="box px-3">
+          <Dropzone
+            multiple={false}
+            inputElement={input}
+            accept=".csv,.txt,.xls,.xlsx"
+            on:drop={handleFilesSelect}
+          >
+            Drag 'n' drop CSV, TXT, XLS, XLSX file here or click to select
+          </Dropzone>
+        </div>
         {#if !_.isEmpty(data)}
           <div class="table-wrapper">
             <table class="mt-2 table is-bordered is-size-7 is-narrow">
@@ -260,6 +268,8 @@
 </section>
 
 <style lang="scss">
+  @import "bulma/sass/utilities/_all.sass";
+
   .clipboard {
     float: right;
     position: absolute;

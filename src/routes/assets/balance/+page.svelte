@@ -31,7 +31,7 @@
 <section class="section tab-holding">
   <div class="container is-fluid">
     <div class="columns">
-      <div class="column is-12">
+      <div class="column is-12 box">
         <table class="table is-narrow is-fullwidth is-hoverable">
           <thead>
             <tr>
@@ -51,7 +51,7 @@
               {@const changeClass = calculateChangeClass(gain)}
               <tr>
                 <td style="max-width: 200px; overflow: hidden;"
-                  >{@html indent}{iconText(b.group)}
+                  >{@html indent}<span class="has-text-grey">{iconText(b.group)}</span>
                   {lastName(b.group)}</td
                 >
                 <td class="has-text-right"

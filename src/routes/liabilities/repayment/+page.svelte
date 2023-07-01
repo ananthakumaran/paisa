@@ -33,7 +33,7 @@
 <section class="section" class:is-hidden={isEmpty}>
   <div class="container is-fluid">
     <div class="columns">
-      <div class="column is-12">
+      <div class="column is-12 box">
         <svg id="d3-repayment-timeline" width="100%" height="500" />
       </div>
     </div>

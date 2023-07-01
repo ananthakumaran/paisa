@@ -106,7 +106,7 @@
 >
   <div class="container is-fluid">
     <div class="columns">
-      <div class="column is-12">
+      <div class="column is-12 box">
         <svg width="100%" height="500" bind:this={svg} />
       </div>
     </div>

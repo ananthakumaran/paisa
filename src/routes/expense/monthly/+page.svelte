@@ -71,7 +71,7 @@
       <div class="column is-3">
         <div class="columns is-flex-wrap-wrap">
           <div class="column is-full">
-            <div class="px-3">
+            <div>
               <nav class="level">
                 <div class="level-item is-narrow has-text-centered">
                   <div>
@@ -94,7 +94,7 @@
             </div>
           </div>
           <div class="column is-full">
-            <div class="p-3">
+            <div>
               <nav class="level">
                 <div class="level-item is-narrow has-text-centered">
                   <div>
@@ -123,7 +123,7 @@
           </div>
           <div class="column is-full">
             {#each current_month_expenses as expense}
-              <div class="box p-2 m-2">
+              <div class="box p-2 my-2 has-background-white">
                 <div class="is-flex is-flex-wrap-wrap is-justify-content-space-between">
                   <div class="has-text-grey is-size-7">{expense.payee}</div>
                   <div class="has-text-grey">
@@ -150,7 +150,7 @@
       <div class="column is-9">
         <div class="columns is-flex-wrap-wrap">
           <div class="column is-4">
-            <div class="px-3">
+            <div class="px-3 box">
               <div id="d3-current-month-expense-calendar" class="d3-calendar">
                 <div class="month-header has-text-centered">
                   {dayjs($month, "YYYY-MM").format("MMMM")}
@@ -169,12 +169,14 @@
             </div>
           </div>
           <div class="column is-8">
-            <div class="px-3">
+            <div class="px-3 box" style="height: 100%">
               <svg id="d3-current-month-breakdown" width="100%" />
             </div>
           </div>
           <div class="column is-full">
-            <svg id="d3-monthly-expense-timeline" width="100%" height="500" />
+            <div class="box">
+              <svg id="d3-monthly-expense-timeline" width="100%" height="400" />
+            </div>
           </div>
           <div class="column is-full has-text-centered">
             <div>

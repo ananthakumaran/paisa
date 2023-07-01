@@ -44,9 +44,9 @@
         </nav>
       </div>
     </div>
-    <div class="columns">
+    <div class="columns box">
       <div
-        class="column is-12 clusterize-scroll"
+        class="column is-12 clusterize-scroll px-3"
         id="d3-postings-container"
         style="max-height: calc(100vh - 200px); min-height: calc(100vh - 200px)"
       >

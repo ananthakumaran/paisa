@@ -48,7 +48,9 @@
   <div class="container is-fluid">
     <div class="columns">
       <div class="column is-12">
-        <svg id="d3-interest-overview" width="100%" />
+        <div class="box">
+          <svg id="d3-interest-overview" width="100%" />
+        </div>
       </div>
     </div>
     <div class="columns">

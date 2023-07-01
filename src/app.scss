@@ -4,6 +4,12 @@ $family-sans-serif: BlinkMacSystemFont, -apple-system, "Segoe UI", "Roboto", "Ox
   "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", "Helvetica", "Arial", sans-serif,
   "Font Awesome 6 Free Solid";
 
+$box-radius: 4px;
+$box-shadow: none;
+$box-padding: 1.25rem 0;
+
+$card-shadow: none;
+
 @import "@fortawesome/fontawesome-free/scss/fontawesome.scss";
 @import "@fortawesome/fontawesome-free/scss/regular.scss";
 @import "@fortawesome/fontawesome-free/scss/solid.scss";
@@ -22,6 +28,7 @@ $family-sans-serif: BlinkMacSystemFont, -apple-system, "Segoe UI", "Roboto", "Ox
 @import "bulma/bulma.sass";
 
 $switch-focus: none;
+/* $box-shadow: 0 0.5em 1em -0.125em rgba($scheme-invert, 0.1), 0 0px 0 1px rgba($scheme-invert, 0.02); */
 @import "bulma-switch/src/sass/index.sass";
 
 :focus {
@@ -231,7 +238,8 @@ svg text {
 }
 
 .d3-calendar .month-header {
-  background: $white-bis;
+  border-radius: $radius $radius 0 0;
+  background: $white-ter;
   margin-bottom: -2px;
   font-weight: bold;
   padding-top: 3px;
@@ -249,7 +257,7 @@ svg text {
 }
 
 .d3-calendar .weekdays div {
-  background: $white-bis;
+  background: $white-ter;
   display: flex;
   justify-content: center;
   padding: 5px;
@@ -285,6 +293,11 @@ svg text {
   &.is-active {
     font-weight: 600;
   }
+}
+
+.navbar {
+  background-color: $white-bis !important;
+  color: rgba(0, 0, 0, 0.7);
 }
 
 @include touch {

@@ -20,7 +20,9 @@
   <div class="container is-fluid">
     <div class="columns">
       <div class="column is-12">
-        <svg id="d3-investment-timeline" width="100%" height="500" />
+        <div class="box">
+          <svg id="d3-investment-timeline" width="100%" height="500" />
+        </div>
       </div>
     </div>
     <div class="columns">
@@ -36,7 +38,7 @@
   <div class="container is-fluid">
     <div class="columns is-flex-wrap-wrap">
       <div class="column is-full-tablet is-half-fullhd">
-        <div class="py-3">
+        <div class="box px-2">
           <svg id="d3-yearly-investment-timeline" width="100%" />
         </div>
         <div class="py-3 has-text-centered">

@@ -120,103 +120,107 @@
       </div>
     </div>
     <div class="columuns">
-      <div class="column is-12 px-0 pt-0 is-flex is-align-items-center">
-        <div class="field has-addons mb-0">
-          <p class="control">
-            <button
-              class="button is-small"
-              disabled={$editorState.hasUnsavedChanges == false}
-              on:click={(_e) => save()}
-            >
-              <span class="icon is-small">
-                <i class="fas fa-floppy-disk" />
-              </span>
-              <span>Save</span>
-            </button>
-          </p>
-          <p class="control">
-            <button
-              class="button is-small"
-              disabled={$editorState.undoDepth == 0}
-              on:click={(_e) => undo(editor)}
-            >
-              <span class="icon is-small">
-                <i class="fas fa-arrow-left" />
-              </span>
-              <span>Undo</span>
-            </button>
-          </p>
-          <p class="control">
-            <button
-              class="button is-small"
-              disabled={$editorState.redoDepth == 0}
-              on:click={(_e) => redo(editor)}
-            >
-              <span>Redo</span>
-              <span class="icon is-small">
-                <i class="fas fa-arrow-right" />
-              </span>
-            </button>
-          </p>
-          <p class="control">
-            <button class="button is-small" on:click={(_e) => pretty()}>
-              <span class="icon is-small">
-                <i class="fas fa-code" />
-              </span>
-              <span>Prettify</span>
-            </button>
-          </p>
-        </div>
-
-        {#if !_.isEmpty(selectedFile?.versions)}
-          <div class="field has-addons ml-2 mb-0">
+      <div class="column is-12 px-0 pt-0">
+        <div class="box px-3 is-flex is-align-items-center" style="width: 100%">
+          <div class="field has-addons mb-0">
             <p class="control">
               <button
                 class="button is-small"
-                disabled={!selectedVersion}
-                on:click={(_e) => revert(selectedVersion)}
+                disabled={$editorState.hasUnsavedChanges == false}
+                on:click={(_e) => save()}
               >
                 <span class="icon is-small">
-                  <i class="fas fa-clock-rotate-left" />
+                  <i class="fas fa-floppy-disk" />
                 </span>
-                <span>Revert</span>
+                <span>Save</span>
               </button>
             </p>
-
-            <div class="control">
-              <div class="select is-small">
-                <select bind:value={selectedVersion}>
-                  {#each selectedFile.versions as version}
-                    <option>{version}</option>
-                  {/each}
-                </select>
-              </div>
-            </div>
-
             <p class="control">
-              <button class="button is-small" on:click={(_e) => deleteBackups()}>
+              <button
+                class="button is-small"
+                disabled={$editorState.undoDepth == 0}
+                on:click={(_e) => undo(editor)}
+              >
                 <span class="icon is-small">
-                  <i class="fas fa-trash" />
+                  <i class="fas fa-arrow-left" />
+                </span>
+                <span>Undo</span>
+              </button>
+            </p>
+            <p class="control">
+              <button
+                class="button is-small"
+                disabled={$editorState.redoDepth == 0}
+                on:click={(_e) => redo(editor)}
+              >
+                <span>Redo</span>
+                <span class="icon is-small">
+                  <i class="fas fa-arrow-right" />
                 </span>
               </button>
             </p>
+            <p class="control">
+              <button class="button is-small" on:click={(_e) => pretty()}>
+                <span class="icon is-small">
+                  <i class="fas fa-code" />
+                </span>
+                <span>Prettify</span>
+              </button>
+            </p>
           </div>
-        {/if}
 
-        {#if $editorState.errors.length > 0}
-          <div class="control">
-            <a on:click={(_e) => moveToLine(editor, $editorState.errors[0].line_from)}
-              ><span class="ml-1 tag is-danger is-light"
-                >{$editorState.errors.length} error(s) found</span
-              ></a
-            >
-          </div>
-        {/if}
+          {#if !_.isEmpty(selectedFile?.versions)}
+            <div class="field has-addons ml-2 mb-0">
+              <p class="control">
+                <button
+                  class="button is-small"
+                  disabled={!selectedVersion}
+                  on:click={(_e) => revert(selectedVersion)}
+                >
+                  <span class="icon is-small">
+                    <i class="fas fa-clock-rotate-left" />
+                  </span>
+                  <span>Revert</span>
+                </button>
+              </p>
+
+              <div class="control">
+                <div class="select is-small">
+                  <select bind:value={selectedVersion}>
+                    {#each selectedFile.versions as version}
+                      <option>{version}</option>
+                    {/each}
+                  </select>
+                </div>
+              </div>
+
+              <p class="control">
+                <button class="button is-small" on:click={(_e) => deleteBackups()}>
+                  <span class="icon is-small">
+                    <i class="fas fa-trash" />
+                  </span>
+                </button>
+              </p>
+            </div>
+          {/if}
+
+          {#if $editorState.errors.length > 0}
+            <div class="control">
+              <a on:click={(_e) => moveToLine(editor, $editorState.errors[0].line_from)}
+                ><span class="ml-1 tag is-danger is-light"
+                  >{$editorState.errors.length} error(s) found</span
+                ></a
+              >
+            </div>
+          {/if}
+        </div>
       </div>
     </div>
     <div class="columns">
       <div class="column is-12">
-        <div class="editor" bind:this={editorDom} />
+        <div class="box py-0">
+          <div class="editor" bind:this={editorDom} />
+        </div>
       </div>
     </div>
   </div>

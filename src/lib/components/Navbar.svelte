@@ -97,7 +97,7 @@
   }
 </script>
 
-<nav class="navbar is-transparent is-light" aria-label="main navigation">
+<nav class="navbar is-transparent" aria-label="main navigation">
   <div class="navbar-brand">
     <span class="navbar-item is-size-4 has-text-weight-medium">₹ Paisa</span>
     <a

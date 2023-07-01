@@ -51,7 +51,9 @@
   <div class="container is-fluid">
     <div class="columns">
       <div class="column is-12">
-        <svg id="d3-income-timeline" width="100%" height="500" />
+        <div class="box">
+          <svg id="d3-income-timeline" width="100%" height="500" />
+        </div>
       </div>
     </div>
     <div class="columns">
@@ -67,17 +69,17 @@
   <div class="container is-fluid">
     <div class="columns">
       <div class="column is-one-third">
-        <div class="py-3">
+        <div class="box px-3">
           <svg id="d3-yearly-income-timeline" width="100%" />
         </div>
       </div>
       <div class="column is-one-third">
-        <div class="py-3">
+        <div class="box px-3">
           <svg id="d3-yearly-net_income-timeline" width="100%" />
         </div>
       </div>
       <div class="column is-one-third">
-        <div class="py-3">
+        <div class="box px-3">
           <svg id="d3-yearly-net_tax-timeline" width="100%" />
         </div>
       </div>

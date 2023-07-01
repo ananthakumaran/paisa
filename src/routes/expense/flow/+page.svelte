@@ -41,7 +41,7 @@
 <section class="section">
   <div class="container is-fluid">
     <div class="columns">
-      <div class="column is-12">
+      <div class="column is-12 box">
         <svg id="d3-expense-flow" height={window.innerHeight - 100} />
       </div>
     </div>

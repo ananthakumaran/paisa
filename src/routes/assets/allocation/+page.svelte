@@ -35,7 +35,7 @@
 <section class="section tab-allocation" style={showAllocation ? "" : "display: none"}>
   <div class="container is-fluid">
     <div class="columns">
-      <div class="column is-12 has-text-centered">
+      <div class="column is-12 has-text-centered box">
         <div id="d3-allocation-target-treemap" style="width: 100%; position: relative" />
         <svg id="d3-allocation-target" width="100%" />
       </div>
@@ -84,7 +84,7 @@
 <section class="section tab-allocation">
   <div class="container is-fluid">
     <div class="columns">
-      <div class="column is-12">
+      <div class="column is-12 box">
         <svg id="d3-allocation-timeline" width="100%" height="300" />
       </div>
     </div>

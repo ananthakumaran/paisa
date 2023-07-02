@@ -22,7 +22,7 @@ var pcache priceCache
 
 func loadPriceCache(db *gorm.DB) {
 	var prices []price.Price
-	result := db.Find(&prices)
+	result := db.Where("commodity_type != ?", price.Unknown).Find(&prices)
 	if result.Error != nil {
 		log.Fatal(result.Error)
 	}
@@ -44,9 +44,14 @@ func loadPriceCache(db *gorm.DB) {
 
 	for commodityName, postings := range lo.GroupBy(postings, func(p posting.Posting) string { return p.Commodity }) {
 		if !utils.IsCurrency(postings[0].Commodity) && pcache.pricesTree[commodityName] == nil {
+			result := db.Where("commodity_type = ? and commodity_name = ?", price.Unknown, commodityName).Find(&prices)
+			if result.Error != nil {
+				log.Fatal(result.Error)
+			}
+
 			pcache.pricesTree[commodityName] = btree.New(2)
-			for _, p := range postings {
-				pcache.pricesTree[commodityName].ReplaceOrInsert(price.Price{Date: p.Date, CommodityID: p.Commodity, CommodityName: p.Commodity, Value: p.Amount / p.Quantity})
+			for _, price := range prices {
+				pcache.pricesTree[price.CommodityName].ReplaceOrInsert(price)
 			}
 		}
 	}
@@ -86,13 +91,12 @@ func GetMarketPrice(db *gorm.DB, p posting.Posting, date time.Time) float64 {
 
 	pt := pcache.pricesTree[p.Commodity]
 	if pt != nil {
-
 		pc := utils.BTreeDescendFirstLessOrEqual(pt, price.Price{Date: date})
 		if pc.Value != 0 {
 			return p.Quantity * pc.Value
 		}
 	} else {
-		log.Info("Not found ", p)
+		log.Info("Price not found ", p)
 	}
 
 	return p.Amount

@@ -22,6 +22,7 @@ lint:
 	test -z $$(gofmt -l .)
 
 test:
+	go test ./...
 	npm run test
 
 windows:

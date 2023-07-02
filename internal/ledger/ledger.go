@@ -4,15 +4,21 @@ import (
 	"bytes"
 	"encoding/csv"
 	"regexp"
+	"strings"
 
 	"os/exec"
 	"strconv"
 	"time"
 
+	"github.com/google/btree"
 	log "github.com/sirupsen/logrus"
 
 	"encoding/json"
+
+	"github.com/ananthakumaran/paisa/internal/config"
 	"github.com/ananthakumaran/paisa/internal/model/posting"
+	"github.com/ananthakumaran/paisa/internal/model/price"
+	"github.com/ananthakumaran/paisa/internal/utils"
 	"github.com/spf13/viper"
 )
 
@@ -25,7 +31,8 @@ type LedgerFileError struct {
 
 type Ledger interface {
 	ValidateFile(journalPath string) ([]LedgerFileError, error)
-	Parse(journalPath string) ([]*posting.Posting, error)
+	Parse(journalPath string, prices []price.Price) ([]*posting.Posting, error)
+	Prices(jornalPath string) ([]price.Price, error)
 }
 
 type LedgerCLI struct{}
@@ -66,7 +73,7 @@ func (LedgerCLI) ValidateFile(journalPath string) ([]LedgerFileError, error) {
 	return errors, err
 }
 
-func (LedgerCLI) Parse(journalPath string) ([]*posting.Posting, error) {
+func (LedgerCLI) Parse(journalPath string, _prices []price.Price) ([]*posting.Posting, error) {
 	var postings []*posting.Posting
 
 	_, err := exec.LookPath("ledger")
@@ -74,7 +81,7 @@ func (LedgerCLI) Parse(journalPath string) ([]*posting.Posting, error) {
 		log.Fatal(err)
 	}
 
-	command := exec.Command("ledger", "-f", journalPath, "csv", "--csv-format", "%(quoted(date)),%(quoted(payee)),%(quoted(display_account)),%(quoted(commodity(scrub(display_amount)))),%(quoted(quantity(scrub(display_amount)))),%(quoted(to_int(scrub(market(amount,date) * 100000)))),%(quoted(xact.id))\n")
+	command := exec.Command("ledger", "-f", journalPath, "csv", "--csv-format", "%(quoted(date)),%(quoted(payee)),%(quoted(display_account)),%(quoted(commodity(scrub(display_amount)))),%(quoted(quantity(scrub(display_amount)))),%(quoted(to_int(scrub(market(amount,date,'"+config.DefaultCurrency()+"') * 100000)))),%(quoted(xact.id))\n")
 	var output, error bytes.Buffer
 	command.Stdout = &output
 	command.Stderr = &error
@@ -117,6 +124,26 @@ func (LedgerCLI) Parse(journalPath string) ([]*posting.Posting, error) {
 	return postings, nil
 }
 
+func (LedgerCLI) Prices(journalPath string) ([]price.Price, error) {
+	var prices []price.Price
+
+	_, err := exec.LookPath("ledger")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	command := exec.Command("ledger", "-f", journalPath, "pricesdb")
+	var output, error bytes.Buffer
+	command.Stdout = &output
+	command.Stderr = &error
+	err = command.Run()
+	if err != nil {
+		return prices, err
+	}
+
+	return parseLedgerPrices(output.String(), config.DefaultCurrency())
+}
+
 func (HLedgerCLI) ValidateFile(journalPath string) ([]LedgerFileError, error) {
 	errors := []LedgerFileError{}
 	_, err := exec.LookPath("hledger")
@@ -157,7 +184,7 @@ func (HLedgerCLI) ValidateFile(journalPath string) ([]LedgerFileError, error) {
 	return errors, err
 }
 
-func (HLedgerCLI) Parse(journalPath string) ([]*posting.Posting, error) {
+func (HLedgerCLI) Parse(journalPath string, prices []price.Price) ([]*posting.Posting, error) {
 	var postings []*posting.Posting
 
 	_, err := exec.LookPath("hledger")
@@ -203,6 +230,15 @@ func (HLedgerCLI) Parse(journalPath string) ([]*posting.Posting, error) {
 		return nil, err
 	}
 
+	pricesTree := make(map[string]*btree.BTree)
+	for _, price := range prices {
+		if pricesTree[price.CommodityName] == nil {
+			pricesTree[price.CommodityName] = btree.New(2)
+		}
+
+		pricesTree[price.CommodityName].ReplaceOrInsert(price)
+	}
+
 	for _, t := range transactions {
 		date, err := time.Parse("2006-01-02", t.Date)
 		if err != nil {
@@ -212,9 +248,21 @@ func (HLedgerCLI) Parse(journalPath string) ([]*posting.Posting, error) {
 		for _, p := range t.Postings {
 			amount := p.Amount[0]
 			totalAmount := amount.Quantity.Value
-			if amount.Price.Contents.Quantity.Value != 0 {
-				totalAmount = amount.Price.Contents.Quantity.Value * amount.Quantity.Value
+
+			if amount.Commodity != config.DefaultCurrency() {
+				if amount.Price.Contents.Quantity.Value != 0 {
+					totalAmount = amount.Price.Contents.Quantity.Value * amount.Quantity.Value
+				} else {
+					pt := pricesTree[amount.Commodity]
+					if pt != nil {
+						pc := utils.BTreeDescendFirstLessOrEqual(pt, price.Price{Date: date})
+						if pc.Value != 0 {
+							totalAmount = amount.Quantity.Value * pc.Value
+						}
+					}
+				}
 			}
+
 			posting := posting.Posting{Date: date, Payee: t.Description, Account: p.Account, Commodity: amount.Commodity, Quantity: amount.Quantity.Value, Amount: totalAmount, TransactionID: strconv.FormatInt(t.ID, 10)}
 			postings = append(postings, &posting)
 
@@ -223,4 +271,91 @@ func (HLedgerCLI) Parse(journalPath string) ([]*posting.Posting, error) {
 	}
 
 	return postings, nil
+}
+
+func (HLedgerCLI) Prices(journalPath string) ([]price.Price, error) {
+	var prices []price.Price
+
+	_, err := exec.LookPath("hledger")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	command := exec.Command("hledger", "-f", journalPath, "--auto", "--infer-market-prices", "prices")
+	var output, error bytes.Buffer
+	command.Stdout = &output
+	command.Stderr = &error
+	err = command.Run()
+	if err != nil {
+		return prices, err
+	}
+
+	return parseHLedgerPrices(output.String(), config.DefaultCurrency())
+}
+
+func parseLedgerPrices(output string, defaultCurrency string) ([]price.Price, error) {
+	var prices []price.Price
+	re := regexp.MustCompile(`P (\d{4}\/\d{2}\/\d{2}) (?:\d{2}:\d{2}:\d{2}) ([^\s\d.-]+) (.+)\n`)
+	matches := re.FindAllStringSubmatch(output, -1)
+
+	for _, match := range matches {
+		target, value, err := parseAmount(match[3])
+		if err != nil {
+			return nil, err
+		}
+
+		if target != defaultCurrency {
+			continue
+		}
+
+		commodity := match[2]
+
+		date, err := time.Parse("2006/01/02", match[1])
+		if err != nil {
+			return nil, err
+		}
+
+		prices = append(prices, price.Price{Date: date, CommodityName: commodity, CommodityID: commodity, CommodityType: price.Unknown, Value: value})
+
+	}
+	return prices, nil
+}
+
+func parseHLedgerPrices(output string, defaultCurrency string) ([]price.Price, error) {
+	var prices []price.Price
+	re := regexp.MustCompile(`P (\d{4}-\d{2}-\d{2}) ([^\s\d.-]+) (.+)\n`)
+	matches := re.FindAllStringSubmatch(output, -1)
+
+	for _, match := range matches {
+		target, value, err := parseAmount(match[3])
+		if err != nil {
+			return nil, err
+		}
+
+		if target != defaultCurrency {
+			continue
+		}
+
+		commodity := match[2]
+
+		date, err := time.Parse("2006-01-02", match[1])
+		if err != nil {
+			return nil, err
+		}
+
+		prices = append(prices, price.Price{Date: date, CommodityName: commodity, CommodityID: commodity, CommodityType: price.Unknown, Value: value})
+
+	}
+	return prices, nil
+}
+
+func parseAmount(amount string) (string, float64, error) {
+	match := regexp.MustCompile(`^(-?[0-9.,]+)([^\d,.-]+)|([^\d,.-]+)(-?[0-9.,]+)$`).FindStringSubmatch(amount)
+	if match[1] == "" {
+		value, err := strconv.ParseFloat(strings.ReplaceAll(match[4], ",", ""), 64)
+		return strings.Trim(match[3], " "), value, err
+	}
+
+	value, err := strconv.ParseFloat(strings.ReplaceAll(match[1], ",", ""), 64)
+	return strings.Trim(match[2], " "), value, err
 }

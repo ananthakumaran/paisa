@@ -11,6 +11,7 @@ import (
 	"github.com/ananthakumaran/paisa/internal/config"
 	"github.com/ananthakumaran/paisa/internal/ledger"
 	"github.com/ananthakumaran/paisa/internal/model/posting"
+	"github.com/bmatcuk/doublestar/v4"
 	"github.com/gin-gonic/gin"
 	"github.com/samber/lo"
 	log "github.com/sirupsen/logrus"
@@ -35,7 +36,7 @@ func GetFiles(db *gorm.DB) gin.H {
 
 	files := []*LedgerFile{}
 	dir := filepath.Dir(path)
-	paths, _ := filepath.Glob(dir + "/*.ledger")
+	paths, _ := doublestar.FilepathGlob(dir + "/**/*" + filepath.Ext(path))
 
 	for _, path = range paths {
 		files = append(files, readLedgerFileWithVersions(dir, path))

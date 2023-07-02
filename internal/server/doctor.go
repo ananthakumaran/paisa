@@ -8,6 +8,7 @@ import (
 	"github.com/ananthakumaran/paisa/internal/accounting"
 	"github.com/ananthakumaran/paisa/internal/config"
 	"github.com/ananthakumaran/paisa/internal/model/posting"
+	"github.com/ananthakumaran/paisa/internal/model/price"
 	"github.com/ananthakumaran/paisa/internal/query"
 	"github.com/ananthakumaran/paisa/internal/service"
 	"github.com/ananthakumaran/paisa/internal/utils"
@@ -122,7 +123,7 @@ func ruleJournalPriceMismatch(db *gorm.DB) []error {
 		if !utils.IsCurrency(p.Commodity) {
 			externalPrice := service.GetUnitPrice(db, p.Commodity, p.Date)
 			diff := math.Abs(externalPrice.Value - p.Price())
-			if diff >= 0.0001 {
+			if externalPrice.CommodityType != price.Unknown && diff >= 0.0001 {
 				errs = append(errs, errors.New(fmt.Sprintf("%s\t%s\t%.4f @ <b>%.4f</b> %s <br />doesn't match the price %s <b>%.4f</b> fetched from external system", p.Date.Format(DATE_FORMAT), p.Account, p.Quantity, p.Price(), config.DefaultCurrency(), externalPrice.Date.Format(DATE_FORMAT), externalPrice.Value)))
 			}
 		}

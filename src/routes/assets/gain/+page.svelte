@@ -2,14 +2,20 @@
   import { renderLegend, renderOverview, renderPerAccountOverview } from "$lib/gain";
   import { ajax } from "$lib/utils";
   import _ from "lodash";
-  import { onMount } from "svelte";
+  import { onMount, onDestroy } from "svelte";
+
+  let destroyCallback = () => {};
+
+  onDestroy(async () => {
+    destroyCallback();
+  });
 
   onMount(async () => {
     const { gain_timeline_breakdown: gains } = await ajax("/api/gain");
 
     renderLegend();
     renderOverview(gains);
-    renderPerAccountOverview(gains);
+    destroyCallback = renderPerAccountOverview(gains);
   });
 </script>
 

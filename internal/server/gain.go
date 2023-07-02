@@ -10,9 +10,10 @@ import (
 )
 
 type Gain struct {
-	Account          string     `json:"account"`
-	OverviewTimeline []Overview `json:"overview_timeline"`
-	XIRR             float64    `json:"xirr"`
+	Account          string            `json:"account"`
+	OverviewTimeline []Overview        `json:"overview_timeline"`
+	XIRR             float64           `json:"xirr"`
+	Postings         []posting.Posting `json:"postings"`
 }
 
 func GetGain(db *gorm.DB) gin.H {
@@ -21,7 +22,7 @@ func GetGain(db *gorm.DB) gin.H {
 	byAccount := lo.GroupBy(postings, func(p posting.Posting) string { return p.Account })
 	var gains []Gain
 	for account, ps := range byAccount {
-		gains = append(gains, Gain{Account: account, XIRR: service.XIRR(db, ps), OverviewTimeline: computeOverviewTimeline(db, ps)})
+		gains = append(gains, Gain{Account: account, XIRR: service.XIRR(db, ps), OverviewTimeline: computeOverviewTimeline(db, ps), Postings: ps})
 	}
 
 	return gin.H{"gain_timeline_breakdown": gains}

@@ -1,9 +1,11 @@
 import chroma from "chroma-js";
 import * as d3 from "d3";
+import { Delaunay } from "d3";
 import legend from "d3-svg-legend";
 import dayjs from "dayjs";
 import _ from "lodash";
 import COLORS from "./colors";
+import tippy from "tippy.js";
 import {
   formatCurrency,
   formatCurrencyCrude,
@@ -12,14 +14,15 @@ import {
   type Overview,
   tooltip,
   skipTicks,
-  restName
+  restName,
+  type Posting
 } from "./utils";
 
 const areaKeys = ["gain", "loss"];
 const colors = [COLORS.gain, COLORS.loss];
 const areaScale = d3.scaleOrdinal<string>().domain(areaKeys).range(colors);
 const lineKeys = ["balance", "investment", "withdrawal"];
-const lineScale = d3
+const typeScale = d3
   .scaleOrdinal<string>()
   .domain(lineKeys)
   .range([COLORS.primary, COLORS.secondary, COLORS.tertiary]);
@@ -352,6 +355,7 @@ export function renderPerAccountOverview(gains: Gain[]) {
     .append("tbody")
     .each(renderTable);
 
+  const destroyCallbacks: Array<() => void> = [];
   const rightColumn = columns.append("div").attr("class", "column");
   rightColumn
     .append("div")
@@ -360,26 +364,44 @@ export function renderPerAccountOverview(gains: Gain[]) {
     .attr("width", "100%")
     .attr("height", "150")
     .each(function (gain) {
-      renderOverviewSmall(gain.overview_timeline, this, [start, end]);
+      const destroyCallback = renderOverviewSmall(gain.overview_timeline, gain.postings, this, [
+        start,
+        end
+      ]);
+      destroyCallbacks.push(destroyCallback);
     });
+
+  return (): void => {
+    _.each(destroyCallbacks, (d) => d());
+  };
 }
 
 function renderOverviewSmall(
   points: Overview[],
+  postings: Posting[],
   element: Element,
   xDomain: [dayjs.Dayjs, dayjs.Dayjs]
 ) {
   const svg = d3.select(element),
-    margin = { top: 5, right: 80, bottom: 20, left: 40 },
+    margin = { top: 5, right: 50, bottom: 20, left: 40 },
     width = element.parentElement.clientWidth - margin.left - margin.right,
     height = +svg.attr("height") - margin.top - margin.bottom,
     g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
+  const areaKeys = ["gain", "loss"];
+  const colors = [COLORS.gain, COLORS.loss];
+
+  const lineKeys = ["balance", "investment"];
+  const lineScale = d3
+    .scaleOrdinal<string>()
+    .domain(lineKeys)
+    .range([COLORS.primary, COLORS.secondary]);
+
+  const positions = _.flatMap(points, (p) => [p.balance_amount, p.net_investment_amount]);
+  positions.push(0);
+
   const x = d3.scaleTime().range([0, width]).domain(xDomain),
-    y = d3
-      .scaleLinear()
-      .range([height, 0])
-      .domain([0, d3.max<Overview, number>(points, (d) => d.gain_amount + d.investment_amount)]),
+    y = d3.scaleLinear().range([height, 0]).domain(d3.extent(positions)),
     z = d3.scaleOrdinal<string>(colors).domain(areaKeys);
 
   const area = (y0: number, y1: (d: Overview) => number) =>
@@ -404,6 +426,27 @@ function renderOverviewSmall(
     .attr("class", "axis y")
     .call(d3.axisLeft(y).ticks(5).tickSize(-width).tickFormat(formatCurrencyCrude));
 
+  const postingsG = g.append("g").attr("class", "postings");
+
+  postingsG
+    .selectAll("circle")
+    .data(postings)
+    .join("circle")
+    .attr("data-tippy-content", (p) => {
+      return tooltip(
+        [
+          ["Date", p.date.format("DD MMM YYYY")],
+          ["Amount", [formatCurrency(p.amount), "has-text-weight-bold has-text-right"]]
+        ],
+        { header: p.payee }
+      );
+    })
+    .attr("cx", (d) => x(d.date))
+    .attr("cy", height + 3)
+    .attr("r", 3)
+    .attr("opacity", 0.5)
+    .attr("fill", (d) => (d.amount >= 0 ? typeScale("investment") : typeScale("withdrawal")));
+
   const layer = g.selectAll(".layer").data([points]).enter().append("g").attr("class", "layer");
 
   const clipAboveID = _.uniqueId("clip-above");
@@ -414,7 +457,7 @@ function renderOverviewSmall(
     .attr(
       "d",
       area(height, (d) => {
-        return y(d.gain_amount + d.investment_amount);
+        return y(d.gain_amount + d.investment_amount - d.withdrawal_amount);
       })
     );
 
@@ -426,7 +469,7 @@ function renderOverviewSmall(
     .attr(
       "d",
       area(0, (d) => {
-        return y(d.gain_amount + d.investment_amount);
+        return y(d.gain_amount + d.investment_amount - d.withdrawal_amount);
       })
     );
 
@@ -438,7 +481,7 @@ function renderOverviewSmall(
     .attr(
       "d",
       area(0, (d) => {
-        return y(d.investment_amount);
+        return y(d.investment_amount - d.withdrawal_amount);
       })
     );
 
@@ -450,7 +493,7 @@ function renderOverviewSmall(
     .attr(
       "d",
       area(height, (d) => {
-        return y(d.investment_amount);
+        return y(d.investment_amount - d.withdrawal_amount);
       })
     );
 
@@ -464,21 +507,7 @@ function renderOverviewSmall(
         .line<Overview>()
         .curve(d3.curveBasis)
         .x((d) => x(d.date))
-        .y((d) => y(d.investment_amount))
-    );
-
-  layer
-    .append("path")
-    .style("stroke", lineScale("withdrawal"))
-    .style("fill", "none")
-    .attr(
-      "d",
-      d3
-        .line<Overview>()
-        .curve(d3.curveBasis)
-        .defined((d) => d.withdrawal_amount > 0)
-        .x((d) => x(d.date))
-        .y((d) => y(d.withdrawal_amount))
+        .y((d) => y(d.net_investment_amount))
     );
 
   layer
@@ -491,8 +520,65 @@ function renderOverviewSmall(
         .line<Overview>()
         .curve(d3.curveBasis)
         .x((d) => x(d.date))
-        .y((d) => y(d.investment_amount + d.gain_amount - d.withdrawal_amount))
+        .y((d) => y(d.balance_amount))
     );
+
+  const hoverCircle = layer.append("circle").attr("r", "3").attr("fill", "none");
+  const t = tippy(hoverCircle.node(), { theme: "light", delay: 0, allowHTML: true });
+
+  const balanceVoronoiPoints = _.map(points, (d) => [x(d.date), y(d.balance_amount)]);
+  const investmentVoronoiPoints = _.map(points, (d) => [x(d.date), y(d.net_investment_amount)]);
+  const voronoi = Delaunay.from(balanceVoronoiPoints.concat(investmentVoronoiPoints)).voronoi([
+    0,
+    0,
+    width,
+    height
+  ]);
+
+  layer
+    .append("g")
+    .selectAll("path")
+    .data(
+      points.map((p) => ["balance", p]).concat(points.map((p) => ["investment", p])) as [
+        string,
+        Overview
+      ][]
+    )
+    .enter()
+    .append("path")
+    .style("pointer-events", "all")
+    .style("fill", "none")
+    .attr("d", (_, i) => {
+      return voronoi.renderCell(i);
+    })
+    .on("mouseover", (_, [pointType, d]) => {
+      hoverCircle
+        .attr("cx", x(d.date))
+        .attr("cy", y(pointType == "balance" ? d.balance_amount : d.net_investment_amount))
+        .attr("fill", lineScale(pointType));
+
+      t.setProps({
+        placement: pointType == "balance" ? "top" : "bottom",
+        content: tooltip([
+          ["Date", d.date.format("DD MMM YYYY")],
+          ["Balance", [formatCurrency(d.balance_amount), "has-text-weight-bold has-text-right"]],
+          [
+            "Net Investment",
+            [formatCurrency(d.net_investment_amount), "has-text-weight-bold has-text-right"]
+          ],
+          ["Gain / Loss", [formatCurrency(d.gain_amount), "has-text-weight-bold has-text-right"]]
+        ])
+      });
+      t.show();
+    })
+    .on("mouseout", () => {
+      t.hide();
+      hoverCircle.attr("fill", "none");
+    });
+
+  return () => {
+    t.destroy();
+  };
 }
 
 export function renderLegend() {
@@ -517,7 +603,7 @@ export function renderLegend() {
     .orient("horizontal")
     .shapePadding(70)
     .labels(lineKeys)
-    .scale(lineScale);
+    .scale(typeScale);
 
   svg.select(".legendLine").call(legendLine as any);
 }

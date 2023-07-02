@@ -37,12 +37,15 @@ export interface Overview {
   investment_amount: number;
   withdrawal_amount: number;
   gain_amount: number;
+  balance_amount: number;
+  net_investment_amount: number;
 }
 
 export interface Gain {
   account: string;
   overview_timeline: Overview[];
   xirr: number;
+  postings: Posting[];
 }
 
 export interface InterestOverview {

@@ -12,10 +12,12 @@ import (
 )
 
 type Overview struct {
-	Date             time.Time `json:"date"`
-	InvestmentAmount float64   `json:"investment_amount"`
-	WithdrawalAmount float64   `json:"withdrawal_amount"`
-	GainAmount       float64   `json:"gain_amount"`
+	Date                time.Time `json:"date"`
+	InvestmentAmount    float64   `json:"investment_amount"`
+	WithdrawalAmount    float64   `json:"withdrawal_amount"`
+	GainAmount          float64   `json:"gain_amount"`
+	BalanceAmount       float64   `json:"balance_amount"`
+	NetInvestmentAmount float64   `json:"net_investment_amount"`
 }
 
 func GetOverview(db *gorm.DB) gin.H {
@@ -67,7 +69,8 @@ func computeOverviewTimeline(db *gorm.DB, postings []posting.Posting) []Overview
 		}
 
 		gain := balance + withdrawal - investment
-		networths = append(networths, Overview{Date: start, InvestmentAmount: investment, WithdrawalAmount: withdrawal, GainAmount: gain})
+		net_investment := investment - withdrawal
+		networths = append(networths, Overview{Date: start, InvestmentAmount: investment, WithdrawalAmount: withdrawal, GainAmount: gain, BalanceAmount: balance, NetInvestmentAmount: net_investment})
 
 		if len(postings) == 0 && math.Abs(balance) < 0.01 {
 			break

@@ -95,6 +95,50 @@ commodities:
 Stock prices are fetched from yahoo finance website. The ticker code
 should match the code used in yahoo.
 
+## RealEstate
+
+Some commodities like real estate are bought once and the price
+changes over time. Ledger allows you to set the price as on date.
+
+```go
+2014/01/01 Home purchase
+    Assets:House                                1 APT @ 4000000 INR
+    Liabilities:Homeloan
+
+P 2016/01/01 00:00:00 APT 5000000 INR
+P 2018/01/01 00:00:00 APT 6500000 INR
+P 2020/01/01 00:00:00 APT 6700000 INR
+P 2021/01/01 00:00:00 APT 6300000 INR
+P 2022/01/01 00:00:00 APT 8000000 INR
+```
+
+## Currencies
+
+If you need to deal with multiple currencies, just treat them as you
+would treat any commodity. Since paisa is a reporting tool, it will
+always try to convert other currencies to the
+[default_currency](./config.md). As long as the exchange rate from a currency to
+default\_currency is available, paisa would work without issue
+
+```go
+P 2023/05/01 00:00:00 USD 81.75 INR
+
+2023/05/01 Freelance Income
+    ;; conversion rate will be picked up from the price directive above
+    Income:Freelance                            -100 USD
+    Assets:Checking
+
+2023/06/01 Freelance Income
+    ;; conversion rate is specified inline
+    Income:Freelance                            -200 USD @ 82.75 INR
+    Assets:Checking
+
+2023/07/01 Netflix
+    ;; if not available for a date, will use previous known conversion rate (82.75)
+    Expenses:Entertainment                        10 USD
+    Assets:Checking
+```
+
 ## Updates
 
 **paisa** fetches the latest price of the commodities only when

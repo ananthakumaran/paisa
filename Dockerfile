@@ -1,8 +1,9 @@
 FROM node:18-alpine3.16 as web
 WORKDIR /usr/src/paisa
+COPY package.json package-lock.json* ./
+RUN npm install
 COPY . .
-RUN npm install && \
-    PAISA_HOST=https://paisa-demo.ananthakumaran.in npm run build
+RUN PAISA_HOST=https://paisa-demo.ananthakumaran.in npm run build
 
 FROM golang:1.20-alpine3.16 as go
 WORKDIR /usr/src/paisa

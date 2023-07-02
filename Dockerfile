@@ -17,7 +17,7 @@ RUN CGO_ENABLED=1 go build
 FROM alpine:3.16
 RUN apk --no-cache add ca-certificates ledger
 WORKDIR /root/
-COPY --from=go /usr/src/paisa ./
+COPY --from=go /usr/src/paisa/paisa ./
 RUN ./paisa init && ./paisa update
 EXPOSE 7500
 CMD ["./paisa", "serve"]

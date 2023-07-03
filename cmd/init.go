@@ -27,7 +27,7 @@ const START_YEAR = 2014
 
 var initCmd = &cobra.Command{
 	Use:   "init",
-	Short: "generates a sample config and journal file",
+	Short: "Generates a sample config and journal file",
 	Run: func(cmd *cobra.Command, args []string) {
 		cwd, err := os.Getwd()
 		if err != nil {

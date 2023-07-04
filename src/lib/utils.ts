@@ -281,6 +281,7 @@ const BACKGROUND = [
   "/api/editor/validate",
   "/api/editor/save",
   "/api/editor/file",
+  "/api/editor/files",
   "/api/editor/file/delete_backups",
   "/api/templates",
   "/api/templates/upsert",

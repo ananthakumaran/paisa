@@ -102,6 +102,7 @@
     <span class="navbar-item is-size-4 has-text-weight-medium">₹ Paisa</span>
     <a
       role="button"
+      tabindex="-1"
       class="navbar-burger"
       class:is-active={isBurger === true}
       on:click|preventDefault={(_e) => (isBurger = !isBurger)}

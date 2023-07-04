@@ -141,11 +141,13 @@
             <p class="control">
               <Select
                 bind:value={selectedTemplate}
+                showChevron={true}
                 items={templates}
                 label="name"
                 itemId="id"
                 searchable={true}
                 clearable={false}
+                --chevron-color="hsl(229deg, 53%, 53%)"
                 --font-size="14px"
                 --item-hover-bg="none"
                 --item-hover-color="hsl(0deg, 0%, 4%)"

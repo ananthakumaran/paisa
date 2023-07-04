@@ -335,4 +335,22 @@ svg text {
   .item.active span.name {
     font-weight: bold;
   }
+
+  .selected-item {
+    font-weight: bold;
+    .tag {
+      font-weight: normal !important;
+    }
+  }
+
+  border: 1px solid $grey-lighter !important;
+
+  &.focused,
+  &:hover {
+    border: 1px solid $grey-light !important;
+  }
+
+  .svelte-select-list {
+    box-shadow: 0 8px 8px rgba(10, 10, 10, 0.1), 0 0 0 1px rgba(10, 10, 10, 0.1) !important;
+  }
 }

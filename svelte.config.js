@@ -16,7 +16,12 @@ const config = {
   },
 
   kit: {
-    adapter: adapter({ pages: "web/static", assets: "web/static", out: "web/static" }),
+    adapter: adapter({
+      pages: "web/static",
+      assets: "web/static",
+      out: "web/static",
+      fallback: "app.html"
+    }),
     paths: {
       assets: host + "/static",
       base: ""

@@ -19,9 +19,10 @@ import (
 )
 
 type LedgerFile struct {
-	Name     string   `json:"name"`
-	Content  string   `json:"content"`
-	Versions []string `json:"versions"`
+	Name      string   `json:"name"`
+	Content   string   `json:"content"`
+	Versions  []string `json:"versions"`
+	Operation string   `json:"operation"`
 }
 
 func GetFiles(db *gorm.DB) gin.H {
@@ -77,24 +78,28 @@ func SaveFile(db *gorm.DB, file LedgerFile) gin.H {
 	filePath := filepath.Join(dir, file.Name)
 	backupPath := filepath.Join(dir, file.Name+".backup."+time.Now().Format("2006-01-02-15-04-05.000"))
 	fileStat, err := os.Stat(filePath)
-	if err != nil {
+	if err != nil && file.Operation != "overwrite" {
 		log.Warn(err)
 		return gin.H{"errors": errors, "saved": false}
 	}
 
-	existingContent, err := ioutil.ReadFile(filePath)
-	if err != nil {
-		log.Warn(err)
-		return gin.H{"errors": errors, "saved": false}
+	var perm os.FileMode = 0644
+	if err == nil {
+		perm = fileStat.Mode().Perm()
+		existingContent, err := ioutil.ReadFile(filePath)
+		if err != nil {
+			log.Warn(err)
+			return gin.H{"errors": errors, "saved": false}
+		}
+
+		err = ioutil.WriteFile(backupPath, existingContent, perm)
+		if err != nil {
+			log.Warn(err)
+			return gin.H{"errors": errors, "saved": false}
+		}
 	}
 
-	err = ioutil.WriteFile(backupPath, existingContent, fileStat.Mode().Perm())
-	if err != nil {
-		log.Warn(err)
-		return gin.H{"errors": errors, "saved": false}
-	}
-
-	err = ioutil.WriteFile(filePath, []byte(file.Content), fileStat.Mode().Perm())
+	err = ioutil.WriteFile(filePath, []byte(file.Content), perm)
 	if err != nil {
 		log.Warn(err)
 		return gin.H{"errors": errors, "saved": false}

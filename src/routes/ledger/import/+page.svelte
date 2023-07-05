@@ -16,6 +16,7 @@
   import { ajax, type Template } from "$lib/utils";
   import { accountTfIdf } from "../../../store";
   import * as toast from "bulma-toast";
+  import Modal from "$lib/components/Modal.svelte";
 
   let templates: Template[] = [];
   let selectedTemplate: Template;
@@ -130,7 +131,55 @@
       });
     }
   }
+
+  let modalOpen = false;
+  let destinationFile = "";
+  function openSaveModal() {
+    modalOpen = true;
+  }
+
+  async function saveToFile() {
+    const { saved } = await ajax("/api/editor/save", {
+      method: "POST",
+      body: JSON.stringify({ name: destinationFile, content: preview, operation: "overwrite" })
+    });
+
+    if (saved) {
+      toast.toast({
+        message: `Saved ${destinationFile}`,
+        type: "is-success"
+      });
+    } else {
+      toast.toast({
+        message: `Failed to save ${destinationFile}`,
+        type: "is-danger",
+        duration: 5000
+      });
+    }
+  }
 </script>
+
+<Modal bind:active={modalOpen}>
+  <svelte:fragment slot="head" let:close>
+    <p class="modal-card-title">Save As</p>
+    <button class="delete" aria-label="close" on:click={(e) => close(e)} />
+  </svelte:fragment>
+  <div class="field" slot="body">
+    <label class="label" for="save-filename">File Name</label>
+    <div class="control" id="save-filename">
+      <input class="input" type="text" placeholder="expense.ledger" bind:value={destinationFile} />
+      <p class="help">Create or overwrite existing file</p>
+    </div>
+  </div>
+  <svelte:fragment slot="foot" let:close>
+    <button
+      class="button is-success"
+      disabled={_.isEmpty(destinationFile)}
+      on:click={(e) => saveToFile() && close(e)}>Save</button
+    >
+    <button class="button" on:click={(e) => close(e)}>Cancel</button>
+  </svelte:fragment>
+</Modal>
 
 <section class="section tab-import">
   <div class="container is-fluid">
@@ -196,13 +245,13 @@
             <div class="field has-addons mb-0 ml-2">
               <p class="control">
                 <button
-                  class="button is-small is-danger"
+                  class="button is-small is-danger is-light"
                   on:click={(_e) => remove()}
                   disabled={$templateEditorState.hasUnsavedChanges == true ||
                     selectedTemplate?.template_type == "builtin"}
                 >
                   <span class="icon is-small">
-                    <i class="fas fa-floppy-disk" />
+                    <i class="fas fa-trash" />
                   </span>
                   <span>Delete</span>
                 </button>
@@ -222,9 +271,24 @@
         <div class="box py-0">
           <div class="field">
             <div class="control">
-              <button class="button is-small clipboard" on:click={copyToClipboard}>
+              <button
+                title="copy to clipboard"
+                class="button is-small clipboard"
+                disabled={_.isEmpty(preview)}
+                on:click={copyToClipboard}
+              >
                 <span class="icon is-small">
                   <i class="fas fa-copy" />
+                </span>
+              </button>
+              <button
+                title="save"
+                class="button is-small save"
+                disabled={_.isEmpty(preview)}
+                on:click={openSaveModal}
+              >
+                <span class="icon is-small">
+                  <i class="fas fa-floppy-disk" />
                 </span>
               </button>
               <div class="preview-editor" bind:this={previewEditorDom} />
@@ -276,6 +340,13 @@
     float: right;
     position: absolute;
     right: 0;
+    z-index: 10;
+  }
+
+  .save {
+    float: right;
+    position: absolute;
+    right: 40px;
     z-index: 10;
   }
 

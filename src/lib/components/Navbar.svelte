@@ -97,7 +97,7 @@
   }
 </script>
 
-<nav class="navbar is-transparent" aria-label="main navigation">
+<nav class="navbar px-3 is-transparent" aria-label="main navigation">
   <div class="navbar-brand">
     <span class="navbar-item is-size-4 has-text-weight-medium">₹ Paisa</span>
     <a
@@ -152,7 +152,7 @@
   </div>
 </nav>
 
-<div class="mt-2 is-flex is-justify-content-space-between">
+<div class="mt-2 px-3 is-flex is-justify-content-space-between">
   {#if selectedLink}
     <nav
       style="margin-left: 12px;"

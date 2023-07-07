@@ -72,8 +72,10 @@
 <section class="section tab-overview">
   <div class="container is-fluid">
     <div class="columns">
-      <div class="column is-12 has-background-white box">
-        <svg id="d3-overview-timeline" width="100%" height="500" bind:this={svg} />
+      <div class="column is-12">
+        <div class="box">
+          <svg id="d3-overview-timeline" width="100%" height="500" bind:this={svg} />
+        </div>
       </div>
     </div>
     <div class="columns">

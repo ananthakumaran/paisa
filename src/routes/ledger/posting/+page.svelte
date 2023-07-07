@@ -44,28 +44,32 @@
         </nav>
       </div>
     </div>
-    <div class="columns box">
-      <div
-        class="column is-12 clusterize-scroll px-3"
-        id="d3-postings-container"
-        style="max-height: calc(100vh - 200px); min-height: calc(100vh - 200px)"
-      >
-        <table class="table is-narrow is-fullwidth is-hoverable">
-          <thead>
-            <tr>
-              <th>Date</th>
-              <th>Description</th>
-              <th>Account</th>
-              <th class="has-text-right">Amount</th>
-              <th class="has-text-right">Units</th>
-              <th class="has-text-right">Unit Price</th>
-              <th class="has-text-right">Market Value</th>
-              <th class="has-text-right">Change</th>
-              <th class="has-text-right">CAGR</th>
-            </tr>
-          </thead>
-          <tbody class="d3-postings clusterize-content" id="d3-postings" />
-        </table>
+    <div class="columns">
+      <div class="column is-12">
+        <div class="box">
+          <div
+            class="clusterize-scroll"
+            id="d3-postings-container"
+            style="max-height: calc(100vh - 200px); min-height: calc(100vh - 200px)"
+          >
+            <table class="table is-narrow is-fullwidth is-hoverable">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Description</th>
+                  <th>Account</th>
+                  <th class="has-text-right">Amount</th>
+                  <th class="has-text-right">Units</th>
+                  <th class="has-text-right">Unit Price</th>
+                  <th class="has-text-right">Market Value</th>
+                  <th class="has-text-right">Change</th>
+                  <th class="has-text-right">CAGR</th>
+                </tr>
+              </thead>
+              <tbody class="d3-postings clusterize-content" id="d3-postings" />
+            </table>
+          </div>
+        </div>
       </div>
     </div>
   </div>

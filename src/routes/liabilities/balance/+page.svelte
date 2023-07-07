@@ -50,46 +50,48 @@
 <section class="section" class:is-hidden={isEmpty}>
   <div class="container is-fluid">
     <div class="columns">
-      <div class="column is-12 box">
-        <table class="table is-narrow is-fullwidth is-hoverable">
-          <thead>
-            <tr>
-              <th>Account</th>
-              <th class="has-text-right">Drawn Amount</th>
-              <th class="has-text-right">Repaid Amount</th>
-              <th class="has-text-right">Balance Amount</th>
-              <th class="has-text-right">Interest</th>
-              <th class="has-text-right">APR</th>
-            </tr>
-          </thead>
-          <tbody>
-            {#each Object.values(breakdowns) as b}
-              {@const indent = _.repeat("&emsp;&emsp;", depth(b.group) - 1)}
-              {@const changeClass = calculateChangeClass(-b.interest_amount)}
+      <div class="column is-12">
+        <div class="box">
+          <table class="table is-narrow is-fullwidth is-hoverable">
+            <thead>
               <tr>
-                <td style="max-width: 200px; overflow: hidden;"
-                  >{@html indent}{iconText(b.group)}
-                  {lastName(b.group)}</td
-                >
-                <td class="has-text-right"
-                  >{b.drawn_amount != 0 ? formatCurrency(b.drawn_amount) : ""}</td
-                >
-                <td class="has-text-right"
-                  >{b.repaid_amount != 0 ? formatCurrency(b.repaid_amount) : ""}</td
-                >
-                <td class="has-text-right"
-                  >{b.balance_amount != 0 ? formatCurrency(b.balance_amount) : ""}</td
-                >
-                <td class="has-text-right"
-                  >{b.interest_amount != 0 ? formatCurrency(b.interest_amount) : ""}</td
-                >
-                <td class="{changeClass} has-text-right"
-                  >{b.apr > 0.0001 || b.apr < -0.0001 ? formatFloat(b.apr) : ""}</td
-                >
+                <th>Account</th>
+                <th class="has-text-right">Drawn Amount</th>
+                <th class="has-text-right">Repaid Amount</th>
+                <th class="has-text-right">Balance Amount</th>
+                <th class="has-text-right">Interest</th>
+                <th class="has-text-right">APR</th>
               </tr>
-            {/each}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {#each Object.values(breakdowns) as b}
+                {@const indent = _.repeat("&emsp;&emsp;", depth(b.group) - 1)}
+                {@const changeClass = calculateChangeClass(-b.interest_amount)}
+                <tr>
+                  <td style="max-width: 200px; overflow: hidden;"
+                    >{@html indent}{iconText(b.group)}
+                    {lastName(b.group)}</td
+                  >
+                  <td class="has-text-right"
+                    >{b.drawn_amount != 0 ? formatCurrency(b.drawn_amount) : ""}</td
+                  >
+                  <td class="has-text-right"
+                    >{b.repaid_amount != 0 ? formatCurrency(b.repaid_amount) : ""}</td
+                  >
+                  <td class="has-text-right"
+                    >{b.balance_amount != 0 ? formatCurrency(b.balance_amount) : ""}</td
+                  >
+                  <td class="has-text-right"
+                    >{b.interest_amount != 0 ? formatCurrency(b.interest_amount) : ""}</td
+                  >
+                  <td class="{changeClass} has-text-right"
+                    >{b.apr > 0.0001 || b.apr < -0.0001 ? formatFloat(b.apr) : ""}</td
+                  >
+                </tr>
+              {/each}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   </div>

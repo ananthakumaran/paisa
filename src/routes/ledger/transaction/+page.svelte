@@ -60,33 +60,37 @@
       </div>
     </div>
 
-    <div class="columns box">
-      <VirtualList
-        width="100%"
-        height={window.innerHeight - 150}
-        itemCount={filtered.length}
-        {itemSize}
-      >
-        <div slot="item" let:index let:style {style}>
-          {@const t = filtered[index]}
-          <div class="column is-12">
-            <div class="columns is-flex-wrap-wrap transaction">
-              <div class="column is-3 py-0">
-                <div class="description is-size-7">
-                  <b>{t.date.format("DD MMM YYYY")}</b>
-                  <span title={t.payee}>{t.payee}</span>
+    <div class="columns">
+      <div class="column is-12">
+        <div class="box">
+          <VirtualList
+            width="100%"
+            height={window.innerHeight - 150}
+            itemCount={filtered.length}
+            {itemSize}
+          >
+            <div slot="item" let:index let:style {style}>
+              {@const t = filtered[index]}
+              <div class="column is-12">
+                <div class="columns is-flex-wrap-wrap transaction">
+                  <div class="column is-3 py-0">
+                    <div class="description is-size-7">
+                      <b>{t.date.format("DD MMM YYYY")}</b>
+                      <span title={t.payee}>{t.payee}</span>
+                    </div>
+                  </div>
+                  <div class="column is-4 py-0">
+                    <Postings postings={debits(t)} />
+                  </div>
+                  <div class="column is-5 py-0">
+                    <Postings postings={credits(t)} />
+                  </div>
                 </div>
               </div>
-              <div class="column is-4 py-0">
-                <Postings postings={debits(t)} />
-              </div>
-              <div class="column is-5 py-0">
-                <Postings postings={credits(t)} />
-              </div>
             </div>
-          </div>
+          </VirtualList>
         </div>
-      </VirtualList>
+      </div>
     </div>
   </div>
 </section>

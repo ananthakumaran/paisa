@@ -207,14 +207,6 @@ svg text {
   white-space: nowrap;
 }
 
-@media only screen and (max-width: 768px) {
-  .column,
-  .section {
-    padding-right: 0;
-    padding-left: 0;
-  }
-}
-
 .adjustable-input {
   border: none;
   border-bottom: 1px solid $grey-light;
@@ -286,7 +278,15 @@ svg text {
 // BULMA overrides
 
 .section {
-  padding: 1.5rem !important;
+  padding-right: 0;
+  padding-left: 0;
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
+}
+
+.container.is-fluid {
+  padding-left: 24px;
+  padding-right: 24px;
 }
 
 .navbar-item,
@@ -299,17 +299,6 @@ svg text {
 .navbar {
   background-color: $white-bis !important;
   color: rgba(0, 0, 0, 0.7);
-}
-
-@include touch {
-  .section {
-    padding: 0.5rem 0.2rem !important;
-  }
-
-  .container.is-fluid {
-    padding-left: 1rem;
-    padding-right: 1rem;
-  }
 }
 
 .template-editor .cm-editor {

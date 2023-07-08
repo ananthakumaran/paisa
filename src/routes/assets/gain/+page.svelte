@@ -1,21 +1,14 @@
 <script lang="ts">
-  import { renderLegend, renderOverview, renderPerAccountOverview } from "$lib/gain";
+  import { renderLegend, renderOverview } from "$lib/gain";
   import { ajax } from "$lib/utils";
   import _ from "lodash";
-  import { onMount, onDestroy } from "svelte";
-
-  let destroyCallback = () => {};
-
-  onDestroy(async () => {
-    destroyCallback();
-  });
+  import { onMount } from "svelte";
 
   onMount(async () => {
-    const { gain_timeline_breakdown: gains } = await ajax("/api/gain");
+    const { gain_breakdown: gains } = await ajax("/api/gain");
 
     renderLegend();
     renderOverview(gains);
-    destroyCallback = renderPerAccountOverview(gains);
   });
 </script>
 

@@ -17,6 +17,7 @@ import {
   restName,
   type Posting
 } from "./utils";
+import { goto } from "$app/navigation";
 
 const areaKeys = ["gain", "loss"];
 const colors = [COLORS.gain, COLORS.loss];
@@ -27,47 +28,12 @@ const typeScale = d3
   .domain(lineKeys)
   .range([COLORS.primary, COLORS.secondary, COLORS.tertiary]);
 
-function renderTable(gain: Gain) {
-  const tbody = d3.select(this);
-  const current = _.last(gain.overview_timeline);
-  tbody.html(function () {
-    return `
-<tr>
-  <td>Account</td>
-  <td class='has-text-right has-text-weight-bold'>${restName(gain.account)}</td>
-</tr>
-<tr>
-  <td>Investment</td>
-  <td class='has-text-right'>${formatCurrency(current.investment_amount)}</td>
-</tr>
-<tr>
-  <td>Withdrawal</td>
-  <td class='has-text-right'>${formatCurrency(current.withdrawal_amount)}</td>
-</tr>
-<tr>
-  <td>Gain</td>
-  <td class='has-text-right'>${formatCurrency(current.gain_amount)}</td>
-</tr>
-<tr>
-  <td>Balance</td>
-  <td class='has-text-right'>${formatCurrency(
-    current.investment_amount + current.gain_amount - current.withdrawal_amount
-  )}</td>
-</tr>
-<tr>
-  <td>XIRR</td>
-  <td class='has-text-right'>${formatFloat(gain.xirr)}</td>
-</tr>
-`;
-  });
-}
-
 export function renderOverview(gains: Gain[]) {
   gains = _.sortBy(gains, (g) => g.account);
   const BAR_HEIGHT = 15;
   const id = "#d3-gain-overview";
   const svg = d3.select(id),
-    margin = { top: 5, right: 20, bottom: 30, left: 150 },
+    margin = { top: 20, right: 20, bottom: 10, left: 150 },
     width =
       document.getElementById(id.substring(1)).parentElement.clientWidth -
       margin.left -
@@ -89,15 +55,12 @@ export function renderOverview(gains: Gain[]) {
   const colors = [COLORS.primary, COLORS.secondary, COLORS.tertiary, COLORS.gain, COLORS.loss];
   const z = d3.scaleOrdinal<string>(colors).domain(keys);
 
-  const getInvestmentAmount = (g: Gain) => _.last(g.overview_timeline).investment_amount;
+  const getInvestmentAmount = (g: Gain) => g.overview.investment_amount;
 
-  const getGainAmount = (g: Gain) => _.last(g.overview_timeline).gain_amount;
-  const getWithdrawalAmount = (g: Gain) => _.last(g.overview_timeline).withdrawal_amount;
+  const getGainAmount = (g: Gain) => g.overview.gain_amount;
+  const getWithdrawalAmount = (g: Gain) => g.overview.withdrawal_amount;
 
-  const getBalanceAmount = (g: Gain) => {
-    const current = _.last(g.overview_timeline);
-    return current.investment_amount + current.gain_amount - current.withdrawal_amount;
-  };
+  const getBalanceAmount = (g: Gain) => g.overview.balance_amount;
 
   const maxX = _.chain(gains)
     .map((g) => getInvestmentAmount(g) + _.max([getGainAmount(g), 0]))
@@ -133,12 +96,13 @@ export function renderOverview(gains: Gain[]) {
     .attr("x2", width)
     .attr("y2", height);
 
-  g.append("text")
+  svg
+    .append("text")
     .classed("svg-text-grey", true)
     .text("XIRR")
     .attr("text-anchor", "middle")
-    .attr("x", xirrWidth / 2)
-    .attr("y", height + 30);
+    .attr("x", margin.left + xirrWidth / 2)
+    .attr("y", 10);
 
   g.append("g")
     .attr("class", "axis y")
@@ -155,7 +119,11 @@ export function renderOverview(gains: Gain[]) {
         .tickFormat(skipTicks(40, x1, (n: number) => formatFloat(n, 1)))
     );
 
-  g.append("g").attr("class", "axis y dark").call(d3.axisLeft(y));
+  g.append("g").attr("class", "axis y dark link").call(d3.axisLeft(y));
+
+  g.selectAll(".axis.y.dark.link .tick").on("click", (_event, label) => {
+    goto(`/assets/gain/Assets:${label}`);
+  });
 
   const textGroup = g
     .append("g")
@@ -301,7 +269,7 @@ export function renderOverview(gains: Gain[]) {
     .append("rect")
     .attr("fill", "transparent")
     .attr("data-tippy-content", (g: Gain) => {
-      const current = _.last(g.overview_timeline);
+      const current = g.overview;
       return tooltip([
         ["Account", [g.account, "has-text-weight-bold has-text-right"]],
         [
@@ -315,12 +283,7 @@ export function renderOverview(gains: Gain[]) {
         ["Gain", [formatCurrency(current.gain_amount), "has-text-weight-bold has-text-right"]],
         [
           "Balance",
-          [
-            formatCurrency(
-              current.investment_amount + current.gain_amount - current.withdrawal_amount
-            ),
-            "has-text-weight-bold has-text-right"
-          ]
+          [formatCurrency(current.balance_amount), "has-text-weight-bold has-text-right"]
         ],
         ["XIRR", [formatFloat(g.xirr), "has-text-weight-bold has-text-right"]]
       ]);
@@ -331,57 +294,12 @@ export function renderOverview(gains: Gain[]) {
     .attr("width", width);
 }
 
-export function renderPerAccountOverview(gains: Gain[]) {
-  const start = _.min(_.flatMap(gains, (g) => _.map(g.overview_timeline, (o) => o.date))),
+export function renderAccountOverview(points: Overview[], postings: Posting[], id: string) {
+  const start = _.min(_.map(points, (p) => p.date)),
     end = dayjs();
 
-  const divs = d3
-    .select("#d3-gain-timeline-breakdown")
-    .selectAll("div")
-    .data(_.sortBy(gains, (g) => g.account));
+  const element = document.getElementById(id);
 
-  divs.exit().remove();
-
-  const columns = divs.enter().append("div").attr("class", "columns");
-
-  const leftColumn = columns
-    .append("div")
-    .attr("class", "column is-4 is-3-desktop is-2-fullhd")
-    .append("div")
-    .attr("class", "box px-3 py-5");
-  leftColumn
-    .append("table")
-    .attr("class", "table is-narrow is-fullwidth is-size-7")
-    .append("tbody")
-    .each(renderTable);
-
-  const destroyCallbacks: Array<() => void> = [];
-  const rightColumn = columns.append("div").attr("class", "column");
-  rightColumn
-    .append("div")
-    .attr("class", "box")
-    .append("svg")
-    .attr("width", "100%")
-    .attr("height", "150")
-    .each(function (gain) {
-      const destroyCallback = renderOverviewSmall(gain.overview_timeline, gain.postings, this, [
-        start,
-        end
-      ]);
-      destroyCallbacks.push(destroyCallback);
-    });
-
-  return (): void => {
-    _.each(destroyCallbacks, (d) => d());
-  };
-}
-
-function renderOverviewSmall(
-  points: Overview[],
-  postings: Posting[],
-  element: Element,
-  xDomain: [dayjs.Dayjs, dayjs.Dayjs]
-) {
   const svg = d3.select(element),
     margin = { top: 5, right: 50, bottom: 20, left: 40 },
     width = element.parentElement.clientWidth - margin.left - margin.right,
@@ -400,7 +318,7 @@ function renderOverviewSmall(
   const positions = _.flatMap(points, (p) => [p.balance_amount, p.net_investment_amount]);
   positions.push(0);
 
-  const x = d3.scaleTime().range([0, width]).domain(xDomain),
+  const x = d3.scaleTime().range([0, width]).domain([start, end]),
     y = d3.scaleLinear().range([height, 0]).domain(d3.extent(positions)),
     z = d3.scaleOrdinal<string>(colors).domain(areaKeys);
 

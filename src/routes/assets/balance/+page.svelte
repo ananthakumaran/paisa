@@ -53,7 +53,7 @@
                 <tr>
                   <td style="max-width: 200px; overflow: hidden;"
                     >{@html indent}<span class="has-text-grey">{iconText(b.group)}</span>
-                    {lastName(b.group)}</td
+                    <a href="/assets/gain/{b.group}">{lastName(b.group)}</a></td
                   >
                   <td class="has-text-right"
                     >{b.investment_amount != 0 ? formatCurrency(b.investment_amount) : ""}</td

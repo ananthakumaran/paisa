@@ -93,6 +93,12 @@
         selectedLink.children,
         (l) => $page.url.pathname == selectedLink.href + l.href
       );
+
+      if (!selectedSubLink) {
+        selectedSubLink = _.find(selectedLink.children, (l) =>
+          $page.url.pathname.startsWith(selectedLink.href + l.href)
+        );
+      }
     }
   }
 </script>
@@ -131,7 +137,7 @@
             <div class="navbar-dropdown is-boxed">
               {#each link.children as sublink}
                 {@const href = link.href + sublink.href}
-                <a class="navbar-item" {href} class:is-active={$page.url.pathname === href}
+                <a class="navbar-item" {href} class:is-active={$page.url.pathname.startsWith(href)}
                   >{sublink.label}</a
                 >
               {/each}
@@ -195,10 +201,16 @@
             {/if}
 
             {#if selectedSubLink.tag}
-              <span style="font-size: 0.6rem" class="tag is-rounded is-warning"
+              <span style="font-size: 0.6rem" class="tag is-rounded is-warning mr-2"
                 >{selectedSubLink.tag}</span
               >
             {/if}
+          </li>
+        {/if}
+
+        {#if selectedSubLink && selectedLink.href + selectedSubLink.href != $page.url.pathname}
+          <li>
+            <a class="is-inactive">{_.last($page.url.pathname.split("/"))}</a>
           </li>
         {/if}
       </ul>

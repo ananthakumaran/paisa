@@ -117,6 +117,12 @@ svg text {
     font-size: 12px;
   }
 
+  &.link text {
+    fill: $link;
+    font-size: 12px;
+    cursor: pointer;
+  }
+
   text {
     font-size: 10px;
     fill: $grey-light;

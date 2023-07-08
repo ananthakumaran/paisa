@@ -43,6 +43,13 @@ export interface Overview {
 
 export interface Gain {
   account: string;
+  overview: Overview;
+  xirr: number;
+  postings: Posting[];
+}
+
+export interface AccountGain {
+  account: string;
   overview_timeline: Overview[];
   xirr: number;
   postings: Posting[];
@@ -313,7 +320,15 @@ export function ajax(route: "/api/overview"): Promise<{
   xirr: number;
 }>;
 export function ajax(route: "/api/gain"): Promise<{
-  gain_timeline_breakdown: Gain[];
+  gain_breakdown: Gain[];
+}>;
+
+export function ajax(
+  route: "/api/gain/:name",
+  options?: RequestInit,
+  params?: Record<string, string>
+): Promise<{
+  gain_timeline_breakdown: AccountGain;
 }>;
 export function ajax(route: "/api/allocation"): Promise<{
   aggregates: { [key: string]: Aggregate };
@@ -387,9 +402,15 @@ export function ajax(
 
 export function ajax(route: "/api/sync", options?: RequestInit): Promise<any>;
 
-export async function ajax(route: string, options?: RequestInit) {
+export async function ajax(route: string, options?: RequestInit, params?: Record<string, string>) {
   if (!_.includes(BACKGROUND, route)) {
     loading.set(true);
+  }
+
+  if (!_.isEmpty(params)) {
+    _.each(params, (value, key) => {
+      route = route.replace(`:${key}`, value);
+    });
   }
   const response = await fetch(route, options);
   const body = await response.text();

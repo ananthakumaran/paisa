@@ -43,6 +43,10 @@ func Listen(db *gorm.DB) {
 	router.GET("/api/gain", func(c *gin.Context) {
 		c.JSON(200, GetGain(db))
 	})
+	router.GET("/api/gain/:account", func(c *gin.Context) {
+		account := c.Param("account")
+		c.JSON(200, GetAccountGain(db, account))
+	})
 	router.GET("/api/income", func(c *gin.Context) {
 		c.JSON(200, GetIncome(db))
 	})

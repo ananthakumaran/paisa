@@ -29,6 +29,43 @@ func GetOverview(db *gorm.DB) gin.H {
 	return gin.H{"overview_timeline": overviewTimeline, "xirr": xirr}
 }
 
+func computeOverview(db *gorm.DB, postings []posting.Posting) Overview {
+	var networth Overview
+
+	if len(postings) == 0 {
+		return networth
+	}
+
+	var investment float64 = 0
+	var withdrawal float64 = 0
+	var balance float64 = 0
+
+	now := time.Now()
+	for _, p := range postings {
+		isInterest := service.IsInterest(db, p)
+
+		if p.Amount > 0 && !isInterest {
+			investment += p.Amount
+		}
+
+		if p.Amount < 0 && !isInterest {
+			withdrawal += -p.Amount
+		}
+
+		if isInterest {
+			balance += p.Amount
+		} else {
+			balance += service.GetMarketPrice(db, p, now)
+		}
+	}
+
+	gain := balance + withdrawal - investment
+	net_investment := investment - withdrawal
+	networth = Overview{Date: now, InvestmentAmount: investment, WithdrawalAmount: withdrawal, GainAmount: gain, BalanceAmount: balance, NetInvestmentAmount: net_investment}
+
+	return networth
+}
+
 func computeOverviewTimeline(db *gorm.DB, postings []posting.Posting) []Overview {
 	var networths []Overview
 

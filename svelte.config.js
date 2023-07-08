@@ -20,7 +20,7 @@ const config = {
       pages: "web/static",
       assets: "web/static",
       out: "web/static",
-      fallback: "app.html"
+      fallback: "index.html"
     }),
     paths: {
       assets: host + "/static",

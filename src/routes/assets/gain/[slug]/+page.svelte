@@ -67,13 +67,11 @@
     selectedCommodities = [...commodities];
     securityTypeR = renderPortfolioBreakdown("#d3-portfolio-security-type", security_type, {
       showLegend: false,
-      small: true,
-      z: d3.schemePastel2
+      small: true
     });
     ratingR = renderPortfolioBreakdown("#d3-portfolio-security-rating", rating, {
       showLegend: false,
-      small: true,
-      z: d3.schemePastel2
+      small: true
     });
     industryR = renderPortfolioBreakdown("#d3-portfolio-security-industry", industry, {
       showLegend: false,
@@ -82,8 +80,7 @@
     });
     portfolioR = renderPortfolioBreakdown("#d3-portfolio", name_and_security_type, {
       showLegend: true,
-      small: true,
-      z: d3.schemePastel2
+      small: true
     });
 
     if (commodities.length !== 0) {

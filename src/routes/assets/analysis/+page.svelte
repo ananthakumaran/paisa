@@ -33,7 +33,9 @@
     selectedCommodities = [...commodities];
     securityTypeR = renderPortfolioBreakdown("#d3-portfolio-security-type", security_type);
     ratingR = renderPortfolioBreakdown("#d3-portfolio-security-rating", rating);
-    industryR = renderPortfolioBreakdown("#d3-portfolio-security-industry", industry);
+    industryR = renderPortfolioBreakdown("#d3-portfolio-security-industry", industry, {
+      z: ["#D9D9D9"]
+    });
     portfolioR = renderPortfolioBreakdown("#d3-portfolio", name_and_security_type, {
       showLegend: true
     });
@@ -87,36 +89,48 @@
     </div>
     <div class="columns">
       <div class="column is-12 has-text-centered">
-        <div class="box">
+        <div class="box mb-2">
           <div id="d3-portfolio-security-type-treemap" style="width: 100%; position: relative" />
           <svg id="d3-portfolio-security-type" width="100%" />
         </div>
-      </div>
-    </div>
-    <div class="columns">
-      <div class="column is-12 has-text-centered">
-        <div class="box">
-          <div id="d3-portfolio-security-rating-treemap" style="width: 100%; position: relative" />
-          <svg id="d3-portfolio-security-rating" width="100%" />
+        <div class="has-text-centered">
+          <p class="heading">Security Type</p>
         </div>
       </div>
     </div>
     <div class="columns">
       <div class="column is-12 has-text-centered">
-        <div class="box">
+        <div class="box mb-2">
+          <div id="d3-portfolio-security-rating-treemap" style="width: 100%; position: relative" />
+          <svg id="d3-portfolio-security-rating" width="100%" />
+        </div>
+        <div class="has-text-centered">
+          <p class="heading">Security Rating</p>
+        </div>
+      </div>
+    </div>
+    <div class="columns">
+      <div class="column is-12 has-text-centered">
+        <div class="box mb-2">
           <div
             id="d3-portfolio-security-industry-treemap"
             style="width: 100%; position: relative"
           />
           <svg id="d3-portfolio-security-industry" width="100%" />
         </div>
+        <div class="has-text-centered">
+          <p class="heading">Industry</p>
+        </div>
       </div>
     </div>
     <div class="columns">
       <div class="column is-12 has-text-centered">
-        <div class="box">
+        <div class="box mb-2">
           <div id="d3-portfolio-treemap" style="width: 100%; position: relative" />
           <svg id="d3-portfolio" width="100%" />
+        </div>
+        <div class="has-text-centered">
+          <p class="heading">Security</p>
         </div>
       </div>
     </div>

@@ -7,7 +7,6 @@ import {
   textColor,
   tooltip,
   skipTicks,
-  generateColorScheme,
   type PortfolioAggregate,
   type CommodityBreakdown
 } from "./utils";
@@ -51,14 +50,14 @@ export function renderPortfolioBreakdown(
   const { showLegend, small } = options;
   const BAR_HEIGHT = 25;
   const svg = d3.select(id),
-    margin = { top: showLegend ? 60 : 20, right: 0, bottom: 10, left: small ? 20 : 350 },
+    margin = { top: showLegend ? 60 : 20, right: 0, bottom: 10, left: 20 },
     fullWidth = document.getElementById(id.substring(1)).parentElement.clientWidth,
     width = fullWidth - margin.left - margin.right,
     g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
   const y = d3.scaleBand().paddingInner(0.1).paddingOuter(0);
 
-  const targetWidth = small ? width - 190 : 400;
+  const targetWidth = small ? width - 190 : 500;
   const targetMargin = 20;
   const textGroupWidth = 150;
   const textGroupMargin = 20;
@@ -96,7 +95,6 @@ export function renderPortfolioBreakdown(
     .attr("y", -5);
 
   const axisxg = g.append("g");
-  const axisyg = g.append("g");
 
   const textGroupg = g.append("g");
 
@@ -106,10 +104,11 @@ export function renderPortfolioBreakdown(
   let rendered = false;
 
   let z: any;
-  if (!_.isEmpty(groups) && !options.z) {
-    z = generateColorScheme(groups);
-  } else {
-    z = d3.scaleOrdinal<string>().domain(groups).range(options.z);
+  if (!_.isEmpty(groups)) {
+    z = d3
+      .scaleOrdinal<string>()
+      .domain(groups)
+      .range(options.z || d3.schemePastel2);
   }
 
   return (portfolioAggregates: PortfolioAggregate[], color: d3.ScaleOrdinal<string, string>) => {
@@ -118,6 +117,7 @@ export function renderPortfolioBreakdown(
       svg.style("display", "none");
       return;
     }
+
     treemap.style("display", null);
     svg.style("display", null);
 
@@ -134,11 +134,6 @@ export function renderPortfolioBreakdown(
     y.domain(portfolioAggregates.map((t) => t.id));
     y.range([0, height]);
     svg.transition(t).attr("height", height + margin.top + margin.bottom);
-
-    const byID: Record<string, PortfolioAggregate> = _.chain(portfolioAggregates)
-      .map((p) => [p.id, p])
-      .fromPairs()
-      .value();
 
     const paddingTop = (BAR_HEIGHT - y.bandwidth()) / 2;
 
@@ -204,28 +199,21 @@ export function renderPortfolioBreakdown(
           .tickFormat(skipTicks(40, x1, (n: number) => formatFloat(n, 1)))
       );
 
-    if (!small) {
-      axisyg
-        .transition(t)
-        .attr("class", "axis y dark")
-        .call(d3.axisLeft(y).tickFormat((id) => formatName(byID[id].group)));
-    }
+    const labelGroup = labelGroupg
+      .selectAll("g")
+      .data(portfolioAggregates, (d: any) => d.percentage.toString());
 
-    if (small) {
-      const labelGroup = labelGroupg
-        .selectAll("g")
-        .data(portfolioAggregates, (d: any) => d.percentage.toString());
+    const labelGroupEnter = labelGroup.enter().append("g").attr("class", "inline-text");
 
-      const labelGroupEnter = labelGroup.enter().append("g").attr("class", "inline-text");
+    labelGroupEnter
+      .append("text")
+      .text((t) => formatName(t.group))
+      .attr("dominant-baseline", "middle")
+      .classed("svg-text-grey-dark", true)
+      .attr("x", 5)
+      .attr("y", (t) => y(t.id) + BAR_HEIGHT / 2);
 
-      labelGroupEnter
-        .append("text")
-        .text((t) => t.group)
-        .attr("dominant-baseline", "middle")
-        .classed("svg-text-grey-dark", true)
-        .attr("x", 5)
-        .attr("y", (t) => y(t.id) + BAR_HEIGHT / 2);
-    }
+    labelGroup.exit().remove();
 
     const textGroup = textGroupg
       .selectAll("g")
@@ -372,7 +360,7 @@ function renderPartition(
 
 function formatName(name: string): string {
   const clean = name.replaceAll(
-    /([*]|EQ - |\bINC\b|\bCorp\b|\bInc\b|\bLTD\b|\bLtd\b|\bLt\b|\bLimited\b|\bLIMITED\b|\(.*\)|[., ]+$)/g,
+    /([#]|[*]|EQ - |\bINC\b|\bCorp\b|\bInc\b|\bLTD\b|\bLtd\b|\bLt\b|\bLimited\b|\bLIMITED\b|\(.*\)|[., ]+$)/g,
     ""
   );
 

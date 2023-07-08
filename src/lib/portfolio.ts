@@ -42,18 +42,23 @@ export function filterCommodityBreakdowns(
 export function renderPortfolioBreakdown(
   id: string,
   portfolioAggregates: PortfolioAggregate[],
-  showLegend = false
+  options: { showLegend?: boolean; small?: boolean; z?: any } = {
+    showLegend: false,
+    small: false,
+    z: null
+  }
 ) {
+  const { showLegend, small } = options;
   const BAR_HEIGHT = 25;
   const svg = d3.select(id),
-    margin = { top: showLegend ? 60 : 20, right: 0, bottom: 10, left: 350 },
+    margin = { top: showLegend ? 60 : 20, right: 0, bottom: 10, left: small ? 20 : 350 },
     fullWidth = document.getElementById(id.substring(1)).parentElement.clientWidth,
     width = fullWidth - margin.left - margin.right,
     g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
   const y = d3.scaleBand().paddingInner(0.1).paddingOuter(0);
 
-  const targetWidth = 400;
+  const targetWidth = small ? width - 190 : 400;
   const targetMargin = 20;
   const textGroupWidth = 150;
   const textGroupMargin = 20;
@@ -70,6 +75,9 @@ export function renderPortfolioBreakdown(
 
   const legendg = svg.append("g");
   const aggregatesg = svg.append("g");
+  const labelGroupg = svg
+    .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
   const lineg = g.append("line").classed("svg-grey-lightest", true);
 
@@ -97,9 +105,11 @@ export function renderPortfolioBreakdown(
 
   let rendered = false;
 
-  let z: d3.ScaleOrdinal<string, string, never> = null;
-  if (!_.isEmpty(groups)) {
+  let z: any;
+  if (!_.isEmpty(groups) && !options.z) {
     z = generateColorScheme(groups);
+  } else {
+    z = d3.scaleOrdinal<string>().domain(groups).range(options.z);
   }
 
   return (portfolioAggregates: PortfolioAggregate[], color: d3.ScaleOrdinal<string, string>) => {
@@ -191,13 +201,31 @@ export function renderPortfolioBreakdown(
         d3
           .axisTop(x1)
           .tickSize(height)
-          .tickFormat(skipTicks(40, x, (n: number) => formatFloat(n, 1)))
+          .tickFormat(skipTicks(40, x1, (n: number) => formatFloat(n, 1)))
       );
 
-    axisyg
-      .transition(t)
-      .attr("class", "axis y dark")
-      .call(d3.axisLeft(y).tickFormat((id) => formatName(byID[id].group)));
+    if (!small) {
+      axisyg
+        .transition(t)
+        .attr("class", "axis y dark")
+        .call(d3.axisLeft(y).tickFormat((id) => formatName(byID[id].group)));
+    }
+
+    if (small) {
+      const labelGroup = labelGroupg
+        .selectAll("g")
+        .data(portfolioAggregates, (d: any) => d.percentage.toString());
+
+      const labelGroupEnter = labelGroup.enter().append("g").attr("class", "inline-text");
+
+      labelGroupEnter
+        .append("text")
+        .text((t) => t.group)
+        .attr("dominant-baseline", "middle")
+        .classed("svg-text-grey-dark", true)
+        .attr("x", 5)
+        .attr("y", (t) => y(t.id) + BAR_HEIGHT / 2);
+    }
 
     const textGroup = textGroupg
       .selectAll("g")
@@ -233,28 +261,30 @@ export function renderPortfolioBreakdown(
 
     textGroup.exit().remove();
 
-    const tree = treemapg
-      .style("height", height + margin.top + margin.bottom + "px")
-      .style("position", "absolute")
-      .style("width", "100%")
-      .selectAll("div")
-      .data(portfolioAggregates, (d: any) => d.id);
+    if (!small) {
+      const tree = treemapg
+        .style("height", height + margin.top + margin.bottom + "px")
+        .style("position", "absolute")
+        .style("width", "100%")
+        .selectAll("div")
+        .data(portfolioAggregates, (d: any) => d.id);
 
-    const partitionWidth = x.range()[1] - x.range()[0];
+      const partitionWidth = x.range()[1] - x.range()[0];
 
-    tree
-      .join("div")
-      .style("position", "absolute")
-      .style("left", margin.left + x(0) + "px")
-      .style("top", (t) => margin.top + y(t.id) + paddingTop + "px")
-      .style("height", y.bandwidth() + "px")
-      .style("width", x.range()[1] - x.range()[0] + "px")
-      .append("div")
-      .style("position", "relative")
-      .style("height", y.bandwidth() + "px")
-      .each(function (pa) {
-        renderPartition(this, pa, d3.treemap(), color, partitionWidth);
-      });
+      tree
+        .join("div")
+        .style("position", "absolute")
+        .style("left", margin.left + x(0) + "px")
+        .style("top", (t) => margin.top + y(t.id) + paddingTop + "px")
+        .style("height", y.bandwidth() + "px")
+        .style("width", x.range()[1] - x.range()[0] + "px")
+        .append("div")
+        .style("position", "relative")
+        .style("height", y.bandwidth() + "px")
+        .each(function (pa) {
+          renderPartition(this, pa, d3.treemap(), color, partitionWidth);
+        });
+    }
   };
 }
 

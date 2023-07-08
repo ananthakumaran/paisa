@@ -32,6 +32,11 @@ func (q *Query) Credit() *Query {
 	return q
 }
 
+func (q *Query) AccountPrefix(account string) *Query {
+	q.context = q.context.Where("account like ? or account = ?", account+":%", account)
+	return q
+}
+
 func (q *Query) Like(account string) *Query {
 	q.context = q.context.Where("account like ?", account)
 	return q

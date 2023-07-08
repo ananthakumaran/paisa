@@ -34,7 +34,9 @@
     securityTypeR = renderPortfolioBreakdown("#d3-portfolio-security-type", security_type);
     ratingR = renderPortfolioBreakdown("#d3-portfolio-security-rating", rating);
     industryR = renderPortfolioBreakdown("#d3-portfolio-security-industry", industry);
-    portfolioR = renderPortfolioBreakdown("#d3-portfolio", name_and_security_type, true);
+    portfolioR = renderPortfolioBreakdown("#d3-portfolio", name_and_security_type, {
+      showLegend: true
+    });
     color = generateColorScheme(commodities);
   });
 

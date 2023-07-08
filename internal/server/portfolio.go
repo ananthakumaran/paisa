@@ -5,6 +5,8 @@ import (
 
 	"github.com/samber/lo"
 
+	"sort"
+
 	"github.com/ananthakumaran/paisa/internal/accounting"
 	"github.com/ananthakumaran/paisa/internal/model/commodity"
 	"github.com/ananthakumaran/paisa/internal/model/portfolio"
@@ -13,7 +15,6 @@ import (
 	"github.com/ananthakumaran/paisa/internal/service"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
-	"sort"
 )
 
 type PortfolioDimension struct {
@@ -45,10 +46,29 @@ type PortfolioAggregate struct {
 	Breakdowns []CommodityBreakdown `json:"breakdowns"`
 }
 
+type PortfolioAllocationGroups struct {
+	Commomdities        []string             `json:"commodities"`
+	NameAndSecurityType []PortfolioAggregate `json:"name_and_security_type"`
+	SecurityType        []PortfolioAggregate `json:"security_type"`
+	Rating              []PortfolioAggregate `json:"rating"`
+	Industry            []PortfolioAggregate `json:"industry"`
+}
+
 func GetPortfolioAllocation(db *gorm.DB) gin.H {
+	groups := GetAccountPortfolioAllocation(db, "Assets")
+	return gin.H{
+		"commodities":            groups.Commomdities,
+		"name_and_security_type": groups.NameAndSecurityType,
+		"security_type":          groups.SecurityType,
+		"rating":                 groups.Rating,
+		"industry":               groups.Industry,
+	}
+}
+
+func GetAccountPortfolioAllocation(db *gorm.DB, account string) PortfolioAllocationGroups {
 	commoditieCodes := portfolio.GetAllParentCommodityIDs(db)
 	commodities := lo.Map(commoditieCodes, func(code string, _ int) commodity.Commodity { return commodity.FindByCode(code) })
-	postings := query.Init(db).Like("Assets:%").Commodities(commodities).All()
+	postings := query.Init(db).AccountPrefix(account).Commodities(commodities).All()
 	postings = service.PopulateMarketPrice(db, postings)
 	byCommodity := lo.GroupBy(postings, func(p posting.Posting) string { return p.Commodity })
 
@@ -64,9 +84,9 @@ func GetPortfolioAllocation(db *gorm.DB) gin.H {
 		return computePortfolioAggregate(db, commodity, balance)
 	})
 
-	return gin.H{
-		"commodities": supportedCommodities,
-		"name_and_security_type": rollupPortfolioAggregate(PortfolioDimension{
+	return PortfolioAllocationGroups{
+		Commomdities: supportedCommodities,
+		NameAndSecurityType: rollupPortfolioAggregate(PortfolioDimension{
 			FilterFn: func(c CommodityBreakdown, _ int) bool {
 				return true
 			},
@@ -78,7 +98,7 @@ func GetPortfolioAllocation(db *gorm.DB) gin.H {
 			SubGroupFn: func(c CommodityBreakdown) string {
 				return orUnknown(c.SecurityType)
 			}}, cbs),
-		"security_type": rollupPortfolioAggregate(PortfolioDimension{
+		SecurityType: rollupPortfolioAggregate(PortfolioDimension{
 			FilterFn: func(c CommodityBreakdown, _ int) bool {
 				return true
 			},
@@ -90,7 +110,7 @@ func GetPortfolioAllocation(db *gorm.DB) gin.H {
 			SubGroupFn: func(c CommodityBreakdown) string {
 				return orUnknown(c.SecurityType)
 			}}, cbs),
-		"rating": rollupPortfolioAggregate(PortfolioDimension{
+		Rating: rollupPortfolioAggregate(PortfolioDimension{
 			FilterFn: func(c CommodityBreakdown, _ int) bool {
 				return c.SecurityType == "debt"
 			},
@@ -102,7 +122,7 @@ func GetPortfolioAllocation(db *gorm.DB) gin.H {
 			SubGroupFn: func(c CommodityBreakdown) string {
 				return orUnknown(c.SecurityRating)
 			}}, cbs),
-		"industry": rollupPortfolioAggregate(PortfolioDimension{
+		Industry: rollupPortfolioAggregate(PortfolioDimension{
 			FilterFn: func(c CommodityBreakdown, _ int) bool {
 				return c.SecurityType == "equity"
 			},

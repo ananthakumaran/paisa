@@ -110,6 +110,14 @@ export interface CommodityBreakdown {
   percentage: number;
 }
 
+export interface PortfolioAllocation {
+  name_and_security_type: PortfolioAggregate[];
+  security_type: PortfolioAggregate[];
+  rating: PortfolioAggregate[];
+  industry: PortfolioAggregate[];
+  commodities: string[];
+}
+
 export interface PortfolioAggregate {
   id: string;
   group: string;
@@ -329,19 +337,14 @@ export function ajax(
   params?: Record<string, string>
 ): Promise<{
   gain_timeline_breakdown: AccountGain;
+  portfolio_allocation: PortfolioAllocation;
 }>;
 export function ajax(route: "/api/allocation"): Promise<{
   aggregates: { [key: string]: Aggregate };
   aggregates_timeline: { [key: string]: Aggregate }[];
   allocation_targets: AllocationTarget[];
 }>;
-export function ajax(route: "/api/portfolio_allocation"): Promise<{
-  name_and_security_type: PortfolioAggregate[];
-  security_type: PortfolioAggregate[];
-  rating: PortfolioAggregate[];
-  industry: PortfolioAggregate[];
-  commodities: string[];
-}>;
+export function ajax(route: "/api/portfolio_allocation"): Promise<PortfolioAllocation>;
 export function ajax(route: "/api/income"): Promise<{
   income_timeline: Income[];
   tax_timeline: Tax[];

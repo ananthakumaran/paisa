@@ -17,7 +17,7 @@ it.
 ## Quick Start
 
 Run the following commands to checkout **paisa** features. Read the
-tutorial to understand the details.
+[tutorial](./tutorial.md) to understand the details.
 
 ```shell
 ❯ mkdir finance

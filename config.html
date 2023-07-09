@@ -160,8 +160,10 @@ db_path: /home/ananthakumaran/work/repos/finance/paisa.db
 # OPTIONAL, DEFAULT: ledger, ENUM: ledger, hledger
 ledger_cli: hledger
 
-# The default currency to use. NOTE: Paisa doesn't handle multiple
-# currencies well.
+# The default currency to use. NOTE: Paisa tries to convert other
+# currencies to default currency, so make sure it's possible to
+# convert to default currency by specifying the exchange rate.
+#
 # OPTIONAL, DEFAULT: INR
 default_currency: INR
 

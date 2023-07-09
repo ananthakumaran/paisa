@@ -180,7 +180,7 @@ it.</li>
 </code></pre>
 <h2 id="quick-start"><a class="header" href="#quick-start">Quick Start</a></h2>
 <p>Run the following commands to checkout <strong>paisa</strong> features. Read the
-tutorial to understand the details.</p>
+<a href="./tutorial.html">tutorial</a> to understand the details.</p>
 <pre><code class="language-shell">❯ mkdir finance
 ❯ cd finance
 ❯ paisa init
@@ -353,9 +353,16 @@ make any changes to the journal file, you need to run the update
 command. The serve command starts a local server and provides the
 WebGUI.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="accounts"><a class="header" href="#accounts">Accounts</a></h1>
-<p>Even though <strong>ledger</strong> doesn't have any Account naming convention,
-<strong>paisa</strong> makes lot of assumptions and expects you to follow the same
-naming convention.</p>
+<p>If you take a typical transaction, money moves between two parties. In
+ledger, you call them <strong>Account</strong>. At least two accounts are involved
+in any transaction. Accounts are also hierarchical. This helps with
+the organization. For example you can treat EPF and PPF as two
+accounts namely <code>Assets:Debt:EPF</code> and <code>Assets:Debt:PPF</code>. The
+hierarchy helps you ask questions like what is the balance of
+<code>Assets:Debt</code>, which will include both EPF and PPF</p>
+<p>Even though <strong>ledger</strong> doesn't have any strict Account naming
+convention, <strong>paisa</strong> expects you to follow the standard naming
+convention.</p>
 <p>There are four types of account namely</p>
 <ol>
 <li>Assets</li>
@@ -364,26 +371,60 @@ naming convention.</p>
 <li>Expenses</li>
 </ol>
 <p><img src="images/flow.png" alt="Flow" /></p>
-<p>Money flows from Income to Assets, from Assets to either Expenses,
-Liabilities or other Assets, from Liabilities to Expenses.</p>
-<h3 id="checking"><a class="header" href="#checking">Checking</a></h3>
-<p>Your checking account should be named <code>Assets:Checking</code>.</p>
+<p>All the accounts you create should be under one of these
+accounts. This naming convention is a necessity, because without
+which, it's not possible to tell whether you are spending money or
+investing money. A transaction from Assets account to Expenses account
+implies that you are spending money.</p>
+<p>Money typically flows from Income to Assets, from Assets to either
+Expenses, Liabilities or other Assets, from Liabilities to Expenses.</p>
+<p>As a general principle, try not to create too many accounts at second
+level. The UI works best when you create less than or equal to 12
+second level account under each type. For example, you can have 12
+accounts under <code>Expenses</code>. But if you want more, try to add them under
+3 level, example <code>Expenses:Food:Subway</code>.</p>
 <h3 id="assets"><a class="header" href="#assets">Assets</a></h3>
 <p>All your assets should go under <code>Assets:</code>. The level of granularity is
 up to you. The recommended convention is to use
 <code>Assets:{instrument_type}:{instrument_name}</code>. The instrument type may
 be <code>Cash</code>, <code>Equity</code>, <code>Debt</code>, etc. The instrument name may be the name of
 the fund, stock, etc</p>
+<h3 id="checking"><a class="header" href="#checking">Checking</a></h3>
+<p><code>Assets:Checking</code> is a special account where you keep your money for
+daily use. This will be included in your net worth, but will not be
+treated as an investment. So gain page for example, will exclude this
+account and won't show the returns.</p>
 <h3 id="income"><a class="header" href="#income">Income</a></h3>
-<p>All your income should come from <code>Income:</code>.</p>
+<p>All your income should come from <code>Income:</code>. The typical way is to
+treat each employer as a separate account.</p>
 <ul>
 <li><code>Income:Salary:{company}</code> - salary debit account</li>
+</ul>
+<h3 id="interest-1"><a class="header" href="#interest-1">Interest</a></h3>
+<p><code>Income:Interest</code> is a special type of account from the perspective of
+returns calculation. Let's assume you have bought APPLE stock. You
+might be buying then at regular intervals. To calculate your returns,
+we can compute the difference between purchase price and current
+price.</p>
+<p>Now in case of FD, you will get your interest credited to your
+account. The returns is the difference between the amount you
+deposited and the final balance. It's essential we need to know which
+transactions are deposits and which are interest credits.</p>
+<p>Any money that comes from the sub account of <code>Income:Interest</code> will be
+treated as interest. This convention allows paisa to calculate the
+returns of any debt instrument without explicitly specifying anything
+else.</p>
+<ul>
 <li><code>Income:Interest:{name}</code> - interest debit account</li>
 </ul>
 <h3 id="tax"><a class="header" href="#tax">Tax</a></h3>
-<p>Income tax paid to government should be credited to <code>Expenses:Tax</code> account</p>
+<p>Income tax paid to government should be credited to <code>Expenses:Tax</code>
+account. This is used to calculate your Net Income and your Savings
+Rate.</p>
 <h3 id="expenses"><a class="header" href="#expenses">Expenses</a></h3>
-<p>All your expenses should go to <code>Expenses:{category}</code> accounts.</p>
+<p>All your expenses should go to <code>Expenses:{category}</code> accounts. You can
+also have more than 2 levels as well. The expense page will roll it up
+to 2 level wherever necessary.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="commodities"><a class="header" href="#commodities">Commodities</a></h1>
 <p>There are no restrictions on the type of <strong>commodities</strong> that can be
 used in <strong>paisa</strong>. Anything like gold, mutual fund, NPS, etc can be
@@ -927,8 +968,10 @@ db_path: /home/ananthakumaran/work/repos/finance/paisa.db
 # OPTIONAL, DEFAULT: ledger, ENUM: ledger, hledger
 ledger_cli: hledger
 
-# The default currency to use. NOTE: Paisa doesn't handle multiple
-# currencies well.
+# The default currency to use. NOTE: Paisa tries to convert other
+# currencies to default currency, so make sure it's possible to
+# convert to default currency by specifying the exchange rate.
+#
 # OPTIONAL, DEFAULT: INR
 default_currency: INR
 

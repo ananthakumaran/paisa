@@ -1,6 +1,6 @@
 # Paisa
 
-![Matrix](https://img.shields.io/matrix/paisa%3Amatrix.org?logo=matrix)
+![Matrix](https://img.shields.io/matrix/paisa%3Amatrix.org?logo=matrix&link=https%3A%2F%2Fmatrix.to%2F%23%2F%23paisa%3Amatrix.org)
 
 **Paisa** is a command line tool and WebGUI to visualize personal
 finance, specially tailored for Indians. It builds on top of the

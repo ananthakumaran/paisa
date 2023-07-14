@@ -11,6 +11,8 @@ $box-padding: 1.25rem 0;
 $card-shadow: none;
 $card-header-shadow: 0 0.05em 0.1em rgba(10, 10, 10, 0.1);
 
+$switch-focus: none;
+
 @import "@fortawesome/fontawesome-free/scss/fontawesome.scss";
 @import "@fortawesome/fontawesome-free/scss/regular.scss";
 @import "@fortawesome/fontawesome-free/scss/solid.scss";
@@ -28,8 +30,6 @@ $card-header-shadow: 0 0.05em 0.1em rgba(10, 10, 10, 0.1);
 
 @import "bulma/bulma.sass";
 
-$switch-focus: none;
-/* $box-shadow: 0 0.5em 1em -0.125em rgba($scheme-invert, 0.1), 0 0px 0 1px rgba($scheme-invert, 0.02); */
 @import "bulma-switch/src/sass/index.sass";
 
 :focus {

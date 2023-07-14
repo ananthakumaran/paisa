@@ -7,28 +7,42 @@ import (
 )
 
 type Config struct {
-	sync.Once
-	defaultCurrency string
-	journalPath     string
+	DefaultCurrency string `json:"default_currency"`
+	Locale          string `json:"locale"`
+	JournalPath     string `json:"journal_path"`
 }
+
+var configLock sync.Once
 
 var config Config
 
 func loadConfig() {
 	if viper.IsSet("default_currency") {
-		config.defaultCurrency = viper.GetString("default_currency")
+		config.DefaultCurrency = viper.GetString("default_currency")
 	} else {
-		config.defaultCurrency = "INR"
+		config.DefaultCurrency = "INR"
 	}
-	config.journalPath = viper.GetString("journal_path")
+
+	if viper.IsSet("locale") {
+		config.Locale = viper.GetString("locale")
+	} else {
+		config.Locale = "en-IN"
+	}
+
+	config.JournalPath = viper.GetString("journal_path")
+}
+
+func GetConfig() Config {
+	configLock.Do(loadConfig)
+	return config
 }
 
 func JournalPath() string {
-	config.Do(loadConfig)
-	return config.journalPath
+	configLock.Do(loadConfig)
+	return config.JournalPath
 }
 
 func DefaultCurrency() string {
-	config.Do(loadConfig)
-	return config.defaultCurrency
+	configLock.Do(loadConfig)
+	return config.DefaultCurrency
 }

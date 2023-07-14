@@ -1,5 +1,14 @@
 /// <reference types="@sveltejs/kit" />
 
+interface UserConfig {
+  default_currency: string;
+  locale: string;
+  journal_path: string;
+}
+
+// eslint-disable-next-line no-var
+declare var USER_CONFIG: UserConfig;
+
 declare namespace App {
   // interface Error {}
   // interface Locals {}

@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@codemirror/autocomplete": "^6.4.2",
+    "@formatjs/intl-numberformat": "^8.7.0",
     "@fortawesome/fontawesome-free": "^6.0",
     "arima": "^0.2.5",
     "bulma": "^0.9.4",
@@ -64,7 +65,7 @@
     "jest": "^29.5.0",
     "jest-environment-jsdom": "^29.5.0",
     "nodemon": "^2.0.15",
-    "prettier": "^2.8.0",
+    "prettier": "^2.8.1",
     "prettier-plugin-svelte": "^2.8.1",
     "sass": "^1.57.1",
     "svelte": "^3.54.0",

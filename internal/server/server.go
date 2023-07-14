@@ -3,6 +3,7 @@ package server
 import (
 	"net/http"
 
+	"github.com/ananthakumaran/paisa/internal/config"
 	"github.com/ananthakumaran/paisa/internal/model/template"
 	"github.com/ananthakumaran/paisa/internal/prediction"
 	"github.com/ananthakumaran/paisa/internal/server/assets"
@@ -21,6 +22,11 @@ func Listen(db *gorm.DB) {
 	router.GET("/static/*filepath", func(c *gin.Context) {
 		c.FileFromFS(c.Request.URL.Path, http.FS(web.Static))
 	})
+
+	router.GET("/api/config", func(c *gin.Context) {
+		c.JSON(200, config.GetConfig())
+	})
+
 	router.POST("/api/sync", func(c *gin.Context) {
 		var syncRequest SyncRequest
 		if err := c.ShouldBindJSON(&syncRequest); err != nil {

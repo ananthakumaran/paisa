@@ -1,5 +1,4 @@
 <script lang="ts">
-  import * as d3 from "d3";
   import COLORS from "$lib/colors";
   import { renderAccountOverview, renderLegend } from "$lib/gain";
   import { filterCommodityBreakdowns, renderPortfolioBreakdown } from "$lib/portfolio";
@@ -15,6 +14,7 @@
   } from "$lib/utils";
   import _ from "lodash";
   import { onMount, onDestroy } from "svelte";
+  import type { PageData } from "./$types";
 
   let commodities: string[] = [];
   let selectedCommodities: string[] = [];
@@ -29,7 +29,7 @@
   let ratingEmpty: boolean = false;
   let industryEmpty: boolean = false;
 
-  export let data: { name: string };
+  export let data: PageData;
   let gain: AccountGain;
   let overview: Overview;
 

@@ -8,8 +8,9 @@
   import _ from "lodash";
   import { onMount } from "svelte";
   import { goto } from "$app/navigation";
+  import type { PageData } from "./$types";
 
-  export let data: { name: string };
+  export let data: PageData;
   let editorDom: Element;
   let editor: EditorView;
   let filesMap: Record<string, LedgerFile> = {};

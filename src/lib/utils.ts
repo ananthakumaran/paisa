@@ -303,6 +303,7 @@ const BACKGROUND = [
   "/api/templates/delete"
 ];
 
+export function ajax(route: "/api/config"): Promise<UserConfig>;
 export function ajax(route: "/api/retirement/progress"): Promise<RetirementProgress>;
 export function ajax(route: "/api/harvest"): Promise<{ harvestables: Record<string, Harvestable> }>;
 export function ajax(
@@ -444,7 +445,7 @@ export function formatCurrency(value: number, precision = 0) {
     value = 0;
   }
 
-  return value.toLocaleString("hi", {
+  return value.toLocaleString(USER_CONFIG.locale, {
     minimumFractionDigits: precision,
     maximumFractionDigits: precision
   });
@@ -459,25 +460,18 @@ export function formatCurrencyCrudeWithPrecision(value: number, precision: numbe
     return "00";
   }
 
-  let x = 0,
-    unit = "";
-  if (Math.abs(value) < 100000) {
-    (x = value / 1000), (unit = "K");
-  } else if (Math.abs(value) < 10000000) {
-    (x = value / 100000), (unit = "L");
-  } else {
-    (x = value / 10000000), (unit = "C");
-  }
+  const options: Intl.NumberFormatOptions = {
+    notation: "compact"
+  };
 
   if (precision < 0) {
-    precision = 2;
-    if (x == Math.round(x)) {
-      precision = 0;
-    } else if (x * 10 == Math.round(x * 10)) {
-      precision = 1;
-    }
+    options.maximumFractionDigits = 2;
+  } else {
+    options.maximumFractionDigits = precision;
+    options.minimumFractionDigits = precision;
   }
-  return sprintf(`%.${precision}f %s`, x, unit);
+
+  return value.toLocaleString(USER_CONFIG.locale, options);
 }
 
 export function formatFloat(value: number, precision = 2) {
@@ -501,7 +495,7 @@ export function formatPercentage(value: number, precision = 0) {
     value = 0;
   }
 
-  return value.toLocaleString("hi", {
+  return value.toLocaleString(USER_CONFIG.locale, {
     style: "percent",
     minimumFractionDigits: precision
   });

@@ -1,6 +1,8 @@
 export const prerender = false;
 export const ssr = false;
 
+import type { LayoutLoad } from "./$types";
+
 import "../app.scss";
 import "tippy.js/dist/tippy.css";
 import "tippy.js/themes/light.css";
@@ -16,6 +18,10 @@ import Handlebars from "handlebars";
 import helpers from "$lib/template_helpers";
 import * as toast from "bulma-toast";
 import _ from "lodash";
+import { ajax } from "$lib/utils";
+
+import "@formatjs/intl-numberformat/polyfill";
+import "@formatjs/intl-numberformat/locale-data/en";
 
 Handlebars.registerHelper(
   _.mapValues(helpers, (helper, name) => {
@@ -34,3 +40,8 @@ toast.setDefaults({
   dismissible: true,
   pauseOnHover: true
 });
+
+export const load = (async () => {
+  globalThis.USER_CONFIG = await ajax("/api/config");
+  return {};
+}) satisfies LayoutLoad;

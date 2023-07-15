@@ -4,6 +4,7 @@ interface UserConfig {
   default_currency: string;
   locale: string;
   journal_path: string;
+  financial_year_starting_month: number;
 }
 
 // eslint-disable-next-line no-var

@@ -38,7 +38,7 @@
   </div>
 </section>
 
-<section class="section">
+<section class="section" class:is-not-visible={isEmpty}>
   <div class="container is-fluid">
     <div class="columns">
       <div class="column is-12">

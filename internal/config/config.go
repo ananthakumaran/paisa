@@ -1,6 +1,8 @@
 package config
 
 import (
+	"time"
+
 	"dario.cat/mergo"
 	"gopkg.in/yaml.v3"
 )
@@ -51,11 +53,12 @@ type AllocationTarget struct {
 }
 
 type Config struct {
-	JournalPath     string `json:"journal_path" yaml:"journal_path"`
-	DBPath          string `json:"db_path" yaml:"db_path"`
-	LedgerCli       string `json:"ledger_cli" yaml:"ledger_cli"`
-	DefaultCurrency string `json:"default_currency" yaml:"default_currency"`
-	Locale          string `json:"locale" yaml:"locale"`
+	JournalPath                string     `json:"journal_path" yaml:"journal_path"`
+	DBPath                     string     `json:"db_path" yaml:"db_path"`
+	LedgerCli                  string     `json:"ledger_cli" yaml:"ledger_cli"`
+	DefaultCurrency            string     `json:"default_currency" yaml:"default_currency"`
+	Locale                     string     `json:"locale" yaml:"locale"`
+	FinancialYearStartingMonth time.Month `json:"financial_year_starting_month" yaml:"financial_year_starting_month"`
 
 	Retirement Retirement `json:"retirement" yaml:"retirement"`
 
@@ -69,10 +72,11 @@ type Config struct {
 var config Config
 
 var defaultConfig = Config{
-	LedgerCli:       "ledger",
-	DefaultCurrency: "INR",
-	Locale:          "en-IN",
-	Retirement:      Retirement{SWR: 4, Savings: []string{"Assets:*"}, Expenses: []string{"Expenses:*"}, YearlyExpenses: 0},
+	LedgerCli:                  "ledger",
+	DefaultCurrency:            "INR",
+	Locale:                     "en-IN",
+	Retirement:                 Retirement{SWR: 4, Savings: []string{"Assets:*"}, Expenses: []string{"Expenses:*"}, YearlyExpenses: 0},
+	FinancialYearStartingMonth: 4,
 }
 
 func LoadConfig(content []byte) error {

@@ -31,7 +31,10 @@ export function renderCalendar(
   const id = "#d3-current-year-expense-calendar";
   const alpha = d3.scaleLinear().range([0.3, 1]);
 
-  const months: string[] = [
+  const ALL_MONTHS = [
+    "Jan",
+    "Feb",
+    "Mar",
     "Apr",
     "May",
     "Jun",
@@ -40,11 +43,13 @@ export function renderCalendar(
     "Sep",
     "Oct",
     "Nov",
-    "Dec",
-    "Jan",
-    "Feb",
-    "Mar"
+    "Dec"
   ];
+
+  const months: string[] = _.concat(
+    _.drop(ALL_MONTHS, USER_CONFIG.financial_year_starting_month - 1),
+    _.take(ALL_MONTHS, USER_CONFIG.financial_year_starting_month - 1)
+  );
   const expensesByMonth: Record<string, Posting[]> = _.chain(months)
     .map((month) => {
       return [

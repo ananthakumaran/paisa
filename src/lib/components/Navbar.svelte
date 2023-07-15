@@ -4,7 +4,16 @@
   import { month, year, dateMax, dateMin } from "../../store";
   import _ from "lodash";
   import { financialYear, forEachFinancialYear } from "$lib/utils";
+  import { onMount } from "svelte";
+  import { get } from "svelte/store";
+  import dayjs from "dayjs";
   export let isBurger: boolean = null;
+
+  onMount(async () => {
+    if (get(year) == "") {
+      year.set(financialYear(dayjs()));
+    }
+  });
 
   interface Link {
     label: string;

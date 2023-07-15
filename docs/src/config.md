@@ -29,6 +29,12 @@ default_currency: INR
 # OPTIONAL, DEFAULT: en-IN
 locale: en-IN
 
+# First month of the financial year. This can be set to 1 to follow
+# January to December.
+#
+# OPTIONAL, DEFAULT: 4
+financial_year_starting_month: 4
+
 ## Retirement
 retirement:
   # Safe Withdrawal Rate

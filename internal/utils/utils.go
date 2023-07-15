@@ -30,7 +30,11 @@ func BTreeToSlice[I btree.Item](tree *btree.BTree) []I {
 }
 
 func FY(date time.Time) string {
-	if date.Month() < time.April {
+	if config.GetConfig().FinancialYearStartingMonth == time.January {
+		return fmt.Sprintf("%d", date.Year())
+	}
+
+	if date.Month() < config.GetConfig().FinancialYearStartingMonth {
 		return fmt.Sprintf("%d-%d", date.Year()-1, date.Year()%100)
 	} else {
 		return fmt.Sprintf("%d-%d", date.Year(), (date.Year()+1)%100)
@@ -38,7 +42,11 @@ func FY(date time.Time) string {
 }
 
 func FYHuman(date time.Time) string {
-	if date.Month() < time.April {
+	if config.GetConfig().FinancialYearStartingMonth == time.January {
+		return fmt.Sprintf("%d", date.Year())
+	}
+
+	if date.Month() < config.GetConfig().FinancialYearStartingMonth {
 		return fmt.Sprintf("%d - %d", date.Year()-1, date.Year()%100)
 	} else {
 		return fmt.Sprintf("%d - %d", date.Year(), (date.Year()+1)%100)
@@ -47,10 +55,10 @@ func FYHuman(date time.Time) string {
 
 func BeginningOfFinancialYear(date time.Time) time.Time {
 	beginningOfMonth := BeginningOfMonth(date)
-	if beginningOfMonth.Month() < time.April {
-		return beginningOfMonth.AddDate(-1, int(time.April-beginningOfMonth.Month()), 0)
+	if beginningOfMonth.Month() < config.GetConfig().FinancialYearStartingMonth {
+		return beginningOfMonth.AddDate(-1, int(config.GetConfig().FinancialYearStartingMonth-beginningOfMonth.Month()), 0)
 	} else {
-		return beginningOfMonth.AddDate(0, -int(beginningOfMonth.Month()-time.April), 0)
+		return beginningOfMonth.AddDate(0, -int(beginningOfMonth.Month()-config.GetConfig().FinancialYearStartingMonth), 0)
 	}
 }
 

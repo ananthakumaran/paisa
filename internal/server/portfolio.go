@@ -8,6 +8,7 @@ import (
 	"sort"
 
 	"github.com/ananthakumaran/paisa/internal/accounting"
+	"github.com/ananthakumaran/paisa/internal/config"
 	"github.com/ananthakumaran/paisa/internal/model/commodity"
 	"github.com/ananthakumaran/paisa/internal/model/portfolio"
 	"github.com/ananthakumaran/paisa/internal/model/posting"
@@ -67,7 +68,7 @@ func GetPortfolioAllocation(db *gorm.DB) gin.H {
 
 func GetAccountPortfolioAllocation(db *gorm.DB, account string) PortfolioAllocationGroups {
 	commoditieCodes := portfolio.GetAllParentCommodityIDs(db)
-	commodities := lo.Map(commoditieCodes, func(code string, _ int) commodity.Commodity { return commodity.FindByCode(code) })
+	commodities := lo.Map(commoditieCodes, func(code string, _ int) config.Commodity { return commodity.FindByCode(code) })
 	postings := query.Init(db).AccountPrefix(account).Commodities(commodities).All()
 	postings = service.PopulateMarketPrice(db, postings)
 	byCommodity := lo.GroupBy(postings, func(p posting.Posting) string { return p.Commodity })

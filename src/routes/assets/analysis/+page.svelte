@@ -67,7 +67,7 @@
   </div>
 </section>
 
-<section class="section tab-portfolio">
+<section class="section tab-portfolio" class:is-hidden={isEmpty}>
   <div class="container is-fluid">
     <div class="columns">
       <div class="column is-12 is-flex">

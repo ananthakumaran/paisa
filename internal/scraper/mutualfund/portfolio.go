@@ -9,8 +9,8 @@ import (
 
 	log "github.com/sirupsen/logrus"
 
+	"github.com/ananthakumaran/paisa/internal/config"
 	"github.com/ananthakumaran/paisa/internal/model/portfolio"
-	"github.com/ananthakumaran/paisa/internal/model/price"
 )
 
 func GetPortfolio(schemeCode string, commodityName string) ([]*portfolio.Portfolio, error) {
@@ -70,7 +70,7 @@ WHERE s.code = %s
 
 		portfolio := portfolio.Portfolio{
 			SecurityName:      data.Name,
-			CommodityType:     price.MutualFund,
+			CommodityType:     config.MutualFund,
 			SecurityID:        data.ISIN,
 			Percentage:        data.PercentageToNav,
 			ParentCommodityID: schemeCode,

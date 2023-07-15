@@ -1,16 +1,17 @@
 package cmd
 
 import (
+	"strings"
+
+	"github.com/ananthakumaran/paisa/internal/config"
 	"github.com/ananthakumaran/paisa/internal/model/nps/scheme"
 	"github.com/ananthakumaran/paisa/internal/scraper/nps"
 	"github.com/logrusorgru/aurora"
 	"github.com/manifoldco/promptui"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
-	"strings"
 )
 
 var npsUpdate bool
@@ -19,7 +20,7 @@ var npsCmd = &cobra.Command{
 	Use:   "nps",
 	Short: "Search nps fund",
 	Run: func(cmd *cobra.Command, args []string) {
-		db, err := gorm.Open(sqlite.Open(viper.GetString("db_path")), &gorm.Config{})
+		db, err := gorm.Open(sqlite.Open(config.GetConfig().DBPath), &gorm.Config{})
 		if err != nil {
 			log.Fatal(err)
 		}

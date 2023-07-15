@@ -26,7 +26,7 @@ func SyncJournal(db *gorm.DB) {
 		log.Fatal(err)
 	}
 
-	price.UpsertAllByType(db, price.Unknown, prices)
+	price.UpsertAllByType(db, config.Unknown, prices)
 
 	postings, err := ledger.Cli().Parse(config.JournalPath(), prices)
 	if err != nil {
@@ -47,11 +47,11 @@ func SyncCommodities(db *gorm.DB) {
 		var err error
 
 		switch commodity.Type {
-		case price.MutualFund:
+		case config.MutualFund:
 			prices, err = mutualfund.GetNav(code, name)
-		case price.NPS:
+		case config.NPS:
 			prices, err = nps.GetNav(code, name)
-		case price.Stock:
+		case config.Stock:
 			prices, err = stock.GetHistory(code, name)
 		}
 
@@ -76,7 +76,7 @@ func SyncCII(db *gorm.DB) {
 func SyncPortfolios(db *gorm.DB) {
 	db.AutoMigrate(&portfolio.Portfolio{})
 	log.Info("Fetching commodities portfolio")
-	commodities := commodity.FindByType(price.MutualFund)
+	commodities := commodity.FindByType(config.MutualFund)
 	for _, commodity := range commodities {
 		name := commodity.Name
 		log.Info("Fetching portfolio for ", aurora.Bold(name))

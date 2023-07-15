@@ -85,7 +85,7 @@ func GetHistory(ticker string, commodityName string) ([]*price.Price, error) {
 			value = value * exchangePrice.Close
 		}
 
-		price := price.Price{Date: date, CommodityType: price.Stock, CommodityID: ticker, CommodityName: commodityName, Value: value}
+		price := price.Price{Date: date, CommodityType: config.Stock, CommodityID: ticker, CommodityName: commodityName, Value: value}
 
 		prices = append(prices, &price)
 	}

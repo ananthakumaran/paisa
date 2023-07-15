@@ -13,6 +13,7 @@ import (
 
 	"math/rand"
 
+	"github.com/ananthakumaran/paisa/internal/config"
 	"github.com/ananthakumaran/paisa/internal/model/price"
 	"github.com/ananthakumaran/paisa/internal/scraper/mutualfund"
 	"github.com/ananthakumaran/paisa/internal/scraper/nps"
@@ -165,14 +166,14 @@ func emitCommoditySell(file *os.File, date time.Time, commodity string, from str
 	return emitCommodityBuy(file, date, commodity, from, to, -units*pc.Value), units * pc.Value
 }
 
-func loadPrices(schemeCode string, commodityType price.CommodityType, commodityName string, pricesTree map[string]*btree.BTree) {
+func loadPrices(schemeCode string, commodityType config.CommodityType, commodityName string, pricesTree map[string]*btree.BTree) {
 	var prices []*price.Price
 	var err error
 
 	switch commodityType {
-	case price.MutualFund:
+	case config.MutualFund:
 		prices, err = mutualfund.GetNav(schemeCode, commodityName)
-	case price.NPS:
+	case config.NPS:
 		prices, err = nps.GetNav(schemeCode, commodityName)
 	}
 
@@ -383,12 +384,12 @@ func generateJournalFile(cwd string) {
 	}
 
 	pricesTree = make(map[string]*btree.BTree)
-	loadPrices("120716", price.MutualFund, "NIFTY", pricesTree)
-	loadPrices("122639", price.MutualFund, "PPFAS", pricesTree)
-	loadPrices("119533", price.MutualFund, "ABCBF", pricesTree)
-	loadPrices("SM008001", price.NPS, "NPS_HDFC_E", pricesTree)
-	loadPrices("SM008002", price.NPS, "NPS_HDFC_C", pricesTree)
-	loadPrices("SM008003", price.NPS, "NPS_HDFC_G", pricesTree)
+	loadPrices("120716", config.MutualFund, "NIFTY", pricesTree)
+	loadPrices("122639", config.MutualFund, "PPFAS", pricesTree)
+	loadPrices("119533", config.MutualFund, "ABCBF", pricesTree)
+	loadPrices("SM008001", config.NPS, "NPS_HDFC_E", pricesTree)
+	loadPrices("SM008002", config.NPS, "NPS_HDFC_C", pricesTree)
+	loadPrices("SM008003", config.NPS, "NPS_HDFC_G", pricesTree)
 
 	state := GeneratorState{Balance: 0, Ledger: ledgerFile, YearlySalary: 1000000, Rent: 10000, LoanBalance: 4000000}
 

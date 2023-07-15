@@ -4,12 +4,12 @@ import (
 	"time"
 
 	"github.com/ananthakumaran/paisa/internal/accounting"
+	"github.com/ananthakumaran/paisa/internal/config"
 	"github.com/ananthakumaran/paisa/internal/model/posting"
 	"github.com/ananthakumaran/paisa/internal/query"
 	"github.com/ananthakumaran/paisa/internal/utils"
 	"github.com/gin-gonic/gin"
 	"github.com/samber/lo"
-	"github.com/spf13/viper"
 	"gorm.io/gorm"
 )
 
@@ -34,11 +34,6 @@ func init() {
 		{Code: "cash", Section: "B (1) (iv) (e)", Details: "Financial assets: Cash in hand"},
 		{Code: "liability", Section: "C (1)", Details: "Liabilities"},
 	}
-}
-
-type ScheduleALConfig struct {
-	Code     string
-	Accounts []string
 }
 
 type ScheduleALEntry struct {
@@ -72,12 +67,11 @@ func GetScheduleAL(db *gorm.DB) gin.H {
 }
 
 func computeScheduleAL(postings []posting.Posting) []ScheduleALEntry {
-	var configs []ScheduleALConfig
-	viper.UnmarshalKey("schedule_al", &configs)
+	scheduleALConfigs := config.GetConfig().ScheduleALs
 
 	return lo.Map(Sections, func(section ScheduleALSection, _ int) ScheduleALEntry {
-		config, found := lo.Find(configs, func(config ScheduleALConfig) bool {
-			return config.Code == section.Code
+		config, found := lo.Find(scheduleALConfigs, func(scheduleALConfig config.ScheduleAL) bool {
+			return scheduleALConfig.Code == section.Code
 		})
 
 		var amount float64

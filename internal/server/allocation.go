@@ -7,11 +7,11 @@ import (
 	"github.com/samber/lo"
 
 	"github.com/ananthakumaran/paisa/internal/accounting"
+	"github.com/ananthakumaran/paisa/internal/config"
 	"github.com/ananthakumaran/paisa/internal/model/posting"
 	"github.com/ananthakumaran/paisa/internal/query"
 	"github.com/ananthakumaran/paisa/internal/service"
 	"github.com/gin-gonic/gin"
-	"github.com/spf13/viper"
 	"gorm.io/gorm"
 )
 
@@ -69,24 +69,23 @@ func computeAggregateTimeline(postings []posting.Posting) []map[string]Aggregate
 
 func computeAllocationTargets(postings []posting.Posting) []AllocationTarget {
 	var targetAllocations []AllocationTarget
-	var configs []AllocationTargetConfig
-	viper.UnmarshalKey("allocation_targets", &configs)
+	allocationTargetConfigs := config.GetConfig().AllocationTargets
 
 	totalMarketAmount := lo.Reduce(postings, func(acc float64, p posting.Posting, _ int) float64 { return acc + p.MarketAmount }, 0.0)
 
-	for _, config := range configs {
-		targetAllocations = append(targetAllocations, computeAllocationTarget(postings, config, totalMarketAmount))
+	for _, allocationTargetConfig := range allocationTargetConfigs {
+		targetAllocations = append(targetAllocations, computeAllocationTarget(postings, allocationTargetConfig, totalMarketAmount))
 	}
 
 	return targetAllocations
 }
 
-func computeAllocationTarget(postings []posting.Posting, config AllocationTargetConfig, total float64) AllocationTarget {
+func computeAllocationTarget(postings []posting.Posting, allocationTargetConfig config.AllocationTarget, total float64) AllocationTarget {
 	date := time.Now()
-	postings = accounting.FilterByGlob(postings, config.Accounts)
+	postings = accounting.FilterByGlob(postings, allocationTargetConfig.Accounts)
 	aggregates := computeAggregate(postings, date)
 	currentTotal := lo.Reduce(postings, func(acc float64, p posting.Posting, _ int) float64 { return acc + p.MarketAmount }, 0.0)
-	return AllocationTarget{Name: config.Name, Target: config.Target, Current: (currentTotal / total) * 100, Aggregates: aggregates}
+	return AllocationTarget{Name: allocationTargetConfig.Name, Target: allocationTargetConfig.Target, Current: (currentTotal / total) * 100, Aggregates: aggregates}
 }
 
 func computeAggregate(postings []posting.Posting, date time.Time) map[string]Aggregate {

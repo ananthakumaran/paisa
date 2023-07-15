@@ -1,10 +1,9 @@
 package server
 
 import (
-	"github.com/ananthakumaran/paisa/internal/model/commodity"
+	"github.com/ananthakumaran/paisa/internal/config"
 	c "github.com/ananthakumaran/paisa/internal/model/commodity"
 	"github.com/ananthakumaran/paisa/internal/model/posting"
-	"github.com/ananthakumaran/paisa/internal/model/price"
 	"github.com/ananthakumaran/paisa/internal/query"
 	"github.com/ananthakumaran/paisa/internal/taxation"
 	"github.com/ananthakumaran/paisa/internal/utils"
@@ -34,9 +33,9 @@ type CapitalGain struct {
 }
 
 func GetCapitalGains(db *gorm.DB) gin.H {
-	commodities := lo.Filter(c.All(), func(c c.Commodity, _ int) bool {
-		return (c.Type == price.MutualFund || c.Type == price.Stock) &&
-			(c.TaxCategory == commodity.Debt || c.TaxCategory == commodity.Equity || c.TaxCategory == commodity.Equity65 || c.TaxCategory == commodity.Equity35 || c.TaxCategory == commodity.UnlistedEquity)
+	commodities := lo.Filter(c.All(), func(c config.Commodity, _ int) bool {
+		return (c.Type == config.MutualFund || c.Type == config.Stock) &&
+			(c.TaxCategory == config.Debt || c.TaxCategory == config.Equity || c.TaxCategory == config.Equity65 || c.TaxCategory == config.Equity35 || c.TaxCategory == config.UnlistedEquity)
 	})
 	postings := query.Init(db).Like("Assets:%").Commodities(commodities).All()
 	byAccount := lo.GroupBy(postings, func(p posting.Posting) string { return p.Account })
@@ -46,7 +45,7 @@ func GetCapitalGains(db *gorm.DB) gin.H {
 	return gin.H{"capital_gains": capitalGains}
 }
 
-func computeCapitalGains(db *gorm.DB, account string, commodity c.Commodity, postings []posting.Posting) CapitalGain {
+func computeCapitalGains(db *gorm.DB, account string, commodity config.Commodity, postings []posting.Posting) CapitalGain {
 	capitalGain := CapitalGain{Account: account, TaxCategory: string(commodity.TaxCategory), FY: make(map[string]FYCapitalGain)}
 	var available []posting.Posting
 	for _, p := range postings {

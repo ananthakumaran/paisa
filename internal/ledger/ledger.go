@@ -19,7 +19,6 @@ import (
 	"github.com/ananthakumaran/paisa/internal/model/posting"
 	"github.com/ananthakumaran/paisa/internal/model/price"
 	"github.com/ananthakumaran/paisa/internal/utils"
-	"github.com/spf13/viper"
 )
 
 type LedgerFileError struct {
@@ -39,7 +38,7 @@ type LedgerCLI struct{}
 type HLedgerCLI struct{}
 
 func Cli() Ledger {
-	if viper.GetString("ledger_cli") == "hledger" {
+	if config.GetConfig().LedgerCli == "hledger" {
 		return HLedgerCLI{}
 	}
 
@@ -315,7 +314,7 @@ func parseLedgerPrices(output string, defaultCurrency string) ([]price.Price, er
 			return nil, err
 		}
 
-		prices = append(prices, price.Price{Date: date, CommodityName: commodity, CommodityID: commodity, CommodityType: price.Unknown, Value: value})
+		prices = append(prices, price.Price{Date: date, CommodityName: commodity, CommodityID: commodity, CommodityType: config.Unknown, Value: value})
 
 	}
 	return prices, nil
@@ -343,7 +342,7 @@ func parseHLedgerPrices(output string, defaultCurrency string) ([]price.Price, e
 			return nil, err
 		}
 
-		prices = append(prices, price.Price{Date: date, CommodityName: commodity, CommodityID: commodity, CommodityType: price.Unknown, Value: value})
+		prices = append(prices, price.Price{Date: date, CommodityName: commodity, CommodityID: commodity, CommodityType: config.Unknown, Value: value})
 
 	}
 	return prices, nil

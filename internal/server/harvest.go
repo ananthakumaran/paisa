@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/ananthakumaran/paisa/internal/accounting"
+	"github.com/ananthakumaran/paisa/internal/config"
 	c "github.com/ananthakumaran/paisa/internal/model/commodity"
 	"github.com/ananthakumaran/paisa/internal/model/posting"
 	"github.com/ananthakumaran/paisa/internal/query"
@@ -36,7 +37,7 @@ type Harvestable struct {
 }
 
 func GetHarvest(db *gorm.DB) gin.H {
-	commodities := lo.Filter(c.All(), func(c c.Commodity, _ int) bool {
+	commodities := lo.Filter(c.All(), func(c config.Commodity, _ int) bool {
 		return c.Harvest > 0
 	})
 	postings := query.Init(db).Like("Assets:%").Commodities(commodities).All()
@@ -47,7 +48,7 @@ func GetHarvest(db *gorm.DB) gin.H {
 	return gin.H{"harvestables": harvestables}
 }
 
-func computeHarvestable(db *gorm.DB, account string, commodity c.Commodity, postings []posting.Posting) Harvestable {
+func computeHarvestable(db *gorm.DB, account string, commodity config.Commodity, postings []posting.Posting) Harvestable {
 	available := accounting.FIFO(postings)
 
 	today := time.Now()

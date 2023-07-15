@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/ananthakumaran/paisa/internal/config"
 	"github.com/ananthakumaran/paisa/internal/model/price"
 )
 
@@ -48,7 +49,7 @@ func GetNav(schemeCode string, commodityName string) ([]*price.Price, error) {
 			return nil, err
 		}
 
-		price := price.Price{Date: date, CommodityType: price.NPS, CommodityID: schemeCode, CommodityName: commodityName, Value: data.Nav}
+		price := price.Price{Date: date, CommodityType: config.NPS, CommodityID: schemeCode, CommodityName: commodityName, Value: data.Nav}
 		prices = append(prices, &price)
 	}
 	return prices, nil

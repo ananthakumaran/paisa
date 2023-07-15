@@ -1,11 +1,12 @@
 package cmd
 
 import (
+	"io/ioutil"
 	"os"
 
+	"github.com/ananthakumaran/paisa/internal/config"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
 )
 
 var configFile string
@@ -36,19 +37,25 @@ func initConfig() {
 	}
 
 	if envConfigFile := os.Getenv("PAISA_CONFIG"); envConfigFile != "" {
-		viper.SetConfigFile(envConfigFile)
+		readConfigFile(envConfigFile)
 	} else if configFile != "" {
-		viper.SetConfigFile(configFile)
+		readConfigFile(configFile)
 	} else {
-		viper.SetConfigName("paisa.yaml")
-		viper.SetConfigType("yaml")
-		viper.AddConfigPath(".")
+		readConfigFile("paisa.yaml")
 	}
+}
 
-	err := viper.ReadInConfig()
-	if err == nil {
-		log.Info("Using config file: ", viper.ConfigFileUsed())
-	} else {
+func readConfigFile(path string) {
+	content, err := ioutil.ReadFile(path)
+	if err != nil {
+		log.Warn("Failed to read config file: ", path)
 		log.Fatal(err)
 	}
+
+	err = config.LoadConfig(content)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	log.Info("Using config file: ", path)
 }

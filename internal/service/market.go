@@ -4,6 +4,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/ananthakumaran/paisa/internal/config"
 	"github.com/ananthakumaran/paisa/internal/model/posting"
 	"github.com/ananthakumaran/paisa/internal/model/price"
 	"github.com/ananthakumaran/paisa/internal/utils"
@@ -22,7 +23,7 @@ var pcache priceCache
 
 func loadPriceCache(db *gorm.DB) {
 	var prices []price.Price
-	result := db.Where("commodity_type != ?", price.Unknown).Find(&prices)
+	result := db.Where("commodity_type != ?", config.Unknown).Find(&prices)
 	if result.Error != nil {
 		log.Fatal(result.Error)
 	}
@@ -44,7 +45,7 @@ func loadPriceCache(db *gorm.DB) {
 
 	for commodityName, postings := range lo.GroupBy(postings, func(p posting.Posting) string { return p.Commodity }) {
 		if !utils.IsCurrency(postings[0].Commodity) && pcache.pricesTree[commodityName] == nil {
-			result := db.Where("commodity_type = ? and commodity_name = ?", price.Unknown, commodityName).Find(&prices)
+			result := db.Where("commodity_type = ? and commodity_name = ?", config.Unknown, commodityName).Find(&prices)
 			if result.Error != nil {
 				log.Fatal(result.Error)
 			}

@@ -305,7 +305,7 @@ the basics of <strong>ledger</strong> because <strong>paisa</strong> builds on t
 <strong>ledger</strong>.</p>
 <p><strong>paisa</strong> checks for a config file named <code>paisa.yaml</code> in the current
 directory. It can also be set via flag <code>--config</code> or env variable
-<code>PAISA_CONFIG</code>.</p>
+<code>PAISA_CONFIG</code>. Check the <a href="./config.html">config</a> section for details.</p>
 <pre><code class="language-yaml"># absolute path of journal file
 journal_path: /home/john/finance/personal.ledger
 # absolute path of sql database
@@ -953,6 +953,9 @@ instead, change the <code>ledger_cli</code> value in paisa.yaml</p>
 <pre><code class="language-yaml">ledger_cli: hledger
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="config-1"><a class="header" href="#config-1">Config</a></h1>
+<p><strong>paisa</strong> checks for a config file named <code>paisa.yaml</code> in the current
+directory. It can also be set via flag <code>--config</code> or env variable
+<code>PAISA_CONFIG</code>.</p>
 <pre><code class="language-yaml"># Absolute path to your journal file. The main journal file can
 # refer other files using `include` as long as all the files are in
 # the same directory
@@ -962,7 +965,7 @@ journal_path: /home/john/finance/personal.ledger
 # Absolute path to your database file. The database file will be
 # created if it does not exist.
 # REQUIRED
-db_path: /home/ananthakumaran/work/repos/finance/paisa.db
+db_path: /home/john/finance/paisa.db
 
 # The ledger client to use
 # OPTIONAL, DEFAULT: ledger, ENUM: ledger, hledger
@@ -1070,9 +1073,12 @@ allocation_targets:
 # OPTIONAL, DEFAULT: []
 commodities:
   - name: NASDAQ
+    # Required, ENUM: mutualfund, stock, nps, unknown
     type: mutualfund
+    # differs based on type
     code: 145552
     harvest: 1095
+    # Optional, ENUM: equity65, equity35, debt, unlisted_equity
     tax_category: debt
   - name: NIFTY
     type: mutualfund

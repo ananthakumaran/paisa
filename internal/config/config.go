@@ -1,9 +1,14 @@
 package config
 
 import (
+	"errors"
+	"fmt"
 	"time"
 
+	_ "embed"
+
 	"dario.cat/mergo"
+	"github.com/santhosh-tekuri/jsonschema/v5"
 	"gopkg.in/yaml.v3"
 )
 
@@ -79,8 +84,27 @@ var defaultConfig = Config{
 	FinancialYearStartingMonth: 4,
 }
 
+//go:embed schema.json
+var SchemaJson string
+var schema *jsonschema.Schema
+
+func init() {
+	schema = jsonschema.MustCompileString("", SchemaJson)
+}
+
 func LoadConfig(content []byte) error {
-	err := yaml.Unmarshal(content, &config)
+	var configJson interface{}
+	err := yaml.Unmarshal(content, &configJson)
+	if err != nil {
+		return err
+	}
+
+	err = schema.Validate(configJson)
+	if err != nil {
+		return errors.New(fmt.Sprintf("Invalid configuration\n%#v", err))
+	}
+
+	err = yaml.Unmarshal(content, &config)
 	if err != nil {
 		return err
 	}
@@ -96,14 +120,6 @@ func LoadConfig(content []byte) error {
 
 func GetConfig() Config {
 	return config
-}
-
-func SetConfig(cfg Config) {
-	config = cfg
-}
-
-func JournalPath() string {
-	return config.JournalPath
 }
 
 func DefaultCurrency() string {

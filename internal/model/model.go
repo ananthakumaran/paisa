@@ -21,14 +21,14 @@ func SyncJournal(db *gorm.DB) {
 	db.AutoMigrate(&posting.Posting{})
 	db.AutoMigrate(&price.Price{})
 	log.Info("Syncing transactions from journal")
-	prices, err := ledger.Cli().Prices(config.JournalPath())
+	prices, err := ledger.Cli().Prices(config.GetConfig().JournalPath)
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	price.UpsertAllByType(db, config.Unknown, prices)
 
-	postings, err := ledger.Cli().Parse(config.JournalPath(), prices)
+	postings, err := ledger.Cli().Parse(config.GetConfig().JournalPath, prices)
 	if err != nil {
 		log.Fatal(err)
 	}

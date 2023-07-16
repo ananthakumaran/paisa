@@ -137,7 +137,7 @@ the basics of **ledger** because **paisa** builds on top of
 
 **paisa** checks for a config file named `paisa.yaml` in the current
 directory. It can also be set via flag `--config` or env variable
-`PAISA_CONFIG`.
+`PAISA_CONFIG`. Check the [config](./config.md) section for details.
 
 ```yaml
 # absolute path of journal file

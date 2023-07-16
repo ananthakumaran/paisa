@@ -1,0 +1,137 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema",
+  "$id": "https://ananthakumaran.in/paisa/schema.json",
+  "title": "Paisa",
+  "description": "Paisa config schema",
+  "type": "object",
+  "properties": {
+    "journal_path": {
+      "type": "string"
+    },
+    "db_path": {
+      "type": "string"
+    },
+    "ledger_cli": {
+      "type": "string",
+      "enum": ["ledger", "hledger"]
+    },
+    "default_currency": {
+      "type": "string"
+    },
+    "locale": {
+      "type": "string",
+      "pattern": "^en-[A-Z]{2}$"
+    },
+    "financial_year_starting_month": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 12
+    },
+    "retirement": {
+      "type": "object",
+      "properties": {
+        "swr": {
+          "type": "number"
+        },
+        "expenses": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "savings": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "yearly_expenses": {
+          "type": "integer"
+        }
+      },
+      "additionalProperties": false
+    },
+    "schedule_al": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "enum": [
+              "immovable",
+              "metal",
+              "art",
+              "vehicle",
+              "bank",
+              "share",
+              "insurance",
+              "loan",
+              "cash",
+              "liability"
+            ]
+          },
+          "accounts": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": ["code", "accounts"],
+        "additionalProperties": false
+      }
+    },
+    "allocation_targets": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "target": {
+            "type": "integer"
+          },
+          "accounts": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": ["name", "target", "accounts"],
+        "additionalProperties": false
+      }
+    },
+    "commodities": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": ["mutualfund", "stock", "nps", "unknown"]
+          },
+          "code": {
+            "type": ["string", "integer"]
+          },
+          "harvest": {
+            "type": "integer"
+          },
+          "tax_category": {
+            "type": "string",
+            "enum": ["debt", "equity", "equity65", "equity35", "unlisted_equity"]
+          }
+        },
+        "required": ["name", "type", "code"],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": ["journal_path", "db_path"],
+  "additionalProperties": false
+}

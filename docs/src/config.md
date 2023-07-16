@@ -1,5 +1,9 @@
 # Config
 
+**paisa** checks for a config file named `paisa.yaml` in the current
+directory. It can also be set via flag `--config` or env variable
+`PAISA_CONFIG`.
+
 ```yaml
 # Absolute path to your journal file. The main journal file can
 # refer other files using `include` as long as all the files are in
@@ -10,7 +14,7 @@ journal_path: /home/john/finance/personal.ledger
 # Absolute path to your database file. The database file will be
 # created if it does not exist.
 # REQUIRED
-db_path: /home/ananthakumaran/work/repos/finance/paisa.db
+db_path: /home/john/finance/paisa.db
 
 # The ledger client to use
 # OPTIONAL, DEFAULT: ledger, ENUM: ledger, hledger
@@ -118,9 +122,12 @@ allocation_targets:
 # OPTIONAL, DEFAULT: []
 commodities:
   - name: NASDAQ
+    # Required, ENUM: mutualfund, stock, nps, unknown
     type: mutualfund
+    # differs based on type
     code: 145552
     harvest: 1095
+    # Optional, ENUM: equity65, equity35, debt, unlisted_equity
     tax_category: debt
   - name: NIFTY
     type: mutualfund

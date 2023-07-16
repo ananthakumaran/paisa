@@ -3,6 +3,7 @@ package cmd
 import (
 	"io/ioutil"
 	"os"
+	"path/filepath"
 
 	"github.com/ananthakumaran/paisa/internal/config"
 	log "github.com/sirupsen/logrus"
@@ -46,6 +47,11 @@ func initConfig() {
 }
 
 func readConfigFile(path string) {
+	path, err := filepath.Abs(path)
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	content, err := ioutil.ReadFile(path)
 	if err != nil {
 		log.Warn("Failed to read config file: ", path)

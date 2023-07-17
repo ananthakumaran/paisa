@@ -8,6 +8,7 @@ import (
 	"github.com/ananthakumaran/paisa/internal/model/posting"
 	"github.com/ananthakumaran/paisa/internal/query"
 	"github.com/ananthakumaran/paisa/internal/service"
+	"github.com/ananthakumaran/paisa/internal/utils"
 	"github.com/gin-gonic/gin"
 	"github.com/samber/lo"
 	"gorm.io/gorm"
@@ -43,7 +44,7 @@ func GetInterest(db *gorm.DB) gin.H {
 
 func computeOverviewTimeline(db *gorm.DB, postings []posting.Posting) []Overview {
 	sort.Slice(postings, func(i, j int) bool { return postings[i].Date.Before(postings[j].Date) })
-	var netliabilities []Overview
+	netliabilities := []Overview{}
 
 	var p posting.Posting
 	var pastPostings []posting.Posting
@@ -52,8 +53,8 @@ func computeOverviewTimeline(db *gorm.DB, postings []posting.Posting) []Overview
 		return netliabilities
 	}
 
-	end := time.Now()
-	for start := postings[0].Date; start.Before(end); start = start.AddDate(0, 0, 1) {
+	end := utils.MaxTime(time.Now(), postings[len(postings)-1].Date)
+	for start := postings[0].Date; start.Before(end) || start.Equal(end); start = start.AddDate(0, 0, 1) {
 		for len(postings) > 0 && (postings[0].Date.Before(start) || postings[0].Date.Equal(start)) {
 			p, postings = postings[0], postings[1:]
 			pastPostings = append(pastPostings, p)

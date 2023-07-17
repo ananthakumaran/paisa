@@ -1,15 +1,16 @@
 <script lang="ts">
+  import * as d3 from "d3";
   import dayjs from "dayjs";
   import { onMount } from "svelte";
   import _ from "lodash";
-  import { ajax, formatCurrency, restName, type Posting } from "$lib/utils";
+  import { ajax, formatCurrency, restName, secondName, type Posting } from "$lib/utils";
   import {
     renderMonthlyExpensesTimeline,
     renderCurrentExpensesBreakdown,
     renderCalendar,
     renderSelectedMonth
   } from "$lib/expense/monthly";
-  import { dateMin, month } from "../../../store";
+  import { dateMin, dateMax, month } from "../../../store";
   import { writable } from "svelte/store";
   import { iconify } from "$lib/icon";
 
@@ -26,7 +27,7 @@
 
   $: {
     current_month_expenses = _.chain((grouped_expenses && grouped_expenses[$month]) || [])
-      .filter((e) => _.includes($groups, restName(e.account)))
+      .filter((e) => _.includes($groups, secondName(e.account)))
       .sortBy((e) => e.date)
       .reverse()
       .value();
@@ -54,9 +55,10 @@
       }
     } = await ajax("/api/expense"));
 
-    let firstExpense = _.minBy(expenses, (e) => e.date);
-    if (firstExpense) {
-      dateMin.set(firstExpense.date);
+    const [start, end] = d3.extent(_.map(expenses, (e) => e.date));
+    if (start) {
+      dateMin.set(start);
+      dateMax.set(end);
     }
 
     ({ z } = renderMonthlyExpensesTimeline(expenses, groups, month));
@@ -125,7 +127,14 @@
             {#each current_month_expenses as expense}
               <div class="box p-2 my-2 has-background-white">
                 <div class="is-flex is-flex-wrap-wrap is-justify-content-space-between">
-                  <div class="has-text-grey is-size-7">{expense.payee}</div>
+                  <div class="has-text-grey is-size-7">
+                    {#if expense.status == "cleared"}
+                      <b>*</b>
+                    {:else if expense.status == "pending"}
+                      <b>!</b>
+                    {/if}
+                    {expense.payee}
+                  </div>
                   <div class="has-text-grey">
                     <span class="icon is-small has-text-grey-light">
                       <i class="fas fa-calendar" />

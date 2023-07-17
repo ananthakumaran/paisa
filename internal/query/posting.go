@@ -27,6 +27,13 @@ func (q *Query) Commodities(commodities []config.Commodity) *Query {
 	return q
 }
 
+func (q *Query) Status(status string) *Query {
+	if status == "cleared" || status == "pending" {
+		q.context = q.context.Where("status = ?", status)
+	}
+	return q
+}
+
 func (q *Query) Credit() *Query {
 	q.context = q.context.Where("amount > 0")
 	return q

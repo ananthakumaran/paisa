@@ -1,4 +1,5 @@
 <script lang="ts">
+  import * as d3 from "d3";
   import { onMount } from "svelte";
   import _ from "lodash";
   import { ajax, type Posting } from "$lib/utils";
@@ -8,7 +9,7 @@
     renderCalendar,
     renderSelectedMonth
   } from "$lib/expense/yearly";
-  import { dateMin, year } from "../../../store";
+  import { dateMin, dateMax, year } from "../../../store";
   import { writable } from "svelte/store";
 
   let groups = writable([]);
@@ -42,9 +43,10 @@
       }
     } = await ajax("/api/expense"));
 
-    let firstExpense = _.minBy(expenses, (e) => e.date);
-    if (firstExpense) {
-      dateMin.set(firstExpense.date);
+    const [start, end] = d3.extent(_.map(expenses, (e) => e.date));
+    if (start) {
+      dateMin.set(start);
+      dateMax.set(end);
     }
 
     ({ z } = renderYearlyExpensesTimeline(expenses, groups, year));

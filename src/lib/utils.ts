@@ -14,6 +14,7 @@ export interface Posting {
   quantity: number;
   amount: number;
   market_amount: number;
+  status: string;
 }
 
 export interface Transaction {
@@ -647,7 +648,7 @@ export function generateColorScheme(domain: string[]) {
       ],
       12: [
         "#8dd3c7",
-        "#ffffb3",
+        "#e5c494",
         "#bebada",
         "#fb8072",
         "#80b1d3",

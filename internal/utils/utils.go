@@ -93,3 +93,11 @@ func IsSameOrParent(account string, comparison string) bool {
 func IsCurrency(currency string) bool {
 	return currency == config.DefaultCurrency()
 }
+
+func MaxTime(a time.Time, b time.Time) time.Time {
+	if a.After(b) {
+		return a
+	} else {
+		return b
+	}
+}

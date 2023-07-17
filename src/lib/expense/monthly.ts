@@ -185,8 +185,7 @@ export function renderMonthlyExpensesTimeline(
     _.map(groups, () => 0)
   );
 
-  const start = _.min(_.map(postings, (p) => p.date)),
-    end = dayjs().startOf("month");
+  const [start, end] = d3.extent(_.map(postings, (p) => p.date));
   const ms = _.groupBy(postings, (p) => p.date.format(timeFormat));
   const ys = _.chain(postings)
     .groupBy((p) => p.date.format("YYYY"))

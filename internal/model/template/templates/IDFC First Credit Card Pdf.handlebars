@@ -1,0 +1,9 @@
+{{#if (and (isDate ROW.A "DD/MM/YYYY") (not (isBlank ROW.C)))}}
+  {{date ROW.A "DD/MM/YYYY"}} {{ROW.B}}
+  {{#if (regexpTest ROW.C "CR")}}
+    {{predictAccount prefix="Expenses"}}      -{{amount ROW.C}} INR
+  {{else}}
+    {{predictAccount prefix="Expenses"}}      {{amount ROW.C}} INR
+  {{/if}}
+  Assets:Checking
+{{/if}}

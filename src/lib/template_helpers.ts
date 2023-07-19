@@ -114,7 +114,7 @@ export default {
   amount(str: string, options: any) {
     const amount = _.trim(str)
       .replace(/\((.+)\)/, "-$1")
-      .replace(/[^0-9.-]/, "");
+      .replace(/[^0-9.-]/g, "");
 
     if (!isNaN(amount as any) && !isNaN(parseFloat(amount))) {
       return amount;

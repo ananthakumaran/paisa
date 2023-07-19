@@ -2,10 +2,14 @@ import Papa from "papaparse";
 import * as XLSX from "xlsx";
 import _ from "lodash";
 import { format } from "./journal";
+import { pdf2array, pdfjs } from "pdf2array";
+import pdfjsWorkerUrl from "pdfjs-dist/build/pdf.worker.js?url";
 
 interface Result {
   data: string[][];
 }
+
+pdfjs.GlobalWorkerOptions.workerSrc = pdfjsWorkerUrl;
 
 export function parse(file: File): Promise<Result> {
   const extension = file.name.split(".").pop();
@@ -13,6 +17,8 @@ export function parse(file: File): Promise<Result> {
     return parseCSV(file);
   } else if (extension === "xlsx" || extension === "xls") {
     return parseXLSX(file);
+  } else if (extension === "pdf") {
+    return parsePDF(file);
   }
   throw new Error(`Unsupported file type ${extension}`);
 }
@@ -70,6 +76,12 @@ async function parseXLSX(file: File): Promise<Result> {
     rawNumbers: false
   });
   return { data: json };
+}
+
+async function parsePDF(file: File): Promise<Result> {
+  const buffer = await readFile(file);
+  const array = await pdf2array(buffer);
+  return { data: array };
 }
 
 function readFile(file: File): Promise<ArrayBuffer> {

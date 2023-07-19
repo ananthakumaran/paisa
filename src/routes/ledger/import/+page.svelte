@@ -301,10 +301,10 @@
           <Dropzone
             multiple={false}
             inputElement={input}
-            accept=".csv,.txt,.xls,.xlsx"
+            accept=".csv,.txt,.xls,.xlsx,.pdf"
             on:drop={handleFilesSelect}
           >
-            Drag 'n' drop CSV, TXT, XLS, XLSX file here or click to select
+            Drag 'n' drop CSV, TXT, XLS, XLSX, PDF file here or click to select
           </Dropzone>
         </div>
         {#if !_.isEmpty(data)}

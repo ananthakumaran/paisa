@@ -14,6 +14,8 @@ jest.mock("../store", () => ({
   accountTfIdf: null
 }));
 
+jest.mock("pdfjs-dist/build/pdf.worker.js?url", () => ({}), { virtual: true });
+
 Handlebars.registerHelper(
   _.mapValues(helpers, (helper, name) => {
     return function (...args: any[]) {

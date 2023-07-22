@@ -106,6 +106,12 @@ func CurrentBalance(postings []posting.Posting) float64 {
 	})
 }
 
+func CostSum(postings []posting.Posting) float64 {
+	return lo.SumBy(postings, func(p posting.Posting) float64 {
+		return p.Amount
+	})
+}
+
 type Point struct {
 	Date  time.Time `json:"date"`
 	Value float64   `json:"value"`

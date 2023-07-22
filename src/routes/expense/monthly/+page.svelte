@@ -125,7 +125,10 @@
           </div>
           <div class="column is-full">
             {#each current_month_expenses as expense}
-              <div class="box p-2 my-2 has-background-white">
+              <div
+                class="box p-2 my-2 has-background-white"
+                style="border-left: 2px solid {z(secondName(expense.account))}"
+              >
                 <div class="is-flex is-flex-wrap-wrap is-justify-content-space-between">
                   <div class="has-text-grey is-size-7">
                     {#if expense.status == "cleared"}
@@ -139,7 +142,7 @@
                     <span class="icon is-small has-text-grey-light">
                       <i class="fas fa-calendar" />
                     </span>
-                    {expense.date.format("DD")}
+                    {expense.date.format("DD MMM YYYY")}
                   </div>
                 </div>
                 <hr class="m-1" />

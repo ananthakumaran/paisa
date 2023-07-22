@@ -161,16 +161,16 @@
           <div class="column is-full">
             Postings
             {#each postings as posting}
-              <div class="box p-2 my-2 has-background-white">
+              <div
+                class="box p-2 my-2 has-background-white"
+                style="border-left: 2px solid {posting.amount >= 0
+                  ? COLORS.secondary
+                  : COLORS.tertiary}"
+              >
                 <div class="is-flex is-flex-wrap-wrap is-justify-content-space-between">
                   <div class="has-text-grey is-size-7">{posting.payee}</div>
                   <div class="has-text-grey">
-                    <span
-                      class="icon is-small"
-                      style="opacity: 0.6; color: {posting.amount >= 0
-                        ? COLORS.secondary
-                        : COLORS.tertiary} !important"
-                    >
+                    <span class="icon is-small has-text-grey-light">
                       <i class="fas fa-calendar" />
                     </span>
                     {posting.date.format("DD MMM YYYY")}

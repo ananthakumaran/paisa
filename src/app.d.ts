@@ -17,6 +17,11 @@ declare namespace App {
   // interface Platform {}
 }
 
+declare module "textures" {
+  const textures: any;
+  export default textures;
+}
+
 declare module "arima/async" {
   export class Arima {
     constructor(options: object);

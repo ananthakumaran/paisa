@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import _ from "lodash";
-  import { renderFlow } from "$lib/expense/flow";
+  import { renderFlow } from "$lib/cash_flow";
   import { ajax, type Graph, type Posting } from "$lib/utils";
   import { dateMin, year } from "../../../store";
 

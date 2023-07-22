@@ -1,12 +1,13 @@
 <script lang="ts">
   import { page } from "$app/stores";
   import Sync from "$lib/components/Sync.svelte";
-  import { month, year, dateMax, dateMin } from "../../store";
+  import { month, year, dateMax, dateMin, dateRangeOption } from "../../store";
   import _ from "lodash";
   import { financialYear, forEachFinancialYear } from "$lib/utils";
   import { onMount } from "svelte";
   import { get } from "svelte/store";
   import dayjs from "dayjs";
+  import DateRange from "./DateRange.svelte";
   export let isBurger: boolean = null;
 
   onMount(async () => {
@@ -20,6 +21,7 @@
     href: string;
     tag?: string;
     help?: string;
+    dateRangeSelector?: boolean;
     monthPicker?: boolean;
     financialYearPicker?: boolean;
     children?: Link[];
@@ -27,12 +29,19 @@
   const links: Link[] = [
     { label: "Overview", href: "/" },
     {
+      label: "Cash Flow",
+      href: "/cash_flow",
+      children: [
+        { label: "Monthly", href: "/monthly", dateRangeSelector: true },
+        { label: "Yearly", href: "/yearly", financialYearPicker: true }
+      ]
+    },
+    {
       label: "Expenses",
       href: "/expense",
       children: [
         { label: "Monthly", href: "/monthly", monthPicker: true },
-        { label: "Yearly", href: "/yearly", financialYearPicker: true },
-        { label: "Cash Flow", href: "/flow", tag: "alpha", financialYearPicker: true }
+        { label: "Yearly", href: "/yearly", financialYearPicker: true }
       ]
     },
     {
@@ -64,27 +73,32 @@
         { label: "Editor", href: "/editor", tag: "alpha" },
         { label: "Transactions", href: "/transaction" },
         { label: "Postings", href: "/posting" },
-        { label: "Price", href: "/price" }
+        { label: "Price", href: "/price" },
+        { label: "Doctor", href: "/doctor" }
       ]
     },
-    {
-      label: "Tax",
-      href: "/tax",
-      help: "tax",
-      children: [
-        { label: "Harvest", href: "/harvest", help: "tax-harvesting" },
-        { label: "Capital Gains", href: "/capital_gains", help: "capital-gains" },
-        {
-          label: "Schedule AL",
-          href: "/schedule_al",
-          help: "schedule-al",
-          financialYearPicker: true
-        }
-      ]
-    },
-    { label: "Retirement", href: "/retirement/progress", help: "retirement" },
-    { label: "Doctor", href: "/doctor" }
+    { label: "Retirement", href: "/retirement/progress", help: "retirement" }
   ];
+
+  const tax = {
+    label: "Tax",
+    href: "/tax",
+    help: "tax",
+    children: [
+      { label: "Harvest", href: "/harvest", help: "tax-harvesting" },
+      { label: "Capital Gains", href: "/capital_gains", help: "capital-gains" },
+      {
+        label: "Schedule AL",
+        href: "/schedule_al",
+        help: "schedule-al",
+        financialYearPicker: true
+      }
+    ]
+  };
+
+  if (USER_CONFIG.default_currency == "INR") {
+    links.push(tax);
+  }
 
   let selectedLink: Link = null;
   let selectedSubLink: Link = null;
@@ -250,6 +264,12 @@
           {/each}
         </select>
       </div>
+    </div>
+  {/if}
+
+  {#if selectedSubLink?.dateRangeSelector || selectedLink?.dateRangeSelector}
+    <div class="mr-3">
+      <DateRange bind:value={$dateRangeOption} dateMin={$dateMin} dateMax={$dateMax} />
     </div>
   {/if}
 </div>

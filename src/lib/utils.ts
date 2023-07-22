@@ -17,6 +17,17 @@ export interface Posting {
   status: string;
 }
 
+export interface CashFlow {
+  date: dayjs.Dayjs;
+  income: number;
+  liabilities: number;
+  expenses: number;
+  investment: number;
+  tax: number;
+  checking: number;
+  balance: number;
+}
+
 export interface Transaction {
   id: string;
   date: dayjs.Dayjs;
@@ -368,6 +379,8 @@ export function ajax(route: "/api/expense"): Promise<{
   };
   graph: { [key: string]: Graph };
 }>;
+
+export function ajax(route: "/api/cash_flow"): Promise<{ cash_flows: CashFlow[] }>;
 
 export function ajax(route: "/api/liabilities/interest"): Promise<{
   interest_timeline_breakdown: Interest[];

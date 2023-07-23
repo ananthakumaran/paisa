@@ -1,6 +1,4 @@
 <script lang="ts">
-  import * as d3 from "d3";
-  import dayjs from "dayjs";
   import { onMount } from "svelte";
   import _ from "lodash";
   import { ajax, formatCurrency, restName, secondName, type Posting } from "$lib/utils";
@@ -10,7 +8,7 @@
     renderCalendar,
     renderSelectedMonth
   } from "$lib/expense/monthly";
-  import { dateMin, dateMax, month } from "../../../store";
+  import { dateRange, month, setAllowedDateRange } from "../../../store";
   import { writable } from "svelte/store";
   import { iconify } from "$lib/icon";
 
@@ -55,13 +53,8 @@
       }
     } = await ajax("/api/expense"));
 
-    const [start, end] = d3.extent(_.map(expenses, (e) => e.date));
-    if (start) {
-      dateMin.set(start);
-      dateMax.set(end);
-    }
-
-    ({ z } = renderMonthlyExpensesTimeline(expenses, groups, month));
+    setAllowedDateRange(_.map(expenses, (e) => e.date));
+    ({ z } = renderMonthlyExpensesTimeline(expenses, groups, month, dateRange));
 
     renderer = renderCurrentExpensesBreakdown(z);
   });
@@ -162,11 +155,8 @@
       <div class="column is-9">
         <div class="columns is-flex-wrap-wrap">
           <div class="column is-4">
-            <div class="px-3 box">
+            <div class="p-3 box">
               <div id="d3-current-month-expense-calendar" class="d3-calendar">
-                <div class="month-header has-text-centered">
-                  {dayjs($month, "YYYY-MM").format("MMMM")}
-                </div>
                 <div class="weekdays">
                   <div>Sun</div>
                   <div>Mon</div>

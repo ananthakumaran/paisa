@@ -18,7 +18,7 @@ import {
   firstName
 } from "$lib/utils";
 import COLORS from "$lib/colors";
-import type { Writable } from "svelte/store";
+import { get, type Readable, type Writable } from "svelte/store";
 import { iconify } from "$lib/icon";
 import { byExpenseGroup, expenseGroup, pieData } from "$lib/expense";
 
@@ -164,7 +164,8 @@ function sumCurrency(postings: Posting[], sign = 1) {
 export function renderMonthlyExpensesTimeline(
   postings: Posting[],
   groupsStore: Writable<string[]>,
-  monthStore: Writable<string>
+  monthStore: Writable<string>,
+  dateRangeStore: Readable<{ from: dayjs.Dayjs; to: dayjs.Dayjs }>
 ) {
   const id = "#d3-monthly-expense-timeline";
   const timeFormat = "MMM-YYYY";
@@ -280,11 +281,15 @@ export function renderMonthlyExpensesTimeline(
     .attr("stroke-linecap", "round")
     .attr("stroke-dasharray", "5,5");
 
-  const render = (allowedGroups: string[]) => {
+  const render = (allowedGroups: string[], dateRange: { from: dayjs.Dayjs; to: dayjs.Dayjs }) => {
     groupsStore.set(allowedGroups);
+    const allowedPoints = _.filter(
+      points,
+      (p) => p.timestamp.isSameOrBefore(dateRange.to) && p.timestamp.isAfter(dateRange.from)
+    );
     const sum = (p: Point) => _.sum(_.map(allowedGroups, (k) => p[k]));
-    x.domain(points.map((p) => p.month));
-    y.domain([0, d3.max(points, sum)]);
+    x.domain(allowedPoints.map((p) => p.month));
+    y.domain([0, d3.max(allowedPoints, sum)]);
 
     const t = svg.transition().duration(750);
     xAxis
@@ -305,31 +310,28 @@ export function renderMonthlyExpensesTimeline(
 
     yAxis.transition(t).call(d3.axisLeft(y).tickSize(-width).tickFormat(formatCurrencyCrude));
 
-    line
-      .transition(t)
-      .attr(
-        "d",
-        d3
-          .line<Point>()
-          .curve(d3.curveStepAfter)
-          .x((p) => x(p.month))
-          .y((p) => {
-            const total = _.chain(ys[p.timestamp.format("YYYY")])
-              .pick(allowedGroups)
-              .values()
-              .sum()
-              .value();
+    line.attr("fill", "none").attr(
+      "d",
+      d3
+        .line<Point>()
+        .curve(d3.curveStepAfter)
+        .x((p) => x(p.month))
+        .y((p) => {
+          const total = _.chain(ys[p.timestamp.format("YYYY")])
+            .pick(allowedGroups)
+            .values()
+            .sum()
+            .value();
 
-            return y(total);
-          })(points)
-      )
-      .attr("fill", "none");
+          return y(total);
+        })(allowedPoints)
+    );
 
     bars
       .selectAll("g")
       .data(
         d3.stack().offset(d3.stackOffsetDiverging).keys(allowedGroups)(
-          points as { [key: string]: number }[]
+          allowedPoints as { [key: string]: number }[]
         ),
         (d: any) => d.key
       )
@@ -343,9 +345,10 @@ export function renderMonthlyExpensesTimeline(
           exit.selectAll("rect").transition(t).attr("y", y.range()[0]).attr("height", 0).remove()
       )
       .selectAll("rect")
-      .data(function (d) {
-        return d;
-      })
+      .data(
+        (d) => d,
+        (d: any) => d.data.timestamp.format("YYYY-MM")
+      )
       .join(
         (enter) =>
           enter
@@ -375,18 +378,27 @@ export function renderMonthlyExpensesTimeline(
           update
             .attr("data-tippy-content", tooltipContent(allowedGroups))
             .transition(t)
+            .attr("width", Math.min(x.bandwidth(), MAX_BAR_WIDTH))
+            .attr("x", function (d) {
+              return (
+                x((d.data as any).month) +
+                (x.bandwidth() - Math.min(x.bandwidth(), MAX_BAR_WIDTH)) / 2
+              );
+            })
             .attr("y", function (d) {
               return y(d[1]);
             })
             .attr("height", function (d) {
               return y(d[0]) - y(d[1]);
             }),
-        (exit) => exit.transition(t).remove()
+        (exit) => exit.remove()
       );
   };
 
   let selectedGroups = groups;
-  render(selectedGroups);
+  render(selectedGroups, get(dateRangeStore));
+
+  dateRangeStore.subscribe((dateRange) => render(get(groupsStore), dateRange));
 
   svg.append("g").attr("class", "legendOrdinal").attr("transform", "translate(40,0)");
 
@@ -409,7 +421,7 @@ export function renderMonthlyExpensesTimeline(
         d3.select(this).selectAll(".label").classed("selected", true);
       }
 
-      render(selectedGroups);
+      render(selectedGroups, get(dateRangeStore));
     })
     .scale(z);
 

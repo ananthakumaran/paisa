@@ -120,7 +120,10 @@ export function renderMonthlyFlow() {
     y.domain(d3.extent(positions));
     x1.range([0, x.bandwidth()]);
 
+    const t = svg.transition().duration(750);
+
     xAxis
+      .transition(t)
       .call(
         d3
           .axisBottom(x)
@@ -134,14 +137,23 @@ export function renderMonthlyFlow() {
       .attr("transform", "rotate(-45)")
       .style("text-anchor", "end");
 
-    yAxis.call(d3.axisLeft(y).tickSize(-width).tickFormat(formatCurrencyCrude));
+    yAxis.transition(t).call(d3.axisLeft(y).tickSize(-width).tickFormat(formatCurrencyCrude));
 
     const gbars = groups
       .selectAll("g.group")
-      .data(cashFlows)
-      .join("g")
-      .attr("class", "group")
-      .attr("transform", (c) => `translate(${x(c.date.format("MMM YYYY"))},0)`);
+      .data(cashFlows, (d: any) => d.date.format("MMM YYYY"))
+      .join(
+        (enter) =>
+          enter
+            .append("g")
+            .attr("class", "group")
+            .attr("transform", (c) => `translate(${x(c.date.format("MMM YYYY"))},0)`),
+        (update) =>
+          update
+            .transition(t)
+            .attr("transform", (c) => `translate(${x(c.date.format("MMM YYYY"))},0)`),
+        (exit) => exit.remove()
+      );
 
     gbars
       .selectAll("g")
@@ -171,21 +183,45 @@ export function renderMonthlyFlow() {
       .data((d) => {
         return d;
       })
-      .join("rect")
-      .attr("fill", (d) => {
-        if (d.key === "tax") {
-          return texture.url();
-        }
-        return z(d.key);
-      })
-      .attr("x", (d: any) =>
-        d[0].data.i === "0"
-          ? x1(d[0].data.i) + x1.bandwidth() - Math.min(x1.bandwidth(), MAX_BAR_WIDTH)
-          : x1(d[0].data.i)
-      )
-      .attr("y", (d: any) => y(d[0][1]))
-      .attr("height", (d: any) => y(d[0][0]) - y(d[0][1]))
-      .attr("width", Math.min(x1.bandwidth(), MAX_BAR_WIDTH));
+      .join(
+        (enter) =>
+          enter
+            .append("rect")
+            .attr("fill", (d) => {
+              if (d.key === "tax") {
+                return texture.url();
+              }
+              return z(d.key);
+            })
+            .attr("x", (d: any) =>
+              d[0].data.i === "0"
+                ? x1(d[0].data.i) + x1.bandwidth() - Math.min(x1.bandwidth(), MAX_BAR_WIDTH)
+                : x1(d[0].data.i)
+            )
+            .attr("width", Math.min(x1.bandwidth(), MAX_BAR_WIDTH))
+            .attr("y", y.range()[0])
+            .transition(t)
+            .attr("y", (d: any) => y(d[0][1]))
+            .attr("height", (d: any) => y(d[0][0]) - y(d[0][1])),
+        (update) =>
+          update
+            .transition(t)
+            .attr("fill", (d) => {
+              if (d.key === "tax") {
+                return texture.url();
+              }
+              return z(d.key);
+            })
+            .attr("x", (d: any) =>
+              d[0].data.i === "0"
+                ? x1(d[0].data.i) + x1.bandwidth() - Math.min(x1.bandwidth(), MAX_BAR_WIDTH)
+                : x1(d[0].data.i)
+            )
+            .attr("y", (d: any) => y(d[0][1]))
+            .attr("height", (d: any) => y(d[0][0]) - y(d[0][1]))
+            .attr("width", Math.min(x1.bandwidth(), MAX_BAR_WIDTH)),
+        (exit) => exit.remove()
+      );
 
     line.attr(
       "d",

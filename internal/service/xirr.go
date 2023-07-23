@@ -6,11 +6,11 @@ import (
 	"github.com/ChizhovVadim/xirr"
 	"github.com/ananthakumaran/paisa/internal/model/posting"
 	"github.com/samber/lo"
+	log "github.com/sirupsen/logrus"
 	"gorm.io/gorm"
 )
 
 func XIRR(db *gorm.DB, ps []posting.Posting) float64 {
-	ps = lo.Filter(ps, func(p posting.Posting, _ int) bool { return p.Account != "Assets:Checking" })
 	today := time.Now()
 	marketAmount := lo.Reduce(ps, func(acc float64, p posting.Posting, _ int) float64 { return acc + p.MarketAmount }, 0.0)
 	payments := lo.Reverse(lo.Map(ps, func(p posting.Posting, _ int) xirr.Payment {
@@ -23,6 +23,7 @@ func XIRR(db *gorm.DB, ps []posting.Posting) float64 {
 	payments = append(payments, xirr.Payment{Date: today, Amount: marketAmount})
 	returns, err := xirr.XIRR(payments)
 	if err != nil {
+		log.Warn(err)
 		return 0
 	}
 
@@ -38,6 +39,7 @@ func APR(db *gorm.DB, ps []posting.Posting) float64 {
 	payments = append(payments, xirr.Payment{Date: today, Amount: -marketAmount})
 	returns, err := xirr.XIRR(payments)
 	if err != nil {
+		log.Warn(err)
 		return 0
 	}
 

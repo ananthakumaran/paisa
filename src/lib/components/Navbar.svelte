@@ -40,7 +40,7 @@
       label: "Expenses",
       href: "/expense",
       children: [
-        { label: "Monthly", href: "/monthly", monthPicker: true },
+        { label: "Monthly", href: "/monthly", monthPicker: true, dateRangeSelector: true },
         { label: "Yearly", href: "/yearly", financialYearPicker: true }
       ]
     },
@@ -240,38 +240,40 @@
     </nav>
   {/if}
 
-  {#if selectedSubLink?.monthPicker || selectedLink?.monthPicker}
-    <div class="mr-3 has-text-centered">
-      <input
-        style="width: 125px"
-        class="input is-small"
-        required
-        type="month"
-        id="d3-current-month"
-        bind:value={$month}
-        max={$dateMax.format("YYYY-MM")}
-        min={$dateMin.format("YYYY-MM")}
-      />
-    </div>
-  {/if}
-
-  {#if selectedSubLink?.financialYearPicker || selectedLink?.financialYearPicker}
-    <div class="mr-3 has-text-centered">
-      <div class="select is-small">
-        <select bind:value={$year}>
-          {#each forEachFinancialYear($dateMin, $dateMax).reverse() as fy}
-            <option>{financialYear(fy)}</option>
-          {/each}
-        </select>
+  <div class="mr-3 is-flex" style="gap: 12px">
+    {#if selectedSubLink?.dateRangeSelector || selectedLink?.dateRangeSelector}
+      <div>
+        <DateRange bind:value={$dateRangeOption} dateMin={$dateMin} dateMax={$dateMax} />
       </div>
-    </div>
-  {/if}
+    {/if}
 
-  {#if selectedSubLink?.dateRangeSelector || selectedLink?.dateRangeSelector}
-    <div class="mr-3">
-      <DateRange bind:value={$dateRangeOption} dateMin={$dateMin} dateMax={$dateMax} />
-    </div>
-  {/if}
+    {#if selectedSubLink?.monthPicker || selectedLink?.monthPicker}
+      <div class="has-text-centered">
+        <input
+          style="width: 125px"
+          class="input is-small"
+          required
+          type="month"
+          id="d3-current-month"
+          bind:value={$month}
+          max={$dateMax.format("YYYY-MM")}
+          min={$dateMin.format("YYYY-MM")}
+        />
+      </div>
+    {/if}
+
+    {#if selectedSubLink?.financialYearPicker || selectedLink?.financialYearPicker}
+      <div class="has-text-centered">
+        <div class="select is-small">
+          <select bind:value={$year}>
+            {#each forEachFinancialYear($dateMin, $dateMax).reverse() as fy}
+              <option>{financialYear(fy)}</option>
+            {/each}
+          </select>
+        </div>
+      </div>
+    {/if}
+  </div>
 </div>
 
 <style lang="scss">

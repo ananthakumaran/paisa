@@ -38,7 +38,8 @@ Handlebars.registerHelper(
 toast.setDefaults({
   position: "bottom-right",
   dismissible: true,
-  pauseOnHover: true
+  pauseOnHover: true,
+  extraClasses: "is-light"
 });
 
 export const load = (async () => {

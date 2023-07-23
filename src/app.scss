@@ -29,8 +29,8 @@ $switch-focus: none;
 }
 
 @import "bulma/bulma.sass";
-
 @import "bulma-switch/src/sass/index.sass";
+@import "@cityssm/bulma-sticky-table/sticky-table";
 
 :focus {
   outline: 0;

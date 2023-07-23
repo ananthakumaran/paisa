@@ -146,8 +146,9 @@
 
     if (saved) {
       toast.toast({
-        message: `Saved ${destinationFile}`,
-        type: "is-success"
+        message: `Saved <b><a href="/ledger/editor/${destinationFile}">${destinationFile}</a></b>`,
+        type: "is-success",
+        duration: 5000
       });
     } else {
       toast.toast({
@@ -181,10 +182,10 @@
   </svelte:fragment>
 </Modal>
 
-<section class="section tab-import">
+<section class="section tab-import" style="padding-bottom: 0 !important">
   <div class="container is-fluid">
-    <div class="columns">
-      <div class="column is-5">
+    <div class="columns mb-0">
+      <div class="column is-5 py-0">
         <div class="box px-3">
           <div class="field mb-2">
             <p class="control">
@@ -278,7 +279,7 @@
                 on:click={copyToClipboard}
               >
                 <span class="icon is-small">
-                  <i class="fas fa-copy" />
+                  <i class="fas fa-clipboard" />
                 </span>
               </button>
               <button
@@ -296,7 +297,7 @@
           </div>
         </div>
       </div>
-      <div class="column is-7">
+      <div class="column is-7 py-0">
         <div class="box px-3">
           <Dropzone
             multiple={false}
@@ -309,21 +310,27 @@
         </div>
         {#if !_.isEmpty(data)}
           <div class="table-wrapper">
-            <table class="mt-2 table is-bordered is-size-7 is-narrow">
-              <tr>
-                <th />
-                {#each _.range(0, columnCount) as ci}
-                  <th class="has-background-light">{String.fromCharCode(65 + ci)}</th>
-                {/each}
-              </tr>
-              {#each data as row, ri}
+            <table
+              class="mt-0 table is-bordered is-size-7 is-narrow has-sticky-header has-sticky-column"
+            >
+              <thead>
                 <tr>
-                  <td class="has-background-light"><b>{ri}</b></td>
-                  {#each row as cell}
-                    <td>{cell || ""}</td>
+                  <th />
+                  {#each _.range(0, columnCount) as ci}
+                    <th class="has-background-light">{String.fromCharCode(65 + ci)}</th>
                   {/each}
                 </tr>
-              {/each}
+              </thead>
+              <tbody>
+                {#each data as row, ri}
+                  <tr>
+                    <th class="has-background-light"><b>{ri}</b></th>
+                    {#each row as cell}
+                      <td>{cell || ""}</td>
+                    {/each}
+                  </tr>
+                {/each}
+              </tbody>
             </table>
           </div>
         {/if}
@@ -352,5 +359,7 @@
 
   .table-wrapper {
     overflow-x: auto;
+    overflow-y: auto;
+    max-height: calc(100vh - 225px);
   }
 </style>

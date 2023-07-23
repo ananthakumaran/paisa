@@ -6,6 +6,7 @@ import (
 	"path/filepath"
 
 	"github.com/ananthakumaran/paisa/internal/config"
+	"github.com/samber/lo"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
@@ -33,7 +34,8 @@ func initConfig() {
 	log.SetFormatter(&log.TextFormatter{DisableTimestamp: true, ForceColors: true})
 
 	currentCommand, _, _ := rootCmd.Find(os.Args[1:])
-	if currentCommand.Name() == "init" {
+
+	if !lo.Contains([]string{"serve", "update"}, currentCommand.Name()) {
 		return
 	}
 

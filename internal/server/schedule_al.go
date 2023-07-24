@@ -47,7 +47,7 @@ type ScheduleAL struct {
 }
 
 func GetScheduleAL(db *gorm.DB) gin.H {
-	postings := query.Init(db).Like("Assets:%").All()
+	postings := query.Init(db).Like("Assets:%").OrLike("Liabilities:%").All()
 	var scheduleALs map[string]ScheduleAL = make(map[string]ScheduleAL)
 
 	start := time.Now().AddDate(1, 0, 0)
@@ -78,6 +78,11 @@ func computeScheduleAL(postings []posting.Posting) []ScheduleALEntry {
 
 		if found {
 			ps := accounting.FilterByGlob(postings, config.Accounts)
+			if section.Code == "liability" {
+				ps = lo.Map(ps, func(p posting.Posting, _ int) posting.Posting {
+					return p.Negate()
+				})
+			}
 			amount = accounting.CostBalance(ps)
 		} else {
 			amount = 0

@@ -27,6 +27,13 @@ func (p *Posting) RestName(level int) string {
 	return strings.Join(strings.Split(p.Account, ":")[level:], ":")
 }
 
+func (p Posting) Negate() Posting {
+	clone := p
+	clone.Quantity = -p.Quantity
+	clone.Amount = -p.Amount
+	return clone
+}
+
 func (p *Posting) Price() float64 {
 	return p.Amount / p.Quantity
 }

@@ -91,6 +91,9 @@ schedule_al:
     accounts:
       - Assets:Equity:*
       - Assets:Debt:*
+  - code: liability
+    accounts:
+      - Liabilities:Homeloan
 commodities:
   - name: NIFTY
     type: mutualfund

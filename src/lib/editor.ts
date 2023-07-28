@@ -15,13 +15,15 @@ interface EditorState {
   undoDepth: number;
   redoDepth: number;
   errors: LedgerFileError[];
+  output: string;
 }
 
 const initialEditorState: EditorState = {
   hasUnsavedChanges: false,
   undoDepth: 0,
   redoDepth: 0,
-  errors: []
+  errors: [],
+  output: ""
 };
 
 export const editorState = writable(initialEditorState);
@@ -33,7 +35,9 @@ async function lint(editor: EditorView): Promise<Diagnostic[]> {
     body: JSON.stringify({ name: "", content: editor.state.doc.toString() })
   });
 
-  editorState.update((current) => _.assign({}, current, { errors: response.errors }));
+  editorState.update((current) =>
+    _.assign({}, current, { errors: response.errors, output: response.output })
+  );
 
   return _.map(response.errors, (error) => {
     const lineFrom = doc.line(error.line_from);

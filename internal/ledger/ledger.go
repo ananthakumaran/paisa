@@ -29,7 +29,7 @@ type LedgerFileError struct {
 }
 
 type Ledger interface {
-	ValidateFile(journalPath string) ([]LedgerFileError, error)
+	ValidateFile(journalPath string) ([]LedgerFileError, string, error)
 	Parse(journalPath string, prices []price.Price) ([]*posting.Posting, error)
 	Prices(jornalPath string) ([]price.Price, error)
 }
@@ -45,7 +45,7 @@ func Cli() Ledger {
 	return LedgerCLI{}
 }
 
-func (LedgerCLI) ValidateFile(journalPath string) ([]LedgerFileError, error) {
+func (LedgerCLI) ValidateFile(journalPath string) ([]LedgerFileError, string, error) {
 	errors := []LedgerFileError{}
 	_, err := exec.LookPath("ledger")
 	if err != nil {
@@ -58,7 +58,7 @@ func (LedgerCLI) ValidateFile(journalPath string) ([]LedgerFileError, error) {
 	command.Stderr = &error
 	err = command.Run()
 	if err == nil {
-		return errors, nil
+		return errors, output.String(), nil
 	}
 
 	re := regexp.MustCompile(`(?m)While parsing file "[^"]+", line ([0-9]+):\s*\n(?:(?:While|>).*\n)*((?:.*\n)*?Error: .*\n)`)
@@ -69,7 +69,7 @@ func (LedgerCLI) ValidateFile(journalPath string) ([]LedgerFileError, error) {
 		line, _ := strconv.ParseUint(match[1], 10, 64)
 		errors = append(errors, LedgerFileError{LineFrom: line, LineTo: line, Message: match[2]})
 	}
-	return errors, err
+	return errors, "", err
 }
 
 func (LedgerCLI) Parse(journalPath string, _prices []price.Price) ([]*posting.Posting, error) {
@@ -152,20 +152,20 @@ func (LedgerCLI) Prices(journalPath string) ([]price.Price, error) {
 	return parseLedgerPrices(output.String(), config.DefaultCurrency())
 }
 
-func (HLedgerCLI) ValidateFile(journalPath string) ([]LedgerFileError, error) {
+func (HLedgerCLI) ValidateFile(journalPath string) ([]LedgerFileError, string, error) {
 	errors := []LedgerFileError{}
 	_, err := exec.LookPath("hledger")
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	command := exec.Command("hledger", "-f", journalPath, "--auto", "check")
+	command := exec.Command("hledger", "-f", journalPath, "--auto", "balance")
 	var output, error bytes.Buffer
 	command.Stdout = &output
 	command.Stderr = &error
 	err = command.Run()
 	if err == nil {
-		return errors, nil
+		return errors, output.String(), nil
 	}
 
 	re := regexp.MustCompile(`(?m)hledger: Error: [^:]*:([0-9:-]+)\n((?:.*\n)*)`)
@@ -189,7 +189,8 @@ func (HLedgerCLI) ValidateFile(journalPath string) ([]LedgerFileError, error) {
 
 		errors = append(errors, LedgerFileError{LineFrom: lineFrom, LineTo: lineTo, Message: match[2]})
 	}
-	return errors, err
+
+	return errors, "", err
 }
 
 func (HLedgerCLI) Parse(journalPath string, prices []price.Price) ([]*posting.Posting, error) {

@@ -49,7 +49,7 @@ func GetFiles(db *gorm.DB) gin.H {
 func GetFile(file LedgerFile) gin.H {
 	path := config.GetConfig().JournalPath
 	dir := filepath.Dir(path)
-	return gin.H{"file": readLedgerFile(filepath.Join(dir, file.Name))}
+	return gin.H{"file": readLedgerFile(dir, filepath.Join(dir, file.Name))}
 }
 
 func DeleteBackups(file LedgerFile) gin.H {
@@ -68,15 +68,23 @@ func DeleteBackups(file LedgerFile) gin.H {
 }
 
 func SaveFile(db *gorm.DB, file LedgerFile) gin.H {
-	errors, err := validateFile(file)
+	errors, _, err := validateFile(file)
 	if err != nil {
 		return gin.H{"errors": errors, "saved": false}
 	}
 
 	path := config.GetConfig().JournalPath
 	dir := filepath.Dir(path)
+
 	filePath := filepath.Join(dir, file.Name)
 	backupPath := filepath.Join(dir, file.Name+".backup."+time.Now().Format("2006-01-02-15-04-05.000"))
+
+	err = os.MkdirAll(filepath.Dir(filePath), 0700)
+	if err != nil {
+		log.Warn(err)
+		return gin.H{"errors": errors, "saved": false}
+	}
+
 	fileStat, err := os.Stat(filePath)
 	if err != nil && file.Operation != "overwrite" {
 		log.Warn(err)
@@ -111,11 +119,11 @@ func SaveFile(db *gorm.DB, file LedgerFile) gin.H {
 }
 
 func ValidateFile(file LedgerFile) gin.H {
-	errors, _ := validateFile(file)
-	return gin.H{"errors": errors}
+	errors, output, _ := validateFile(file)
+	return gin.H{"errors": errors, "output": output}
 }
 
-func validateFile(file LedgerFile) ([]ledger.LedgerFileError, error) {
+func validateFile(file LedgerFile) ([]ledger.LedgerFileError, string, error) {
 	path := config.GetConfig().JournalPath
 
 	tmpfile, err := ioutil.TempFile(filepath.Dir(path), "paisa-tmp-")
@@ -136,14 +144,16 @@ func validateFile(file LedgerFile) ([]ledger.LedgerFileError, error) {
 	return ledger.Cli().ValidateFile(tmpfile.Name())
 }
 
-func readLedgerFile(path string) *LedgerFile {
+func readLedgerFile(dir string, path string) *LedgerFile {
 	content, err := ioutil.ReadFile(path)
 	if err != nil {
 		log.Fatal(err)
 	}
 
+	name, err := filepath.Rel(dir, path)
+
 	return &LedgerFile{
-		Name:    filepath.Base(path),
+		Name:    name,
 		Content: string(content),
 	}
 }
@@ -154,11 +164,24 @@ func readLedgerFileWithVersions(dir string, path string) *LedgerFile {
 		log.Fatal(err)
 	}
 
-	versions, _ := filepath.Glob(filepath.Join(dir, filepath.Base(path)+".backup.*"))
-	versionPaths := lo.Map(versions, func(path string, _ int) string { return filepath.Base(path) })
+	versions, _ := filepath.Glob(filepath.Join(filepath.Dir(path), filepath.Base(path)+".backup.*"))
+	versionPaths := lo.Map(versions, func(path string, _ int) string {
+		name, err := filepath.Rel(dir, path)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		return name
+	})
 	sort.Sort(sort.Reverse(sort.StringSlice(versionPaths)))
+
+	name, err := filepath.Rel(dir, path)
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	return &LedgerFile{
-		Name:     filepath.Base(path),
+		Name:     name,
 		Content:  string(content),
 		Versions: versionPaths,
 	}

@@ -19,6 +19,10 @@ $switch-focus: none;
 
 @import "bulma/sass/utilities/_all.sass";
 
+$menu-item-hover-background-color: $link-light;
+$menu-item-active-color: $link-dark;
+$menu-item-active-background-color: $link-light;
+
 @font-face {
   font-family: "Font Awesome 6 Free Solid";
   font-style: normal;
@@ -308,7 +312,7 @@ svg text {
 }
 
 .editor .cm-editor {
-  max-height: calc(100vh - 225px);
+  max-height: calc(100vh - 185px);
 }
 .cm-scroller {
   overflow: auto;

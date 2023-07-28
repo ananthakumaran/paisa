@@ -418,7 +418,7 @@ export function ajax(route: "/api/editor/files"): Promise<{
 export function ajax(
   route: "/api/editor/validate",
   options?: RequestInit
-): Promise<{ errors: LedgerFileError[] }>;
+): Promise<{ errors: LedgerFileError[]; output: string }>;
 
 export function ajax(
   route: "/api/editor/save",

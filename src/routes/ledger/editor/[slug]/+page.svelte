@@ -9,6 +9,7 @@
   import { onMount } from "svelte";
   import { goto } from "$app/navigation";
   import type { PageData } from "./$types";
+  import FileTree from "$lib/components/FileTree.svelte";
 
   export let data: PageData;
   let editorDom: Element;
@@ -31,7 +32,7 @@
 
   async function selectFile(file: LedgerFile) {
     selectedFile = file;
-    await goto(`/ledger/editor/${file.name}`, { noScroll: true });
+    await goto(`/ledger/editor/${encodeURIComponent(file.name)}`, { noScroll: true });
   }
 
   async function revert(version: string) {
@@ -107,28 +108,8 @@
 
 <section class="section tab-editor" style="padding-bottom: 0 !important">
   <div class="container is-fluid">
-    <div class="columns">
-      <div class="column is-12 py-0">
-        <div class="tabs is-boxed">
-          <ul>
-            {#each _.values(filesMap) as file}
-              <li class:is-active={file.name == selectedFile.name}>
-                <a on:click={(_e) => selectFile(file)}>
-                  <span
-                    >{file.name}
-                    {#if file.name == selectedFile.name && $editorState.hasUnsavedChanges}
-                      <span class="ml-1 tag is-danger">unsaved</span>
-                    {/if}
-                  </span>
-                </a>
-              </li>
-            {/each}
-          </ul>
-        </div>
-      </div>
-    </div>
     <div class="columuns">
-      <div class="column is-12 px-0 pt-0">
+      <div class="column is-12 px-0 pt-0 mb-2">
         <div class="box p-3 is-flex is-align-items-center" style="width: 100%">
           <div class="field has-addons mb-0">
             <p class="control">
@@ -225,10 +206,27 @@
       </div>
     </div>
     <div class="columns">
-      <div class="column is-12">
+      <div class="column is-2">
+        <div class="box px-2">
+          <aside class="menu" style="max-height: calc(100vh - 185px)">
+            <FileTree
+              on:select={(e) => selectFile(e.detail)}
+              ledgerFiles={_.values(filesMap)}
+              selectedFileName={selectedFile?.name}
+              hasUnsavedChanges={$editorState.hasUnsavedChanges}
+            />
+          </aside>
+        </div>
+      </div>
+      <div class="column is-6">
         <div class="box py-0">
           <div class="editor" bind:this={editorDom} />
         </div>
+      </div>
+      <div class="column is-4">
+        {#if !_.isEmpty($editorState.output)}
+          <pre style="max-height: calc(100vh - 185px)">{$editorState.output}</pre>
+        {/if}
       </div>
     </div>
   </div>

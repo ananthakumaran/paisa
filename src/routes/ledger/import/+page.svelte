@@ -146,7 +146,9 @@
 
     if (saved) {
       toast.toast({
-        message: `Saved <b><a href="/ledger/editor/${destinationFile}">${destinationFile}</a></b>`,
+        message: `Saved <b><a href="/ledger/editor/${encodeURIComponent(
+          destinationFile
+        )}">${destinationFile}</a></b>`,
         type: "is-success",
         duration: 5000
       });

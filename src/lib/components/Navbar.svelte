@@ -234,7 +234,7 @@
 
         {#if selectedSubLink && selectedLink.href + selectedSubLink.href != $page.url.pathname}
           <li>
-            <a class="is-inactive">{_.last($page.url.pathname.split("/"))}</a>
+            <a class="is-inactive">{decodeURIComponent(_.last($page.url.pathname.split("/")))}</a>
           </li>
         {/if}
       </ul>

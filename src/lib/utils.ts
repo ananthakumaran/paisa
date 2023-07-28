@@ -28,6 +28,18 @@ export interface CashFlow {
   balance: number;
 }
 
+export interface TransactionSequenceKey {
+  payee: string;
+  credit_accounts: string;
+  debit_accounts: string;
+}
+
+export interface TransactionSequence {
+  transactions: Transaction[];
+  key: TransactionSequenceKey;
+  interval: number;
+}
+
 export interface Transaction {
   id: string;
   date: dayjs.Dayjs;
@@ -266,6 +278,7 @@ export interface RetirementProgress {
   savings_timeline: Point[];
   swr: number;
   yearly_expense: number;
+  xirr: number;
 }
 
 export interface LedgerFile {
@@ -381,6 +394,10 @@ export function ajax(route: "/api/expense"): Promise<{
 }>;
 
 export function ajax(route: "/api/cash_flow"): Promise<{ cash_flows: CashFlow[] }>;
+
+export function ajax(
+  route: "/api/recurring"
+): Promise<{ transaction_sequences: TransactionSequence[] }>;
 
 export function ajax(route: "/api/liabilities/interest"): Promise<{
   interest_timeline_breakdown: Interest[];

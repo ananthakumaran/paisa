@@ -4,6 +4,7 @@ import (
 	"math"
 
 	"github.com/ananthakumaran/paisa/internal/model/posting"
+	"github.com/ananthakumaran/paisa/internal/model/transaction"
 	"github.com/ananthakumaran/paisa/internal/query"
 	"github.com/gin-gonic/gin"
 	"github.com/samber/lo"
@@ -64,11 +65,7 @@ func computeGraph(postings []posting.Posting) Graph {
 
 	var nodeID uint = 0
 
-	grouped := lo.GroupBy(postings, func(p posting.Posting) string { return p.TransactionID })
-	transactions := lo.Map(lo.Values(grouped), func(ps []posting.Posting, _ int) Transaction {
-		sample := ps[0]
-		return Transaction{ID: sample.TransactionID, Date: sample.Date, Payee: sample.Payee, Postings: ps}
-	})
+	transactions := transaction.Build(postings)
 
 	for _, p := range postings {
 		_, ok := nodes[p.Account]

@@ -345,3 +345,22 @@ svg text {
     box-shadow: 0 8px 8px rgba(10, 10, 10, 0.1), 0 0 0 1px rgba(10, 10, 10, 0.1) !important;
   }
 }
+
+.sc-carousel-dots__dot-container {
+  margin-top: 10px;
+}
+
+.sc-carousel-button.sc-carousel-dot__dot {
+  color: $grey-lighter;
+
+  button {
+    color: $grey-lighter;
+    &.sc-carousel-dot__dot_active {
+      color: $grey-light;
+
+      &:focus {
+        outline: none;
+      }
+    }
+  }
+}

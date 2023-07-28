@@ -1,19 +1,19 @@
 <script lang="ts">
-  import { ajax, type Transaction } from "$lib/utils";
+  import { ajax, type Transaction as T } from "$lib/utils";
   import { filterTransactions } from "$lib/transaction";
   import _ from "lodash";
   import { onMount } from "svelte";
   import VirtualList from "svelte-tiny-virtual-list";
-  import Postings from "$lib/components/Postings.svelte";
+  import Transaction from "$lib/components/Transaction.svelte";
 
-  let transactions: Transaction[] = [];
-  let filtered: Transaction[] = [];
+  let transactions: T[] = [];
+  let filtered: T[] = [];
 
-  const debits = (t: Transaction) => {
+  const debits = (t: T) => {
     return _.filter(t.postings, (p) => p.amount < 0);
   };
 
-  const credits = (t: Transaction) => {
+  const credits = (t: T) => {
     return _.filter(t.postings, (p) => p.amount >= 0);
   };
 
@@ -71,22 +71,7 @@
           >
             <div slot="item" let:index let:style {style}>
               {@const t = filtered[index]}
-              <div class="column is-12">
-                <div class="columns is-flex-wrap-wrap transaction">
-                  <div class="column is-3 py-0">
-                    <div class="description is-size-7">
-                      <b>{t.date.format("DD MMM YYYY")}</b>
-                      <span title={t.payee}>{t.payee}</span>
-                    </div>
-                  </div>
-                  <div class="column is-4 py-0">
-                    <Postings postings={debits(t)} />
-                  </div>
-                  <div class="column is-5 py-0">
-                    <Postings postings={credits(t)} />
-                  </div>
-                </div>
-              </div>
+              <Transaction {t} />
             </div>
           </VirtualList>
         </div>
@@ -94,18 +79,3 @@
     </div>
   </div>
 </section>
-
-<style lang="scss">
-  @import "bulma/sass/utilities/_all.sass";
-
-  .transaction {
-    border-bottom: 1px solid $grey-lighter;
-    padding-bottom: 1px;
-  }
-
-  .description {
-    display: inline-block;
-    white-space: nowrap;
-    overflow: hidden;
-  }
-</style>

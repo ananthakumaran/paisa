@@ -33,7 +33,8 @@
       href: "/cash_flow",
       children: [
         { label: "Monthly", href: "/monthly", dateRangeSelector: true },
-        { label: "Yearly", href: "/yearly", financialYearPicker: true }
+        { label: "Yearly", href: "/yearly", financialYearPicker: true },
+        { label: "Recurring", href: "/recurring" }
       ]
     },
     {

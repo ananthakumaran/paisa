@@ -3,6 +3,10 @@ import { stemmer } from "stemmer";
 
 const ICONS: Record<string, [string, string]> = {
   rent: ["\ue065", "house-user"],
+  bike: ["\uf21c", "motorcycle"],
+  motorcycl: ["\uf21c", "motorcycle"],
+  car: ["\uf1b9", "car"],
+  vehicl: ["\uf1b9", "car"],
   check: ["\uf4d3", "piggy-bank"],
   bank: ["\uf4d3", "piggy-bank"],
   asset: ["\uf81d", "sack-dollar"],

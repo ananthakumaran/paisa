@@ -9,7 +9,7 @@ lakh. Paisa helps with the computation of the amount.
 | immovable | A (1)          | Immovable Assets                                                             |
 | metal     | B (1) (i)      | Jewellery, bullion etc.                                                      |
 | art       | B (1) (ii)     | Archaeological collections, drawings, painting, sculpture or any work of art |
-| vechicle  | B (1) (iii)    | Vehicles, yachts, boats and aircrafts                                        |
+| vehicle   | B (1) (iii)    | Vehicles, yachts, boats and aircrafts                                        |
 | bank      | B (1) (iv) (a) | Financial assets: Bank (including all deposits)                              |
 | share     | B (1) (iv) (b) | Financial assets: Shares and securities                                      |
 | insurance | B (1) (iv) (c) | Financial assets: Insurance policies                                         |

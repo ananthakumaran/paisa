@@ -99,7 +99,7 @@ func (LedgerCLI) Parse(journalPath string, _prices []price.Price) ([]*posting.Po
 	}
 
 	for _, record := range records {
-		date, err := time.Parse("2006/01/02", record[0])
+		date, err := time.ParseInLocation("2006/01/02", record[0], time.Local)
 		if err != nil {
 			return nil, err
 		}
@@ -249,7 +249,7 @@ func (HLedgerCLI) Parse(journalPath string, prices []price.Price) ([]*posting.Po
 	}
 
 	for _, t := range transactions {
-		date, err := time.Parse("2006-01-02", t.Date)
+		date, err := time.ParseInLocation("2006-01-02", t.Date, time.Local)
 		if err != nil {
 			return nil, err
 		}

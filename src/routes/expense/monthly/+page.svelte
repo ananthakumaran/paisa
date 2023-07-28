@@ -11,6 +11,7 @@
   import { dateRange, month, setAllowedDateRange } from "../../../store";
   import { writable } from "svelte/store";
   import { iconify } from "$lib/icon";
+  import PostingStatus from "$lib/components/PostingStatus.svelte";
 
   let groups = writable([]);
   let z: d3.ScaleOrdinal<string, string, never>,
@@ -124,11 +125,7 @@
               >
                 <div class="is-flex is-flex-wrap-wrap is-justify-content-space-between">
                   <div class="has-text-grey is-size-7">
-                    {#if expense.status == "cleared"}
-                      <b>*</b>
-                    {:else if expense.status == "pending"}
-                      <b>!</b>
-                    {/if}
+                    <PostingStatus posting={expense} />
                     {expense.payee}
                   </div>
                   <div class="has-text-grey">

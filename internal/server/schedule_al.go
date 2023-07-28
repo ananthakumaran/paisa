@@ -26,7 +26,7 @@ func init() {
 		{Code: "immovable", Section: "A (1)", Details: "Immovable Assets"},
 		{Code: "metal", Section: "B (1) (i)", Details: "Jewellery, bullion etc"},
 		{Code: "art", Section: "B (1) (ii)", Details: "Archaeological collections, drawings, painting, sculpture or any work of art"},
-		{Code: "vechicle", Section: "B (1) (ii)", Details: "Vehicles, yachts, boats and aircrafts"},
+		{Code: "vehicle", Section: "B (1) (ii)", Details: "Vehicles, yachts, boats and aircrafts"},
 		{Code: "bank", Section: "B (1) (iv) (a)", Details: "Financial assets: Bank (including all deposits)"},
 		{Code: "share", Section: "B (1) (iv) (b)", Details: "Financial assets: Shares and securities"},
 		{Code: "insurance", Section: "B (1) (iv) (c)", Details: "Financial assets: Insurance policies"},

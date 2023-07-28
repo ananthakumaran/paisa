@@ -39,6 +39,7 @@
     "pdf2array": "^0.0.1",
     "sprintf-js": "^1.1.2",
     "stemmer": "^2.0.1",
+    "svelte-carousel": "^1.0.25",
     "svelte-file-dropzone": "^2.0.1",
     "svelte-language-server": "^0.15.0",
     "svelte-select": "^5.6.0",

@@ -12,6 +12,7 @@
   let savingsTotal = 0,
     targetSavings = 0,
     swr = 0,
+    xirr = 0,
     yearlyExpense = 0,
     progressPercent = 0,
     savingsX = 0,
@@ -30,7 +31,8 @@
       savings_total: savingsTotal,
       savings_timeline: savingsTimeline,
       yearly_expense: yearlyExpense,
-      swr
+      swr,
+      xirr
     } = await ajax("/api/retirement/progress"));
     targetSavings = yearlyExpense * (100 / swr);
 
@@ -60,7 +62,7 @@
 </script>
 
 <section class="section">
-  <div class="container">
+  <div class="container is-fluid">
     <nav class="level">
       <LevelItem
         title="Current Savings"
@@ -90,6 +92,12 @@
         <div>
           <p class="heading">SWR</p>
           <p class="title has-text-black">{formatFloat(swr)}</p>
+        </div>
+      </div>
+      <div class="level-item has-text-centered">
+        <div>
+          <p class="heading">XIRR</p>
+          <p class="title has-text-black">{formatFloat(xirr)}</p>
         </div>
       </div>
     </nav>

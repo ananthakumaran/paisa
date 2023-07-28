@@ -32,10 +32,24 @@ export function renderPostings(postings: Posting[]) {
         change = formatCurrency(changeAmount);
       }
     }
+
+    let postingStatus = "";
+    if (p.status == "cleared")
+      postingStatus = `<span class="icon is-small">
+    <i class="fa-solid fa-check"></i>
+  </span>`;
+    else {
+      if (p.status == "pending") {
+        postingStatus = `<span class="icon is-small">
+    <i class="fa-solid fa-exclamation"></i>
+  </span>`;
+      }
+    }
+
     const markup = `
 <tr class="${p.date.month() % 2 == 0 ? "has-background-white-ter" : ""}">
        <td>${date}</td>
-       <td>${p.payee}</td>
+       <td>${postingStatus}${p.payee}</td>
        <td>${iconify(p.account)}</td>
        <td class='has-text-right'>${purchase}</td>
        <td class='has-text-right'>${units}</td>

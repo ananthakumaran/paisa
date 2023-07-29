@@ -10,6 +10,7 @@
   import { goto } from "$app/navigation";
   import type { PageData } from "./$types";
   import FileTree from "$lib/components/FileTree.svelte";
+  import FileModal from "$lib/components/FileModal.svelte";
 
   export let data: PageData;
   let editorDom: Element;
@@ -22,13 +23,17 @@
   let selectedVersion: string = null;
 
   onMount(async () => {
+    loadFiles(data.name);
+  });
+
+  async function loadFiles(selectedFileName: string) {
     let files;
     ({ files, accounts, commodities, payees } = await ajax("/api/editor/files"));
     filesMap = _.fromPairs(_.map(files, (f) => [f.name, f]));
     if (!_.isEmpty(files)) {
-      selectedFile = _.find(files, (f) => f.name == data.name) || files[0];
+      selectedFile = _.find(files, (f) => f.name == selectedFileName) || files[0];
     }
-  });
+  }
 
   async function selectFile(file: LedgerFile) {
     selectedFile = file;
@@ -62,14 +67,14 @@
 
   async function save() {
     const doc = editor.state.doc;
-    const { errors, saved, file } = await ajax("/api/editor/save", {
+    const { errors, saved, file, message } = await ajax("/api/editor/save", {
       method: "POST",
       body: JSON.stringify({ name: selectedFile.name, content: doc.toString() })
     });
 
     if (!saved) {
       toast.toast({
-        message: `Failed to save ${selectedFile.name}`,
+        message: `Failed to save ${selectedFile.name}. reason: ${message}`,
         type: "is-danger",
         duration: 5000
       });
@@ -104,7 +109,39 @@
       moveToEnd(editor);
     }
   }
+
+  let modalOpen = false;
+  function openCreateModal() {
+    modalOpen = true;
+  }
+
+  async function createFile(destinationFile: string) {
+    const { saved, message } = await ajax("/api/editor/save", {
+      method: "POST",
+      body: JSON.stringify({ name: destinationFile, content: "", operation: "create" })
+    });
+
+    if (saved) {
+      toast.toast({
+        message: `Created <b><a href="/ledger/editor/${encodeURIComponent(
+          destinationFile
+        )}">${destinationFile}</a></b>`,
+        type: "is-success",
+        duration: 5000
+      });
+      await goto(`/ledger/editor/${encodeURIComponent(destinationFile)}`, { noScroll: true });
+      await loadFiles(destinationFile);
+    } else {
+      toast.toast({
+        message: `Failed to create ${destinationFile}. reason: ${message}`,
+        type: "is-danger",
+        duration: 5000
+      });
+    }
+  }
 </script>
+
+<FileModal bind:open={modalOpen} on:save={(e) => createFile(e.detail)} label="Create" help="" />
 
 <section class="section tab-editor" style="padding-bottom: 0 !important">
   <div class="container is-fluid">
@@ -112,6 +149,17 @@
       <div class="column is-12 px-0 pt-0 mb-2">
         <div class="box p-3 is-flex is-align-items-center" style="width: 100%">
           <div class="field has-addons mb-0">
+            <p class="control">
+              <button class="button is-small is-link is-light" on:click={(_e) => openCreateModal()}>
+                <span class="icon is-small">
+                  <i class="fas fa-file-circle-plus" />
+                </span>
+                <span>Create</span>
+              </button>
+            </p>
+          </div>
+
+          <div class="field has-addons ml-5 mb-0">
             <p class="control">
               <button
                 class="button is-small"
@@ -159,7 +207,7 @@
           </div>
 
           {#if !_.isEmpty(selectedFile?.versions)}
-            <div class="field has-addons ml-2 mb-0">
+            <div class="field has-addons ml-5 mb-0">
               <p class="control">
                 <button
                   class="button is-small"
@@ -194,7 +242,7 @@
           {/if}
 
           {#if $editorState.errors.length > 0}
-            <div class="control">
+            <div class="control ml-5">
               <a on:click={(_e) => moveToLine(editor, $editorState.errors[0].line_from)}
                 ><span class="ml-1 tag is-danger is-light"
                   >{$editorState.errors.length} error(s) found</span

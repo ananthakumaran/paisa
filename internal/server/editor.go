@@ -70,7 +70,7 @@ func DeleteBackups(file LedgerFile) gin.H {
 func SaveFile(db *gorm.DB, file LedgerFile) gin.H {
 	errors, _, err := validateFile(file)
 	if err != nil {
-		return gin.H{"errors": errors, "saved": false}
+		return gin.H{"errors": errors, "saved": false, "message": "Validation failed"}
 	}
 
 	path := config.GetConfig().JournalPath
@@ -82,35 +82,39 @@ func SaveFile(db *gorm.DB, file LedgerFile) gin.H {
 	err = os.MkdirAll(filepath.Dir(filePath), 0700)
 	if err != nil {
 		log.Warn(err)
-		return gin.H{"errors": errors, "saved": false}
+		return gin.H{"errors": errors, "saved": false, "message": "Failed to create directory"}
 	}
 
 	fileStat, err := os.Stat(filePath)
-	if err != nil && file.Operation != "overwrite" {
+	if err != nil && file.Operation != "overwrite" && file.Operation != "create" {
 		log.Warn(err)
-		return gin.H{"errors": errors, "saved": false}
+		return gin.H{"errors": errors, "saved": false, "message": "File does not exist"}
 	}
 
 	var perm os.FileMode = 0644
 	if err == nil {
+		if file.Operation == "create" {
+			return gin.H{"errors": errors, "saved": false, "message": "File already exists"}
+		}
+
 		perm = fileStat.Mode().Perm()
 		existingContent, err := ioutil.ReadFile(filePath)
 		if err != nil {
 			log.Warn(err)
-			return gin.H{"errors": errors, "saved": false}
+			return gin.H{"errors": errors, "saved": false, "message": "Failed to read file"}
 		}
 
 		err = ioutil.WriteFile(backupPath, existingContent, perm)
 		if err != nil {
 			log.Warn(err)
-			return gin.H{"errors": errors, "saved": false}
+			return gin.H{"errors": errors, "saved": false, "message": "Failed to create backup"}
 		}
 	}
 
 	err = ioutil.WriteFile(filePath, []byte(file.Content), perm)
 	if err != nil {
 		log.Warn(err)
-		return gin.H{"errors": errors, "saved": false}
+		return gin.H{"errors": errors, "saved": false, "message": "Failed to write file"}
 	}
 
 	Sync(db, SyncRequest{Journal: true})

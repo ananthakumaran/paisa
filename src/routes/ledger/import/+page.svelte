@@ -17,6 +17,7 @@
   import { accountTfIdf } from "../../../store";
   import * as toast from "bulma-toast";
   import Modal from "$lib/components/Modal.svelte";
+  import FileModal from "$lib/components/FileModal.svelte";
 
   let templates: Template[] = [];
   let selectedTemplate: Template;
@@ -133,13 +134,12 @@
   }
 
   let modalOpen = false;
-  let destinationFile = "";
   function openSaveModal() {
     modalOpen = true;
   }
 
-  async function saveToFile() {
-    const { saved } = await ajax("/api/editor/save", {
+  async function saveToFile(destinationFile: string) {
+    const { saved, message } = await ajax("/api/editor/save", {
       method: "POST",
       body: JSON.stringify({ name: destinationFile, content: preview, operation: "overwrite" })
     });
@@ -154,7 +154,7 @@
       });
     } else {
       toast.toast({
-        message: `Failed to save ${destinationFile}`,
+        message: `Failed to save ${destinationFile}. reason: ${message}`,
         type: "is-danger",
         duration: 5000
       });
@@ -162,27 +162,7 @@
   }
 </script>
 
-<Modal bind:active={modalOpen}>
-  <svelte:fragment slot="head" let:close>
-    <p class="modal-card-title">Save As</p>
-    <button class="delete" aria-label="close" on:click={(e) => close(e)} />
-  </svelte:fragment>
-  <div class="field" slot="body">
-    <label class="label" for="save-filename">File Name</label>
-    <div class="control" id="save-filename">
-      <input class="input" type="text" placeholder="expense.ledger" bind:value={destinationFile} />
-      <p class="help">Create or overwrite existing file</p>
-    </div>
-  </div>
-  <svelte:fragment slot="foot" let:close>
-    <button
-      class="button is-success"
-      disabled={_.isEmpty(destinationFile)}
-      on:click={(e) => saveToFile() && close(e)}>Save</button
-    >
-    <button class="button" on:click={(e) => close(e)}>Cancel</button>
-  </svelte:fragment>
-</Modal>
+<FileModal bind:open={modalOpen} on:save={(e) => saveToFile(e.detail)} />
 
 <section class="section tab-import" style="padding-bottom: 0 !important">
   <div class="container is-fluid">

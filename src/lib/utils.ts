@@ -423,7 +423,7 @@ export function ajax(
 export function ajax(
   route: "/api/editor/save",
   options?: RequestInit
-): Promise<{ errors: LedgerFileError[]; saved: boolean; file: LedgerFile }>;
+): Promise<{ errors: LedgerFileError[]; saved: boolean; file: LedgerFile; message: string }>;
 
 export function ajax(
   route: "/api/editor/file",

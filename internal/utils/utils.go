@@ -79,7 +79,7 @@ func IsWithDate(date time.Time, start time.Time, end time.Time) bool {
 }
 
 func toDate(date time.Time) time.Time {
-	return time.Date(date.Year(), date.Month(), date.Day(), 0, 0, 0, 0, time.UTC)
+	return time.Date(date.Year(), date.Month(), date.Day(), 0, 0, 0, 0, time.Local)
 }
 
 func IsSameOrParent(account string, comparison string) bool {

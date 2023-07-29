@@ -64,6 +64,7 @@ db_path: '%s'
 ledger_cli: ledger
 default_currency: INR
 retirement:
+  swr: 3
   savings:
     - Assets:Debt:*
     - Assets:Equity:*
@@ -256,30 +257,6 @@ func emitChitFund(state *GeneratorState) {
 	}
 }
 
-func emitHouseLoan(state *GeneratorState) {
-	start, _ := time.Parse("02-01-2006", "01-01-2016")
-	end, _ := time.Parse("02-01-2006", "01-11-2016")
-
-	for ; start.Before(end); start = start.AddDate(0, 1, 0) {
-		price := 10000 - ((time.November - start.Month()) * 100)
-		amount := fmt.Sprintf("1 CHIT @ %d", price)
-
-		if start.Month() >= time.June {
-			emitTransaction(state.Ledger, start, "Chit installment", "Assets:Checking", "Liabilities:Chit", amount)
-		} else {
-			emitTransaction(state.Ledger, start, "Chit installment", "Assets:Checking", "Assets:Debt:Chit", amount)
-		}
-
-		if start.Month() == time.June {
-			amount = fmt.Sprintf("-5 CHIT @ %d", price)
-			emitTransaction(state.Ledger, start, "Chit withdraw", "Assets:Checking", "Assets:Debt:Chit", amount)
-			amount = fmt.Sprintf("-5 CHIT @ %d", price)
-			emitTransaction(state.Ledger, start, "Chit withdraw", "Assets:Checking", "Liabilities:Chit", amount)
-		}
-
-	}
-}
-
 func emitSalary(state *GeneratorState, start time.Time) {
 	if start.Month() == time.April {
 		state.YearlySalary = incrementByPercentRange(state.YearlySalary, 10, 15)
@@ -329,12 +306,18 @@ func emitExpense(state *GeneratorState, start time.Time) {
 	emit("Eat out", "Expenses:Restaurants", 2500, 0.5)
 	emit("Groceries", "Expenses:Food", 5000, 0.9)
 
-	emi := 40000.0
-	interest := (state.LoanBalance * 0.08 / 12)
-	principal := emi - interest
-	state.LoanBalance -= principal
-	emit("EMI", "Expenses:Interest:Homeloan", interest, 1.0)
-	emit("EMI", "Liabilities:Homeloan", principal, 1.0)
+	if state.LoanBalance > 0 {
+		emi := math.Min(state.Balance-10000, 30000.0)
+		interest := (state.LoanBalance * 0.08 / 12)
+		principal := emi - interest
+		state.LoanBalance -= principal
+		emit("EMI", "Expenses:Interest:Homeloan", interest, 1.0)
+		emit("EMI", "Liabilities:Homeloan", principal, 1.0)
+	}
+
+	if state.Balance < 10000 {
+		return
+	}
 
 	if lo.Contains([]time.Month{time.January, time.April, time.November, time.December}, start.Month()) {
 		emit("Dress", "Expenses:Clothing", 5000, 0.5)
@@ -394,9 +377,9 @@ func generateJournalFile(cwd string) {
 	loadPrices("SM008002", config.NPS, "NPS_HDFC_C", pricesTree)
 	loadPrices("SM008003", config.NPS, "NPS_HDFC_G", pricesTree)
 
-	state := GeneratorState{Balance: 0, Ledger: ledgerFile, YearlySalary: 1000000, Rent: 10000, LoanBalance: 4000000}
+	state := GeneratorState{Balance: 0, Ledger: ledgerFile, YearlySalary: 1000000, Rent: 10000, LoanBalance: 2500000}
 
-	emitTransaction(state.Ledger, start, "Home purchase", "Liabilities:Homeloan", "Assets:House", "1 APT @ 4000000")
+	emitTransaction(state.Ledger, start, "Home purchase", "Liabilities:Homeloan", "Assets:House", "1 APT @ 25000000")
 
 	for ; start.Before(end); start = start.AddDate(0, 1, 0) {
 		emitSalary(&state, start)

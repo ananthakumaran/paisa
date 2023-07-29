@@ -11,7 +11,7 @@ docs:
 	cd docs && mdbook serve --open
 
 sample:
-	go build && ./paisa init && ./paisa update && ./paisa serve
+	go build && ./paisa init && ./paisa update
 
 publish:
 	nix develop --command bash -c 'cd docs && mdbook build'

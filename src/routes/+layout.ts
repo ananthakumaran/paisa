@@ -29,8 +29,6 @@ dayjs.extend(relativeTime, {
     { l: "yy", d: "year" }
   ]
 });
-import utc from "dayjs/plugin/utc";
-dayjs.extend(utc);
 
 import Handlebars from "handlebars";
 import helpers from "$lib/template_helpers";

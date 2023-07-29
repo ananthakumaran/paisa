@@ -320,7 +320,7 @@ func parseLedgerPrices(output string, defaultCurrency string) ([]price.Price, er
 
 		commodity := match[2]
 
-		date, err := time.Parse("2006/01/02", match[1])
+		date, err := time.ParseInLocation("2006/01/02", match[1], time.Local)
 		if err != nil {
 			return nil, err
 		}
@@ -348,7 +348,7 @@ func parseHLedgerPrices(output string, defaultCurrency string) ([]price.Price, e
 
 		commodity := match[2]
 
-		date, err := time.Parse("2006-01-02", match[1])
+		date, err := time.ParseInLocation("2006-01-02", match[1], time.Local)
 		if err != nil {
 			return nil, err
 		}

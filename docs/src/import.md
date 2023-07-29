@@ -1,8 +1,8 @@
 # Import
 
-Paisa provides ability to convert **CSV**, **TXT**, **XLS** or
-**XLSX** files to Ledger file format. The import page is made of three
-components.
+Paisa provides ability to convert **CSV**, **TXT**, **XLS**, **XLSX**
+or **PDF** files to Ledger file format. The import page is made of
+three components.
 
 1) File Preview - You can drag and drop files here to preview the
 contents.

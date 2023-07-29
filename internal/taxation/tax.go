@@ -10,12 +10,16 @@ import (
 	"gorm.io/gorm"
 )
 
-var EQUITY_GRANDFATHER_DATE, _ = time.Parse("2006-01-02", "2018-02-01")
-var DEBT_INDEXATION_REVOCATION_DATE, _ = time.Parse("2006-01-02", "2023-04-01")
-var CII_START_DATE, _ = time.Parse("2006-01-02", "2001-03-31")
+var EQUITY_GRANDFATHER_DATE, DEBT_INDEXATION_REVOCATION_DATE, CII_START_DATE time.Time
 var ONE_YEAR = time.Hour * 24 * 365
 var THREE_YEAR = ONE_YEAR * 3
 var TWO_YEAR = ONE_YEAR * 2
+
+func init() {
+	EQUITY_GRANDFATHER_DATE, _ = time.ParseInLocation("2006-01-02", "2018-02-01", time.Local)
+	DEBT_INDEXATION_REVOCATION_DATE, _ = time.ParseInLocation("2006-01-02", "2023-04-01", time.Local)
+	CII_START_DATE, _ = time.ParseInLocation("2006-01-02", "2001-03-31", time.Local)
+}
 
 type Tax struct {
 	Gain      float64 `json:"gain"`

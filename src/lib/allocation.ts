@@ -30,7 +30,7 @@ export function renderAllocationTarget(
   allocationTargets = _.sortBy(allocationTargets, (t) => t.name);
   const BAR_HEIGHT = 25;
   const svg = d3.select(id),
-    margin = { top: 20, right: 0, bottom: 10, left: 150 },
+    margin = { top: 20, right: 20, bottom: 10, left: 150 },
     fullWidth = document.getElementById(id.substring(1)).parentElement.clientWidth,
     width = fullWidth - margin.left - margin.right,
     height = allocationTargets.length * BAR_HEIGHT * 2,
@@ -214,7 +214,9 @@ export function renderAllocationTarget(
     .style("position", "relative")
     .style("height", y1.bandwidth() * 2 + "px")
     .each(function (t) {
-      renderPartition(this, t.aggregates, d3.treemap(), color);
+      renderPartition(this, t.aggregates, d3.treemap(), color, {
+        margin: { top: 0, right: 0, bottom: 0, left: 0 }
+      });
     });
 }
 
@@ -235,14 +237,15 @@ function renderPartition(
   element: HTMLElement,
   aggregates: Record<string, Aggregate>,
   hierarchy: any,
-  color: d3.ScaleOrdinal<string, string>
+  color: d3.ScaleOrdinal<string, string>,
+  options = { margin: { top: 0, right: 20, bottom: 0, left: 0 } }
 ) {
   if (_.isEmpty(aggregates)) {
     return;
   }
 
   const div = d3.select(element),
-    margin = { top: 0, right: 0, bottom: 0, left: 20 },
+    margin = options.margin,
     width = element.parentElement.clientWidth - margin.left - margin.right,
     height = +div.style("height").replace("px", "") - margin.top - margin.bottom;
 

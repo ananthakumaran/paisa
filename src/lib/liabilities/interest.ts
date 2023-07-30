@@ -82,6 +82,13 @@ export function renderOverview(gains: Interest[]) {
     .paddingInner(0)
     .paddingOuter(0.1);
 
+  const y2 = d3
+    .scaleBand()
+    .range([0, y.bandwidth()])
+    .domain(["0", "1"])
+    .paddingInner(0)
+    .paddingOuter(0.6);
+
   const keys = ["balance", "drawn", "repaid", "gain", "loss"];
   const colors = [COLORS.primary, COLORS.secondary, COLORS.tertiary, COLORS.gain, COLORS.loss];
   const z = d3.scaleOrdinal<string>(colors).domain(keys);
@@ -271,12 +278,13 @@ export function renderOverview(gains: Interest[]) {
     })
     .enter()
     .append("rect")
+    .attr("rx", "5")
     .attr("fill", (d) => {
       return z(d.key);
     })
     .attr("x", (d) => x(d[0][0]))
-    .attr("y", (d: any) => y1(d[0].data.i))
-    .attr("height", y1.bandwidth())
+    .attr("y", (d: any) => y2(d[0].data.i))
+    .attr("height", y2.bandwidth())
     .attr("width", (d) => x(d[0][1]) - x(d[0][0]));
 
   const paddingTop = (y1.range()[1] - y1.bandwidth() * 2) / 2;

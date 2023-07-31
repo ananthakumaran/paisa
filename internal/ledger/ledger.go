@@ -10,6 +10,7 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/gofrs/uuid"
 	"github.com/google/btree"
 	log "github.com/sirupsen/logrus"
 
@@ -80,7 +81,7 @@ func (LedgerCLI) Parse(journalPath string, _prices []price.Price) ([]*posting.Po
 		log.Fatal(err)
 	}
 
-	command := exec.Command("ledger", "-f", journalPath, "csv", "--csv-format", "%(quoted(date)),%(quoted(payee)),%(quoted(display_account)),%(quoted(commodity(scrub(display_amount)))),%(quoted(quantity(scrub(display_amount)))),%(quoted(to_int(scrub(market(amount,date,'"+config.DefaultCurrency()+"') * 100000)))),%(quoted(xact.id)),%(quoted(cleared ? \"*\" : (pending ? \"!\" : \"\")))\n")
+	command := exec.Command("ledger", "-f", journalPath, "csv", "--csv-format", "%(quoted(date)),%(quoted(payee)),%(quoted(display_account)),%(quoted(commodity(scrub(display_amount)))),%(quoted(quantity(scrub(display_amount)))),%(quoted(to_int(scrub(market(amount,date,'"+config.DefaultCurrency()+"') * 100000)))),%(quoted(xact.filename)),%(quoted(xact.id)),%(quoted(cleared ? \"*\" : (pending ? \"!\" : \"\")))\n")
 	var output, error bytes.Buffer
 	command.Stdout = &output
 	command.Stderr = &error
@@ -115,16 +116,19 @@ func (LedgerCLI) Parse(journalPath string, _prices []price.Price) ([]*posting.Po
 		}
 		amount = amount / 100000
 
+		namespace := uuid.Must(uuid.FromString("45964a1b-b24c-4a73-835a-9335a7aa7de5"))
+		transactionID := uuid.NewV5(namespace, record[6]+":"+record[7]).String()
+
 		var status string
-		if record[7] == "*" {
+		if record[8] == "*" {
 			status = "cleared"
-		} else if record[7] == "!" {
+		} else if record[8] == "!" {
 			status = "pending"
 		} else {
 			status = "unmarked"
 		}
 
-		posting := posting.Posting{Date: date, Payee: record[1], Account: record[2], Commodity: record[3], Quantity: quantity, Amount: amount, TransactionID: record[6], Status: status}
+		posting := posting.Posting{Date: date, Payee: record[1], Account: record[2], Commodity: record[3], Quantity: quantity, Amount: amount, TransactionID: transactionID, Status: status}
 		postings = append(postings, &posting)
 
 	}

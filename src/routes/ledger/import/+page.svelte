@@ -16,7 +16,6 @@
   import { ajax, type Template } from "$lib/utils";
   import { accountTfIdf } from "../../../store";
   import * as toast from "bulma-toast";
-  import Modal from "$lib/components/Modal.svelte";
   import FileModal from "$lib/components/FileModal.svelte";
 
   let templates: Template[] = [];

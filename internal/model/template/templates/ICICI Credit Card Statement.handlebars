@@ -1,5 +1,5 @@
 {{#if (and (isDate ROW.A "DD/MM/YYYY") (isBlank ROW.G))}}
  {{date ROW.A "DD/MM/YYYY"}} {{ROW.C}}
     {{predictAccount prefix="Expenses"}}		{{ROW.F}} INR
-    Assets:Checking
+    Liabilities:CreditCard:ICICI
 {{/if}}

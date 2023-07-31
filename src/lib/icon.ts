@@ -1,36 +1,44 @@
 import _ from "lodash";
 import { stemmer } from "stemmer";
 
-const ICONS: Record<string, [string, string]> = {
-  rent: ["\ue065", "house-user"],
-  bike: ["\uf21c", "motorcycle"],
-  motorcycl: ["\uf21c", "motorcycle"],
-  car: ["\uf1b9", "car"],
-  vehicl: ["\uf1b9", "car"],
-  check: ["\uf4d3", "piggy-bank"],
-  bank: ["\uf4d3", "piggy-bank"],
-  asset: ["\uf81d", "sack-dollar"],
-  equiti: ["\uf201", "chart-line"],
-  debt: ["\uf53d", "money-check-dollar"],
-  gold: ["\uf70b", "ring"],
-  realest: ["\uf015", "house"],
-  hous: ["\uf015", "house"],
-  homeloan: ["\uf015", "house"],
-  liabil: ["\uf09d", "credit-card"],
-  expens: ["\uf555", "wallet"],
-  incom: ["\uf1ad", "building"],
-  gift: ["\uf06b", "gift"],
-  cloth: ["\uf553", "tshirt"],
-  educ: ["\uf19d", "graduation-cap"],
-  food: ["\uf805", "hamburger"],
-  entertain: ["\uf008", "film"],
-  insur: ["\uf5e1", "car-crash"],
-  interest: ["\uf4c0", "hand-holding-dollar"],
-  shop: ["\uf07a", "shopping-car"],
-  restaur: ["\uf2e7", "utensils"],
-  misc: ["\uf5fd", "layer-group"],
-  util: ["\ue55b", "plug-circle-bolt"]
-};
+interface IconLookup {
+  class: string;
+  glyph: string;
+  words: string[];
+}
+
+const ICON_LOOKUP: IconLookup[] = [
+  { class: "house-user", glyph: "\ue065", words: ["rent"] },
+  { class: "motorcycle", glyph: "\uf21c", words: ["bike", "motorcycl"] },
+  { class: "car", glyph: "\uf1b9", words: ["car", "vehicl"] },
+  { class: "piggy-bank", glyph: "\uf4d3", words: ["check", "bank"] },
+  { class: "sack-dollar", glyph: "\uf81d", words: ["asset"] },
+  { class: "chart-line", glyph: "\uf201", words: ["equiti"] },
+  { class: "money-check-dollar", glyph: "\uf53d", words: ["debt"] },
+  { class: "ring", glyph: "\uf70b", words: ["gold"] },
+  { class: "house", glyph: "\uf015", words: ["realest", "hous", "homeloan"] },
+  { class: "credit-card", glyph: "\uf09d", words: ["liabil"] },
+  { class: "cc-visa", glyph: "\uf1f0", words: ["idfc"] },
+  { class: "cc-amazon-pay", glyph: "\uf42d", words: ["icici"] },
+  { class: "wallet", glyph: "\uf555", words: ["expens"] },
+  { class: "building", glyph: "\uf1ad", words: ["incom"] },
+  { class: "gift", glyph: "\uf06b", words: ["gift", "reward"] },
+  { class: "tshirt", glyph: "\uf553", words: ["cloth"] },
+  { class: "graduation-cap", glyph: "\uf19d", words: ["educ"] },
+  { class: "hamburger", glyph: "\uf805", words: ["food"] },
+  { class: "film", glyph: "\uf008", words: ["entertain"] },
+  { class: "car-crash", glyph: "\uf5e1", words: ["insur"] },
+  { class: "hand-holding-dollar", glyph: "\uf4c0", words: ["interest"] },
+  { class: "shopping-car", glyph: "\uf07a", words: ["shop"] },
+  { class: "utensils", glyph: "\uf2e7", words: ["restaur"] },
+  { class: "layer-group", glyph: "\uf5fd", words: ["misc"] },
+  { class: "plug-circle-bolt", glyph: "\ue55b", words: ["util"] }
+];
+
+const ICONS: Record<string, string> = _.chain(ICON_LOOKUP)
+  .flatMap((icon) => _.map(icon.words, (word) => [word, icon.glyph]))
+  .fromPairs()
+  .value();
 
 export function iconText(account: string): string {
   if (account == "") {
@@ -38,7 +46,7 @@ export function iconText(account: string): string {
   }
   const parts = account.split(":");
   const part = stemmer(_.last(parts).toLowerCase());
-  return ICONS[part]?.[0] || iconText(_.dropRight(parts, 1).join(":"));
+  return ICONS[part] || iconText(_.dropRight(parts, 1).join(":"));
 }
 
 export function iconify(account: string, options?: { group?: string; suffix?: boolean }) {

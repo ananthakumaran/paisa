@@ -2,7 +2,6 @@ package server
 
 import (
 	"sort"
-	"strings"
 	"time"
 
 	"github.com/ananthakumaran/paisa/internal/model/posting"
@@ -25,9 +24,7 @@ type TransactionSequence struct {
 }
 
 type TransactionSequenceKey struct {
-	Payee          string `json:"payee"`
-	CreditAccounts string `json:"credit_accounts"`
-	DebitAccounts  string `json:"debit_accounts"`
+	TagRecurring string `json:"tag_recurring"`
 }
 
 func computeRecurringTransactions(postings []posting.Posting) []TransactionSequence {
@@ -38,16 +35,11 @@ func computeRecurringTransactions(postings []posting.Posting) []TransactionSeque
 	})
 
 	transactions := transaction.Build(postings)
+	transactions = lo.Filter(transactions, func(t transaction.Transaction, _ int) bool {
+		return t.TagRecurring != ""
+	})
 	transactionsGrouped := lo.GroupBy(transactions, func(t transaction.Transaction) TransactionSequenceKey {
-		creditAccounts := lo.FilterMap(t.Postings, func(p posting.Posting, _ int) (string, bool) {
-			return p.Account, p.Amount >= 0
-		})
-		sort.Strings(creditAccounts)
-		debitAccounts := lo.FilterMap(t.Postings, func(p posting.Posting, _ int) (string, bool) {
-			return p.Account, p.Amount < 0
-		})
-		sort.Strings(debitAccounts)
-		return TransactionSequenceKey{Payee: t.Payee, CreditAccounts: strings.Join(creditAccounts, ","), DebitAccounts: strings.Join(debitAccounts, ",")}
+		return TransactionSequenceKey{TagRecurring: t.TagRecurring}
 	})
 
 	transaction_sequences := lo.MapToSlice(transactionsGrouped, func(key TransactionSequenceKey, ts []transaction.Transaction) TransactionSequence {
@@ -70,6 +62,6 @@ func computeRecurringTransactions(postings []posting.Posting) []TransactionSeque
 	})
 
 	return lo.Filter(transaction_sequences, func(ts TransactionSequence, _ int) bool {
-		return len(ts.Transactions) > 2 && ts.Interval < 400 && ts.DaysSinceLastTransaction <= (ts.Interval*2)
+		return len(ts.Transactions) > 1
 	})
 }

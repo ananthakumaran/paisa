@@ -46,9 +46,14 @@
                   class="is-flex is-flex-wrap-wrap is-align-items-baseline is-justify-content-space-between"
                 >
                   <span
-                    class="tag is-medium is-light {n.isBefore(now) ? 'is-danger' : 'is-success'}"
+                    class="icon-text tag is-medium is-light {n.isBefore(now)
+                      ? 'is-danger'
+                      : 'is-success'}"
                   >
-                    due {n.fromNow()}
+                    <span class="icon">
+                      <i class="fas {n.isBefore(now) ? 'fa-hourglass-end' : 'fa-hourglass-half'}" />
+                    </span>
+                    <span>due {n.fromNow()}</span>
                   </span>
                   <div class="has-text-grey">
                     <span class="icon has-text-grey-light">

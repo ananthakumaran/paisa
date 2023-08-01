@@ -34,7 +34,7 @@
       children: [
         { label: "Monthly", href: "/monthly", dateRangeSelector: true },
         { label: "Yearly", href: "/yearly", financialYearPicker: true },
-        { label: "Recurring", href: "/recurring" }
+        { label: "Recurring", href: "/recurring", tag: "alpha" }
       ]
     },
     {

@@ -81,7 +81,7 @@ func (LedgerCLI) Parse(journalPath string, _prices []price.Price) ([]*posting.Po
 		log.Fatal(err)
 	}
 
-	command := exec.Command("ledger", "-f", journalPath, "csv", "--csv-format", "%(quoted(date)),%(quoted(payee)),%(quoted(display_account)),%(quoted(commodity(scrub(display_amount)))),%(quoted(quantity(scrub(display_amount)))),%(quoted(to_int(scrub(market(amount,date,'"+config.DefaultCurrency()+"') * 100000)))),%(quoted(xact.filename)),%(quoted(xact.id)),%(quoted(cleared ? \"*\" : (pending ? \"!\" : \"\")))\n")
+	command := exec.Command("ledger", "-f", journalPath, "csv", "--csv-format", "%(quoted(date)),%(quoted(payee)),%(quoted(display_account)),%(quoted(commodity(scrub(display_amount)))),%(quoted(quantity(scrub(display_amount)))),%(quoted(to_int(scrub(market(amount,date,'"+config.DefaultCurrency()+"') * 100000)))),%(quoted(xact.filename)),%(quoted(xact.id)),%(quoted(cleared ? \"*\" : (pending ? \"!\" : \"\"))),%(quoted(tag('Recurring')))\n")
 	var output, error bytes.Buffer
 	command.Stdout = &output
 	command.Stderr = &error
@@ -128,7 +128,12 @@ func (LedgerCLI) Parse(journalPath string, _prices []price.Price) ([]*posting.Po
 			status = "unmarked"
 		}
 
-		posting := posting.Posting{Date: date, Payee: record[1], Account: record[2], Commodity: record[3], Quantity: quantity, Amount: amount, TransactionID: transactionID, Status: status}
+		var tagRecurring string
+		if record[9] != "" {
+			tagRecurring = record[9]
+		}
+
+		posting := posting.Posting{Date: date, Payee: record[1], Account: record[2], Commodity: record[3], Quantity: quantity, Amount: amount, TransactionID: transactionID, Status: status, TagRecurring: tagRecurring}
 		postings = append(postings, &posting)
 
 	}
@@ -216,12 +221,14 @@ func (HLedgerCLI) Parse(journalPath string, prices []price.Price) ([]*posting.Po
 	}
 
 	type Transaction struct {
-		Date        string `json:"tdate"`
-		Description string `json:"tdescription"`
-		ID          int64  `json:"tindex"`
-		Status      string `json:"tstatus"`
+		Date        string     `json:"tdate"`
+		Description string     `json:"tdescription"`
+		ID          int64      `json:"tindex"`
+		Status      string     `json:"tstatus"`
+		Tags        [][]string `json:"ttags"`
 		Postings    []struct {
-			Account string `json:"paccount"`
+			Account string     `json:"paccount"`
+			Tags    [][]string `json:"ptags"`
 			Amount  []struct {
 				Commodity string `json:"acommodity"`
 				Quantity  struct {
@@ -277,7 +284,23 @@ func (HLedgerCLI) Parse(journalPath string, prices []price.Price) ([]*posting.Po
 				}
 			}
 
-			posting := posting.Posting{Date: date, Payee: t.Description, Account: p.Account, Commodity: amount.Commodity, Quantity: amount.Quantity.Value, Amount: totalAmount, TransactionID: strconv.FormatInt(t.ID, 10), Status: strings.ToLower(t.Status)}
+			var tagRecurring string
+
+			for _, tag := range t.Tags {
+				if len(tag) == 2 && tag[0] == "Recurring" {
+					tagRecurring = tag[1]
+				}
+				break
+			}
+
+			for _, tag := range p.Tags {
+				if len(tag) == 2 && tag[0] == "Recurring" {
+					tagRecurring = tag[1]
+				}
+				break
+			}
+
+			posting := posting.Posting{Date: date, Payee: t.Description, Account: p.Account, Commodity: amount.Commodity, Quantity: amount.Quantity.Value, Amount: totalAmount, TransactionID: strconv.FormatInt(t.ID, 10), Status: strings.ToLower(t.Status), TagRecurring: tagRecurring}
 			postings = append(postings, &posting)
 
 		}

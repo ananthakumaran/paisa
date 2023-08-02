@@ -363,6 +363,17 @@ func generateJournalFile(cwd string) {
 		log.Fatal(err)
 	}
 
+	_, err = ledgerFile.WriteString(`
+= Expenses:Rent
+    ; Recurring: Rent
+
+= expr payee=~/Internet/
+    ; Recurring: Internet
+`)
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	end := time.Now()
 	start, err := time.Parse("02-01-2006", fmt.Sprintf("01-01-%d", START_YEAR))
 	if err != nil {

@@ -1,17 +1,18 @@
 <script lang="ts">
   import Carousel from "svelte-carousel";
   import Transaction from "$lib/components/Transaction.svelte";
-  import { ajax, type TransactionSequence } from "$lib/utils";
+  import { ajax, helpUrl, type TransactionSequence } from "$lib/utils";
   import dayjs from "dayjs";
   import _ from "lodash";
   import { onMount } from "svelte";
 
+  let isEmpty = false;
   const now = dayjs();
   let transactionSequences: TransactionSequence[] = [];
 
   function nextDate(ts: TransactionSequence) {
     const lastTransaction = ts.transactions[0];
-    if (ts.interval >= 28 && ts.interval <= 31) {
+    if (ts.interval >= 28 && ts.interval <= 33) {
       return lastTransaction.date.add(1, "month");
     }
 
@@ -22,8 +23,40 @@
     return lastTransaction.date.add(ts.interval, "day");
   }
 
+  function intervalText(ts: TransactionSequence) {
+    if (ts.interval >= 7 && ts.interval <= 8) {
+      return "weekly";
+    }
+
+    if (ts.interval >= 14 && ts.interval <= 16) {
+      return "bi-weekly";
+    }
+
+    if (ts.interval >= 28 && ts.interval <= 33) {
+      return "monthly";
+    }
+
+    if (ts.interval >= 87 && ts.interval <= 100) {
+      return "quarterly";
+    }
+
+    if (ts.interval >= 175 && ts.interval <= 190) {
+      return "half-yearly";
+    }
+
+    if (ts.interval >= 350 && ts.interval <= 395) {
+      return "yearly";
+    }
+
+    return `every ${ts.interval} days`;
+  }
+
   onMount(async () => {
     ({ transaction_sequences: transactionSequences } = await ajax("/api/recurring"));
+
+    if (_.isEmpty(transactionSequences)) {
+      isEmpty = true;
+    }
 
     transactionSequences = _.chain(transactionSequences)
       .sortBy((ts) => {
@@ -32,6 +65,21 @@
       .value();
   });
 </script>
+
+<section class="section" class:is-hidden={!isEmpty}>
+  <div class="container is-fluid">
+    <div class="columns is-centered">
+      <div class="column is-4 has-text-centered">
+        <article class="message is-info">
+          <div class="message-body">
+            <strong>Oops!</strong> You haven't configured any recurring transactions yet. Checkout
+            the <a href={helpUrl("recurring")}>docs</a> page to get started.
+          </div>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>
 
 <div class="section">
   <div class="container is-fluid">
@@ -56,6 +104,7 @@
                     <span>due {n.fromNow()}</span>
                   </span>
                   <div class="has-text-grey">
+                    <span class="tag is-light">{intervalText(ts)}</span>
                     <span class="icon has-text-grey-light">
                       <i class="fas fa-calendar" />
                     </span>

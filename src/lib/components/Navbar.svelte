@@ -3,7 +3,7 @@
   import Sync from "$lib/components/Sync.svelte";
   import { month, year, dateMax, dateMin, dateRangeOption } from "../../store";
   import _ from "lodash";
-  import { financialYear, forEachFinancialYear } from "$lib/utils";
+  import { financialYear, forEachFinancialYear, helpUrl } from "$lib/utils";
   import { onMount } from "svelte";
   import { get } from "svelte/store";
   import dayjs from "dayjs";
@@ -34,7 +34,7 @@
       children: [
         { label: "Monthly", href: "/monthly", dateRangeSelector: true },
         { label: "Yearly", href: "/yearly", financialYearPicker: true },
-        { label: "Recurring", href: "/recurring", tag: "alpha" }
+        { label: "Recurring", href: "/recurring", tag: "alpha", help: "recurring" }
       ]
     },
     {
@@ -193,10 +193,7 @@
         <li>
           <a class="is-inactive">{selectedLink.label}</a>
           {#if selectedLink.help}
-            <a
-              style="margin-left: -10px;"
-              class="p-0"
-              href={`https://ananthakumaran.in/paisa/${selectedLink.help}.html`}
+            <a style="margin-left: -10px;" class="p-0" href={helpUrl(selectedLink.help)}
               ><span class="icon is-small">
                 <i class="fas fa-question fa-border" />
               </span></a

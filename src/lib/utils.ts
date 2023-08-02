@@ -797,3 +797,7 @@ export function financialYear(date: dayjs.Dayjs) {
     })}`;
   }
 }
+
+export function helpUrl(section: string) {
+  return `https://ananthakumaran.in/paisa/${section}.html`;
+}

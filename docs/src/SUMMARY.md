@@ -19,5 +19,6 @@
 - [Retirement](retirement.md)
 - [Analysis](analysis.md)
 - [Import](import.md)
+- [Recurring](recurring.md)
 - [Ledger CLI](ledger-cli.md)
 - [Config](config.md)

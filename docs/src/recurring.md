@@ -49,7 +49,7 @@ The first line is the predicate and the line below it will get added
 to any matching posting. By default, it will match the posting account
 name. But you can target other attributes like payee, amount etc. You
 can find more examples below, more info about predicate is available on
-Ledger [docs](be fou)
+Ledger [docs](https://ledger-cli.org/doc/ledger3.html#Complex-expressions)
 
 ```go
 = expr payee=~/^PPF$/

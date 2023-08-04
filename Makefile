@@ -22,7 +22,7 @@ lint:
 	test -z $$(gofmt -l .)
 
 test:
-	npm run test
+	NODE_OPTIONS=--experimental-vm-modules npm run test
 	npm run build
 	go test ./...
 

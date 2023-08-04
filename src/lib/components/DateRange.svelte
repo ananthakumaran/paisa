@@ -25,16 +25,21 @@
 </script>
 
 {#if options.length > 1}
-  <div class="buttons has-addons">
+  <div class="du-tabs du-tabs-boxed">
     {#each options as option}
-      <button
-        class="button is-small {option.value === value
-          ? 'is-selected has-background-white-ter'
-          : ''}"
+      <a
+        class="du-tab du-tab-sm {option.value === value ? 'du-tab-active' : ''}"
         on:click={() => (value = option.value)}
       >
         {option.label}
-      </button>
+      </a>
     {/each}
   </div>
 {/if}
+
+<style lang="postcss">
+  .du-tab-active {
+    background-color: hsl(var(--b1)) !important;
+    color: hsl(var(--bc)) !important;
+  }
+</style>

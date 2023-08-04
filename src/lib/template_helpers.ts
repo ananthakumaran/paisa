@@ -20,7 +20,7 @@ function tokenize(s: string) {
 }
 
 function tfidf(query: string) {
-  if (accountTfIdf === null) {
+  if (accountTfIdf === null || get(accountTfIdf) == null) {
     return {};
   }
 
@@ -40,7 +40,7 @@ function tfidf(query: string) {
 }
 
 function findMatch(query: string) {
-  if (accountTfIdf === null) {
+  if (accountTfIdf === null || get(accountTfIdf) == null) {
     return [];
   }
 
@@ -55,7 +55,7 @@ function findMatch(query: string) {
       return [account, similarity(q, a)];
     })
     .sortBy(([, score]) => score)
-    .filter(([, score]) => score > 0)
+    .filter(([, score]: [string, number]) => score > 0)
     .reverse()
     .value();
 }

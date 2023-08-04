@@ -46,6 +46,10 @@ $menu-item-active-background-color: $link-light;
 @import "bulma-switch/src/sass/index.sass";
 @import "@cityssm/bulma-sticky-table/sticky-table";
 
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 :focus {
   outline: 0;
 }

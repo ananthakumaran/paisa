@@ -2,9 +2,9 @@
   {{date ROW.A "DD/MM/YY"}} {{ROW.B}}
   {{#if (eq (trim ROW.E) "0.00")}}
     {{predictAccount prefix="Expenses"}}      {{trim ROW.D}} INR
-    Asset:Checking
+    Assets:Checking
   {{else}}
-    Asset:Checking                           {{trim ROW.E}} INR
+    Assets:Checking                           {{trim ROW.E}} INR
     {{predictAccount prefix="Income"}}
   {{/if}}
 {{/if}}

@@ -1,19 +1,19 @@
 2022/11/12 TO TRANSFER
     Expenses:Unknown                          250.00 INR
-    Asset:Checking
+    Assets:Checking
 
 2022/11/13 TO TRANSFER
     Expenses:Unknown                          100.00 INR
-    Asset:Checking
+    Assets:Checking
 
 2022/11/14 BY TRANSFER
-    Asset:Checking                               120 INR
+    Assets:Checking                              120 INR
     Income:Unknown
 
 2022/11/19 BY TRANSFER
-    Asset:Checking                               220 INR
+    Assets:Checking                              220 INR
     Income:Unknown
 
 2022/11/22 BY TRANSFER
-    Asset:Checking                                75 INR
+    Assets:Checking                               75 INR
     Income:Unknown

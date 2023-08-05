@@ -1,24 +1,55 @@
 <script lang="ts">
-  import type { LedgerFile } from "$lib/utils";
+  import type { LedgerDirectory, LedgerFile } from "$lib/utils";
   import _ from "lodash";
   import { createEventDispatcher } from "svelte";
 
-  export let ledgerFiles: LedgerFile[] = [];
+  export let files: Array<LedgerDirectory | LedgerFile>;
   export let selectedFileName: string;
   export let hasUnsavedChanges: boolean;
+  export let root: boolean = true;
 
   const dispatch = createEventDispatcher();
+
+  function fileName(path: string) {
+    return _.last(path.split("/"));
+  }
 </script>
 
-<ul class="menu-list is-size-6">
-  {#each _.sortBy(ledgerFiles, (l) => l.name) as file}
-    <li>
-      <a on:click={() => dispatch("select", file)} class:is-active={file.name == selectedFileName}
-        >{file.name}
-        {#if file.name == selectedFileName && hasUnsavedChanges}
-          <span class="ml-1 tag is-danger">unsaved</span>
-        {/if}
-      </a>
-    </li>
+<ul class={root && "du-menu du-menu-sm w-full p-0"}>
+  {#each files as file}
+    {#if file.type != "directory"}
+      <li>
+        <a
+          on:click={() => dispatch("select", file)}
+          class={file.name == selectedFileName ? "du-active" : ""}
+        >
+          <span class="icon is-small">
+            <i class="fa-regular fa-file-lines" />
+          </span>
+          {fileName(file.name)}
+          {#if file.name == selectedFileName && hasUnsavedChanges}
+            <span class="ml-1 tag is-danger">unsaved</span>
+          {/if}
+        </a>
+      </li>
+    {:else}
+      <li>
+        <details open>
+          <summary>
+            <span class="icon is-small">
+              <i class="fa-regular fa-folder" />
+            </span>
+            {file.name}
+          </summary>
+          <svelte:self
+            on:select={(e) => dispatch("select", e.detail)}
+            root={false}
+            files={file.children}
+            {selectedFileName}
+            {hasUnsavedChanges}
+          />
+        </details>
+      </li>
+    {/if}
   {/each}
 </ul>

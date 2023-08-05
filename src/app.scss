@@ -20,6 +20,7 @@ $switch-focus: none;
 
 @import "bulma/sass/utilities/_all.sass";
 
+$grey-lightest: hsl(0, 0%, 93%);
 $menu-item-hover-background-color: $link-light;
 $menu-item-active-color: $link-dark;
 $menu-item-active-background-color: $link-light;
@@ -46,9 +47,45 @@ $menu-item-active-background-color: $link-light;
 @import "bulma-switch/src/sass/index.sass";
 @import "@cityssm/bulma-sticky-table/sticky-table";
 
-@tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+// daisy UI color override
+.du-tabs {
+  background-color: $grey-lightest !important;
+
+  .du-tab {
+    color: $grey-dark !important;
+
+    &.du-tab-active {
+      background-color: $white !important;
+      color: $black-bis !important;
+    }
+  }
+}
+
+.du-menu {
+  summary:after {
+    color: $link;
+  }
+
+  a,
+  summary {
+    border-radius: $radius-small;
+    color: $grey-dark;
+  }
+
+  a:hover,
+  summary:hover {
+    background-color: findLightColor($link) !important;
+  }
+
+  a.du-active {
+    color: $link !important;
+    background-color: findLightColor($link) !important;
+    font-weight: bold;
+  }
+}
 
 :focus {
   outline: 0;
@@ -320,6 +357,19 @@ svg text {
 .navbar {
   background-color: $white-bis !important;
   color: rgba(0, 0, 0, 0.7);
+}
+
+.cm-editor {
+  .cm-gutters {
+    background-color: $white-ter;
+    color: $grey-light;
+    border: none;
+  }
+
+  .cm-activeLine,
+  .cm-activeLineGutter {
+    background-color: findLightColor($link) !important;
+  }
 }
 
 .template-editor .cm-editor {

@@ -1,6 +1,6 @@
 <script lang="ts">
   import { createEditor, editorState, moveToEnd, moveToLine, updateContent } from "$lib/editor";
-  import { ajax, type LedgerFile } from "$lib/utils";
+  import { ajax, buildLedgerTree, type LedgerFile } from "$lib/utils";
   import { redo, undo } from "@codemirror/commands";
   import * as toast from "bulma-toast";
   import type { EditorView } from "codemirror";
@@ -259,7 +259,7 @@
           <aside class="menu" style="max-height: calc(100vh - 185px)">
             <FileTree
               on:select={(e) => selectFile(e.detail)}
-              ledgerFiles={_.values(filesMap)}
+              files={buildLedgerTree(_.values(filesMap))}
               selectedFileName={selectedFile?.name}
               hasUnsavedChanges={$editorState.hasUnsavedChanges}
             />

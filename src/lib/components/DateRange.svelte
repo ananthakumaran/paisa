@@ -36,10 +36,3 @@
     {/each}
   </div>
 {/if}
-
-<style lang="postcss">
-  .du-tab-active {
-    background-color: hsl(var(--b1)) !important;
-    color: hsl(var(--bc)) !important;
-  }
-</style>

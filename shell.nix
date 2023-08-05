@@ -9,6 +9,15 @@ pkgs.mkShell {
     pkgs.nodejs-18_x
     pkgs.mdbook
     pkgs.libuuid
+    pkgs.electron_25
+    pkgs.pkg-config
+    pkgs.pixman
+    pkgs.cairo
+    pkgs.pango
+    pkgs._7zz
+    pkgs.flatpak-builder
+    pkgs.flatpak
+    pkgs.elfutils
     # pkgs.pkgsCross.mingwW64.buildPackages.gcc
   ];
 

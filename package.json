@@ -1,8 +1,18 @@
 {
   "name": "paisa",
+  "description": "Personal finance management system",
+  "author": "Anantha Kumaran <ananthakumaran@gmail.com>",
   "version": "0.0.1",
   "private": true,
+  "main": "main.cjs",
+  "build": {
+    "appId": "in.ananthakumaran.paisa",
+    "mac": {
+      "category": "public.app-category.finance"
+    }
+  },
   "scripts": {
+    "electron": "electron .",
     "test": "jest --no-cache",
     "dev": "vite dev --host 0.0.0.0",
     "build": "vite build",
@@ -11,7 +21,12 @@
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --compiler-warnings 'a11y-aria-attributes:ignore,a11y-incorrect-aria-attribute-type:ignore,a11y-unknown-aria-attribute:ignore,a11y-hidden:ignore,a11y-misplaced-role:ignore,a11y-unknown-role:ignore,a11y-no-abstract-role:ignore,a11y-no-redundant-roles:ignore,a11y-role-has-required-aria-props:ignore,a11y-accesskey:ignore,a11y-autofocus:ignore,a11y-misplaced-scope:ignore,a11y-positive-tabindex:ignore,a11y-invalid-attribute:ignore,a11y-missing-attribute:ignore,a11y-img-redundant-alt:ignore,a11y-label-has-associated-control:ignore,a11y-media-has-caption:ignore,a11y-distracting-elements:ignore,a11y-structure:ignore,a11y-mouse-events-have-key-events:ignore,a11y-missing-content:ignore,a11y-click-events-have-key-events:ignore,a11y-no-static-element-interactions:ignore'",
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch --compiler-warnings 'a11y-aria-attributes:ignore,a11y-incorrect-aria-attribute-type:ignore,a11y-unknown-aria-attribute:ignore,a11y-hidden:ignore,a11y-misplaced-role:ignore,a11y-unknown-role:ignore,a11y-no-abstract-role:ignore,a11y-no-redundant-roles:ignore,a11y-role-has-required-aria-props:ignore,a11y-accesskey:ignore,a11y-autofocus:ignore,a11y-misplaced-scope:ignore,a11y-positive-tabindex:ignore,a11y-invalid-attribute:ignore,a11y-missing-attribute:ignore,a11y-img-redundant-alt:ignore,a11y-label-has-associated-control:ignore,a11y-media-has-caption:ignore,a11y-distracting-elements:ignore,a11y-structure:ignore,a11y-mouse-events-have-key-events:ignore,a11y-missing-content:ignore,a11y-click-events-have-key-events:ignore,a11y-no-static-element-interactions:ignore'",
     "lint": "prettier --plugin-search-dir . --check . && eslint .",
-    "format": "prettier --plugin-search-dir . --write ."
+    "format": "prettier --plugin-search-dir . --write .",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder -l",
+    "start": "electron-forge start",
+    "package": "electron-forge package",
+    "make": "electron-forge make"
   },
   "dependencies": {
     "@cityssm/bulma-sticky-table": "^2.1.0",
@@ -34,6 +49,7 @@
     "d3-sankey-circular": "github:tomshanley/d3-sankey-circular",
     "d3-svg-legend": "^2.25.6",
     "dayjs": "^1.11.0",
+    "electron-squirrel-startup": "^1.0.0",
     "handlebars": "^4.7.7",
     "lodash": "^4.17.21",
     "papaparse": "^5.4.1",
@@ -51,6 +67,13 @@
   },
   "devDependencies": {
     "@codemirror/merge": "^6.1.1",
+    "@electron-forge/cli": "^6.4.1",
+    "@electron-forge/maker-deb": "^6.4.1",
+    "@electron-forge/maker-flatpak": "^6.4.1",
+    "@electron-forge/maker-rpm": "^6.4.1",
+    "@electron-forge/maker-squirrel": "^6.4.1",
+    "@electron-forge/maker-zip": "^6.4.1",
+    "@electron-forge/plugin-auto-unpack-natives": "^6.4.1",
     "@sveltejs/adapter-auto": "^1.0.0",
     "@sveltejs/adapter-static": "^1.0.0",
     "@sveltejs/kit": "^1.20.4",
@@ -66,6 +89,7 @@
     "autoprefixer": "^10.4.14",
     "concurrently": "^7.6.0",
     "daisyui": "^3.5.1",
+    "electron": "^25.4.0",
     "esbuild": "^0.14.29",
     "eslint": "^8.28.0",
     "eslint-config-prettier": "^8.0",

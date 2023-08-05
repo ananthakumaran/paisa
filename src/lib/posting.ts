@@ -1,7 +1,7 @@
 import dayjs from "dayjs";
 import _ from "lodash";
 import Clusturize from "clusterize.js";
-import { formatCurrency, formatFloat, type Posting } from "./utils";
+import { formatCurrency, formatFloat, postingUrl, type Posting } from "./utils";
 import { iconify } from "./icon";
 
 export function renderPostings(postings: Posting[]) {
@@ -49,7 +49,7 @@ export function renderPostings(postings: Posting[]) {
     const markup = `
 <tr class="${p.date.month() % 2 == 0 ? "has-background-white-ter" : ""}">
        <td>${date}</td>
-       <td>${postingStatus}${p.payee}</td>
+       <td>${postingStatus}<a href=${postingUrl(p)}>${p.payee}</a></td>
        <td>${iconify(p.account)}</td>
        <td class='has-text-right'>${purchase}</td>
        <td class='has-text-right'>${units}</td>

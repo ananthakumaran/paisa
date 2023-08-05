@@ -15,6 +15,10 @@ export interface Posting {
   amount: number;
   market_amount: number;
   status: string;
+  tag_recurring: string;
+  transaction_begin_line: number;
+  transaction_end_line: number;
+  file_name: string;
 }
 
 export interface CashFlow {
@@ -835,4 +839,10 @@ export function financialYear(date: dayjs.Dayjs) {
 
 export function helpUrl(section: string) {
   return `https://ananthakumaran.in/paisa/${section}.html`;
+}
+
+export function postingUrl(posting: Posting) {
+  return `/ledger/editor/${encodeURIComponent(posting.file_name)}#${
+    posting.transaction_begin_line
+  }`;
 }

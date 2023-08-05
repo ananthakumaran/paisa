@@ -11,6 +11,7 @@
   import type { PageData } from "./$types";
   import FileTree from "$lib/components/FileTree.svelte";
   import FileModal from "$lib/components/FileModal.svelte";
+  import { page } from "$app/stores";
 
   export let data: PageData;
   let editorDom: Element;
@@ -21,9 +22,14 @@
   let commodities: string[] = [];
   let payees: string[] = [];
   let selectedVersion: string = null;
+  let lineNumber = 0;
 
   onMount(async () => {
     loadFiles(data.name);
+    const line = _.toNumber($page.url.hash.substring(1));
+    if (_.isNumber(line)) {
+      lineNumber = line;
+    }
   });
 
   async function loadFiles(selectedFileName: string) {
@@ -106,7 +112,15 @@
           unit: commodities
         }
       });
-      moveToEnd(editor);
+      if (lineNumber > 0) {
+        if (!editor.hasFocus) {
+          editor.focus();
+        }
+        moveToLine(editor, lineNumber, true);
+        lineNumber = 0;
+      } else {
+        moveToEnd(editor);
+      }
     }
   }
 

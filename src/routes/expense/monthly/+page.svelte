@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import _ from "lodash";
-  import { ajax, formatCurrency, restName, secondName, type Posting } from "$lib/utils";
+  import { ajax, formatCurrency, restName, secondName, type Posting, postingUrl } from "$lib/utils";
   import {
     renderMonthlyExpensesTimeline,
     renderCurrentExpensesBreakdown,
@@ -126,7 +126,7 @@
                 <div class="is-flex is-justify-content-space-between">
                   <div class="has-text-grey is-size-7 truncate">
                     <PostingStatus posting={expense} />
-                    {expense.payee}
+                    <a href={postingUrl(expense)}>{expense.payee}</a>
                   </div>
                   <div class="has-text-grey min-w-[100px]">
                     <span class="icon is-small has-text-grey-light">

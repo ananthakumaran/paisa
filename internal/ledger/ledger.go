@@ -3,6 +3,7 @@ package ledger
 import (
 	"bytes"
 	"encoding/csv"
+	"path/filepath"
 	"regexp"
 	"strings"
 
@@ -81,7 +82,7 @@ func (LedgerCLI) Parse(journalPath string, _prices []price.Price) ([]*posting.Po
 		log.Fatal(err)
 	}
 
-	command := exec.Command("ledger", "-f", journalPath, "csv", "--csv-format", "%(quoted(date)),%(quoted(payee)),%(quoted(display_account)),%(quoted(commodity(scrub(display_amount)))),%(quoted(quantity(scrub(display_amount)))),%(quoted(to_int(scrub(market(amount,date,'"+config.DefaultCurrency()+"') * 100000)))),%(quoted(xact.filename)),%(quoted(xact.id)),%(quoted(cleared ? \"*\" : (pending ? \"!\" : \"\"))),%(quoted(tag('Recurring')))\n")
+	command := exec.Command("ledger", "-f", journalPath, "csv", "--csv-format", "%(quoted(date)),%(quoted(payee)),%(quoted(display_account)),%(quoted(commodity(scrub(display_amount)))),%(quoted(quantity(scrub(display_amount)))),%(quoted(to_int(scrub(market(amount,date,'"+config.DefaultCurrency()+"') * 100000)))),%(quoted(xact.filename)),%(quoted(xact.id)),%(quoted(cleared ? \"*\" : (pending ? \"!\" : \"\"))),%(quoted(tag('Recurring'))),%(quoted(xact.beg_line)),%(quoted(xact.end_line))\n")
 	var output, error bytes.Buffer
 	command.Stdout = &output
 	command.Stderr = &error
@@ -98,6 +99,8 @@ func (LedgerCLI) Parse(journalPath string, _prices []price.Price) ([]*posting.Po
 	if err != nil {
 		return nil, err
 	}
+
+	dir := filepath.Dir(config.GetConfig().JournalPath)
 
 	for _, record := range records {
 		date, err := time.ParseInLocation("2006/01/02", record[0], time.Local)
@@ -116,8 +119,13 @@ func (LedgerCLI) Parse(journalPath string, _prices []price.Price) ([]*posting.Po
 		}
 		amount = amount / 100000
 
+		fileName, err := filepath.Rel(dir, record[6])
+		if err != nil {
+			return nil, err
+		}
+
 		namespace := uuid.Must(uuid.FromString("45964a1b-b24c-4a73-835a-9335a7aa7de5"))
-		transactionID := uuid.NewV5(namespace, record[6]+":"+record[7]).String()
+		transactionID := uuid.NewV5(namespace, fileName+":"+record[7]).String()
 
 		var status string
 		if record[8] == "*" {
@@ -133,7 +141,29 @@ func (LedgerCLI) Parse(journalPath string, _prices []price.Price) ([]*posting.Po
 			tagRecurring = record[9]
 		}
 
-		posting := posting.Posting{Date: date, Payee: record[1], Account: record[2], Commodity: record[3], Quantity: quantity, Amount: amount, TransactionID: transactionID, Status: status, TagRecurring: tagRecurring}
+		transactionBeginLine, err := strconv.ParseUint(record[10], 10, 64)
+		if err != nil {
+			return nil, err
+		}
+
+		transactionEndLine, err := strconv.ParseUint(record[11], 10, 64)
+		if err != nil {
+			return nil, err
+		}
+
+		posting := posting.Posting{
+			Date:                 date,
+			Payee:                record[1],
+			Account:              record[2],
+			Commodity:            record[3],
+			Quantity:             quantity,
+			Amount:               amount,
+			TransactionID:        transactionID,
+			Status:               status,
+			TagRecurring:         tagRecurring,
+			TransactionBeginLine: transactionBeginLine,
+			TransactionEndLine:   transactionEndLine,
+			FileName:             fileName}
 		postings = append(postings, &posting)
 
 	}
@@ -226,7 +256,12 @@ func (HLedgerCLI) Parse(journalPath string, prices []price.Price) ([]*posting.Po
 		ID          int64      `json:"tindex"`
 		Status      string     `json:"tstatus"`
 		Tags        [][]string `json:"ttags"`
-		Postings    []struct {
+		TSourcePos  []struct {
+			SourceColumn uint64 `json:"sourceColumn"`
+			SourceLine   uint64 `json:"sourceLine"`
+			SourceName   string `json:"sourceName"`
+		} `json:"tsourcepos"`
+		Postings []struct {
 			Account string     `json:"paccount"`
 			Tags    [][]string `json:"ptags"`
 			Amount  []struct {
@@ -259,6 +294,8 @@ func (HLedgerCLI) Parse(journalPath string, prices []price.Price) ([]*posting.Po
 
 		pricesTree[price.CommodityName].ReplaceOrInsert(price)
 	}
+
+	dir := filepath.Dir(config.GetConfig().JournalPath)
 
 	for _, t := range transactions {
 		date, err := time.ParseInLocation("2006-01-02", t.Date, time.Local)
@@ -300,7 +337,24 @@ func (HLedgerCLI) Parse(journalPath string, prices []price.Price) ([]*posting.Po
 				break
 			}
 
-			posting := posting.Posting{Date: date, Payee: t.Description, Account: p.Account, Commodity: amount.Commodity, Quantity: amount.Quantity.Value, Amount: totalAmount, TransactionID: strconv.FormatInt(t.ID, 10), Status: strings.ToLower(t.Status), TagRecurring: tagRecurring}
+			fileName, err := filepath.Rel(dir, t.TSourcePos[0].SourceName)
+			if err != nil {
+				return nil, err
+			}
+
+			posting := posting.Posting{
+				Date:                 date,
+				Payee:                t.Description,
+				Account:              p.Account,
+				Commodity:            amount.Commodity,
+				Quantity:             amount.Quantity.Value,
+				Amount:               totalAmount,
+				TransactionID:        strconv.FormatInt(t.ID, 10),
+				Status:               strings.ToLower(t.Status),
+				TagRecurring:         tagRecurring,
+				TransactionBeginLine: t.TSourcePos[0].SourceLine,
+				TransactionEndLine:   t.TSourcePos[1].SourceLine,
+				FileName:             fileName}
 			postings = append(postings, &posting)
 
 		}

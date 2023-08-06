@@ -2,14 +2,14 @@
 
 [![Matrix](https://img.shields.io/matrix/paisa%3Amatrix.org?logo=matrix)](https://matrix.to/#/#paisa:matrix.org)
 
-**Paisa** is a command line tool and WebGUI to visualize personal
+**Paisa** is a command line tool and Web UI to visualize personal
 finance, specially tailored for Indians. It builds on top of the
 [ledger](https://www.ledger-cli.org/) double entry accounting tool. Checkout [documentation](https://ananthakumaran.in/paisa/)
 to get started.
 
 # Demo
 
-A demo of the WebGUI can be found at [https://paisa-demo.ananthakumaran.in](https://paisa-demo.ananthakumaran.in)
+A demo of the Web UI can be found at [https://paisa-demo.ananthakumaran.in](https://paisa-demo.ananthakumaran.in)
 
 ## Status
 

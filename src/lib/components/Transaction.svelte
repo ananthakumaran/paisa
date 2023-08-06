@@ -23,7 +23,7 @@
           <b>{t.date.format("DD MMM YYYY")}</b>
           <span title={t.payee}
             ><PostingStatus posting={t.postings[0]} />
-            <a href={postingUrl(t.postings[0])}>{t.payee}</a></span
+            <a class="secondary-link" href={postingUrl(t.postings[0])}>{t.payee}</a></span
           >
         </div>
       </div>
@@ -41,7 +41,7 @@
           <b>{t.date.format("DD MMM YYYY")}</b>
           <span title={t.payee}
             ><PostingStatus posting={t.postings[0]} />
-            <a href={postingUrl(t.postings[0])}>{t.payee}</a></span
+            <a class="secondary-link" href={postingUrl(t.postings[0])}>{t.payee}</a></span
           >
         </div>
       </div>

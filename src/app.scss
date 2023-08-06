@@ -110,6 +110,14 @@ body {
   font-size: 14px;
 }
 
+.secondary-link {
+  color: $grey-dark;
+  &:hover {
+    color: $link;
+    text-decoration: underline;
+  }
+}
+
 .inline-text text {
   font-size: 12px;
   font-weight: bold;

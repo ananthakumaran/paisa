@@ -126,7 +126,7 @@
                 <div class="is-flex is-justify-content-space-between">
                   <div class="has-text-grey is-size-7 truncate">
                     <PostingStatus posting={expense} />
-                    <a href={postingUrl(expense)}>{expense.payee}</a>
+                    <a class="secondary-link" href={postingUrl(expense)}>{expense.payee}</a>
                   </div>
                   <div class="has-text-grey min-w-[100px]">
                     <span class="icon is-small has-text-grey-light">

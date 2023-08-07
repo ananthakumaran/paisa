@@ -41,7 +41,7 @@ jobs:
         npm install
         npm run build
         go build
-        cp paisa paisa-darwin-amd64
+        cp paisa paisa-macos-amd64
     - name: Release
       uses: softprops/action-gh-release@v1
       with:

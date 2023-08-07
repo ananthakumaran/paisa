@@ -147,7 +147,12 @@ export function renderOverview(gains: Interest[]) {
   g.append("g")
     .attr("class", "axis y")
     .attr("transform", "translate(0," + height + ")")
-    .call(d3.axisBottom(x).tickSize(-height).tickFormat(skipTicks(60, x, formatCurrencyCrude)));
+    .call(
+      d3
+        .axisBottom(x)
+        .tickSize(-height)
+        .tickFormat(skipTicks(60, x, formatCurrencyCrude))
+    );
 
   g.append("g")
     .attr("class", "axis y")

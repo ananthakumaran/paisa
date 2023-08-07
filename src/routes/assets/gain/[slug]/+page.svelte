@@ -10,7 +10,8 @@
     type AccountGain,
     type Overview,
     type PortfolioAggregate,
-    generateColorScheme
+    generateColorScheme,
+    postingUrl
   } from "$lib/utils";
   import _ from "lodash";
   import { onMount, onDestroy } from "svelte";
@@ -167,9 +168,11 @@
                   ? COLORS.secondary
                   : COLORS.tertiary}"
               >
-                <div class="is-flex is-flex-wrap-wrap is-justify-content-space-between">
-                  <div class="has-text-grey is-size-7">{posting.payee}</div>
-                  <div class="has-text-grey">
+                <div class="is-flex is-justify-content-space-between">
+                  <div class="has-text-grey is-size-7 truncate">
+                    <a href={postingUrl(posting)}>{posting.payee}</a>
+                  </div>
+                  <div class="has-text-grey min-w-[100px]">
                     <span class="icon is-small has-text-grey-light">
                       <i class="fas fa-calendar" />
                     </span>

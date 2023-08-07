@@ -15,6 +15,10 @@ export interface Posting {
   amount: number;
   market_amount: number;
   status: string;
+  tag_recurring: string;
+  transaction_begin_line: number;
+  transaction_end_line: number;
+  file_name: string;
 }
 
 export interface CashFlow {
@@ -282,9 +286,44 @@ export interface RetirementProgress {
 }
 
 export interface LedgerFile {
+  type: "file";
   name: string;
   content: string;
   versions: string[];
+}
+
+export interface LedgerDirectory {
+  type: "directory";
+  name: string;
+  children: Array<LedgerDirectory | LedgerFile>;
+}
+
+export function buildLedgerTree(files: LedgerFile[]) {
+  const root: LedgerDirectory = {
+    type: "directory",
+    name: "",
+    children: []
+  };
+
+  for (const file of _.sortBy(files, (f) => f.name)) {
+    const parts = file.name.split("/");
+    let current = root;
+    for (const part of _.dropRight(parts, 1)) {
+      let found = current.children.find((c) => c.name === part);
+      if (!found) {
+        found = {
+          type: "directory",
+          name: part,
+          children: []
+        };
+        current.children.push(found);
+      }
+      current = found as LedgerDirectory;
+    }
+    current.children.push(file);
+  }
+
+  return root.children;
 }
 
 export interface LedgerFileError {
@@ -800,4 +839,10 @@ export function financialYear(date: dayjs.Dayjs) {
 
 export function helpUrl(section: string) {
   return `https://ananthakumaran.in/paisa/${section}.html`;
+}
+
+export function postingUrl(posting: Posting) {
+  return `/ledger/editor/${encodeURIComponent(posting.file_name)}#${
+    posting.transaction_begin_line
+  }`;
 }

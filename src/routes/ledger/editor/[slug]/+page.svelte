@@ -1,6 +1,6 @@
 <script lang="ts">
   import { createEditor, editorState, moveToEnd, moveToLine, updateContent } from "$lib/editor";
-  import { ajax, type LedgerFile } from "$lib/utils";
+  import { ajax, buildLedgerTree, type LedgerFile } from "$lib/utils";
   import { redo, undo } from "@codemirror/commands";
   import * as toast from "bulma-toast";
   import type { EditorView } from "codemirror";
@@ -11,6 +11,7 @@
   import type { PageData } from "./$types";
   import FileTree from "$lib/components/FileTree.svelte";
   import FileModal from "$lib/components/FileModal.svelte";
+  import { page } from "$app/stores";
 
   export let data: PageData;
   let editorDom: Element;
@@ -21,9 +22,14 @@
   let commodities: string[] = [];
   let payees: string[] = [];
   let selectedVersion: string = null;
+  let lineNumber = 0;
 
   onMount(async () => {
     loadFiles(data.name);
+    const line = _.toNumber($page.url.hash.substring(1));
+    if (_.isNumber(line)) {
+      lineNumber = line;
+    }
   });
 
   async function loadFiles(selectedFileName: string) {
@@ -106,7 +112,15 @@
           unit: commodities
         }
       });
-      moveToEnd(editor);
+      if (lineNumber > 0) {
+        if (!editor.hasFocus) {
+          editor.focus();
+        }
+        moveToLine(editor, lineNumber, true);
+        lineNumber = 0;
+      } else {
+        moveToEnd(editor);
+      }
     }
   }
 
@@ -259,7 +273,7 @@
           <aside class="menu" style="max-height: calc(100vh - 185px)">
             <FileTree
               on:select={(e) => selectFile(e.detail)}
-              ledgerFiles={_.values(filesMap)}
+              files={buildLedgerTree(_.values(filesMap))}
               selectedFileName={selectedFile?.name}
               hasUnsavedChanges={$editorState.hasUnsavedChanges}
             />

@@ -104,13 +104,21 @@ export function moveToEnd(editor: EditorView) {
   );
 }
 
-export function moveToLine(editor: EditorView, lineNumber: number) {
-  const line = editor.state.doc.line(lineNumber);
-  editor.dispatch(
-    editor.state.update({
-      effects: EditorView.scrollIntoView(line.from, { y: "center" })
-    })
-  );
+export function moveToLine(editor: EditorView, lineNumber: number, cursor = false) {
+  try {
+    const line = editor.state.doc.line(lineNumber);
+    editor.dispatch(
+      editor.state.update({
+        effects: EditorView.scrollIntoView(line.from, { y: "center" })
+      })
+    );
+
+    if (cursor) {
+      editor.dispatch({ selection: { anchor: line.from, head: line.from } });
+    }
+  } catch (_e) {
+    // ignore invalid line number
+  }
 }
 
 export function updateContent(editor: EditorView, content: string) {

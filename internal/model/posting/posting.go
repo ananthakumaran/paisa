@@ -10,16 +10,20 @@ import (
 )
 
 type Posting struct {
-	ID            uint      `gorm:"primaryKey" json:"id"`
-	TransactionID string    `json:"transaction_id"`
-	Date          time.Time `json:"date"`
-	Payee         string    `json:"payee"`
-	Account       string    `json:"account"`
-	Commodity     string    `json:"commodity"`
-	Quantity      float64   `json:"quantity"`
-	Amount        float64   `json:"amount"`
-	Status        string    `json:"status"`
-	TagRecurring  string    `json:"tag_recurring"`
+	ID                   uint      `gorm:"primaryKey" json:"id"`
+	TransactionID        string    `json:"transaction_id"`
+	Date                 time.Time `json:"date"`
+	Payee                string    `json:"payee"`
+	Account              string    `json:"account"`
+	Commodity            string    `json:"commodity"`
+	Quantity             float64   `json:"quantity"`
+	Amount               float64   `json:"amount"`
+	Status               string    `json:"status"`
+	TagRecurring         string    `json:"tag_recurring"`
+	TagBudgeting         string    `json:"tag_budgeting"`
+	TransactionBeginLine uint64    `json:"transaction_begin_line"`
+	TransactionEndLine   uint64    `json:"transaction_end_line"`
+	FileName             string    `json:"file_name"`
 
 	MarketAmount float64 `gorm:"-:all" json:"market_amount"`
 }

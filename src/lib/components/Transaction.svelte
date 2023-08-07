@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { Transaction } from "$lib/utils";
+  import { postingUrl, type Transaction } from "$lib/utils";
   import Postings from "$lib/components/Postings.svelte";
   import _ from "lodash";
   import PostingStatus from "$lib/components/PostingStatus.svelte";
@@ -21,7 +21,10 @@
       <div class="column is-12 py-0">
         <div class="description is-size-7">
           <b>{t.date.format("DD MMM YYYY")}</b>
-          <span title={t.payee}><PostingStatus posting={t.postings[0]} /> {t.payee}</span>
+          <span title={t.payee}
+            ><PostingStatus posting={t.postings[0]} />
+            <a href={postingUrl(t.postings[0])}>{t.payee}</a></span
+          >
         </div>
       </div>
       <div class="column is-6 py-0">
@@ -36,7 +39,10 @@
       <div class="column is-3 py-0">
         <div class="description is-size-7">
           <b>{t.date.format("DD MMM YYYY")}</b>
-          <span title={t.payee}><PostingStatus posting={t.postings[0]} /> {t.payee}</span>
+          <span title={t.payee}
+            ><PostingStatus posting={t.postings[0]} />
+            <a href={postingUrl(t.postings[0])}>{t.payee}</a></span
+          >
         </div>
       </div>
       <div class="column is-4 py-0">

@@ -12,7 +12,6 @@
   const now = dayjs();
 
   let carousel: Carousel;
-
   let pageSize = _.min([20, ts.transactions.length]);
 
   function showPage(pageIndex: number) {
@@ -82,7 +81,7 @@
       <div use:chart={{ ts: ts, next: n }}>
         <svg height="50" width="100%" />
       </div>
-      <div>
+      <div class="">
         <span>Started on</span>
         <b>{_.last(ts.transactions).date.format("DD MMM YYYY")}</b>, with a total of
         <b>{ts.transactions.length}</b> transactions so far.
@@ -91,14 +90,13 @@
   </div>
 
   <div class="column is-8">
-    <Carousel
-      bind:this={carousel}
-      let:showPrevPage
-      let:showNextPage
-      infinite={false}
-      initialPageIndex={pageSize - 1}
-    >
-      <div slot="prev" on:click={showPrevPage} class="custom-arrow custom-arrow-prev">
+    <Carousel bind:this={carousel} infinite={false} initialPageIndex={pageSize - 1}>
+      <div
+        slot="prev"
+        let:showPrevPage
+        on:click={showPrevPage}
+        class="custom-arrow custom-arrow-prev"
+      >
         <i class="fa-solid has-text-grey-light fa-angle-left" />
       </div>
       {#each _.reverse(_.take(ts.transactions, 20)) as t}
@@ -106,7 +104,12 @@
           <Transaction {t} compact={true} />
         </div>
       {/each}
-      <div slot="next" on:click={showNextPage} class="custom-arrow custom-arrow-next">
+      <div
+        slot="next"
+        let:showNextPage
+        on:click={showNextPage}
+        class="custom-arrow custom-arrow-next"
+      >
         <i class="fa-solid has-text-grey-light fa-angle-right" />
       </div>
     </Carousel>

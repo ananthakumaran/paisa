@@ -1,8 +1,21 @@
 $fa-font-path: "../node_modules/@fortawesome/fontawesome-free/webfonts";
 
-$family-sans-serif: BlinkMacSystemFont, -apple-system, "Segoe UI", "Roboto", "Oxygen", "Ubuntu",
-  "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", "Helvetica", "Arial", sans-serif,
-  "Font Awesome 6 Free Solid", "Font Awesome 6 Free Brands";
+$family-sans-serif:
+  BlinkMacSystemFont,
+  -apple-system,
+  "Segoe UI",
+  "Roboto",
+  "Oxygen",
+  "Ubuntu",
+  "Cantarell",
+  "Fira Sans",
+  "Droid Sans",
+  "Helvetica Neue",
+  "Helvetica",
+  "Arial",
+  sans-serif,
+  "Font Awesome 6 Free Solid",
+  "Font Awesome 6 Free Brands";
 
 $box-radius: 4px;
 $box-shadow: none;
@@ -20,6 +33,7 @@ $switch-focus: none;
 
 @import "bulma/sass/utilities/_all.sass";
 
+$grey-lightest: hsl(0, 0%, 93%);
 $menu-item-hover-background-color: $link-light;
 $menu-item-active-color: $link-dark;
 $menu-item-active-background-color: $link-light;
@@ -29,7 +43,8 @@ $menu-item-active-background-color: $link-light;
   font-style: normal;
   font-weight: 900;
   font-display: $fa-font-display;
-  src: url("#{$fa-font-path}/fa-solid-900.woff2") format("woff2"),
+  src:
+    url("#{$fa-font-path}/fa-solid-900.woff2") format("woff2"),
     url("#{$fa-font-path}/fa-solid-900.ttf") format("truetype");
 }
 
@@ -38,13 +53,54 @@ $menu-item-active-background-color: $link-light;
   font-style: normal;
   font-weight: 900;
   font-display: $fa-font-display;
-  src: url("#{$fa-font-path}/fa-brands-400.woff2") format("woff2"),
+  src:
+    url("#{$fa-font-path}/fa-brands-400.woff2") format("woff2"),
     url("#{$fa-font-path}/fa-brands-400.ttf") format("truetype");
 }
 
 @import "bulma/bulma.sass";
 @import "bulma-switch/src/sass/index.sass";
 @import "@cityssm/bulma-sticky-table/sticky-table";
+
+@tailwind components;
+@tailwind utilities;
+
+// daisy UI color override
+.du-tabs {
+  background-color: $grey-lightest !important;
+
+  .du-tab {
+    color: $grey-dark !important;
+
+    &.du-tab-active {
+      background-color: $white !important;
+      color: $black-bis !important;
+    }
+  }
+}
+
+.du-menu {
+  summary:after {
+    color: $link;
+  }
+
+  a,
+  summary {
+    border-radius: $radius-small;
+    color: $grey-dark;
+  }
+
+  a:hover,
+  summary:hover {
+    background-color: findLightColor($link) !important;
+  }
+
+  a.du-active {
+    color: $link !important;
+    background-color: findLightColor($link) !important;
+    font-weight: bold;
+  }
+}
 
 :focus {
   outline: 0;
@@ -318,6 +374,19 @@ svg text {
   color: rgba(0, 0, 0, 0.7);
 }
 
+.cm-editor {
+  .cm-gutters {
+    background-color: $white-ter;
+    color: $grey-light;
+    border: none;
+  }
+
+  .cm-activeLine,
+  .cm-activeLineGutter {
+    background-color: findLightColor($link) !important;
+  }
+}
+
 .template-editor .cm-editor {
   height: 200px;
 }
@@ -357,7 +426,9 @@ svg text {
   }
 
   .svelte-select-list {
-    box-shadow: 0 8px 8px rgba(10, 10, 10, 0.1), 0 0 0 1px rgba(10, 10, 10, 0.1) !important;
+    box-shadow:
+      0 8px 8px rgba(10, 10, 10, 0.1),
+      0 0 0 1px rgba(10, 10, 10, 0.1) !important;
   }
 }
 

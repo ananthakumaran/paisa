@@ -433,7 +433,12 @@ export function renderCurrentExpensesBreakdown(z: d3.ScaleOrdinal<string, string
     xAxis
       .attr("transform", "translate(0," + height + ")")
       .transition(t)
-      .call(d3.axisBottom(x).tickSize(-height).tickFormat(skipTicks(60, x, formatCurrencyCrude)));
+      .call(
+        d3
+          .axisBottom(x)
+          .tickSize(-height)
+          .tickFormat(skipTicks(60, x, formatCurrencyCrude))
+      );
 
     yAxis
       .transition(t)

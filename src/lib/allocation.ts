@@ -372,7 +372,7 @@ export function renderAllocationTimeline(aggregatesTimeline: { [key: string]: Ag
     d3
       .line<Point>()
       .curve(d3.curveLinear)
-      .defined((p, i) => p[group] > 0 || points[i + 1]?.[group] > 0)
+      .defined((p, i) => (p[group] as number) > 0 || (points[i + 1]?.[group] as number) > 0)
       .x((p) => x(p.date))
       .y((p) => y(p[group]));
 

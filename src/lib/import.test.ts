@@ -1,4 +1,7 @@
-import { describe, expect, test } from "@jest/globals";
+import { describe, expect, test, jest } from "@jest/globals";
+
+jest.mock("pdfjs-dist/build/pdf.worker.js?url", () => ({}), { virtual: true });
+
 import { parse, render, asRows } from "./sheet";
 import fs from "fs";
 import helpers from "./template_helpers";
@@ -9,12 +12,6 @@ import customParseFormat from "dayjs/plugin/customParseFormat";
 dayjs.extend(customParseFormat);
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
 dayjs.extend(isSameOrBefore);
-
-jest.mock("../store", () => ({
-  accountTfIdf: null
-}));
-
-jest.mock("pdfjs-dist/build/pdf.worker.js?url", () => ({}), { virtual: true });
 
 Handlebars.registerHelper(
   _.mapValues(helpers, (helper, name) => {

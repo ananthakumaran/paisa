@@ -369,6 +369,23 @@ func generateJournalFile(cwd string) {
 
 = expr payee=~/Internet/
     ; Recurring: Internet
+
+~ monthly
+	Expenses:Food 			4500 INR
+	Expenses:Shopping 		2500 INR
+	Expenses:Restaurants 	1000 INR
+	Expenses:Utilities 		2000 INR
+	Income:Salary			-122720 INR
+	Assets:Checking
+
+~ yearly from 2020
+	Expenses:Auto:Repair 	5000 INR
+	Assets:Checking
+
+~ monthly from 2023/08 to 2024/07
+	Expenses:Rent 			20000 INR
+	Assets:Checking
+
 `)
 	if err != nil {
 		log.Fatal(err)

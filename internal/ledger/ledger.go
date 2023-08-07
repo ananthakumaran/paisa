@@ -3,6 +3,7 @@ package ledger
 import (
 	"bytes"
 	"encoding/csv"
+	"fmt"
 	"regexp"
 	"strings"
 
@@ -73,15 +74,8 @@ func (LedgerCLI) ValidateFile(journalPath string) ([]LedgerFileError, string, er
 	return errors, "", err
 }
 
-func (LedgerCLI) Parse(journalPath string, _prices []price.Price) ([]*posting.Posting, error) {
-	var postings []*posting.Posting
-
-	_, err := exec.LookPath("ledger")
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	command := exec.Command("ledger", "-f", journalPath, "csv", "--csv-format", "%(quoted(date)),%(quoted(payee)),%(quoted(display_account)),%(quoted(commodity(scrub(display_amount)))),%(quoted(quantity(scrub(display_amount)))),%(quoted(to_int(scrub(market(amount,date,'"+config.DefaultCurrency()+"') * 100000)))),%(quoted(xact.filename)),%(quoted(xact.id)),%(quoted(cleared ? \"*\" : (pending ? \"!\" : \"\"))),%(quoted(tag('Recurring')))\n")
+func ledgerCmd(args ...string) (records [][]string, err error) {
+	command := exec.Command("ledger", args...)
 	var output, error bytes.Buffer
 	command.Stdout = &output
 	command.Stderr = &error
@@ -94,10 +88,31 @@ func (LedgerCLI) Parse(journalPath string, _prices []price.Price) ([]*posting.Po
 	// https://github.com/ledger/ledger/issues/2007
 	fixedOutput := bytes.ReplaceAll(output.Bytes(), []byte(`\"`), []byte(`""`))
 	reader := csv.NewReader(bytes.NewBuffer(fixedOutput))
-	records, err := reader.ReadAll()
+	records, err = reader.ReadAll()
 	if err != nil {
 		return nil, err
 	}
+	return
+}
+
+func (LedgerCLI) Parse(journalPath string, _prices []price.Price) ([]*posting.Posting, error) {
+	var postings []*posting.Posting
+
+	_, err := exec.LookPath("ledger")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	csvFormat := "%(quoted(date)),%(quoted(payee)),%(quoted(display_account)),%(quoted(commodity(scrub(display_amount)))),%(quoted(quantity(scrub(display_amount)))),%(quoted(to_int(scrub(market(amount,date,'" + config.DefaultCurrency() + "') * 100000)))),%(quoted(xact.filename)),%(quoted(xact.id)),%(quoted(cleared ? \"*\" : (pending ? \"!\" : \"\"))),%(quoted(tag('Recurring')))\n"
+	records, err := ledgerCmd("-f", journalPath, "--forecast", "d>[1900]", "csv", "--csv-format", csvFormat)
+	if err != nil {
+		return nil, err
+	}
+	budgetRecords, err := ledgerCmd("-f", journalPath, "--budget", "csv", "@", "^Budget transaction$", "--csv-format", csvFormat)
+	if err != nil {
+		return nil, err
+	}
+	records = append(records, budgetRecords...)
 
 	for _, record := range records {
 		date, err := time.ParseInLocation("2006/01/02", record[0], time.Local)
@@ -128,12 +143,20 @@ func (LedgerCLI) Parse(journalPath string, _prices []price.Price) ([]*posting.Po
 			status = "unmarked"
 		}
 
-		var tagRecurring string
+		var tagRecurring, tagBudgeting string
 		if record[9] != "" {
 			tagRecurring = record[9]
 		}
 
-		posting := posting.Posting{Date: date, Payee: record[1], Account: record[2], Commodity: record[3], Quantity: quantity, Amount: amount, TransactionID: transactionID, Status: status, TagRecurring: tagRecurring}
+		if record[1] == "Forecast transaction" {
+			tagBudgeting = record[1]
+		} else if record[1] == "Budget transaction" {
+			tagBudgeting = record[1]
+			quantity = -quantity
+			amount = -amount
+		}
+
+		posting := posting.Posting{Date: date, Payee: record[1], Account: record[2], Commodity: record[3], Quantity: quantity, Amount: amount, TransactionID: transactionID, Status: status, TagRecurring: tagRecurring, TagBudgeting: tagBudgeting}
 		postings = append(postings, &posting)
 
 	}
@@ -209,8 +232,9 @@ func (HLedgerCLI) Parse(journalPath string, prices []price.Price) ([]*posting.Po
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	command := exec.Command("hledger", "-f", journalPath, "--auto", "print", "-Ojson")
+	currentYear, _, _ := time.Now().Date()
+	forecastYearEnd := currentYear + 5 // currentYear + config.GetConfig().Budgeting.EndYearDelta
+	command := exec.Command("hledger", "-f", journalPath, "--auto", fmt.Sprintf("--forecast=..%d", forecastYearEnd), "print", "-Ojson")
 	var output, error bytes.Buffer
 	command.Stdout = &output
 	command.Stderr = &error
@@ -284,23 +308,20 @@ func (HLedgerCLI) Parse(journalPath string, prices []price.Price) ([]*posting.Po
 				}
 			}
 
-			var tagRecurring string
+			var tagRecurring, tagBudgeting string
 
-			for _, tag := range t.Tags {
+			//? Does order matter here?
+			for _, tag := range append(t.Tags, p.Tags...) {
 				if len(tag) == 2 && tag[0] == "Recurring" {
 					tagRecurring = tag[1]
+					break
+				} else if len(tag) == 2 && tag[0] == "_generated-transaction" {
+					tagBudgeting = tag[1]
+					break
 				}
-				break
 			}
 
-			for _, tag := range p.Tags {
-				if len(tag) == 2 && tag[0] == "Recurring" {
-					tagRecurring = tag[1]
-				}
-				break
-			}
-
-			posting := posting.Posting{Date: date, Payee: t.Description, Account: p.Account, Commodity: amount.Commodity, Quantity: amount.Quantity.Value, Amount: totalAmount, TransactionID: strconv.FormatInt(t.ID, 10), Status: strings.ToLower(t.Status), TagRecurring: tagRecurring}
+			posting := posting.Posting{Date: date, Payee: t.Description, Account: p.Account, Commodity: amount.Commodity, Quantity: amount.Quantity.Value, Amount: totalAmount, TransactionID: strconv.FormatInt(t.ID, 10), Status: strings.ToLower(t.Status), TagRecurring: tagRecurring, TagBudgeting: tagBudgeting}
 			postings = append(postings, &posting)
 
 		}

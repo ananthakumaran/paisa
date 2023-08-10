@@ -3,6 +3,7 @@ package config
 import (
 	"errors"
 	"fmt"
+	"path/filepath"
 	"time"
 
 	_ "embed"
@@ -92,7 +93,7 @@ func init() {
 	schema = jsonschema.MustCompileString("", SchemaJson)
 }
 
-func LoadConfig(content []byte) error {
+func LoadConfig(content []byte, configPath string) error {
 	var configJson interface{}
 	err := yaml.Unmarshal(content, &configJson)
 	if err != nil {
@@ -113,6 +114,18 @@ func LoadConfig(content []byte) error {
 
 	if err != nil {
 		return err
+	}
+
+	journalDir := filepath.Dir(configPath)
+
+	if !filepath.IsAbs(config.JournalPath) {
+		config.JournalPath = filepath.Join(journalDir, config.JournalPath)
+		println("journal absolute path" + config.JournalPath)
+	}
+
+	if !filepath.IsAbs(config.DBPath) {
+		config.DBPath = filepath.Join(journalDir, config.DBPath)
+		println("db absolute path" + config.DBPath)
 	}
 
 	return nil

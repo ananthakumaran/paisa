@@ -27,7 +27,7 @@
     children?: Link[];
   }
   const links: Link[] = [
-    { label: "Overview", href: "/" },
+    { label: "Dashboard", href: "/" },
     {
       label: "Cash Flow",
       href: "/cash_flow",
@@ -50,6 +50,7 @@
       href: "/assets",
       children: [
         { label: "Balance", href: "/balance" },
+        { label: "Networth", href: "/networth" },
         { label: "Investment", href: "/investment" },
         { label: "Gain", href: "/gain" },
         { label: "Allocation", href: "/allocation", help: "allocation-targets" },

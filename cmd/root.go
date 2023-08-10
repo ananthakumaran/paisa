@@ -1,9 +1,13 @@
 package cmd
 
 import (
+	"fmt"
 	"io/ioutil"
 	"os"
+	"path"
 	"path/filepath"
+	"runtime"
+	"strings"
 
 	"github.com/ananthakumaran/paisa/internal/config"
 	"github.com/samber/lo"
@@ -31,7 +35,17 @@ func init() {
 }
 
 func initConfig() {
-	log.SetFormatter(&log.TextFormatter{DisableTimestamp: true, ForceColors: true})
+	formatter := log.TextFormatter{DisableTimestamp: true, ForceColors: true}
+	if os.Getenv("PAISA_DEBUG") == "true" {
+		log.SetReportCaller(true)
+		formatter.CallerPrettyfier = func(f *runtime.Frame) (string, string) {
+			s := strings.Split(f.Function, ".")
+			funcName := s[len(s)-1]
+			return funcName, fmt.Sprintf(" [%s:%d]", path.Base(f.File), f.Line)
+		}
+	}
+
+	log.SetFormatter(&formatter)
 
 	currentCommand, _, _ := rootCmd.Find(os.Args[1:])
 
@@ -60,7 +74,7 @@ func readConfigFile(path string) {
 		log.Fatal(err)
 	}
 
-	err = config.LoadConfig(content)
+	err = config.LoadConfig(content, path)
 	if err != nil {
 		log.Fatal(err)
 	}

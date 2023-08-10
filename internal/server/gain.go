@@ -11,14 +11,14 @@ import (
 
 type Gain struct {
 	Account  string            `json:"account"`
-	Overview Overview          `json:"overview"`
+	Networth Networth          `json:"networth"`
 	XIRR     float64           `json:"xirr"`
 	Postings []posting.Posting `json:"postings"`
 }
 
 type AccountGain struct {
 	Account          string            `json:"account"`
-	OverviewTimeline []Overview        `json:"overview_timeline"`
+	NetworthTimeline []Networth        `json:"networthTimeline"`
 	XIRR             float64           `json:"xirr"`
 	Postings         []posting.Posting `json:"postings"`
 }
@@ -29,7 +29,7 @@ func GetGain(db *gorm.DB) gin.H {
 	byAccount := lo.GroupBy(postings, func(p posting.Posting) string { return p.Account })
 	var gains []Gain
 	for account, ps := range byAccount {
-		gains = append(gains, Gain{Account: account, XIRR: service.XIRR(db, ps), Overview: computeOverview(db, ps), Postings: ps})
+		gains = append(gains, Gain{Account: account, XIRR: service.XIRR(db, ps), Networth: computeNetworth(db, ps), Postings: ps})
 	}
 
 	return gin.H{"gain_breakdown": gains}
@@ -38,7 +38,7 @@ func GetGain(db *gorm.DB) gin.H {
 func GetAccountGain(db *gorm.DB, account string) gin.H {
 	postings := query.Init(db).AccountPrefix(account).All()
 	postings = service.PopulateMarketPrice(db, postings)
-	gain := AccountGain{Account: account, XIRR: service.XIRR(db, postings), OverviewTimeline: computeOverviewTimeline(db, postings), Postings: postings}
+	gain := AccountGain{Account: account, XIRR: service.XIRR(db, postings), NetworthTimeline: computeNetworthTimeline(db, postings), Postings: postings}
 
 	commodities := lo.Uniq(lo.Map(postings, func(p posting.Posting, _ int) string { return p.Commodity }))
 	var portfolio_groups PortfolioAllocationGroups

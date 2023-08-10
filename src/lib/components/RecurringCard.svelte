@@ -1,7 +1,12 @@
 <script lang="ts">
   import Carousel from "svelte-carousel";
   import Transaction from "$lib/components/Transaction.svelte";
-  import type { TransactionSequence } from "$lib/utils";
+  import {
+    formatCurrencyCrude,
+    intervalText,
+    totalRecurring,
+    type TransactionSequence
+  } from "$lib/utils";
   import dayjs from "dayjs";
   import type { Action } from "svelte/action";
   import { renderRecurring } from "$lib/recurring";
@@ -25,34 +30,6 @@
     renderRecurring(element, props.ts, props.next, showPage);
     return {};
   };
-
-  function intervalText(ts: TransactionSequence) {
-    if (ts.interval >= 7 && ts.interval <= 8) {
-      return "weekly";
-    }
-
-    if (ts.interval >= 14 && ts.interval <= 16) {
-      return "bi-weekly";
-    }
-
-    if (ts.interval >= 28 && ts.interval <= 33) {
-      return "monthly";
-    }
-
-    if (ts.interval >= 87 && ts.interval <= 100) {
-      return "quarterly";
-    }
-
-    if (ts.interval >= 175 && ts.interval <= 190) {
-      return "half-yearly";
-    }
-
-    if (ts.interval >= 350 && ts.interval <= 395) {
-      return "yearly";
-    }
-
-    return `every ${ts.interval} days`;
-  }
 </script>
 
 <div class="columns">
@@ -67,7 +44,7 @@
           <span class="icon">
             <i class="fas {n.isBefore(now) ? 'fa-hourglass-end' : 'fa-hourglass-half'}" />
           </span>
-          <span>due {n.fromNow()}</span>
+          <span>{formatCurrencyCrude(totalRecurring(ts))} due {n.fromNow()}</span>
         </span>
         <div class="has-text-grey">
           <span class="tag is-light">{intervalText(ts)}</span>
@@ -82,7 +59,7 @@
         <svg height="50" width="100%" />
       </div>
       <div class="">
-        <span>Started on</span>
+        <span><b>{ts.key.tagRecurring}</b> started on</span>
         <b>{_.last(ts.transactions).date.format("DD MMM YYYY")}</b>, with a total of
         <b>{ts.transactions.length}</b> transactions so far.
       </div>

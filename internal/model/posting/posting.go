@@ -4,7 +4,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/ananthakumaran/paisa/internal/utils"
 	log "github.com/sirupsen/logrus"
 	"gorm.io/gorm"
 )
@@ -25,6 +24,10 @@ type Posting struct {
 	FileName             string    `json:"file_name"`
 
 	MarketAmount float64 `gorm:"-:all" json:"market_amount"`
+}
+
+func (p Posting) GroupDate() time.Time {
+	return p.Date
 }
 
 func (p *Posting) RestName(level int) string {
@@ -78,34 +81,4 @@ func UpsertAll(db *gorm.DB, postings []*Posting) {
 	if err != nil {
 		log.Fatal(err)
 	}
-}
-
-func GroupByMonth(postings []Posting) map[string][]Posting {
-	grouped := make(map[string][]Posting)
-	for _, p := range postings {
-		key := p.Date.Format("2006-01")
-		ps, ok := grouped[key]
-		if ok {
-			grouped[key] = append(ps, p)
-		} else {
-			grouped[key] = []Posting{p}
-		}
-
-	}
-	return grouped
-}
-
-func GroupByFY(postings []Posting) map[string][]Posting {
-	grouped := make(map[string][]Posting)
-	for _, p := range postings {
-		key := utils.FYHuman(p.Date)
-		ps, ok := grouped[key]
-		if ok {
-			grouped[key] = append(ps, p)
-		} else {
-			grouped[key] = []Posting{p}
-		}
-
-	}
-	return grouped
 }

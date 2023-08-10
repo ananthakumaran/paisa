@@ -241,20 +241,20 @@ svg text {
   opacity: 0.5;
 }
 
-.legendOrdinal .label,
-.legendLine .label {
-  display: block;
-  font-size: 11px;
-  letter-spacing: 1px;
-  margin-bottom: 5px;
-  text-transform: uppercase;
-  font-weight: normal;
-  color: $grey;
-  fill: $grey;
+.legendOrdinal,
+.legendLine {
+  .label {
+    display: block;
+    font-size: 11px;
+    text-transform: capitalize;
+    font-weight: normal;
+    color: $grey;
+    fill: $grey;
 
-  &.selected {
-    fill: $grey-darker;
-    font-weight: bold;
+    &.selected {
+      fill: $grey-darker;
+      font-weight: bold;
+    }
   }
 }
 
@@ -263,7 +263,7 @@ svg text {
 #d3-income-timeline .legendOrdinal .label,
 #d3-repayment-timeline .legendOrdinal .label,
 #d3-breakdown .legendOrdinal .label {
-  font-size: 8px;
+  font-size: 10px;
 }
 
 #d3-salary-timeline .x.axis > g.tick {
@@ -368,6 +368,11 @@ svg text {
 .container.is-fluid {
   padding-left: 24px;
   padding-right: 24px;
+}
+
+.level-item p.title {
+  padding: 5px;
+  color: white;
 }
 
 .navbar-item,

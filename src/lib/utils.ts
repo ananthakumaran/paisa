@@ -33,9 +33,7 @@ export interface CashFlow {
 }
 
 export interface TransactionSequenceKey {
-  payee: string;
-  credit_accounts: string;
-  debit_accounts: string;
+  tagRecurring: string;
 }
 
 export interface TransactionSequence {
@@ -60,25 +58,25 @@ export interface Price {
   value: number;
 }
 
-export interface Overview {
+export interface Networth {
   date: dayjs.Dayjs;
-  investment_amount: number;
-  withdrawal_amount: number;
-  gain_amount: number;
-  balance_amount: number;
-  net_investment_amount: number;
+  investmentAmount: number;
+  withdrawalAmount: number;
+  gainAmount: number;
+  balanceAmount: number;
+  netInvestmentAmount: number;
 }
 
 export interface Gain {
   account: string;
-  overview: Overview;
+  networth: Networth;
   xirr: number;
   postings: Posting[];
 }
 
 export interface AccountGain {
   account: string;
-  overview_timeline: Overview[];
+  networthTimeline: Networth[];
   xirr: number;
   postings: Posting[];
 }
@@ -388,12 +386,18 @@ export function ajax(
 ): Promise<{ liability_breakdowns: LiabilityBreakdown[] }>;
 export function ajax(route: "/api/price"): Promise<{ prices: Record<string, Price[]> }>;
 export function ajax(route: "/api/transaction"): Promise<{ transactions: Transaction[] }>;
-export function ajax(route: "/api/overview"): Promise<{
-  overview_timeline: Overview[];
+export function ajax(route: "/api/networth"): Promise<{
+  networthTimeline: Networth[];
   xirr: number;
 }>;
 export function ajax(route: "/api/gain"): Promise<{
   gain_breakdown: Gain[];
+}>;
+export function ajax(route: "/api/dashboard"): Promise<{
+  expenses: { [key: string]: Posting[] };
+  cashFlows: CashFlow[];
+  transactionSequences: TransactionSequence[];
+  networth: { networth: Networth; xirr: number };
 }>;
 
 export function ajax(
@@ -845,4 +849,58 @@ export function postingUrl(posting: Posting) {
   return `/ledger/editor/${encodeURIComponent(posting.file_name)}#${
     posting.transaction_begin_line
   }`;
+}
+
+export function intervalText(ts: TransactionSequence) {
+  if (ts.interval >= 7 && ts.interval <= 8) {
+    return "weekly";
+  }
+
+  if (ts.interval >= 14 && ts.interval <= 16) {
+    return "bi-weekly";
+  }
+
+  if (ts.interval >= 28 && ts.interval <= 33) {
+    return "monthly";
+  }
+
+  if (ts.interval >= 87 && ts.interval <= 100) {
+    return "quarterly";
+  }
+
+  if (ts.interval >= 175 && ts.interval <= 190) {
+    return "half-yearly";
+  }
+
+  if (ts.interval >= 350 && ts.interval <= 395) {
+    return "yearly";
+  }
+
+  return `every ${ts.interval} days`;
+}
+
+export function nextDate(ts: TransactionSequence) {
+  const lastTransaction = ts.transactions[0];
+  if (ts.interval >= 28 && ts.interval <= 33) {
+    return lastTransaction.date.add(1, "month");
+  }
+
+  if (ts.interval >= 360 && ts.interval <= 370) {
+    return lastTransaction.date.add(1, "year");
+  }
+
+  return lastTransaction.date.add(ts.interval, "day");
+}
+
+export function totalRecurring(ts: TransactionSequence) {
+  const lastTransaction = ts.transactions[0];
+  return _.sumBy(lastTransaction.postings, (t) => _.max([0, t.amount]));
+}
+
+export function sortTrantionSequence(transactionSequences: TransactionSequence[]) {
+  return _.chain(transactionSequences)
+    .sortBy((ts) => {
+      return Math.abs(nextDate(ts).diff(dayjs()));
+    })
+    .value();
 }

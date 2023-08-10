@@ -7,30 +7,40 @@ import (
 	"github.com/ananthakumaran/paisa/internal/model/posting"
 	"github.com/ananthakumaran/paisa/internal/query"
 	"github.com/ananthakumaran/paisa/internal/service"
+	"github.com/ananthakumaran/paisa/internal/utils"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
 
-type Overview struct {
+type Networth struct {
 	Date                time.Time `json:"date"`
-	InvestmentAmount    float64   `json:"investment_amount"`
-	WithdrawalAmount    float64   `json:"withdrawal_amount"`
-	GainAmount          float64   `json:"gain_amount"`
-	BalanceAmount       float64   `json:"balance_amount"`
-	NetInvestmentAmount float64   `json:"net_investment_amount"`
+	InvestmentAmount    float64   `json:"investmentAmount"`
+	WithdrawalAmount    float64   `json:"withdrawalAmount"`
+	GainAmount          float64   `json:"gainAmount"`
+	BalanceAmount       float64   `json:"balanceAmount"`
+	NetInvestmentAmount float64   `json:"netInvestmentAmount"`
 }
 
-func GetOverview(db *gorm.DB) gin.H {
-	postings := query.Init(db).Like("Assets:%").OrLike("Liabilities:%").All()
+func GetNetworth(db *gorm.DB) gin.H {
+	postings := query.Init(db).Like("Assets:%").OrLike("Liabilities:%").UntilToday().All()
 
 	postings = service.PopulateMarketPrice(db, postings)
-	overviewTimeline := computeOverviewTimeline(db, postings)
+	networthTimeline := computeNetworthTimeline(db, postings)
 	xirr := service.XIRR(db, postings)
-	return gin.H{"overview_timeline": overviewTimeline, "xirr": xirr}
+	return gin.H{"networthTimeline": networthTimeline, "xirr": xirr}
 }
 
-func computeOverview(db *gorm.DB, postings []posting.Posting) Overview {
-	var networth Overview
+func GetCurrentNetworth(db *gorm.DB) gin.H {
+	postings := query.Init(db).Like("Assets:%").OrLike("Liabilities:%").UntilToday().All()
+
+	postings = service.PopulateMarketPrice(db, postings)
+	networth := computeNetworth(db, postings)
+	xirr := service.XIRR(db, postings)
+	return gin.H{"networth": networth, "xirr": xirr}
+}
+
+func computeNetworth(db *gorm.DB, postings []posting.Posting) Networth {
+	var networth Networth
 
 	if len(postings) == 0 {
 		return networth
@@ -40,7 +50,7 @@ func computeOverview(db *gorm.DB, postings []posting.Posting) Overview {
 	var withdrawal float64 = 0
 	var balance float64 = 0
 
-	now := time.Now()
+	now := utils.BeginingOfDay(time.Now())
 	for _, p := range postings {
 		isInterest := service.IsInterest(db, p)
 
@@ -61,13 +71,13 @@ func computeOverview(db *gorm.DB, postings []posting.Posting) Overview {
 
 	gain := balance + withdrawal - investment
 	net_investment := investment - withdrawal
-	networth = Overview{Date: now, InvestmentAmount: investment, WithdrawalAmount: withdrawal, GainAmount: gain, BalanceAmount: balance, NetInvestmentAmount: net_investment}
+	networth = Networth{Date: now, InvestmentAmount: investment, WithdrawalAmount: withdrawal, GainAmount: gain, BalanceAmount: balance, NetInvestmentAmount: net_investment}
 
 	return networth
 }
 
-func computeOverviewTimeline(db *gorm.DB, postings []posting.Posting) []Overview {
-	var networths []Overview
+func computeNetworthTimeline(db *gorm.DB, postings []posting.Posting) []Networth {
+	var networths []Networth
 
 	var p posting.Posting
 	var pastPostings []posting.Posting
@@ -107,7 +117,7 @@ func computeOverviewTimeline(db *gorm.DB, postings []posting.Posting) []Overview
 
 		gain := balance + withdrawal - investment
 		net_investment := investment - withdrawal
-		networths = append(networths, Overview{Date: start, InvestmentAmount: investment, WithdrawalAmount: withdrawal, GainAmount: gain, BalanceAmount: balance, NetInvestmentAmount: net_investment})
+		networths = append(networths, Networth{Date: start, InvestmentAmount: investment, WithdrawalAmount: withdrawal, GainAmount: gain, BalanceAmount: balance, NetInvestmentAmount: net_investment})
 
 		if len(postings) == 0 && math.Abs(balance) < 0.01 {
 			break

@@ -13,7 +13,7 @@ import (
 )
 
 func GetRecurringTransactions(db *gorm.DB) gin.H {
-	return gin.H{"transaction_sequences": computeRecurringTransactions(query.Init(db).All())}
+	return gin.H{"transaction_sequences": ComputeRecurringTransactions(query.Init(db).All())}
 }
 
 type TransactionSequence struct {
@@ -24,10 +24,10 @@ type TransactionSequence struct {
 }
 
 type TransactionSequenceKey struct {
-	TagRecurring string `json:"tag_recurring"`
+	TagRecurring string `json:"tagRecurring"`
 }
 
-func computeRecurringTransactions(postings []posting.Posting) []TransactionSequence {
+func ComputeRecurringTransactions(postings []posting.Posting) []TransactionSequence {
 	now := time.Now()
 
 	postings = lo.Filter(postings, func(p posting.Posting, _ int) bool {

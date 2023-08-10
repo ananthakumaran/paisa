@@ -6,17 +6,17 @@ import _ from "lodash";
 import tippy from "tippy.js";
 import COLORS from "./colors";
 import { formatCurrency, isMobile } from "./utils";
-import { formatCurrencyCrude, tooltip, type Overview } from "./utils";
+import { formatCurrencyCrude, tooltip, type Networth } from "./utils";
 
-function networth(d: Overview) {
-  return d.investment_amount + d.gain_amount - d.withdrawal_amount;
+function networth(d: Networth) {
+  return d.investmentAmount + d.gainAmount - d.withdrawalAmount;
 }
 
-function investment(d: Overview) {
-  return d.investment_amount - d.withdrawal_amount;
+function investment(d: Networth) {
+  return d.investmentAmount - d.withdrawalAmount;
 }
 
-export function renderOverview(points: Overview[], element: Element): () => void {
+export function renderNetworth(points: Networth[], element: Element): () => void {
   const start = _.min(_.map(points, (p) => p.date)),
     end = dayjs();
 
@@ -39,8 +39,8 @@ export function renderOverview(points: Overview[], element: Element): () => void
     .range([COLORS.primary, COLORS.secondary]);
 
   const positions = _.flatMap(points, (p) => [
-    p.gain_amount + p.investment_amount - p.withdrawal_amount,
-    p.investment_amount - p.withdrawal_amount
+    p.gainAmount + p.investmentAmount - p.withdrawalAmount,
+    p.investmentAmount - p.withdrawalAmount
   ]);
   positions.push(0);
 
@@ -48,9 +48,9 @@ export function renderOverview(points: Overview[], element: Element): () => void
     y = d3.scaleLinear().range([height, 0]).domain(d3.extent(positions)),
     z = d3.scaleOrdinal<string>(colors).domain(areaKeys);
 
-  const area = (y0: number, y1: (d: Overview) => number) =>
+  const area = (y0: number, y1: (d: Networth) => number) =>
     d3
-      .area<Overview>()
+      .area<Networth>()
       .curve(d3.curveBasis)
       .x((d) => x(d.date))
       .y0(y0)
@@ -82,7 +82,7 @@ export function renderOverview(points: Overview[], element: Element): () => void
     .attr(
       "d",
       area(height, (d) => {
-        return y(d.gain_amount + d.investment_amount - d.withdrawal_amount);
+        return y(d.gainAmount + d.investmentAmount - d.withdrawalAmount);
       })
     );
 
@@ -94,7 +94,7 @@ export function renderOverview(points: Overview[], element: Element): () => void
     .attr(
       "d",
       area(0, (d) => {
-        return y(d.gain_amount + d.investment_amount - d.withdrawal_amount);
+        return y(d.gainAmount + d.investmentAmount - d.withdrawalAmount);
       })
     );
 
@@ -106,7 +106,7 @@ export function renderOverview(points: Overview[], element: Element): () => void
     .attr(
       "d",
       area(0, (d) => {
-        return y(d.investment_amount - d.withdrawal_amount);
+        return y(d.investmentAmount - d.withdrawalAmount);
       })
     );
 
@@ -118,7 +118,7 @@ export function renderOverview(points: Overview[], element: Element): () => void
     .attr(
       "d",
       area(height, (d) => {
-        return y(d.investment_amount - d.withdrawal_amount);
+        return y(d.investmentAmount - d.withdrawalAmount);
       })
     );
 
@@ -129,7 +129,7 @@ export function renderOverview(points: Overview[], element: Element): () => void
     .attr(
       "d",
       d3
-        .line<Overview>()
+        .line<Networth>()
         .curve(d3.curveBasis)
         .x((d) => x(d.date))
         .y((d) => y(investment(d)))
@@ -142,7 +142,7 @@ export function renderOverview(points: Overview[], element: Element): () => void
     .attr(
       "d",
       d3
-        .line<Overview>()
+        .line<Networth>()
         .curve(d3.curveBasis)
         .x((d) => x(d.date))
         .y((d) => y(networth(d)))
@@ -166,7 +166,7 @@ export function renderOverview(points: Overview[], element: Element): () => void
     .data(
       points.map((p) => ["networth", p]).concat(points.map((p) => ["investment", p])) as [
         string,
-        Overview
+        Networth
       ][]
     )
     .enter()
@@ -191,7 +191,7 @@ export function renderOverview(points: Overview[], element: Element): () => void
             "Net Investment",
             [formatCurrency(investment(d)), "has-text-weight-bold has-text-right"]
           ],
-          ["Gain / Loss", [formatCurrency(d.gain_amount), "has-text-weight-bold has-text-right"]]
+          ["Gain / Loss", [formatCurrency(d.gainAmount), "has-text-weight-bold has-text-right"]]
         ])
       });
       t.show();

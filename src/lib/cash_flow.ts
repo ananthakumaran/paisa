@@ -20,9 +20,13 @@ import { willClearTippy } from "../store";
 import COLORS from "./colors";
 import textures from "textures";
 
-export function renderMonthlyFlow() {
-  const id = "#d3-monthly-cash-flow";
-
+export function renderMonthlyFlow(
+  id: string,
+  options = {
+    rotate: true,
+    balance: 0
+  }
+) {
   const MAX_BAR_WIDTH = 40;
   const svg = d3.select(id),
     margin = { top: 50, right: 30, bottom: 50, left: 40 },
@@ -47,7 +51,9 @@ export function renderMonthlyFlow() {
   const areaScale = d3.scaleOrdinal().domain(areaKeys).range(colors);
 
   const lineKeys = ["balance"];
-  const lineLabels = ["Checking Balance"];
+  const lineLabels = [
+    "Checking Balance" + (options.balance > 0 ? " " + formatCurrency(options.balance) : "")
+  ];
   const lineScale = d3.scaleOrdinal<string>().domain(lineKeys).range([COLORS.primary]);
 
   const x = d3.scaleBand().range([0, width]).paddingInner(0.1),
@@ -73,13 +79,13 @@ export function renderMonthlyFlow() {
 
   const tooltipRects = g.append("g");
 
-  svg.append("g").attr("class", "legendOrdinal").attr("transform", "translate(185,3)");
+  svg.append("g").attr("class", `legendOrdinal is-small`).attr("transform", "translate(140,3)");
 
   const legendOrdinal = legend
     .legendColor()
     .shape("rect")
     .orient("horizontal")
-    .shapePadding(60)
+    .shapePadding(40)
     .labels(areaKeys)
     .scale(areaScale);
 
@@ -92,20 +98,24 @@ export function renderMonthlyFlow() {
     return z(d);
   });
 
-  svg.append("g").attr("class", "legendLine").attr("transform", "translate(80,3)");
+  svg.append("g").attr("class", `legendLine is-small`).attr("transform", "translate(60,3)");
 
   const legendLine = legend
     .legendColor()
     .shape("rect")
     .orient("horizontal")
-    .shapePadding(70)
     .labelOffset(22)
     .shapeHeight(3)
     .shapeWidth(25)
+    .labelOffset(10)
     .labels(lineLabels)
     .scale(lineScale);
 
+  (legendLine as any).labelWrap(100); // type missing
+
   svg.select(".legendLine").call(legendLine as any);
+
+  let firstRender = true;
 
   return function (cashFlows: CashFlow[]) {
     const positions = _.flatMap(cashFlows, (c) => [
@@ -120,9 +130,10 @@ export function renderMonthlyFlow() {
     y.domain(d3.extent(positions));
     x1.range([0, x.bandwidth()]);
 
-    const t = svg.transition().duration(750);
+    const t = svg.transition().duration(firstRender ? 0 : 750);
+    firstRender = false;
 
-    xAxis
+    const axis = xAxis
       .transition(t)
       .call(
         d3
@@ -133,9 +144,11 @@ export function renderMonthlyFlow() {
       .selectAll("text")
       .attr("y", 10)
       .attr("x", -8)
-      .attr("dy", ".35em")
-      .attr("transform", "rotate(-45)")
-      .style("text-anchor", "end");
+      .attr("dy", ".35em");
+
+    if (options.rotate) {
+      axis.attr("transform", "rotate(-45)").style("text-anchor", "end");
+    }
 
     yAxis.transition(t).call(d3.axisLeft(y).tickSize(-width).tickFormat(formatCurrencyCrude));
 

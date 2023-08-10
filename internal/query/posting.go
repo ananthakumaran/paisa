@@ -1,8 +1,11 @@
 package query
 
 import (
+	"time"
+
 	"github.com/ananthakumaran/paisa/internal/config"
 	"github.com/ananthakumaran/paisa/internal/model/posting"
+	"github.com/ananthakumaran/paisa/internal/utils"
 	"github.com/samber/lo"
 	log "github.com/sirupsen/logrus"
 	"gorm.io/gorm"
@@ -19,6 +22,30 @@ func Init(db *gorm.DB) *Query {
 
 func (q *Query) Desc() *Query {
 	q.order = "DESC"
+	return q
+}
+
+func (q *Query) Clone() *Query {
+	return &Query{context: q.context.Session(&gorm.Session{}), order: q.order}
+}
+
+func (q *Query) BeforeTwoMonths() *Query {
+	monthStart := utils.BeginningOfMonth(time.Now())
+	start := monthStart.AddDate(0, -1, 0)
+	q.context = q.context.Where("date < ?", start)
+	return q
+}
+
+func (q *Query) UntilToday() *Query {
+	q.context = q.context.Where("date < ?", time.Now())
+	return q
+}
+
+func (q *Query) LastTwoMonths() *Query {
+	monthStart := utils.BeginningOfMonth(time.Now())
+	start := monthStart.AddDate(0, -1, 0)
+	end := monthStart.AddDate(0, 1, 0)
+	q.context = q.context.Where("date >= ? and date < ?", start, end)
 	return q
 }
 

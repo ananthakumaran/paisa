@@ -34,6 +34,7 @@ $switch-focus: none;
 @import "bulma/sass/utilities/_all.sass";
 
 $grey-lightest: hsl(0, 0%, 93%);
+$grey-darkest: hsl(0, 0%, 16%);
 $menu-item-hover-background-color: $link-light;
 $menu-item-active-color: $link-dark;
 $menu-item-active-background-color: $link-light;
@@ -62,6 +63,29 @@ $menu-item-active-background-color: $link-light;
 @import "bulma-switch/src/sass/index.sass";
 @import "@cityssm/bulma-sticky-table/sticky-table";
 
+@import "bulma-prefers-dark/bulma-prefers-dark.sass";
+
+@media (prefers-color-scheme: dark) {
+  .has-background-white-bis {
+    background-color: $black-bis !important;
+  }
+
+  .has-background-white {
+    background-color: $black !important;
+  }
+
+  .tag:not(body).is-light {
+    background-color: $black-ter;
+    color: $white-bis;
+  }
+
+  .paisa {
+    .navbar {
+      background-color: $black-bis !important;
+    }
+  }
+}
+
 @tailwind components;
 @tailwind utilities;
 
@@ -75,6 +99,21 @@ $menu-item-active-background-color: $link-light;
     &.du-tab-active {
       background-color: $white !important;
       color: $black-bis !important;
+    }
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .du-tabs {
+    background-color: $grey-darkest !important;
+
+    .du-tab {
+      color: $grey-light !important;
+
+      &.du-tab-active {
+        background-color: $black !important;
+        color: $white-bis !important;
+      }
     }
   }
 }
@@ -233,6 +272,37 @@ svg text {
 
     &.keep-domain path.domain {
       display: block;
+    }
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .axis {
+    &.dark text {
+      fill: $grey;
+    }
+
+    &.link text {
+      fill: $link;
+    }
+
+    text {
+      fill: $grey-dark;
+    }
+
+    path.domain,
+    line {
+      stroke: $grey-darker;
+    }
+
+    .tick line {
+      stroke: $black-ter;
+    }
+
+    &.y {
+      line {
+        stroke: $black-bis;
+      }
     }
   }
 }

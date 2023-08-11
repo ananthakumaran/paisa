@@ -203,7 +203,7 @@
             <article class="tile is-child">
               <div class="content">
                 <p class="subtitle">
-                  <a class="secondary-link" href="/cash_flow/recurring">Recent Transactions</a>
+                  <a class="secondary-link" href="/ledger/transaction">Recent Transactions</a>
                 </p>
                 <div>
                   <UntypedMasonryGrid gap={10} maxStretchColumnSize={500} align="stretch">

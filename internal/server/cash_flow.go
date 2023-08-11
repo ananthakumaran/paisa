@@ -30,8 +30,8 @@ func GetCashFlow(db *gorm.DB) gin.H {
 }
 
 func GetCurrentCashFlow(db *gorm.DB) []CashFlow {
-	balance := accounting.CostSum(query.Init(db).BeforeTwoMonths().Like("Assets:Checking").All())
-	return computeCashFlow(db, query.Init(db).LastTwoMonths(), balance)
+	balance := accounting.CostSum(query.Init(db).BeforeNMonths(3).Like("Assets:Checking").All())
+	return computeCashFlow(db, query.Init(db).LastNMonths(3), balance)
 }
 
 func computeCashFlow(db *gorm.DB, q *query.Query, balance float64) []CashFlow {

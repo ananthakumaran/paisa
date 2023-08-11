@@ -34,7 +34,7 @@ type Graph struct {
 }
 
 func GetCurrentExpense(db *gorm.DB) map[string][]posting.Posting {
-	expenses := query.Init(db).LastTwoMonths().Like("Expenses:%").NotLike("Expenses:Tax").All()
+	expenses := query.Init(db).LastNMonths(3).Like("Expenses:%").NotLike("Expenses:Tax").All()
 	return utils.GroupByMonth(expenses)
 }
 

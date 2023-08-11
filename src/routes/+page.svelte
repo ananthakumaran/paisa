@@ -13,13 +13,19 @@
     intervalText,
     type Networth,
     formatCurrency,
-    formatFloat
+    formatFloat,
+    type Transaction
   } from "$lib/utils";
   import _ from "lodash";
   import { onMount } from "svelte";
   import COLORS from "$lib/colors";
   import dayjs from "dayjs";
-  import LastTwoMonths from "$lib/components/LastTwoMonths.svelte";
+  import LastNMonths from "$lib/components/LastNMonths.svelte";
+  import TransactionCard from "$lib/components/TransactionCard.svelte";
+
+  import { MasonryGrid } from "@egjs/svelte-grid";
+
+  let UntypedMasonryGrid = MasonryGrid as any;
 
   let month = dayjs().format("YYYY-MM");
   let transactionSequences: TransactionSequence[] = [];
@@ -29,6 +35,7 @@
   let networth: Networth;
   let renderer: (data: Posting[]) => void;
   let totalExpense = 0;
+  let transactions: Transaction[] = [];
 
   const now = dayjs();
 
@@ -42,7 +49,8 @@
       expenses,
       cashFlows,
       transactionSequences,
-      networth: { networth, xirr }
+      networth: { networth, xirr },
+      transactions
     } = await ajax("/api/dashboard"));
     const postings = _.chain(expenses).values().flatten().value();
     const z = expense.colorScale(postings);
@@ -53,13 +61,13 @@
       rotate: false,
       balance: _.last(cashFlows)?.balance || 0
     })(cashFlows);
-    transactionSequences = _.take(sortTrantionSequence(transactionSequences), 10);
+    transactionSequences = _.take(sortTrantionSequence(transactionSequences), 16);
   });
 </script>
 
 <section class="section tab-networth">
   <div class="container is-fluid">
-    <div class="tile is-ancestor">
+    <div class="tile is-ancestor is-align-items-start">
       <div class="tile is-4">
         <div class="tile is-vertical">
           <div class="tile is-parent">
@@ -131,7 +139,7 @@
       <div class="tile is-vertical">
         <div class="tile is-parent is-12">
           <article class="tile is-child">
-            <p class="subtitle is-flex is-justify-content-space-between">
+            <p class="subtitle is-flex is-justify-content-space-between is-align-items-end">
               <span
                 ><a class="secondary-link" href="/expense/monthly">Expenses</a>
                 <span
@@ -140,7 +148,7 @@
                   >{formatCurrency(totalExpense)}</span
                 ></span
               >
-              <LastTwoMonths bind:value={month} />
+              <LastNMonths n={3} bind:value={month} />
             </p>
             <div class="content box px-3">
               <svg id="d3-current-month-breakdown" width="100%" />
@@ -185,6 +193,26 @@
                       </div>
                     {/each}
                   </div>
+                </div>
+              </div>
+            </article>
+          </div>
+        </div>
+        <div class="tile">
+          <div class="tile is-parent is-12">
+            <article class="tile is-child">
+              <div class="content">
+                <p class="subtitle">
+                  <a class="secondary-link" href="/cash_flow/recurring">Recent Transactions</a>
+                </p>
+                <div>
+                  <UntypedMasonryGrid gap={10} maxStretchColumnSize={500} align="stretch">
+                    {#each _.take(transactions, 20) as t}
+                      <div class="mr-3 is-flex-grow-1">
+                        <TransactionCard {t} />
+                      </div>
+                    {/each}
+                  </UntypedMasonryGrid>
                 </div>
               </div>
             </article>

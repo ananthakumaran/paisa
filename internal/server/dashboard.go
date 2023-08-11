@@ -12,5 +12,6 @@ func GetDashboard(db *gorm.DB) gin.H {
 		"expenses":             GetCurrentExpense(db),
 		"cashFlows":            GetCurrentCashFlow(db),
 		"transactionSequences": ComputeRecurringTransactions(query.Init(db).All()),
+		"transactions":         GetLatestTransactions(db),
 	}
 }

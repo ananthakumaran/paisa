@@ -398,6 +398,7 @@ export function ajax(route: "/api/dashboard"): Promise<{
   cashFlows: CashFlow[];
   transactionSequences: TransactionSequence[];
   networth: { networth: Networth; xirr: number };
+  transactions: Transaction[];
 }>;
 
 export function ajax(

@@ -751,7 +751,7 @@ export function setHtml(selector: string, value: string, color?: string) {
   if (color) {
     node.style.backgroundColor = color;
     node.style.padding = "5px";
-    node.style.color = "white";
+    node.classList.add("has-text-white");
   }
   node.innerHTML = value;
 }

@@ -1,3 +1,5 @@
+@use "sass:color";
+
 $fa-font-path: "../node_modules/@fortawesome/fontawesome-free/webfonts";
 
 $family-sans-serif:
@@ -66,6 +68,26 @@ $menu-item-active-background-color: $link-light;
 @import "bulma-prefers-dark/bulma-prefers-dark.sass";
 
 @media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+  }
+
+  .box {
+    box-shadow: none;
+  }
+
+  .has-text-white {
+    color: $black !important;
+  }
+
+  .has-text-black {
+    color: $white !important;
+  }
+
+  .has-text-black-ter {
+    color: $white-ter !important;
+  }
+
   .has-background-white-bis {
     background-color: $black-bis !important;
   }
@@ -83,6 +105,67 @@ $menu-item-active-background-color: $link-light;
     .navbar {
       background-color: $black-bis !important;
     }
+
+    navbar.is-spaced .navbar-dropdown,
+    .navbar-dropdown.is-boxed {
+      box-shadow:
+        0 8px 8px rgba(0, 0, 0, 1),
+        0 0 0 1px rgba(0, 0, 0, 1);
+    }
+
+    .tippy-box[data-theme~="light"] {
+      background-color: $black;
+      box-shadow:
+        0 8px 8px rgba(0, 0, 0, 1),
+        0 0 0 1px rgba(0, 0, 0, 1);
+    }
+
+    .tippy-box[data-theme~="light"][data-placement^="top"] > .tippy-arrow:before {
+      border-top-color: $black;
+    }
+    .tippy-box[data-theme~="light"][data-placement^="bottom"] > .tippy-arrow:before {
+      border-bottom-color: $black;
+    }
+    .tippy-box[data-theme~="light"][data-placement^="left"] > .tippy-arrow:before {
+      border-left-color: $black;
+    }
+    .tippy-box[data-theme~="light"][data-placement^="right"] > .tippy-arrow:before {
+      border-right-color: $black;
+    }
+    .tippy-box[data-theme~="light"] > .tippy-backdrop {
+      background-color: $black;
+    }
+    .tippy-box[data-theme~="light"] > .tippy-svg-arrow {
+      fill: $black;
+    }
+
+    .tag:not(body).is-danger.is-light {
+      background-color: $danger;
+      color: $danger-light;
+    }
+
+    .tag:not(body).is-success.is-light {
+      background-color: $success;
+      color: $success-light;
+    }
+
+    .card {
+      box-shadow:
+        0 2px 3px rgba(0, 0, 0, 1),
+        0 0 0 1px rgba(0, 0, 0, 1);
+    }
+  }
+
+  .table td,
+  .table th {
+    border: 1px solid $grey-darker;
+    border-width: 0 0 1px;
+  }
+
+  .content table td,
+  .content table th {
+    border: 1px solid $grey-darker;
+    border-width: 0 0 1px;
   }
 }
 
@@ -154,6 +237,12 @@ body {
   &:hover {
     color: $link;
     text-decoration: underline;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .secondary-link {
+    color: $grey-light;
   }
 }
 
@@ -410,6 +499,12 @@ svg text {
   align-items: center;
 }
 
+@media (prefers-color-scheme: dark) {
+  .d3-calendar .weekdays div {
+    background: $black-ter;
+  }
+}
+
 .d3-calendar .days .date {
   display: flex;
   justify-content: center;
@@ -442,7 +537,14 @@ svg text {
 
 .level-item p.title {
   padding: 5px;
-  color: white;
+  color: $white;
+}
+
+@media (prefers-color-scheme: dark) {
+  .level-item p.title {
+    padding: 5px;
+    color: $black;
+  }
 }
 
 .navbar-item,

@@ -276,14 +276,22 @@
 </div>
 
 <style lang="scss">
+  @import "bulma/sass/utilities/_all.sass";
+
   .breadcrumb.has-chevron-separator li + li::before {
     content: "";
     color: hsl(229deg, 53%, 53%);
   }
 
   a.is-inactive {
-    color: hsl(0deg, 0%, 21%);
+    color: $grey-darker;
     cursor: default;
     pointer-events: none;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    a.is-inactive {
+      color: $grey-lighter;
+    }
   }
 </style>

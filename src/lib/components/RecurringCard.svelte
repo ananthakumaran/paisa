@@ -124,4 +124,14 @@
       background-color: $white-ter;
     }
   }
+
+  @media (prefers-color-scheme: dark) {
+    .custom-arrow {
+      background-color: $black-bis;
+
+      &:hover {
+        background-color: $black-ter;
+      }
+    }
+  }
 </style>

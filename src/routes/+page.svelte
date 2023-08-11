@@ -169,7 +169,7 @@
                   >
                     {#each transactionSequences as ts}
                       {@const n = nextDate(ts)}
-                      <div class="has-text-centered mb-3 mr-3 max-w-[200px] border-2">
+                      <div class="has-text-centered mb-3 mr-3 max-w-[200px]">
                         <div class="is-size-7 truncate">{ts.key.tagRecurring}</div>
                         <div class="my-1"><span class="tag is-light">{intervalText(ts)}</span></div>
                         <div class="has-text-grey is-size-7">

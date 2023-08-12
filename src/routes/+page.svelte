@@ -155,49 +155,53 @@
             </div>
           </article>
         </div>
-        <div class="tile">
-          <div class="tile is-parent is-12">
-            <article class="tile is-child">
-              <div class="content">
-                <p class="subtitle">
-                  <a class="secondary-link" href="/cash_flow/recurring">Recurring</a>
-                </p>
-                <div class="content box">
-                  <div
-                    class="is-flex is-justify-content-flex-start is-flex-wrap-wrap"
-                    style="overflow: hidden; max-height: 190px"
-                  >
-                    {#each transactionSequences as ts}
-                      {@const n = nextDate(ts)}
-                      <div class="has-text-centered mb-3 mr-3 max-w-[200px] border-2">
-                        <div class="is-size-7 truncate">{ts.key.tagRecurring}</div>
-                        <div class="my-1"><span class="tag is-light">{intervalText(ts)}</span></div>
-                        <div class="has-text-grey is-size-7">
-                          <span class="icon has-text-grey-light">
-                            <i class="fas fa-calendar" />
-                          </span>
-                          {n.format("DD MMM YYYY")}
+        {#if !_.isEmpty(transactionSequences)}
+          <div class="tile">
+            <div class="tile is-parent is-12">
+              <article class="tile is-child">
+                <div class="content">
+                  <p class="subtitle">
+                    <a class="secondary-link" href="/cash_flow/recurring">Recurring</a>
+                  </p>
+                  <div class="content box">
+                    <div
+                      class="is-flex is-justify-content-flex-start is-flex-wrap-wrap"
+                      style="overflow: hidden; max-height: 190px"
+                    >
+                      {#each transactionSequences as ts}
+                        {@const n = nextDate(ts)}
+                        <div class="has-text-centered mb-3 mr-3 max-w-[200px] border-2">
+                          <div class="is-size-7 truncate">{ts.key.tagRecurring}</div>
+                          <div class="my-1">
+                            <span class="tag is-light">{intervalText(ts)}</span>
+                          </div>
+                          <div class="has-text-grey is-size-7">
+                            <span class="icon has-text-grey-light">
+                              <i class="fas fa-calendar" />
+                            </span>
+                            {n.format("DD MMM YYYY")}
+                          </div>
+                          <div
+                            class="m-3 du-radial-progress is-size-7"
+                            style="--value: {n.isBefore(now)
+                              ? '0'
+                              : (n.diff(now, 'day') / ts.interval) *
+                                100}; --thickness: 3px; --size: 100px; color: {n.isBefore(now)
+                              ? COLORS.danger
+                              : COLORS.success};"
+                          >
+                            <span>{formatCurrencyCrude(totalRecurring(ts))}</span>
+                            <span>due {n.fromNow()}</span>
+                          </div>
                         </div>
-                        <div
-                          class="m-3 du-radial-progress is-size-7"
-                          style="--value: {n.isBefore(now)
-                            ? '0'
-                            : (n.diff(now, 'day') / ts.interval) *
-                              100}; --thickness: 3px; --size: 100px; color: {n.isBefore(now)
-                            ? COLORS.danger
-                            : COLORS.success};"
-                        >
-                          <span>{formatCurrencyCrude(totalRecurring(ts))}</span>
-                          <span>due {n.fromNow()}</span>
-                        </div>
-                      </div>
-                    {/each}
+                      {/each}
+                    </div>
                   </div>
                 </div>
-              </div>
-            </article>
+              </article>
+            </div>
           </div>
-        </div>
+        {/if}
         <div class="tile">
           <div class="tile is-parent is-12">
             <article class="tile is-child">

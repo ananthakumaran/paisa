@@ -13,10 +13,10 @@
       <span>{title}</span>
       <span
         title={subtitle}
-        class="tag ml-2 has-text-weight-semibold"
-        style="padding: 5px; color: white; background-color: {subcolor};">{subvalue}</span
+        class="tag ml-2 has-text-weight-semibold has-text-white"
+        style="padding: 5px; background-color: {subcolor};">{subvalue}</span
       >
     </p>
-    <p class="title" style="padding: 5px; color: white; background-color: {color};">{value}</p>
+    <p class="title has-text-white" style="padding: 5px; background-color: {color};">{value}</p>
   </div>
 </div>

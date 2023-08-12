@@ -114,7 +114,7 @@
                         <div class="level-item is-narrow has-text-centered">
                           <div>
                             <p class="heading">XIRR</p>
-                            <p class="title has-text-black">{formatFloat(xirr)}</p>
+                            <p class="title has-text-black-ter">{formatFloat(xirr)}</p>
                           </div>
                         </div>
                       </nav>
@@ -143,9 +143,8 @@
               <span
                 ><a class="secondary-link" href="/expense/monthly">Expenses</a>
                 <span
-                  class="is-size-5 has-text-weight-bold px-2"
-                  style="background-color: {COLORS.lossText}; color: white;"
-                  >{formatCurrency(totalExpense)}</span
+                  class="is-size-5 has-text-weight-bold px-2 has-text-white"
+                  style="background-color: {COLORS.lossText};">{formatCurrency(totalExpense)}</span
                 ></span
               >
               <LastNMonths n={3} bind:value={month} />

@@ -120,12 +120,10 @@ func LoadConfig(content []byte, configPath string) error {
 
 	if !filepath.IsAbs(config.JournalPath) {
 		config.JournalPath = filepath.Join(journalDir, config.JournalPath)
-		println("journal absolute path" + config.JournalPath)
 	}
 
 	if !filepath.IsAbs(config.DBPath) {
 		config.DBPath = filepath.Join(journalDir, config.DBPath)
-		println("db absolute path" + config.DBPath)
 	}
 
 	return nil

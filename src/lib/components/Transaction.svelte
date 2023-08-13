@@ -58,11 +58,6 @@
 <style lang="scss">
   @import "bulma/sass/utilities/_all.sass";
 
-  .transaction.bordered {
-    border-bottom: 1px solid $grey-lighter;
-    padding-bottom: 1px;
-  }
-
   .description {
     display: inline-block;
     white-space: nowrap;

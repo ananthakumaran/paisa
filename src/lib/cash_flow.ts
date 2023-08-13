@@ -19,6 +19,7 @@ import { iconify } from "$lib/icon";
 import { willClearTippy } from "../store";
 import COLORS from "./colors";
 import textures from "textures";
+import chroma from "chroma-js";
 
 export function renderMonthlyFlow(
   id: string,
@@ -42,12 +43,18 @@ export function renderMonthlyFlow(
     .strokeWidth(1)
     .size(4)
     .orientation("vertical")
-    .background(COLORS.loss)
-    .stroke(COLORS.lossText);
+    .background(chroma(COLORS.expenses).brighten().hex())
+    .stroke(COLORS.expenses);
   svg.call(texture);
 
   const areaKeys = ["income", "expenses", "liabilities", "tax", "investment"];
-  const colors = [COLORS.gain, COLORS.loss, COLORS.liabilities, COLORS.loss, COLORS.secondaryLight];
+  const colors = [
+    COLORS.income,
+    COLORS.expenses,
+    COLORS.liabilities,
+    COLORS.expenses,
+    COLORS.assets
+  ];
   const areaScale = d3.scaleOrdinal().domain(areaKeys).range(colors);
 
   const lineKeys = ["balance"];

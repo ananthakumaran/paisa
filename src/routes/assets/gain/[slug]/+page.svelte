@@ -1,5 +1,5 @@
 <script lang="ts">
-  import COLORS from "$lib/colors";
+  import COLORS, { genericBarColor } from "$lib/colors";
   import { renderAccountOverview, renderLegend } from "$lib/gain";
   import { filterCommodityBreakdowns, renderPortfolioBreakdown } from "$lib/portfolio";
   import {
@@ -77,7 +77,7 @@
     industryR = renderPortfolioBreakdown("#d3-portfolio-security-industry", industry, {
       showLegend: false,
       small: true,
-      z: ["#D9D9D9"]
+      z: [genericBarColor()]
     });
     portfolioR = renderPortfolioBreakdown("#d3-portfolio", name_and_security_type, {
       showLegend: true,

@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { genericBarColor } from "$lib/colors";
   import { filterCommodityBreakdowns, renderPortfolioBreakdown } from "$lib/portfolio";
   import { ajax, generateColorScheme, type PortfolioAggregate } from "$lib/utils";
   import _ from "lodash";
@@ -34,7 +35,7 @@
     securityTypeR = renderPortfolioBreakdown("#d3-portfolio-security-type", security_type);
     ratingR = renderPortfolioBreakdown("#d3-portfolio-security-rating", rating);
     industryR = renderPortfolioBreakdown("#d3-portfolio-security-industry", industry, {
-      z: ["#D9D9D9"]
+      z: [genericBarColor()]
     });
     portfolioR = renderPortfolioBreakdown("#d3-portfolio", name_and_security_type, {
       showLegend: true

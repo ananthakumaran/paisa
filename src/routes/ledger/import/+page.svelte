@@ -180,21 +180,19 @@
                 clearable={false}
                 --chevron-color="hsl(229deg, 53%, 53%)"
                 --font-size="14px"
-                --item-hover-bg="none"
-                --item-hover-color="hsl(0deg, 0%, 4%)"
-                --item-is-active-bg="none"
-                --item-is-active-color="hsl(229deg, 53%, 53%)"
                 on:change={(_e) => {
                   saveAsName = selectedTemplate.name;
                 }}
               >
                 <div slot="selection" let:selection>
                   {selection.name}
-                  <span class="tag is-small is-link is-light">{selection.template_type}</span>
+                  <span class="tag is-small is-link invertable is-light"
+                    >{selection.template_type}</span
+                  >
                 </div>
                 <div slot="item" let:item>
                   <span class="name">{item.name}</span>
-                  <span class="tag is-small is-link is-light">{item.template_type}</span>
+                  <span class="tag is-small is-link invertable is-light">{item.template_type}</span>
                 </div>
               </Select>
             </p>
@@ -227,7 +225,7 @@
             <div class="field has-addons mb-0 ml-2">
               <p class="control">
                 <button
-                  class="button is-small is-danger is-light"
+                  class="button is-small is-danger is-light invertable"
                   on:click={(_e) => remove()}
                   disabled={$templateEditorState.hasUnsavedChanges == true ||
                     selectedTemplate?.template_type == "builtin"}
@@ -333,7 +331,7 @@
 
   .save {
     float: right;
-    position: absolute;
+    position: absolute !important;
     right: 40px;
     z-index: 10;
   }

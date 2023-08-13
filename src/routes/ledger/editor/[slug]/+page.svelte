@@ -164,7 +164,10 @@
         <div class="box p-3 is-flex is-align-items-center" style="width: 100%">
           <div class="field has-addons mb-0">
             <p class="control">
-              <button class="button is-small is-link is-light" on:click={(_e) => openCreateModal()}>
+              <button
+                class="button is-small is-link invertable is-light"
+                on:click={(_e) => openCreateModal()}
+              >
                 <span class="icon is-small">
                   <i class="fas fa-file-circle-plus" />
                 </span>

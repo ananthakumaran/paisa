@@ -8,6 +8,7 @@
   import { get } from "svelte/store";
   import dayjs from "dayjs";
   import DateRange from "./DateRange.svelte";
+  import ThemeSwitcher from "./ThemeSwitcher.svelte";
   export let isBurger: boolean = null;
 
   onMount(async () => {
@@ -175,6 +176,9 @@
       <div class="navbar-item">
         <div class="field is-grouped">
           <p class="control">
+            <ThemeSwitcher />
+          </p>
+          <p class="control">
             <Sync />
           </p>
         </div>
@@ -274,18 +278,3 @@
     {/if}
   </div>
 </div>
-
-<style lang="scss">
-  @import "bulma/sass/utilities/_all.sass";
-
-  .breadcrumb.has-chevron-separator li + li::before {
-    content: "";
-    color: hsl(229deg, 53%, 53%);
-  }
-
-  a.is-inactive {
-    color: $grey-darker;
-    cursor: default;
-    pointer-events: none;
-  }
-</style>

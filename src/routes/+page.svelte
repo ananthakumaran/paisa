@@ -227,7 +227,7 @@
 </section>
 
 <style lang="scss">
-  p.subtitle {
+  .content p.subtitle {
     margin-bottom: 10px;
   }
 </style>

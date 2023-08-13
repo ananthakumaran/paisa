@@ -39,7 +39,9 @@
         class="is-flex is-flex-wrap-wrap is-align-items-baseline is-justify-content-space-between"
       >
         <span
-          class="icon-text tag is-medium is-light {n.isBefore(now) ? 'is-danger' : 'is-success'}"
+          class="icon-text tag invertable is-medium is-light {n.isBefore(now)
+            ? 'is-danger'
+            : 'is-success'}"
         >
           <span class="icon">
             <i class="fas {n.isBefore(now) ? 'fa-hourglass-end' : 'fa-hourglass-half'}" />
@@ -92,36 +94,3 @@
     </Carousel>
   </div>
 </div>
-
-<style lang="scss">
-  @import "bulma/sass/utilities/_all.sass";
-
-  .custom-arrow-prev {
-    border-radius: $radius 0 0 $radius;
-    left: 0;
-  }
-
-  .custom-arrow-next {
-    border-radius: 0 $radius $radius 0;
-    right: 0;
-  }
-
-  .custom-arrow {
-    width: 25px;
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    z-index: 1;
-    transition: opacity 150ms ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    -webkit-tap-highlight-color: transparent;
-    background-color: $white-bis;
-
-    &:hover {
-      background-color: $white-ter;
-    }
-  }
-</style>

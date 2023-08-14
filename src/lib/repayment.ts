@@ -6,12 +6,12 @@ import {
   forEachMonth,
   formatCurrency,
   formatCurrencyCrude,
-  generateColorScheme,
   type Posting,
   restName,
   skipTicks,
   tooltip
 } from "./utils";
+import { generateColorScheme } from "./colors";
 
 export function renderMonthlyRepaymentTimeline(postings: Posting[]) {
   const id = "#d3-repayment-timeline";

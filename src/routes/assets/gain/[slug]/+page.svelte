@@ -1,5 +1,5 @@
 <script lang="ts">
-  import COLORS, { genericBarColor } from "$lib/colors";
+  import COLORS, { generateColorScheme, genericBarColor } from "$lib/colors";
   import { renderAccountOverview, renderLegend } from "$lib/gain";
   import { filterCommodityBreakdowns, renderPortfolioBreakdown } from "$lib/portfolio";
   import {
@@ -10,7 +10,6 @@
     type AccountGain,
     type Networth,
     type PortfolioAggregate,
-    generateColorScheme,
     postingUrl
   } from "$lib/utils";
   import _ from "lodash";

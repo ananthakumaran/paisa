@@ -16,7 +16,8 @@ A demo of the Web UI can be found at [https://paisa-demo.ananthakumaran.in](http
 I use it to track my personal finance. It's more like alpha product
 now, usable, but I might update things based on the feedback I
 receive. Feel free to open an issue if you found a bug or start a
-discussion if you have a feature request.
+discussion if you have a feature request. If you have any question,
+you can ask on [Matrix chat](https://matrix.to/#/#paisa:matrix.org).
 
 ## License
 

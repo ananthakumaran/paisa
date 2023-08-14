@@ -1,7 +1,7 @@
 <script lang="ts">
-  import { genericBarColor } from "$lib/colors";
+  import { generateColorScheme, genericBarColor } from "$lib/colors";
   import { filterCommodityBreakdowns, renderPortfolioBreakdown } from "$lib/portfolio";
-  import { ajax, generateColorScheme, type PortfolioAggregate } from "$lib/utils";
+  import { ajax, type PortfolioAggregate } from "$lib/utils";
   import _ from "lodash";
   import { onMount } from "svelte";
 

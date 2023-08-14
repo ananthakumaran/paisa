@@ -25,6 +25,8 @@ export const dateRange = derived(
   }
 );
 
+export const theme = writable("light");
+
 export const loading = writable(false);
 
 export const willClearTippy = writable(0);

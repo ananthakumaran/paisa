@@ -1,10 +1,8 @@
-import chroma from "chroma-js";
 import dayjs from "dayjs";
 import { sprintf } from "sprintf-js";
 import _ from "lodash";
 import * as d3 from "d3";
 import { loading } from "../store";
-import COLORS from "./colors";
 
 export interface Posting {
   id: string;
@@ -669,86 +667,6 @@ export function skipTicks<Domain>(
 
     return index % skip === 0 ? cb(data, index) : null;
   };
-}
-
-export function generateColorScheme(domain: string[]) {
-  let colors: string[];
-  const n = domain.length;
-
-  if (_.every(domain, (d) => _.has(COLORS, _.toLower(d)))) {
-    colors = _.map(domain, (d) => (COLORS as Record<string, string>)[_.toLower(d)]);
-  } else {
-    if (n <= 12) {
-      colors = {
-        1: ["#7570b3"],
-        2: ["#7fc97f", "#fdc086"],
-        3: ["#66c2a5", "#fc8d62", "#8da0cb"],
-        4: ["#66c2a5", "#fc8d62", "#8da0cb", "#e78ac3"],
-        5: ["#66c2a5", "#fc8d62", "#8da0cb", "#e78ac3", "#a6d854"],
-        6: ["#4e79a7", "#f28e2c", "#e15759", "#76b7b2", "#59a14f", "#edc949"],
-        7: ["#4e79a7", "#f28e2c", "#e15759", "#76b7b2", "#59a14f", "#edc949", "#af7aa1"],
-        8: ["#4e79a7", "#f28e2c", "#e15759", "#76b7b2", "#59a14f", "#edc949", "#af7aa1", "#ff9da7"],
-        9: [
-          "#4e79a7",
-          "#f28e2c",
-          "#e15759",
-          "#76b7b2",
-          "#59a14f",
-          "#edc949",
-          "#af7aa1",
-          "#ff9da7",
-          "#9c755f"
-        ],
-        10: [
-          "#4e79a7",
-          "#f28e2c",
-          "#e15759",
-          "#76b7b2",
-          "#59a14f",
-          "#edc949",
-          "#af7aa1",
-          "#ff9da7",
-          "#9c755f",
-          "#bab0ab"
-        ],
-        11: [
-          "#8dd3c7",
-          "#ffed6f",
-          "#bebada",
-          "#fb8072",
-          "#80b1d3",
-          "#fdb462",
-          "#b3de69",
-          "#fccde5",
-          "#d9d9d9",
-          "#bc80bd",
-          "#ccebc5"
-        ],
-        12: [
-          "#8dd3c7",
-          "#e5c494",
-          "#bebada",
-          "#fb8072",
-          "#80b1d3",
-          "#fdb462",
-          "#b3de69",
-          "#fccde5",
-          "#d9d9d9",
-          "#bc80bd",
-          "#ccebc5",
-          "#ffed6f"
-        ]
-      }[n];
-    } else {
-      const z = d3
-        .scaleSequential()
-        .domain([0, n - 1])
-        .interpolator(d3.interpolateSinebow);
-      colors = _.map(_.range(0, n), (n) => chroma(z(n)).desaturate(1.5).hex());
-    }
-  }
-
-  return d3.scaleOrdinal<string>().domain(domain).range(colors);
 }
 
 export function setHtml(selector: string, value: string, color?: string) {

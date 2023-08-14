@@ -396,6 +396,32 @@ svg text {
     border-left-color: $black;
     border-width: 2px;
   }
+
+  .cm-tooltip {
+    border: none;
+    box-shadow: $shadow;
+  }
+
+  .cm-tooltip-autocomplete > ul > li[aria-selected] {
+    background-color: $grey-lightest;
+    color: $black-ter;
+  }
+
+  .cm-completionMatchedText {
+    font-weight: bold;
+  }
+
+  .cm-tooltip-autocomplete > ul > li {
+    background-color: $white;
+    color: $black-ter;
+  }
+
+  .cm-diagnostic {
+    background: $white;
+    color: $black-ter;
+    font-size: 14px;
+    box-shadow: $shadow;
+  }
 }
 
 .template-editor .cm-editor {

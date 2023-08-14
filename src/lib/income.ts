@@ -5,7 +5,6 @@ import _ from "lodash";
 import {
   formatCurrency,
   formatCurrencyCrude,
-  generateColorScheme,
   type Income,
   type Posting,
   restName,
@@ -14,6 +13,7 @@ import {
   tooltip,
   type IncomeYearlyCard
 } from "./utils";
+import { generateColorScheme } from "./colors";
 
 export function renderMonthlyInvestmentTimeline(incomes: Income[]) {
   renderIncomeTimeline(incomes, "#d3-income-timeline", "MMM-YYYY");

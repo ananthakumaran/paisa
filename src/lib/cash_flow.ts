@@ -1,5 +1,4 @@
 import {
-  generateColorScheme,
   type Graph,
   type Node,
   formatCurrencyCrude,
@@ -17,7 +16,7 @@ import { tooltip } from "$lib/utils";
 import { formatCurrency } from "$lib/utils";
 import { iconify } from "$lib/icon";
 import { willClearTippy } from "../store";
-import COLORS from "./colors";
+import COLORS, { generateColorScheme } from "./colors";
 import textures from "textures";
 import chroma from "chroma-js";
 

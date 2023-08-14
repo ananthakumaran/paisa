@@ -261,7 +261,7 @@
           {#if $editorState.errors.length > 0}
             <div class="control ml-5">
               <a on:click={(_e) => moveToLine(editor, $editorState.errors[0].line_from)}
-                ><span class="ml-1 tag is-danger is-light"
+                ><span class="ml-1 tag invertable is-danger is-light"
                   >{$editorState.errors.length} error(s) found</span
                 ></a
               >

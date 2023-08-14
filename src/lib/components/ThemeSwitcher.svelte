@@ -1,13 +1,16 @@
 <script lang="ts">
   import { getColorPreference, setColorPreference } from "$lib/utils";
   import { onMount } from "svelte";
+  import * as store from "../../store";
 
   let theme = getColorPreference();
+  store.theme.set(theme);
 
   function setTheme(value: string) {
     theme = value;
     setColorPreference(value);
     reflectPreference();
+    store.theme.set(value);
   }
 
   const toggle = () => {

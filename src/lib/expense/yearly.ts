@@ -12,13 +12,12 @@ import {
   setHtml,
   skipTicks,
   tooltip,
-  generateColorScheme,
   secondName,
   financialYear,
   forEachFinancialYear,
   formatCurrencyCrudeWithPrecision
 } from "$lib/utils";
-import COLORS from "$lib/colors";
+import COLORS, { generateColorScheme } from "$lib/colors";
 import type { Writable } from "svelte/store";
 import { iconify } from "$lib/icon";
 import { byExpenseGroup, expenseGroup, pieData } from "$lib/expense";

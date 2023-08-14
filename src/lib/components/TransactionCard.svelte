@@ -1,5 +1,6 @@
 <script lang="ts">
-  import { iconify } from "$lib/icon";
+  import { accountColor } from "$lib/colors";
+  import { iconText } from "$lib/icon";
   import {
     formatCurrency,
     postingUrl,
@@ -18,7 +19,7 @@
 </script>
 
 <div class="box p-2 has-background-white">
-  <div class="is-flex is-justify-content-space-between">
+  <div class="is-flex is-justify-content-space-between is-align-items-baseline">
     <div class="has-text-grey is-size-7 truncate">
       <PostingStatus {posting} />
       <a class="secondary-link" href={postingUrl(posting)}>{posting.payee}</a>
@@ -32,9 +33,11 @@
   </div>
   <hr class="m-1" />
   {#each t.postings as posting}
+    {@const color = accountColor(firstName(posting.account))}
     <div class="my-1 is-flex is-flex-wrap-wrap is-justify-content-space-between">
       <div class="has-text-grey" title={posting.account}>
-        {iconify(restName(posting.account), { group: firstName(posting.account) })}
+        <span style:color>{iconText(posting.account)}</span>
+        {restName(posting.account)}
       </div>
       <div class="has-text-weight-bold is-size-6">
         {formatCurrency(posting.amount)}

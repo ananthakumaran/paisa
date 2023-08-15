@@ -23,7 +23,7 @@
           <b>{t.date.format("DD MMM YYYY")}</b>
           <span title={t.payee}
             ><PostingStatus posting={t.postings[0]} />
-            <a href={postingUrl(t.postings[0])}>{t.payee}</a></span
+            <a class="secondary-link" href={postingUrl(t.postings[0])}>{t.payee}</a></span
           >
         </div>
       </div>
@@ -41,7 +41,7 @@
           <b>{t.date.format("DD MMM YYYY")}</b>
           <span title={t.payee}
             ><PostingStatus posting={t.postings[0]} />
-            <a href={postingUrl(t.postings[0])}>{t.payee}</a></span
+            <a class="secondary-link" href={postingUrl(t.postings[0])}>{t.payee}</a></span
           >
         </div>
       </div>
@@ -57,11 +57,6 @@
 
 <style lang="scss">
   @import "bulma/sass/utilities/_all.sass";
-
-  .transaction.bordered {
-    border-bottom: 1px solid $grey-lighter;
-    padding-bottom: 1px;
-  }
 
   .description {
     display: inline-block;

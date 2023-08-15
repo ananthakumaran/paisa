@@ -22,7 +22,7 @@ export function renderIssues(issues: Issue[]) {
     .append("div")
     .attr("class", "column is-6")
     .append("div")
-    .attr("class", (i) => `message is-${i.level}`);
+    .attr("class", (i) => `message invertable is-${i.level}`);
 
   issue
     .append("div")

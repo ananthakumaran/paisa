@@ -49,7 +49,7 @@ export function renderPostings(postings: Posting[]) {
     const markup = `
 <tr class="${p.date.month() % 2 == 0 ? "has-background-white-ter" : ""}">
        <td>${date}</td>
-       <td>${postingStatus}<a href=${postingUrl(p)}>${p.payee}</a></td>
+       <td>${postingStatus}<a class="secondary-link" href=${postingUrl(p)}>${p.payee}</a></td>
        <td>${iconify(p.account)}</td>
        <td class='has-text-right'>${purchase}</td>
        <td class='has-text-right'>${units}</td>

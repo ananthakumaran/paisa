@@ -4,7 +4,6 @@ import (
 	"time"
 
 	"github.com/ananthakumaran/paisa/internal/accounting"
-	"github.com/ananthakumaran/paisa/internal/model/posting"
 	"github.com/ananthakumaran/paisa/internal/query"
 	"github.com/ananthakumaran/paisa/internal/utils"
 	"github.com/gin-gonic/gin"
@@ -22,23 +21,35 @@ type CashFlow struct {
 	Balance     float64   `json:"balance"`
 }
 
-func GetCashFlow(db *gorm.DB) gin.H {
-	return gin.H{"cash_flows": computeCashFlow(db)}
+func (c CashFlow) GroupDate() time.Time {
+	return c.Date
 }
 
-func computeCashFlow(db *gorm.DB) []CashFlow {
+func GetCashFlow(db *gorm.DB) gin.H {
+	return gin.H{"cash_flows": computeCashFlow(db, query.Init(db), 0)}
+}
+
+func GetCurrentCashFlow(db *gorm.DB) []CashFlow {
+	balance := accounting.CostSum(query.Init(db).BeforeNMonths(3).Like("Assets:Checking").All())
+	return computeCashFlow(db, query.Init(db).LastNMonths(3), balance)
+}
+
+func computeCashFlow(db *gorm.DB, q *query.Query, balance float64) []CashFlow {
 	var cashFlows []CashFlow
 
-	expenses := posting.GroupByMonth(query.Init(db).Like("Expenses:%").NotLike("Expenses:Tax").All())
-	incomes := posting.GroupByMonth(query.Init(db).Like("Income:%").All())
-	liabilities := posting.GroupByMonth(query.Init(db).Like("Liabilities:%").All())
-	investments := posting.GroupByMonth(query.Init(db).Like("Assets:%").NotLike("Assets:Checking").All())
-	taxes := posting.GroupByMonth(query.Init(db).Like("Expenses:Tax").All())
-	checkings := posting.GroupByMonth(query.Init(db).Like("Assets:Checking").All())
-	postings := query.Init(db).All()
+	expenses := utils.GroupByMonth(q.Clone().Like("Expenses:%").NotLike("Expenses:Tax").All())
+	incomes := utils.GroupByMonth(q.Clone().Like("Income:%").All())
+	liabilities := utils.GroupByMonth(q.Clone().Like("Liabilities:%").All())
+	investments := utils.GroupByMonth(q.Clone().Like("Assets:%").NotLike("Assets:Checking").All())
+	taxes := utils.GroupByMonth(q.Clone().Like("Expenses:Tax").All())
+	checkings := utils.GroupByMonth(q.Clone().Like("Assets:Checking").All())
+	postings := q.Clone().All()
+
+	if len(postings) == 0 {
+		return cashFlows
+	}
 
 	end := utils.MaxTime(time.Now(), postings[len(postings)-1].Date)
-	var balance float64 = 0
 	for start := utils.BeginningOfMonth(postings[0].Date); start.Before(end); start = start.AddDate(0, 1, 0) {
 		cashFlow := CashFlow{Date: start}
 

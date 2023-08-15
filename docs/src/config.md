@@ -5,14 +5,14 @@ directory. It can also be set via flag `--config` or env variable
 `PAISA_CONFIG`.
 
 ```yaml
-# Absolute path to your journal file. The main journal file can
-# refer other files using `include` as long as all the files are in
-# the same directory
+# Path to your journal file. It can be absolute or relative to the
+# config file. The main journal file can refer other files using
+# `include` as long as all the files are in the same or sub directory
 # REQUIRED
 journal_path: /home/john/finance/personal.ledger
 
-# Absolute path to your database file. The database file will be
-# created if it does not exist.
+# Path to your database file. It can be absolute or relative to the
+# config file. The database file will be created if it does not exist.
 # REQUIRED
 db_path: /home/john/finance/paisa.db
 

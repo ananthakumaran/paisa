@@ -1,0 +1,171 @@
+html[data-theme="dark"] {
+  $black-hue: 215;
+  $black-saturation: 18%;
+
+  $black: hsl(0, 0%, 95%) !default;
+  $black-bis: hsl(0, 0%, 83%) !default;
+  $black-ter: hsl(0, 0%, 81%) !default;
+
+  $grey-darker: hsl(0, 0%, 78%) !default;
+  $grey-dark: hsl(0, 0%, 63%) !default;
+  $grey: hsl(0, 0%, 48%) !default;
+  $grey-light: hsl($black-hue, $black-saturation, 35%) !default;
+  $grey-lighter: hsl($black-hue, $black-saturation, 27%) !default;
+  $grey-lightest: hsl($black-hue, $black-saturation, 21%) !default;
+
+  $white-ter: hsl($black-hue, $black-saturation, 20%) !default;
+  $white-bis: hsl($black-hue, $black-saturation, 13%) !default;
+  $white: hsl($black-hue, $black-saturation, 10%) !default;
+
+  $shadow:
+    0 0.5em 1em -0.125em rgba(0, 0, 0, 0.5),
+    0 0px 0 1px rgba(0, 0, 0, 0.5);
+
+  &:root {
+    color-scheme: dark;
+    --fa-border-color: hsl(0, 0%, 15%);
+  }
+
+  @import "./app.scss";
+
+  background: $white-bis;
+
+  &.paisa {
+    navbar.is-spaced .navbar-dropdown,
+    .navbar-dropdown.is-boxed {
+      box-shadow: $shadow;
+    }
+
+    .tippy-box[data-theme~="light"] {
+      background-color: $white;
+      box-shadow: $shadow;
+    }
+
+    .tippy-box[data-theme~="light"][data-placement^="top"] > .tippy-arrow:before {
+      border-top-color: $white;
+    }
+    .tippy-box[data-theme~="light"][data-placement^="bottom"] > .tippy-arrow:before {
+      border-bottom-color: $white;
+    }
+    .tippy-box[data-theme~="light"][data-placement^="left"] > .tippy-arrow:before {
+      border-left-color: $white;
+    }
+    .tippy-box[data-theme~="light"][data-placement^="right"] > .tippy-arrow:before {
+      border-right-color: $white;
+    }
+    .tippy-box[data-theme~="light"] > .tippy-backdrop {
+      background-color: $white;
+    }
+    .tippy-box[data-theme~="light"] > .tippy-svg-arrow {
+      fill: $white;
+    }
+
+    .tag.invertable:not(body) {
+      @each $name, $pair in $tag-colors {
+        $color: nth($pair, 1);
+        $color-invert: nth($pair, 2);
+        &.is-#{$name} {
+          background-color: $color-invert;
+          color: $color;
+          // If a light and dark colors are provided
+          @if length($pair) > 3 {
+            $color-light: nth($pair, 3);
+            $color-dark: nth($pair, 4);
+            &.is-light {
+              background-color: $color-dark;
+              color: $color-light;
+            } // Sizes
+          }
+        }
+      }
+    }
+
+    .notification {
+      @each $name, $pair in $notification-colors {
+        $color: nth($pair, 1);
+        $color-invert: nth($pair, 2);
+        &.is-#{$name} {
+          background-color: $color;
+          color: $color-invert;
+          // If light and dark colors are provided
+          @if length($pair) >= 4 {
+            $color-light: nth($pair, 3);
+            $color-dark: nth($pair, 4);
+            &.is-light {
+              background-color: $color-light;
+              color: $color-dark;
+            }
+          }
+        }
+      }
+    }
+
+    .message {
+      @each $name, $components in $message-colors {
+        $color: nth($components, 1);
+        $color-invert: nth($components, 2);
+        $color-light: null;
+        $color-dark: null;
+
+        @if length($components) >= 3 {
+          $color-light: nth($components, 3);
+          @if length($components) >= 4 {
+            $color-dark: nth($components, 4);
+          } @else {
+            $color-luminance: colorLuminance($color);
+            $darken-percentage: $color-luminance * 70%;
+            $desaturate-percentage: $color-luminance * 30%;
+            $color-dark: desaturate(darken($color, $darken-percentage), $desaturate-percentage);
+          }
+        } @else {
+          $color-lightning: max((100% - lightness($color)) - 2%, 0%);
+          $color-light: lighten($color, $color-lightning);
+        }
+
+        &.invertable.is-#{$name} {
+          .message-header {
+            color: $white-ter;
+          }
+          .message-body {
+            border-color: $white-ter;
+            background-color: $white-ter;
+          }
+        }
+      }
+    }
+
+    .button {
+      @each $name, $pair in $button-colors {
+        $color: nth($pair, 1);
+        $color-invert: nth($pair, 2);
+        &.is-#{$name} {
+          @if length($pair) >= 4 {
+            $color-light: nth($pair, 3);
+            $color-dark: nth($pair, 4);
+            &.invertable.is-light {
+              background-color: $color-dark;
+              color: $color-light;
+              &:hover,
+              &.is-hovered {
+                background-color: $color-dark;
+                border-color: transparent;
+                color: bulmaDarken($color-light, 2.5%);
+              }
+              &:active,
+              &.is-active {
+                background-color: $color-dark;
+                border-color: transparent;
+                color: bulmaDarken($color-light, 5%);
+              } // Sizes
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .du-menu :where(li ul) {
+    margin-left: 1rem;
+    padding-left: 0.5rem;
+  }
+}

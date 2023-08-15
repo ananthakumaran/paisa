@@ -50,7 +50,7 @@ export const ledger: StreamParser<State> = {
       return "tagName";
     }
 
-    if (stream.match(AMOUNT)) return "atom";
+    if (stream.match(AMOUNT)) return "number";
 
     const ch = stream.next();
     if (!ch) {

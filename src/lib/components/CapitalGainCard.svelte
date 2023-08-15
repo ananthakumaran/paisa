@@ -95,7 +95,7 @@
                     {@const fy = cg.fy[financialYear]}
                     <Toggleable>
                       <tr
-                        class={active ? "is-active" : ""}
+                        class={active ? "is-active has-background-white-ter" : ""}
                         style="cursor: pointer;"
                         slot="toggle"
                         let:active
@@ -152,9 +152,3 @@
     </div>
   </div>
 </div>
-
-<style>
-  .table tr.is-active {
-    background-color: #eee !important;
-  }
-</style>

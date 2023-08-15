@@ -4,7 +4,8 @@
     renderAllocationTarget,
     renderAllocationTimeline
   } from "$lib/allocation";
-  import { ajax, generateColorScheme } from "$lib/utils";
+  import { generateColorScheme } from "$lib/colors";
+  import { ajax } from "$lib/utils";
   import _ from "lodash";
   import { onMount, tick } from "svelte";
 

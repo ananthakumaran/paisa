@@ -1,101 +1,233 @@
 <script lang="ts">
-  import { ajax, formatCurrency, formatFloat } from "$lib/utils";
-  import COLORS from "$lib/colors";
-  import { renderOverview } from "$lib/overview";
+  import * as expense from "$lib/expense/monthly";
+  import * as cashFlow from "$lib/cash_flow";
+  import {
+    ajax,
+    sortTrantionSequence,
+    type CashFlow,
+    type Posting,
+    type TransactionSequence,
+    nextDate,
+    totalRecurring,
+    formatCurrencyCrude,
+    intervalText,
+    type Networth,
+    formatCurrency,
+    formatFloat,
+    type Transaction
+  } from "$lib/utils";
   import _ from "lodash";
-  import { onDestroy, onMount } from "svelte";
+  import { onMount } from "svelte";
+  import COLORS from "$lib/colors";
+  import dayjs from "dayjs";
+  import LastNMonths from "$lib/components/LastNMonths.svelte";
+  import TransactionCard from "$lib/components/TransactionCard.svelte";
 
-  let networth = 0;
-  let investment = 0;
-  let gain = 0;
+  import { MasonryGrid } from "@egjs/svelte-grid";
+
+  let UntypedMasonryGrid = MasonryGrid as any;
+
+  let month = dayjs().format("YYYY-MM");
+  let transactionSequences: TransactionSequence[] = [];
+  let cashFlows: CashFlow[] = [];
+  let expenses: { [key: string]: Posting[] } = {};
   let xirr = 0;
-  let svg: Element;
-  let destroyCallback: () => void;
+  let networth: Networth;
+  let renderer: (data: Posting[]) => void;
+  let totalExpense = 0;
+  let transactions: Transaction[] = [];
 
-  onDestroy(async () => {
-    destroyCallback();
-  });
+  const now = dayjs();
+
+  $: if (renderer && expenses[month]) {
+    renderer(expenses[month]);
+    totalExpense = _.sumBy(expenses[month], (p) => p.amount);
+  }
+
   onMount(async () => {
-    const result = await ajax("/api/overview");
-    const points = result.overview_timeline;
+    ({
+      expenses,
+      cashFlows,
+      transactionSequences,
+      networth: { networth, xirr },
+      transactions
+    } = await ajax("/api/dashboard"));
+    const postings = _.chain(expenses).values().flatten().value();
+    const z = expense.colorScale(postings);
+    renderer = expense.renderCurrentExpensesBreakdown(z);
+    renderer(expenses[month]);
 
-    const current = _.last(points);
-    networth = current.investment_amount + current.gain_amount - current.withdrawal_amount;
-    investment = current.investment_amount - current.withdrawal_amount;
-    gain = current.gain_amount;
-    xirr = result.xirr;
-
-    destroyCallback = renderOverview(points, svg);
+    cashFlow.renderMonthlyFlow("#d3-current-cash-flow", {
+      rotate: false,
+      balance: _.last(cashFlows)?.balance || 0
+    })(cashFlows);
+    transactionSequences = _.take(sortTrantionSequence(transactionSequences), 16);
   });
 </script>
 
-<section class="section tab-overview">
-  <div class="container">
-    <nav class="level">
-      <div class="level-item has-text-centered">
-        <div>
-          <p class="heading">Net worth</p>
-          <p class="title" style="background-color: {COLORS.primary};">
-            {formatCurrency(networth)}
-          </p>
+<section class="section tab-networth">
+  <div class="container is-fluid">
+    <div class="tile is-ancestor is-align-items-start">
+      <div class="tile is-4">
+        <div class="tile is-vertical">
+          <div class="tile is-parent">
+            <div class="tile is-child px-3">
+              <div class="content">
+                <div class="subtitle">
+                  <a class="secondary-link" href="/assets/networth">Assets</a>
+                </div>
+                <div class="content">
+                  <div>
+                    {#if networth}
+                      <nav class="level">
+                        <div class="level-item is-narrow has-text-centered">
+                          <div>
+                            <p class="heading">Net worth</p>
+                            <p class="title" style="background-color: {COLORS.primary};">
+                              {formatCurrency(networth.balanceAmount)}
+                            </p>
+                          </div>
+                        </div>
+                        <div class="level-item is-narrow has-text-centered">
+                          <div>
+                            <p class="heading">Net Investment</p>
+                            <p class="title" style="background-color: {COLORS.secondary};">
+                              {formatCurrency(networth.netInvestmentAmount)}
+                            </p>
+                          </div>
+                        </div>
+                      </nav>
+                      <nav class="level">
+                        <div class="level-item is-narrow has-text-centered">
+                          <div>
+                            <p class="heading">Gain / Loss</p>
+                            <p
+                              class="title"
+                              style="background-color: {networth.gainAmount >= 0
+                                ? COLORS.gainText
+                                : COLORS.lossText};"
+                            >
+                              {formatCurrency(networth.gainAmount)}
+                            </p>
+                          </div>
+                        </div>
+                        <div class="level-item is-narrow has-text-centered">
+                          <div>
+                            <p class="heading">XIRR</p>
+                            <p class="title has-text-black-ter">{formatFloat(xirr)}</p>
+                          </div>
+                        </div>
+                      </nav>
+                    {/if}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="tile is-parent">
+            <article class="tile is-child">
+              <p class="subtitle">
+                <a class="secondary-link" href="/cash_flow/monthly">Cash Flow</a>
+              </p>
+              <div class="content box px-3">
+                <svg id="d3-current-cash-flow" height="300" width="100%" />
+              </div>
+            </article>
+          </div>
         </div>
       </div>
-      <div class="level-item has-text-centered">
-        <div>
-          <p class="heading">Net Investment</p>
-          <p class="title" style="background-color: {COLORS.secondary};">
-            {formatCurrency(investment)}
-          </p>
+      <div class="tile is-vertical">
+        <div class="tile is-parent is-12">
+          <article class="tile is-child">
+            <p class="subtitle is-flex is-justify-content-space-between is-align-items-end">
+              <span
+                ><a class="secondary-link" href="/expense/monthly">Expenses</a>
+                <span
+                  class="is-size-5 has-text-weight-bold px-2 has-text-white"
+                  style="background-color: {COLORS.lossText};">{formatCurrency(totalExpense)}</span
+                ></span
+              >
+              <LastNMonths n={3} bind:value={month} />
+            </p>
+            <div class="content box px-3">
+              <svg id="d3-current-month-breakdown" width="100%" />
+            </div>
+          </article>
+        </div>
+        {#if !_.isEmpty(transactionSequences)}
+          <div class="tile">
+            <div class="tile is-parent is-12">
+              <article class="tile is-child">
+                <div class="content">
+                  <p class="subtitle">
+                    <a class="secondary-link" href="/cash_flow/recurring">Recurring</a>
+                  </p>
+                  <div class="content box">
+                    <div
+                      class="is-flex is-justify-content-flex-start is-flex-wrap-wrap"
+                      style="overflow: hidden; max-height: 190px"
+                    >
+                      {#each transactionSequences as ts}
+                        {@const n = nextDate(ts)}
+                        <div class="has-text-centered mb-3 mr-3 max-w-[200px] border-2">
+                          <div class="is-size-7 truncate">{ts.key.tagRecurring}</div>
+                          <div class="my-1">
+                            <span class="tag is-light">{intervalText(ts)}</span>
+                          </div>
+                          <div class="has-text-grey is-size-7">
+                            <span class="icon has-text-grey-light">
+                              <i class="fas fa-calendar" />
+                            </span>
+                            {n.format("DD MMM YYYY")}
+                          </div>
+                          <div
+                            class="m-3 du-radial-progress is-size-7"
+                            style="--value: {n.isBefore(now)
+                              ? '0'
+                              : (n.diff(now, 'day') / ts.interval) *
+                                100}; --thickness: 3px; --size: 100px; color: {n.isBefore(now)
+                              ? COLORS.danger
+                              : COLORS.success};"
+                          >
+                            <span>{formatCurrencyCrude(totalRecurring(ts))}</span>
+                            <span>due {n.fromNow()}</span>
+                          </div>
+                        </div>
+                      {/each}
+                    </div>
+                  </div>
+                </div>
+              </article>
+            </div>
+          </div>
+        {/if}
+        <div class="tile">
+          <div class="tile is-parent is-12">
+            <article class="tile is-child">
+              <div class="content">
+                <p class="subtitle">
+                  <a class="secondary-link" href="/ledger/transaction">Recent Transactions</a>
+                </p>
+                <div>
+                  <UntypedMasonryGrid gap={10} maxStretchColumnSize={500} align="stretch">
+                    {#each _.take(transactions, 20) as t}
+                      <div class="mr-3 is-flex-grow-1">
+                        <TransactionCard {t} />
+                      </div>
+                    {/each}
+                  </UntypedMasonryGrid>
+                </div>
+              </div>
+            </article>
+          </div>
         </div>
       </div>
-      <div class="level-item has-text-centered">
-        <div>
-          <p class="heading">Gain / Loss</p>
-          <p
-            class="title"
-            style="background-color: {gain >= 0 ? COLORS.gainText : COLORS.lossText};"
-          >
-            {formatCurrency(gain)}
-          </p>
-        </div>
-      </div>
-      <div class="level-item has-text-centered">
-        <div>
-          <p class="heading">XIRR</p>
-          <p class="title has-text-black">{formatFloat(xirr)}</p>
-        </div>
-      </div>
-    </nav>
+    </div>
   </div>
 </section>
 
-<section class="section tab-overview">
-  <div class="container is-fluid">
-    <div class="columns">
-      <div class="column is-12">
-        <div class="box">
-          <svg id="d3-overview-timeline" width="100%" height="500" bind:this={svg} />
-        </div>
-      </div>
-    </div>
-    <div class="columns">
-      <div class="column is-12 has-text-centered">
-        <div>
-          <p class="heading">Networth Timeline</p>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="container is-fluid">
-    <div class="columns">
-      <div id="d3-overview-timeline-breakdown" class="column is-12" />
-    </div>
-  </div>
-</section>
-
-<style>
-  .level-item p.title {
-    padding: 5px;
-    color: white;
+<style lang="scss">
+  .content p.subtitle {
+    margin-bottom: 10px;
   }
 </style>

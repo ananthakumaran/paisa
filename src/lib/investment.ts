@@ -7,13 +7,13 @@ import {
   formatCurrency,
   formatCurrencyCrude,
   formatFloat,
-  generateColorScheme,
   type Posting,
   secondName,
   skipTicks,
   tooltip,
   type InvestmentYearlyCard
 } from "./utils";
+import { generateColorScheme } from "./colors";
 
 function financialYear(card: InvestmentYearlyCard) {
   return `${card.start_date.format("YYYY")} - ${card.end_date.format("YY")}`;

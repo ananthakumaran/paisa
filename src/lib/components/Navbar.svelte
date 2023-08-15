@@ -8,6 +8,7 @@
   import { get } from "svelte/store";
   import dayjs from "dayjs";
   import DateRange from "./DateRange.svelte";
+  import ThemeSwitcher from "./ThemeSwitcher.svelte";
   export let isBurger: boolean = null;
 
   onMount(async () => {
@@ -27,7 +28,7 @@
     children?: Link[];
   }
   const links: Link[] = [
-    { label: "Overview", href: "/" },
+    { label: "Dashboard", href: "/" },
     {
       label: "Cash Flow",
       href: "/cash_flow",
@@ -50,6 +51,7 @@
       href: "/assets",
       children: [
         { label: "Balance", href: "/balance" },
+        { label: "Networth", href: "/networth" },
         { label: "Investment", href: "/investment" },
         { label: "Gain", href: "/gain" },
         { label: "Allocation", href: "/allocation", help: "allocation-targets" },
@@ -174,6 +176,9 @@
       <div class="navbar-item">
         <div class="field is-grouped">
           <p class="control">
+            <ThemeSwitcher />
+          </p>
+          <p class="control">
             <Sync />
           </p>
         </div>
@@ -273,16 +278,3 @@
     {/if}
   </div>
 </div>
-
-<style lang="scss">
-  .breadcrumb.has-chevron-separator li + li::before {
-    content: "";
-    color: hsl(229deg, 53%, 53%);
-  }
-
-  a.is-inactive {
-    color: hsl(0deg, 0%, 21%);
-    cursor: default;
-    pointer-events: none;
-  }
-</style>

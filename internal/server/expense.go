@@ -6,6 +6,7 @@ import (
 	"github.com/ananthakumaran/paisa/internal/model/posting"
 	"github.com/ananthakumaran/paisa/internal/model/transaction"
 	"github.com/ananthakumaran/paisa/internal/query"
+	"github.com/ananthakumaran/paisa/internal/utils"
 	"github.com/gin-gonic/gin"
 	"github.com/samber/lo"
 	"gorm.io/gorm"
@@ -32,6 +33,11 @@ type Graph struct {
 	Links []Link `json:"links"`
 }
 
+func GetCurrentExpense(db *gorm.DB) map[string][]posting.Posting {
+	expenses := query.Init(db).LastNMonths(3).Like("Expenses:%").NotLike("Expenses:Tax").All()
+	return utils.GroupByMonth(expenses)
+}
+
 func GetExpense(db *gorm.DB) gin.H {
 	expenses := query.Init(db).Like("Expenses:%").NotLike("Expenses:Tax").All()
 	incomes := query.Init(db).Like("Income:%").All()
@@ -40,22 +46,22 @@ func GetExpense(db *gorm.DB) gin.H {
 	postings := query.Init(db).All()
 
 	graph := make(map[string]Graph)
-	for fy, ps := range posting.GroupByFY(postings) {
+	for fy, ps := range utils.GroupByFY(postings) {
 		graph[fy] = computeGraph(ps)
 	}
 
 	return gin.H{
 		"expenses": expenses,
 		"month_wise": gin.H{
-			"expenses":    posting.GroupByMonth(expenses),
-			"incomes":     posting.GroupByMonth(incomes),
-			"investments": posting.GroupByMonth(investments),
-			"taxes":       posting.GroupByMonth(taxes)},
+			"expenses":    utils.GroupByMonth(expenses),
+			"incomes":     utils.GroupByMonth(incomes),
+			"investments": utils.GroupByMonth(investments),
+			"taxes":       utils.GroupByMonth(taxes)},
 		"year_wise": gin.H{
-			"expenses":    posting.GroupByFY(expenses),
-			"incomes":     posting.GroupByFY(incomes),
-			"investments": posting.GroupByFY(investments),
-			"taxes":       posting.GroupByFY(taxes)},
+			"expenses":    utils.GroupByFY(expenses),
+			"incomes":     utils.GroupByFY(incomes),
+			"investments": utils.GroupByFY(investments),
+			"taxes":       utils.GroupByFY(taxes)},
 		"graph": graph}
 }
 

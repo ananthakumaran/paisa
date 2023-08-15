@@ -3,10 +3,9 @@ export const ssr = false;
 
 import type { LayoutLoad } from "./$types";
 
-import "../app.scss";
-import "tippy.js/dist/tippy.css";
-import "tippy.js/themes/light.css";
-import "clusterize.js/clusterize.css";
+import "../common.scss";
+import "../light.scss";
+import "../dark.scss";
 
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";

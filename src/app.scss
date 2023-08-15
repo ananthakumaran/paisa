@@ -1,5 +1,3 @@
-$fa-font-path: "../node_modules/@fortawesome/fontawesome-free/webfonts";
-
 $family-sans-serif:
   BlinkMacSystemFont,
   -apple-system,
@@ -26,44 +24,15 @@ $card-header-shadow: 0 0.05em 0.1em rgba(10, 10, 10, 0.1);
 
 $switch-focus: none;
 
-@import "@fortawesome/fontawesome-free/scss/fontawesome.scss";
-@import "@fortawesome/fontawesome-free/scss/regular.scss";
-@import "@fortawesome/fontawesome-free/scss/solid.scss";
-@import "@fortawesome/fontawesome-free/scss/brands.scss";
-
 @import "bulma/sass/utilities/_all.sass";
 
-$grey-lightest: hsl(0, 0%, 93%);
 $menu-item-hover-background-color: $link-light;
 $menu-item-active-color: $link-dark;
 $menu-item-active-background-color: $link-light;
 
-@font-face {
-  font-family: "Font Awesome 6 Free Solid";
-  font-style: normal;
-  font-weight: 900;
-  font-display: $fa-font-display;
-  src:
-    url("#{$fa-font-path}/fa-solid-900.woff2") format("woff2"),
-    url("#{$fa-font-path}/fa-solid-900.ttf") format("truetype");
-}
-
-@font-face {
-  font-family: "Font Awesome 6 Free Brands";
-  font-style: normal;
-  font-weight: 900;
-  font-display: $fa-font-display;
-  src:
-    url("#{$fa-font-path}/fa-brands-400.woff2") format("woff2"),
-    url("#{$fa-font-path}/fa-brands-400.ttf") format("truetype");
-}
-
 @import "bulma/bulma.sass";
 @import "bulma-switch/src/sass/index.sass";
 @import "@cityssm/bulma-sticky-table/sticky-table";
-
-@tailwind components;
-@tailwind utilities;
 
 // daisy UI color override
 .du-tabs {
@@ -92,12 +61,12 @@ $menu-item-active-background-color: $link-light;
 
   a:hover,
   summary:hover {
-    background-color: findLightColor($link) !important;
+    background-color: $white-ter !important;
   }
 
   a.du-active {
     color: $link !important;
-    background-color: findLightColor($link) !important;
+    background-color: $white-ter !important;
     font-weight: bold;
   }
 }
@@ -106,8 +75,18 @@ $menu-item-active-background-color: $link-light;
   outline: 0;
 }
 
+html,
 body {
   font-size: 14px;
+  background: $white-bis;
+}
+
+.secondary-link {
+  color: $grey-dark;
+  &:hover {
+    color: $link;
+    text-decoration: underline;
+  }
 }
 
 .inline-text text {
@@ -147,8 +126,20 @@ svg text {
   fill: $grey-light;
 }
 
+.svg-text-shadow {
+  text-shadow: 0px 0px 2px $white;
+}
+
 .svg-text-grey {
   fill: $grey;
+}
+
+.svg-text-black {
+  fill: $black;
+}
+
+.svg-text-black-ter {
+  fill: $black-ter;
 }
 
 .svg-text-grey-darker {
@@ -156,7 +147,7 @@ svg text {
 }
 
 .svg-text-grey-dark {
-  fill: $grey-dark;
+  fill: $grey;
 }
 
 .svg-grey-light {
@@ -233,20 +224,20 @@ svg text {
   opacity: 0.5;
 }
 
-.legendOrdinal .label,
-.legendLine .label {
-  display: block;
-  font-size: 11px;
-  letter-spacing: 1px;
-  margin-bottom: 5px;
-  text-transform: uppercase;
-  font-weight: normal;
-  color: $grey;
-  fill: $grey;
+.legendOrdinal,
+.legendLine {
+  .label {
+    display: block;
+    font-size: 11px;
+    text-transform: capitalize;
+    font-weight: normal;
+    color: $grey;
+    fill: $grey;
 
-  &.selected {
-    fill: $grey-darker;
-    font-weight: bold;
+    &.selected {
+      fill: $grey-darker;
+      font-weight: bold;
+    }
   }
 }
 
@@ -255,7 +246,7 @@ svg text {
 #d3-income-timeline .legendOrdinal .label,
 #d3-repayment-timeline .legendOrdinal .label,
 #d3-breakdown .legendOrdinal .label {
-  font-size: 8px;
+  font-size: 10px;
 }
 
 #d3-salary-timeline .x.axis > g.tick {
@@ -362,6 +353,11 @@ svg text {
   padding-right: 24px;
 }
 
+.level-item p.title {
+  padding: 5px;
+  color: $white;
+}
+
 .navbar-item,
 .navbar-link {
   &.is-active {
@@ -383,7 +379,48 @@ svg text {
 
   .cm-activeLine,
   .cm-activeLineGutter {
-    background-color: findLightColor($link) !important;
+    background-color: $white-bis !important;
+  }
+
+  .cm-line .ͼd {
+    color: $link;
+    font-weight: bold;
+  }
+
+  .cm-line .ͼg {
+    color: $link;
+  }
+
+  .cm-cursor,
+  .cm-dropCursor {
+    border-left-color: $black;
+    border-width: 2px;
+  }
+
+  .cm-tooltip {
+    border: none;
+    box-shadow: $shadow;
+  }
+
+  .cm-tooltip-autocomplete > ul > li[aria-selected] {
+    background-color: $grey-lightest;
+    color: $black-ter;
+  }
+
+  .cm-completionMatchedText {
+    font-weight: bold;
+  }
+
+  .cm-tooltip-autocomplete > ul > li {
+    background-color: $white;
+    color: $black-ter;
+  }
+
+  .cm-diagnostic {
+    background: $white;
+    color: $black-ter;
+    font-size: 14px;
+    box-shadow: $shadow;
   }
 }
 
@@ -407,6 +444,17 @@ svg text {
 }
 
 .svelte-select {
+  --background: #{$white};
+  --list-background: #{$white};
+  --item-hover-bg: #{$white-bis};
+  --item-hover-color: #{$black-bis};
+  --item-is-active-bg: #{$white-ter};
+  --item-is-active-color: #{$black-ter};
+  --border: 1px solid #{$grey-lighter};
+  --border-focused: 1px solid #{$grey-lighter};
+  --border-hover: 1px solid #{$grey-lighter};
+  --list-shadow: #{$shadow};
+
   .item.active span.name {
     font-weight: bold;
   }
@@ -416,19 +464,6 @@ svg text {
     .tag {
       font-weight: normal !important;
     }
-  }
-
-  border: 1px solid $grey-lighter !important;
-
-  &.focused,
-  &:hover {
-    border: 1px solid $grey-light !important;
-  }
-
-  .svelte-select-list {
-    box-shadow:
-      0 8px 8px rgba(10, 10, 10, 0.1),
-      0 0 0 1px rgba(10, 10, 10, 0.1) !important;
   }
 }
 
@@ -449,4 +484,114 @@ svg text {
       }
     }
   }
+}
+
+.custom-arrow-prev {
+  border-radius: $radius 0 0 $radius;
+  left: 0;
+}
+
+.custom-arrow-next {
+  border-radius: 0 $radius $radius 0;
+  right: 0;
+}
+
+.custom-arrow {
+  width: 25px;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  z-index: 1;
+  transition: opacity 150ms ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  background-color: $white-bis;
+
+  &:hover {
+    background-color: $white-ter;
+  }
+}
+
+nav.breadcrumb a.is-inactive {
+  color: $grey-darker;
+  cursor: default;
+  pointer-events: none;
+}
+
+.breadcrumb.has-chevron-separator li + li::before {
+  content: "";
+  color: hsl(229deg, 53%, 53%);
+}
+
+div.small-box:hover {
+  background-color: $white-bis;
+}
+
+span.progress-percent {
+  position: absolute;
+  top: 0;
+  margin-right: 5px;
+  margin-top: 2px;
+  color: $white;
+}
+
+span.progress-percent.less-than-10 {
+  margin-left: 5px;
+  color: $black-ter;
+}
+
+.progress {
+  background: $white-ter;
+}
+
+.circle-container {
+  margin: auto;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  height: 100px;
+  width: 100px;
+
+  svg {
+    position: absolute;
+    left: 15px;
+    top: 10px;
+  }
+
+  .circle {
+    height: 60px;
+    width: 60px;
+    border-color: $grey-dark $grey-dark transparent transparent;
+    border-width: 3px;
+    border-style: solid;
+    border-image: initial;
+    border-radius: 50%;
+    animation: 0.75s linear 0s infinite normal none running rotate;
+  }
+
+  @keyframes rotate {
+    0% {
+      transform: rotate(0);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+}
+
+.transaction.bordered {
+  border-bottom: 1px solid $grey-lighter;
+  padding-bottom: 1px;
+}
+
+.dropzone {
+  border-color: $white-ter !important;
+  background-color: $white-bis !important;
+  color: $grey !important;
+  transition: none !important;
 }

@@ -8,7 +8,8 @@ import {
   tooltip,
   skipTicks,
   type PortfolioAggregate,
-  type CommodityBreakdown
+  type CommodityBreakdown,
+  getColorPreference
 } from "./utils";
 
 export function filterCommodityBreakdowns(
@@ -105,10 +106,10 @@ export function renderPortfolioBreakdown(
 
   let z: any;
   if (!_.isEmpty(groups)) {
-    z = d3
-      .scaleOrdinal<string>()
-      .domain(groups)
-      .range(options.z || d3.schemePastel2);
+    const range =
+      options.z || (getColorPreference() == "dark" ? d3.schemeCategory10 : d3.schemePastel2);
+
+    z = d3.scaleOrdinal<string>().domain(groups).range(range);
   }
 
   return (portfolioAggregates: PortfolioAggregate[], color: d3.ScaleOrdinal<string, string>) => {
@@ -209,7 +210,7 @@ export function renderPortfolioBreakdown(
       .append("text")
       .text((t) => formatName(t.group))
       .attr("dominant-baseline", "middle")
-      .classed("svg-text-grey-dark", true)
+      .classed("svg-text-black svg-text-shadow", true)
       .attr("x", 5)
       .attr("y", (t) => y(t.id) + BAR_HEIGHT / 2);
 

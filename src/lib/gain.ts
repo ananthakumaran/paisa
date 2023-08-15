@@ -11,7 +11,7 @@ import {
   formatCurrencyCrude,
   formatFloat,
   type Gain,
-  type Overview,
+  type Networth,
   tooltip,
   skipTicks,
   restName,
@@ -62,12 +62,12 @@ export function renderOverview(gains: Gain[]) {
   const colors = [COLORS.primary, COLORS.secondary, COLORS.tertiary, COLORS.gain, COLORS.loss];
   const z = d3.scaleOrdinal<string>(colors).domain(keys);
 
-  const getInvestmentAmount = (g: Gain) => g.overview.investment_amount;
+  const getInvestmentAmount = (g: Gain) => g.networth.investmentAmount;
 
-  const getGainAmount = (g: Gain) => g.overview.gain_amount;
-  const getWithdrawalAmount = (g: Gain) => g.overview.withdrawal_amount;
+  const getGainAmount = (g: Gain) => g.networth.gainAmount;
+  const getWithdrawalAmount = (g: Gain) => g.networth.withdrawalAmount;
 
-  const getBalanceAmount = (g: Gain) => g.overview.balance_amount;
+  const getBalanceAmount = (g: Gain) => g.networth.balanceAmount;
 
   const maxX = _.chain(gains)
     .map((g) => getInvestmentAmount(g) + _.max([getGainAmount(g), 0]))
@@ -282,22 +282,19 @@ export function renderOverview(gains: Gain[]) {
     .append("rect")
     .attr("fill", "transparent")
     .attr("data-tippy-content", (g: Gain) => {
-      const current = g.overview;
+      const current = g.networth;
       return tooltip([
         ["Account", [g.account, "has-text-weight-bold has-text-right"]],
         [
           "Investment",
-          [formatCurrency(current.investment_amount), "has-text-weight-bold has-text-right"]
+          [formatCurrency(current.investmentAmount), "has-text-weight-bold has-text-right"]
         ],
         [
           "Withdrawal",
-          [formatCurrency(current.withdrawal_amount), "has-text-weight-bold has-text-right"]
+          [formatCurrency(current.withdrawalAmount), "has-text-weight-bold has-text-right"]
         ],
-        ["Gain", [formatCurrency(current.gain_amount), "has-text-weight-bold has-text-right"]],
-        [
-          "Balance",
-          [formatCurrency(current.balance_amount), "has-text-weight-bold has-text-right"]
-        ],
+        ["Gain", [formatCurrency(current.gainAmount), "has-text-weight-bold has-text-right"]],
+        ["Balance", [formatCurrency(current.balanceAmount), "has-text-weight-bold has-text-right"]],
         ["XIRR", [formatFloat(g.xirr), "has-text-weight-bold has-text-right"]]
       ]);
     })
@@ -307,7 +304,7 @@ export function renderOverview(gains: Gain[]) {
     .attr("width", width);
 }
 
-export function renderAccountOverview(points: Overview[], postings: Posting[], id: string) {
+export function renderAccountOverview(points: Networth[], postings: Posting[], id: string) {
   const start = _.min(_.map(points, (p) => p.date)),
     end = dayjs();
 
@@ -328,16 +325,16 @@ export function renderAccountOverview(points: Overview[], postings: Posting[], i
     .domain(lineKeys)
     .range([COLORS.primary, COLORS.secondary]);
 
-  const positions = _.flatMap(points, (p) => [p.balance_amount, p.net_investment_amount]);
+  const positions = _.flatMap(points, (p) => [p.balanceAmount, p.netInvestmentAmount]);
   positions.push(0);
 
   const x = d3.scaleTime().range([0, width]).domain([start, end]),
     y = d3.scaleLinear().range([height, 0]).domain(d3.extent(positions)),
     z = d3.scaleOrdinal<string>(colors).domain(areaKeys);
 
-  const area = (y0: number, y1: (d: Overview) => number) =>
+  const area = (y0: number, y1: (d: Networth) => number) =>
     d3
-      .area<Overview>()
+      .area<Networth>()
       .curve(d3.curveBasis)
       .x((d) => x(d.date))
       .y0(y0)
@@ -388,7 +385,7 @@ export function renderAccountOverview(points: Overview[], postings: Posting[], i
     .attr(
       "d",
       area(height, (d) => {
-        return y(d.gain_amount + d.investment_amount - d.withdrawal_amount);
+        return y(d.gainAmount + d.investmentAmount - d.withdrawalAmount);
       })
     );
 
@@ -400,7 +397,7 @@ export function renderAccountOverview(points: Overview[], postings: Posting[], i
     .attr(
       "d",
       area(0, (d) => {
-        return y(d.gain_amount + d.investment_amount - d.withdrawal_amount);
+        return y(d.gainAmount + d.investmentAmount - d.withdrawalAmount);
       })
     );
 
@@ -412,7 +409,7 @@ export function renderAccountOverview(points: Overview[], postings: Posting[], i
     .attr(
       "d",
       area(0, (d) => {
-        return y(d.investment_amount - d.withdrawal_amount);
+        return y(d.investmentAmount - d.withdrawalAmount);
       })
     );
 
@@ -424,7 +421,7 @@ export function renderAccountOverview(points: Overview[], postings: Posting[], i
     .attr(
       "d",
       area(height, (d) => {
-        return y(d.investment_amount - d.withdrawal_amount);
+        return y(d.investmentAmount - d.withdrawalAmount);
       })
     );
 
@@ -435,10 +432,10 @@ export function renderAccountOverview(points: Overview[], postings: Posting[], i
     .attr(
       "d",
       d3
-        .line<Overview>()
+        .line<Networth>()
         .curve(d3.curveBasis)
         .x((d) => x(d.date))
-        .y((d) => y(d.net_investment_amount))
+        .y((d) => y(d.netInvestmentAmount))
     );
 
   layer
@@ -448,17 +445,17 @@ export function renderAccountOverview(points: Overview[], postings: Posting[], i
     .attr(
       "d",
       d3
-        .line<Overview>()
+        .line<Networth>()
         .curve(d3.curveBasis)
         .x((d) => x(d.date))
-        .y((d) => y(d.balance_amount))
+        .y((d) => y(d.balanceAmount))
     );
 
   const hoverCircle = layer.append("circle").attr("r", "3").attr("fill", "none");
   const t = tippy(hoverCircle.node(), { theme: "light", delay: 0, allowHTML: true });
 
-  const balanceVoronoiPoints = _.map(points, (d) => [x(d.date), y(d.balance_amount)]);
-  const investmentVoronoiPoints = _.map(points, (d) => [x(d.date), y(d.net_investment_amount)]);
+  const balanceVoronoiPoints = _.map(points, (d) => [x(d.date), y(d.balanceAmount)]);
+  const investmentVoronoiPoints = _.map(points, (d) => [x(d.date), y(d.netInvestmentAmount)]);
   const voronoi = Delaunay.from(balanceVoronoiPoints.concat(investmentVoronoiPoints)).voronoi([
     0,
     0,
@@ -472,7 +469,7 @@ export function renderAccountOverview(points: Overview[], postings: Posting[], i
     .data(
       points.map((p) => ["balance", p]).concat(points.map((p) => ["investment", p])) as [
         string,
-        Overview
+        Networth
       ][]
     )
     .enter()
@@ -485,19 +482,19 @@ export function renderAccountOverview(points: Overview[], postings: Posting[], i
     .on("mouseover", (_, [pointType, d]) => {
       hoverCircle
         .attr("cx", x(d.date))
-        .attr("cy", y(pointType == "balance" ? d.balance_amount : d.net_investment_amount))
+        .attr("cy", y(pointType == "balance" ? d.balanceAmount : d.netInvestmentAmount))
         .attr("fill", lineScale(pointType));
 
       t.setProps({
         placement: pointType == "balance" ? "top" : "bottom",
         content: tooltip([
           ["Date", d.date.format("DD MMM YYYY")],
-          ["Balance", [formatCurrency(d.balance_amount), "has-text-weight-bold has-text-right"]],
+          ["Balance", [formatCurrency(d.balanceAmount), "has-text-weight-bold has-text-right"]],
           [
             "Net Investment",
-            [formatCurrency(d.net_investment_amount), "has-text-weight-bold has-text-right"]
+            [formatCurrency(d.netInvestmentAmount), "has-text-weight-bold has-text-right"]
           ],
-          ["Gain / Loss", [formatCurrency(d.gain_amount), "has-text-weight-bold has-text-right"]]
+          ["Gain / Loss", [formatCurrency(d.gainAmount), "has-text-weight-bold has-text-right"]]
         ])
       });
       t.show();

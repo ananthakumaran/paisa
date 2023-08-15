@@ -129,10 +129,3 @@
     </div>
   </div>
 </section>
-
-<style>
-  .level-item p.title {
-    padding: 5px;
-    color: white;
-  }
-</style>

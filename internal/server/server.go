@@ -36,9 +36,15 @@ func Listen(db *gorm.DB) {
 
 		c.JSON(200, Sync(db, syncRequest))
 	})
-	router.GET("/api/overview", func(c *gin.Context) {
-		c.JSON(200, GetOverview(db))
+
+	router.GET("/api/dashboard", func(c *gin.Context) {
+		c.JSON(200, GetDashboard(db))
 	})
+
+	router.GET("/api/networth", func(c *gin.Context) {
+		c.JSON(200, GetNetworth(db))
+	})
+
 	router.GET("/api/assets/balance", func(c *gin.Context) {
 		c.JSON(200, assets.GetBalance(db))
 	})

@@ -12,10 +12,9 @@ import {
   secondName,
   textColor,
   tooltip,
-  skipTicks,
-  generateColorScheme
+  skipTicks
 } from "./utils";
-import COLORS from "./colors";
+import COLORS, { generateColorScheme } from "./colors";
 import chroma from "chroma-js";
 
 export function renderAllocationTarget(

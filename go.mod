@@ -7,6 +7,7 @@ require (
 	github.com/ChizhovVadim/xirr v0.0.0-20210210181856-508bc36c62aa
 	github.com/bmatcuk/doublestar/v4 v4.6.0
 	github.com/gin-gonic/gin v1.8.1
+	github.com/gofrs/uuid v4.4.0+incompatible
 	github.com/google/btree v1.1.2
 	github.com/logrusorgru/aurora v2.0.3+incompatible
 	github.com/manifoldco/promptui v0.9.0
@@ -28,8 +29,6 @@ require (
 	github.com/go-playground/universal-translator v0.18.0 // indirect
 	github.com/go-playground/validator/v10 v10.11.0 // indirect
 	github.com/goccy/go-json v0.9.11 // indirect
-	github.com/gofrs/uuid v4.4.0+incompatible // indirect
-	github.com/google/go-cmp v0.5.8 // indirect
 	github.com/inconshreveable/mousetrap v1.0.0 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.4 // indirect

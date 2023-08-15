@@ -20,7 +20,10 @@
   onMount(async () => {
     ({ cash_flows: cashFlows } = await ajax("/api/cash_flow"));
     setAllowedDateRange(_.map(cashFlows, (c) => c.date));
-    renderer = renderMonthlyFlow();
+    renderer = renderMonthlyFlow("#d3-monthly-cash-flow", {
+      rotate: true,
+      balance: _.last(cashFlows)?.balance || 0
+    });
   });
 </script>
 

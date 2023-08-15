@@ -164,7 +164,10 @@
         <div class="box p-3 is-flex is-align-items-center" style="width: 100%">
           <div class="field has-addons mb-0">
             <p class="control">
-              <button class="button is-small is-link is-light" on:click={(_e) => openCreateModal()}>
+              <button
+                class="button is-small is-link invertable is-light"
+                on:click={(_e) => openCreateModal()}
+              >
                 <span class="icon is-small">
                   <i class="fas fa-file-circle-plus" />
                 </span>
@@ -258,7 +261,7 @@
           {#if $editorState.errors.length > 0}
             <div class="control ml-5">
               <a on:click={(_e) => moveToLine(editor, $editorState.errors[0].line_from)}
-                ><span class="ml-1 tag is-danger is-light"
+                ><span class="ml-1 tag invertable is-danger is-light"
                   >{$editorState.errors.length} error(s) found</span
                 ></a
               >

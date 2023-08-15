@@ -13,11 +13,10 @@ import {
   setHtml,
   skipTicks,
   tooltip,
-  generateColorScheme,
   restName,
   firstName
 } from "$lib/utils";
-import COLORS from "$lib/colors";
+import COLORS, { generateColorScheme } from "$lib/colors";
 import { get, type Readable, type Writable } from "svelte/store";
 import { iconify } from "$lib/icon";
 import { byExpenseGroup, expenseGroup, pieData } from "$lib/expense";
@@ -161,6 +160,11 @@ function sumCurrency(postings: Posting[], sign = 1) {
   return formatCurrency(sign * _.sumBy(postings, (p) => p.amount));
 }
 
+export function colorScale(postings: Posting[]) {
+  const groups = _.chain(postings).map(expenseGroup).uniq().sort().value();
+  return generateColorScheme(groups);
+}
+
 export function renderMonthlyExpensesTimeline(
   postings: Posting[],
   groupsStore: Writable<string[]>,
@@ -281,6 +285,8 @@ export function renderMonthlyExpensesTimeline(
     .attr("stroke-linecap", "round")
     .attr("stroke-dasharray", "5,5");
 
+  let firstRender = true;
+
   const render = (allowedGroups: string[], dateRange: { from: dayjs.Dayjs; to: dayjs.Dayjs }) => {
     groupsStore.set(allowedGroups);
     const allowedPoints = _.filter(
@@ -291,7 +297,8 @@ export function renderMonthlyExpensesTimeline(
     x.domain(allowedPoints.map((p) => p.month));
     y.domain([0, d3.max(allowedPoints, sum)]);
 
-    const t = svg.transition().duration(750);
+    const t = svg.transition().duration(firstRender ? 0 : 750);
+    firstRender = false;
     xAxis
       .attr("transform", "translate(0," + height + ")")
       .transition(t)

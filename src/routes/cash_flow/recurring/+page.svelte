@@ -1,5 +1,11 @@
 <script lang="ts">
-  import { ajax, helpUrl, type TransactionSequence } from "$lib/utils";
+  import {
+    ajax,
+    helpUrl,
+    nextDate,
+    sortTrantionSequence,
+    type TransactionSequence
+  } from "$lib/utils";
   import dayjs from "dayjs";
   import _ from "lodash";
   import { onMount } from "svelte";
@@ -8,19 +14,6 @@
   let isEmpty = false;
   let transactionSequences: TransactionSequence[] = [];
 
-  function nextDate(ts: TransactionSequence) {
-    const lastTransaction = ts.transactions[0];
-    if (ts.interval >= 28 && ts.interval <= 33) {
-      return lastTransaction.date.add(1, "month");
-    }
-
-    if (ts.interval >= 360 && ts.interval <= 370) {
-      return lastTransaction.date.add(1, "year");
-    }
-
-    return lastTransaction.date.add(ts.interval, "day");
-  }
-
   onMount(async () => {
     ({ transaction_sequences: transactionSequences } = await ajax("/api/recurring"));
 
@@ -28,11 +21,7 @@
       isEmpty = true;
     }
 
-    transactionSequences = _.chain(transactionSequences)
-      .sortBy((ts) => {
-        return Math.abs(nextDate(ts).diff(dayjs()));
-      })
-      .value();
+    transactionSequences = sortTrantionSequence(transactionSequences);
   });
 </script>
 

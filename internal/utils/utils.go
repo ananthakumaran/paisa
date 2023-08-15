@@ -78,6 +78,10 @@ func IsWithDate(date time.Time, start time.Time, end time.Time) bool {
 	return (date.Equal(start) || date.After(start)) && (date.Before(end) || date.Equal(end))
 }
 
+func BeginingOfDay(date time.Time) time.Time {
+	return toDate(date)
+}
+
 func toDate(date time.Time) time.Time {
 	return time.Date(date.Year(), date.Month(), date.Day(), 0, 0, 0, 0, time.Local)
 }
@@ -100,4 +104,38 @@ func MaxTime(a time.Time, b time.Time) time.Time {
 	} else {
 		return b
 	}
+}
+
+type GroupableByDate interface {
+	GroupDate() time.Time
+}
+
+func GroupByMonth[G GroupableByDate](groupables []G) map[string][]G {
+	grouped := make(map[string][]G)
+	for _, g := range groupables {
+		key := g.GroupDate().Format("2006-01")
+		ps, ok := grouped[key]
+		if ok {
+			grouped[key] = append(ps, g)
+		} else {
+			grouped[key] = []G{g}
+		}
+
+	}
+	return grouped
+}
+
+func GroupByFY[G GroupableByDate](groupables []G) map[string][]G {
+	grouped := make(map[string][]G)
+	for _, g := range groupables {
+		key := FYHuman(g.GroupDate())
+		ps, ok := grouped[key]
+		if ok {
+			grouped[key] = append(ps, g)
+		} else {
+			grouped[key] = []G{g}
+		}
+
+	}
+	return grouped
 }

@@ -1,4 +1,5 @@
 .PHONY: docs
+.PHONY: fixture/main.transactions.json
 
 develop:
 	./node_modules/.bin/concurrently --names "GO,JS" -c "auto" "make serve" "npm run dev"
@@ -38,3 +39,11 @@ install:
 	npm run build
 	go build
 	cp paisa ~/.local/bin
+
+fixture/main.transactions.json:
+	cd /tmp && paisa init
+	cp fixture/main.ledger /tmp/personal.ledger
+	cd /tmp && paisa update --journal && paisa serve -p 6500 &
+	sleep 1
+	curl http://localhost:6500/api/transaction | jq .transactions > fixture/main.transactions.json
+	pkill -f 'paisa serve -p 6500'

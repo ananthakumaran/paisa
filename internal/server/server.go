@@ -1,6 +1,7 @@
 package server
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/ananthakumaran/paisa/internal/config"
@@ -15,7 +16,7 @@ import (
 	"gorm.io/gorm"
 )
 
-func Listen(db *gorm.DB) {
+func Listen(db *gorm.DB, port int) {
 	gin.SetMode(gin.ReleaseMode)
 
 	router := gin.Default()
@@ -194,8 +195,8 @@ func Listen(db *gorm.DB) {
 		c.Data(http.StatusOK, "text/html; charset=utf-8", []byte(web.Index))
 	})
 
-	log.Info("Listening on 7500")
-	err := router.Run(":7500")
+	log.Info("Listening on ", port)
+	err := router.Run(fmt.Sprintf(":%d", port))
 	if err != nil {
 		log.Fatal(err)
 	}

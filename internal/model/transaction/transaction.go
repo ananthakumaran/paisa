@@ -13,6 +13,9 @@ type Transaction struct {
 	Payee        string            `json:"payee"`
 	Postings     []posting.Posting `json:"postings"`
 	TagRecurring string            `json:"tag_recurring"`
+	BeginLine    uint64            `json:"beginLine"`
+	EndLine      uint64            `json:"endLine"`
+	FileName     string            `json:"fileName"`
 }
 
 func Build(postings []posting.Posting) []Transaction {
@@ -26,7 +29,7 @@ func Build(postings []posting.Posting) []Transaction {
 				break
 			}
 		}
-		return Transaction{ID: sample.TransactionID, Date: sample.Date, Payee: sample.Payee, Postings: ps, TagRecurring: tagRecurring}
+		return Transaction{ID: sample.TransactionID, Date: sample.Date, Payee: sample.Payee, Postings: ps, TagRecurring: tagRecurring, BeginLine: sample.TransactionBeginLine, EndLine: sample.TransactionEndLine, FileName: sample.FileName}
 	})
 
 }

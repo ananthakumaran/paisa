@@ -54,7 +54,7 @@ toast.setDefaults({
   position: "bottom-right",
   dismissible: true,
   pauseOnHover: true,
-  extraClasses: "is-light"
+  extraClasses: "is-light invertable"
 });
 
 export const load = (async () => {

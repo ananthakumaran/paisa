@@ -1,0 +1,15 @@
+2023/01/01  Rent
+    Assets:Checking                           -10000 INR
+    Expenses:Unknown
+
+2023/02/01  Rent
+    Assets:Checking                           -10000 INR
+    Expenses:Rent
+
+2023/02/05  Income
+    Assets:Checking                            20000 INR
+    Income:Salary
+
+2023/03/01  Rent
+    Assets:Checking
+    Expenses:Unknown                           10000 INR

@@ -3,12 +3,14 @@ import { ledger } from "$lib/parser";
 import { StreamLanguage } from "@codemirror/language";
 import { keymap } from "@codemirror/view";
 import { EditorState as State } from "@codemirror/state";
-import { basicSetup, EditorView } from "codemirror";
+import { EditorView } from "codemirror";
+import { basicSetup } from "./editor/base";
 import { insertTab, history, undoDepth, redoDepth } from "@codemirror/commands";
 import { linter, lintGutter, type Diagnostic } from "@codemirror/lint";
 import _ from "lodash";
 import { writable } from "svelte/store";
 import { autocompletion, completeFromList, ifIn } from "@codemirror/autocomplete";
+import { MergeView } from "@codemirror/merge";
 
 interface EditorState {
   hasUnsavedChanges: boolean;
@@ -48,6 +50,28 @@ async function lint(editor: EditorView): Promise<Diagnostic[]> {
       from: lineFrom.from,
       to: lineTo.to
     };
+  });
+}
+
+export function createDiffEditor(oldContent: string, newContent: string, dom: Element) {
+  const extensions = [
+    basicSetup,
+    State.readOnly.of(true),
+    EditorView.theme({
+      "&": {
+        fontSize: "12px"
+      }
+    }),
+    StreamLanguage.define(ledger),
+    EditorView.contentAttributes.of({ "data-enable-grammarly": "false" }),
+    lintGutter(),
+    linter(lint)
+  ];
+  return new MergeView({
+    a: { extensions: extensions, doc: oldContent },
+    b: { extensions: extensions, doc: newContent },
+    parent: dom,
+    collapseUnchanged: {}
   });
 }
 

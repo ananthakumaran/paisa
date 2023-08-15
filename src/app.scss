@@ -71,6 +71,10 @@ $menu-item-active-background-color: $link-light;
   }
 }
 
+.modal-background {
+  background-color: rgba(0, 0, 0, 0.86);
+}
+
 :focus {
   outline: 0;
 }
@@ -377,9 +381,18 @@ svg text {
     border: none;
   }
 
-  .cm-activeLine,
   .cm-activeLineGutter {
-    background-color: $white-bis !important;
+    background-color: $grey-light !important;
+    color: $grey-dark;
+    font-weight: bold;
+  }
+
+  .cm-activeLine {
+    background-color: transparent !important;
+  }
+
+  .cm-selectionBackground {
+    background-color: $grey-lightest !important;
   }
 
   .cm-line .ͼd {
@@ -416,11 +429,101 @@ svg text {
     color: $black-ter;
   }
 
+  .cm-panels-bottom {
+    border-top: 1px solid $grey-lightest;
+  }
+
+  .cm-lintRange-active {
+    background-color: transparent !important;
+  }
+
   .cm-diagnostic {
-    background: $white;
+    background: $white !important;
     color: $black-ter;
     font-size: 14px;
     box-shadow: $shadow;
+  }
+
+  .cm-panel.cm-search {
+    background: $white;
+    color: $black-ter;
+
+    .cm-button,
+    .cm-textfield {
+      @include control;
+      background: $white;
+      border: 1px solid $grey-lighter;
+      font-size: 12px;
+    }
+
+    .cm-textfield {
+      min-width: 300px;
+    }
+
+    .cm-button {
+      cursor: pointer;
+      &:hover {
+        border: 1px solid $grey-light;
+      }
+    }
+
+    label {
+      display: inline-flex;
+      margin: 10px 15px 0 0;
+      align-items: center;
+      justify-content: left;
+    }
+
+    [name="close"] {
+      font-size: 14px;
+      color: $black;
+    }
+  }
+
+  .cm-searchMatch {
+    background-color: rgba(255, 215, 0, 1);
+
+    &.cm-searchMatch-selected {
+      background-color: rgba(255, 87, 51, 0.2);
+    }
+  }
+
+  .cm-collapsedLines {
+    color: $grey-dark;
+    background: $white-bis;
+  }
+
+  &.cm-merge-a {
+    .cm-changedLine {
+      background-color: $diff-del-bg-light;
+    }
+
+    .cm-changedText {
+      background: $diff-del-bg-dark;
+    }
+  }
+
+  &.cm-merge-b {
+    .cm-changedLine {
+      background-color: $diff-add-bg-light;
+    }
+
+    .cm-changedText {
+      background: $diff-add-bg-dark;
+    }
+  }
+
+  .cm-changedText {
+    background: $diff-add-bg-dark;
+    border: none;
+
+    ins,
+    del {
+      text-decoration: none !important;
+      span {
+        color: $grey-darker !important;
+      }
+    }
   }
 }
 
@@ -444,6 +547,8 @@ svg text {
 }
 
 .svelte-select {
+  --chevron-color: hsl(229deg, 53%, 53%);
+  --font-size: 14px;
   --background: #{$white};
   --list-background: #{$white};
   --item-hover-bg: #{$white-bis};
@@ -454,6 +559,8 @@ svg text {
   --border-focused: 1px solid #{$grey-lighter};
   --border-hover: 1px solid #{$grey-lighter};
   --list-shadow: #{$shadow};
+  --height: 35px;
+  --max-height: 35px;
 
   .item.active span.name {
     font-weight: bold;

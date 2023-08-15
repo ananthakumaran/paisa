@@ -17,6 +17,11 @@ html[data-theme="dark"] {
   $white-bis: hsl($black-hue, $black-saturation, 13%) !default;
   $white: hsl($black-hue, $black-saturation, 10%) !default;
 
+  $diff-add-bg-light: rgba(70, 149, 74, 0.15);
+  $diff-add-bg-dark: rgba(70, 149, 74, 0.4);
+  $diff-del-bg-light: rgba(229, 83, 75, 0.1);
+  $diff-del-bg-dark: rgba(229, 83, 75, 0.4);
+
   $shadow:
     0 0.5em 1em -0.125em rgba(0, 0, 0, 0.5),
     0 0px 0 1px rgba(0, 0, 0, 0.5);
@@ -91,9 +96,9 @@ html[data-theme="dark"] {
           @if length($pair) >= 4 {
             $color-light: nth($pair, 3);
             $color-dark: nth($pair, 4);
-            &.is-light {
-              background-color: $color-light;
-              color: $color-dark;
+            &.is-light.invertable {
+              background-color: $color-dark;
+              color: $color-light;
             }
           }
         }

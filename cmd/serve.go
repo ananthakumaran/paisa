@@ -15,6 +15,8 @@ import (
 	"gorm.io/gorm"
 )
 
+var port int
+
 var serveCmd = &cobra.Command{
 	Use:   "serve",
 	Short: "serve the WEB UI",
@@ -30,10 +32,11 @@ var serveCmd = &cobra.Command{
 		if err != nil {
 			log.Fatal(err)
 		}
-		server.Listen(db)
+		server.Listen(db, port)
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(serveCmd)
+	serveCmd.Flags().IntVarP(&port, "port", "p", 7500, "port to listen on")
 }

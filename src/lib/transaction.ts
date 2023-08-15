@@ -9,6 +9,7 @@ export function filterTransactions(transactions: Transaction[], filter: string |
 
   return _.filter(transactions, (t) => {
     return (
+      filterRegex.test(t.fileName) ||
       filterRegex.test(t.payee) ||
       filterRegex.test(t.date.format("DD MMM YYYY")) ||
       _.some(t.postings, (p) => filterRegex.test(p.account))

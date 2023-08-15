@@ -178,8 +178,6 @@
                 itemId="id"
                 searchable={true}
                 clearable={false}
-                --chevron-color="hsl(229deg, 53%, 53%)"
-                --font-size="14px"
                 on:change={(_e) => {
                   saveAsName = selectedTemplate.name;
                 }}

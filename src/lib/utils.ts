@@ -45,6 +45,9 @@ export interface Transaction {
   id: string;
   date: dayjs.Dayjs;
   payee: string;
+  beginLine: number;
+  endLine: number;
+  fileName: string;
   postings: Posting[];
 }
 

@@ -1,0 +1,174 @@
+[
+  {
+    "id": "7a27185a-90da-5c8f-8235-ae4d947ba3cf",
+    "date": "2023-03-01T00:00:00+05:30",
+    "payee": "Rent",
+    "postings": [
+      {
+        "id": 8,
+        "transaction_id": "7a27185a-90da-5c8f-8235-ae4d947ba3cf",
+        "date": "2023-03-01T00:00:00+05:30",
+        "payee": "Rent",
+        "account": "Expenses:Unknown",
+        "commodity": "INR",
+        "quantity": 10000,
+        "amount": 10000,
+        "status": "unmarked",
+        "tag_recurring": "",
+        "transaction_begin_line": 13,
+        "transaction_end_line": 15,
+        "file_name": "personal.ledger",
+        "market_amount": 0
+      },
+      {
+        "id": 7,
+        "transaction_id": "7a27185a-90da-5c8f-8235-ae4d947ba3cf",
+        "date": "2023-03-01T00:00:00+05:30",
+        "payee": "Rent",
+        "account": "Assets:Checking",
+        "commodity": "INR",
+        "quantity": -10000,
+        "amount": -10000,
+        "status": "unmarked",
+        "tag_recurring": "",
+        "transaction_begin_line": 13,
+        "transaction_end_line": 15,
+        "file_name": "personal.ledger",
+        "market_amount": 0
+      }
+    ],
+    "tag_recurring": "",
+    "beginLine": 13,
+    "endLine": 15,
+    "fileName": "personal.ledger"
+  },
+  {
+    "id": "ae8edbd5-7bfc-5520-a2b5-fd1d7668adc4",
+    "date": "2023-02-05T00:00:00+05:30",
+    "payee": "Income",
+    "postings": [
+      {
+        "id": 5,
+        "transaction_id": "ae8edbd5-7bfc-5520-a2b5-fd1d7668adc4",
+        "date": "2023-02-05T00:00:00+05:30",
+        "payee": "Income",
+        "account": "Assets:Checking",
+        "commodity": "INR",
+        "quantity": 20000,
+        "amount": 20000,
+        "status": "unmarked",
+        "tag_recurring": "",
+        "transaction_begin_line": 9,
+        "transaction_end_line": 11,
+        "file_name": "personal.ledger",
+        "market_amount": 0
+      },
+      {
+        "id": 6,
+        "transaction_id": "ae8edbd5-7bfc-5520-a2b5-fd1d7668adc4",
+        "date": "2023-02-05T00:00:00+05:30",
+        "payee": "Income",
+        "account": "Income:Salary",
+        "commodity": "INR",
+        "quantity": -20000,
+        "amount": -20000,
+        "status": "unmarked",
+        "tag_recurring": "",
+        "transaction_begin_line": 9,
+        "transaction_end_line": 11,
+        "file_name": "personal.ledger",
+        "market_amount": 0
+      }
+    ],
+    "tag_recurring": "",
+    "beginLine": 9,
+    "endLine": 11,
+    "fileName": "personal.ledger"
+  },
+  {
+    "id": "97f59855-0f29-571c-a529-0fe288597b3b",
+    "date": "2023-02-01T00:00:00+05:30",
+    "payee": "Rent",
+    "postings": [
+      {
+        "id": 4,
+        "transaction_id": "97f59855-0f29-571c-a529-0fe288597b3b",
+        "date": "2023-02-01T00:00:00+05:30",
+        "payee": "Rent",
+        "account": "Expenses:Rent",
+        "commodity": "INR",
+        "quantity": 10000,
+        "amount": 10000,
+        "status": "unmarked",
+        "tag_recurring": "",
+        "transaction_begin_line": 5,
+        "transaction_end_line": 7,
+        "file_name": "personal.ledger",
+        "market_amount": 0
+      },
+      {
+        "id": 3,
+        "transaction_id": "97f59855-0f29-571c-a529-0fe288597b3b",
+        "date": "2023-02-01T00:00:00+05:30",
+        "payee": "Rent",
+        "account": "Assets:Checking",
+        "commodity": "INR",
+        "quantity": -10000,
+        "amount": -10000,
+        "status": "unmarked",
+        "tag_recurring": "",
+        "transaction_begin_line": 5,
+        "transaction_end_line": 7,
+        "file_name": "personal.ledger",
+        "market_amount": 0
+      }
+    ],
+    "tag_recurring": "",
+    "beginLine": 5,
+    "endLine": 7,
+    "fileName": "personal.ledger"
+  },
+  {
+    "id": "185550f9-08e0-5df8-9381-21d689f889f6",
+    "date": "2023-01-01T00:00:00+05:30",
+    "payee": "Rent",
+    "postings": [
+      {
+        "id": 2,
+        "transaction_id": "185550f9-08e0-5df8-9381-21d689f889f6",
+        "date": "2023-01-01T00:00:00+05:30",
+        "payee": "Rent",
+        "account": "Expenses:Unknown",
+        "commodity": "INR",
+        "quantity": 10000,
+        "amount": 10000,
+        "status": "unmarked",
+        "tag_recurring": "",
+        "transaction_begin_line": 1,
+        "transaction_end_line": 3,
+        "file_name": "personal.ledger",
+        "market_amount": 0
+      },
+      {
+        "id": 1,
+        "transaction_id": "185550f9-08e0-5df8-9381-21d689f889f6",
+        "date": "2023-01-01T00:00:00+05:30",
+        "payee": "Rent",
+        "account": "Assets:Checking",
+        "commodity": "INR",
+        "quantity": -10000,
+        "amount": -10000,
+        "status": "unmarked",
+        "tag_recurring": "",
+        "transaction_begin_line": 1,
+        "transaction_end_line": 3,
+        "file_name": "personal.ledger",
+        "market_amount": 0
+      }
+    ],
+    "tag_recurring": "",
+    "beginLine": 1,
+    "endLine": 3,
+    "fileName": "personal.ledger"
+  }
+]

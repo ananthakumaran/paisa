@@ -37,7 +37,7 @@
   {:else}
     <div class="columns is-flex-wrap-wrap transaction bordered">
       <div class="column is-3 py-0">
-        <div class="description is-size-7">
+        <div class="description mt-1 is-size-7">
           <b>{t.date.format("DD MMM YYYY")}</b>
           <span title={t.payee}
             ><PostingStatus posting={t.postings[0]} />

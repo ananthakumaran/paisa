@@ -1,1 +1,8 @@
+$grey-lightest: hsl(0, 0%, 93%) !default;
+
+$diff-add-bg-light: rgba(70, 149, 74, 0.15);
+$diff-add-bg-dark: rgba(70, 149, 74, 0.4);
+$diff-del-bg-light: rgba(229, 83, 75, 0.1);
+$diff-del-bg-dark: rgba(229, 83, 75, 0.4);
+
 @import "./app.scss";

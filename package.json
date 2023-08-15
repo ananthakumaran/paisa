@@ -3,8 +3,8 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "test": "jest",
-    "dev": "vite dev",
+    "test": "jest --no-cache",
+    "dev": "vite dev --host 0.0.0.0",
     "build": "vite build",
     "build:watch": "vite build --watch",
     "preview": "vite preview",
@@ -50,6 +50,7 @@
     "xlsx": "https://cdn.sheetjs.com/xlsx-0.19.3/xlsx-0.19.3.tgz"
   },
   "devDependencies": {
+    "@codemirror/merge": "^6.1.1",
     "@sveltejs/adapter-auto": "^1.0.0",
     "@sveltejs/adapter-static": "^1.0.0",
     "@sveltejs/kit": "^1.20.4",

@@ -15,6 +15,7 @@
   import _ from "lodash";
   import { onMount, onDestroy } from "svelte";
   import type { PageData } from "./$types";
+    import dayjs from "dayjs";
 
   let commodities: string[] = [];
   let selectedCommodities: string[] = [];
@@ -51,8 +52,9 @@
       portfolio_allocation: { name_and_security_type, security_type, rating, industry, commodities }
     } = await ajax("/api/gain/:name", null, data));
 
-    overview = _.last(gain.networthTimeline);
+    overview = _.last(gain.networthTimeline.filter((n) => n.date <= dayjs()));
     postings = _.chain(gain.postings)
+      .filter((p) => p.date <= dayjs())
       .sortBy((p) => p.date)
       .reverse()
       .take(100)

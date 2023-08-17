@@ -306,7 +306,7 @@ export function renderOverview(gains: Gain[]) {
 
 export function renderAccountOverview(points: Networth[], postings: Posting[], id: string) {
   const start = _.min(_.map(points, (p) => p.date)),
-    end = dayjs();
+    end = _.max(_.map(points, (p) => p.date));
 
   const element = document.getElementById(id);
 
@@ -376,6 +376,8 @@ export function renderAccountOverview(points: Networth[], postings: Posting[], i
     .attr("fill", (d) => (d.amount >= 0 ? typeScale("investment") : typeScale("withdrawal")));
 
   const layer = g.selectAll(".layer").data([points]).enter().append("g").attr("class", "layer");
+  const actualLayer = g.selectAll(".actual-layer").data([points.filter((p) => p.date <= dayjs())]).enter().append("g").attr("class", "actual-layer");
+  const forecastedLayer = g.selectAll(".forecasted-layer").data([points.filter((p) => p.date > dayjs())]).enter().append("g").attr("class", "forecasted-layer");
 
   const clipAboveID = _.uniqueId("clip-above");
   layer
@@ -425,31 +427,43 @@ export function renderAccountOverview(points: Networth[], postings: Posting[], i
       })
     );
 
-  layer
+  const investmentLine = d3
+    .line<Networth>()
+    .curve(d3.curveBasis)
+    .x((d) => x(d.date))
+    .y((d) => y(d.netInvestmentAmount))
+
+  actualLayer
     .append("path")
     .style("stroke", lineScale("investment"))
     .style("fill", "none")
-    .attr(
-      "d",
-      d3
-        .line<Networth>()
-        .curve(d3.curveBasis)
-        .x((d) => x(d.date))
-        .y((d) => y(d.netInvestmentAmount))
-    );
+    .attr("d", investmentLine);
 
-  layer
+  forecastedLayer
+    .append("path")
+    .style("stroke", lineScale("investment"))
+    .style("stroke-dasharray", "2,2")
+    .style("fill", "none")
+    .attr("d", investmentLine);
+
+  const balanceLine = d3
+    .line<Networth>()
+    .curve(d3.curveBasis)
+    .x((d) => x(d.date))
+    .y((d) => y(d.balanceAmount));
+
+  actualLayer
     .append("path")
     .style("stroke", lineScale("balance"))
     .style("fill", "none")
-    .attr(
-      "d",
-      d3
-        .line<Networth>()
-        .curve(d3.curveBasis)
-        .x((d) => x(d.date))
-        .y((d) => y(d.balanceAmount))
-    );
+    .attr("d", balanceLine);
+
+  forecastedLayer
+    .append("path")
+    .style("stroke", lineScale("balance"))
+    .style("stroke-dasharray", "2,2")
+    .style("fill", "none")
+    .attr("d", balanceLine);
 
   const hoverCircle = layer.append("circle").attr("r", "3").attr("fill", "none");
   const t = tippy(hoverCircle.node(), { theme: "light", delay: 0, allowHTML: true });

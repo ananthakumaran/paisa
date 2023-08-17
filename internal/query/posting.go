@@ -71,6 +71,26 @@ func (q *Query) Credit() *Query {
 	return q
 }
 
+func (q *Query) Budgeted() *Query {
+	q.context = q.context.Where("tag_budgeting != ''")
+	return q
+}
+
+func (q *Query) Unbudgeted() *Query {
+	q.context = q.context.Where("tag_budgeting = ''")
+	return q
+}
+
+func (q *Query) Forecasted() *Query {
+	q.context = q.context.Where("date > ?", time.Now())
+	return q
+}
+
+func (q *Query) Current() *Query {
+	q.context = q.context.Where("date <= ?", time.Now())
+	return q
+}
+
 func (q *Query) AccountPrefix(account string) *Query {
 	q.context = q.context.Where("account like ? or account = ?", account+":%", account)
 	return q

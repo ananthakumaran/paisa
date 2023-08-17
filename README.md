@@ -21,3 +21,11 @@ you can ask on [Matrix chat](https://matrix.to/#/#paisa:matrix.org).
 ## License
 
 This software is licensed under [the AGPL 3 or later license](./COPYING).
+
+## Contribution Policy
+
+Paisa is open source, but I do not plan to accept any pull request for
+now. If you have a feature request start a [discussion](dis), or if you
+found a bug, create a new [issue](https://github.com/ananthakumaran/paisa/issues). Since this a UI project, I would
+prefer to have full control over how things are done. I might relax
+this restriction later.

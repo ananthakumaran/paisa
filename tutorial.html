@@ -252,7 +252,9 @@ the basics of <strong>ledger</strong> because <strong>paisa</strong> builds on t
 <strong>ledger</strong>.</p>
 <p><strong>paisa</strong> checks for a config file named <code>paisa.yaml</code> in the current
 directory. It can also be set via flag <code>--config</code> or env variable
-<code>PAISA_CONFIG</code>. Check the <a href="./config.html">config</a> section for details.</p>
+<code>PAISA_CONFIG</code>. The default config is tuned for Indians, users from
+other countries would have to change the <code>default_currency</code> and
+<code>locale</code>. Check the <a href="./config.html">config</a> section for details.</p>
 <pre><code class="language-yaml"># absolute path of journal file
 journal_path: /home/john/finance/personal.ledger
 # absolute path of sql database

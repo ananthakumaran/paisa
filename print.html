@@ -147,8 +147,8 @@
                     <main>
                         <h1 id="introduction"><a class="header" href="#introduction">Introduction</a></h1>
 <p><strong>Paisa</strong> is a command line tool and Web UI to manage personal
-finance, specially tailored for Indians. It builds on top of the
-<a href="https://www.ledger-cli.org/">ledger</a> double entry accounting tool.</p>
+finance. It builds on top of the <a href="https://www.ledger-cli.org/">ledger</a> double entry accounting
+tool.</p>
 <ul>
 <li>Your financial data never leaves your system.</li>
 <li>The journal and config information are stored in plain text files
@@ -305,7 +305,9 @@ the basics of <strong>ledger</strong> because <strong>paisa</strong> builds on t
 <strong>ledger</strong>.</p>
 <p><strong>paisa</strong> checks for a config file named <code>paisa.yaml</code> in the current
 directory. It can also be set via flag <code>--config</code> or env variable
-<code>PAISA_CONFIG</code>. Check the <a href="./config.html">config</a> section for details.</p>
+<code>PAISA_CONFIG</code>. The default config is tuned for Indians, users from
+other countries would have to change the <code>default_currency</code> and
+<code>locale</code>. Check the <a href="./config.html">config</a> section for details.</p>
 <pre><code class="language-yaml"># absolute path of journal file
 journal_path: /home/john/finance/personal.ledger
 # absolute path of sql database

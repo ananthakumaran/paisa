@@ -134,14 +134,6 @@ func (LedgerCLI) Parse(journalPath string, _prices []price.Price) ([]*posting.Po
 		}
 		amount = amount / 100000
 
-		fileName, err := filepath.Rel(dir, record[6])
-		if err != nil {
-			return nil, err
-		}
-
-		namespace := uuid.Must(uuid.FromString("45964a1b-b24c-4a73-835a-9335a7aa7de5"))
-		transactionID := uuid.NewV5(namespace, fileName+":"+record[7]).String()
-
 		var status string
 		if record[8] == "*" {
 			status = "cleared"
@@ -164,15 +156,23 @@ func (LedgerCLI) Parse(journalPath string, _prices []price.Price) ([]*posting.Po
 			amount = -amount
 		}
 
-		transactionBeginLine, err := strconv.ParseUint(record[10], 10, 64)
-		if err != nil {
-			return nil, err
+		var transactionBeginLine, transactionEndLine uint64
+
+		fileName, err := filepath.Rel(dir, record[6])
+		if err == nil {
+			transactionBeginLine, err = strconv.ParseUint(record[10], 10, 64)
+			if err != nil {
+				return nil, err
+			}
+
+			transactionEndLine, err = strconv.ParseUint(record[11], 10, 64)
+			if err != nil {
+				return nil, err
+			}
 		}
 
-		transactionEndLine, err := strconv.ParseUint(record[11], 10, 64)
-		if err != nil {
-			return nil, err
-		}
+		namespace := uuid.Must(uuid.FromString("45964a1b-b24c-4a73-835a-9335a7aa7de5"))
+		transactionID := uuid.NewV5(namespace, fileName+":"+record[7]).String()
 
 		posting := posting.Posting{
 			Date:                 date,

@@ -36,9 +36,12 @@ func GetGain(db *gorm.DB) gin.H {
 }
 
 func GetAccountGain(db *gorm.DB, account string) gin.H {
-	postings := query.Init(db).AccountPrefix(account).All()
+	accountPostingsQuery := query.Init(db).AccountPrefix(account)
+	forecastedPostings := accountPostingsQuery.Clone().Forecasted().All()
+	postings := accountPostingsQuery.Unbudgeted().All()
 	postings = service.PopulateMarketPrice(db, postings)
-	gain := AccountGain{Account: account, XIRR: service.XIRR(db, postings), NetworthTimeline: computeNetworthTimeline(db, postings), Postings: postings}
+	allPostings := append(postings, forecastedPostings...)
+	gain := AccountGain{Account: account, XIRR: service.XIRR(db, postings), NetworthTimeline: computeNetworthTimeline(db, allPostings), Postings: allPostings}
 
 	commodities := lo.Uniq(lo.Map(postings, func(p posting.Posting, _ int) string { return p.Commodity }))
 	var portfolio_groups PortfolioAllocationGroups

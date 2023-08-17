@@ -24,7 +24,7 @@ type AccountGain struct {
 }
 
 func GetGain(db *gorm.DB) gin.H {
-	postings := query.Init(db).Like("Assets:%").NotLike("Assets:Checking").All()
+	postings := query.Init(db).Unbudgeted().Like("Assets:%").NotLike("Assets:Checking").All()
 	postings = service.PopulateMarketPrice(db, postings)
 	byAccount := lo.GroupBy(postings, func(p posting.Posting) string { return p.Account })
 	var gains []Gain

@@ -24,7 +24,7 @@ type AssetBreakdown struct {
 }
 
 func GetBalance(db *gorm.DB) gin.H {
-	postings := query.Init(db).Like("Assets:%").All()
+	postings := query.Init(db).Unbudgeted().Like("Assets:%").All()
 	postings = service.PopulateMarketPrice(db, postings)
 	breakdowns := computeBreakdown(db, postings)
 	return gin.H{"asset_breakdowns": breakdowns}

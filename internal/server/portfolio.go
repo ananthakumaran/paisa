@@ -69,7 +69,7 @@ func GetPortfolioAllocation(db *gorm.DB) gin.H {
 func GetAccountPortfolioAllocation(db *gorm.DB, account string) PortfolioAllocationGroups {
 	commoditieCodes := portfolio.GetAllParentCommodityIDs(db)
 	commodities := lo.Map(commoditieCodes, func(code string, _ int) config.Commodity { return commodity.FindByCode(code) })
-	postings := query.Init(db).AccountPrefix(account).Commodities(commodities).All()
+	postings := query.Init(db).Unbudgeted().AccountPrefix(account).Commodities(commodities).All()
 	postings = service.PopulateMarketPrice(db, postings)
 	byCommodity := lo.GroupBy(postings, func(p posting.Posting) string { return p.Commodity })
 

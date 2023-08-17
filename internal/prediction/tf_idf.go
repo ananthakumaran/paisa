@@ -29,7 +29,7 @@ type tfidfCache struct {
 var cache tfidfCache
 
 func loadVectorCache(db *gorm.DB) {
-	postings := query.Init(db).All()
+	postings := query.Init(db).Unbudgeted().All()
 	idx := buldIndex(postings)
 
 	cache.index = idx

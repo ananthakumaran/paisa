@@ -81,7 +81,7 @@ func GetDiagnosis(db *gorm.DB) gin.H {
 
 func ruleAssetRegisterNonNegative(db *gorm.DB) []error {
 	errs := make([]error, 0)
-	assets := query.Init(db).Like("Assets:%").All()
+	assets := query.Init(db).Unbudgeted().Like("Assets:%").All()
 	for account, ps := range lo.GroupBy(assets, func(posting posting.Posting) string { return posting.Account }) {
 		for _, balance := range accounting.Register(ps) {
 			if balance.Quantity < -0.01 {
@@ -95,7 +95,7 @@ func ruleAssetRegisterNonNegative(db *gorm.DB) []error {
 
 func ruleNonCreditAccount(db *gorm.DB) []error {
 	errs := make([]error, 0)
-	incomes := query.Init(db).Like("Income:%").All()
+	incomes := query.Init(db).Unbudgeted().Like("Income:%").All()
 	for _, p := range incomes {
 		if p.Amount > 0.01 {
 			errs = append(errs, errors.New(fmt.Sprintf("<b>%.4f</b> got credited to <b>%s</b> on %s", p.Amount, p.Account, p.Date.Format(DATE_FORMAT))))
@@ -106,7 +106,7 @@ func ruleNonCreditAccount(db *gorm.DB) []error {
 
 func ruleNonDebitAccount(db *gorm.DB) []error {
 	errs := make([]error, 0)
-	incomes := query.Init(db).Like("Expenses:%").All()
+	incomes := query.Init(db).Unbudgeted().Like("Expenses:%").All()
 	for _, p := range incomes {
 		if p.Amount < -0.01 {
 			errs = append(errs, errors.New(fmt.Sprintf("<b>%.4f</b> got debited from <b>%s</b> on %s", p.Amount, p.Account, p.Date.Format(DATE_FORMAT))))
@@ -117,7 +117,7 @@ func ruleNonDebitAccount(db *gorm.DB) []error {
 
 func ruleJournalPriceMismatch(db *gorm.DB) []error {
 	errs := make([]error, 0)
-	postings := query.Init(db).Desc().All()
+	postings := query.Init(db).Unbudgeted().Desc().All()
 	for _, p := range postings {
 		if !utils.IsCurrency(p.Commodity) {
 			externalPrice := service.GetUnitPrice(db, p.Commodity, p.Date)

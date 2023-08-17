@@ -8,7 +8,7 @@ import (
 )
 
 func GetLedger(db *gorm.DB) gin.H {
-	postings := query.Init(db).Desc().All()
+	postings := query.Init(db).Unbudgeted().Desc().All()
 	postings = service.PopulateMarketPrice(db, postings)
 	return gin.H{"postings": postings}
 }

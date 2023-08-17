@@ -26,12 +26,12 @@ func (c CashFlow) GroupDate() time.Time {
 }
 
 func GetCashFlow(db *gorm.DB) gin.H {
-	return gin.H{"cash_flows": computeCashFlow(db, query.Init(db), 0)}
+	return gin.H{"cash_flows": computeCashFlow(db, query.Init(db).Unbudgeted(), 0)}
 }
 
 func GetCurrentCashFlow(db *gorm.DB) []CashFlow {
-	balance := accounting.CostSum(query.Init(db).BeforeNMonths(3).Like("Assets:Checking").All())
-	return computeCashFlow(db, query.Init(db).LastNMonths(3), balance)
+	balance := accounting.CostSum(query.Init(db).Unbudgeted().BeforeNMonths(3).Like("Assets:Checking").All())
+	return computeCashFlow(db, query.Init(db).Unbudgeted().LastNMonths(3), balance)
 }
 
 func computeCashFlow(db *gorm.DB, q *query.Query, balance float64) []CashFlow {

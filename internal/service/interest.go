@@ -19,7 +19,7 @@ type interestCache struct {
 var icache interestCache
 
 func loadInterestCache(db *gorm.DB) {
-	postings := query.Init(db).Like("Income:Interest:%").All()
+	postings := query.Init(db).Unbudgeted().Like("Income:Interest:%").All()
 	icache.postings = lo.GroupBy(postings, func(p posting.Posting) int64 { return p.Date.Unix() })
 }
 

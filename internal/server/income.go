@@ -32,9 +32,9 @@ type Tax struct {
 }
 
 func GetIncome(db *gorm.DB) gin.H {
-	incomePostings := query.Init(db).Like("Income:%").All()
-	taxPostings := query.Init(db).Like("Expenses:Tax").All()
-	p := query.Init(db).First()
+	incomePostings := query.Init(db).Unbudgeted().Like("Income:%").All()
+	taxPostings := query.Init(db).Unbudgeted().Like("Expenses:Tax").All()
+	p := query.Init(db).Unbudgeted().First()
 
 	return gin.H{"income_timeline": computeIncomeTimeline(incomePostings), "tax_timeline": computeTaxTimeline(taxPostings), "yearly_cards": computeIncomeYearlyCard(p.Date, taxPostings, incomePostings)}
 }

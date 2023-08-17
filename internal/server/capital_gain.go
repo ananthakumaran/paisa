@@ -37,7 +37,7 @@ func GetCapitalGains(db *gorm.DB) gin.H {
 		return (c.Type == config.MutualFund || c.Type == config.Stock) &&
 			(c.TaxCategory == config.Debt || c.TaxCategory == config.Equity || c.TaxCategory == config.Equity65 || c.TaxCategory == config.Equity35 || c.TaxCategory == config.UnlistedEquity)
 	})
-	postings := query.Init(db).Like("Assets:%").Commodities(commodities).All()
+	postings := query.Init(db).Unbudgeted().Like("Assets:%").Commodities(commodities).All()
 	byAccount := lo.GroupBy(postings, func(p posting.Posting) string { return p.Account })
 	capitalGains := lo.MapValues(byAccount, func(postings []posting.Posting, account string) CapitalGain {
 		return computeCapitalGains(db, account, c.FindByName(postings[0].Commodity), postings)

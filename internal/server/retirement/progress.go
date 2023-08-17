@@ -17,7 +17,7 @@ import (
 func GetRetirementProgress(db *gorm.DB) gin.H {
 	retirementConfig := config.GetConfig().Retirement
 
-	savings := accounting.FilterByGlob(query.Init(db).Like("Assets:%").All(), retirementConfig.Savings)
+	savings := accounting.FilterByGlob(query.Init(db).Unbudgeted().Like("Assets:%").All(), retirementConfig.Savings)
 	savings = service.PopulateMarketPrice(db, savings)
 	savingsTotal := accounting.CurrentBalance(savings)
 
@@ -33,6 +33,6 @@ func calculateAverageExpense(db *gorm.DB, retirementConfig config.Retirement) fl
 	now := time.Now()
 	end := utils.BeginningOfMonth(now)
 	start := end.AddDate(-2, 0, 0)
-	expenses := accounting.FilterByGlob(query.Init(db).Like("Expenses:%").Where("date between ? AND ?", start, end).All(), retirementConfig.Expenses)
+	expenses := accounting.FilterByGlob(query.Init(db).Unbudgeted().Like("Expenses:%").Where("date between ? AND ?", start, end).All(), retirementConfig.Expenses)
 	return lo.SumBy(expenses, func(p posting.Posting) float64 { return p.Amount }) / 2
 }

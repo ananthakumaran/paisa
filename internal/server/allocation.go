@@ -36,7 +36,7 @@ type AllocationTarget struct {
 }
 
 func GetAllocation(db *gorm.DB) gin.H {
-	postings := query.Init(db).Like("Assets:%").All()
+	postings := query.Init(db).Unbudgeted().Like("Assets:%").All()
 
 	now := time.Now()
 	postings = lo.Map(postings, func(p posting.Posting, _ int) posting.Posting {

@@ -386,7 +386,7 @@ func (HLedgerCLI) Prices(journalPath string) ([]price.Price, error) {
 
 func parseLedgerPrices(output string, defaultCurrency string) ([]price.Price, error) {
 	var prices []price.Price
-	re := regexp.MustCompile(`P (\d{4}\/\d{2}\/\d{2}) (?:\d{2}:\d{2}:\d{2}) ([^\s\d.-]+) (.+)\n`)
+	re := regexp.MustCompile(`P (\d{4}\/\d{2}\/\d{2}) (?:\d{2}:\d{2}:\d{2}) ([^\s\d.-]+|"[^"]+") (.+)\n`)
 	matches := re.FindAllStringSubmatch(output, -1)
 
 	for _, match := range matches {

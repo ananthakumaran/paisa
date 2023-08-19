@@ -5,6 +5,7 @@ import (
 
 	"github.com/samber/lo"
 
+	"github.com/ananthakumaran/paisa/internal/accounting"
 	"github.com/ananthakumaran/paisa/internal/model/posting"
 	"github.com/ananthakumaran/paisa/internal/query"
 	"github.com/ananthakumaran/paisa/internal/service"
@@ -60,7 +61,7 @@ func computeBreakdown(db *gorm.DB, postings []posting.Posting) map[string]AssetB
 				return acc + -p.Amount
 			}
 		}, 0.0)
-		marketAmount := lo.Reduce(ps, func(acc float64, p posting.Posting, _ int) float64 { return acc + p.MarketAmount }, 0.0)
+		marketAmount := accounting.CurrentBalance(ps)
 		var balanceUnits float64
 		if leaf {
 			balanceUnits = lo.Reduce(ps, func(acc float64, p posting.Posting, _ int) float64 {

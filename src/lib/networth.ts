@@ -20,8 +20,11 @@ export function renderNetworth(points: Networth[], element: Element): () => void
   const start = _.min(_.map(points, (p) => p.date)),
     end = dayjs();
 
-  const svg = d3.select(element),
-    right = isMobile() ? 10 : 80,
+  const svg = d3.select(element);
+
+  svg.selectAll("*").remove();
+
+  const right = isMobile() ? 10 : 80,
     margin = { top: 40, right: right, bottom: 20, left: 40 },
     width = element.parentElement.clientWidth - margin.left - margin.right,
     height = +svg.attr("height") - margin.top - margin.bottom,

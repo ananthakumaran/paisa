@@ -32,7 +32,10 @@ const ICON_LOOKUP: IconLookup[] = [
   { class: "shopping-car", glyph: "\uf07a", words: ["shop"] },
   { class: "utensils", glyph: "\uf2e7", words: ["restaur"] },
   { class: "layer-group", glyph: "\uf5fd", words: ["misc"] },
-  { class: "plug-circle-bolt", glyph: "\ue55b", words: ["util"] }
+  { class: "plug-circle-bolt", glyph: "\ue55b", words: ["util"] },
+  { class: "carrot", glyph: "\uf787", words: ["veget"] },
+  { class: "taxi", glyph: "\uf1ba", words: ["transport"] },
+  { class: "money-bill", glyph: "\uf0d6", words: ["cash"] }
 ];
 
 const ICONS: Record<string, string> = _.chain(ICON_LOOKUP)

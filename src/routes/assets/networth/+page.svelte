@@ -1,9 +1,10 @@
 <script lang="ts">
-  import { ajax, formatCurrency, formatFloat } from "$lib/utils";
+  import { ajax, formatCurrency, formatFloat, type Networth } from "$lib/utils";
   import COLORS from "$lib/colors";
   import { renderNetworth } from "$lib/networth";
   import _ from "lodash";
   import { onDestroy, onMount } from "svelte";
+  import { dateRange, setAllowedDateRange } from "../../../store";
 
   let networth = 0;
   let investment = 0;
@@ -11,21 +12,36 @@
   let xirr = 0;
   let svg: Element;
   let destroyCallback: () => void;
+  let points: Networth[] = [];
+
+  $: if (!_.isEmpty(points)) {
+    if (destroyCallback) {
+      destroyCallback();
+    }
+
+    destroyCallback = renderNetworth(
+      _.filter(
+        points,
+        (p) => p.date.isSameOrBefore($dateRange.to) && p.date.isAfter($dateRange.from)
+      ),
+      svg
+    );
+  }
 
   onDestroy(async () => {
     destroyCallback();
   });
+
   onMount(async () => {
     const result = await ajax("/api/networth");
-    const points = result.networthTimeline;
+    points = result.networthTimeline;
+    setAllowedDateRange(_.map(points, (p) => p.date));
 
     const current = _.last(points);
     networth = current.investmentAmount + current.gainAmount - current.withdrawalAmount;
     investment = current.investmentAmount - current.withdrawalAmount;
     gain = current.gainAmount;
     xirr = result.xirr;
-
-    destroyCallback = renderNetworth(points, svg);
   });
 </script>
 

@@ -26,7 +26,7 @@ type InvestmentYearlyCard struct {
 }
 
 func GetInvestment(db *gorm.DB) gin.H {
-	assets := query.Init(db).Like("Assets:%").NotLike("Assets:Checking").
+	assets := query.Init(db).Like("Assets:%").NotAccountPrefix("Assets:Checking").
 		Where("transaction_id not in (select transaction_id from postings p where p.account like ? and p.transaction_id = transaction_id)", "Liabilities:%").
 		All()
 	incomes := query.Init(db).Like("Income:%").All()

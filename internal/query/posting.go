@@ -76,6 +76,11 @@ func (q *Query) AccountPrefix(account string) *Query {
 	return q
 }
 
+func (q *Query) NotAccountPrefix(account string) *Query {
+	q.context = q.context.Where("account not like ? and account != ?", account+":%", account)
+	return q
+}
+
 func (q *Query) Like(account string) *Query {
 	q.context = q.context.Where("account like ?", account)
 	return q

@@ -98,6 +98,10 @@ func IsCurrency(currency string) bool {
 	return currency == config.DefaultCurrency()
 }
 
+func IsCheckingAccount(account string) bool {
+	return IsSameOrParent(account, "Assets:Checking")
+}
+
 func MaxTime(a time.Time, b time.Time) time.Time {
 	if a.After(b) {
 		return a

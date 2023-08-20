@@ -190,7 +190,14 @@ export function renderMonthlyExpensesTimeline(
     _.map(groups, () => 0)
   );
 
+  const z = generateColorScheme(groups);
+
   const [start, end] = d3.extent(_.map(postings, (p) => p.date));
+
+  if (!start) {
+    return { z: z };
+  }
+
   const ms = _.groupBy(postings, (p) => p.date.format(timeFormat));
   const ys = _.chain(postings)
     .groupBy((p) => p.date.format("YYYY"))
@@ -250,8 +257,6 @@ export function renderMonthlyExpensesTimeline(
   const x = d3.scaleBand().range([0, width]).paddingInner(0.1).paddingOuter(0);
   const y = d3.scaleLinear().range([height, 0]);
 
-  const z = generateColorScheme(groups);
-
   const tooltipContent = (allowedGroups: string[]) => {
     return (d: d3.SeriesPoint<Record<string, number>>) => {
       let grandTotal = 0;
@@ -291,7 +296,7 @@ export function renderMonthlyExpensesTimeline(
     groupsStore.set(allowedGroups);
     const allowedPoints = _.filter(
       points,
-      (p) => p.timestamp.isSameOrBefore(dateRange.to) && p.timestamp.isAfter(dateRange.from)
+      (p) => p.timestamp.isSameOrBefore(dateRange.to) && p.timestamp.isSameOrAfter(dateRange.from)
     );
     const sum = (p: Point) => _.sum(_.map(allowedGroups, (k) => p[k]));
     x.domain(allowedPoints.map((p) => p.month));

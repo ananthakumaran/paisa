@@ -41,7 +41,7 @@ func GetCurrentExpense(db *gorm.DB) map[string][]posting.Posting {
 func GetExpense(db *gorm.DB) gin.H {
 	expenses := query.Init(db).Like("Expenses:%").NotLike("Expenses:Tax").All()
 	incomes := query.Init(db).Like("Income:%").All()
-	investments := query.Init(db).Like("Assets:%").NotLike("Assets:Checking").All()
+	investments := query.Init(db).Like("Assets:%").NotAccountPrefix("Assets:Checking").All()
 	taxes := query.Init(db).Like("Expenses:Tax").All()
 	postings := query.Init(db).All()
 

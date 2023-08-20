@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import _ from "lodash";
-  import { ajax, formatCurrency, restName, secondName, type Posting, postingUrl } from "$lib/utils";
+  import { ajax, secondName, type Posting } from "$lib/utils";
   import {
     renderMonthlyExpensesTimeline,
     renderCurrentExpensesBreakdown,
@@ -10,8 +10,7 @@
   } from "$lib/expense/monthly";
   import { dateRange, month, setAllowedDateRange } from "../../../store";
   import { writable } from "svelte/store";
-  import { iconify } from "$lib/icon";
-  import PostingStatus from "$lib/components/PostingStatus.svelte";
+  import PostingCard from "$lib/components/PostingCard.svelte";
 
   let groups = writable([]);
   let z: d3.ScaleOrdinal<string, string, never>,
@@ -56,7 +55,6 @@
 
     setAllowedDateRange(_.map(expenses, (e) => e.date));
     ({ z } = renderMonthlyExpensesTimeline(expenses, groups, month, dateRange));
-
     renderer = renderCurrentExpensesBreakdown(z);
   });
 </script>
@@ -119,32 +117,7 @@
           </div>
           <div class="column is-full">
             {#each current_month_expenses as expense}
-              <div
-                class="box p-2 my-2 has-background-white"
-                style="border-left: 2px solid {z(secondName(expense.account))}"
-              >
-                <div class="is-flex is-justify-content-space-between">
-                  <div class="has-text-grey is-size-7 truncate">
-                    <PostingStatus posting={expense} />
-                    <a class="secondary-link" href={postingUrl(expense)}>{expense.payee}</a>
-                  </div>
-                  <div class="has-text-grey min-w-[110px] has-text-right">
-                    <span class="icon is-small has-text-grey-light">
-                      <i class="fas fa-calendar" />
-                    </span>
-                    {expense.date.format("DD MMM YYYY")}
-                  </div>
-                </div>
-                <hr class="m-1" />
-                <div class="is-flex is-flex-wrap-wrap is-justify-content-space-between">
-                  <div class="has-text-grey">
-                    {iconify(restName(expense.account), { group: "Expenses" })}
-                  </div>
-                  <div class="has-text-weight-bold is-size-6">
-                    {formatCurrency(expense.amount)}
-                  </div>
-                </div>
-              </div>
+              <PostingCard posting={expense} color={z(secondName(expense.account))} icon={true} />
             {/each}
           </div>
         </div>

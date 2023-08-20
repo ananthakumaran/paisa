@@ -34,8 +34,8 @@
   <hr class="m-1" />
   {#each t.postings as posting}
     {@const color = accountColor(firstName(posting.account))}
-    <div class="my-1 is-flex is-flex-wrap-wrap is-justify-content-space-between">
-      <div class="has-text-grey" title={posting.account}>
+    <div class="my-1 is-flex is-justify-content-space-between">
+      <div class="has-text-grey truncate" title={posting.account}>
         <span style:color>{iconText(posting.account)}</span>
         {restName(posting.account)}
       </div>

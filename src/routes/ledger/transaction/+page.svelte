@@ -36,7 +36,7 @@
 
   const itemSize = (i: number) => {
     const t = filtered[i];
-    return 2 + Math.max(credits(t).length, debits(t).length) * 30;
+    return 8 + Math.max(credits(t).length, debits(t).length) * 22;
   };
 
   async function loadTransactions() {

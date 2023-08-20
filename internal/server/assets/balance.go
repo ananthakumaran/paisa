@@ -48,14 +48,14 @@ func computeBreakdown(db *gorm.DB, postings []posting.Posting) map[string]AssetB
 	for group, leaf := range accounts {
 		ps := lo.Filter(postings, func(p posting.Posting, _ int) bool { return utils.IsSameOrParent(p.Account, group) })
 		investmentAmount := lo.Reduce(ps, func(acc float64, p posting.Posting, _ int) float64 {
-			if p.Account == "Assets:Checking" || p.Amount < 0 || service.IsInterest(db, p) {
+			if utils.IsCheckingAccount(p.Account) || p.Amount < 0 || service.IsInterest(db, p) {
 				return acc
 			} else {
 				return acc + p.Amount
 			}
 		}, 0.0)
 		withdrawalAmount := lo.Reduce(ps, func(acc float64, p posting.Posting, _ int) float64 {
-			if p.Account == "Assets:Checking" || p.Amount > 0 || service.IsInterest(db, p) {
+			if utils.IsCheckingAccount(p.Account) || p.Amount > 0 || service.IsInterest(db, p) {
 				return acc
 			} else {
 				return acc + -p.Amount

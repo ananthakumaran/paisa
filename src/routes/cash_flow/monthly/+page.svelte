@@ -12,7 +12,7 @@
     renderer(
       _.filter(
         cashFlows,
-        (c) => c.date.isSameOrBefore($dateRange.to) && c.date.isAfter($dateRange.from)
+        (c) => c.date.isSameOrBefore($dateRange.to) && c.date.isSameOrAfter($dateRange.from)
       )
     );
   }

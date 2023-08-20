@@ -30,7 +30,7 @@ func GetCashFlow(db *gorm.DB) gin.H {
 }
 
 func GetCurrentCashFlow(db *gorm.DB) []CashFlow {
-	balance := accounting.CostSum(query.Init(db).BeforeNMonths(3).Like("Assets:Checking").All())
+	balance := accounting.CostSum(query.Init(db).BeforeNMonths(3).AccountPrefix("Assets:Checking").All())
 	return computeCashFlow(db, query.Init(db).LastNMonths(3), balance)
 }
 
@@ -40,13 +40,13 @@ func computeCashFlow(db *gorm.DB, q *query.Query, balance float64) []CashFlow {
 	expenses := utils.GroupByMonth(q.Clone().Like("Expenses:%").NotLike("Expenses:Tax").All())
 	incomes := utils.GroupByMonth(q.Clone().Like("Income:%").All())
 	liabilities := utils.GroupByMonth(q.Clone().Like("Liabilities:%").All())
-	investments := utils.GroupByMonth(q.Clone().Like("Assets:%").NotLike("Assets:Checking").All())
+	investments := utils.GroupByMonth(q.Clone().Like("Assets:%").NotAccountPrefix("Assets:Checking").All())
 	taxes := utils.GroupByMonth(q.Clone().Like("Expenses:Tax").All())
-	checkings := utils.GroupByMonth(q.Clone().Like("Assets:Checking").All())
+	checkings := utils.GroupByMonth(q.Clone().AccountPrefix("Assets:Checking").All())
 	postings := q.Clone().All()
 
 	if len(postings) == 0 {
-		return cashFlows
+		return []CashFlow{}
 	}
 
 	end := utils.MaxTime(time.Now(), postings[len(postings)-1].Date)

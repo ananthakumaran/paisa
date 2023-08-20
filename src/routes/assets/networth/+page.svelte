@@ -22,7 +22,7 @@
     destroyCallback = renderNetworth(
       _.filter(
         points,
-        (p) => p.date.isSameOrBefore($dateRange.to) && p.date.isAfter($dateRange.from)
+        (p) => p.date.isSameOrBefore($dateRange.to) && p.date.isSameOrAfter($dateRange.from)
       ),
       svg
     );

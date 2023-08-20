@@ -73,9 +73,9 @@
           <div class="tile is-parent">
             <div class="tile is-child px-3">
               <div class="content">
-                <div class="subtitle">
+                <p class="subtitle">
                   <a class="secondary-link" href="/assets/networth">Assets</a>
-                </div>
+                </p>
                 <div class="content">
                   <div>
                     {#if networth}
@@ -227,7 +227,7 @@
 </section>
 
 <style lang="scss">
-  .content p.subtitle {
+  p.subtitle {
     margin-bottom: 10px;
   }
 </style>

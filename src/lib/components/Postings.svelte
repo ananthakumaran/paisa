@@ -16,17 +16,18 @@
   export let postings: Posting[];
 </script>
 
-<table
-  style="margin-bottom: -1px; margin-top: -1px"
-  class="table is-fullwidth is-narrow is-striped is-hoverable"
->
-  <tbody>
-    {#each postings as p}
-      <tr>
-        <td>{iconify(p.account)}</td>
-        <td class="has-text-right">{unlessINR(p)}</td>
-        <td class="has-text-right">{formatCurrency(p.amount, 2)}</td>
-      </tr>
-    {/each}
-  </tbody>
-</table>
+<div style="margin: 4px 0;">
+  {#each postings as p}
+    <div class="is-flex is-justify-content-space-between is-hoverable" style="margin: 1px 0;">
+      <div class="truncate" style="min-width: 100px;" title={p.account}>{iconify(p.account)}</div>
+      <div class="is-flex is-align-items-baseline is-justify-content-right">
+        <div class="has-text-right has-text-grey is-size-7 mr-2 truncate">
+          {unlessINR(p)}
+        </div>
+        <div class="has-text-right" style="min-width: 50px;">
+          {formatCurrency(p.amount, 2)}
+        </div>
+      </div>
+    </div>
+  {/each}
+</div>

@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/samber/lo"
+	"github.com/shopspring/decimal"
 
 	"github.com/ananthakumaran/paisa/internal/accounting"
 	"github.com/ananthakumaran/paisa/internal/config"
@@ -16,22 +17,22 @@ import (
 )
 
 type Aggregate struct {
-	Date         time.Time `json:"date"`
-	Account      string    `json:"account"`
-	Amount       float64   `json:"amount"`
-	MarketAmount float64   `json:"market_amount"`
+	Date         time.Time       `json:"date"`
+	Account      string          `json:"account"`
+	Amount       decimal.Decimal `json:"amount"`
+	MarketAmount decimal.Decimal `json:"market_amount"`
 }
 
 type AllocationTargetConfig struct {
 	Name     string
-	Target   float64
+	Target   decimal.Decimal
 	Accounts []string
 }
 
 type AllocationTarget struct {
 	Name       string               `json:"name"`
-	Target     float64              `json:"target"`
-	Current    float64              `json:"current"`
+	Target     decimal.Decimal      `json:"target"`
+	Current    decimal.Decimal      `json:"current"`
 	Aggregates map[string]Aggregate `json:"aggregates"`
 }
 
@@ -71,7 +72,7 @@ func computeAllocationTargets(postings []posting.Posting) []AllocationTarget {
 	var targetAllocations []AllocationTarget
 	allocationTargetConfigs := config.GetConfig().AllocationTargets
 
-	totalMarketAmount := lo.Reduce(postings, func(acc float64, p posting.Posting, _ int) float64 { return acc + p.MarketAmount }, 0.0)
+	totalMarketAmount := accounting.CurrentBalance(postings)
 
 	for _, allocationTargetConfig := range allocationTargetConfigs {
 		targetAllocations = append(targetAllocations, computeAllocationTarget(postings, allocationTargetConfig, totalMarketAmount))
@@ -80,12 +81,12 @@ func computeAllocationTargets(postings []posting.Posting) []AllocationTarget {
 	return targetAllocations
 }
 
-func computeAllocationTarget(postings []posting.Posting, allocationTargetConfig config.AllocationTarget, total float64) AllocationTarget {
+func computeAllocationTarget(postings []posting.Posting, allocationTargetConfig config.AllocationTarget, total decimal.Decimal) AllocationTarget {
 	date := time.Now()
 	postings = accounting.FilterByGlob(postings, allocationTargetConfig.Accounts)
 	aggregates := computeAggregate(postings, date)
-	currentTotal := lo.Reduce(postings, func(acc float64, p posting.Posting, _ int) float64 { return acc + p.MarketAmount }, 0.0)
-	return AllocationTarget{Name: allocationTargetConfig.Name, Target: allocationTargetConfig.Target, Current: (currentTotal / total) * 100, Aggregates: aggregates}
+	currentTotal := accounting.CurrentBalance(postings)
+	return AllocationTarget{Name: allocationTargetConfig.Name, Target: decimal.NewFromFloat(allocationTargetConfig.Target), Current: (currentTotal.Div(total)).Mul(decimal.NewFromInt(100)), Aggregates: aggregates}
 }
 
 func computeAggregate(postings []posting.Posting, date time.Time) map[string]Aggregate {
@@ -99,8 +100,8 @@ func computeAggregate(postings []posting.Posting, date time.Time) map[string]Agg
 			result[parent] = Aggregate{Account: parent}
 		}
 
-		amount := lo.Reduce(ps, func(acc float64, p posting.Posting, _ int) float64 { return acc + p.Amount }, 0.0)
-		marketAmount := lo.Reduce(ps, func(acc float64, p posting.Posting, _ int) float64 { return acc + p.MarketAmount }, 0.0)
+		amount := accounting.CostSum(ps)
+		marketAmount := accounting.CurrentBalance(ps)
 		result[account] = Aggregate{Date: date, Account: account, Amount: amount, MarketAmount: marketAmount}
 
 	}

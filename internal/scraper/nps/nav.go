@@ -3,10 +3,12 @@ package nps
 import (
 	"encoding/json"
 	"fmt"
-	log "github.com/sirupsen/logrus"
 	"io/ioutil"
 	"net/http"
 	"time"
+
+	"github.com/shopspring/decimal"
+	log "github.com/sirupsen/logrus"
 
 	"github.com/ananthakumaran/paisa/internal/config"
 	"github.com/ananthakumaran/paisa/internal/model/price"
@@ -28,7 +30,7 @@ func GetNav(schemeCode string, commodityName string) ([]*price.Price, error) {
 
 	type Data struct {
 		Date string
-		Nav  float64
+		Nav  decimal.Decimal
 	}
 	type Result struct {
 		Data []Data

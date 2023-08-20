@@ -9,6 +9,7 @@ import (
 	"github.com/ananthakumaran/paisa/internal/utils"
 	"github.com/gin-gonic/gin"
 	"github.com/samber/lo"
+	"github.com/shopspring/decimal"
 	"gorm.io/gorm"
 )
 
@@ -19,11 +20,11 @@ type PostingPair struct {
 }
 
 type FYCapitalGain struct {
-	Units         float64       `json:"units"`
-	PurchasePrice float64       `json:"purchase_price"`
-	SellPrice     float64       `json:"sell_price"`
-	Tax           taxation.Tax  `json:"tax"`
-	PostingPairs  []PostingPair `json:"posting_pairs"`
+	Units         decimal.Decimal `json:"units"`
+	PurchasePrice decimal.Decimal `json:"purchase_price"`
+	SellPrice     decimal.Decimal `json:"sell_price"`
+	Tax           taxation.Tax    `json:"tax"`
+	PostingPairs  []PostingPair   `json:"posting_pairs"`
 }
 
 type CapitalGain struct {
@@ -49,41 +50,41 @@ func computeCapitalGains(db *gorm.DB, account string, commodity config.Commodity
 	capitalGain := CapitalGain{Account: account, TaxCategory: string(commodity.TaxCategory), FY: make(map[string]FYCapitalGain)}
 	var available []posting.Posting
 	for _, p := range postings {
-		if p.Quantity > 0 {
+		if p.Quantity.GreaterThan(decimal.Zero) {
 			available = append(available, p)
 		} else {
-			quantity := -p.Quantity
+			quantity := p.Quantity.Neg()
 			totalTax := taxation.Tax{}
-			purchasePrice := 0.0
+			purchasePrice := decimal.Zero
 			postingPairs := make([]PostingPair, 0)
-			for quantity > 0 && len(available) > 0 {
+			for quantity.GreaterThan(decimal.Zero) && len(available) > 0 {
 				first := available[0]
-				q := 0.0
+				q := decimal.Zero
 
-				if first.Quantity > quantity {
-					first.AddQuantity(-quantity)
+				if first.Quantity.GreaterThan(quantity) {
+					first.AddQuantity(quantity.Neg())
 					q = quantity
 					available[0] = first
-					quantity = 0
+					quantity = decimal.Zero
 				} else {
-					quantity -= first.Quantity
+					quantity = quantity.Sub(first.Quantity)
 					q = first.Quantity
 					available = available[1:]
 				}
 
-				purchasePrice += q * first.Price()
+				purchasePrice = purchasePrice.Add(q.Mul(first.Price()))
 				tax := taxation.Calculate(db, q, commodity, first.Price(), first.Date, p.Price(), p.Date)
 				totalTax = taxation.Add(totalTax, tax)
-				postingPair := PostingPair{Purchase: first.WithQuantity(q), Sell: p.WithQuantity(-q), Tax: tax}
+				postingPair := PostingPair{Purchase: first.WithQuantity(q), Sell: p.WithQuantity(q.Neg()), Tax: tax}
 				postingPairs = append(postingPairs, postingPair)
 
 			}
 			fy := utils.FY(p.Date)
 			fyCapitalGain := capitalGain.FY[fy]
 			fyCapitalGain.Tax = taxation.Add(fyCapitalGain.Tax, totalTax)
-			fyCapitalGain.Units += -p.Quantity
-			fyCapitalGain.PurchasePrice += purchasePrice
-			fyCapitalGain.SellPrice += -p.Amount
+			fyCapitalGain.Units.Add(p.Quantity.Neg())
+			fyCapitalGain.PurchasePrice.Add(purchasePrice)
+			fyCapitalGain.SellPrice.Add(p.Amount.Neg())
 			fyCapitalGain.PostingPairs = append(fyCapitalGain.PostingPairs, postingPairs...)
 
 			capitalGain.FY[fy] = fyCapitalGain

@@ -13,6 +13,7 @@ import (
 
 	"github.com/gofrs/uuid"
 	"github.com/google/btree"
+	"github.com/shopspring/decimal"
 	log "github.com/sirupsen/logrus"
 
 	"encoding/json"
@@ -82,7 +83,7 @@ func (LedgerCLI) Parse(journalPath string, _prices []price.Price) ([]*posting.Po
 		log.Fatal(err)
 	}
 
-	command := exec.Command("ledger", "-f", journalPath, "csv", "--csv-format", "%(quoted(date)),%(quoted(payee)),%(quoted(display_account)),%(quoted(commodity(scrub(display_amount)))),%(quoted(quantity(scrub(display_amount)))),%(quoted(to_int(scrub(market(amount,date,'"+config.DefaultCurrency()+"') * 100000)))),%(quoted(xact.filename)),%(quoted(xact.id)),%(quoted(cleared ? \"*\" : (pending ? \"!\" : \"\"))),%(quoted(tag('Recurring'))),%(quoted(xact.beg_line)),%(quoted(xact.end_line))\n")
+	command := exec.Command("ledger", "-f", journalPath, "csv", "--csv-format", "%(quoted(date)),%(quoted(payee)),%(quoted(display_account)),%(quoted(commodity(scrub(display_amount)))),%(quoted(quantity(scrub(display_amount)))),%(quoted(to_int(scrub(market(amount,date,'"+config.DefaultCurrency()+"') * 100000000)))),%(quoted(xact.filename)),%(quoted(xact.id)),%(quoted(cleared ? \"*\" : (pending ? \"!\" : \"\"))),%(quoted(tag('Recurring'))),%(quoted(xact.beg_line)),%(quoted(xact.end_line))\n")
 	var output, error bytes.Buffer
 	command.Stdout = &output
 	command.Stderr = &error
@@ -117,7 +118,7 @@ func (LedgerCLI) Parse(journalPath string, _prices []price.Price) ([]*posting.Po
 		if err != nil {
 			return nil, err
 		}
-		amount = amount / 100000
+		amount = amount / 100000000
 
 		fileName, err := filepath.Rel(dir, record[6])
 		if err != nil {
@@ -156,8 +157,8 @@ func (LedgerCLI) Parse(journalPath string, _prices []price.Price) ([]*posting.Po
 			Payee:                record[1],
 			Account:              record[2],
 			Commodity:            record[3],
-			Quantity:             quantity,
-			Amount:               amount,
+			Quantity:             decimal.NewFromFloat(quantity),
+			Amount:               decimal.NewFromFloat(amount),
 			TransactionID:        transactionID,
 			Status:               status,
 			TagRecurring:         tagRecurring,
@@ -305,17 +306,17 @@ func (HLedgerCLI) Parse(journalPath string, prices []price.Price) ([]*posting.Po
 
 		for _, p := range t.Postings {
 			amount := p.Amount[0]
-			totalAmount := amount.Quantity.Value
+			totalAmount := decimal.NewFromFloat(amount.Quantity.Value)
 
 			if amount.Commodity != config.DefaultCurrency() {
 				if amount.Price.Contents.Quantity.Value != 0 {
-					totalAmount = amount.Price.Contents.Quantity.Value * amount.Quantity.Value
+					totalAmount = decimal.NewFromFloat(amount.Price.Contents.Quantity.Value).Mul(decimal.NewFromFloat(amount.Quantity.Value))
 				} else {
 					pt := pricesTree[amount.Commodity]
 					if pt != nil {
 						pc := utils.BTreeDescendFirstLessOrEqual(pt, price.Price{Date: date})
-						if pc.Value != 0 {
-							totalAmount = amount.Quantity.Value * pc.Value
+						if !pc.Value.Equal(decimal.Zero) {
+							totalAmount = decimal.NewFromFloat(amount.Quantity.Value).Mul(pc.Value)
 						}
 					}
 				}
@@ -347,7 +348,7 @@ func (HLedgerCLI) Parse(journalPath string, prices []price.Price) ([]*posting.Po
 				Payee:                t.Description,
 				Account:              p.Account,
 				Commodity:            amount.Commodity,
-				Quantity:             amount.Quantity.Value,
+				Quantity:             decimal.NewFromFloat(amount.Quantity.Value),
 				Amount:               totalAmount,
 				TransactionID:        strconv.FormatInt(t.ID, 10),
 				Status:               strings.ToLower(t.Status),
@@ -406,7 +407,7 @@ func parseLedgerPrices(output string, defaultCurrency string) ([]price.Price, er
 			return nil, err
 		}
 
-		prices = append(prices, price.Price{Date: date, CommodityName: commodity, CommodityID: commodity, CommodityType: config.Unknown, Value: value})
+		prices = append(prices, price.Price{Date: date, CommodityName: commodity, CommodityID: commodity, CommodityType: config.Unknown, Value: decimal.NewFromFloat(value)})
 
 	}
 	return prices, nil
@@ -434,7 +435,7 @@ func parseHLedgerPrices(output string, defaultCurrency string) ([]price.Price, e
 			return nil, err
 		}
 
-		prices = append(prices, price.Price{Date: date, CommodityName: commodity, CommodityID: commodity, CommodityType: config.Unknown, Value: value})
+		prices = append(prices, price.Price{Date: date, CommodityName: commodity, CommodityID: commodity, CommodityType: config.Unknown, Value: decimal.NewFromFloat(value)})
 
 	}
 	return prices, nil

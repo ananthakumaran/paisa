@@ -1,7 +1,6 @@
 package liabilities
 
 import (
-	"math"
 	"sort"
 	"time"
 
@@ -11,20 +10,21 @@ import (
 	"github.com/ananthakumaran/paisa/internal/utils"
 	"github.com/gin-gonic/gin"
 	"github.com/samber/lo"
+	"github.com/shopspring/decimal"
 	"gorm.io/gorm"
 )
 
 type Overview struct {
-	Date           time.Time `json:"date"`
-	DrawnAmount    float64   `json:"drawn_amount"`
-	RepaidAmount   float64   `json:"repaid_amount"`
-	InterestAmount float64   `json:"interest_amount"`
+	Date           time.Time       `json:"date"`
+	DrawnAmount    decimal.Decimal `json:"drawn_amount"`
+	RepaidAmount   decimal.Decimal `json:"repaid_amount"`
+	InterestAmount decimal.Decimal `json:"interest_amount"`
 }
 
 type Interest struct {
-	Account          string     `json:"account"`
-	OverviewTimeline []Overview `json:"overview_timeline"`
-	APR              float64    `json:"apr"`
+	Account          string          `json:"account"`
+	OverviewTimeline []Overview      `json:"overview_timeline"`
+	APR              decimal.Decimal `json:"apr"`
 }
 
 func GetInterest(db *gorm.DB) gin.H {
@@ -60,34 +60,34 @@ func computeOverviewTimeline(db *gorm.DB, postings []posting.Posting) []Overview
 			pastPostings = append(pastPostings, p)
 		}
 
-		drawn := lo.Reduce(pastPostings, func(agg float64, p posting.Posting, _ int) float64 {
-			if p.Amount > 0 || service.IsInterest(db, p) {
+		drawn := lo.Reduce(pastPostings, func(agg decimal.Decimal, p posting.Posting, _ int) decimal.Decimal {
+			if p.Amount.GreaterThan(decimal.Zero) || service.IsInterest(db, p) {
 				return agg
 			} else {
-				return -p.Amount + agg
+				return p.Amount.Neg().Add(agg)
 			}
-		}, 0)
+		}, decimal.Zero)
 
-		repaid := lo.Reduce(pastPostings, func(agg float64, p posting.Posting, _ int) float64 {
-			if p.Amount < 0 {
+		repaid := lo.Reduce(pastPostings, func(agg decimal.Decimal, p posting.Posting, _ int) decimal.Decimal {
+			if p.Amount.LessThan(decimal.Zero) {
 				return agg
 			} else {
-				return p.Amount + agg
+				return p.Amount.Add(agg)
 			}
-		}, 0)
+		}, decimal.Zero)
 
-		balance := lo.Reduce(pastPostings, func(agg float64, p posting.Posting, _ int) float64 {
+		balance := lo.Reduce(pastPostings, func(agg decimal.Decimal, p posting.Posting, _ int) decimal.Decimal {
 			if service.IsInterest(db, p) {
 				return agg
 			} else {
-				return -service.GetMarketPrice(db, p, start) + agg
+				return service.GetMarketPrice(db, p, start).Neg().Add(agg)
 			}
-		}, 0)
+		}, decimal.Zero)
 
-		interest := balance + repaid - drawn
+		interest := balance.Add(repaid).Sub(drawn)
 		netliabilities = append(netliabilities, Overview{Date: start, DrawnAmount: drawn, RepaidAmount: repaid, InterestAmount: interest})
 
-		if len(postings) == 0 && math.Abs(balance) < 0.01 {
+		if len(postings) == 0 && balance.Abs().LessThan(decimal.NewFromFloat(0.01)) {
 			break
 		}
 	}

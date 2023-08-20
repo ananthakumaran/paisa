@@ -4,6 +4,7 @@ import (
 	"strings"
 
 	"github.com/samber/lo"
+	"github.com/shopspring/decimal"
 
 	"github.com/ananthakumaran/paisa/internal/accounting"
 	"github.com/ananthakumaran/paisa/internal/model/posting"
@@ -15,13 +16,13 @@ import (
 )
 
 type AssetBreakdown struct {
-	Group            string  `json:"group"`
-	InvestmentAmount float64 `json:"investment_amount"`
-	WithdrawalAmount float64 `json:"withdrawal_amount"`
-	MarketAmount     float64 `json:"market_amount"`
-	BalanceUnits     float64 `json:"balance_units"`
-	LatestPrice      float64 `json:"latest_price"`
-	XIRR             float64 `json:"xirr"`
+	Group            string          `json:"group"`
+	InvestmentAmount decimal.Decimal `json:"investment_amount"`
+	WithdrawalAmount decimal.Decimal `json:"withdrawal_amount"`
+	MarketAmount     decimal.Decimal `json:"market_amount"`
+	BalanceUnits     decimal.Decimal `json:"balance_units"`
+	LatestPrice      decimal.Decimal `json:"latest_price"`
+	XIRR             decimal.Decimal `json:"xirr"`
 }
 
 func GetBalance(db *gorm.DB) gin.H {
@@ -47,29 +48,29 @@ func computeBreakdown(db *gorm.DB, postings []posting.Posting) map[string]AssetB
 
 	for group, leaf := range accounts {
 		ps := lo.Filter(postings, func(p posting.Posting, _ int) bool { return utils.IsSameOrParent(p.Account, group) })
-		investmentAmount := lo.Reduce(ps, func(acc float64, p posting.Posting, _ int) float64 {
-			if utils.IsCheckingAccount(p.Account) || p.Amount < 0 || service.IsInterest(db, p) {
+		investmentAmount := lo.Reduce(ps, func(acc decimal.Decimal, p posting.Posting, _ int) decimal.Decimal {
+			if utils.IsCheckingAccount(p.Account) || p.Amount.LessThan(decimal.Zero) || service.IsInterest(db, p) {
 				return acc
 			} else {
-				return acc + p.Amount
+				return acc.Add(p.Amount)
 			}
-		}, 0.0)
-		withdrawalAmount := lo.Reduce(ps, func(acc float64, p posting.Posting, _ int) float64 {
-			if utils.IsCheckingAccount(p.Account) || p.Amount > 0 || service.IsInterest(db, p) {
+		}, decimal.Zero)
+		withdrawalAmount := lo.Reduce(ps, func(acc decimal.Decimal, p posting.Posting, _ int) decimal.Decimal {
+			if utils.IsCheckingAccount(p.Account) || p.Amount.GreaterThan(decimal.Zero) || service.IsInterest(db, p) {
 				return acc
 			} else {
-				return acc + -p.Amount
+				return acc.Add(p.Amount.Neg())
 			}
-		}, 0.0)
+		}, decimal.Zero)
 		marketAmount := accounting.CurrentBalance(ps)
-		var balanceUnits float64
+		var balanceUnits decimal.Decimal
 		if leaf {
-			balanceUnits = lo.Reduce(ps, func(acc float64, p posting.Posting, _ int) float64 {
+			balanceUnits = lo.Reduce(ps, func(acc decimal.Decimal, p posting.Posting, _ int) decimal.Decimal {
 				if !utils.IsCurrency(p.Commodity) {
-					return acc + p.Quantity
+					return acc.Add(p.Quantity)
 				}
-				return 0.0
-			}, 0.0)
+				return decimal.Zero
+			}, decimal.Zero)
 		}
 
 		xirr := service.XIRR(db, ps)

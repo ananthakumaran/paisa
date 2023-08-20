@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/shopspring/decimal"
 	log "github.com/sirupsen/logrus"
 
 	"github.com/ananthakumaran/paisa/internal/config"
@@ -48,12 +49,12 @@ WHERE s.code = %s
 	}
 
 	type Data struct {
-		Name            string  `json:"name"`
-		PercentageToNav float64 `json:"percentage_to_nav"`
-		ISIN            string  `json:"isin"`
-		Type            string  `json:"type"`
-		Rating          string  `json:"rating"`
-		Industry        string  `json:"industry"`
+		Name            string          `json:"name"`
+		PercentageToNav decimal.Decimal `json:"percentage_to_nav"`
+		ISIN            string          `json:"isin"`
+		Type            string          `json:"type"`
+		Rating          string          `json:"rating"`
+		Industry        string          `json:"industry"`
 	}
 	type Result struct {
 		Data []Data

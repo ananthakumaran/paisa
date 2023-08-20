@@ -3,7 +3,6 @@ package server
 import (
 	"errors"
 	"fmt"
-	"math"
 
 	"github.com/ananthakumaran/paisa/internal/accounting"
 	"github.com/ananthakumaran/paisa/internal/config"
@@ -13,6 +12,7 @@ import (
 	"github.com/ananthakumaran/paisa/internal/utils"
 	"github.com/gin-gonic/gin"
 	"github.com/samber/lo"
+	"github.com/shopspring/decimal"
 	"gorm.io/gorm"
 )
 
@@ -84,7 +84,7 @@ func ruleAssetRegisterNonNegative(db *gorm.DB) []error {
 	assets := query.Init(db).Like("Assets:%").All()
 	for account, ps := range lo.GroupBy(assets, func(posting posting.Posting) string { return posting.Account }) {
 		for _, balance := range accounting.Register(ps) {
-			if balance.Quantity < -0.01 {
+			if balance.Quantity.LessThan(decimal.NewFromFloat(0.01).Neg()) {
 				errs = append(errs, errors.New(fmt.Sprintf("<b>%s</b> account went negative on %s", account, balance.Date.Format(DATE_FORMAT))))
 				break
 			}
@@ -97,8 +97,8 @@ func ruleNonCreditAccount(db *gorm.DB) []error {
 	errs := make([]error, 0)
 	incomes := query.Init(db).Like("Income:%").All()
 	for _, p := range incomes {
-		if p.Amount > 0.01 {
-			errs = append(errs, errors.New(fmt.Sprintf("<b>%.4f</b> got credited to <b>%s</b> on %s", p.Amount, p.Account, p.Date.Format(DATE_FORMAT))))
+		if p.Amount.GreaterThan(decimal.NewFromFloat(0.01)) {
+			errs = append(errs, errors.New(fmt.Sprintf("<b>%.4f</b> got credited to <b>%s</b> on %s", p.Amount.InexactFloat64(), p.Account, p.Date.Format(DATE_FORMAT))))
 		}
 	}
 	return errs
@@ -108,8 +108,8 @@ func ruleNonDebitAccount(db *gorm.DB) []error {
 	errs := make([]error, 0)
 	incomes := query.Init(db).Like("Expenses:%").All()
 	for _, p := range incomes {
-		if p.Amount < -0.01 {
-			errs = append(errs, errors.New(fmt.Sprintf("<b>%.4f</b> got debited from <b>%s</b> on %s", p.Amount, p.Account, p.Date.Format(DATE_FORMAT))))
+		if p.Amount.LessThan(decimal.NewFromFloat(0.01).Neg()) {
+			errs = append(errs, errors.New(fmt.Sprintf("<b>%.4f</b> got debited from <b>%s</b> on %s", p.Amount.InexactFloat64(), p.Account, p.Date.Format(DATE_FORMAT))))
 		}
 	}
 	return errs
@@ -121,9 +121,9 @@ func ruleJournalPriceMismatch(db *gorm.DB) []error {
 	for _, p := range postings {
 		if !utils.IsCurrency(p.Commodity) {
 			externalPrice := service.GetUnitPrice(db, p.Commodity, p.Date)
-			diff := math.Abs(externalPrice.Value - p.Price())
-			if externalPrice.CommodityType != config.Unknown && diff >= 0.0001 {
-				errs = append(errs, errors.New(fmt.Sprintf("%s\t%s\t%.4f @ <b>%.4f</b> %s <br />doesn't match the price %s <b>%.4f</b> fetched from external system", p.Date.Format(DATE_FORMAT), p.Account, p.Quantity, p.Price(), config.DefaultCurrency(), externalPrice.Date.Format(DATE_FORMAT), externalPrice.Value)))
+			diff := externalPrice.Value.Sub(p.Price()).Abs()
+			if externalPrice.CommodityType != config.Unknown && diff.GreaterThanOrEqual(decimal.NewFromFloat(0.0001)) {
+				errs = append(errs, errors.New(fmt.Sprintf("%s\t%s\t%.4f @ <b>%.4f</b> %s <br />doesn't match the price %s <b>%.4f</b> fetched from external system", p.Date.Format(DATE_FORMAT), p.Account, p.Quantity.InexactFloat64(), p.Price().InexactFloat64(), config.DefaultCurrency(), externalPrice.Date.Format(DATE_FORMAT), externalPrice.Value.InexactFloat64())))
 			}
 		}
 	}

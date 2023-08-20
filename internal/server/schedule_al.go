@@ -10,6 +10,7 @@ import (
 	"github.com/ananthakumaran/paisa/internal/utils"
 	"github.com/gin-gonic/gin"
 	"github.com/samber/lo"
+	"github.com/shopspring/decimal"
 	"gorm.io/gorm"
 )
 
@@ -38,7 +39,7 @@ func init() {
 
 type ScheduleALEntry struct {
 	Section ScheduleALSection `json:"section"`
-	Amount  float64           `json:"amount"`
+	Amount  decimal.Decimal   `json:"amount"`
 }
 
 type ScheduleAL struct {
@@ -74,7 +75,7 @@ func computeScheduleAL(postings []posting.Posting) []ScheduleALEntry {
 			return scheduleALConfig.Code == section.Code
 		})
 
-		var amount float64
+		var amount decimal.Decimal
 
 		if found {
 			ps := accounting.FilterByGlob(postings, config.Accounts)
@@ -85,7 +86,7 @@ func computeScheduleAL(postings []posting.Posting) []ScheduleALEntry {
 			}
 			amount = accounting.CostBalance(ps)
 		} else {
-			amount = 0
+			amount = decimal.Zero
 		}
 
 		return ScheduleALEntry{

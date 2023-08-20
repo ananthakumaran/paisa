@@ -6,20 +6,21 @@ import (
 	"github.com/ananthakumaran/paisa/internal/service"
 	"github.com/gin-gonic/gin"
 	"github.com/samber/lo"
+	"github.com/shopspring/decimal"
 	"gorm.io/gorm"
 )
 
 type Gain struct {
 	Account  string            `json:"account"`
 	Networth Networth          `json:"networth"`
-	XIRR     float64           `json:"xirr"`
+	XIRR     decimal.Decimal   `json:"xirr"`
 	Postings []posting.Posting `json:"postings"`
 }
 
 type AccountGain struct {
 	Account          string            `json:"account"`
 	NetworthTimeline []Networth        `json:"networthTimeline"`
-	XIRR             float64           `json:"xirr"`
+	XIRR             decimal.Decimal   `json:"xirr"`
 	Postings         []posting.Posting `json:"postings"`
 }
 

@@ -6,7 +6,8 @@
     formatCurrency,
     formatFloat,
     lastName,
-    type AssetBreakdown
+    type AssetBreakdown,
+    isZero
   } from "$lib/utils";
   import _ from "lodash";
   import { onMount } from "svelte";
@@ -56,22 +57,22 @@
                     <a href="/assets/gain/{b.group}">{lastName(b.group)}</a></td
                   >
                   <td class="has-text-right"
-                    >{b.investment_amount != 0 ? formatCurrency(b.investment_amount) : ""}</td
+                    >{!isZero(b.investment_amount) ? formatCurrency(b.investment_amount) : ""}</td
                   >
                   <td class="has-text-right"
-                    >{b.withdrawal_amount != 0 ? formatCurrency(b.withdrawal_amount) : ""}</td
+                    >{!isZero(b.withdrawal_amount) ? formatCurrency(b.withdrawal_amount) : ""}</td
                   >
                   <td class="has-text-right"
                     >{b.balance_units > 0 ? formatFloat(b.balance_units, 4) : ""}</td
                   >
                   <td class="has-text-right"
-                    >{b.market_amount != 0 ? formatCurrency(b.market_amount) : ""}</td
+                    >{!isZero(b.market_amount) ? formatCurrency(b.market_amount) : ""}</td
                   >
                   <td class="{changeClass} has-text-right"
-                    >{b.investment_amount != 0 && gain != 0 ? formatCurrency(gain) : ""}</td
+                    >{!isZero(b.investment_amount) && !isZero(gain) ? formatCurrency(gain) : ""}</td
                   >
                   <td class="{changeClass} has-text-right"
-                    >{b.xirr > 0.0001 || b.xirr < -0.0001 ? formatFloat(b.xirr) : ""}</td
+                    >{!isZero(b.xirr) ? formatFloat(b.xirr) : ""}</td
                   >
                 </tr>
               {/each}

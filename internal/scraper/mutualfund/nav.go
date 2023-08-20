@@ -3,11 +3,13 @@ package mutualfund
 import (
 	"encoding/json"
 	"fmt"
-	log "github.com/sirupsen/logrus"
 	"io/ioutil"
 	"net/http"
 	"strconv"
 	"time"
+
+	"github.com/shopspring/decimal"
+	log "github.com/sirupsen/logrus"
 
 	"github.com/ananthakumaran/paisa/internal/config"
 	"github.com/ananthakumaran/paisa/internal/model/price"
@@ -52,7 +54,7 @@ func GetNav(schemeCode string, commodityName string) ([]*price.Price, error) {
 			return nil, err
 		}
 
-		price := price.Price{Date: date, CommodityType: config.MutualFund, CommodityID: schemeCode, CommodityName: commodityName, Value: value}
+		price := price.Price{Date: date, CommodityType: config.MutualFund, CommodityID: schemeCode, CommodityName: commodityName, Value: decimal.NewFromFloat(value)}
 		prices = append(prices, &price)
 	}
 	return prices, nil

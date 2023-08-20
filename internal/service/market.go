@@ -10,6 +10,7 @@ import (
 	"github.com/ananthakumaran/paisa/internal/utils"
 	"github.com/google/btree"
 	"github.com/samber/lo"
+	"github.com/shopspring/decimal"
 	log "github.com/sirupsen/logrus"
 	"gorm.io/gorm"
 )
@@ -83,7 +84,7 @@ func GetAllPrices(db *gorm.DB, commodity string) []price.Price {
 	return utils.BTreeToSlice[price.Price](pt)
 }
 
-func GetMarketPrice(db *gorm.DB, p posting.Posting, date time.Time) float64 {
+func GetMarketPrice(db *gorm.DB, p posting.Posting, date time.Time) decimal.Decimal {
 	pcache.Do(func() { loadPriceCache(db) })
 
 	if utils.IsCurrency(p.Commodity) {
@@ -93,8 +94,8 @@ func GetMarketPrice(db *gorm.DB, p posting.Posting, date time.Time) float64 {
 	pt := pcache.pricesTree[p.Commodity]
 	if pt != nil {
 		pc := utils.BTreeDescendFirstLessOrEqual(pt, price.Price{Date: date})
-		if pc.Value != 0 {
-			return p.Quantity * pc.Value
+		if !pc.Value.Equal(decimal.Zero) {
+			return p.Quantity.Mul(pc.Value)
 		}
 	} else {
 		log.Info("Price not found ", p)

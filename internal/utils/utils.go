@@ -7,6 +7,8 @@ import (
 
 	"github.com/ananthakumaran/paisa/internal/config"
 	"github.com/google/btree"
+	"github.com/samber/lo"
+	"github.com/shopspring/decimal"
 )
 
 func BTreeDescendFirstLessOrEqual[I btree.Item](tree *btree.BTree, item I) I {
@@ -142,4 +144,10 @@ func GroupByFY[G GroupableByDate](groupables []G) map[string][]G {
 
 	}
 	return grouped
+}
+
+func SumBy[C any](collection []C, iteratee func(item C) decimal.Decimal) decimal.Decimal {
+	return lo.Reduce(collection, func(acc decimal.Decimal, item C, _ int) decimal.Decimal {
+		return iteratee(item).Add(acc)
+	}, decimal.Zero)
 }

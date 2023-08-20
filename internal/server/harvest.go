@@ -12,27 +12,28 @@ import (
 	"github.com/ananthakumaran/paisa/internal/taxation"
 	"github.com/gin-gonic/gin"
 	"github.com/samber/lo"
+	"github.com/shopspring/decimal"
 	"gorm.io/gorm"
 )
 
 type HarvestBreakdown struct {
-	Units             float64      `json:"units"`
-	PurchaseDate      time.Time    `json:"purchase_date"`
-	PurchasePrice     float64      `json:"purchase_price"`
-	CurrentPrice      float64      `json:"current_price"`
-	PurchaseUnitPrice float64      `json:"purchase_unit_price"`
-	Tax               taxation.Tax `json:"tax"`
+	Units             decimal.Decimal `json:"units"`
+	PurchaseDate      time.Time       `json:"purchase_date"`
+	PurchasePrice     decimal.Decimal `json:"purchase_price"`
+	CurrentPrice      decimal.Decimal `json:"current_price"`
+	PurchaseUnitPrice decimal.Decimal `json:"purchase_unit_price"`
+	Tax               taxation.Tax    `json:"tax"`
 }
 
 type Harvestable struct {
 	Account               string             `json:"account"`
 	TaxCategory           string             `json:"tax_category"`
-	TotalUnits            float64            `json:"total_units"`
-	HarvestableUnits      float64            `json:"harvestable_units"`
-	UnrealizedGain        float64            `json:"unrealized_gain"`
-	TaxableUnrealizedGain float64            `json:"taxable_unrealized_gain"`
+	TotalUnits            decimal.Decimal    `json:"total_units"`
+	HarvestableUnits      decimal.Decimal    `json:"harvestable_units"`
+	UnrealizedGain        decimal.Decimal    `json:"unrealized_gain"`
+	TaxableUnrealizedGain decimal.Decimal    `json:"taxable_unrealized_gain"`
 	HarvestBreakdown      []HarvestBreakdown `json:"harvest_breakdown"`
-	CurrentUnitPrice      float64            `json:"current_unit_price"`
+	CurrentUnitPrice      decimal.Decimal    `json:"current_unit_price"`
 	CurrentUnitDate       time.Time          `json:"current_unit_date"`
 }
 
@@ -57,17 +58,17 @@ func computeHarvestable(db *gorm.DB, account string, commodity config.Commodity,
 	harvestable := Harvestable{Account: account, TaxCategory: string(commodity.TaxCategory), HarvestBreakdown: []HarvestBreakdown{}, CurrentUnitPrice: currentPrice.Value, CurrentUnitDate: currentPrice.Date}
 	cutoff := time.Now().AddDate(0, 0, -commodity.Harvest)
 	for _, p := range available {
-		harvestable.TotalUnits += p.Quantity
+		harvestable.TotalUnits = harvestable.TotalUnits.Add(p.Quantity)
 		if p.Date.Before(cutoff) {
 			tax := taxation.Calculate(db, p.Quantity, commodity, p.Price(), p.Date, currentPrice.Value, currentPrice.Date)
-			harvestable.HarvestableUnits += p.Quantity
-			harvestable.UnrealizedGain += tax.Gain
-			harvestable.TaxableUnrealizedGain += tax.Taxable
+			harvestable.HarvestableUnits = harvestable.HarvestableUnits.Add(p.Quantity)
+			harvestable.UnrealizedGain = harvestable.UnrealizedGain.Add(tax.Gain)
+			harvestable.TaxableUnrealizedGain = harvestable.TaxableUnrealizedGain.Add(tax.Taxable)
 			harvestable.HarvestBreakdown = append(harvestable.HarvestBreakdown, HarvestBreakdown{
 				Units:             p.Quantity,
 				PurchaseDate:      p.Date,
 				PurchasePrice:     p.Amount,
-				CurrentPrice:      currentPrice.Value * p.Quantity,
+				CurrentPrice:      currentPrice.Value.Mul(p.Quantity),
 				PurchaseUnitPrice: p.Price(),
 				Tax:               tax,
 			})

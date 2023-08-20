@@ -7,6 +7,7 @@ import (
 
 	"github.com/ananthakumaran/paisa/internal/config"
 	"github.com/google/btree"
+	"github.com/shopspring/decimal"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -16,7 +17,7 @@ type Price struct {
 	CommodityType config.CommodityType `json:"commodity_type"`
 	CommodityID   string               `json:"commodity_id"`
 	CommodityName string               `json:"commodity_name"`
-	Value         float64              `json:"value"`
+	Value         decimal.Decimal      `json:"value"`
 }
 
 func (p Price) Less(o btree.Item) bool {

@@ -1,14 +1,13 @@
 package server
 
 import (
-	"math"
-
 	"github.com/ananthakumaran/paisa/internal/model/posting"
 	"github.com/ananthakumaran/paisa/internal/model/transaction"
 	"github.com/ananthakumaran/paisa/internal/query"
 	"github.com/ananthakumaran/paisa/internal/utils"
 	"github.com/gin-gonic/gin"
 	"github.com/samber/lo"
+	"github.com/shopspring/decimal"
 	"gorm.io/gorm"
 )
 
@@ -18,9 +17,9 @@ type Node struct {
 }
 
 type Link struct {
-	Source uint    `json:"source"`
-	Target uint    `json:"target"`
-	Value  float64 `json:"value"`
+	Source uint            `json:"source"`
+	Target uint            `json:"target"`
+	Value  decimal.Decimal `json:"value"`
 }
 
 type Pair struct {
@@ -67,7 +66,7 @@ func GetExpense(db *gorm.DB) gin.H {
 
 func computeGraph(postings []posting.Posting) Graph {
 	nodes := make(map[string]Node)
-	links := make(map[Pair]float64)
+	links := make(map[Pair]decimal.Decimal)
 
 	var nodeID uint = 0
 
@@ -83,19 +82,19 @@ func computeGraph(postings []posting.Posting) Graph {
 	}
 
 	for _, t := range transactions {
-		from := lo.Filter(t.Postings, func(p posting.Posting, _ int) bool { return p.Amount < 0 })
-		to := lo.Filter(t.Postings, func(p posting.Posting, _ int) bool { return p.Amount > 0 })
+		from := lo.Filter(t.Postings, func(p posting.Posting, _ int) bool { return p.Amount.LessThan(decimal.Zero) })
+		to := lo.Filter(t.Postings, func(p posting.Posting, _ int) bool { return p.Amount.GreaterThan(decimal.Zero) })
 
 		for _, f := range from {
-			for math.Abs(f.Amount) > 0.1 && len(to) > 0 {
+			for f.Amount.Abs().GreaterThan(decimal.NewFromFloat(0.1)) && len(to) > 0 {
 				top := to[0]
-				if top.Amount > -f.Amount {
-					links[Pair{Source: nodes[f.Account].ID, Target: nodes[top.Account].ID}] += -f.Amount
-					top.Amount -= f.Amount
-					f.Amount = 0
+				if top.Amount.GreaterThan(f.Amount.Neg()) {
+					links[Pair{Source: nodes[f.Account].ID, Target: nodes[top.Account].ID}] = links[Pair{Source: nodes[f.Account].ID, Target: nodes[top.Account].ID}].Add(f.Amount.Neg())
+					top.Amount = top.Amount.Sub(f.Amount)
+					f.Amount = decimal.Zero
 				} else {
-					links[Pair{Source: nodes[f.Account].ID, Target: nodes[top.Account].ID}] += top.Amount
-					f.Amount += top.Amount
+					links[Pair{Source: nodes[f.Account].ID, Target: nodes[top.Account].ID}] = links[Pair{Source: nodes[f.Account].ID, Target: nodes[top.Account].ID}].Add(top.Amount)
+					f.Amount = f.Amount.Add(top.Amount)
 					to = to[1:]
 				}
 			}

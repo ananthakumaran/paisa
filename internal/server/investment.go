@@ -4,11 +4,12 @@ import (
 	"strings"
 	"time"
 
+	"github.com/ananthakumaran/paisa/internal/accounting"
 	"github.com/ananthakumaran/paisa/internal/model/posting"
 	"github.com/ananthakumaran/paisa/internal/query"
 	"github.com/ananthakumaran/paisa/internal/utils"
 	"github.com/gin-gonic/gin"
-	"github.com/samber/lo"
+	"github.com/shopspring/decimal"
 	"gorm.io/gorm"
 )
 
@@ -16,13 +17,13 @@ type InvestmentYearlyCard struct {
 	StartDate         time.Time         `json:"start_date"`
 	EndDate           time.Time         `json:"end_date"`
 	Postings          []posting.Posting `json:"postings"`
-	GrossSalaryIncome float64           `json:"gross_salary_income"`
-	GrossOtherIncome  float64           `json:"gross_other_income"`
-	NetTax            float64           `json:"net_tax"`
-	NetIncome         float64           `json:"net_income"`
-	NetInvestment     float64           `json:"net_investment"`
-	NetExpense        float64           `json:"net_expense"`
-	SavingsRate       float64           `json:"savings_rate"`
+	GrossSalaryIncome decimal.Decimal   `json:"gross_salary_income"`
+	GrossOtherIncome  decimal.Decimal   `json:"gross_other_income"`
+	NetTax            decimal.Decimal   `json:"net_tax"`
+	NetIncome         decimal.Decimal   `json:"net_income"`
+	NetInvestment     decimal.Decimal   `json:"net_investment"`
+	NetExpense        decimal.Decimal   `json:"net_expense"`
+	SavingsRate       decimal.Decimal   `json:"savings_rate"`
 }
 
 func GetInvestment(db *gorm.DB) gin.H {
@@ -65,8 +66,8 @@ func computeInvestmentYearlyCard(start time.Time, assets []posting.Posting, expe
 			}
 		}
 
-		netTax := lo.SumBy(currentYearTaxes, func(p posting.Posting) float64 { return p.Amount })
-		netExpense := lo.SumBy(currentYearExpenses, func(p posting.Posting) float64 { return p.Amount })
+		netTax := accounting.CostSum(currentYearTaxes)
+		netExpense := accounting.CostSum(currentYearExpenses)
 
 		var currentYearIncomes []posting.Posting = make([]posting.Posting, 0)
 		for len(incomes) > 0 && utils.IsWithDate(incomes[0].Date, start, yearEnd) {
@@ -74,27 +75,27 @@ func computeInvestmentYearlyCard(start time.Time, assets []posting.Posting, expe
 			currentYearIncomes = append(currentYearIncomes, p)
 		}
 
-		grossSalaryIncome := lo.SumBy(currentYearIncomes, func(p posting.Posting) float64 {
+		grossSalaryIncome := utils.SumBy(currentYearIncomes, func(p posting.Posting) decimal.Decimal {
 			if strings.HasPrefix(p.Account, "Income:Salary") {
-				return -p.Amount
+				return p.Amount.Neg()
 			} else {
-				return 0
+				return decimal.Zero
 			}
 		})
-		grossOtherIncome := lo.SumBy(currentYearIncomes, func(p posting.Posting) float64 {
+		grossOtherIncome := utils.SumBy(currentYearIncomes, func(p posting.Posting) decimal.Decimal {
 			if !strings.HasPrefix(p.Account, "Income:Salary") {
-				return -p.Amount
+				return p.Amount.Neg()
 			} else {
-				return 0
+				return decimal.Zero
 			}
 		})
 
-		netInvestment := lo.SumBy(currentYearPostings, func(p posting.Posting) float64 { return p.Amount })
+		netInvestment := accounting.CostSum(currentYearPostings)
 
-		netIncome := grossSalaryIncome + grossOtherIncome - netTax
-		var savingsRate float64 = 0
-		if netIncome != 0 {
-			savingsRate = (netInvestment / netIncome) * 100
+		netIncome := grossSalaryIncome.Add(grossOtherIncome).Sub(netTax)
+		var savingsRate decimal.Decimal = decimal.Zero
+		if !netIncome.Equal(decimal.Zero) {
+			savingsRate = (netInvestment.Div(netIncome)).Mul(decimal.NewFromInt(100))
 		}
 
 		yearlyCards = append(yearlyCards, InvestmentYearlyCard{

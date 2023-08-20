@@ -10,6 +10,7 @@ import (
 	"github.com/ananthakumaran/paisa/internal/service"
 	"github.com/ananthakumaran/paisa/internal/utils"
 	"github.com/samber/lo"
+	"github.com/shopspring/decimal"
 	log "github.com/sirupsen/logrus"
 	"gorm.io/gorm"
 )
@@ -17,15 +18,15 @@ import (
 type Balance struct {
 	Date      time.Time
 	Commodity string
-	Quantity  float64
+	Quantity  decimal.Decimal
 }
 
 func Register(postings []posting.Posting) []Balance {
 	balances := make([]Balance, 0)
-	current := Balance{Quantity: 0}
+	current := Balance{Quantity: decimal.Zero}
 	for _, p := range postings {
 		sameDay := p.Date == current.Date
-		current = Balance{Date: p.Date, Quantity: p.Quantity + current.Quantity, Commodity: p.Commodity}
+		current = Balance{Date: p.Date, Quantity: p.Quantity.Add(current.Quantity), Commodity: p.Commodity}
 		if sameDay {
 			balances = balances[:len(balances)-1]
 		}
@@ -51,35 +52,35 @@ func FIFO(postings []posting.Posting) []posting.Posting {
 	var available []posting.Posting
 	for _, p := range postings {
 		if utils.IsCurrency(p.Commodity) {
-			if p.Amount > 0 {
+			if p.Amount.GreaterThan(decimal.Zero) {
 				available = append(available, p)
 			} else {
-				amount := -p.Amount
-				for amount > 0 && len(available) > 0 {
+				amount := p.Amount.Neg()
+				for amount.GreaterThan(decimal.Zero) && len(available) > 0 {
 					first := available[0]
-					if first.Amount > amount {
-						first.AddAmount(-amount)
+					if first.Amount.GreaterThan(amount) {
+						first.AddAmount(amount.Neg())
 						available[0] = first
-						amount = 0
+						amount = decimal.Zero
 					} else {
-						amount -= first.Amount
+						amount = amount.Sub(first.Amount)
 						available = available[1:]
 					}
 				}
 			}
 		} else {
-			if p.Quantity > 0 {
+			if p.Quantity.GreaterThan(decimal.Zero) {
 				available = append(available, p)
 			} else {
-				quantity := -p.Quantity
-				for quantity > 0 && len(available) > 0 {
+				quantity := p.Quantity.Neg()
+				for quantity.GreaterThan(decimal.Zero) && len(available) > 0 {
 					first := available[0]
-					if first.Quantity > quantity {
-						first.AddQuantity(-quantity)
+					if first.Quantity.GreaterThan(quantity) {
+						first.AddQuantity(quantity.Neg())
 						available[0] = first
-						quantity = 0
+						quantity = decimal.Zero
 					} else {
-						quantity -= first.Quantity
+						quantity = quantity.Sub(first.Quantity)
 						available = available[1:]
 					}
 				}
@@ -90,31 +91,31 @@ func FIFO(postings []posting.Posting) []posting.Posting {
 	return available
 }
 
-func CostBalance(postings []posting.Posting) float64 {
+func CostBalance(postings []posting.Posting) decimal.Decimal {
 	byAccount := lo.GroupBy(postings, func(p posting.Posting) string { return p.Account })
-	return lo.SumBy(lo.Values(byAccount), func(ps []posting.Posting) float64 {
-		return lo.SumBy(FIFO(ps), func(p posting.Posting) float64 {
+	return utils.SumBy(lo.Values(byAccount), func(ps []posting.Posting) decimal.Decimal {
+		return utils.SumBy(FIFO(ps), func(p posting.Posting) decimal.Decimal {
 			return p.Amount
 		})
 	})
 
 }
 
-func CurrentBalance(postings []posting.Posting) float64 {
-	return lo.SumBy(postings, func(p posting.Posting) float64 {
+func CurrentBalance(postings []posting.Posting) decimal.Decimal {
+	return utils.SumBy(postings, func(p posting.Posting) decimal.Decimal {
 		return p.MarketAmount
 	})
 }
 
-func CostSum(postings []posting.Posting) float64 {
-	return lo.SumBy(postings, func(p posting.Posting) float64 {
+func CostSum(postings []posting.Posting) decimal.Decimal {
+	return utils.SumBy(postings, func(p posting.Posting) decimal.Decimal {
 		return p.Amount
 	})
 }
 
 type Point struct {
-	Date  time.Time `json:"date"`
-	Value float64   `json:"value"`
+	Date  time.Time       `json:"date"`
+	Value decimal.Decimal `json:"value"`
 }
 
 func RunningBalance(db *gorm.DB, postings []posting.Posting) []Point {
@@ -135,7 +136,7 @@ func RunningBalance(db *gorm.DB, postings []posting.Posting) []Point {
 			pastPostings = append(pastPostings, p)
 		}
 
-		balance := lo.SumBy(pastPostings, func(p posting.Posting) float64 {
+		balance := utils.SumBy(pastPostings, func(p posting.Posting) decimal.Decimal {
 			return service.GetMarketPrice(db, p, start)
 		})
 		series = append(series, Point{Date: start, Value: balance})

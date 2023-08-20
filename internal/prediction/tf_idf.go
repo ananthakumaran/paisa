@@ -53,7 +53,7 @@ func buldIndex(postings []posting.Posting) index {
 		if idx.Docs[p.Account] == nil {
 			idx.Docs[p.Account] = make(map[string]int64)
 		}
-		for _, token := range tokenize(strings.Join([]string{strings.TrimRight(strings.TrimRight(fmt.Sprintf("%f", p.Amount), "0"), "."), p.Payee}, " ")) {
+		for _, token := range tokenize(strings.Join([]string{strings.TrimRight(strings.TrimRight(fmt.Sprintf("%f", p.Amount.InexactFloat64()), "0"), "."), p.Payee}, " ")) {
 			if idx.Tokens[token] == nil {
 				idx.Tokens[token] = make(map[string]int64)
 			}

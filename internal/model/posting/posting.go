@@ -4,26 +4,27 @@ import (
 	"strings"
 	"time"
 
+	"github.com/shopspring/decimal"
 	log "github.com/sirupsen/logrus"
 	"gorm.io/gorm"
 )
 
 type Posting struct {
-	ID                   uint      `gorm:"primaryKey" json:"id"`
-	TransactionID        string    `json:"transaction_id"`
-	Date                 time.Time `json:"date"`
-	Payee                string    `json:"payee"`
-	Account              string    `json:"account"`
-	Commodity            string    `json:"commodity"`
-	Quantity             float64   `json:"quantity"`
-	Amount               float64   `json:"amount"`
-	Status               string    `json:"status"`
-	TagRecurring         string    `json:"tag_recurring"`
-	TransactionBeginLine uint64    `json:"transaction_begin_line"`
-	TransactionEndLine   uint64    `json:"transaction_end_line"`
-	FileName             string    `json:"file_name"`
+	ID                   uint            `gorm:"primaryKey" json:"id"`
+	TransactionID        string          `json:"transaction_id"`
+	Date                 time.Time       `json:"date"`
+	Payee                string          `json:"payee"`
+	Account              string          `json:"account"`
+	Commodity            string          `json:"commodity"`
+	Quantity             decimal.Decimal `json:"quantity"`
+	Amount               decimal.Decimal `json:"amount"`
+	Status               string          `json:"status"`
+	TagRecurring         string          `json:"tag_recurring"`
+	TransactionBeginLine uint64          `json:"transaction_begin_line"`
+	TransactionEndLine   uint64          `json:"transaction_end_line"`
+	FileName             string          `json:"file_name"`
 
-	MarketAmount float64 `gorm:"-:all" json:"market_amount"`
+	MarketAmount decimal.Decimal `gorm:"-:all" json:"market_amount"`
 }
 
 func (p Posting) GroupDate() time.Time {
@@ -36,29 +37,29 @@ func (p *Posting) RestName(level int) string {
 
 func (p Posting) Negate() Posting {
 	clone := p
-	clone.Quantity = -p.Quantity
-	clone.Amount = -p.Amount
+	clone.Quantity = p.Quantity.Neg()
+	clone.Amount = p.Amount.Neg()
 	return clone
 }
 
-func (p *Posting) Price() float64 {
-	return p.Amount / p.Quantity
+func (p *Posting) Price() decimal.Decimal {
+	return p.Amount.Div(p.Quantity)
 }
 
-func (p *Posting) AddAmount(amount float64) {
-	p.Amount += amount
+func (p *Posting) AddAmount(amount decimal.Decimal) {
+	p.Amount = p.Amount.Add(amount)
 }
 
-func (p *Posting) AddQuantity(quantity float64) {
+func (p *Posting) AddQuantity(quantity decimal.Decimal) {
 	price := p.Price()
-	p.Quantity += quantity
-	p.Amount = p.Quantity * price
+	p.Quantity = p.Quantity.Add(quantity)
+	p.Amount = p.Quantity.Mul(price)
 }
 
-func (p Posting) WithQuantity(quantity float64) Posting {
+func (p Posting) WithQuantity(quantity decimal.Decimal) Posting {
 	clone := p
 	clone.Quantity = quantity
-	clone.Amount = quantity * p.Price()
+	clone.Amount = quantity.Mul(p.Price())
 	return clone
 }
 

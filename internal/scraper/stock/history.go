@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/google/btree"
+	"github.com/shopspring/decimal"
 	log "github.com/sirupsen/logrus"
 
 	"github.com/ananthakumaran/paisa/internal/config"
@@ -85,7 +86,7 @@ func GetHistory(ticker string, commodityName string) ([]*price.Price, error) {
 			value = value * exchangePrice.Close
 		}
 
-		price := price.Price{Date: date, CommodityType: config.Stock, CommodityID: ticker, CommodityName: commodityName, Value: value}
+		price := price.Price{Date: date, CommodityType: config.Stock, CommodityID: ticker, CommodityName: commodityName, Value: decimal.NewFromFloat(value)}
 
 		prices = append(prices, &price)
 	}

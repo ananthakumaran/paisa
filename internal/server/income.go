@@ -7,7 +7,7 @@ import (
 	"github.com/ananthakumaran/paisa/internal/query"
 	"github.com/ananthakumaran/paisa/internal/utils"
 	"github.com/gin-gonic/gin"
-	"github.com/samber/lo"
+	"github.com/shopspring/decimal"
 	"gorm.io/gorm"
 )
 
@@ -15,9 +15,9 @@ type IncomeYearlyCard struct {
 	StartDate   time.Time         `json:"start_date"`
 	EndDate     time.Time         `json:"end_date"`
 	Postings    []posting.Posting `json:"postings"`
-	GrossIncome float64           `json:"gross_income"`
-	NetTax      float64           `json:"net_tax"`
-	NetIncome   float64           `json:"net_income"`
+	GrossIncome decimal.Decimal   `json:"gross_income"`
+	NetTax      decimal.Decimal   `json:"net_tax"`
+	NetIncome   decimal.Decimal   `json:"net_income"`
 }
 
 type Income struct {
@@ -91,10 +91,10 @@ func computeIncomeYearlyCard(start time.Time, taxes []posting.Posting, incomes [
 	end := time.Now()
 	for start = utils.BeginningOfFinancialYear(start); start.Before(end); start = start.AddDate(1, 0, 0) {
 		yearEnd := utils.EndOfFinancialYear(start)
-		var netTax float64 = 0
+		var netTax decimal.Decimal = decimal.Zero
 		for len(taxes) > 0 && utils.IsWithDate(taxes[0].Date, start, yearEnd) {
 			p, taxes = taxes[0], taxes[1:]
-			netTax += p.Amount
+			netTax = netTax.Add(p.Amount)
 		}
 
 		var currentYearIncomes []posting.Posting = make([]posting.Posting, 0)
@@ -103,8 +103,8 @@ func computeIncomeYearlyCard(start time.Time, taxes []posting.Posting, incomes [
 			currentYearIncomes = append(currentYearIncomes, p)
 		}
 
-		grossIncome := lo.SumBy(currentYearIncomes, func(p posting.Posting) float64 {
-			return -p.Amount
+		grossIncome := utils.SumBy(currentYearIncomes, func(p posting.Posting) decimal.Decimal {
+			return p.Amount.Neg()
 		})
 
 		yearlyCards = append(yearlyCards, IncomeYearlyCard{
@@ -113,7 +113,7 @@ func computeIncomeYearlyCard(start time.Time, taxes []posting.Posting, incomes [
 			Postings:    currentYearIncomes,
 			NetTax:      netTax,
 			GrossIncome: grossIncome,
-			NetIncome:   grossIncome - netTax,
+			NetIncome:   grossIncome.Sub(netTax),
 		})
 
 	}

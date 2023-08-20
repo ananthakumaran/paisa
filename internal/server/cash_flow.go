@@ -7,18 +7,19 @@ import (
 	"github.com/ananthakumaran/paisa/internal/query"
 	"github.com/ananthakumaran/paisa/internal/utils"
 	"github.com/gin-gonic/gin"
+	"github.com/shopspring/decimal"
 	"gorm.io/gorm"
 )
 
 type CashFlow struct {
-	Date        time.Time `json:"date"`
-	Income      float64   `json:"income"`
-	Expenses    float64   `json:"expenses"`
-	Liabilities float64   `json:"liabilities"`
-	Investment  float64   `json:"investment"`
-	Tax         float64   `json:"tax"`
-	Checking    float64   `json:"checking"`
-	Balance     float64   `json:"balance"`
+	Date        time.Time       `json:"date"`
+	Income      decimal.Decimal `json:"income"`
+	Expenses    decimal.Decimal `json:"expenses"`
+	Liabilities decimal.Decimal `json:"liabilities"`
+	Investment  decimal.Decimal `json:"investment"`
+	Tax         decimal.Decimal `json:"tax"`
+	Checking    decimal.Decimal `json:"checking"`
+	Balance     decimal.Decimal `json:"balance"`
 }
 
 func (c CashFlow) GroupDate() time.Time {
@@ -26,7 +27,7 @@ func (c CashFlow) GroupDate() time.Time {
 }
 
 func GetCashFlow(db *gorm.DB) gin.H {
-	return gin.H{"cash_flows": computeCashFlow(db, query.Init(db), 0)}
+	return gin.H{"cash_flows": computeCashFlow(db, query.Init(db), decimal.Zero)}
 }
 
 func GetCurrentCashFlow(db *gorm.DB) []CashFlow {
@@ -34,7 +35,7 @@ func GetCurrentCashFlow(db *gorm.DB) []CashFlow {
 	return computeCashFlow(db, query.Init(db).LastNMonths(3), balance)
 }
 
-func computeCashFlow(db *gorm.DB, q *query.Query, balance float64) []CashFlow {
+func computeCashFlow(db *gorm.DB, q *query.Query, balance decimal.Decimal) []CashFlow {
 	var cashFlows []CashFlow
 
 	expenses := utils.GroupByMonth(q.Clone().Like("Expenses:%").NotLike("Expenses:Tax").All())
@@ -61,12 +62,12 @@ func computeCashFlow(db *gorm.DB, q *query.Query, balance float64) []CashFlow {
 
 		ps, ok = incomes[key]
 		if ok {
-			cashFlow.Income = -accounting.CostSum(ps)
+			cashFlow.Income = accounting.CostSum(ps).Neg()
 		}
 
 		ps, ok = liabilities[key]
 		if ok {
-			cashFlow.Liabilities = -accounting.CostSum(ps)
+			cashFlow.Liabilities = accounting.CostSum(ps).Neg()
 		}
 
 		ps, ok = investments[key]
@@ -84,7 +85,7 @@ func computeCashFlow(db *gorm.DB, q *query.Query, balance float64) []CashFlow {
 			cashFlow.Checking = accounting.CostSum(ps)
 		}
 
-		balance += cashFlow.Checking
+		balance = balance.Add(cashFlow.Checking)
 		cashFlow.Balance = balance
 
 		cashFlows = append(cashFlows, cashFlow)

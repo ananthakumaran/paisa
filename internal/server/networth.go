@@ -1,7 +1,6 @@
 package server
 
 import (
-	"math"
 	"time"
 
 	"github.com/ananthakumaran/paisa/internal/model/posting"
@@ -9,16 +8,17 @@ import (
 	"github.com/ananthakumaran/paisa/internal/service"
 	"github.com/ananthakumaran/paisa/internal/utils"
 	"github.com/gin-gonic/gin"
+	"github.com/shopspring/decimal"
 	"gorm.io/gorm"
 )
 
 type Networth struct {
-	Date                time.Time `json:"date"`
-	InvestmentAmount    float64   `json:"investmentAmount"`
-	WithdrawalAmount    float64   `json:"withdrawalAmount"`
-	GainAmount          float64   `json:"gainAmount"`
-	BalanceAmount       float64   `json:"balanceAmount"`
-	NetInvestmentAmount float64   `json:"netInvestmentAmount"`
+	Date                time.Time       `json:"date"`
+	InvestmentAmount    decimal.Decimal `json:"investmentAmount"`
+	WithdrawalAmount    decimal.Decimal `json:"withdrawalAmount"`
+	GainAmount          decimal.Decimal `json:"gainAmount"`
+	BalanceAmount       decimal.Decimal `json:"balanceAmount"`
+	NetInvestmentAmount decimal.Decimal `json:"netInvestmentAmount"`
 }
 
 func GetNetworth(db *gorm.DB) gin.H {
@@ -46,31 +46,31 @@ func computeNetworth(db *gorm.DB, postings []posting.Posting) Networth {
 		return networth
 	}
 
-	var investment float64 = 0
-	var withdrawal float64 = 0
-	var balance float64 = 0
+	var investment decimal.Decimal = decimal.Zero
+	var withdrawal decimal.Decimal = decimal.Zero
+	var balance decimal.Decimal = decimal.Zero
 
 	now := utils.BeginingOfDay(time.Now())
 	for _, p := range postings {
 		isInterest := service.IsInterest(db, p)
 
-		if p.Amount > 0 && !isInterest {
-			investment += p.Amount
+		if p.Amount.GreaterThan(decimal.Zero) && !isInterest {
+			investment = investment.Add(p.Amount)
 		}
 
-		if p.Amount < 0 && !isInterest {
-			withdrawal += -p.Amount
+		if p.Amount.LessThan(decimal.Zero) && !isInterest {
+			withdrawal = withdrawal.Add(p.Amount.Neg())
 		}
 
 		if isInterest {
-			balance += p.Amount
+			balance = balance.Add(p.Amount)
 		} else {
-			balance += service.GetMarketPrice(db, p, now)
+			balance = balance.Add(service.GetMarketPrice(db, p, now))
 		}
 	}
 
-	gain := balance + withdrawal - investment
-	net_investment := investment - withdrawal
+	gain := balance.Add(withdrawal).Sub(investment)
+	net_investment := investment.Sub(withdrawal)
 	networth = Networth{Date: now, InvestmentAmount: investment, WithdrawalAmount: withdrawal, GainAmount: gain, BalanceAmount: balance, NetInvestmentAmount: net_investment}
 
 	return networth
@@ -93,33 +93,33 @@ func computeNetworthTimeline(db *gorm.DB, postings []posting.Posting) []Networth
 			pastPostings = append(pastPostings, p)
 		}
 
-		var investment float64 = 0
-		var withdrawal float64 = 0
-		var balance float64 = 0
+		var investment decimal.Decimal = decimal.Zero
+		var withdrawal decimal.Decimal = decimal.Zero
+		var balance decimal.Decimal = decimal.Zero
 
 		for _, p := range pastPostings {
 			isInterest := service.IsInterest(db, p)
 
-			if p.Amount > 0 && !isInterest {
-				investment += p.Amount
+			if p.Amount.GreaterThan(decimal.Zero) && !isInterest {
+				investment = investment.Add(p.Amount)
 			}
 
-			if p.Amount < 0 && !isInterest {
-				withdrawal += -p.Amount
+			if p.Amount.LessThan(decimal.Zero) && !isInterest {
+				withdrawal = withdrawal.Add(p.Amount.Neg())
 			}
 
 			if isInterest {
-				balance += p.Amount
+				balance = balance.Add(p.Amount)
 			} else {
-				balance += service.GetMarketPrice(db, p, start)
+				balance = balance.Add(service.GetMarketPrice(db, p, start))
 			}
 		}
 
-		gain := balance + withdrawal - investment
-		net_investment := investment - withdrawal
+		gain := balance.Add(withdrawal).Sub(investment)
+		net_investment := investment.Sub(withdrawal)
 		networths = append(networths, Networth{Date: start, InvestmentAmount: investment, WithdrawalAmount: withdrawal, GainAmount: gain, BalanceAmount: balance, NetInvestmentAmount: net_investment})
 
-		if len(postings) == 0 && math.Abs(balance) < 0.01 {
+		if len(postings) == 0 && balance.Abs().LessThan(decimal.NewFromFloat(0.01)) {
 			break
 		}
 	}

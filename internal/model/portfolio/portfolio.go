@@ -2,6 +2,7 @@ package portfolio
 
 import (
 	"github.com/ananthakumaran/paisa/internal/config"
+	"github.com/shopspring/decimal"
 	log "github.com/sirupsen/logrus"
 	"gorm.io/gorm"
 )
@@ -15,7 +16,7 @@ type Portfolio struct {
 	SecurityType      string               `json:"security_type"`
 	SecurityRating    string               `json:"security_rating"`
 	SecurityIndustry  string               `json:"security_industry"`
-	Percentage        float64              `json:"percentage"`
+	Percentage        decimal.Decimal      `json:"percentage"`
 }
 
 func UpsertAll(db *gorm.DB, commodityType config.CommodityType, parentCommodityID string, portfolios []*Portfolio) {

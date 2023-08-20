@@ -151,12 +151,12 @@ func emitTransaction(file *os.File, date time.Time, payee string, from string, t
 
 func emitCommodityBuy(file *os.File, date time.Time, commodity string, from string, to string, amount float64) float64 {
 	pc := utils.BTreeDescendFirstLessOrEqual(pricesTree[commodity], price.Price{Date: date})
-	units := amount / pc.Value
+	units := amount / pc.Value.InexactFloat64()
 	_, err := file.WriteString(fmt.Sprintf(`
 %s Investment
     %s                      %s %s @    %s INR
     %s
-`, date.Format("2006/01/02"), to, formatFloat(units), commodity, formatFloat(pc.Value), from))
+`, date.Format("2006/01/02"), to, formatFloat(units), commodity, formatFloat(pc.Value.InexactFloat64()), from))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -165,9 +165,9 @@ func emitCommodityBuy(file *os.File, date time.Time, commodity string, from stri
 
 func emitCommoditySell(file *os.File, date time.Time, commodity string, from string, to string, amount float64, availableUnits float64) (float64, float64) {
 	pc := utils.BTreeDescendFirstLessOrEqual(pricesTree[commodity], price.Price{Date: date})
-	requiredUnits := amount / pc.Value
+	requiredUnits := amount / pc.Value.InexactFloat64()
 	units := math.Min(availableUnits, requiredUnits)
-	return emitCommodityBuy(file, date, commodity, from, to, -units*pc.Value), units * pc.Value
+	return emitCommodityBuy(file, date, commodity, from, to, -units*pc.Value.InexactFloat64()), units * pc.Value.InexactFloat64()
 }
 
 func loadPrices(schemeCode string, commodityType config.CommodityType, commodityName string, pricesTree map[string]*btree.BTree) {

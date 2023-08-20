@@ -845,3 +845,7 @@ export function getColorPreference() {
 export function setColorPreference(theme: string) {
   localStorage.setItem(storageKey, theme);
 }
+
+export function isZero(n: number) {
+  return n < 0.0001 && n > -0.0001;
+}

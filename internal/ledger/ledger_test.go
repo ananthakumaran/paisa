@@ -10,7 +10,7 @@ import (
 func assertPriceEqual(t *testing.T, actual price.Price, date string, commodityName string, value float64) {
 	assert.Equal(t, commodityName, actual.CommodityName, "they should be equal")
 	assert.Equal(t, date, actual.Date.Format("2006/01/02"), "they should be equal")
-	assert.Equal(t, value, actual.Value, "they should be equal")
+	assert.Equal(t, value, actual.Value.InexactFloat64(), "they should be equal")
 }
 
 func TestParseLegerPrices(t *testing.T) {

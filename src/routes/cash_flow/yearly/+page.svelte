@@ -3,13 +3,13 @@
   import _ from "lodash";
   import { renderFlow } from "$lib/cash_flow";
   import { ajax, type Graph, type Posting } from "$lib/utils";
-  import { dateMin, year } from "../../../store";
+  import { dateMin, year, cashflowType } from "../../../store";
 
-  let graph: Record<string, Graph>, expenses: Posting[];
+  let graph: Record<string, Record<string, Graph>>, expenses: Posting[];
   let isEmpty = false;
 
   $: if (graph) {
-    renderFlow(graph[$year]);
+    renderFlow(graph[$year][$cashflowType], $cashflowType);
     if (graph[$year] == null) {
       isEmpty = true;
     } else {

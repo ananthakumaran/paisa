@@ -225,7 +225,12 @@ svg text {
 }
 
 .g-arrow path {
-  opacity: 0.5;
+  opacity: 0.4;
+  stroke: $black !important;
+}
+
+.g-arrow path.arrow-head {
+  fill: $black !important;
 }
 
 .legendOrdinal,

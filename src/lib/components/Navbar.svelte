@@ -1,7 +1,7 @@
 <script lang="ts">
   import { page } from "$app/stores";
   import Sync from "$lib/components/Sync.svelte";
-  import { month, year, dateMax, dateMin, dateRangeOption } from "../../store";
+  import { month, year, dateMax, dateMin, dateRangeOption, cashflowType } from "../../store";
   import _ from "lodash";
   import { financialYear, forEachFinancialYear, helpUrl } from "$lib/utils";
   import { onMount } from "svelte";
@@ -9,6 +9,7 @@
   import dayjs from "dayjs";
   import DateRange from "./DateRange.svelte";
   import ThemeSwitcher from "./ThemeSwitcher.svelte";
+  import BoxedTabs from "./BoxedTabs.svelte";
   export let isBurger: boolean = null;
 
   onMount(async () => {
@@ -24,6 +25,7 @@
     help?: string;
     dateRangeSelector?: boolean;
     monthPicker?: boolean;
+    cashflowTypePicker?: boolean;
     financialYearPicker?: boolean;
     children?: Link[];
   }
@@ -34,7 +36,7 @@
       href: "/cash_flow",
       children: [
         { label: "Monthly", href: "/monthly", dateRangeSelector: true },
-        { label: "Yearly", href: "/yearly", financialYearPicker: true },
+        { label: "Yearly", href: "/yearly", cashflowTypePicker: true, financialYearPicker: true },
         { label: "Recurring", href: "/recurring", tag: "alpha", help: "recurring" }
       ]
     },
@@ -244,6 +246,16 @@
   {/if}
 
   <div class="mr-3 is-flex" style="gap: 12px">
+    {#if selectedSubLink?.cashflowTypePicker}
+      <BoxedTabs
+        options={[
+          { label: "Flat", value: "flat" },
+          { label: "Hierachy", value: "hierachy" }
+        ]}
+        bind:value={$cashflowType}
+      />
+    {/if}
+
     {#if selectedSubLink?.dateRangeSelector || selectedLink?.dateRangeSelector}
       <div>
         <DateRange bind:value={$dateRangeOption} dateMin={$dateMin} dateMax={$dateMax} />

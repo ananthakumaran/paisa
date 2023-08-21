@@ -25,6 +25,8 @@ export const dateRange = derived(
   }
 );
 
+export const cashflowType = writable("hierachy");
+
 export const theme = writable("light");
 
 export const loading = writable(false);

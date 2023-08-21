@@ -436,7 +436,7 @@ export function ajax(route: "/api/expense"): Promise<{
     investments: { [key: string]: Posting[] };
     taxes: { [key: string]: Posting[] };
   };
-  graph: { [key: string]: Graph };
+  graph: { [key: string]: { flat: Graph; hierachy: Graph } };
 }>;
 
 export function ajax(route: "/api/cash_flow"): Promise<{ cash_flows: CashFlow[] }>;

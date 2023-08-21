@@ -1,5 +1,6 @@
 <script lang="ts">
   import type dayjs from "dayjs";
+  import BoxedTabs from "./BoxedTabs.svelte";
 
   export let value: number;
   export let dateMin: dayjs.Dayjs;
@@ -25,14 +26,5 @@
 </script>
 
 {#if options.length > 1}
-  <div class="du-tabs du-tabs-boxed">
-    {#each options as option}
-      <a
-        class="du-tab du-tab-sm {option.value === value ? 'du-tab-active' : ''}"
-        on:click={() => (value = option.value)}
-      >
-        {option.label}
-      </a>
-    {/each}
-  </div>
+  <BoxedTabs bind:value {options} />
 {/if}

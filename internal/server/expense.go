@@ -1,6 +1,8 @@
 package server
 
 import (
+	"strings"
+
 	"github.com/ananthakumaran/paisa/internal/model/posting"
 	"github.com/ananthakumaran/paisa/internal/model/transaction"
 	"github.com/ananthakumaran/paisa/internal/query"
@@ -44,9 +46,11 @@ func GetExpense(db *gorm.DB) gin.H {
 	taxes := query.Init(db).Like("Expenses:Tax").All()
 	postings := query.Init(db).All()
 
-	graph := make(map[string]Graph)
+	graph := make(map[string]map[string]Graph)
 	for fy, ps := range utils.GroupByFY(postings) {
-		graph[fy] = computeGraph(ps)
+		graph[fy] = make(map[string]Graph)
+		graph[fy]["flat"] = computeGraph(ps)
+		graph[fy]["hierachy"] = computeHierachyGraph(ps)
 	}
 
 	return gin.H{
@@ -105,4 +109,88 @@ func computeGraph(postings []posting.Posting) Graph {
 		return Link{Source: k.Source, Target: k.Target, Value: links[k]}
 	})}
 
+}
+
+func computeHierachyGraph(postings []posting.Posting) Graph {
+	nodes := make(map[string]Node)
+	links := make(map[Pair]decimal.Decimal)
+
+	var nodeID uint = 0
+
+	transactions := transaction.Build(postings)
+
+	for _, p := range postings {
+		addNode(&nodeID, &nodes, p.Account)
+	}
+
+	for _, t := range transactions {
+		from := lo.Filter(t.Postings, func(p posting.Posting, _ int) bool { return p.Amount.LessThan(decimal.Zero) })
+		to := lo.Filter(t.Postings, func(p posting.Posting, _ int) bool { return p.Amount.GreaterThan(decimal.Zero) })
+
+		for _, f := range from {
+			for f.Amount.Abs().GreaterThan(decimal.NewFromFloat(0.1)) && len(to) > 0 {
+				top := to[0]
+				if top.Amount.GreaterThan(f.Amount.Neg()) {
+					addLink(f.Account, top.Account, f.Amount.Neg(), &nodes, &links)
+					top.Amount = top.Amount.Sub(f.Amount)
+					f.Amount = decimal.Zero
+				} else {
+					addLink(f.Account, top.Account, top.Amount, &nodes, &links)
+					f.Amount = f.Amount.Add(top.Amount)
+					to = to[1:]
+				}
+			}
+		}
+	}
+
+	return Graph{Nodes: lo.Values(nodes), Links: lo.Map(lo.Keys(links), func(k Pair, _ int) Link {
+		return Link{Source: k.Source, Target: k.Target, Value: links[k]}
+	})}
+
+}
+
+func addNode(nodeID *uint, nodes *map[string]Node, account string) {
+	if account == "" {
+		return
+	}
+
+	_, ok := (*nodes)[account]
+	if !ok {
+		if strings.HasPrefix(account, "Income:") || strings.HasPrefix(account, "Expenses:") {
+			parts := strings.Split(account, ":")
+			addNode(nodeID, nodes, strings.Join(parts[:len(parts)-1], ":"))
+
+		}
+
+		(*nodeID)++
+		(*nodes)[account] = Node{ID: *nodeID, Name: account}
+	}
+}
+
+func addLink(source string, target string, amount decimal.Decimal, nodes *map[string]Node, links *map[Pair]decimal.Decimal) {
+
+	sparts := strings.Split(source, ":")
+	if sparts[0] == "Income" {
+		for len(sparts) > 1 {
+			s := strings.Join(sparts, ":")
+			t := strings.Join(sparts[:len(sparts)-1], ":")
+			(*links)[Pair{Source: (*nodes)[s].ID, Target: (*nodes)[t].ID}] = (*links)[Pair{Source: (*nodes)[s].ID, Target: (*nodes)[t].ID}].Add(amount)
+			sparts = sparts[:len(sparts)-1]
+		}
+		source = strings.Join(sparts, ":")
+
+	}
+
+	tparts := strings.Split(target, ":")
+	if tparts[0] == "Expenses" {
+		for len(tparts) > 1 {
+			t := strings.Join(tparts, ":")
+			s := strings.Join(tparts[:len(tparts)-1], ":")
+			(*links)[Pair{Source: (*nodes)[s].ID, Target: (*nodes)[t].ID}] = (*links)[Pair{Source: (*nodes)[s].ID, Target: (*nodes)[t].ID}].Add(amount)
+			tparts = tparts[:len(tparts)-1]
+		}
+		target = strings.Join(tparts, ":")
+	}
+
+	(*links)[Pair{Source: (*nodes)[source].ID, Target: (*nodes)[target].ID}] = (*links)[Pair{Source: (*nodes)[source].ID, Target: (*nodes)[target].ID}].Add(amount)
 }

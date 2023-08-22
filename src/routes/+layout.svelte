@@ -4,7 +4,7 @@
   import _ from "lodash";
   import Spinner from "$lib/components/Spinner.svelte";
   import Navbar from "$lib/components/Navbar.svelte";
-  import { willClearTippy } from "../store";
+  import { willClearTippy, willRefresh } from "../store";
 
   let isBurger: boolean = null;
 
@@ -12,12 +12,8 @@
     hideAll();
   }
 
-  willClearTippy.subscribe(clearTippy);
-  beforeNavigate(clearTippy);
-
-  afterNavigate(() => {
-    isBurger = null;
-    delegate("section,nav", {
+  function setupTippy() {
+    delegate("body", {
       target: "[data-tippy-content]",
       theme: "light",
       onShow: (instance) => {
@@ -34,11 +30,25 @@
       followCursor: true,
       plugins: [followCursor]
     });
+  }
+
+  willClearTippy.subscribe(clearTippy);
+  beforeNavigate(clearTippy);
+  willRefresh.subscribe(() => {
+    clearTippy();
+    setupTippy();
+  });
+
+  afterNavigate(() => {
+    isBurger = null;
+    setupTippy();
   });
 </script>
 
 <Navbar {isBurger} />
 
-<Spinner>
-  <slot />
-</Spinner>
+{#key $willRefresh}
+  <Spinner>
+    <slot />
+  </Spinner>
+{/key}

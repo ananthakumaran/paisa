@@ -510,10 +510,12 @@ export async function ajax(route: string, options?: RequestInit, params?: Record
   });
 }
 
-const obscure = false;
+function obscure() {
+  return localStorage.getItem("obscure") == "true";
+}
 
 export function formatCurrency(value: number, precision = 0) {
-  if (obscure) {
+  if (obscure()) {
     return "00";
   }
 
@@ -533,7 +535,7 @@ export function formatCurrencyCrude(value: number) {
 }
 
 export function formatCurrencyCrudeWithPrecision(value: number, precision: number) {
-  if (obscure) {
+  if (obscure()) {
     return "00";
   }
 
@@ -552,14 +554,14 @@ export function formatCurrencyCrudeWithPrecision(value: number, precision: numbe
 }
 
 export function formatFloat(value: number, precision = 2) {
-  if (obscure) {
+  if (obscure()) {
     return "00";
   }
   return sprintf(`%.${precision}f`, value);
 }
 
 export function formatPercentage(value: number, precision = 0) {
-  if (obscure) {
+  if (obscure()) {
     return "00";
   }
 
@@ -579,7 +581,7 @@ export function formatPercentage(value: number, precision = 0) {
 }
 
 export function formatFixedWidthFloat(value: number, width: number, precision = 2) {
-  if (obscure) {
+  if (obscure()) {
     value = 0;
   }
   return sprintf(`%${width}.${precision}f`, value);

@@ -42,3 +42,8 @@ export function setAllowedDateRange(dates: dayjs.Dayjs[]) {
     dateMax.set(end);
   }
 }
+
+export const willRefresh = writable(0);
+export function refresh() {
+  willRefresh.update((n) => n + 1);
+}

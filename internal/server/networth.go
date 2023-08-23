@@ -80,39 +80,62 @@ func computeNetworthTimeline(db *gorm.DB, postings []posting.Posting) []Networth
 	var networths []Networth
 
 	var p posting.Posting
-	var pastPostings []posting.Posting
 
 	if len(postings) == 0 {
-		return networths
+		return []Networth{}
 	}
+
+	type RunningSum struct {
+		investment   decimal.Decimal
+		withdrawal   decimal.Decimal
+		balance      decimal.Decimal
+		balanceUnits decimal.Decimal
+	}
+
+	accumulator := make(map[string]RunningSum)
 
 	end := time.Now()
 	for start := postings[0].Date; start.Before(end); start = start.AddDate(0, 0, 1) {
 		for len(postings) > 0 && (postings[0].Date.Before(start) || postings[0].Date.Equal(start)) {
 			p, postings = postings[0], postings[1:]
-			pastPostings = append(pastPostings, p)
+			rs := accumulator[p.Commodity]
+
+			isInterest := service.IsInterest(db, p)
+
+			if p.Amount.GreaterThan(decimal.Zero) && !isInterest {
+				rs.investment = rs.investment.Add(p.Amount)
+			}
+
+			if p.Amount.LessThan(decimal.Zero) && !isInterest {
+				rs.withdrawal = rs.withdrawal.Add(p.Amount.Neg())
+			}
+
+			rs.balance = rs.balance.Add(service.GetMarketPrice(db, p, start))
+			rs.balanceUnits = rs.balanceUnits.Add(p.Quantity)
+
+			accumulator[p.Commodity] = rs
+
 		}
 
 		var investment decimal.Decimal = decimal.Zero
 		var withdrawal decimal.Decimal = decimal.Zero
 		var balance decimal.Decimal = decimal.Zero
 
-		for _, p := range pastPostings {
-			isInterest := service.IsInterest(db, p)
+		for commodity, rs := range accumulator {
+			investment = investment.Add(rs.investment)
+			withdrawal = withdrawal.Add(rs.withdrawal)
 
-			if p.Amount.GreaterThan(decimal.Zero) && !isInterest {
-				investment = investment.Add(p.Amount)
-			}
-
-			if p.Amount.LessThan(decimal.Zero) && !isInterest {
-				withdrawal = withdrawal.Add(p.Amount.Neg())
-			}
-
-			if isInterest {
-				balance = balance.Add(p.Amount)
+			if utils.IsCurrency(commodity) {
+				balance = balance.Add(rs.balance)
 			} else {
-				balance = balance.Add(service.GetMarketPrice(db, p, start))
+				price := service.GetUnitPrice(db, commodity, start)
+				if !price.Value.Equal(decimal.Zero) {
+					balance = balance.Add(rs.balanceUnits.Mul(price.Value))
+				} else {
+					balance = balance.Add(rs.balance)
+				}
 			}
+
 		}
 
 		gain := balance.Add(withdrawal).Sub(investment)

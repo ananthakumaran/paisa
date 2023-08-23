@@ -144,4 +144,5 @@ P 2023/05/01 00:00:00 USD 81.75 INR
 **paisa** fetches the latest price of the commodities only when
 *update* command is used. Make sure to run `paisa update` command
 after you make any changes to your journal file or you want to fetch
-the latest value of the commodities.
+the latest value of the commodities. The update can be performed from
+the UI as well via the dropdown in the top right corner.

@@ -173,4 +173,23 @@ html[data-theme="dark"] {
     margin-left: 1rem;
     padding-left: 0.5rem;
   }
+
+  .budget-card {
+    .budget-amount {
+      &.success {
+        color: #b2df8a;
+        background: #257953;
+      }
+
+      &.danger {
+        color: #fb9a99;
+        background: #cc0f35;
+      }
+
+      &.warn {
+        color: #ffe08a;
+        background: #946c00;
+      }
+    }
+  }
 }

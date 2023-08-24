@@ -151,7 +151,7 @@ svg text {
 }
 
 .svg-text-grey-dark {
-  fill: $grey;
+  fill: $grey-dark;
 }
 
 .svg-grey-light {
@@ -264,6 +264,10 @@ svg text {
 
 #d3-salary-timeline .x.axis > g.tick:nth-child(3n-1) {
   display: inline;
+}
+
+.box.is-selected {
+  box-shadow: $shadow;
 }
 
 .node {
@@ -706,4 +710,42 @@ span.progress-percent.less-than-10 {
   background-color: $white-bis !important;
   color: $grey !important;
   transition: none !important;
+}
+
+.budget-card {
+  .budget-label {
+    width: 80px;
+    text-align: right;
+    color: $grey-light;
+  }
+
+  .budget-amount {
+    width: 80px;
+    text-align: right;
+    text-weight: bold;
+
+    &.success {
+      font-weight: bold;
+      padding: 2px 10px;
+      background: #b2df8a;
+      color: #257953;
+      border-radius: 10px;
+    }
+
+    &.danger {
+      font-weight: bold;
+      padding: 2px 10px;
+      background: #fb9a99;
+      color: #cc0f35;
+      border-radius: 10px;
+    }
+
+    &.warn {
+      font-weight: bold;
+      padding: 2px 10px;
+      background: #ffe08a;
+      color: #946c00;
+      border-radius: 10px;
+    }
+  }
 }

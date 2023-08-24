@@ -6,7 +6,6 @@
     sortTrantionSequence,
     type TransactionSequence
   } from "$lib/utils";
-  import dayjs from "dayjs";
   import _ from "lodash";
   import { onMount } from "svelte";
   import RecurringCard from "$lib/components/RecurringCard.svelte";
@@ -29,7 +28,7 @@
   <div class="container is-fluid">
     <div class="columns is-centered">
       <div class="column is-4 has-text-centered">
-        <article class="message is-info">
+        <article class="message">
           <div class="message-body">
             <strong>Oops!</strong> You haven't configured any recurring transactions yet. Checkout
             the <a href={helpUrl("recurring")}>docs</a> page to get started.

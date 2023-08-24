@@ -1,9 +1,9 @@
 <script lang="ts">
-  import { loading } from "../../store";
+  import { delayedLoading, loading } from "../../store";
 </script>
 
 <div>
-  {#if $loading}
+  {#if $delayedLoading}
     <div class="circle-container">
       <div class="circle" />
       <svg xmlns="http://www.w3.org/2000/svg" version="1.0" viewBox="40 -1 170 250" height="40"

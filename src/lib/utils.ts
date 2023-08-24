@@ -277,6 +277,24 @@ export interface Forecast {
   error: number;
 }
 
+export interface Budget {
+  date: dayjs.Dayjs;
+  accounts: AccountBudget[];
+  endOfMonthBalance: number;
+  availableThisMonth: number;
+}
+
+export interface AccountBudget {
+  account: string;
+  date: dayjs.Dayjs;
+  actual: number;
+  budgeted: number;
+  forecast: number;
+  available: number;
+  rollover: number;
+  expenses: Posting[];
+}
+
 export interface RetirementProgress {
   savings_total: number;
   savings_timeline: Point[];
@@ -401,6 +419,9 @@ export function ajax(route: "/api/dashboard"): Promise<{
   transactionSequences: TransactionSequence[];
   networth: { networth: Networth; xirr: number };
   transactions: Transaction[];
+  budget: {
+    budgetsByMonth: { [key: string]: Budget };
+  };
 }>;
 
 export function ajax(
@@ -437,6 +458,12 @@ export function ajax(route: "/api/expense"): Promise<{
     taxes: { [key: string]: Posting[] };
   };
   graph: { [key: string]: { flat: Graph; hierachy: Graph } };
+}>;
+
+export function ajax(route: "/api/budget"): Promise<{
+  budgetsByMonth: { [key: string]: Budget };
+  checkingBalance: number;
+  availableForBudgeting: number;
 }>;
 
 export function ajax(route: "/api/cash_flow"): Promise<{ cash_flows: CashFlow[] }>;
@@ -842,6 +869,10 @@ export function getColorPreference() {
   } else {
     return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
   }
+}
+
+export function darkLightColor(dark: string, light: string) {
+  return getColorPreference() == "dark" ? dark : light;
 }
 
 export function setColorPreference(theme: string) {

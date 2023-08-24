@@ -30,7 +30,7 @@
   <div class="container is-fluid">
     <div class="columns is-centered">
       <div class="column is-4 has-text-centered">
-        <article class="message is-warning">
+        <article class="message">
           <div class="message-body">No transactions found for the selected year.</div>
         </article>
       </div>

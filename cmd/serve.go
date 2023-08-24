@@ -1,6 +1,8 @@
 package cmd
 
 import (
+	"os"
+
 	"github.com/ananthakumaran/paisa/internal/config"
 	mutualfund "github.com/ananthakumaran/paisa/internal/model/mutualfund/scheme"
 	nps "github.com/ananthakumaran/paisa/internal/model/nps/scheme"
@@ -28,6 +30,10 @@ var serveCmd = &cobra.Command{
 		db.AutoMigrate(&price.Price{})
 		db.AutoMigrate(&portfolio.Portfolio{})
 		db.AutoMigrate(&template.Template{})
+
+		if os.Getenv("PAISA_DEBUG") == "true" {
+			db = db.Debug()
+		}
 
 		if err != nil {
 			log.Fatal(err)

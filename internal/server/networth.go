@@ -22,7 +22,7 @@ type Networth struct {
 }
 
 func GetNetworth(db *gorm.DB) gin.H {
-	postings := query.Init(db).Like("Assets:%").OrLike("Liabilities:%").UntilToday().All()
+	postings := query.Init(db).Like("Assets:%", "Liabilities:%").UntilToday().All()
 
 	postings = service.PopulateMarketPrice(db, postings)
 	networthTimeline := computeNetworthTimeline(db, postings)
@@ -31,7 +31,7 @@ func GetNetworth(db *gorm.DB) gin.H {
 }
 
 func GetCurrentNetworth(db *gorm.DB) gin.H {
-	postings := query.Init(db).Like("Assets:%").OrLike("Liabilities:%").UntilToday().All()
+	postings := query.Init(db).Like("Assets:%", "Liabilities:%").UntilToday().All()
 
 	postings = service.PopulateMarketPrice(db, postings)
 	networth := computeNetworth(db, postings)

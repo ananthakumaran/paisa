@@ -2,6 +2,7 @@
   import { getColorPreference, setColorPreference } from "$lib/utils";
   import { onMount } from "svelte";
   import * as store from "../../store";
+  import { refresh } from "../../store";
 
   let theme = getColorPreference();
   store.theme.set(theme);
@@ -15,6 +16,7 @@
 
   const toggle = () => {
     setTheme(theme === "light" ? "dark" : "light");
+    refresh();
   };
 
   const reflectPreference = () => {

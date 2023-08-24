@@ -55,7 +55,7 @@
   <div class="container is-fluid">
     <div class="columns is-centered">
       <div class="column is-4 has-text-centered">
-        <article class="message is-warning">
+        <article class="message">
           <div class="message-body">
             <strong>Oops!</strong> Looks like mutual fund portfolio data is not available<br /><br
             />

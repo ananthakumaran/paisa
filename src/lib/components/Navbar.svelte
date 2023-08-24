@@ -45,7 +45,8 @@
       href: "/expense",
       children: [
         { label: "Monthly", href: "/monthly", monthPicker: true, dateRangeSelector: true },
-        { label: "Yearly", href: "/yearly", financialYearPicker: true }
+        { label: "Yearly", href: "/yearly", financialYearPicker: true },
+        { label: "Budget", href: "/budget", monthPicker: true }
       ]
     },
     {

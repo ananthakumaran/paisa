@@ -12,16 +12,22 @@ import (
 )
 
 type Query struct {
-	context *gorm.DB
-	order   string
+	context         *gorm.DB
+	order           string
+	includeForecast bool
 }
 
 func Init(db *gorm.DB) *Query {
-	return &Query{context: db, order: "ASC"}
+	return &Query{context: db, order: "ASC", includeForecast: false}
 }
 
 func (q *Query) Desc() *Query {
 	q.order = "DESC"
+	return q
+}
+
+func (q *Query) Forecast() *Query {
+	q.includeForecast = true
 	return q
 }
 
@@ -31,7 +37,7 @@ func (q *Query) Limit(n int) *Query {
 }
 
 func (q *Query) Clone() *Query {
-	return &Query{context: q.context.Session(&gorm.Session{}), order: q.order}
+	return &Query{context: q.context.Session(&gorm.Session{}), order: q.order, includeForecast: q.includeForecast}
 }
 
 func (q *Query) BeforeNMonths(n int) *Query {
@@ -43,6 +49,11 @@ func (q *Query) BeforeNMonths(n int) *Query {
 
 func (q *Query) UntilToday() *Query {
 	q.context = q.context.Where("date < ?", time.Now())
+	return q
+}
+
+func (q *Query) UntilThisMonthEnd() *Query {
+	q.context = q.context.Where("date <= ?", utils.EndOfMonth(time.Now()))
 	return q
 }
 
@@ -81,23 +92,22 @@ func (q *Query) NotAccountPrefix(account string) *Query {
 	return q
 }
 
-func (q *Query) Like(account string) *Query {
-	q.context = q.context.Where("account like ?", account)
-	return q
-}
+func (q *Query) Like(accounts ...string) *Query {
+	query := "account like ?"
+	for range accounts[1:] {
+		query += " or account like ?"
+	}
 
-func (q *Query) OrLike(account string) *Query {
-	q.context = q.context.Or("account like ?", account)
+	args := make([]interface{}, len(accounts))
+	for i, a := range accounts {
+		args[i] = a
+	}
+	q.context = q.context.Where(query, args...)
 	return q
 }
 
 func (q *Query) NotLike(account string) *Query {
 	q.context = q.context.Where("account not like ?", account)
-	return q
-}
-
-func (q *Query) Or(query interface{}, args ...interface{}) *Query {
-	q.context = q.context.Or(query, args...)
 	return q
 }
 
@@ -108,6 +118,8 @@ func (q *Query) Where(query interface{}, args ...interface{}) *Query {
 
 func (q *Query) All() []posting.Posting {
 	var postings []posting.Posting
+
+	q.context = q.context.Where("forecast = ?", q.includeForecast)
 	result := q.context.Order("date " + q.order + ", amount desc").Find(&postings)
 	if result.Error != nil {
 		log.Fatal(result.Error)
@@ -117,6 +129,7 @@ func (q *Query) All() []posting.Posting {
 
 func (q *Query) First() posting.Posting {
 	var posting posting.Posting
+	q.context = q.context.Where("forecast = ?", q.includeForecast)
 	result := q.context.Order("date " + q.order + ", amount desc").First(&posting)
 	if result.Error != nil {
 		log.Fatal(result.Error)

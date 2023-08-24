@@ -10,7 +10,7 @@
       await ajax("/api/sync", { method: "POST", body: JSON.stringify(request) });
     } finally {
       isLoading = false;
-      window.location.reload();
+      refresh();
     }
   }
 

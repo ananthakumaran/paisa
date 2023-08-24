@@ -66,6 +66,11 @@ func Listen(db *gorm.DB, port int) {
 	router.GET("/api/expense", func(c *gin.Context) {
 		c.JSON(200, GetExpense(db))
 	})
+
+	router.GET("/api/budget", func(c *gin.Context) {
+		c.JSON(200, GetBudget(db))
+	})
+
 	router.GET("/api/cash_flow", func(c *gin.Context) {
 		c.JSON(200, GetCashFlow(db))
 	})

@@ -37,7 +37,7 @@
   <div class="container is-fluid">
     <div class="columns is-centered">
       <div class="column is-4 has-text-centered">
-        <article class="message is-success">
+        <article class="message">
           <div class="message-body">
             <strong>Hurray!</strong> You have no liabilities.
           </div>

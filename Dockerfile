@@ -1,11 +1,11 @@
-FROM node:18-alpine3.16 as web
+FROM node:18-alpine3.18 as web
 WORKDIR /usr/src/paisa
 COPY package.json package-lock.json* ./
 RUN npm install
 COPY . .
 RUN PAISA_HOST=https://paisa-demo.ananthakumaran.in npm run build
 
-FROM golang:1.20-alpine3.16 as go
+FROM golang:1.20-alpine3.18 as go
 WORKDIR /usr/src/paisa
 RUN apk --no-cache add sqlite gcc g++
 COPY go.mod go.sum ./
@@ -14,7 +14,7 @@ COPY . .
 COPY --from=web /usr/src/paisa/web/static ./web/static
 RUN CGO_ENABLED=1 go build
 
-FROM alpine:3.16
+FROM alpine:3.18
 RUN apk --no-cache add ca-certificates ledger
 WORKDIR /root/
 COPY --from=go /usr/src/paisa/paisa ./

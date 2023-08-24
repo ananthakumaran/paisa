@@ -31,6 +31,21 @@ export const theme = writable("light");
 
 export const loading = writable(false);
 
+let timeoutId: NodeJS.Timeout;
+export const delayedLoading = derived([loading], ([$l], set) => {
+  if (timeoutId) {
+    clearTimeout(timeoutId);
+  }
+
+  if (!$l) {
+    set($l);
+  } else {
+    timeoutId = setTimeout(() => {
+      return set($l);
+    }, 150);
+  }
+});
+
 export const willClearTippy = writable(0);
 
 export const accountTfIdf = writable<AccountTfIdf>(null);

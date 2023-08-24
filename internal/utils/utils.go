@@ -2,13 +2,16 @@ package utils
 
 import (
 	"fmt"
+	"sort"
 	"strings"
 	"time"
 
 	"github.com/ananthakumaran/paisa/internal/config"
+	"github.com/ananthakumaran/paisa/internal/model/posting"
 	"github.com/google/btree"
 	"github.com/samber/lo"
 	"github.com/shopspring/decimal"
+	"golang.org/x/exp/constraints"
 )
 
 func BTreeDescendFirstLessOrEqual[I btree.Item](tree *btree.BTree, item I) I {
@@ -112,6 +115,12 @@ func MaxTime(a time.Time, b time.Time) time.Time {
 	}
 }
 
+func GroupByAccount(posts []posting.Posting) map[string][]posting.Posting {
+	return lo.GroupBy(posts, func(post posting.Posting) string {
+		return post.Account
+	})
+}
+
 type GroupableByDate interface {
 	GroupDate() time.Time
 }
@@ -150,4 +159,10 @@ func SumBy[C any](collection []C, iteratee func(item C) decimal.Decimal) decimal
 	return lo.Reduce(collection, func(acc decimal.Decimal, item C, _ int) decimal.Decimal {
 		return iteratee(item).Add(acc)
 	}, decimal.Zero)
+}
+
+func SortedKeys[K constraints.Ordered, V any](m map[K]V) []K {
+	keys := lo.Keys(m)
+	sort.Slice(keys, func(i, j int) bool { return keys[i] < keys[j] })
+	return keys
 }

@@ -363,12 +363,38 @@ func generateJournalFile(cwd string) {
 		log.Fatal(err)
 	}
 
+	startMonth := utils.BeginningOfMonth(time.Now())
+	endMonth := startMonth.AddDate(0, 2, 0)
+
 	_, err = ledgerFile.WriteString(`
 = Expenses:Rent
     ; Recurring: Rent
 
 = expr payee=~/Internet/
     ; Recurring: Internet
+
+= expr payee=~/EPF/
+    ; Recurring: EPF
+
+= Liabilities:Homeloan
+    ; Recurring: EMI Principle
+
+= Expenses:Interest:Homeloan
+    ; Recurring: EMI Interest
+
+~ Monthly from `)
+
+	_, err = ledgerFile.WriteString(fmt.Sprintf("%s to %s", startMonth.Format("2006-01-02"), endMonth.Format("2006-01-02")))
+
+	_, err = ledgerFile.WriteString(`
+    Expenses:Rent                              15000 INR
+    Expenses:Interest:Homeloan                  6000 INR
+    Expenses:Food                               5000 INR
+    Expenses:Utilities                          2000 INR
+    Expenses:Shopping                           3000 INR
+    Expenses:Clothing                           1000 INR
+    Assets:Checking
+
 `)
 	if err != nil {
 		log.Fatal(err)

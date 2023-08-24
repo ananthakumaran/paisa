@@ -14,7 +14,8 @@
     type Networth,
     formatCurrency,
     formatFloat,
-    type Transaction
+    type Transaction,
+    type Budget
   } from "$lib/utils";
   import _ from "lodash";
   import { onMount } from "svelte";
@@ -24,6 +25,7 @@
   import TransactionCard from "$lib/components/TransactionCard.svelte";
 
   import { MasonryGrid } from "@egjs/svelte-grid";
+  import BudgetCard from "$lib/components/BudgetCard.svelte";
 
   let UntypedMasonryGrid = MasonryGrid as any;
 
@@ -36,6 +38,8 @@
   let renderer: (data: Posting[]) => void;
   let totalExpense = 0;
   let transactions: Transaction[] = [];
+  let budgetsByMonth: Record<string, Budget> = {};
+  let currentBudget: Budget;
 
   const now = dayjs();
 
@@ -48,6 +52,7 @@
     ({
       expenses,
       cashFlows,
+      budget: { budgetsByMonth },
       transactionSequences,
       networth: { networth, xirr },
       transactions
@@ -55,6 +60,7 @@
     const postings = _.chain(expenses).values().flatten().value();
     const z = expense.colorScale(postings);
     renderer = expense.renderCurrentExpensesBreakdown(z);
+    currentBudget = budgetsByMonth[month];
     renderer(expenses[month]);
 
     cashFlow.renderMonthlyFlow("#d3-current-cash-flow", {
@@ -71,7 +77,7 @@
       <div class="tile is-4">
         <div class="tile is-vertical">
           <div class="tile is-parent">
-            <div class="tile is-child px-3">
+            <div class="tile is-child">
               <div class="content">
                 <p class="subtitle">
                   <a class="secondary-link" href="/assets/networth">Assets</a>
@@ -129,11 +135,29 @@
               <p class="subtitle">
                 <a class="secondary-link" href="/cash_flow/monthly">Cash Flow</a>
               </p>
-              <div class="content box px-3">
-                <svg id="d3-current-cash-flow" height="300" width="100%" />
+              <div class="content box px-2 pb-0">
+                <svg id="d3-current-cash-flow" height="250" width="100%" />
               </div>
             </article>
           </div>
+          {#if currentBudget}
+            <div class="tile is-parent">
+              <div class="tile is-child">
+                <div class="content">
+                  <p class="subtitle">
+                    <a class="secondary-link" href="/expense/budget">Budget</a>
+                  </p>
+                  <div class="content">
+                    <div>
+                      {#each currentBudget.accounts as accountBudget (accountBudget)}
+                        <BudgetCard compact {accountBudget} selected={false} />
+                      {/each}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          {/if}
         </div>
       </div>
       <div class="tile is-vertical">
@@ -201,26 +225,28 @@
             </div>
           </div>
         {/if}
-        <div class="tile">
-          <div class="tile is-parent is-12">
-            <article class="tile is-child">
-              <div class="content">
-                <p class="subtitle">
-                  <a class="secondary-link" href="/ledger/transaction">Recent Transactions</a>
-                </p>
-                <div>
-                  <UntypedMasonryGrid gap={10} maxStretchColumnSize={500} align="stretch">
-                    {#each _.take(transactions, 20) as t}
-                      <div class="mr-3 is-flex-grow-1">
-                        <TransactionCard {t} />
-                      </div>
-                    {/each}
-                  </UntypedMasonryGrid>
+        {#if !_.isEmpty(transactions)}
+          <div class="tile">
+            <div class="tile is-parent is-12">
+              <article class="tile is-child">
+                <div class="content">
+                  <p class="subtitle">
+                    <a class="secondary-link" href="/ledger/transaction">Recent Transactions</a>
+                  </p>
+                  <div>
+                    <UntypedMasonryGrid gap={10} maxStretchColumnSize={500} align="stretch">
+                      {#each _.take(transactions, 20) as t}
+                        <div class="mr-3 is-flex-grow-1">
+                          <TransactionCard {t} />
+                        </div>
+                      {/each}
+                    </UntypedMasonryGrid>
+                  </div>
                 </div>
-              </div>
-            </article>
+              </article>
+            </div>
           </div>
-        </div>
+        {/if}
       </div>
     </div>
   </div>

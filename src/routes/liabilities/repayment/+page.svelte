@@ -20,10 +20,8 @@
   <div class="container is-fluid">
     <div class="columns is-centered">
       <div class="column is-4 has-text-centered">
-        <article class="message is-success">
-          <div class="message-body">
-            <strong>Hurray!</strong> You have repaid any liabilities.
-          </div>
+        <article class="message">
+          <div class="message-body">You haven't repaid any liabilities.</div>
         </article>
       </div>
     </div>

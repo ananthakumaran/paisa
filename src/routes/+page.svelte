@@ -16,7 +16,7 @@
     formatFloat,
     type Transaction
   } from "$lib/utils";
-  import _ from "lodash";
+  import _, { isEmpty } from "lodash";
   import { onMount } from "svelte";
   import COLORS from "$lib/colors";
   import dayjs from "dayjs";
@@ -209,13 +209,15 @@
                   <a class="secondary-link" href="/ledger/transaction">Recent Transactions</a>
                 </p>
                 <div>
-                  <UntypedMasonryGrid gap={10} maxStretchColumnSize={500} align="stretch">
-                    {#each _.take(transactions, 20) as t}
-                      <div class="mr-3 is-flex-grow-1">
-                        <TransactionCard {t} />
-                      </div>
-                    {/each}
-                  </UntypedMasonryGrid>
+                  {#if !_.isEmpty(transactions)}
+                    <UntypedMasonryGrid gap={10} maxStretchColumnSize={500} align="stretch">
+                      {#each _.take(transactions, 20) as t}
+                        <div class="mr-3 is-flex-grow-1">
+                          <TransactionCard {t} />
+                        </div>
+                      {/each}
+                    </UntypedMasonryGrid>
+                  {/if}
                 </div>
               </div>
             </article>

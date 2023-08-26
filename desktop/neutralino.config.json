@@ -1,0 +1,36 @@
+{
+  "applicationId": "fyi.paisa.app",
+  "version": "1.0.0",
+  "defaultMode": "window",
+  "documentRoot": "/www/",
+  "url": "http://localhost:7500",
+  "enableServer": true,
+  "enableNativeAPI": true,
+  "nativeAllowList": ["app.*"],
+  "modes": {
+    "window": {
+      "title": "Paisa",
+      "width": 800,
+      "height": 500,
+      "minWidth": 400,
+      "minHeight": 200,
+      "icon": "/www/icon.png"
+    }
+  },
+  "cli": {
+    "binaryName": "paisa",
+    "resourcesPath": "/www/",
+    "extensionsPath": "/extensions/",
+    "clientLibrary": "/www/neutralino.js",
+    "binaryVersion": "4.10.0",
+    "clientVersion": "3.8.2"
+  },
+  "logging": {
+    "enabled": true
+  },
+  "modes": {
+    "window": {
+      "enableInspector": false
+    }
+  }
+}

@@ -8,6 +8,7 @@ pkgs.mkShell {
     pkgs.sqlite
     pkgs.nodejs-18_x
     pkgs.libuuid
+    pkgs.webkitgtk
     # pkgs.pkgsCross.mingwW64.buildPackages.gcc
 
     pkgs.python311Packages.mkdocs
@@ -18,5 +19,17 @@ pkgs.mkShell {
     export CGO_ENABLED=1
   '';
 
-  env = { LD_LIBRARY_PATH = pkgs.lib.makeLibraryPath [ pkgs.libuuid ]; };
+  env = {
+    LD_LIBRARY_PATH = pkgs.lib.makeLibraryPath [
+      pkgs.libuuid
+      pkgs.webkitgtk
+      pkgs.gtk3
+      pkgs.gdk-pixbuf
+      pkgs.glib
+      pkgs.xorg.libxcb
+      pkgs.xorg.libX11
+      pkgs.xorg.libXrandr
+      pkgs.stdenv.cc.cc.lib
+    ];
+  };
 }

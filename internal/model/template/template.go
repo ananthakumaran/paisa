@@ -10,7 +10,7 @@ import (
 	"strings"
 )
 
-//go:embed all:templates/*
+//go:embed all:templates
 var BuiltinTemplates embed.FS
 
 type TemplateType string

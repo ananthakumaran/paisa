@@ -11,15 +11,21 @@ import (
 	"github.com/ananthakumaran/paisa/internal/server/liabilities"
 	"github.com/ananthakumaran/paisa/internal/server/retirement"
 	"github.com/ananthakumaran/paisa/web"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	log "github.com/sirupsen/logrus"
 	"gorm.io/gorm"
 )
 
-func Listen(db *gorm.DB, port int) {
+func Build(db *gorm.DB) *gin.Engine {
 	gin.SetMode(gin.ReleaseMode)
 
 	router := gin.Default()
+
+	corsConfig := cors.DefaultConfig()
+	corsConfig.AllowAllOrigins = true
+	router.Use(cors.New(corsConfig))
+
 	router.GET("/_app/*filepath", func(c *gin.Context) {
 		c.FileFromFS("/static"+c.Request.URL.Path, http.FS(web.Static))
 	})
@@ -199,6 +205,12 @@ func Listen(db *gorm.DB, port int) {
 	router.NoRoute(func(c *gin.Context) {
 		c.Data(http.StatusOK, "text/html; charset=utf-8", []byte(web.Index))
 	})
+
+	return router
+}
+
+func Listen(db *gorm.DB, port int) {
+	router := Build(db)
 
 	log.Info("Listening on ", port)
 	err := router.Run(fmt.Sprintf(":%d", port))

@@ -522,6 +522,13 @@ export async function ajax(route: string, options?: RequestInit, params?: Record
       route = route.replace(`:${key}`, value);
     });
   }
+
+  options = options || {};
+
+  options.headers = {
+    "Content-Type": "application/json"
+  };
+
   const response = await fetch(route, options);
   const body = await response.text();
   if (!_.includes(BACKGROUND, route)) {

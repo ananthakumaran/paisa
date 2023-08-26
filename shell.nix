@@ -12,7 +12,7 @@ pkgs.mkShell {
 
     pkgs.python311Packages.mkdocs
     pkgs.python311Packages.mkdocs-material
-  ];
+  ] ++ (pkgs.lib.optional pkgs.stdenv.isLinux pkgs.wails);
 
   shellHook = ''
     export CGO_ENABLED=1

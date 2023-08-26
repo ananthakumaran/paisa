@@ -30,11 +30,11 @@ func Execute() {
 }
 
 func init() {
-	cobra.OnInitialize(initConfig)
+	cobra.OnInitialize(Initialize)
 	rootCmd.PersistentFlags().StringVar(&configFile, "config", "", "config file (default is ./paisa.yaml)")
 }
 
-func initConfig() {
+func Initialize() {
 	formatter := log.TextFormatter{DisableTimestamp: true, ForceColors: true}
 	if os.Getenv("PAISA_DEBUG") == "true" {
 		log.SetReportCaller(true)
@@ -53,6 +53,11 @@ func initConfig() {
 		return
 	}
 
+	InitConfig()
+
+}
+
+func InitConfig() {
 	if envConfigFile := os.Getenv("PAISA_CONFIG"); envConfigFile != "" {
 		readConfigFile(envConfigFile)
 	} else if configFile != "" {

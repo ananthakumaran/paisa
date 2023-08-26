@@ -1,0 +1,11 @@
+{
+  "$schema": "https://wails.io/schemas/config.v2.json",
+  "name": "desktop",
+  "outputfilename": "desktop",
+  "frontend:install": "",
+  "frontend:build": "",
+  "author": {
+    "name": "Anantha Kumaran",
+    "email": "ananthakumaran@gmail.com"
+  }
+}

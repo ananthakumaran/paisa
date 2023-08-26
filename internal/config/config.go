@@ -10,6 +10,7 @@ import (
 
 	"dario.cat/mergo"
 	"github.com/santhosh-tekuri/jsonschema/v5"
+
 	"gopkg.in/yaml.v3"
 )
 

@@ -1,5 +1,9 @@
-{{#if (and (isDate ROW.A "DD/MM/YYYY") (isBlank ROW.G))}}
+{{#if (isDate ROW.A "DD/MM/YYYY")}}
  {{date ROW.A "DD/MM/YYYY"}} {{ROW.C}}
+  {{#if (regexpTest ROW.G "CR")}}
+    Income:Refund:CreditCard:ICICI                     -{{ROW.F}} INR
+  {{else}}
     {{predictAccount prefix="Expenses"}}		{{ROW.F}} INR
+  {{/if}}
     Liabilities:CreditCard:ICICI
 {{/if}}

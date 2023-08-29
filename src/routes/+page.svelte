@@ -150,7 +150,7 @@
                   <div class="content">
                     <div>
                       {#each currentBudget.accounts as accountBudget (accountBudget)}
-                        <BudgetCard compact {accountBudget} selected={false} />
+                        <BudgetCard compact {accountBudget} />
                       {/each}
                     </div>
                   </div>

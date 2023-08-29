@@ -1,0 +1,10 @@
+{{#if (isDate ROW.A "DD/MM/YY")}}
+  {{date ROW.A "DD/MM/YY"}} {{ROW.B}}
+  {{#if (or (eq (trim ROW.F) "0.00") (isBlank (trim ROW.F)))}}
+    {{predictAccount prefix="Expenses"}}      {{trim ROW.E}} INR
+    Assets:Checking:HDFC
+  {{else}}
+    Assets:Checking:HDFC
+    {{predictAccount prefix="Income"}}        -{{trim ROW.F}} INR
+  {{/if}}
+{{/if}}

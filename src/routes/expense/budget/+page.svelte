@@ -13,33 +13,11 @@
   let currentMonthAccountBudgets: AccountBudget[] = [];
   let currentMonthBudget: Budget;
   let checkingBalance: number, availableForBudgeting: number;
-  let selectedAccountIndex: number = 0;
-  let selectedAccount: string = "";
   let isEmpty = false;
 
   $: {
     currentMonthBudget = budgetsByMonth[$month];
     currentMonthAccountBudgets = budgetsByMonth[$month]?.accounts || [];
-
-    if (selectedAccount) {
-      selectedAccountIndex = _.findIndex(
-        currentMonthAccountBudgets,
-        (b) => b.account == selectedAccount
-      );
-
-      if (selectedAccountIndex == -1) {
-        selectedAccountIndex = 0;
-        selectedAccount = null;
-      }
-    } else if (selectedAccountIndex >= currentMonthAccountBudgets.length) {
-      selectedAccountIndex = 0;
-      selectedAccount = null;
-    }
-  }
-
-  function select(index: number) {
-    selectedAccountIndex = index;
-    selectedAccount = currentMonthAccountBudgets[selectedAccountIndex]?.account;
   }
 
   onMount(async () => {
@@ -123,24 +101,11 @@
           </nav>
         </div>
       {/if}
-      <div class="column is-narrow">
-        <div class="is-flex gap-6">
-          <div>
-            {#each currentMonthAccountBudgets as accountBudget, i (accountBudget)}
-              <BudgetCard
-                on:click={(_e) => select(i)}
-                {accountBudget}
-                selected={i == selectedAccountIndex}
-              />
-            {/each}
-          </div>
-          <div
-            style="width: 450px"
-            class:is-hidden={_.isEmpty(currentMonthAccountBudgets[selectedAccountIndex]?.expenses)}
-          >
-            <div class="mt-2">Expenses</div>
-            {#each currentMonthAccountBudgets[selectedAccountIndex]?.expenses || [] as expense}
-              <PostingCard posting={expense} color={"transparent"} icon={true} />
+      <div class="column">
+        <div class="is-flex">
+          <div style="max-width: 800px; min-width: 500px; width: 100%; margin: auto;">
+            {#each currentMonthAccountBudgets as accountBudget (accountBudget)}
+              <BudgetCard {accountBudget} />
             {/each}
           </div>
         </div>

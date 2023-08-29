@@ -2,11 +2,11 @@
   import { renderBudget } from "$lib/budget";
   import { iconify } from "$lib/icon";
   import type { Action } from "svelte/action";
-  import { firstName, formatCurrency, restName, type AccountBudget } from "$lib/utils";
+  import { firstName, formatCurrency, restName, type AccountBudget, tooltip } from "$lib/utils";
+  import _ from "lodash";
 
   export let compact = false;
   export let accountBudget: AccountBudget;
-  export let selected: boolean;
 
   function canShow(accountBudget: AccountBudget): boolean {
     return accountBudget.forecast !== 0 || accountBudget.actual !== 0;
@@ -16,14 +16,21 @@
     renderBudget(element, props.ab);
     return {};
   };
+
+  const tooltipContent = tooltip(
+    accountBudget.expenses.map((e) => {
+      return [
+        e.date.format("DD MMM YYYY"),
+        [e.payee, "is-clipped"],
+        [formatCurrency(e.amount), "has-text-weight-bold has-text-right"]
+      ];
+    })
+  );
 </script>
 
 <div
-  on:click
   class="budget-card box px-2 pt-2 pb-2 my-2 has-background-white"
-  class:is-selected={selected}
-  class:cursor-pointer={!selected && !compact}
-  style={compact ? "" : "width: 800px"}
+  data-tippy-content={_.isEmpty(accountBudget.expenses) ? null : tooltipContent}
 >
   <div class="is-flex is-justify-content-space-between">
     <div class="has-text-weight-bold ml-2 truncate" title={accountBudget.account}>
@@ -39,7 +46,7 @@
           <span class="budget-amount">{formatCurrency(accountBudget.forecast)}</span>
         </div>
         <div class="mr-3">
-          <span class="budget-label mr-1">Used</span>
+          <span class="budget-label mr-1">Spent</span>
           <span class="budget-amount">{formatCurrency(accountBudget.actual)}</span>
         </div>
       {/if}
@@ -50,9 +57,11 @@
         </div>
       {/if}
       <div>
-        <span class="budget-label mr-1">Available</span>
+        <span class="budget-label mr-1"
+          >{accountBudget.available >= 0 ? "Available" : "Overspent"}</span
+        >
         <span class="budget-amount {accountBudget.available >= 0 ? 'success' : 'danger'}"
-          >{formatCurrency(accountBudget.available)}</span
+          >{formatCurrency(Math.abs(accountBudget.available))}</span
         >
       </div>
     </div>

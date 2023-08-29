@@ -68,7 +68,7 @@ export function renderBudget(element: Element, accountBudget: AccountBudget) {
 
   green = _.min([accountBudget.forecast, accountBudget.actual]);
 
-  renderLine(yellow + green + red, darkLightColor(COLORS.danger, COLORS.loss));
-  renderLine(yellow + green, darkLightColor(COLORS.success, COLORS.gain));
-  renderLine(yellow, darkLightColor(COLORS.warnText, COLORS.warn));
+  renderLine(green + yellow + red, darkLightColor(COLORS.danger, COLORS.loss));
+  renderLine(green + yellow, darkLightColor(COLORS.warnText, COLORS.warn));
+  renderLine(green, darkLightColor(COLORS.success, COLORS.gain));
 }

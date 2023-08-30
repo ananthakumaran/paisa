@@ -20,5 +20,6 @@
 - [Analysis](analysis.md)
 - [Import](import.md)
 - [Recurring](recurring.md)
+- [Budget](budget.md)
 - [Ledger CLI](ledger-cli.md)
 - [Config](config.md)

@@ -76,7 +76,7 @@
                     ? COLORS.gainText
                     : COLORS.lossText};"
                 >
-                  {formatCurrency(availableForBudgeting)}
+                  {formatCurrency(Math.abs(availableForBudgeting))}
                 </p>
               </div>
             </div>

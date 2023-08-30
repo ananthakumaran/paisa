@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Retirement - ₹ Paisa</title>
+        <title>Budget - ₹ Paisa</title>
 
 
         <!-- Custom HTML head -->
@@ -83,7 +83,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="introduction.html">Introduction</a></li><li class="chapter-item expanded affix "><li class="part-title">Getting Started</li><li class="chapter-item expanded "><a href="installation.html"><strong aria-hidden="true">1.</strong> Installation</a></li><li class="chapter-item expanded "><a href="tutorial.html"><strong aria-hidden="true">2.</strong> Tutorial</a></li><li class="chapter-item expanded affix "><li class="part-title">Reference Guide</li><li class="chapter-item expanded "><a href="accounts.html"><strong aria-hidden="true">3.</strong> Accounts</a></li><li class="chapter-item expanded "><a href="commodities.html"><strong aria-hidden="true">4.</strong> Commodities</a></li><li class="chapter-item expanded "><a href="allocation-targets.html"><strong aria-hidden="true">5.</strong> Allocation Targets</a></li><li class="chapter-item expanded "><a href="tax.html"><strong aria-hidden="true">6.</strong> Tax</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="tax-harvesting.html"><strong aria-hidden="true">6.1.</strong> Tax Harvesting</a></li><li class="chapter-item expanded "><a href="capital-gains.html"><strong aria-hidden="true">6.2.</strong> Capital Gains</a></li><li class="chapter-item expanded "><a href="schedule-al.html"><strong aria-hidden="true">6.3.</strong> Schedule AL</a></li></ol></li><li class="chapter-item expanded "><a href="retirement.html" class="active"><strong aria-hidden="true">7.</strong> Retirement</a></li><li class="chapter-item expanded "><a href="analysis.html"><strong aria-hidden="true">8.</strong> Analysis</a></li><li class="chapter-item expanded "><a href="import.html"><strong aria-hidden="true">9.</strong> Import</a></li><li class="chapter-item expanded "><a href="recurring.html"><strong aria-hidden="true">10.</strong> Recurring</a></li><li class="chapter-item expanded "><a href="budget.html"><strong aria-hidden="true">11.</strong> Budget</a></li><li class="chapter-item expanded "><a href="ledger-cli.html"><strong aria-hidden="true">12.</strong> Ledger CLI</a></li><li class="chapter-item expanded "><a href="config.html"><strong aria-hidden="true">13.</strong> Config</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="introduction.html">Introduction</a></li><li class="chapter-item expanded affix "><li class="part-title">Getting Started</li><li class="chapter-item expanded "><a href="installation.html"><strong aria-hidden="true">1.</strong> Installation</a></li><li class="chapter-item expanded "><a href="tutorial.html"><strong aria-hidden="true">2.</strong> Tutorial</a></li><li class="chapter-item expanded affix "><li class="part-title">Reference Guide</li><li class="chapter-item expanded "><a href="accounts.html"><strong aria-hidden="true">3.</strong> Accounts</a></li><li class="chapter-item expanded "><a href="commodities.html"><strong aria-hidden="true">4.</strong> Commodities</a></li><li class="chapter-item expanded "><a href="allocation-targets.html"><strong aria-hidden="true">5.</strong> Allocation Targets</a></li><li class="chapter-item expanded "><a href="tax.html"><strong aria-hidden="true">6.</strong> Tax</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="tax-harvesting.html"><strong aria-hidden="true">6.1.</strong> Tax Harvesting</a></li><li class="chapter-item expanded "><a href="capital-gains.html"><strong aria-hidden="true">6.2.</strong> Capital Gains</a></li><li class="chapter-item expanded "><a href="schedule-al.html"><strong aria-hidden="true">6.3.</strong> Schedule AL</a></li></ol></li><li class="chapter-item expanded "><a href="retirement.html"><strong aria-hidden="true">7.</strong> Retirement</a></li><li class="chapter-item expanded "><a href="analysis.html"><strong aria-hidden="true">8.</strong> Analysis</a></li><li class="chapter-item expanded "><a href="import.html"><strong aria-hidden="true">9.</strong> Import</a></li><li class="chapter-item expanded "><a href="recurring.html"><strong aria-hidden="true">10.</strong> Recurring</a></li><li class="chapter-item expanded "><a href="budget.html" class="active"><strong aria-hidden="true">11.</strong> Budget</a></li><li class="chapter-item expanded "><a href="ledger-cli.html"><strong aria-hidden="true">12.</strong> Ledger CLI</a></li><li class="chapter-item expanded "><a href="config.html"><strong aria-hidden="true">13.</strong> Config</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -144,54 +144,123 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="retirement"><a class="header" href="#retirement">Retirement</a></h1>
-<p>Paisa will help you plan your retirement and track your progress. The
-first part is figuring out what should be your retirement corpus. This
-will be your target. Instead of specifying the amount explicitly, you
-can specify your expected yearly expenses and the safe withdrawal
-rate.</p>
-<pre><code class="language-yaml">retirement:
-    swr: 3.3
-    yearly_expenses: 1100000
+                        <h1 id="budget"><a class="header" href="#budget">Budget</a></h1>
+<p>Paisa supports a simple budgeting system. Let's say you get 50000 INR
+at the beginning of the month. You want to budget this amount and
+figure out how much you can spend on each category.</p>
+<p>Let's add a salary transaction to the ledger:</p>
+<pre><code class="language-go">2023/08/01 Salary
+    Income:Salary:Acme                         -50,000 INR
+    Assets:Checking
 </code></pre>
-<p>If you use paisa to track expenses, instead of specifying the
-<code>yearly_expenses</code>, you can specify the list of accounts. Paisa will
-take the average of the last 3 year expenses</p>
-<pre><code class="language-yaml">retirement:
-  swr: 2
-  expenses:
-    - Expenses:Entertainment
-    - Expenses:Gift
-    - Expenses:Insurance
-    - Expenses:Misc
-    - Expenses:Shopping
-    - Expenses:Utilities
+<p>Now you have 50k in your checking account. Let's budget this amount:</p>
+<pre><code class="language-go">~ Monthly in 2023/08/01
+    Expenses:Rent                              15,000 INR
+    Expenses:Food                              10,000 INR
+    Expenses:Clothing                           5,000 INR
+    Expenses:Entertainment                      5,000 INR
+    Expenses:Transport                          5,000 INR
+    Expenses:Personal                           5,000 INR
+    Assets:Checking
 </code></pre>
-<p>Now that the target is specified, you need to specify the list of
-accounts where you keep your retirement savings.</p>
-<pre><code class="language-yaml">retirement:
-  swr: 2
-  expenses:
-    - Expenses:Entertainment
-    - Expenses:Gift
-    - Expenses:Insurance
-    - Expenses:Misc
-    - Expenses:Shopping
-    - Expenses:Utilities
-  savings:
-    - Assets:Equity:*
-    - Assets:Debt:*
+<p>The <code>~</code> character indicates that this is a periodic transaction. This
+is not a real transaction, but used only for forecasting purposes. You
+can read more about <a href="https://ledger-cli.org/doc/ledger3.html#Period-Expressions">periodic expressions</a> and <a href="https://ledger-cli.org/doc/ledger3.html#Budgeting-and-Forecasting">periodic transactions</a>.</p>
+<blockquote>
+<p>Even though the interval part is optional as per the doc, there is a
+<a href="https://github.com/ledger/ledger/issues/1625">bug</a> in the ledger-cli, so you can't use <code>~ in 2023/08/01</code>,
+instead you always have to specify some interval like <code>~ Monthly in 2023/08/01</code>.</p>
+</blockquote>
+<p><img src="images/budget-1.png" alt="Initial Budget" /></p>
+<p>Now you can see that you will have 5k left in your checking account at
+the end of the month, if you spend as per your budget. Before you
+spend, you can check your budget and verify if you have money
+available under that category.</p>
+<p>Let's add some real transactions.</p>
+<pre><code class="language-go">2023/08/02 Rent
+    Expenses:Rent                             15,000 INR
+    Assets:Checking
+
+2023/08/03 Transport
+    Expenses:Transport                         1,000 INR
+    Assets:Checking
+
+2023/08/03 Food
+    Expenses:Food                              8,500 INR
+    Assets:Checking
+
+2023/08/05 Transport
+    Expenses:Transport                         2,000 INR
+    Assets:Checking
+
+2023/08/07 Transport
+    Expenses:Transport                         3,000 INR
+    Assets:Checking
+
+2023/08/10 Personal
+    Expenses:Personal                          4,000 INR
+    Assets:Checking
+
+2023/08/15 Insurance
+    Expenses:Insurance                         10000 INR
+    Assets:Checking
 </code></pre>
+<p><img src="images/budget-2.png" alt="Month end Budget" /></p>
+<p>As the month progresses, you can see how much you have spent and how
+much you have left. You notice that you have overspent on transport
+and you have missed the insurance payment. You have a budget deficit
+now. That means, you can't actually spend as per your budget. You have
+to first bring the deficit back to 0. Let's cut down the entertainment
+and clothing budget to 0 and add insurance.</p>
+<pre><code class="language-go">~ Monthly in 2023/08/01
+    Expenses:Rent                             15,000 INR
+    Expenses:Food                             10,000 INR
+    Expenses:Clothing                              0 INR
+    Expenses:Entertainment                         0 INR
+    Expenses:Transport                         5,000 INR
+    Expenses:Personal                          5,000 INR
+    Assets:Checking
+</code></pre>
+<p><img src="images/budget-3.png" alt="Budget Deficit Fixed" /></p>
+<p>You can go back and adjust your budget anytime. Let's move on to the
+next month, assuming you haven't made any further transaction.</p>
+<pre><code class="language-go">2023/09/01 Salary
+    Income:Salary:Acme                       -50,000 INR
+    Assets:Checking
+
+~ Monthly in 2023/09/01
+    Expenses:Rent                             15,000 INR
+    Expenses:Food                             10,000 INR
+    Expenses:Clothing                          5,000 INR
+    Expenses:Entertainment                     5,000 INR
+    Expenses:Transport                         5,000 INR
+    Expenses:Personal                          5,000 INR
+    Assets:Checking
+</code></pre>
+<p><img src="images/budget-4.png" alt="Next month Budget" /></p>
+<p>You can see a new element in the UI called Rollover. This is basically
+the amount you have budgeted last month, but haven't spent. This will
+automatically rollover to the next month. That's pretty much it.</p>
+<p>To recap, there are just two things you need to do.</p>
+<ol>
+<li>
+<p>Create a periodic transaction at the beginning of the month when
+you get your salary.</p>
+</li>
+<li>
+<p>Adjust your budget as you spend and make sure there is no deficit.</p>
+</li>
+</ol>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="schedule-al.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="recurring.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next" href="analysis.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next" href="ledger-cli.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -201,11 +270,11 @@ accounts where you keep your retirement savings.</p>
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="schedule-al.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="recurring.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next" href="analysis.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next" href="ledger-cli.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>

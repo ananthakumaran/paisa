@@ -10,6 +10,7 @@
   import DateRange from "./DateRange.svelte";
   import ThemeSwitcher from "./ThemeSwitcher.svelte";
   import BoxedTabs from "./BoxedTabs.svelte";
+  import MonthPicker from "./MonthPicker.svelte";
   export let isBurger: boolean = null;
 
   onMount(async () => {
@@ -264,18 +265,7 @@
     {/if}
 
     {#if selectedSubLink?.monthPicker || selectedLink?.monthPicker}
-      <div class="has-text-centered">
-        <input
-          style="width: 125px"
-          class="input is-small"
-          required
-          type="month"
-          id="d3-current-month"
-          bind:value={$month}
-          max={$dateMax.format("YYYY-MM")}
-          min={$dateMin.format("YYYY-MM")}
-        />
-      </div>
+      <MonthPicker bind:value={$month} max={$dateMax} min={$dateMin} />
     {/if}
 
     {#if selectedSubLink?.financialYearPicker || selectedLink?.financialYearPicker}

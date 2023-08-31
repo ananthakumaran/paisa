@@ -749,3 +749,26 @@ span.progress-percent.less-than-10 {
     }
   }
 }
+
+.month-picker {
+  .months {
+    width: 200px;
+
+    .month {
+      width: 50px;
+      text-align: center;
+    }
+  }
+}
+
+.border-none {
+  border-radius: 0 !important;
+}
+
+.border-left {
+  border-radius: $radius-small 0 0 $radius-small !important;
+}
+
+.border-right {
+  border-radius: 0 $radius-small $radius-small 0 !important;
+}

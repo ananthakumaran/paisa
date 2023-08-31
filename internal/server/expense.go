@@ -50,7 +50,7 @@ func GetExpense(db *gorm.DB) gin.H {
 	for fy, ps := range utils.GroupByFY(postings) {
 		graph[fy] = make(map[string]Graph)
 		graph[fy]["flat"] = computeGraph(ps)
-		graph[fy]["hierachy"] = computeHierachyGraph(ps)
+		graph[fy]["hierarchy"] = computeHierarchyGraph(ps)
 	}
 
 	return gin.H{
@@ -111,7 +111,7 @@ func computeGraph(postings []posting.Posting) Graph {
 
 }
 
-func computeHierachyGraph(postings []posting.Posting) Graph {
+func computeHierarchyGraph(postings []posting.Posting) Graph {
 	nodes := make(map[string]Node)
 	links := make(map[Pair]decimal.Decimal)
 

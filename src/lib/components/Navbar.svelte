@@ -252,7 +252,7 @@
       <BoxedTabs
         options={[
           { label: "Flat", value: "flat" },
-          { label: "Hierachy", value: "hierachy" }
+          { label: "Hierarchy", value: "hierarchy" }
         ]}
         bind:value={$cashflowType}
       />

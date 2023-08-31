@@ -428,7 +428,7 @@ export function renderFlow(graph: Graph, cashflowType: string) {
 
 function name(node: Node, cashflowType: string) {
   if (
-    cashflowType === "hierachy" &&
+    cashflowType === "hierarchy" &&
     (node.name.startsWith("Income") || node.name.startsWith("Expenses"))
   ) {
     return lastName(node.name);

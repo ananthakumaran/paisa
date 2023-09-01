@@ -335,7 +335,7 @@ export function renderAccountOverview(points: Networth[], postings: Posting[], i
   const area = (y0: number, y1: (d: Networth) => number) =>
     d3
       .area<Networth>()
-      .curve(d3.curveBasis)
+      .curve(d3.curveMonotoneX)
       .x((d) => x(d.date))
       .y0(y0)
       .y1(y1);
@@ -433,7 +433,7 @@ export function renderAccountOverview(points: Networth[], postings: Posting[], i
       "d",
       d3
         .line<Networth>()
-        .curve(d3.curveBasis)
+        .curve(d3.curveMonotoneX)
         .x((d) => x(d.date))
         .y((d) => y(d.netInvestmentAmount))
     );
@@ -446,7 +446,7 @@ export function renderAccountOverview(points: Networth[], postings: Posting[], i
       "d",
       d3
         .line<Networth>()
-        .curve(d3.curveBasis)
+        .curve(d3.curveMonotoneX)
         .x((d) => x(d.date))
         .y((d) => y(d.balanceAmount))
     );

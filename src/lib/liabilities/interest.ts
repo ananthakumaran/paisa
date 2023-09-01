@@ -403,7 +403,7 @@ function renderOverviewSmall(
   const area = (y0: number, y1: (d: InterestOverview) => number) =>
     d3
       .area<InterestOverview>()
-      .curve(d3.curveBasis)
+      .curve(d3.curveMonotoneX)
       .x((d) => x(d.date))
       .y0(y0)
       .y1(y1);
@@ -480,7 +480,7 @@ function renderOverviewSmall(
       "d",
       d3
         .line<InterestOverview>()
-        .curve(d3.curveBasis)
+        .curve(d3.curveMonotoneX)
         .x((d) => x(d.date))
         .y((d) => y(d.drawn_amount))
     );
@@ -493,7 +493,7 @@ function renderOverviewSmall(
       "d",
       d3
         .line<InterestOverview>()
-        .curve(d3.curveBasis)
+        .curve(d3.curveMonotoneX)
         .defined((d) => d.repaid_amount > 0)
         .x((d) => x(d.date))
         .y((d) => y(d.repaid_amount))
@@ -507,7 +507,7 @@ function renderOverviewSmall(
       "d",
       d3
         .line<InterestOverview>()
-        .curve(d3.curveBasis)
+        .curve(d3.curveMonotoneX)
         .x((d) => x(d.date))
         .y((d) => y(d.drawn_amount + d.interest_amount - d.repaid_amount))
     );

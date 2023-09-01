@@ -63,7 +63,7 @@ export function renderProgress(
       "d",
       d3
         .line<Point>()
-        .curve(d3.curveBasis)
+        .curve(d3.curveMonotoneX)
         .x((d) => x(d.date))
         .y((d) => y(d.value))(points)
     );
@@ -75,7 +75,7 @@ export function renderProgress(
       "d",
       d3
         .line<Point>()
-        .curve(d3.curveBasis)
+        .curve(d3.curveMonotoneX)
         .x((d) => x(d.date))
         .y((d) => y(d.value))(takeRight(points, 1).concat(predictions))
     );
@@ -87,7 +87,7 @@ export function renderProgress(
       "d",
       d3
         .area<Forecast>()
-        .curve(d3.curveBasis)
+        .curve(d3.curveMonotoneX)
         .x((d) => x(d.date))
         .y0((d) => y(d.value - d.error / 2))
         .y1((d) => y(d.value + d.error / 2))(predictions)

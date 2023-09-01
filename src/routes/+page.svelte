@@ -43,9 +43,10 @@
 
   const now = dayjs();
 
-  $: if (renderer && expenses[month]) {
-    renderer(expenses[month]);
-    totalExpense = _.sumBy(expenses[month], (p) => p.amount);
+  $: if (renderer) {
+    const selectedExpenses = expenses[month] || [];
+    renderer(selectedExpenses);
+    totalExpense = _.sumBy(selectedExpenses, (p) => p.amount);
   }
 
   onMount(async () => {
@@ -61,7 +62,6 @@
     const z = expense.colorScale(postings);
     renderer = expense.renderCurrentExpensesBreakdown(z);
     currentBudget = budgetsByMonth[month];
-    renderer(expenses[month]);
 
     cashFlow.renderMonthlyFlow("#d3-current-cash-flow", {
       rotate: false,

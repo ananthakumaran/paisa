@@ -107,6 +107,12 @@ func CurrentBalance(postings []posting.Posting) decimal.Decimal {
 	})
 }
 
+func CurrentBalanceOn(db *gorm.DB, postings []posting.Posting, date time.Time) decimal.Decimal {
+	return utils.SumBy(postings, func(p posting.Posting) decimal.Decimal {
+		return service.GetMarketPrice(db, p, date)
+	})
+}
+
 func CostSum(postings []posting.Posting) decimal.Decimal {
 	return utils.SumBy(postings, func(p posting.Posting) decimal.Decimal {
 		return p.Amount

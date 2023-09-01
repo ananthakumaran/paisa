@@ -12,6 +12,7 @@ import (
 	"github.com/ananthakumaran/paisa/internal/model/posting"
 	"github.com/ananthakumaran/paisa/internal/query"
 	"github.com/ananthakumaran/paisa/internal/service"
+	"github.com/ananthakumaran/paisa/internal/utils"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
@@ -44,52 +45,94 @@ func GetAllocation(db *gorm.DB) gin.H {
 		p.MarketAmount = service.GetMarketPrice(db, p, now)
 		return p
 	})
-	aggregates := computeAggregate(postings, now)
-	aggregates_timeline := computeAggregateTimeline(postings)
-	allocation_targets := computeAllocationTargets(postings)
+	aggregates := computeAggregate(db, postings, now)
+	aggregates_timeline := computeAggregateTimeline(db, postings)
+	allocation_targets := computeAllocationTargets(db, postings)
 	return gin.H{"aggregates": aggregates, "aggregates_timeline": aggregates_timeline, "allocation_targets": allocation_targets}
 }
 
-func computeAggregateTimeline(postings []posting.Posting) []map[string]Aggregate {
+func computeAggregateTimeline(db *gorm.DB, postings []posting.Posting) []map[string]Aggregate {
 	var timeline []map[string]Aggregate
 
 	var p posting.Posting
-	var pastPostings []posting.Posting
+
+	type RunningSum struct {
+		units decimal.Decimal
+		cost  decimal.Decimal
+	}
+
+	accumulator := make(map[string]map[string]RunningSum)
 
 	end := time.Now()
 	for start := postings[0].Date; start.Before(end); start = start.AddDate(0, 0, 1) {
 		for len(postings) > 0 && (postings[0].Date.Before(start) || postings[0].Date.Equal(start)) {
 			p, postings = postings[0], postings[1:]
-			pastPostings = append(pastPostings, p)
+			rsByAccount := accumulator[p.Account]
+			if rsByAccount == nil {
+				rsByAccount = make(map[string]RunningSum)
+			}
+
+			rs := rsByAccount[p.Commodity]
+			rs.units = rs.units.Add(p.Quantity)
+			rs.cost = rs.cost.Add(p.Amount)
+
+			rsByAccount[p.Commodity] = rs
+			accumulator[p.Account] = rsByAccount
+
 		}
 
-		timeline = append(timeline, computeAggregate(pastPostings, start))
+		result := make(map[string]Aggregate)
+
+		for account, rsByAccount := range accumulator {
+			amount := decimal.Zero
+			marketAmount := decimal.Zero
+
+			for commodity, rs := range rsByAccount {
+				amount = amount.Add(rs.cost)
+				if utils.IsCurrency(commodity) {
+					marketAmount = marketAmount.Add(rs.cost)
+				} else {
+					price := service.GetUnitPrice(db, commodity, start)
+					if !price.Value.Equal(decimal.Zero) {
+						marketAmount = marketAmount.Add(rs.units.Mul(price.Value))
+					} else {
+						marketAmount = marketAmount.Add(rs.cost)
+					}
+				}
+			}
+
+			result[account] = Aggregate{Date: start, Account: account, Amount: amount, MarketAmount: marketAmount}
+
+		}
+
+		timeline = append(timeline, result)
+
 	}
 	return timeline
 }
 
-func computeAllocationTargets(postings []posting.Posting) []AllocationTarget {
+func computeAllocationTargets(db *gorm.DB, postings []posting.Posting) []AllocationTarget {
 	var targetAllocations []AllocationTarget
 	allocationTargetConfigs := config.GetConfig().AllocationTargets
 
 	totalMarketAmount := accounting.CurrentBalance(postings)
 
 	for _, allocationTargetConfig := range allocationTargetConfigs {
-		targetAllocations = append(targetAllocations, computeAllocationTarget(postings, allocationTargetConfig, totalMarketAmount))
+		targetAllocations = append(targetAllocations, computeAllocationTarget(db, postings, allocationTargetConfig, totalMarketAmount))
 	}
 
 	return targetAllocations
 }
 
-func computeAllocationTarget(postings []posting.Posting, allocationTargetConfig config.AllocationTarget, total decimal.Decimal) AllocationTarget {
+func computeAllocationTarget(db *gorm.DB, postings []posting.Posting, allocationTargetConfig config.AllocationTarget, total decimal.Decimal) AllocationTarget {
 	date := time.Now()
 	postings = accounting.FilterByGlob(postings, allocationTargetConfig.Accounts)
-	aggregates := computeAggregate(postings, date)
+	aggregates := computeAggregate(db, postings, date)
 	currentTotal := accounting.CurrentBalance(postings)
 	return AllocationTarget{Name: allocationTargetConfig.Name, Target: decimal.NewFromFloat(allocationTargetConfig.Target), Current: (currentTotal.Div(total)).Mul(decimal.NewFromInt(100)), Aggregates: aggregates}
 }
 
-func computeAggregate(postings []posting.Posting, date time.Time) map[string]Aggregate {
+func computeAggregate(db *gorm.DB, postings []posting.Posting, date time.Time) map[string]Aggregate {
 	byAccount := lo.GroupBy(postings, func(p posting.Posting) string { return p.Account })
 	result := make(map[string]Aggregate)
 	for account, ps := range byAccount {
@@ -101,7 +144,7 @@ func computeAggregate(postings []posting.Posting, date time.Time) map[string]Agg
 		}
 
 		amount := accounting.CostSum(ps)
-		marketAmount := accounting.CurrentBalance(ps)
+		marketAmount := accounting.CurrentBalanceOn(db, ps, date)
 		result[account] = Aggregate{Date: date, Account: account, Amount: amount, MarketAmount: marketAmount}
 
 	}

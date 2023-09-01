@@ -16,7 +16,11 @@
 
   $: {
     if (!isAllowed(valueDate, min, max)) {
-      select(dayjs());
+      if (isAllowed(dayjs(), min, max)) {
+        select(dayjs());
+      } else {
+        select(max);
+      }
     }
   }
 

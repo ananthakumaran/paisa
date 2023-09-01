@@ -64,7 +64,7 @@ treat each employer as a separate account.
 
 `Income:Interest` is a special type of account from the perspective of
 returns calculation. Let's assume you have bought APPLE stock. You
-might be buying then at regular intervals. To calculate your returns,
+might be buying them at regular intervals. To calculate your returns,
 we can compute the difference between purchase price and current
 price.
 

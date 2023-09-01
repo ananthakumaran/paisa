@@ -54,7 +54,7 @@ export function renderNetworth(points: Networth[], element: Element): () => void
   const area = (y0: number, y1: (d: Networth) => number) =>
     d3
       .area<Networth>()
-      .curve(d3.curveBasis)
+      .curve(d3.curveMonotoneX)
       .x((d) => x(d.date))
       .y0(y0)
       .y1(y1);
@@ -133,7 +133,7 @@ export function renderNetworth(points: Networth[], element: Element): () => void
       "d",
       d3
         .line<Networth>()
-        .curve(d3.curveBasis)
+        .curve(d3.curveMonotoneX)
         .x((d) => x(d.date))
         .y((d) => y(investment(d)))
     );
@@ -146,7 +146,7 @@ export function renderNetworth(points: Networth[], element: Element): () => void
       "d",
       d3
         .line<Networth>()
-        .curve(d3.curveBasis)
+        .curve(d3.curveMonotoneX)
         .x((d) => x(d.date))
         .y((d) => y(networth(d)))
     );

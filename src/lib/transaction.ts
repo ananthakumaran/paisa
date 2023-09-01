@@ -12,7 +12,10 @@ export function filterTransactions(transactions: Transaction[], filter: string |
       filterRegex.test(t.fileName) ||
       filterRegex.test(t.payee) ||
       filterRegex.test(t.date.format("DD MMM YYYY")) ||
-      _.some(t.postings, (p) => filterRegex.test(p.account))
+      _.some(
+        t.postings,
+        (p) => filterRegex.test(p.account) || filterRegex.test(p.amount.toString())
+      )
     );
   });
 }

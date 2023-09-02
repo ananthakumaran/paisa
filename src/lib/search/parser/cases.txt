@@ -1,0 +1,116 @@
+# String
+
+abc
+
+==>
+
+Query(Clause(Value(String(UnQuoted))))
+
+# Multiple strings
+
+abc def
+
+==>
+
+Query(Clause(Value(String(UnQuoted))),Clause(Value(String(UnQuoted))))
+
+# String property
+
+"account"
+
+==>
+
+Query(Clause(Value(String(Quoted))))
+
+
+# Condition
+
+account = "Expenses:Name"
+
+==>
+
+Query(Clause(Condition(Property(Account),Operator("="),Value(String(Quoted)))))
+
+
+# String and Condition
+
+abc account = "Expenses:Name"
+
+==>
+
+Query(Clause(Value(String(UnQuoted))),Clause(Condition(Property(Account),Operator("="),Value(String(Quoted)))))
+
+# BooleanCondition
+
+account = "Expenses:Name" AND amount > 500
+
+==>
+
+Query(Clause(BooleanCondition(Clause(Condition(Property(Account),Operator("="),Value(String(Quoted)))),BooleanBinaryOperator(AND),Clause(Condition(Property(Amount),Operator(">"),Value(Number))))))
+
+# Not query 1
+
+account = "Expenses:Name" AND NOT amount > 500
+
+==>
+
+Query(Clause(BooleanCondition(Clause(Condition(Property(Account),Operator("="),Value(String(Quoted)))),BooleanBinaryOperator(AND),Clause(BooleanCondition(BooleanUnaryOperator(NOT),Clause(Condition(Property(Amount),Operator(">"),Value(Number))))))))
+
+
+# Not query 2
+
+account = Expenses:Name AND NOT amount > 500 AND filename = test/another.ledger
+
+==>
+
+Query(Clause(BooleanCondition(Clause(BooleanCondition(Clause(Condition(Property(Account),Operator("="),Value(String(UnQuoted)))),BooleanBinaryOperator(AND),Clause(BooleanCondition(BooleanUnaryOperator(NOT),Clause(Condition(Property(Amount),Operator(">"),Value(Number))))))),BooleanBinaryOperator(AND),Clause(Condition(Property(Filename),Operator("="),Value(String(UnQuoted)))))))
+
+
+# Bracket 1
+
+account = Expenses:Name AND (NOT amount > 500 AND filename = test/another.ledger)
+
+==>
+
+Query(Clause(BooleanCondition(Clause(Condition(Property(Account),Operator("="),Value(String(UnQuoted)))),BooleanBinaryOperator(AND),Clause(Expression(Clause(BooleanCondition(Clause(BooleanCondition(BooleanUnaryOperator(NOT),Clause(Condition(Property(Amount),Operator(">"),Value(Number))))),BooleanBinaryOperator(AND),Clause(Condition(Property(Filename),Operator("="),Value(String(UnQuoted)))))))))))
+
+# Bracket 2
+
+account = Expenses:Name AND NOT (amount > 500 AND filename = test/another.ledger)
+
+==>
+
+Query(Clause(BooleanCondition(Clause(Condition(Property(Account),Operator("="),Value(String(UnQuoted)))),BooleanBinaryOperator(AND),Clause(BooleanCondition(BooleanUnaryOperator(NOT),Clause(Expression(Clause(BooleanCondition(Clause(Condition(Property(Amount),Operator(">"),Value(Number))),BooleanBinaryOperator(AND),Clause(Condition(Property(Filename),Operator("="),Value(String(UnQuoted)))))))))))))
+
+# Operator
+
+amount > 500 OR amount >= 500 OR amount < 500 OR amount <= 500
+
+==>
+
+Query(Clause(BooleanCondition(Clause(BooleanCondition(Clause(BooleanCondition(Clause(Condition(Property(Amount),Operator(">"),Value(Number))),BooleanBinaryOperator(OR),Clause(Condition(Property(Amount),Operator(">="),Value(Number))))),BooleanBinaryOperator(OR),Clause(Condition(Property(Amount),Operator("<"),Value(Number))))),BooleanBinaryOperator(OR),Clause(Condition(Property(Amount),Operator("<="),Value(Number))))))
+
+
+# Date
+
+2022.30 [2022/05/07]  [this jan] [today] [last month] [2022] [2023/05]
+
+==>
+
+Query(Clause(Value(Number)),Clause(Value(DateValue)),Clause(Value(DateValue)),Clause(Value(DateValue)),Clause(Value(DateValue)),Clause(Value(DateValue)),Clause(Value(DateValue)))
+
+# Regexp
+
+/abc/ /[ab]/ /[aI]abc/i
+
+==>
+
+Query(Clause(Value(RegExp)),Clause(Value(RegExp)),Clause(Value(RegExp)))
+
+# Commodity
+
+commodity = GOOG OR commodity =~ /iAPPL/i
+
+==>
+
+Query(Clause(BooleanCondition(Clause(Condition(Property(Commodity),Operator("="),Value(String(UnQuoted)))),BooleanBinaryOperator(OR),Clause(Condition(Property(Commodity),Operator("=~"),Value(RegExp))))))

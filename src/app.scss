@@ -540,6 +540,14 @@ svg text {
   height: 200px;
 }
 
+.search-query-editor {
+  border: 1px solid $grey-lighter;
+  border-radius: $radius;
+  background: $white;
+  padding: 2px 5px;
+  width: 800px;
+}
+
 .editor .cm-editor {
   max-height: calc(100vh - 185px);
 }

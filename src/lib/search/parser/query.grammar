@@ -1,0 +1,65 @@
+@top Query { Clause* }
+
+@precedence { unary @right, binary @left }
+
+Clause { Value | Condition | BooleanCondition | Expression }
+
+Value { String | Number | DateValue | RegExp }
+
+Expression { "(" Clause+ ")" }
+
+String { UnQuoted | Quoted }
+Condition { Property Operator Value }
+BooleanCondition { Clause !binary BooleanBinaryOperator Clause | !unary BooleanUnaryOperator Clause }
+
+Operator { "=" | "=~" | ">" | ">=" | "<" | "<=" }
+BooleanBinaryOperator { AND | OR }
+BooleanUnaryOperator { NOT }
+
+Property { Account | Commodity | Amount | Total | Filename | Payee | Date }
+
+DateValue { "[" dateChar+ "]" }
+
+@tokens {
+  AND   { "AND" }
+  OR    { "OR" }
+  NOT   { "NOT" }
+
+  Account { "account" }
+  Commodity { "commodity" }
+  Amount { "amount" }
+  Total { "total" }
+  Filename { "filename" }
+  Payee { "payee" }
+  Date { "date" }
+
+  Number { '-'? int frac? exp?  }
+  int  { '0' | $[1-9] @digit* }
+  frac { '.' @digit+ }
+  exp  { $[eE] $[+\-]? @digit+ }
+
+  RegExp { "/" (![/\\\n[] | "\\" ![\n] | "[" (![\n\\\]] | "\\" ![\n])* "]")+ "/" ($[gimsuy]*)? }
+
+  Quoted { '"' char* '"' }
+  UnQuoted { $[a-zA-Z] unquotedchar* }
+
+  dateChar { $[a-zA-Z0-9/.-] }
+
+  unquotedchar { $[0-9a-zA-Z:./] }
+
+  char { $[\u{20}\u{21}\u{23}-\u{5b}\u{5d}-\u{10ffff}] | "\\" esc }
+  esc  { $["\\\/bfnrt] | "u" hex hex hex hex }
+  hex  { $[0-9a-fA-F] }
+
+  whitespace { $[ \n\r\t] }
+
+  "=" "=~" ">" ">=" "<" "<="
+
+  @precedence { Account, Commodity, Amount, Total, Filename, Payee, Date, NOT, AND, OR, UnQuoted, Number }
+}
+
+@skip { whitespace }
+
+@external propSource jsonHighlighting from "./highlight"
+
+@detectDelim

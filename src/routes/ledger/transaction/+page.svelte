@@ -1,6 +1,5 @@
 <script lang="ts">
   import { ajax, type LedgerFile, type Transaction as T } from "$lib/utils";
-  import { filterTransactions } from "$lib/transaction";
   import _ from "lodash";
   import { onMount } from "svelte";
   import VirtualList from "svelte-tiny-virtual-list";
@@ -10,6 +9,9 @@
   import * as bulkEdit from "$lib/bulk_edit";
   import * as toast from "bulma-toast";
   import DiffViewModal from "$lib/components/DiffViewModal.svelte";
+  import SearchQuery from "$lib/components/SearchQuery.svelte";
+  import { editorState } from "$lib/search_query_editor";
+  import { get } from "svelte/store";
 
   let buldEditOpen = false;
   let transactions: T[] = [];
@@ -18,8 +20,8 @@
   let newFiles: LedgerFile[] = [];
   let updatedTransactionsCount = 0;
   let openPreviewModal = false;
-  let filter: string;
   let accounts: string[] = [];
+  let commodities: string[] = [];
 
   const debits = (t: T) => {
     return _.filter(t.postings, (p) => p.amount < 0);
@@ -29,10 +31,13 @@
     return _.filter(t.postings, (p) => p.amount >= 0);
   };
 
-  const handleInput = _.debounce((event) => {
-    filter = event.srcElement.value;
-    filtered = filterTransactions(transactions, filter);
+  const handleInput = _.debounce((predicate: (t: T) => boolean) => {
+    filtered = _.filter(transactions, predicate);
   }, 100);
+
+  editorState.subscribe((state) => {
+    handleInput(state.predicate);
+  });
 
   const itemSize = (i: number) => {
     const t = filtered[i];
@@ -40,9 +45,9 @@
   };
 
   async function loadTransactions() {
-    ({ files, accounts } = await ajax("/api/editor/files"));
+    ({ files, accounts, commodities } = await ajax("/api/editor/files"));
     ({ transactions } = await ajax("/api/transaction"));
-    filtered = filterTransactions(transactions, filter);
+    handleInput(get(editorState).predicate);
 
     newFiles = files;
   }
@@ -101,15 +106,15 @@
           <div class="level-left">
             <div class="level-item">
               <div class="field">
-                <p class="control">
-                  <input
-                    class="d3-transaction-filter input"
-                    style="width: 500px"
-                    type="text"
-                    placeholder="filter by account or description or date"
-                    on:input={handleInput}
+                <div class="control">
+                  <SearchQuery
+                    autocomplete={{
+                      account: accounts,
+                      commodity: commodities,
+                      filename: files.map((f) => f.name)
+                    }}
                   />
-                </p>
+                </div>
               </div>
             </div>
             <div class="level-item">

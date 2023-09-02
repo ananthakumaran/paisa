@@ -19,6 +19,7 @@
 - [Retirement](retirement.md)
 - [Analysis](analysis.md)
 - [Import](import.md)
+- [Bulk Edit](./bulk-edit.md)
 - [Recurring](recurring.md)
 - [Budget](budget.md)
 - [Ledger CLI](ledger-cli.md)

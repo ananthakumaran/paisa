@@ -4,7 +4,7 @@
 
 **Paisa** is a command line tool and Web UI to visualize personal
 finance. It builds on top of the [ledger](https://www.ledger-cli.org/) double entry accounting
-tool. Checkout [documentation](https://ananthakumaran.in/paisa/) to get started.
+tool. Checkout [documentation](https://paisa.fyi) to get started.
 
 # Demo
 

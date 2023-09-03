@@ -223,7 +223,7 @@
               <a
                 style="margin-left: -10px;"
                 class="p-0"
-                href={`https://ananthakumaran.in/paisa/${selectedSubLink.help}.html`}
+                href={`https://paisa.fyi/${selectedSubLink.help}.html`}
                 ><span class="icon is-small">
                   <i class="fas fa-question fa-border" />
                 </span></a

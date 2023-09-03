@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft-07/schema",
-  "$id": "https://ananthakumaran.in/paisa/schema.json",
+  "$id": "https://paisa.fyi/schema.json",
   "title": "Paisa",
   "description": "Paisa config schema",
   "type": "object",

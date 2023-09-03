@@ -798,7 +798,7 @@ export function financialYear(date: dayjs.Dayjs) {
 }
 
 export function helpUrl(section: string) {
-  return `https://ananthakumaran.in/paisa/${section}.html`;
+  return `https://paisa.fyi/${section}.html`;
 }
 
 export function postingUrl(posting: Posting) {

@@ -524,8 +524,9 @@ function constructValueAST(state: EditorState, node: SyntaxNode): ValueAST {
     let value: string;
     if (node.firstChild.type.is(Terms.Quoted)) {
       value = state.sliceDoc(node.from + 1, node.to - 1);
+    } else {
+      value = state.sliceDoc(node.from, node.to);
     }
-    value = state.sliceDoc(node.from, node.to);
 
     return {
       type: "string",

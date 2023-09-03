@@ -11,7 +11,7 @@
       editor.destroy();
     }
 
-    editor = createEditor("[last week]", editorDom, autocomplete);
+    editor = createEditor("", editorDom, autocomplete);
   }
 </script>
 

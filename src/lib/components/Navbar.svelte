@@ -78,7 +78,7 @@
       children: [
         { label: "Import", href: "/import", tag: "alpha", help: "import" },
         { label: "Editor", href: "/editor", tag: "alpha" },
-        { label: "Transactions", href: "/transaction" },
+        { label: "Transactions", href: "/transaction", help: "bulk-edit" },
         { label: "Postings", href: "/posting" },
         { label: "Price", href: "/price" },
         { label: "Doctor", href: "/doctor" }

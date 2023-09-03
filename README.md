@@ -8,7 +8,7 @@ tool. Checkout [documentation](https://ananthakumaran.in/paisa/) to get started.
 
 # Demo
 
-A demo of the Web UI can be found at [https://paisa-demo.ananthakumaran.in](https://paisa-demo.ananthakumaran.in)
+A demo of the Web UI can be found at [https://demo.paisa.fyi](https://demo.paisa.fyi)
 
 ## Status
 

@@ -15,6 +15,8 @@ import {
 } from "./utils";
 import { generateColorScheme } from "./colors";
 
+const LEGEND_PADDING = 70;
+
 export function renderMonthlyInvestmentTimeline(incomes: Income[]) {
   renderIncomeTimeline(incomes, "#d3-income-timeline", "MMM-YYYY");
 }
@@ -32,13 +34,13 @@ function renderIncomeTimeline(incomes: Income[], id: string, timeFormat: string)
 
   const postings = _.flatMap(incomes, (i) => i.postings);
   const groupKeys = _.chain(postings)
-    .map((p) => restName(p.account))
+    .map((p) => incomeGroup(p))
     .uniq()
     .sort()
     .value();
 
   const groupTotal = _.chain(postings)
-    .groupBy((p) => restName(p.account))
+    .groupBy((p) => incomeGroup(p))
     .map((postings, key) => {
       const total = _.sumBy(postings, (p) => -p.amount);
       return [key, `${key} ${formatCurrency(total)}`];
@@ -60,7 +62,7 @@ function renderIncomeTimeline(incomes: Income[], id: string, timeFormat: string)
 
   points = _.map(incomes, (i) => {
     const values = _.chain(i.postings)
-      .groupBy((p) => restName(p.account))
+      .groupBy((p) => incomeGroup(p))
       .flatMap((postings, key) => [[key, _.sumBy(postings, (p) => -p.amount)]])
       .fromPairs()
       .value();
@@ -164,8 +166,6 @@ function renderIncomeTimeline(incomes: Income[], id: string, timeFormat: string)
       return y(d[0]) - y(d[1]);
     })
     .attr("width", Math.min(x.bandwidth(), MAX_BAR_WIDTH));
-
-  const LEGEND_PADDING = 100;
 
   svg
     .append("g")
@@ -311,7 +311,7 @@ export function renderYearlyIncomeTimeline(yearlyCards: IncomeYearlyCard[]) {
     .legendColor()
     .shape("rect")
     .orient("horizontal")
-    .shapePadding(100)
+    .shapePadding(LEGEND_PADDING)
     .labels(groups)
     .scale(z);
 
@@ -391,9 +391,13 @@ export function renderYearlyTimelineOf(
     .legendColor()
     .shape("rect")
     .orient("horizontal")
-    .shapePadding(100)
+    .shapePadding(LEGEND_PADDING)
     .labels(colorKeys)
     .scale(colorScale);
 
   svg.select(".legendOrdinal").call(legendOrdinal as any);
+}
+
+export function incomeGroup(posting: Posting) {
+  return secondName(posting.account);
 }

@@ -20,8 +20,8 @@ func Listen(db *gorm.DB, port int) {
 	gin.SetMode(gin.ReleaseMode)
 
 	router := gin.Default()
-	router.GET("/static/*filepath", func(c *gin.Context) {
-		c.FileFromFS(c.Request.URL.Path, http.FS(web.Static))
+	router.GET("/_app/*filepath", func(c *gin.Context) {
+		c.FileFromFS("/static"+c.Request.URL.Path, http.FS(web.Static))
 	})
 
 	router.GET("/api/config", func(c *gin.Context) {

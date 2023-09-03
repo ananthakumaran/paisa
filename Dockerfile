@@ -3,7 +3,7 @@ WORKDIR /usr/src/paisa
 COPY package.json package-lock.json* ./
 RUN npm install
 COPY . .
-RUN PAISA_HOST=https://paisa-demo.ananthakumaran.in npm run build
+RUN npm run build
 
 FROM golang:1.20-alpine3.18 as go
 WORKDIR /usr/src/paisa

@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Analysis - ₹ Paisa</title>
+        <title>Bulk Edit - ₹ Paisa</title>
 
 
         <!-- Custom HTML head -->
@@ -83,7 +83,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="introduction.html">Introduction</a></li><li class="chapter-item expanded affix "><li class="part-title">Getting Started</li><li class="chapter-item expanded "><a href="installation.html"><strong aria-hidden="true">1.</strong> Installation</a></li><li class="chapter-item expanded "><a href="tutorial.html"><strong aria-hidden="true">2.</strong> Tutorial</a></li><li class="chapter-item expanded affix "><li class="part-title">Reference Guide</li><li class="chapter-item expanded "><a href="accounts.html"><strong aria-hidden="true">3.</strong> Accounts</a></li><li class="chapter-item expanded "><a href="commodities.html"><strong aria-hidden="true">4.</strong> Commodities</a></li><li class="chapter-item expanded "><a href="allocation-targets.html"><strong aria-hidden="true">5.</strong> Allocation Targets</a></li><li class="chapter-item expanded "><a href="tax.html"><strong aria-hidden="true">6.</strong> Tax</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="tax-harvesting.html"><strong aria-hidden="true">6.1.</strong> Tax Harvesting</a></li><li class="chapter-item expanded "><a href="capital-gains.html"><strong aria-hidden="true">6.2.</strong> Capital Gains</a></li><li class="chapter-item expanded "><a href="schedule-al.html"><strong aria-hidden="true">6.3.</strong> Schedule AL</a></li></ol></li><li class="chapter-item expanded "><a href="retirement.html"><strong aria-hidden="true">7.</strong> Retirement</a></li><li class="chapter-item expanded "><a href="analysis.html" class="active"><strong aria-hidden="true">8.</strong> Analysis</a></li><li class="chapter-item expanded "><a href="import.html"><strong aria-hidden="true">9.</strong> Import</a></li><li class="chapter-item expanded "><a href="bulk-edit.html"><strong aria-hidden="true">10.</strong> Bulk Edit</a></li><li class="chapter-item expanded "><a href="recurring.html"><strong aria-hidden="true">11.</strong> Recurring</a></li><li class="chapter-item expanded "><a href="budget.html"><strong aria-hidden="true">12.</strong> Budget</a></li><li class="chapter-item expanded "><a href="ledger-cli.html"><strong aria-hidden="true">13.</strong> Ledger CLI</a></li><li class="chapter-item expanded "><a href="config.html"><strong aria-hidden="true">14.</strong> Config</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="introduction.html">Introduction</a></li><li class="chapter-item expanded affix "><li class="part-title">Getting Started</li><li class="chapter-item expanded "><a href="installation.html"><strong aria-hidden="true">1.</strong> Installation</a></li><li class="chapter-item expanded "><a href="tutorial.html"><strong aria-hidden="true">2.</strong> Tutorial</a></li><li class="chapter-item expanded affix "><li class="part-title">Reference Guide</li><li class="chapter-item expanded "><a href="accounts.html"><strong aria-hidden="true">3.</strong> Accounts</a></li><li class="chapter-item expanded "><a href="commodities.html"><strong aria-hidden="true">4.</strong> Commodities</a></li><li class="chapter-item expanded "><a href="allocation-targets.html"><strong aria-hidden="true">5.</strong> Allocation Targets</a></li><li class="chapter-item expanded "><a href="tax.html"><strong aria-hidden="true">6.</strong> Tax</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="tax-harvesting.html"><strong aria-hidden="true">6.1.</strong> Tax Harvesting</a></li><li class="chapter-item expanded "><a href="capital-gains.html"><strong aria-hidden="true">6.2.</strong> Capital Gains</a></li><li class="chapter-item expanded "><a href="schedule-al.html"><strong aria-hidden="true">6.3.</strong> Schedule AL</a></li></ol></li><li class="chapter-item expanded "><a href="retirement.html"><strong aria-hidden="true">7.</strong> Retirement</a></li><li class="chapter-item expanded "><a href="analysis.html"><strong aria-hidden="true">8.</strong> Analysis</a></li><li class="chapter-item expanded "><a href="import.html"><strong aria-hidden="true">9.</strong> Import</a></li><li class="chapter-item expanded "><a href="bulk-edit.html" class="active"><strong aria-hidden="true">10.</strong> Bulk Edit</a></li><li class="chapter-item expanded "><a href="recurring.html"><strong aria-hidden="true">11.</strong> Recurring</a></li><li class="chapter-item expanded "><a href="budget.html"><strong aria-hidden="true">12.</strong> Budget</a></li><li class="chapter-item expanded "><a href="ledger-cli.html"><strong aria-hidden="true">13.</strong> Ledger CLI</a></li><li class="chapter-item expanded "><a href="config.html"><strong aria-hidden="true">14.</strong> Config</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -144,30 +144,114 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="analysis"><a class="header" href="#analysis">Analysis</a></h1>
-<p>Ledger represents everything except currency as commodities. A
-commodity could represent physical object like Gold or certificates
-like Stock, Bond etc. Some commodities like Mutual Fund is a container
-for Securities. When you own a mutual fund unit, you indirectly own
-these securities.</p>
-<p>The Analysis page unwraps the container and shows you what securities
-you own along with their amount and percentage. It also categorizes
-the securities by their industry and rating.</p>
-<blockquote>
-<p>The data that powers this page comes from various sources and might
-not be 100% accurate. Before you make any decision based on this
-information, double check via different source.</p>
-</blockquote>
+                        <h1 id="bulk-edit"><a class="header" href="#bulk-edit">Bulk Edit</a></h1>
+<p>Paisa provides bulk transaction editor to search and modify multiple
+transactions at once. The interface is made of two parts:</p>
+<ol>
+<li>
+<p>Search input box allows you to narrow down the transactions you are
+interested in making changes</p>
+</li>
+<li>
+<p>Bulk Edit form allows you to make changes to the narrowed down set
+of transactions.</p>
+</li>
+</ol>
+<h2 id="search"><a class="header" href="#search">Search</a></h2>
+<h4 id="plain"><a class="header" href="#plain">Plain</a></h4>
+<p>Paisa provides a powerful search query interface. Let's start with a
+few example queries.</p>
+<pre><code>Expenses:Utilities:Electricity
+</code></pre>
+<p>This will search for all transactions that have a posting with account
+named Expenses:Utilities:Electricity. By default, the search is case
+insensitive and will do a substring match. So, <code>Expenses:Utilities</code>
+will match Expenses:Utilities:Electricity account as well as. If you
+want to search an account name which has special characters like space
+in it, you can use double quotes to enclose it like
+<code>&quot;Expenses:Utilities:Hair Cut&quot;</code>.</p>
+<p>You can also search on transaction date. For example, if you want to
+show all the transactions made on 1st Jan 2023, just type
+<code>[2023-01-01]</code>. If you want to see all made on that month, just leave
+out the day part <code>[2023-01]</code>. You can do the same with year, <code>[2023]</code>
+will show all the transactions made in 2023.</p>
+<p>There is experimental support for natural language date. You can do
+queries like <code>[last month]</code>, <code>[last year]</code>, <code>[this month]</code>, <code>[last week]</code>, <code>[jan 2023]</code>, etc.</p>
+<p>Let's say you want to search by amount. You can do that by typing
+<code>42</code>, it will show all the transactions that have a posting with that
+amount.</p>
+<p>if you want to search a exact Account, you can do that using Regular
+Expression. Just type <code>/^Assets:Equity:APPLE$/</code>, you can also do case
+insensitive search by using the modifier <code>i</code> like
+<code>/^Assets:Equity:APPLE$/i</code>.</p>
+<h4 id="property"><a class="header" href="#property">Property</a></h4>
+<p>You can also search based on properties like account, commodity,
+amount, total, filename, payee and date.</p>
+<pre><code>account = Expenses:Utilities:Electricity
+payee =~ /uber/i
+payee = &quot;Advance Tax&quot;
+total &gt; 5000
+commodity = GOLD
+date &gt;= [2023-01-01]
+filename = creditcard/2023/jan.ledger
+</code></pre>
+<p>The general format is <code>property operator value</code>. The property can be
+any of the following:</p>
+<ul>
+<li>account (posting account)</li>
+<li>commodity (posting commodity)</li>
+<li>amount (posting amount)</li>
+<li>total (transaction total)</li>
+<li>filename (name of the file the transaction is in)</li>
+<li>payee (transaction payee)</li>
+<li>date (transaction date)</li>
+</ul>
+<p>The operator can be any of the following:</p>
+<ul>
+<li>= (equal)</li>
+<li>=~ (regular expression match)</li>
+<li>&lt; (less than)</li>
+<li>&lt;= (less than or equal)</li>
+<li>&gt; (greater than)</li>
+<li>&gt;= (greater than or equal)</li>
+</ul>
+<p>Not all the combinations of property, operator and value would work,
+if in doubt, just try it out, the UI will show you an error if the
+query is not valid.</p>
+<p>In fact, in the previous format we saw, the property and operator is
+not specified and a default set is chosen based on the value type. For
+example, <code>42</code> will be treated as <code>amount = 42</code>, <code>Expenses:Utilities</code>
+will be treated as <code>account = Expenses:Utilities</code>,
+<code>/Expenses:Utilities/i</code> will be treated as <code>account =~ /Expenses:Utilities/i</code>, <code>[2023-01]</code> will be treated as <code>date = [2023-01]</code>.</p>
+<h4 id="conditional"><a class="header" href="#conditional">Conditional</a></h4>
+<p>You can combine multiple property based queries using <code>AND</code> and <code>OR</code>,
+you can negate them using <code>NOT</code></p>
+<pre><code>account = Expenses:Utilities AND payee =~ /uber/i
+commodity = GOLD OR total &gt; 5000
+date &gt;= [2023-01-01] AND date &lt; [2023-04-01]
+account = Expenses:Utilities AND payee =~ /uber/i AND (total &gt; 5000 OR total &lt; 1000)
+total &lt; 5000 AND NOT account = Expenses:Utilities
+[last year] AND (payee =~ /swiggy/i OR payee =~ /phonepe/i)
+</code></pre>
+<p>If you leave out the conditional operator, it will be treated as
+<code>AND</code>. Both of the below queries are the same</p>
+<pre><code>account = Expenses:Utilities AND payee =~ /uber/i
+account = Expenses:Utilities payee =~ /uber/i
+</code></pre>
+<h2 id="bulk-edit-form"><a class="header" href="#bulk-edit-form">Bulk Edit Form</a></h2>
+<p>Currently bulk edit form supports only account rename feature. More
+will be added later. The preview button allows you to see the changes
+before you save them. It will show a side by side diff of the changes.</p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="retirement.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="import.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next" href="import.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next" href="recurring.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -177,11 +261,11 @@ information, double check via different source.</p>
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="retirement.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="import.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next" href="import.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next" href="recurring.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>

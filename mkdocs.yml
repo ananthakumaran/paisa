@@ -1,4 +1,28 @@
 site_name: Paisa
+nav:
+  - index.md
+  - 'Getting Starteed':
+    - getting-started/installation.md
+    - getting-started/tutorial.md
+  - 'Reference':
+    - reference/accounts.md
+    - reference/commodities.md
+    - reference/allocation-targets.md
+    - reference/budget.md
+    - reference/bulk-edit.md
+    - reference/import.md
+    - reference/retirement.md
+    - reference/recurring.md
+    - reference/config.md
+    - reference/ledger-cli.md
+    - reference/analysis.md
+    - 'Tax':
+      - reference/tax/index.md
+      - reference/tax/tax-harvesting.md
+      - reference/tax/capital-gains.md
+      - reference/tax/schedule-al.md
+  - 'Demo': 'https://demo.paisa.fyi'
+
 theme:
   name: material
   icon:
@@ -21,6 +45,7 @@ theme:
     - navigation.tabs
     - navigation.expand
     - navigation.indexes
+    - navigation.top
 
 markdown_extensions:
   - pymdownx.highlight:
@@ -49,3 +74,5 @@ extra:
   social:
     - icon: fontawesome/brands/github
       link: https://github.com/ananthakumaran/paisa
+    - icon: simple/matrix
+      link: https://matrix.to/#/#paisa:matrix.org

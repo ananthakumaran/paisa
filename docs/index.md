@@ -1,4 +1,10 @@
-# Home
+---
+hide:
+  - navigation
+  - toc
+---
+
+#
 
 **Paisa** is a command line tool and Web UI to manage personal
 finance. It builds on top of the [ledger](https://www.ledger-cli.org/) double entry accounting

@@ -46,8 +46,8 @@ The example config above links two commodities with their respective
 mutual fund scheme code. The scheme code can be found using the
 *search* command.
 
-```shell
-❯ paisa search mutualfund
+```console
+# paisa search mutualfund
 INFO Using config file: /home/john/finance/paisa.yaml
 INFO Using cached results; pass '-u' to update the cache
 ✔ ICICI Prudential Asset Management Company Limited
@@ -71,8 +71,8 @@ The example config above links NPS fund commodity with their
 respective NPS fund scheme code. The scheme code can be found using
 the *search* command.
 
-```
-❯ paisa search nps
+```console
+# paisa search nps
 INFO Using config file: /home/john/finance/paisa.yaml
 INFO Using cached results; pass '-u' to update the cache
 ✔ HDFC Pension Management Company Limited

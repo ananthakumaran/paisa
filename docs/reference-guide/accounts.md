@@ -19,7 +19,7 @@ There are four types of account namely
 1. Income
 1. Expenses
 
-![Flow](images/flow.png)
+![Flow](/images/flow.png)
 
 All the accounts you create should be under one of these
 accounts. This naming convention is a necessity, because without

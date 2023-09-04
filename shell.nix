@@ -7,9 +7,11 @@ pkgs.mkShell {
     pkgs.gopls
     pkgs.sqlite
     pkgs.nodejs-18_x
-    pkgs.mdbook
     pkgs.libuuid
     # pkgs.pkgsCross.mingwW64.buildPackages.gcc
+
+    pkgs.python311Packages.mkdocs
+    pkgs.python311Packages.mkdocs-material
   ];
 
   shellHook = ''

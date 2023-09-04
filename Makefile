@@ -9,13 +9,13 @@ serve:
 watch:
 	npm run "build:watch"
 docs:
-	cd docs && mdbook serve --open
+	mkdocs serve
 
 sample:
 	go build && ./paisa init && ./paisa update
 
 publish:
-	nix develop --command bash -c 'cd docs && mdbook build'
+	nix develop --command bash -c 'mkdocs build'
 
 lint:
 	./node_modules/.bin/prettier --check src

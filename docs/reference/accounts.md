@@ -19,8 +19,6 @@ There are four types of account namely
 1. Income
 1. Expenses
 
-![Flow](/images/flow.png)
-
 All the accounts you create should be under one of these
 accounts. This naming convention is a necessity, because without
 which, it's not possible to tell whether you are spending money or
@@ -30,9 +28,18 @@ implies that you are spending money.
 Money typically flows from Income to Assets, from Assets to either
 Expenses, Liabilities or other Assets, from Liabilities to Expenses.
 
+``` mermaid
+graph LR
+  I[Income] --> A[Assets];
+  A --> E[Expenses];
+  A --> A;
+  A --> L[Liabilities];
+  L --> E[Expenses];
+```
+
 As a general principle, try not to create too many accounts at second
 level. The UI works best when you create less than or equal to 12
-second level account under each type. For example, you can have 12
+second level accounts under each type. For example, you can have 12
 accounts under `Expenses`. But if you want more, try to add them under
 3 level, example `Expenses:Food:Subway`.
 

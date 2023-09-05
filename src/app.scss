@@ -36,6 +36,7 @@ $menu-item-active-background-color: $link-light;
 
 // daisy UI color override
 .du-tabs {
+  --rounded-btn: #{$radius};
   background-color: $grey-lightest !important;
 
   .du-tab {
@@ -774,9 +775,9 @@ span.progress-percent.less-than-10 {
 }
 
 .border-left {
-  border-radius: $radius-small 0 0 $radius-small !important;
+  border-radius: $radius 0 0 $radius !important;
 }
 
 .border-right {
-  border-radius: 0 $radius-small $radius-small 0 !important;
+  border-radius: 0 $radius $radius 0 !important;
 }

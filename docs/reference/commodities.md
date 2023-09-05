@@ -6,9 +6,7 @@ tracked as a commodity. Few example transactions can be found below.
 
 ```go
 2019/02/18 NPS
-    Assets:Equity:NPS:SBI:E           15.9378 NPS_SBI_E @ 23.5289 INR
-;// account name                      units   commodity   purchase price
-;//                                           name        per unit
+    Assets:Equity:NPS:SBI:E/*(1)!*/       /*(2)!*/15.9378 NPS_SBI_E/*(3)!*/ @ /*(4)!*/23.5289 INR/*(5)!*/
     Assets:Checking
 
 2019/02/21 NPS
@@ -19,6 +17,12 @@ tracked as a commodity. Few example transactions can be found below.
     Assets:Gold                       40 GOLD @ 4650 INR
     Assets:Checking
 ```
+
+1.  Account name
+2.  Number of units purchased
+3.  Commodity Name
+4.  Purchase Price per Unit
+5.  Currency
 
 **paisa** comes with inbuilt support for fetching the latest price of
 some commodities like mutual fund and NPS. For others, it will try to

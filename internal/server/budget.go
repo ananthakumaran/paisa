@@ -79,7 +79,7 @@ func computeBudet(db *gorm.DB, forecastPostings, expensesPostings []posting.Post
 
 			for _, account := range accounts {
 				fs := forecastsByAccount[account]
-				es, ok := expensesByAccount[account]
+				es := popExpenses(account, expensesByAccount)
 				if !ok {
 					es = []posting.Posting{}
 				}
@@ -133,4 +133,16 @@ func buildBudget(date time.Time, account string, balance decimal.Decimal, foreca
 		Date:      date,
 		Expenses:  expenses,
 	}
+}
+
+func popExpenses(forecastAccount string, expensesByAccount map[string][]posting.Posting) []posting.Posting {
+	expenses := []posting.Posting{}
+	for account, es := range expensesByAccount {
+		if utils.IsSameOrParent(account, forecastAccount) {
+			expenses = append(expenses, es...)
+			delete(expensesByAccount, account)
+		}
+	}
+	return expenses
+
 }

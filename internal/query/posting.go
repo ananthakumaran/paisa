@@ -1,6 +1,7 @@
 package query
 
 import (
+	"errors"
 	"time"
 
 	"github.com/ananthakumaran/paisa/internal/config"
@@ -127,12 +128,16 @@ func (q *Query) All() []posting.Posting {
 	return postings
 }
 
-func (q *Query) First() posting.Posting {
+func (q *Query) First() *posting.Posting {
 	var posting posting.Posting
 	q.context = q.context.Where("forecast = ?", q.includeForecast)
 	result := q.context.Order("date " + q.order + ", amount desc").First(&posting)
+
 	if result.Error != nil {
+		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+			return nil
+		}
 		log.Fatal(result.Error)
 	}
-	return posting
+	return &posting
 }

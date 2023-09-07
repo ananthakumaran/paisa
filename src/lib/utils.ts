@@ -67,6 +67,7 @@ export interface Networth {
   gainAmount: number;
   balanceAmount: number;
   netInvestmentAmount: number;
+  absoluteReturn: number;
 }
 
 export interface Gain {
@@ -282,6 +283,7 @@ export interface Budget {
   accounts: AccountBudget[];
   endOfMonthBalance: number;
   availableThisMonth: number;
+  forecast: number;
 }
 
 export interface AccountBudget {
@@ -699,16 +701,6 @@ export function skipTicks<Domain>(
 
     return index % skip === 0 ? cb(data, index) : null;
   };
-}
-
-export function setHtml(selector: string, value: string, color?: string) {
-  const node: HTMLElement = document.querySelector(".d3-" + selector);
-  if (color) {
-    node.style.backgroundColor = color;
-    node.style.padding = "5px";
-    node.classList.add("has-text-white");
-  }
-  node.innerHTML = value;
 }
 
 export function rainbowScale(keys: string[]) {

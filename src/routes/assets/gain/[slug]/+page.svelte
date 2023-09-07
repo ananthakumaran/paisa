@@ -15,6 +15,7 @@
   import { onMount, onDestroy } from "svelte";
   import type { PageData } from "./$types";
   import PostingCard from "$lib/components/PostingCard.svelte";
+  import LevelItem from "$lib/components/LevelItem.svelte";
 
   let commodities: string[] = [];
   let selectedCommodities: string[] = [];
@@ -110,49 +111,32 @@
             <div class="column is-full">
               <div>
                 <nav class="level">
-                  <div class="level-item is-narrow">
-                    <div>
-                      <p class="heading has-text-left">Balance</p>
-                      <p class="title" style="background-color: {COLORS.primary};">
-                        {formatCurrency(overview.balanceAmount)}
-                      </p>
-                    </div>
-                  </div>
-                  <div class="level-item is-narrow">
-                    <div>
-                      <p class="heading has-text-right">Net Investment</p>
-                      <p class="title" style="background-color: {COLORS.secondary};">
-                        {formatCurrency(overview.netInvestmentAmount)}
-                      </p>
-                    </div>
-                  </div>
+                  <LevelItem
+                    narrow
+                    title="Balance"
+                    color={COLORS.primary}
+                    value={formatCurrency(overview.balanceAmount)}
+                  />
+                  <LevelItem
+                    narrow
+                    title="Net Investment"
+                    color={COLORS.secondary}
+                    value={formatCurrency(overview.netInvestmentAmount)}
+                  />
                 </nav>
               </div>
             </div>
             <div class="column is-full">
               <div>
                 <nav class="level">
-                  <div class="level-item is-narrow">
-                    <div>
-                      <p class="heading has-text-left">Gain / Loss</p>
-                      <p
-                        class="title"
-                        style="background-color: {overview.gainAmount >= 0
-                          ? COLORS.gainText
-                          : COLORS.lossText};"
-                      >
-                        {formatCurrency(overview.gainAmount)}
-                      </p>
-                    </div>
-                  </div>
-                  <div class="level-item is-narrow">
-                    <div>
-                      <p class="heading has-text-right">XIRR</p>
-                      <p class="title has-text-black pr-0">
-                        {formatFloat(gain.xirr)}
-                      </p>
-                    </div>
-                  </div>
+                  <LevelItem
+                    narrow
+                    title="Gain / Loss"
+                    color={overview.gainAmount >= 0 ? COLORS.gainText : COLORS.lossText}
+                    value={formatCurrency(overview.gainAmount)}
+                  />
+
+                  <LevelItem narrow title="XIRR" value={formatFloat(gain.xirr)} />
                 </nav>
               </div>
             </div>

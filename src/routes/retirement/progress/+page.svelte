@@ -68,38 +68,22 @@
         title="Current Savings"
         value={formatCurrency(savingsTotal)}
         color={COLORS.primary}
-        subtitle="X times Yearly Expenses"
-        subvalue="{formatFloat(savingsX, 0)}x"
-        subcolor={COLORS.primary}
+        subtitle="{formatFloat(savingsX, 0)}x times Yearly Expenses"
       />
-      <div class="level-item has-text-centered">
-        <div>
-          <p class="heading">Yearly Expenses</p>
-          <p class="title" style="background-color: {COLORS.lossText};">
-            {formatCurrency(yearlyExpense)}
-          </p>
-        </div>
-      </div>
+      <LevelItem
+        title="Yearly Expenses"
+        color={COLORS.lossText}
+        value={formatCurrency(yearlyExpense)}
+      />
+
       <LevelItem
         title="Target Savings"
         value={formatCurrency(targetSavings)}
         color={targetSavings <= savingsTotal ? COLORS.gainText : COLORS.lossText}
-        subtitle="X times Yearly Expenses"
-        subvalue="{formatFloat(targetX, 0)}x"
-        subcolor={targetSavings <= savingsTotal ? COLORS.gainText : COLORS.lossText}
+        subtitle="{formatFloat(targetX, 0)}x times Yearly Expenses"
       />
-      <div class="level-item has-text-centered">
-        <div>
-          <p class="heading">SWR</p>
-          <p class="title has-text-black">{formatFloat(swr)}</p>
-        </div>
-      </div>
-      <div class="level-item has-text-centered">
-        <div>
-          <p class="heading">XIRR</p>
-          <p class="title has-text-black">{formatFloat(xirr)}</p>
-        </div>
-      </div>
+      <LevelItem title="SWR" value={formatFloat(swr)} />
+      <LevelItem title="XIRR" value={formatFloat(xirr)} />
     </nav>
   </div>
 </section>

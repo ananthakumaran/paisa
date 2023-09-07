@@ -15,7 +15,8 @@
     formatCurrency,
     formatFloat,
     type Transaction,
-    type Budget
+    type Budget,
+    formatPercentage
   } from "$lib/utils";
   import _ from "lodash";
   import { onMount } from "svelte";
@@ -26,6 +27,8 @@
 
   import { MasonryGrid } from "@egjs/svelte-grid";
   import BudgetCard from "$lib/components/BudgetCard.svelte";
+  import LevelItem from "$lib/components/LevelItem.svelte";
+  import ZeroState from "$lib/components/ZeroState.svelte";
 
   let UntypedMasonryGrid = MasonryGrid as any;
 
@@ -40,11 +43,12 @@
   let transactions: Transaction[] = [];
   let budgetsByMonth: Record<string, Budget> = {};
   let currentBudget: Budget;
+  let selectedExpenses: Posting[] = [];
 
   const now = dayjs();
 
   $: if (renderer) {
-    const selectedExpenses = expenses[month] || [];
+    selectedExpenses = expenses[month] || [];
     renderer(selectedExpenses);
     totalExpense = _.sumBy(selectedExpenses, (p) => p.amount);
   }
@@ -85,44 +89,35 @@
                 <div class="content">
                   <div>
                     {#if networth}
-                      <nav class="level">
-                        <div class="level-item is-narrow has-text-centered">
-                          <div>
-                            <p class="heading">Net worth</p>
-                            <p class="title" style="background-color: {COLORS.primary};">
-                              {formatCurrency(networth.balanceAmount)}
-                            </p>
-                          </div>
-                        </div>
-                        <div class="level-item is-narrow has-text-centered">
-                          <div>
-                            <p class="heading">Net Investment</p>
-                            <p class="title" style="background-color: {COLORS.secondary};">
-                              {formatCurrency(networth.netInvestmentAmount)}
-                            </p>
-                          </div>
-                        </div>
+                      <nav class="level grid-2">
+                        <LevelItem
+                          narrow
+                          title="Net worth"
+                          color={COLORS.primary}
+                          value={formatCurrency(networth.balanceAmount)}
+                        />
+
+                        <LevelItem
+                          narrow
+                          title="Net Investment"
+                          color={COLORS.secondary}
+                          value={formatCurrency(networth.netInvestmentAmount)}
+                        />
                       </nav>
-                      <nav class="level">
-                        <div class="level-item is-narrow has-text-centered">
-                          <div>
-                            <p class="heading">Gain / Loss</p>
-                            <p
-                              class="title"
-                              style="background-color: {networth.gainAmount >= 0
-                                ? COLORS.gainText
-                                : COLORS.lossText};"
-                            >
-                              {formatCurrency(networth.gainAmount)}
-                            </p>
-                          </div>
-                        </div>
-                        <div class="level-item is-narrow has-text-centered">
-                          <div>
-                            <p class="heading">XIRR</p>
-                            <p class="title has-text-black-ter">{formatFloat(xirr)}</p>
-                          </div>
-                        </div>
+                      <nav class="level grid-2">
+                        <LevelItem
+                          narrow
+                          title="Gain / Loss"
+                          color={networth.gainAmount >= 0 ? COLORS.gainText : COLORS.lossText}
+                          value={formatCurrency(networth.gainAmount)}
+                        />
+
+                        <LevelItem
+                          narrow
+                          title="XIRR"
+                          value={formatFloat(xirr)}
+                          subtitle="{formatPercentage(networth.absoluteReturn, 2)} absolute return"
+                        />
                       </nav>
                     {/if}
                   </div>
@@ -136,7 +131,16 @@
                 <a class="secondary-link" href="/cash_flow/monthly">Cash Flow</a>
               </p>
               <div class="content box px-2 pb-0">
-                <svg id="d3-current-cash-flow" height="250" width="100%" />
+                <ZeroState item={cashFlows}>
+                  <strong>Oops!</strong> You have not made any transactions in the last 3 months.
+                </ZeroState>
+
+                <svg
+                  class:is-not-visible={_.isEmpty(cashFlows)}
+                  id="d3-current-cash-flow"
+                  height="250"
+                  width="100%"
+                />
               </div>
             </article>
           </div>
@@ -174,6 +178,9 @@
               <LastNMonths n={3} bind:value={month} />
             </p>
             <div class="content box px-3">
+              <ZeroState item={selectedExpenses}>
+                <strong>Hurray!</strong> You have no expenses this month.
+              </ZeroState>
               <svg id="d3-current-month-breakdown" width="100%" />
             </div>
           </article>

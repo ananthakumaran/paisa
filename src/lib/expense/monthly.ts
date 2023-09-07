@@ -7,10 +7,8 @@ import {
   forEachMonth,
   formatFixedWidthFloat,
   formatCurrency,
-  formatPercentage,
   formatCurrencyCrude,
   type Posting,
-  setHtml,
   skipTicks,
   tooltip,
   restName,
@@ -130,34 +128,6 @@ export function renderCalendar(
     .attr("d", (arc) => {
       return d3.arc().innerRadius(13).outerRadius(17)(arc as any);
     });
-}
-
-export function renderSelectedMonth(
-  renderer: (ps: Posting[]) => void,
-  expenses: Posting[],
-  incomes: Posting[],
-  taxes: Posting[],
-  investments: Posting[]
-) {
-  renderer(expenses);
-  setHtml("current-month-income", sumCurrency(incomes, -1), COLORS.gainText);
-  const taxRate = sum(taxes) / sum(incomes, -1);
-  setHtml("current-month-tax", sumCurrency(taxes), COLORS.lossText);
-  setHtml("current-month-tax-rate", formatPercentage(taxRate), COLORS.lossText);
-  const expensesRate = sum(expenses) / (sum(incomes, -1) - sum(taxes));
-  setHtml("current-month-expenses", sumCurrency(expenses), COLORS.lossText);
-  setHtml("current-month-expenses-rate", formatPercentage(expensesRate), COLORS.lossText);
-  setHtml("current-month-investment", sumCurrency(investments), COLORS.secondary);
-  const savingsRate = sum(investments) / (sum(incomes, -1) - sum(taxes));
-  setHtml("current-month-savings-rate", formatPercentage(savingsRate), COLORS.secondary);
-}
-
-function sum(postings: Posting[], sign = 1) {
-  return sign * _.sumBy(postings, (p) => p.amount);
-}
-
-function sumCurrency(postings: Posting[], sign = 1) {
-  return formatCurrency(sign * _.sumBy(postings, (p) => p.amount));
 }
 
 export function colorScale(postings: Posting[]) {

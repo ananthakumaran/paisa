@@ -22,3 +22,8 @@ tool.
 - :material-beach: Can help with retirement planning.
 - :material-chart-bar: And many more visualizations to help you make any financial
   decisions.
+
+<p style="text-align: center; margin-top: 10px">
+  <a class="md-button md-button--primary" style="margin-right: 20px;" href="/getting-started/installation/">Install</a>
+  <a class="md-button md-button--primary" href="https://demo.paisa.fyi">Demo</a>
+</p>

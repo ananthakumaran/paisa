@@ -4,15 +4,16 @@
   import { renderFlow } from "$lib/cash_flow";
   import { ajax, type Graph, type Posting } from "$lib/utils";
   import { dateMin, year, cashflowType } from "../../../store";
+  import ZeroState from "$lib/components/ZeroState.svelte";
 
   let graph: Record<string, Record<string, Graph>>, expenses: Posting[];
   let isEmpty = false;
 
   $: if (graph) {
-    renderFlow(graph[$year][$cashflowType], $cashflowType);
     if (graph[$year] == null) {
       isEmpty = true;
     } else {
+      renderFlow(graph[$year][$cashflowType], $cashflowType);
       isEmpty = false;
     }
   }
@@ -26,24 +27,19 @@
   });
 </script>
 
-<section class="section" class:is-hidden={!isEmpty}>
-  <div class="container is-fluid">
-    <div class="columns is-centered">
-      <div class="column is-4 has-text-centered">
-        <article class="message">
-          <div class="message-body">No transactions found for the selected year.</div>
-        </article>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="section" class:is-not-visible={isEmpty}>
+<section class="section">
   <div class="container is-fluid">
     <div class="columns">
       <div class="column is-12">
         <div class="box">
-          <svg id="d3-expense-flow" height={window.innerHeight - 100} />
+          <ZeroState item={!isEmpty}
+            ><strong>Oops!</strong> You have not made any transactions for the selected year.</ZeroState
+          >
+          <svg
+            class:is-not-visible={isEmpty}
+            id="d3-expense-flow"
+            height={window.innerHeight - 100}
+          />
         </div>
       </div>
     </div>

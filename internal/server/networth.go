@@ -19,6 +19,7 @@ type Networth struct {
 	GainAmount          decimal.Decimal `json:"gainAmount"`
 	BalanceAmount       decimal.Decimal `json:"balanceAmount"`
 	NetInvestmentAmount decimal.Decimal `json:"netInvestmentAmount"`
+	AbsoluteReturn      decimal.Decimal `json:"absoluteReturn"`
 }
 
 func GetNetworth(db *gorm.DB) gin.H {
@@ -70,8 +71,17 @@ func computeNetworth(db *gorm.DB, postings []posting.Posting) Networth {
 	}
 
 	gain := balance.Add(withdrawal).Sub(investment)
-	net_investment := investment.Sub(withdrawal)
-	networth = Networth{Date: now, InvestmentAmount: investment, WithdrawalAmount: withdrawal, GainAmount: gain, BalanceAmount: balance, NetInvestmentAmount: net_investment}
+	netInvestment := investment.Sub(withdrawal)
+	absoluteReturn := balance.Sub(netInvestment).Div(netInvestment)
+	networth = Networth{
+		Date:                now,
+		InvestmentAmount:    investment,
+		WithdrawalAmount:    withdrawal,
+		GainAmount:          gain,
+		BalanceAmount:       balance,
+		NetInvestmentAmount: netInvestment,
+		AbsoluteReturn:      absoluteReturn,
+	}
 
 	return networth
 }
@@ -139,8 +149,8 @@ func computeNetworthTimeline(db *gorm.DB, postings []posting.Posting) []Networth
 		}
 
 		gain := balance.Add(withdrawal).Sub(investment)
-		net_investment := investment.Sub(withdrawal)
-		networths = append(networths, Networth{Date: start, InvestmentAmount: investment, WithdrawalAmount: withdrawal, GainAmount: gain, BalanceAmount: balance, NetInvestmentAmount: net_investment})
+		netInvestment := investment.Sub(withdrawal)
+		networths = append(networths, Networth{Date: start, InvestmentAmount: investment, WithdrawalAmount: withdrawal, GainAmount: gain, BalanceAmount: balance, NetInvestmentAmount: netInvestment})
 
 		if len(postings) == 0 && balance.Abs().LessThan(decimal.NewFromFloat(0.01)) {
 			break

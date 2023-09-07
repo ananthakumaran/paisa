@@ -1,13 +1,17 @@
 <script lang="ts">
   import COLORS from "$lib/colors";
+  import LevelItem from "$lib/components/LevelItem.svelte";
   import {
     renderMonthlyInvestmentTimeline,
     renderYearlyIncomeTimeline,
     renderYearlyTimelineOf
   } from "$lib/income";
-  import { ajax, formatCurrency, setHtml } from "$lib/utils";
+  import { ajax, formatCurrency } from "$lib/utils";
   import _ from "lodash";
   import { onMount } from "svelte";
+
+  let grossIncome = 0;
+  let netTax = 0;
 
   onMount(async () => {
     const {
@@ -20,30 +24,16 @@
     renderYearlyTimelineOf("Net Income", "net_income", COLORS.gain, yearlyCards);
     renderYearlyTimelineOf("Net Tax", "net_tax", COLORS.loss, yearlyCards);
 
-    const grossIncome = _.sumBy(incomes, (i) => _.sumBy(i.postings, (p) => -p.amount));
-
-    const netTax = _.sumBy(taxes, (t) => _.sumBy(t.postings, (p) => p.amount));
-
-    setHtml("gross-income", formatCurrency(grossIncome), COLORS.gainText);
-    setHtml("net-tax", formatCurrency(netTax), COLORS.lossText);
+    grossIncome = _.sumBy(incomes, (i) => _.sumBy(i.postings, (p) => -p.amount));
+    netTax = _.sumBy(taxes, (t) => _.sumBy(t.postings, (p) => p.amount));
   });
 </script>
 
 <section class="section tab-income">
   <div class="container">
     <nav class="level">
-      <div class="level-item has-text-centered">
-        <div>
-          <p class="heading">Gross Income</p>
-          <p class="d3-gross-income title" />
-        </div>
-      </div>
-      <div class="level-item has-text-centered">
-        <div>
-          <p class="heading">Net Tax</p>
-          <p class="d3-net-tax title" />
-        </div>
-      </div>
+      <LevelItem title="Gross Income" value={formatCurrency(grossIncome)} color={COLORS.gainText} />
+      <LevelItem title="Net Tax" value={formatCurrency(netTax)} color={COLORS.lossText} />
     </nav>
   </div>
 </section>

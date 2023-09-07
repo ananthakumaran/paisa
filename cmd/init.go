@@ -416,7 +416,7 @@ func generateJournalFile(cwd string) {
 
 	state := GeneratorState{Balance: 0, Ledger: ledgerFile, YearlySalary: 1000000, Rent: 10000, LoanBalance: 2500000}
 
-	emitTransaction(state.Ledger, start, "Home purchase", "Liabilities:Homeloan", "Assets:House", "1 APT @ 25000000")
+	emitTransaction(state.Ledger, start, "Home purchase", "Liabilities:Homeloan", "Assets:House", "1 APT @ 2500000")
 
 	for ; start.Before(end); start = start.AddDate(0, 1, 0) {
 		emitSalary(&state, start)

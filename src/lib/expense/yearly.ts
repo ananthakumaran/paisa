@@ -9,7 +9,6 @@ import {
   formatPercentage,
   formatCurrencyCrude,
   type Posting,
-  setHtml,
   skipTicks,
   tooltip,
   secondName,
@@ -150,39 +149,15 @@ export function renderCalendar(
     });
 }
 
-export function renderSelectedMonth(
-  renderer: (ps: Posting[]) => void,
-  expenses: Posting[],
-  incomes: Posting[],
-  taxes: Posting[],
-  investments: Posting[]
-) {
-  renderer(expenses);
-  setHtml("current-year-income", sumCurrency(incomes, -1), COLORS.gainText);
-  const taxRate = sum(taxes) / sum(incomes, -1);
-  setHtml("current-year-tax", sumCurrency(taxes), COLORS.lossText);
-  setHtml("current-year-tax-rate", formatPercentage(taxRate), COLORS.lossText);
-  const expensesRate = sum(expenses) / (sum(incomes, -1) - sum(taxes));
-  setHtml("current-year-expenses", sumCurrency(expenses), COLORS.lossText);
-  setHtml("current-year-expenses-rate", formatPercentage(expensesRate), COLORS.lossText);
-  setHtml("current-year-investment", sumCurrency(investments), COLORS.secondary);
-  const savingsRate = sum(investments) / (sum(incomes, -1) - sum(taxes));
-  setHtml("current-year-savings-rate", formatPercentage(savingsRate), COLORS.secondary);
-}
-
-function sum(postings: Posting[], sign = 1) {
-  return sign * _.sumBy(postings, (p) => p.amount);
-}
-
-function sumCurrency(postings: Posting[], sign = 1) {
-  return formatCurrency(sign * _.sumBy(postings, (p) => p.amount));
-}
-
 export function renderYearlyExpensesTimeline(
   postings: Posting[],
   groupsStore: Writable<string[]>,
   yearStore: Writable<string>
 ) {
+  if (_.isEmpty(postings)) {
+    return { z: null };
+  }
+
   const id = "#d3-yearly-expense-timeline";
   const MAX_BAR_WIDTH = 40;
   const svg = d3.select(id),

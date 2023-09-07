@@ -63,6 +63,10 @@ func computeAggregateTimeline(db *gorm.DB, postings []posting.Posting) []map[str
 
 	accumulator := make(map[string]map[string]RunningSum)
 
+	if len(postings) == 0 {
+		return timeline
+	}
+
 	end := time.Now()
 	for start := postings[0].Date; start.Before(end); start = start.AddDate(0, 0, 1) {
 		for len(postings) > 0 && (postings[0].Date.Before(start) || postings[0].Date.Equal(start)) {
@@ -114,6 +118,10 @@ func computeAggregateTimeline(db *gorm.DB, postings []posting.Posting) []map[str
 func computeAllocationTargets(db *gorm.DB, postings []posting.Posting) []AllocationTarget {
 	var targetAllocations []AllocationTarget
 	allocationTargetConfigs := config.GetConfig().AllocationTargets
+
+	if len(postings) == 0 {
+		return targetAllocations
+	}
 
 	totalMarketAmount := accounting.CurrentBalance(postings)
 

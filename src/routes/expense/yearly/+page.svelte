@@ -2,15 +2,17 @@
   import * as d3 from "d3";
   import { onMount } from "svelte";
   import _ from "lodash";
-  import { ajax, type Posting } from "$lib/utils";
+  import { ajax, formatCurrency, formatPercentage, type Posting } from "$lib/utils";
   import {
     renderYearlyExpensesTimeline,
     renderCurrentExpensesBreakdown,
-    renderCalendar,
-    renderSelectedMonth
+    renderCalendar
   } from "$lib/expense/yearly";
   import { dateMin, dateMax, year } from "../../../store";
   import { writable } from "svelte/store";
+  import LevelItem from "$lib/components/LevelItem.svelte";
+  import COLORS from "$lib/colors";
+  import ZeroState from "$lib/components/ZeroState.svelte";
 
   let groups = writable([]);
   let z: d3.ScaleOrdinal<string, string, never>,
@@ -21,15 +23,47 @@
     grouped_investments: Record<string, Posting[]>,
     grouped_taxes: Record<string, Posting[]>;
 
+  let currentYearExpenses: Posting[] = [];
+
+  let income = "",
+    netIncome = "",
+    taxRate = "",
+    tax = "",
+    expenseRate = "",
+    expense = "",
+    investment = "",
+    savingRate = "";
+
   $: if (grouped_expenses) {
-    renderCalendar(grouped_expenses[$year], z, $groups);
-    renderSelectedMonth(
-      renderer,
-      grouped_expenses[$year] || [],
-      grouped_incomes[$year] || [],
-      grouped_taxes[$year] || [],
-      grouped_investments[$year] || []
-    );
+    currentYearExpenses = grouped_expenses[$year];
+    renderCalendar(currentYearExpenses, z, $groups);
+
+    const expenses = grouped_expenses[$year] || [];
+    const incomes = grouped_incomes[$year] || [];
+    const taxes = grouped_taxes[$year] || [];
+    const investments = grouped_investments[$year] || [];
+
+    income = sumCurrency(incomes, -1);
+
+    tax = sumCurrency(taxes);
+    expense = sumCurrency(expenses);
+    investment = sumCurrency(investments);
+
+    if (_.isEmpty(incomes)) {
+      expenseRate = "";
+      taxRate = "";
+      savingRate = "";
+      netIncome = "";
+    } else {
+      netIncome = formatCurrency(sum(incomes, -1) - sum(taxes)) + " net income";
+      taxRate = formatPercentage(sum(taxes) / sum(incomes, -1)) + " of income";
+      expenseRate =
+        formatPercentage(sum(expenses) / (sum(incomes, -1) - sum(taxes))) + " of net income";
+      savingRate =
+        formatPercentage(sum(investments) / (sum(incomes, -1) - sum(taxes))) + " of net income";
+    }
+
+    renderer(expenses);
   }
 
   onMount(async () => {
@@ -53,6 +87,14 @@
 
     renderer = renderCurrentExpensesBreakdown(z);
   });
+
+  function sum(postings: Posting[], sign = 1) {
+    return sign * _.sumBy(postings, (p) => p.amount);
+  }
+
+  function sumCurrency(postings: Posting[], sign = 1) {
+    return formatCurrency(sign * _.sumBy(postings, (p) => p.amount));
+  }
 </script>
 
 <section class="section tab-expense">
@@ -62,52 +104,33 @@
         <div class="columns is-flex-wrap-wrap">
           <div class="column is-full">
             <div>
-              <nav class="level">
-                <div class="level-item is-narrow has-text-centered">
-                  <div>
-                    <p class="heading is-flex is-justify-content-space-between">Income</p>
-                    <p class="d3-current-year-income title" />
-                  </div>
-                </div>
-                <div class="level-item is-narrow has-text-centered">
-                  <div>
-                    <p class="heading is-flex is-justify-content-space-between">
-                      <span>Tax</span><span
-                        title="Tax Rate"
-                        class="tag ml-2 has-text-weight-semibold d3-current-year-tax-rate"
-                      />
-                    </p>
-                    <p class="d3-current-year-tax title" />
-                  </div>
-                </div>
+              <nav class="level grid-2">
+                <LevelItem
+                  title="Gross Income"
+                  value={income}
+                  color={COLORS.gainText}
+                  subtitle={netIncome}
+                />
+                <LevelItem title="Tax" value={tax} color={COLORS.lossText} subtitle={taxRate} />
               </nav>
             </div>
           </div>
           <div class="column is-full">
             <div>
-              <nav class="level">
-                <div class="level-item is-narrow has-text-centered">
-                  <div>
-                    <p class="heading is-flex is-justify-content-space-between">
-                      <span>Net Investment</span><span
-                        title="Savings Rate"
-                        class="tag ml-2 has-text-weight-semibold d3-current-year-savings-rate"
-                      />
-                    </p>
-                    <p class="d3-current-year-investment title" />
-                  </div>
-                </div>
-                <div class="level-item is-narrow has-text-centered">
-                  <div>
-                    <p class="heading is-flex is-justify-content-space-between">
-                      <span>Expenses</span><span
-                        title="Expenses Rate"
-                        class="tag ml-2 has-text-weight-semibold d3-current-year-expenses-rate"
-                      />
-                    </p>
-                    <p class="d3-current-year-expenses title" />
-                  </div>
-                </div>
+              <nav class="level grid-2">
+                <LevelItem
+                  title="Net Investment"
+                  value={investment}
+                  color={COLORS.secondary}
+                  subtitle={savingRate}
+                />
+
+                <LevelItem
+                  title="Expenses"
+                  value={expense}
+                  color={COLORS.lossText}
+                  subtitle={expenseRate}
+                />
               </nav>
             </div>
           </div>
@@ -122,11 +145,18 @@
       </div>
       <div class="column is-full-tablet is-half-fullhd">
         <div class="px-3 box" style="height: 100%">
+          <ZeroState item={currentYearExpenses}>
+            <strong>Hurray!</strong> You have no expenses this year.
+          </ZeroState>
           <svg id="d3-current-year-breakdown" width="100%" />
         </div>
       </div>
       <div class="column is-12">
         <div class="box">
+          <ZeroState item={expenses}>
+            <strong>Oops!</strong> You have no expenses.
+          </ZeroState>
+
           <svg id="d3-yearly-expense-timeline" width="100%" height="500" />
         </div>
       </div>

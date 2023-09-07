@@ -18,7 +18,6 @@ type AccountBudget struct {
 	Account   string            `json:"account"`
 	Forecast  decimal.Decimal   `json:"forecast"`
 	Actual    decimal.Decimal   `json:"actual"`
-	Budgeted  decimal.Decimal   `json:"budgeted"`
 	Rollover  decimal.Decimal   `json:"rollover"`
 	Available decimal.Decimal   `json:"available"`
 	Date      time.Time         `json:"date"`
@@ -30,6 +29,7 @@ type Budget struct {
 	Accounts           []AccountBudget `json:"accounts"`
 	AvailableThisMonth decimal.Decimal `json:"availableThisMonth"`
 	EndOfMonthBalance  decimal.Decimal `json:"endOfMonthBalance"`
+	Forecast           decimal.Decimal `json:"forecast"`
 }
 
 func GetBudget(db *gorm.DB) gin.H {
@@ -102,6 +102,14 @@ func computeBudet(db *gorm.DB, forecastPostings, expensesPostings []posting.Post
 					return decimal.Zero
 				})
 
+			forecast := utils.SumBy(
+				accountBudgets, func(budget AccountBudget) decimal.Decimal {
+					if budget.Forecast.IsPositive() {
+						return budget.Forecast
+					}
+					return decimal.Zero
+				})
+
 			endOfMonthBalance := checkingBalance.Sub(availableThisMonth)
 			availableForBudgeting = endOfMonthBalance
 
@@ -110,6 +118,7 @@ func computeBudet(db *gorm.DB, forecastPostings, expensesPostings []posting.Post
 				Accounts:           accountBudgets,
 				EndOfMonthBalance:  endOfMonthBalance,
 				AvailableThisMonth: availableThisMonth,
+				Forecast:           forecast,
 			}
 		}
 	}

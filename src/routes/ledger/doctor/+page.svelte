@@ -1,16 +1,12 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import COLORS from "$lib/colors";
-  import { ajax, setHtml } from "$lib/utils";
+  import { ajax } from "$lib/utils";
   import { renderIssues } from "$lib/doctor";
 
+  let issues = [];
   onMount(async () => {
-    const { issues: issues } = await ajax("/api/diagnosis");
-    setHtml(
-      "diagnosis-count",
-      issues.length.toString(),
-      issues.length > 0 ? COLORS.lossText : COLORS.gainText
-    );
+    ({ issues } = await ajax("/api/diagnosis"));
     renderIssues(issues);
   });
 </script>
@@ -20,7 +16,11 @@
     <div class="columns">
       <div class="column is-12 has-text-centered">
         <div>
-          <b class="d3-diagnosis-count" /> potential issue(s) found.
+          <b
+            class="p-1 has-text-white"
+            style="background-color: {issues.length > 0 ? COLORS.lossText : COLORS.gainText}"
+            >{issues.length}</b
+          > potential issue(s) found.
         </div>
       </div>
     </div>

@@ -34,6 +34,10 @@ func GetInvestment(db *gorm.DB) gin.H {
 	expenses := query.Init(db).Like("Expenses:%").All()
 	p := query.Init(db).First()
 
+	if p == nil {
+		return gin.H{"assets": []posting.Posting{}, "yearly_cards": []InvestmentYearlyCard{}}
+	}
+
 	return gin.H{"assets": assets, "yearly_cards": computeInvestmentYearlyCard(p.Date, assets, expenses, incomes)}
 }
 

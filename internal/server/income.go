@@ -36,6 +36,10 @@ func GetIncome(db *gorm.DB) gin.H {
 	taxPostings := query.Init(db).Like("Expenses:Tax").All()
 	p := query.Init(db).First()
 
+	if p == nil {
+		return gin.H{"income_timeline": []Income{}, "tax_timeline": []Tax{}, "yearly_cards": []IncomeYearlyCard{}}
+	}
+
 	return gin.H{"income_timeline": computeIncomeTimeline(incomePostings), "tax_timeline": computeTaxTimeline(taxPostings), "yearly_cards": computeIncomeYearlyCard(p.Date, taxPostings, incomePostings)}
 }
 

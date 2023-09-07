@@ -5,6 +5,8 @@
   import _ from "lodash";
   import { onDestroy, onMount } from "svelte";
   import { dateRange, setAllowedDateRange } from "../../../store";
+  import LevelItem from "$lib/components/LevelItem.svelte";
+  import ZeroState from "$lib/components/ZeroState.svelte";
 
   let networth = 0;
   let investment = 0;
@@ -38,9 +40,11 @@
     setAllowedDateRange(_.map(points, (p) => p.date));
 
     const current = _.last(points);
-    networth = current.investmentAmount + current.gainAmount - current.withdrawalAmount;
-    investment = current.investmentAmount - current.withdrawalAmount;
-    gain = current.gainAmount;
+    if (current) {
+      networth = current.investmentAmount + current.gainAmount - current.withdrawalAmount;
+      investment = current.investmentAmount - current.withdrawalAmount;
+      gain = current.gainAmount;
+    }
     xirr = result.xirr;
   });
 </script>
@@ -48,39 +52,18 @@
 <section class="section tab-networth">
   <div class="container">
     <nav class="level">
-      <div class="level-item has-text-centered">
-        <div>
-          <p class="heading">Net worth</p>
-          <p class="title" style="background-color: {COLORS.primary};">
-            {formatCurrency(networth)}
-          </p>
-        </div>
-      </div>
-      <div class="level-item has-text-centered">
-        <div>
-          <p class="heading">Net Investment</p>
-          <p class="title" style="background-color: {COLORS.secondary};">
-            {formatCurrency(investment)}
-          </p>
-        </div>
-      </div>
-      <div class="level-item has-text-centered">
-        <div>
-          <p class="heading">Gain / Loss</p>
-          <p
-            class="title"
-            style="background-color: {gain >= 0 ? COLORS.gainText : COLORS.lossText};"
-          >
-            {formatCurrency(gain)}
-          </p>
-        </div>
-      </div>
-      <div class="level-item has-text-centered">
-        <div>
-          <p class="heading">XIRR</p>
-          <p class="title has-text-black">{formatFloat(xirr)}</p>
-        </div>
-      </div>
+      <LevelItem title="Net worth" color={COLORS.primary} value={formatCurrency(networth)} />
+      <LevelItem
+        title="Net Investment"
+        color={COLORS.secondary}
+        value={formatCurrency(investment)}
+      />
+      <LevelItem
+        title="Gain / Loss"
+        color={gain >= 0 ? COLORS.gainText : COLORS.lossText}
+        value={formatCurrency(gain)}
+      />
+      <LevelItem title="XIRR" value={formatFloat(xirr)} />
     </nav>
   </div>
 </section>
@@ -90,6 +73,9 @@
     <div class="columns">
       <div class="column is-12">
         <div class="box">
+          <ZeroState item={points}>
+            <strong>Oops!</strong> You have no transactions.
+          </ZeroState>
           <svg id="d3-networth-timeline" width="100%" height="500" bind:this={svg} />
         </div>
       </div>

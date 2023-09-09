@@ -1,10 +1,10 @@
 package india
 
 import (
+	"io"
 	"net/http"
 
 	"encoding/json"
-	"io/ioutil"
 
 	"github.com/ananthakumaran/paisa/internal/model/cii"
 	log "github.com/sirupsen/logrus"
@@ -18,7 +18,7 @@ func GetCostInflationIndex() ([]*cii.CII, error) {
 	}
 	defer resp.Body.Close()
 
-	respBytes, err := ioutil.ReadAll(resp.Body)
+	respBytes, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return nil, err
 	}

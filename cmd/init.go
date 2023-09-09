@@ -2,7 +2,6 @@ package cmd
 
 import (
 	"fmt"
-	"io/ioutil"
 	"math"
 	"os"
 	"path/filepath"
@@ -124,7 +123,7 @@ commodities:
 	log.Info("Generating config file: ", configFilePath)
 	journalFilePath := filepath.Join(cwd, "personal.ledger")
 	dbFilePath := filepath.Join(cwd, "paisa.db")
-	err := ioutil.WriteFile(configFilePath, []byte(fmt.Sprintf(config, journalFilePath, dbFilePath)), 0644)
+	err := os.WriteFile(configFilePath, []byte(fmt.Sprintf(config, journalFilePath, dbFilePath)), 0644)
 	if err != nil {
 		log.Fatal(err)
 	}

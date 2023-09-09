@@ -1,7 +1,6 @@
 package server
 
 import (
-	"io/ioutil"
 	"path/filepath"
 	"sort"
 	"time"
@@ -98,20 +97,20 @@ func SaveFile(db *gorm.DB, file LedgerFile) gin.H {
 		}
 
 		perm = fileStat.Mode().Perm()
-		existingContent, err := ioutil.ReadFile(filePath)
+		existingContent, err := os.ReadFile(filePath)
 		if err != nil {
 			log.Warn(err)
 			return gin.H{"errors": errors, "saved": false, "message": "Failed to read file"}
 		}
 
-		err = ioutil.WriteFile(backupPath, existingContent, perm)
+		err = os.WriteFile(backupPath, existingContent, perm)
 		if err != nil {
 			log.Warn(err)
 			return gin.H{"errors": errors, "saved": false, "message": "Failed to create backup"}
 		}
 	}
 
-	err = ioutil.WriteFile(filePath, []byte(file.Content), perm)
+	err = os.WriteFile(filePath, []byte(file.Content), perm)
 	if err != nil {
 		log.Warn(err)
 		return gin.H{"errors": errors, "saved": false, "message": "Failed to write file"}
@@ -130,7 +129,7 @@ func ValidateFile(file LedgerFile) gin.H {
 func validateFile(file LedgerFile) ([]ledger.LedgerFileError, string, error) {
 	path := config.GetConfig().JournalPath
 
-	tmpfile, err := ioutil.TempFile(filepath.Dir(path), "paisa-tmp-")
+	tmpfile, err := os.CreateTemp(filepath.Dir(path), "paisa-tmp-")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -149,7 +148,7 @@ func validateFile(file LedgerFile) ([]ledger.LedgerFileError, string, error) {
 }
 
 func readLedgerFile(dir string, path string) *LedgerFile {
-	content, err := ioutil.ReadFile(path)
+	content, err := os.ReadFile(path)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -163,7 +162,7 @@ func readLedgerFile(dir string, path string) *LedgerFile {
 }
 
 func readLedgerFileWithVersions(dir string, path string) *LedgerFile {
-	content, err := ioutil.ReadFile(path)
+	content, err := os.ReadFile(path)
 	if err != nil {
 		log.Fatal(err)
 	}

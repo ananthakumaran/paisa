@@ -2,7 +2,6 @@ package cmd
 
 import (
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path"
 	"path/filepath"
@@ -38,6 +37,7 @@ func Initialize() {
 	formatter := log.TextFormatter{DisableTimestamp: true, ForceColors: true}
 	if os.Getenv("PAISA_DEBUG") == "true" {
 		log.SetReportCaller(true)
+		log.SetLevel(log.DebugLevel)
 		formatter.CallerPrettyfier = func(f *runtime.Frame) (string, string) {
 			s := strings.Split(f.Function, ".")
 			funcName := s[len(s)-1]
@@ -73,7 +73,7 @@ func readConfigFile(path string) {
 		log.Fatal(err)
 	}
 
-	content, err := ioutil.ReadFile(path)
+	content, err := os.ReadFile(path)
 	if err != nil {
 		log.Warn("Failed to read config file: ", path)
 		log.Fatal(err)

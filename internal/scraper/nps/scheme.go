@@ -1,12 +1,13 @@
 package nps
 
 import (
+	"io"
 	"net/http"
 
 	"encoding/json"
+
 	"github.com/ananthakumaran/paisa/internal/model/nps/scheme"
 	log "github.com/sirupsen/logrus"
-	"io/ioutil"
 )
 
 func GetSchemes() ([]*scheme.Scheme, error) {
@@ -17,7 +18,7 @@ func GetSchemes() ([]*scheme.Scheme, error) {
 	}
 	defer resp.Body.Close()
 
-	respBytes, err := ioutil.ReadAll(resp.Body)
+	respBytes, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return nil, err
 	}

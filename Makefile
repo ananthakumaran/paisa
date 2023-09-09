@@ -39,7 +39,7 @@ deploy:
 install:
 	npm run build
 	go build
-	cp paisa ~/.local/bin
+	go install
 
 fixture/main.transactions.json:
 	cd /tmp && paisa init

@@ -230,7 +230,7 @@ func parseLedgerPrices(output string, defaultCurrency string) ([]price.Price, er
 			return nil, err
 		}
 
-		prices = append(prices, price.Price{Date: date, CommodityName: commodity, CommodityID: commodity, CommodityType: config.Unknown, Value: decimal.NewFromFloat(value)})
+		prices = append(prices, price.Price{Date: date, CommodityName: commodity, CommodityID: commodity, CommodityType: config.Unknown, Value: value})
 
 	}
 	return prices, nil
@@ -258,27 +258,27 @@ func parseHLedgerPrices(output string, defaultCurrency string) ([]price.Price, e
 			return nil, err
 		}
 
-		prices = append(prices, price.Price{Date: date, CommodityName: commodity, CommodityID: commodity, CommodityType: config.Unknown, Value: decimal.NewFromFloat(value)})
+		prices = append(prices, price.Price{Date: date, CommodityName: commodity, CommodityID: commodity, CommodityType: config.Unknown, Value: value})
 
 	}
 	return prices, nil
 }
 
-func parseAmount(amount string) (string, float64, error) {
+func parseAmount(amount string) (string, decimal.Decimal, error) {
 	match := regexp.MustCompile(`^(-?[0-9.,]+)([^\d,.-]+)|([^\d,.-]+)(-?[0-9.,]+)$`).FindStringSubmatch(amount)
 	if match[1] == "" {
-		value, err := strconv.ParseFloat(strings.ReplaceAll(match[4], ",", ""), 64)
+		value, err := decimal.NewFromString(strings.ReplaceAll(match[4], ",", ""))
 		return strings.Trim(match[3], " "), value, err
 	}
 
-	value, err := strconv.ParseFloat(strings.ReplaceAll(match[1], ",", ""), 64)
+	value, err := decimal.NewFromString(strings.ReplaceAll(match[1], ",", ""))
 	return strings.Trim(match[2], " "), value, err
 }
 
 func execLedgerCommand(journalPath string, flags []string) ([]*posting.Posting, error) {
 	var postings []*posting.Posting
 
-	args := append(append([]string{"-f", journalPath}, flags...), "csv", "--csv-format", "%(quoted(date)),%(quoted(payee)),%(quoted(display_account)),%(quoted(commodity(scrub(display_amount)))),%(quoted(quantity(scrub(display_amount)))),%(quoted(to_int(scrub(market(amount,date,'"+config.DefaultCurrency()+"') * 100000000)))),%(quoted(xact.filename)),%(quoted(xact.id)),%(quoted(cleared ? \"*\" : (pending ? \"!\" : \"\"))),%(quoted(tag('Recurring'))),%(quoted(xact.beg_line)),%(quoted(xact.end_line))\n")
+	args := append(append([]string{"-f", journalPath}, flags...), "csv", "--csv-format", "%(quoted(date)),%(quoted(payee)),%(quoted(display_account)),%(quoted(commodity(scrub(display_amount)))),%(quoted(quantity(scrub(display_amount)))),%(quoted(scrub(market(amount,date,'"+config.DefaultCurrency()+"') * 100000000))),%(quoted(xact.filename)),%(quoted(xact.id)),%(quoted(cleared ? \"*\" : (pending ? \"!\" : \"\"))),%(quoted(tag('Recurring'))),%(quoted(xact.beg_line)),%(quoted(xact.end_line))\n")
 
 	command := exec.Command("ledger", args...)
 	var output, error bytes.Buffer
@@ -306,18 +306,18 @@ func execLedgerCommand(journalPath string, flags []string) ([]*posting.Posting, 
 			return nil, err
 		}
 
-		quantity, err := strconv.ParseFloat(record[4], 64)
+		quantity, err := decimal.NewFromString(record[4])
 		if err != nil {
 			return nil, err
 		}
 
-		amount, err := strconv.ParseFloat(record[5], 64)
+		_, amount, err := parseAmount(record[5])
 		if err != nil {
 			return nil, err
 		}
-		amount = amount / 100000000
+		amount = amount.Div(decimal.NewFromInt(100000000))
 		if record[1] == "Budget transaction" {
-			amount = amount * -1
+			amount = amount.Neg()
 		}
 
 		namespace := uuid.Must(uuid.FromString("45964a1b-b24c-4a73-835a-9335a7aa7de5"))
@@ -367,8 +367,8 @@ func execLedgerCommand(journalPath string, flags []string) ([]*posting.Posting, 
 			Payee:                record[1],
 			Account:              record[2],
 			Commodity:            record[3],
-			Quantity:             decimal.NewFromFloat(quantity),
-			Amount:               decimal.NewFromFloat(amount),
+			Quantity:             quantity,
+			Amount:               amount,
 			TransactionID:        transactionID,
 			Status:               status,
 			TagRecurring:         tagRecurring,

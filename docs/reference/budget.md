@@ -81,9 +81,9 @@ much you have left. You notice that you have overspent on transport
 and you have missed the insurance payment. You have a budget deficit
 now. That means, you can't actually spend as per your budget. You have
 to first bring the deficit back to 0. Let's cut down the entertainment
-and clothing budget to 0 and add insurance.
+and clothing budget to 0
 
-```go
+```go hl_lines="4-5"
 ~ Monthly in 2023/08/01
     Expenses:Rent                             15,000 INR
     Expenses:Food                             10,000 INR

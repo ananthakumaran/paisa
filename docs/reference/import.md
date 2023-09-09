@@ -32,7 +32,7 @@ fourth line constructs the second posting.
 Effectively a single row in the CSV file is converted to a single
 transaction like this.
 
-```
+```go
 2023/03/28 AMAZON HTTP://WWW.AM IN
     Expenses:Shopping		249.00 INR
     Assets:Checking
@@ -142,22 +142,22 @@ own. To create a new template, edit the template and click on the
 
 #### Template Helpers
 
-1) `eq(a: any, b: any): boolean` - Checks if the two values are
+1) `#!typescript eq(a: any, b: any): boolean` - Checks if the two values are
    equal.
 
-2) `not(value: any): boolean` - Negates the given value.
+2) `#!typescript not(value: any): boolean` - Negates the given value.
 
-3) `and(...args: any[]): boolean` - Returns true if all the
+3) `#!typescript and(...args: any[]): boolean` - Returns true if all the
    arguments are true.
 
-4) `or(...args: any[]): boolean` - Returns true if any of the
+4) `#!typescript or(...args: any[]): boolean` - Returns true if any of the
    arguments are true.
 
-5) `isDate(str: string, format: string): boolean` - Checks if the
+5) `#!typescript isDate(str: string, format: string): boolean` - Checks if the
    given string is a valid date in the given format. Refer [Day.js](https://day.js.org/docs/en/parse/string-format#list-of-all-available-parsing-tokens)
    for the full list of supported formats.
 
-6) `predictAccount(...corpus: string[], {prefix?: string}): string` -
+6) `#!typescript predictAccount(...corpus: string[], {prefix?: string}): string` -
    Predicts the account name based on your existing ledger file. The
    corpus provided will be matched with the existing transaction
    description and amount.
@@ -172,19 +172,20 @@ own. To create a new template, edit the template and click on the
 {{predictAccount ROW.C ROW.F prefix="Income"}}
 ```
 
-> NOTE: prediction will only work if you have similar transactions in
-> ledger file. It usually means, first time you have to manually fix
-> the Unknown account and then subsequent imports will work
+!!! tip
+    Prediction will only work if you have similar transactions in
+    ledger file. It usually means, first time you have to manually fix
+    the Unknown account and then subsequent imports will work
 
-7) `isBlank(str: string): boolean` - Checks if the given string is
+7) `#!typescript isBlank(str: string): boolean` - Checks if the given string is
    blank.
 
-8) `date(str: string, format: string): string` - Parses the given
+8) `#!typescript date(str: string, format: string): string` - Parses the given
    string as a date in the given format and returns the date in the
    format `YYYY/MM/DD`. Refer [Day.js](https://day.js.org/docs/en/parse/string-format#list-of-all-available-parsing-tokens)
    for the full list of supported formats.
 
-9) `findAbove(column: string, {regexp?: string}): string` - Finds the
+9) `#!typescript findAbove(column: string, {regexp?: string}): string` - Finds the
 first cell above the current row in the given column. If `regexp` is
 provided, the search will continue till a match is found
 
@@ -192,23 +193,23 @@ provided, the search will continue till a match is found
 {{findAbove B regexp="LIMITED"}}
 `````
 
-10) `acronym(str: string): string` - Returns the acronym of the given
+10) `#!typescript acronym(str: string): string` - Returns the acronym of the given
     string that is suitable to be used as a commodity symbol. For
     example, `UTI Nifty Next 50 Index Growth Direct Plan` will be
     converted to `UNNI`
 
-11) `negate(value: string): number` - Negates the given value. For
+11) `#!typescript negate(value: string): number` - Negates the given value. For
     example, `negate("123.45")` will return `-123.45`
 
-12) `replace(str: string, search: string, replace: string): string` -
+12) `#!typescript replace(str: string, search: string, replace: string): string` -
     Replaces all the occurrences of `search` with `replace` in the
     given string.
 
-13) `trim(str: string): string` - Trims the given string.
+13) `#!typescript trim(str: string): string` - Trims the given string.
 
-14) `amount(str: string, {default?: string}): string` - Converts the given
+14) `#!typescript amount(str: string, {default?: string}): string` - Converts the given
 string to a valid amount. If the string is blank, the default value is
 used. Examples `(0.9534)` to `-0.9534`, `₹ 1,234.56` to `1234.56`
 
-15) `regexpTest(str: string, regexp: string): boolean` - Tests the
+15) `#!typescript regexpTest(str: string, regexp: string): boolean` - Tests the
     given string against the given regular expression.

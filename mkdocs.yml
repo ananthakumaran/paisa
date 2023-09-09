@@ -50,12 +50,13 @@ theme:
 
 markdown_extensions:
   - pymdownx.highlight:
+      linenums: true
       anchor_linenums: true
       line_spans: __span
       pygments_lang_class: true
+      linenums_style: pymdownx-inline
   - pymdownx.inlinehilite
   - pymdownx.snippets
-  - pymdownx.superfences
   - attr_list
   - md_in_html
   - admonition

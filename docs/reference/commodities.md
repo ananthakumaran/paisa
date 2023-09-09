@@ -38,13 +38,17 @@ you need to link the commodity and the fund scheme code.
 
 ```yaml
 commodities:
-  - name: NIFTY      # commodity name
-    type: mutualfund # type
-    code: 120716     # mutual fund scheme code
+  - name: NIFTY # (1)!
+    type: mutualfund # (2)!
+    code: 120716 # (3)!
   - name: NIFTY_JR
     type: mutualfund
     code: 120684
 ```
+
+1. commodity name
+1. commodity type
+1. mutual fund scheme code
 
 The example config above links two commodities with their respective
 mutual fund scheme code. The scheme code can be found using the
@@ -66,10 +70,14 @@ you need to link the commodity and the fund scheme code.
 
 ```yaml
 commodities:
-  - name: NPS_HDFC_E      # commodity name
-    type: nps             # type
-    code: SM008002        # nps fund scheme code
+  - name: NPS_HDFC_E # (1)!
+    type: nps # (2)!
+    code: SM008002 # (3)!
 ```
+
+1. commodity name
+1. type
+1. nps fund scheme code
 
 The example config above links NPS fund commodity with their
 respective NPS fund scheme code. The scheme code can be found using
@@ -91,10 +99,14 @@ you need to link the commodity and the stock ticker name.
 
 ```yaml
 commodities:
-  - name: APPLE           # commodity name
-    type: stock           # type
-    code: AAPL            # stock ticker code
+  - name: APPLE # (1)!
+    type: stock # (2)!
+    code: AAPL # (3)!
 ```
+
+1. commodity name
+2. type
+3. stock ticker code
 
 Stock prices are fetched from yahoo finance website. The ticker code
 should match the code used in yahoo.

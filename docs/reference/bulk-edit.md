@@ -23,9 +23,9 @@ Expenses:Utilities:Electricity
 This will search for all transactions that have a posting with account
 named Expenses:Utilities:Electricity. By default, the search is case
 insensitive and will do a substring match. So, `Expenses:Utilities`
-will match Expenses:Utilities:Electricity account as well as. If you
-want to search an account name which has special characters like space
-in it, you can use double quotes to enclose it like
+will match Expenses:Utilities:Electricity account as well. If you want
+to search an account name which has special characters like space in
+it, you can use double quotes to enclose it like
 `"Expenses:Utilities:Hair Cut"`.
 
 You can also search on transaction date. For example, if you want to

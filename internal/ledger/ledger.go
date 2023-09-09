@@ -20,6 +20,7 @@ import (
 
 	"encoding/json"
 
+	"github.com/ananthakumaran/paisa/internal/binary"
 	"github.com/ananthakumaran/paisa/internal/config"
 	"github.com/ananthakumaran/paisa/internal/model/posting"
 	"github.com/ananthakumaran/paisa/internal/model/price"
@@ -52,16 +53,12 @@ func Cli() Ledger {
 
 func (LedgerCLI) ValidateFile(journalPath string) ([]LedgerFileError, string, error) {
 	errors := []LedgerFileError{}
-	_, err := exec.LookPath("ledger")
-	if err != nil {
-		log.Fatal(err)
-	}
 
-	command := exec.Command("ledger", "-f", journalPath, "balance")
+	command := exec.Command(binary.LedgerBinaryPath(), "-f", journalPath, "balance")
 	var output, error bytes.Buffer
 	command.Stdout = &output
 	command.Stderr = &error
-	err = command.Run()
+	err := command.Run()
 	if err == nil {
 		return errors, output.String(), nil
 	}
@@ -80,12 +77,7 @@ func (LedgerCLI) ValidateFile(journalPath string) ([]LedgerFileError, string, er
 func (LedgerCLI) Parse(journalPath string, _prices []price.Price) ([]*posting.Posting, error) {
 	var postings []*posting.Posting
 
-	_, err := exec.LookPath("ledger")
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	postings, err = execLedgerCommand(journalPath, []string{})
+	postings, err := execLedgerCommand(journalPath, []string{})
 
 	if err != nil {
 		return nil, err
@@ -106,16 +98,11 @@ func (LedgerCLI) Parse(journalPath string, _prices []price.Price) ([]*posting.Po
 func (LedgerCLI) Prices(journalPath string) ([]price.Price, error) {
 	var prices []price.Price
 
-	_, err := exec.LookPath("ledger")
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	command := exec.Command("ledger", "-f", journalPath, "pricesdb")
+	command := exec.Command(binary.LedgerBinaryPath(), "-f", journalPath, "pricesdb")
 	var output, error bytes.Buffer
 	command.Stdout = &output
 	command.Stderr = &error
-	err = command.Run()
+	err := command.Run()
 	if err != nil {
 		return prices, err
 	}
@@ -280,7 +267,7 @@ func execLedgerCommand(journalPath string, flags []string) ([]*posting.Posting, 
 
 	args := append(append([]string{"-f", journalPath}, flags...), "csv", "--csv-format", "%(quoted(date)),%(quoted(payee)),%(quoted(display_account)),%(quoted(commodity(scrub(display_amount)))),%(quoted(quantity(scrub(display_amount)))),%(quoted(scrub(market(amount,date,'"+config.DefaultCurrency()+"') * 100000000))),%(quoted(xact.filename)),%(quoted(xact.id)),%(quoted(cleared ? \"*\" : (pending ? \"!\" : \"\"))),%(quoted(tag('Recurring'))),%(quoted(xact.beg_line)),%(quoted(xact.end_line))\n")
 
-	command := exec.Command("ledger", args...)
+	command := exec.Command(binary.LedgerBinaryPath(), args...)
 	var output, error bytes.Buffer
 	command.Stdout = &output
 	command.Stderr = &error

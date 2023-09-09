@@ -9,9 +9,12 @@ on:
 
 jobs:
   linux-binary:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
     - uses: actions/checkout@v2.4.0
+    - uses: cachix/install-nix-action@v22
+      with:
+        nix_path: nixpkgs=channel:nixos-unstable
     - uses: actions/setup-node@v3
       with:
         node-version: 18
@@ -22,6 +25,8 @@ jobs:
         sudo apt-get install -y sqlite3
         npm install
         npm run build
+        nix-build ledger.nix
+        cp ./result/bin/ledger internal/binary/ledger
         go build
         cp paisa paisa-linux-amd64
     - name: Release
@@ -33,11 +38,13 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   mac-binary:
-    runs-on: macos-latest
+    runs-on: macos-11
     steps:
     - uses: actions/checkout@v2.4.0
     - run: |
         brew install --force --overwrite go sqlite3
+        brew install --build-from-source --verbose ./ledger.rb
+        cp "$(brew --prefix ledger)/bin/ledger" internal/binary/ledger
         npm install
         npm run build
         go build
@@ -51,7 +58,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   windows-binary:
-    runs-on: windows-latest
+    runs-on: windows-2019
     steps:
     - uses: actions/checkout@v2.4.0
     - uses: actions/setup-node@v3
@@ -62,8 +69,11 @@ jobs:
         go-version: '1.20.5'
     - run: |
         choco install sqlite
+        choco install wget
         npm install
         npm run build
+        wget https://github.com/FullofQuarks/Windows-Ledger-Binaries/releases/download/v3.3.2/ledger.exe
+        cp ledger.exe internal/binary/ledger
         go build
         cp paisa.exe paisa-windows-amd64.exe
     - name: Release

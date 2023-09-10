@@ -42,6 +42,7 @@ html[data-theme="dark"] {
     }
 
     .tippy-box[data-theme~="light"] {
+      color: $grey-darker;
       background-color: $white;
       box-shadow: $shadow;
     }

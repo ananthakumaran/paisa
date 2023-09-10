@@ -2,57 +2,77 @@
   "$schema": "https://json-schema.org/draft-07/schema",
   "$id": "https://paisa.fyi/schema.json",
   "title": "Paisa",
-  "description": "Paisa config schema",
+  "description": "Paisa configuration",
   "type": "object",
   "properties": {
     "journal_path": {
-      "type": "string"
+      "type": "string",
+      "description": "Path to your journal file. It can be absolute or relative to the config file. The main journal file can refer other files using <code>include</code> as long as all the files are in the same or sub directory"
     },
     "db_path": {
-      "type": "string"
+      "type": "string",
+      "description": "Path to your database file. It can be absolute or relative to the config file. The database file will be created if it does not exist."
     },
     "ledger_cli": {
       "type": "string",
-      "enum": ["ledger", "hledger"]
+      "description": "The ledger client to use",
+      "enum": ["", "ledger", "hledger"]
     },
     "default_currency": {
-      "type": "string"
+      "type": "string",
+      "description": "The default currency to use. NOTE: Paisa tries to convert other currencies to default currency, so make sure it's possible to convert to default currency by specifying the exchange rate."
     },
     "locale": {
       "type": "string",
-      "pattern": "^en-[A-Z]{2}$"
+      "pattern": "^en-[A-Z]{2}$",
+      "description": "The locale used to format numbers. The list of locales supported depends on your browser. It's known to work well with en-US and en-IN."
     },
     "financial_year_starting_month": {
       "type": "integer",
       "minimum": 1,
-      "maximum": 12
+      "maximum": 12,
+      "description": "First month of the financial year. This can be set to 1 to follow January to December."
     },
     "retirement": {
+      "description": "Retirement config",
       "type": "object",
       "properties": {
         "swr": {
-          "type": "number"
+          "type": "number",
+          "description": "Safe Withdrawal Rate"
         },
         "expenses": {
           "type": "array",
+          "description": "List of expense accounts",
+          "default": ["Expenses:Utilities"],
           "items": {
             "type": "string"
           }
         },
         "savings": {
           "type": "array",
+          "description": "List of accounts where you keep retirement savings",
+          "default": ["Expenses:Equity"],
           "items": {
             "type": "string"
           }
         },
         "yearly_expenses": {
-          "type": "integer"
+          "type": "integer",
+          "description": "By default, average of last 3 year expenses will be used to calculate your yearly expenses. This can be overriden by setting this config to positive value"
         }
       },
       "additionalProperties": false
     },
     "schedule_al": {
+      "description": "Schedule AL config",
       "type": "array",
+      "default": [
+        {
+          "code": "bank",
+          "accounts": ["Assets:Checking"]
+        }
+      ],
       "items": {
         "type": "object",
         "properties": {
@@ -73,6 +93,7 @@
           },
           "accounts": {
             "type": "array",
+            "default": ["Assets:Checking"],
             "items": {
               "type": "string"
             }
@@ -84,6 +105,7 @@
     },
     "allocation_targets": {
       "type": "array",
+      "default": [{ "name": "Debt", "target": 20, "accounts": ["Assets:Debt:*"] }],
       "items": {
         "type": "object",
         "properties": {
@@ -91,10 +113,15 @@
             "type": "string"
           },
           "target": {
-            "type": "integer"
+            "type": "integer",
+            "description": "Target percentage",
+            "minimum": 1,
+            "maximum": 100
           },
           "accounts": {
             "type": "array",
+            "description": "List of accounts to consider for this target",
+            "default": ["Assets:Debt:*"],
             "items": {
               "type": "string"
             }
@@ -106,11 +133,15 @@
     },
     "commodities": {
       "type": "array",
+      "default": [
+        { "name": "AAPL", "type": "stock", "code": "AAPL", "tax_category": "unlisted_equity" }
+      ],
       "items": {
         "type": "object",
         "properties": {
           "name": {
-            "type": "string"
+            "type": "string",
+            "description": "name of the commodity"
           },
           "type": {
             "type": "string",
@@ -124,7 +155,7 @@
           },
           "tax_category": {
             "type": "string",
-            "enum": ["debt", "equity", "equity65", "equity35", "unlisted_equity"]
+            "enum": ["", "debt", "equity", "equity65", "equity35", "unlisted_equity"]
           }
         },
         "required": ["name", "type", "code"],

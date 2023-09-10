@@ -1,12 +1,16 @@
 package config
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
+	"os"
 	"path/filepath"
 	"time"
 
 	_ "embed"
+
+	log "github.com/sirupsen/logrus"
 
 	"dario.cat/mergo"
 	"github.com/santhosh-tekuri/jsonschema/v5"
@@ -77,6 +81,7 @@ type Config struct {
 }
 
 var config Config
+var configPath string
 
 var defaultConfig = Config{
 	LedgerCli:                  "ledger",
@@ -94,7 +99,26 @@ func init() {
 	schema = jsonschema.MustCompileString("", SchemaJson)
 }
 
-func LoadConfig(content []byte, configPath string) error {
+func SaveConfig(content []byte) error {
+	err := LoadConfig(content, "")
+	if err != nil {
+		return err
+	}
+
+	yamlContent, err := yaml.Marshal(config)
+	if err != nil {
+		return err
+	}
+
+	err = os.WriteFile(configPath, yamlContent, 0644)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func LoadConfig(content []byte, cp string) error {
 	var configJson interface{}
 	err := yaml.Unmarshal(content, &configJson)
 	if err != nil {
@@ -127,11 +151,24 @@ func LoadConfig(content []byte, configPath string) error {
 		config.DBPath = filepath.Join(journalDir, config.DBPath)
 	}
 
+	if cp != "" && configPath == "" {
+		configPath = cp
+	}
+
 	return nil
 }
 
 func GetConfig() Config {
 	return config
+}
+
+func GetSchema() any {
+	var schemaObject any
+	err := json.Unmarshal([]byte(SchemaJson), &schemaObject)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return schemaObject
 }
 
 func DefaultCurrency() string {

@@ -2,6 +2,7 @@ package server
 
 import (
 	"fmt"
+	"io"
 	"net/http"
 
 	"github.com/ananthakumaran/paisa/internal/config"
@@ -11,7 +12,6 @@ import (
 	"github.com/ananthakumaran/paisa/internal/server/liabilities"
 	"github.com/ananthakumaran/paisa/internal/server/retirement"
 	"github.com/ananthakumaran/paisa/web"
-	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	log "github.com/sirupsen/logrus"
 	"gorm.io/gorm"
@@ -22,16 +22,28 @@ func Build(db *gorm.DB) *gin.Engine {
 
 	router := gin.Default()
 
-	corsConfig := cors.DefaultConfig()
-	corsConfig.AllowAllOrigins = true
-	router.Use(cors.New(corsConfig))
-
 	router.GET("/_app/*filepath", func(c *gin.Context) {
 		c.FileFromFS("/static"+c.Request.URL.Path, http.FS(web.Static))
 	})
 
 	router.GET("/api/config", func(c *gin.Context) {
-		c.JSON(200, config.GetConfig())
+		c.JSON(200, gin.H{"config": config.GetConfig(), "schema": config.GetSchema()})
+	})
+
+	router.POST("/api/config", func(c *gin.Context) {
+		body, err := io.ReadAll(c.Request.Body)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"success": false, "error": err.Error()})
+			return
+		}
+
+		err = config.SaveConfig(body)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"success": false, "error": err.Error()})
+			return
+		}
+
+		c.JSON(200, gin.H{"success": true})
 	})
 
 	router.POST("/api/sync", func(c *gin.Context) {

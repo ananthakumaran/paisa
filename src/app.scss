@@ -21,6 +21,7 @@ $box-padding: 1.25rem 0;
 
 $card-shadow: none;
 $card-header-shadow: 0 0.05em 0.1em rgba(10, 10, 10, 0.1);
+$danger-light: hsl(347, 90%, 96%);
 
 $switch-focus: none;
 
@@ -92,6 +93,10 @@ body {
     color: $link;
     text-decoration: underline;
   }
+}
+
+code {
+  color: $grey-darker;
 }
 
 .inline-text text {
@@ -787,4 +792,43 @@ span.progress-percent.less-than-10 {
 
 .border-right {
   border-radius: 0 $radius $radius 0 !important;
+}
+
+.config-header {
+  margin-left: -3px;
+  margin-bottom: 5px;
+}
+
+.config-body {
+  padding: 10px 0 10px 10px;
+  margin-bottom: 10px;
+  border-left: 1px solid $grey-lighter;
+  border-bottom: 1px solid $grey-lighter;
+
+  &.odd {
+    background-color: $white-ter;
+  }
+
+  &.even {
+    background-color: $white-bis;
+  }
+}
+
+.config-delete,
+.config-add {
+  float: right;
+  margin-right: 10px;
+}
+
+.config-delete {
+  color: $danger;
+}
+
+.config-add {
+  float: none;
+  color: $success;
+}
+
+input:invalid {
+  border-color: $danger;
 }

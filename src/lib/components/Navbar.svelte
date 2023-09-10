@@ -1,6 +1,6 @@
 <script lang="ts">
   import { page } from "$app/stores";
-  import Sync from "$lib/components/Sync.svelte";
+  import Actions from "$lib/components/Actions.svelte";
   import { month, year, dateMax, dateMin, dateRangeOption, cashflowType } from "../../store";
   import _ from "lodash";
   import { financialYear, forEachFinancialYear, helpUrl } from "$lib/utils";
@@ -38,7 +38,7 @@
       children: [
         { label: "Monthly", href: "/monthly", dateRangeSelector: true },
         { label: "Yearly", href: "/yearly", cashflowTypePicker: true, financialYearPicker: true },
-        { label: "Recurring", href: "/recurring", tag: "alpha", help: "recurring" }
+        { label: "Recurring", href: "/recurring", help: "recurring" }
       ]
     },
     {
@@ -76,8 +76,8 @@
       label: "Ledger",
       href: "/ledger",
       children: [
-        { label: "Import", href: "/import", tag: "alpha", help: "import" },
-        { label: "Editor", href: "/editor", tag: "alpha" },
+        { label: "Import", href: "/import", help: "import" },
+        { label: "Editor", href: "/editor" },
         { label: "Transactions", href: "/transaction", help: "bulk-edit" },
         { label: "Postings", href: "/posting" },
         { label: "Price", href: "/price" },
@@ -106,6 +106,8 @@
   if (USER_CONFIG.default_currency == "INR") {
     links.push(tax);
   }
+
+  links.push({ label: "Config", href: "/config", tag: "alpha" });
 
   let selectedLink: Link = null;
   let selectedSubLink: Link = null;
@@ -183,7 +185,7 @@
             <ThemeSwitcher />
           </p>
           <p class="control">
-            <Sync />
+            <Actions />
           </p>
         </div>
       </div>
@@ -281,3 +283,9 @@
     {/if}
   </div>
 </div>
+
+<style lang="scss">
+  li a span.icon {
+    margin-top: -5px;
+  }
+</style>

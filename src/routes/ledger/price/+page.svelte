@@ -18,11 +18,6 @@
   <div class="container is-fluid">
     <div class="columns">
       <div class="column is-12">
-        <p class="subtitle is-12">Prices</p>
-      </div>
-    </div>
-    <div class="columns">
-      <div class="column is-12">
         <div class="box">
           <table class="table is-narrow is-fullwidth">
             <thead>

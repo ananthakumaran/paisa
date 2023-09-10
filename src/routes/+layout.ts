@@ -60,6 +60,7 @@ toast.setDefaults({
 });
 
 export const load = (async () => {
-  globalThis.USER_CONFIG = await ajax("/api/config");
+  const { config } = await ajax("/api/config");
+  globalThis.USER_CONFIG = config;
   return {};
 }) satisfies LayoutLoad;

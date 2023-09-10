@@ -37,11 +37,32 @@ func Register(postings []posting.Posting) []Balance {
 }
 
 func FilterByGlob(postings []posting.Posting, accounts []string) []posting.Posting {
+	negatePresent := lo.SomeBy(accounts, func(accountGlob string) bool {
+		return accountGlob[0] == '!'
+	})
+
 	return lo.Filter(postings, func(p posting.Posting, _ int) bool {
-		return lo.SomeBy(accounts, func(accountGlob string) bool {
+		var combine func(collection []string, predicate func(item string) bool) bool
+		if negatePresent {
+			combine = lo.EveryBy[string]
+		} else {
+			combine = lo.SomeBy[string]
+		}
+		return combine(accounts, func(accountGlob string) bool {
+			negative := false
+
+			if accountGlob[0] == '!' {
+				negative = true
+				accountGlob = accountGlob[1:]
+			}
+
 			match, err := filepath.Match(accountGlob, p.Account)
 			if err != nil {
 				log.Fatal("Invalid account glob used for filtering", accountGlob, err)
+			}
+
+			if negative {
+				return !match
 			}
 			return match
 		})

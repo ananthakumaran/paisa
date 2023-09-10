@@ -29,32 +29,40 @@
   <div class="dropdown-trigger">
     <button class:is-loading={isLoading} class="button is-small" aria-haspopup="true">
       <span class="icon is-small">
-        <i class="fas fa-gear" />
+        <i class="fas fa-caret-down" />
       </span>
     </button>
   </div>
   <div class="dropdown-menu" id="dropdown-menu4" role="menu">
     <div class="dropdown-content">
-      <a on:click={(_e) => sync({ journal: true })} class="dropdown-item">Sync Journal</a>
-      <a on:click={(_e) => sync({ prices: true })} class="dropdown-item">Update Prices</a>
-      <a on:click={(_e) => sync({ portfolios: true })} class="dropdown-item"
-        >Update Mutual Fund Portfolios</a
+      <a on:click={(_e) => sync({ journal: true })} class="dropdown-item icon-text">
+        <span class="icon is-small">
+          <i class="fa-regular fa-file-lines" />
+        </span>
+        <span>Sync Journal</span>
+      </a>
+      <a on:click={(_e) => sync({ prices: true })} class="dropdown-item icon-text">
+        <span class="icon is-small">
+          <i class="fas fa-dollar-sign" />
+        </span>
+        <span>Update Prices</span></a
+      >
+      <a on:click={(_e) => sync({ portfolios: true })} class="dropdown-item icon-text">
+        <span class="icon is-small">
+          <i class="fas fa-layer-group" />
+        </span>
+        <span>Update Mutual Fund Portfolios</span></a
       >
       <hr class="dropdown-divider" />
-      <span class="dropdown-item">
-        <input
-          bind:checked={obscure}
-          id={obscureId}
-          type="checkbox"
-          class="switch is-rounded is-link is-small"
-        />
-        <label for={obscureId} class="is-size-6" style="padding-bottom: 2px;">
-          <span class="icon is-small mx-2">
+      <a class="dropdown-item icon-text">
+        <label for={obscureId} class="cursor-pointer w-full inline-block">
+          <input bind:checked={obscure} id={obscureId} type="checkbox" class="is-hidden" />
+          <span class="ml-0 icon is-small">
             <i class="fas {obscure ? 'fa-eye-slash' : 'fa-eye'}" />
           </span>
-          Hide numbers
+          <span>Hide numbers</span>
         </label>
-      </span>
+      </a>
     </div>
   </div>
 </div>

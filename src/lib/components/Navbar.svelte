@@ -1,6 +1,6 @@
 <script lang="ts">
   import { page } from "$app/stores";
-  import Sync from "$lib/components/Sync.svelte";
+  import Actions from "$lib/components/Actions.svelte";
   import { month, year, dateMax, dateMin, dateRangeOption, cashflowType } from "../../store";
   import _ from "lodash";
   import { financialYear, forEachFinancialYear, helpUrl } from "$lib/utils";
@@ -107,6 +107,8 @@
     links.push(tax);
   }
 
+  links.push({ label: "Config", href: "/config" });
+
   let selectedLink: Link = null;
   let selectedSubLink: Link = null;
 
@@ -183,7 +185,7 @@
             <ThemeSwitcher />
           </p>
           <p class="control">
-            <Sync />
+            <Actions />
           </p>
         </div>
       </div>
@@ -281,3 +283,9 @@
     {/if}
   </div>
 </div>
+
+<style lang="scss">
+  li a span.icon {
+    margin-top: -5px;
+  }
+</style>

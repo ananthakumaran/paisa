@@ -1,12 +1,14 @@
 package config
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"path/filepath"
 	"time"
 
 	_ "embed"
+	log "github.com/sirupsen/logrus"
 
 	"dario.cat/mergo"
 	"github.com/santhosh-tekuri/jsonschema/v5"
@@ -132,6 +134,15 @@ func LoadConfig(content []byte, configPath string) error {
 
 func GetConfig() Config {
 	return config
+}
+
+func GetSchema() any {
+	var schemaObject any
+	err := json.Unmarshal([]byte(SchemaJson), &schemaObject)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return schemaObject
 }
 
 func DefaultCurrency() string {

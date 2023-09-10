@@ -6,7 +6,6 @@ require (
 	dario.cat/mergo v1.0.0
 	github.com/ChizhovVadim/xirr v0.0.0-20210210181856-508bc36c62aa
 	github.com/bmatcuk/doublestar/v4 v4.6.0
-	github.com/gin-contrib/cors v1.4.0
 	github.com/gin-gonic/gin v1.8.1
 	github.com/gofrs/uuid v4.4.0+incompatible
 	github.com/google/btree v1.1.2

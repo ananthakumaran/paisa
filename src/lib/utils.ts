@@ -3,6 +3,7 @@ import { sprintf } from "sprintf-js";
 import _ from "lodash";
 import * as d3 from "d3";
 import { loading } from "../store";
+import type { JSONSchema7 } from "json-schema";
 
 export interface Posting {
   id: string;
@@ -387,7 +388,7 @@ const BACKGROUND = [
   "/api/templates/delete"
 ];
 
-export function ajax(route: "/api/config"): Promise<UserConfig>;
+export function ajax(route: "/api/config"): Promise<{ config: UserConfig; schema: JSONSchema7 }>;
 export function ajax(route: "/api/retirement/progress"): Promise<RetirementProgress>;
 export function ajax(route: "/api/harvest"): Promise<{ harvestables: Record<string, Harvestable> }>;
 export function ajax(

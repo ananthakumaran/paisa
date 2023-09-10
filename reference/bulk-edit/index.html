@@ -861,14 +861,14 @@ of transactions.</p>
 <h4 id="plain">Plain</h4>
 <p>Paisa provides a powerful search query interface. Let's start with a
 few example queries.</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>Expenses:Utilities:Electricity
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1"></a><a href="#__codelineno-0-1"><span class="linenos" data-linenos="1 "></span></a>Expenses:Utilities:Electricity
 </span></code></pre></div>
 <p>This will search for all transactions that have a posting with account
 named Expenses:Utilities:Electricity. By default, the search is case
 insensitive and will do a substring match. So, <code>Expenses:Utilities</code>
-will match Expenses:Utilities:Electricity account as well as. If you
-want to search an account name which has special characters like space
-in it, you can use double quotes to enclose it like
+will match Expenses:Utilities:Electricity account as well. If you want
+to search an account name which has special characters like space in
+it, you can use double quotes to enclose it like
 <code>"Expenses:Utilities:Hair Cut"</code>.</p>
 <p>You can also search on transaction date. For example, if you want to
 show all the transactions made on 1st Jan 2023, just type
@@ -888,13 +888,13 @@ insensitive search by using the modifier <code>i</code> like
 <h4 id="property">Property</h4>
 <p>You can also search based on properties like account, commodity,
 amount, total, filename, payee and date.</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>account = Expenses:Utilities:Electricity
-</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>payee =~ /uber/i
-</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>payee = &quot;Advance Tax&quot;
-</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>total &gt; 5000
-</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>commodity = GOLD
-</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>date &gt;= [2023-01-01]
-</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>filename = creditcard/2023/jan.ledger
+<div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1"></a><a href="#__codelineno-1-1"><span class="linenos" data-linenos="1 "></span></a>account = Expenses:Utilities:Electricity
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2"></a><a href="#__codelineno-1-2"><span class="linenos" data-linenos="2 "></span></a>payee =~ /uber/i
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3"></a><a href="#__codelineno-1-3"><span class="linenos" data-linenos="3 "></span></a>payee = &quot;Advance Tax&quot;
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4"></a><a href="#__codelineno-1-4"><span class="linenos" data-linenos="4 "></span></a>total &gt; 5000
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5"></a><a href="#__codelineno-1-5"><span class="linenos" data-linenos="5 "></span></a>commodity = GOLD
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6"></a><a href="#__codelineno-1-6"><span class="linenos" data-linenos="6 "></span></a>date &gt;= [2023-01-01]
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7"></a><a href="#__codelineno-1-7"><span class="linenos" data-linenos="7 "></span></a>filename = creditcard/2023/jan.ledger
 </span></code></pre></div>
 <p>The general format is <code>property operator value</code>. The property can be
 any of the following:</p>
@@ -929,17 +929,17 @@ will be treated as <code>account = Expenses:Utilities</code>,
 <h4 id="conditional">Conditional</h4>
 <p>You can combine multiple property based queries using <code>AND</code> and <code>OR</code>,
 you can negate them using <code>NOT</code></p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>account = Expenses:Utilities AND payee =~ /uber/i
-</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>commodity = GOLD OR total &gt; 5000
-</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>date &gt;= [2023-01-01] AND date &lt; [2023-04-01]
-</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>account = Expenses:Utilities AND payee =~ /uber/i AND (total &gt; 5000 OR total &lt; 1000)
-</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>total &lt; 5000 AND NOT account = Expenses:Utilities
-</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>[last year] AND (payee =~ /swiggy/i OR payee =~ /phonepe/i)
+<div class="language-text highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1"></a><a href="#__codelineno-2-1"><span class="linenos" data-linenos="1 "></span></a>account = Expenses:Utilities AND payee =~ /uber/i
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2"></a><a href="#__codelineno-2-2"><span class="linenos" data-linenos="2 "></span></a>commodity = GOLD OR total &gt; 5000
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3"></a><a href="#__codelineno-2-3"><span class="linenos" data-linenos="3 "></span></a>date &gt;= [2023-01-01] AND date &lt; [2023-04-01]
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4"></a><a href="#__codelineno-2-4"><span class="linenos" data-linenos="4 "></span></a>account = Expenses:Utilities AND payee =~ /uber/i AND (total &gt; 5000 OR total &lt; 1000)
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5"></a><a href="#__codelineno-2-5"><span class="linenos" data-linenos="5 "></span></a>total &lt; 5000 AND NOT account = Expenses:Utilities
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6"></a><a href="#__codelineno-2-6"><span class="linenos" data-linenos="6 "></span></a>[last year] AND (payee =~ /swiggy/i OR payee =~ /phonepe/i)
 </span></code></pre></div>
 <p>If you leave out the conditional operator, it will be treated as
 <code>AND</code>. Both of the below queries are the same</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>account = Expenses:Utilities AND payee =~ /uber/i
-</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>account = Expenses:Utilities payee =~ /uber/i
+<div class="language-text highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1"></a><a href="#__codelineno-3-1"><span class="linenos" data-linenos="1 "></span></a>account = Expenses:Utilities AND payee =~ /uber/i
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2"></a><a href="#__codelineno-3-2"><span class="linenos" data-linenos="2 "></span></a>account = Expenses:Utilities payee =~ /uber/i
 </span></code></pre></div>
 <h2 id="bulk-edit-form">Bulk Edit Form</h2>
 <p>Currently bulk edit form supports only account rename feature. More

@@ -191,7 +191,7 @@ provided, the search will continue till a match is found
 
 ```handlebars
 {{findAbove B regexp="LIMITED"}}
-`````
+```
 
 10) `#!typescript acronym(str: string): string` - Returns the acronym of the given
     string that is suitable to be used as a commodity symbol. For

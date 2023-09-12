@@ -987,9 +987,8 @@ the Unknown account and then subsequent imports will work</p>
 <p>9) <code class="language-typescript highlight"><span class="nx">findAbove</span><span class="p">(</span><span class="nx">column</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="nx">regexp?</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">})</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span></code> - Finds the
 first cell above the current row in the given column. If <code>regexp</code> is
 provided, the search will continue till a match is found</p>
-<p>```handlebars
-{{findAbove B regexp="LIMITED"}}
-`````</p>
+<div class="language-handlebars highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1"></a><a href="#__codelineno-5-1"><span class="linenos" data-linenos="1 "></span></a><span class="cp">{{</span><span class="nv">findAbove</span> <span class="nv">B</span> <span class="na">regexp</span><span class="o">=</span><span class="s2">&quot;LIMITED&quot;</span><span class="cp">}}</span>
+</span></code></pre></div>
 <p>10) <code class="language-typescript highlight"><span class="nx">acronym</span><span class="p">(</span><span class="nx">str</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span></code> - Returns the acronym of the given
     string that is suitable to be used as a commodity symbol. For
     example, <code>UTI Nifty Next 50 Index Growth Direct Plan</code> will be

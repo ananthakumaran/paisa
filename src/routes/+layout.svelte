@@ -45,9 +45,9 @@
   });
 </script>
 
-<Navbar {isBurger} />
-
 {#key $willRefresh}
+  <Navbar {isBurger} />
+
   <Spinner>
     <slot />
   </Spinner>

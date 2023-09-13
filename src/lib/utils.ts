@@ -512,6 +512,7 @@ export function ajax(
 ): Promise<{ file: LedgerFile }>;
 
 export function ajax(route: "/api/sync", options?: RequestInit): Promise<any>;
+export function ajax(route: "/api/init", options?: RequestInit): Promise<any>;
 
 export function ajax(
   route: "/api/config",

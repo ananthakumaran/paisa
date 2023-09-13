@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/ananthakumaran/paisa/internal/config"
+	"github.com/ananthakumaran/paisa/internal/generator"
 	"github.com/ananthakumaran/paisa/internal/model/template"
 	"github.com/ananthakumaran/paisa/internal/prediction"
 	"github.com/ananthakumaran/paisa/internal/server/assets"
@@ -43,6 +44,13 @@ func Build(db *gorm.DB) *gin.Engine {
 			return
 		}
 
+		c.JSON(200, gin.H{"success": true})
+	})
+
+	router.POST("/api/init", func(c *gin.Context) {
+		generator.Demo(config.GetConfigDir())
+		config.LoadConfigFile(config.GetConfigPath())
+		Sync(db, SyncRequest{Journal: true, Prices: true, Portfolios: true})
 		c.JSON(200, gin.H{"success": true})
 	})
 

@@ -1,7 +1,7 @@
 .PHONY: build
 
-dev:
+develop:
 	wails dev -tags webkit2_40
 
 build:
-	wails build -tags webkit2_40 -debug
+	wails build -tags webkit2_40

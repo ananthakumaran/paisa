@@ -8,7 +8,10 @@ import (
 	"runtime"
 	"strings"
 
+	"github.com/adrg/xdg"
 	"github.com/ananthakumaran/paisa/internal/config"
+	"github.com/ananthakumaran/paisa/internal/generator"
+	"github.com/ananthakumaran/paisa/internal/utils"
 	"github.com/samber/lo"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
@@ -58,31 +61,22 @@ func Initialize() {
 }
 
 func InitConfig() {
+	xdgDocumentDir := filepath.Join(xdg.UserDirs.Documents, "paisa")
+	xdgDocumentPath := filepath.Join(xdgDocumentDir, "paisa.yaml")
 	if envConfigFile := os.Getenv("PAISA_CONFIG"); envConfigFile != "" {
-		readConfigFile(envConfigFile)
+		config.LoadConfigFile(envConfigFile)
 	} else if configFile != "" {
-		readConfigFile(configFile)
+		config.LoadConfigFile(configFile)
+	} else if utils.FileExists("paisa.yaml") {
+		config.LoadConfigFile("paisa.yaml")
+	} else if utils.FileExists(xdgDocumentPath) {
+		config.LoadConfigFile(xdgDocumentPath)
 	} else {
-		readConfigFile("paisa.yaml")
+		err := os.MkdirAll(xdgDocumentDir, 0755)
+		if err != nil {
+			log.Fatal(err)
+		}
+		generator.MinimalConfig(xdgDocumentDir)
+		config.LoadConfigFile(xdgDocumentPath)
 	}
-}
-
-func readConfigFile(path string) {
-	path, err := filepath.Abs(path)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	content, err := os.ReadFile(path)
-	if err != nil {
-		log.Warn("Failed to read config file: ", path)
-		log.Fatal(err)
-	}
-
-	err = config.LoadConfig(content, path)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	log.Info("Using config file: ", path)
 }

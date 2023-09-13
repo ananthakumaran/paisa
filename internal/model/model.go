@@ -5,9 +5,12 @@ import (
 	"github.com/ananthakumaran/paisa/internal/ledger"
 	"github.com/ananthakumaran/paisa/internal/model/cii"
 	"github.com/ananthakumaran/paisa/internal/model/commodity"
+	mutualfundModel "github.com/ananthakumaran/paisa/internal/model/mutualfund/scheme"
+	npsModel "github.com/ananthakumaran/paisa/internal/model/nps/scheme"
 	"github.com/ananthakumaran/paisa/internal/model/portfolio"
 	"github.com/ananthakumaran/paisa/internal/model/posting"
 	"github.com/ananthakumaran/paisa/internal/model/price"
+	"github.com/ananthakumaran/paisa/internal/model/template"
 	"github.com/ananthakumaran/paisa/internal/scraper/india"
 	"github.com/ananthakumaran/paisa/internal/scraper/mutualfund"
 	"github.com/ananthakumaran/paisa/internal/scraper/nps"
@@ -17,9 +20,19 @@ import (
 	"gorm.io/gorm"
 )
 
-func SyncJournal(db *gorm.DB) {
+func AutoMigrate(db *gorm.DB) {
+	db.AutoMigrate(&npsModel.Scheme{})
+	db.AutoMigrate(&mutualfundModel.Scheme{})
 	db.AutoMigrate(&posting.Posting{})
 	db.AutoMigrate(&price.Price{})
+	db.AutoMigrate(&portfolio.Portfolio{})
+	db.AutoMigrate(&template.Template{})
+	db.AutoMigrate(&price.Price{})
+	db.AutoMigrate(&cii.CII{})
+}
+
+func SyncJournal(db *gorm.DB) {
+	AutoMigrate(db)
 	log.Info("Syncing transactions from journal")
 	prices, err := ledger.Cli().Prices(config.GetConfig().JournalPath)
 	if err != nil {
@@ -36,7 +49,7 @@ func SyncJournal(db *gorm.DB) {
 }
 
 func SyncCommodities(db *gorm.DB) {
-	db.AutoMigrate(&price.Price{})
+	AutoMigrate(db)
 	log.Info("Fetching commodities price history")
 	commodities := commodity.All()
 	for _, commodity := range commodities {
@@ -64,7 +77,7 @@ func SyncCommodities(db *gorm.DB) {
 }
 
 func SyncCII(db *gorm.DB) {
-	db.AutoMigrate(&cii.CII{})
+	AutoMigrate(db)
 	log.Info("Fetching taxation related info")
 	ciis, err := india.GetCostInflationIndex()
 	if err != nil {

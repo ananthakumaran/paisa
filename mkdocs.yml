@@ -1,4 +1,6 @@
 site_name: Paisa
+repo_url: https://github.com/ananthakumaran/paisa
+repo_name: ananthakumaran/paisa
 nav:
   - index.md
   - 'Getting Starteed':
@@ -27,6 +29,7 @@ theme:
   name: material
   icon:
     logo: material/currency-rupee
+    repo: fontawesome/brands/github
   palette:
     - scheme: default
       primary: white
@@ -47,6 +50,8 @@ theme:
     - navigation.indexes
     - navigation.top
     - navigation.footer
+    - search.suggest
+    - search.highlight
 
 markdown_extensions:
   - pymdownx.highlight:
@@ -97,14 +102,19 @@ extra:
     feedback:
       title: Was this page helpful?
       ratings:
-        - icon: material/emoticon-happy-outline
+        - icon: material/thumb-up-outline
           name: This page was helpful
           data: 1
           note: >-
             Thanks for your feedback!
-        - icon: material/emoticon-sad-outline
+        - icon: material/thumb-down-outline
           name: This page could be improved
           data: 0
           note: >-
             Thanks for your feedback! Help us improve this page by
             using our <a href="https://docs.google.com/forms/d/e/1FAIpQLSejpTiljuhsviEvXFBN-Z5rJZ_dkXHV5RaZzqpyCAZF1nIFiQ/viewform?usp=pp_url&entry.1125403938={url}" target="_blank" rel="noopener">feedback form</a>.
+
+plugins:
+  - search
+  - git-revision-date-localized:
+      enable_creation_date: true

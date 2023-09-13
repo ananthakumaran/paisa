@@ -4,6 +4,7 @@ import (
 	"strings"
 
 	"github.com/ananthakumaran/paisa/internal/config"
+	"github.com/ananthakumaran/paisa/internal/model"
 	"github.com/ananthakumaran/paisa/internal/model/nps/scheme"
 	"github.com/ananthakumaran/paisa/internal/scraper/nps"
 	"github.com/logrusorgru/aurora"
@@ -25,7 +26,7 @@ var npsCmd = &cobra.Command{
 			log.Fatal(err)
 		}
 
-		db.AutoMigrate(&scheme.Scheme{})
+		model.AutoMigrate(db)
 		count := scheme.Count(db)
 		if update || count == 0 {
 			schemes, err := nps.GetSchemes()

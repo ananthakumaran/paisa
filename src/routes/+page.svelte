@@ -29,6 +29,7 @@
   import BudgetCard from "$lib/components/BudgetCard.svelte";
   import LevelItem from "$lib/components/LevelItem.svelte";
   import ZeroState from "$lib/components/ZeroState.svelte";
+  import { refresh } from "../store";
 
   let UntypedMasonryGrid = MasonryGrid as any;
 
@@ -44,6 +45,7 @@
   let budgetsByMonth: Record<string, Budget> = {};
   let currentBudget: Budget;
   let selectedExpenses: Posting[] = [];
+  let isEmpty = false;
 
   const now = dayjs();
 
@@ -51,6 +53,11 @@
     selectedExpenses = expenses[month] || [];
     renderer(selectedExpenses);
     totalExpense = _.sumBy(selectedExpenses, (p) => p.amount);
+  }
+
+  async function initDemo() {
+    await ajax("/api/init", { method: "POST" });
+    refresh();
   }
 
   onMount(async () => {
@@ -62,6 +69,13 @@
       networth: { networth, xirr },
       transactions
     } = await ajax("/api/dashboard"));
+
+    if (_.isEmpty(transactions)) {
+      isEmpty = true;
+    } else {
+      isEmpty = false;
+    }
+
     const postings = _.chain(expenses).values().flatten().value();
     const z = expense.colorScale(postings);
     renderer = expense.renderCurrentExpensesBreakdown(z);
@@ -75,7 +89,52 @@
   });
 </script>
 
-<section class="section tab-networth">
+<section class="section">
+  <div class="container is-fluid">
+    <div class="columns">
+      <div class="column is-12">
+        <ZeroState item={!isEmpty}>
+          <div class="has-text-left" style="max-width: 640px;">
+            <p class="mb-2">
+              Looks like you are new here, you can either get started or look at a demo setup
+            </p>
+            <div>
+              <p class="is-size-4">I want to get started</p>
+              <ol class="ml-5 mt-2 mb-4">
+                <li>
+                  Go to <a href="/config">config</a> page and set your default currency and locale.
+                </li>
+                <li>
+                  Go to <a href="/ledger/editor">editor</a> page and start adding transactions to your
+                  journal.
+                </li>
+              </ol>
+              <p class="is-size-4">I want to view a Demo</p>
+              <p class="ml-3"></p>
+              <ol class="ml-5 mt-2 mb-4">
+                <li>
+                  Click the button below to load a demo setup. This will load a demo journal with
+                  relevant config.
+                </li>
+                <li>
+                  Once you are done playing around, you can go to <a href="/ledger/editor">editor</a
+                  > page and select all the content and delete them.
+                </li>
+                <li>
+                  Go to <a href="/config">config</a> page and click the reset to defaults button.
+                </li>
+              </ol>
+
+              <a on:click={(_e) => initDemo()} class="button is-link">Setup Demo</a>
+            </div>
+          </div>
+        </ZeroState>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section tab-networth" class:is-hidden={isEmpty}>
   <div class="container is-fluid">
     <div class="tile is-ancestor is-align-items-start">
       <div class="tile is-4">

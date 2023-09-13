@@ -162,9 +162,8 @@ own. To create a new template, edit the template and click on the
    corpus provided will be matched with the existing transaction
    description and amount.
 
-    If `corpus` is not provided, the entire `ROW` will be used
-
-    The `prefix` is optional and will be used to filter out matching
+   If `corpus` is not provided, the entire `ROW` will be used.
+   The `prefix` is optional and will be used to filter out matching
    accounts. If no match is found, `Unknown` will be returned.
 
 ```handlebars

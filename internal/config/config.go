@@ -89,6 +89,9 @@ var defaultConfig = Config{
 	Locale:                     "en-IN",
 	Retirement:                 Retirement{SWR: 4, Savings: []string{"Assets:*"}, Expenses: []string{"Expenses:*"}, YearlyExpenses: 0},
 	FinancialYearStartingMonth: 4,
+	ScheduleALs:                []ScheduleAL{},
+	AllocationTargets:          []AllocationTarget{},
+	Commodities:                []Commodity{},
 }
 
 //go:embed schema.json
@@ -118,6 +121,26 @@ func SaveConfig(content []byte) error {
 	return nil
 }
 
+func LoadConfigFile(path string) {
+	path, err := filepath.Abs(path)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	content, err := os.ReadFile(path)
+	if err != nil {
+		log.Warn("Failed to read config file: ", path)
+		log.Fatal(err)
+	}
+
+	err = LoadConfig(content, path)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	log.Info("Using config file: ", path)
+}
+
 func LoadConfig(content []byte, cp string) error {
 	var configJson interface{}
 	err := yaml.Unmarshal(content, &configJson)
@@ -130,12 +153,13 @@ func LoadConfig(content []byte, cp string) error {
 		return errors.New(fmt.Sprintf("Invalid configuration\n%#v", err))
 	}
 
+	config = Config{}
 	err = yaml.Unmarshal(content, &config)
 	if err != nil {
 		return err
 	}
 
-	err = mergo.Merge(&config, defaultConfig)
+	err = mergo.Merge(&config, defaultConfig, mergo.WithOverrideEmptySlice)
 
 	if err != nil {
 		return err
@@ -160,6 +184,14 @@ func LoadConfig(content []byte, cp string) error {
 
 func GetConfig() Config {
 	return config
+}
+
+func GetConfigDir() string {
+	return filepath.Dir(configPath)
+}
+
+func GetConfigPath() string {
+	return configPath
 }
 
 func GetSchema() any {

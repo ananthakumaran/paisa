@@ -5,6 +5,7 @@
   import JsonSchemaForm from "$lib/components/JsonSchemaForm.svelte";
   import _ from "lodash";
   import * as toast from "bulma-toast";
+  import { refresh } from "../../store";
 
   let lastConfig: UserConfig;
   let config: UserConfig;
@@ -17,18 +18,33 @@
     lastConfig = _.cloneDeep(config);
   });
 
-  async function save() {
+  async function resetToDefault() {
+    if (
+      confirm(
+        "Are you sure you want to reset the config to defaults? This action is not reversible."
+      )
+    ) {
+      save({
+        journal_path: lastConfig.journal_path,
+        db_path: lastConfig.db_path
+      } as any);
+    }
+  }
+
+  async function save(newConfig: UserConfig) {
     isLoading = true;
     try {
       let success = false;
       ({ success, error } = await ajax("/api/config", {
         method: "POST",
-        body: JSON.stringify(config)
+        body: JSON.stringify(newConfig)
       }));
 
       if (success) {
-        lastConfig = _.cloneDeep(config);
-        globalThis.USER_CONFIG = _.cloneDeep(config);
+        lastConfig = _.cloneDeep(newConfig);
+        config = _.cloneDeep(newConfig);
+        globalThis.USER_CONFIG = _.cloneDeep(newConfig);
+        refresh();
         toast.toast({
           message: `Saved config`,
           type: "is-success"
@@ -58,15 +74,20 @@
             <div class="field is-grouped is-grouped-right">
               <div class="control">
                 <button
-                  on:click={(_e) => save()}
+                  on:click={(_e) => save(config)}
                   class="button is-success {isLoading && 'is-loading'}"
-                  disabled={!hasChanges}>Submit</button
+                  disabled={!hasChanges}>Save</button
                 >
               </div>
               <div class="control">
                 <button
                   on:click={(_e) => (config = _.cloneDeep(lastConfig))}
                   class="button is-light">Cancel</button
+                >
+              </div>
+              <div class="control">
+                <button on:click={(_e) => resetToDefault()} class="button is-danger"
+                  >Reset to Defaults</button
                 >
               </div>
             </div>

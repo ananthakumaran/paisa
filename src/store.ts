@@ -42,7 +42,7 @@ export const delayedLoading = derived([loading], ([$l], set) => {
   } else {
     timeoutId = setTimeout(() => {
       return set($l);
-    }, 150);
+    }, 200);
   }
 });
 

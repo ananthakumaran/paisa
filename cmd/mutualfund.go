@@ -4,6 +4,7 @@ import (
 	"strings"
 
 	"github.com/ananthakumaran/paisa/internal/config"
+	"github.com/ananthakumaran/paisa/internal/model"
 	"github.com/ananthakumaran/paisa/internal/model/mutualfund/scheme"
 	"github.com/ananthakumaran/paisa/internal/scraper/mutualfund"
 	"github.com/logrusorgru/aurora"
@@ -25,7 +26,7 @@ var mutualfundCmd = &cobra.Command{
 			log.Fatal(err)
 		}
 
-		db.AutoMigrate(&scheme.Scheme{})
+		model.AutoMigrate(db)
 		count := scheme.Count(db)
 		if update || count == 0 {
 			schemes, err := mutualfund.GetSchemes()

@@ -19,6 +19,7 @@
     "@cityssm/bulma-sticky-table": "^2.1.0",
     "@codemirror/autocomplete": "^6.4.2",
     "@egjs/svelte-grid": "^1.14.2",
+    "@fontsource-variable/roboto-flex": "^5.0.8",
     "@formatjs/intl-numberformat": "^8.7.0",
     "@fortawesome/fontawesome-free": "^6.0",
     "@lezer/highlight": "^1.1.6",

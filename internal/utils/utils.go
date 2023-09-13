@@ -2,6 +2,7 @@ package utils
 
 import (
 	"fmt"
+	"os"
 	"sort"
 	"strings"
 	"time"
@@ -165,4 +166,12 @@ func SortedKeys[K constraints.Ordered, V any](m map[K]V) []K {
 	keys := lo.Keys(m)
 	sort.Slice(keys, func(i, j int) bool { return keys[i] < keys[j] })
 	return keys
+}
+
+func FileExists(path string) bool {
+	_, err := os.Stat(path)
+	if err != nil {
+		return false
+	}
+	return true
 }

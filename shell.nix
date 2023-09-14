@@ -12,7 +12,6 @@ pkgs.mkShell {
 
     pkgs.python311Packages.mkdocs
     pkgs.python311Packages.mkdocs-material
-    pkgs.python311Packages.mkdocs-git-revision-date-localized-plugin
   ] ++ (pkgs.lib.optional pkgs.stdenv.isLinux pkgs.wails);
 
   shellHook = ''

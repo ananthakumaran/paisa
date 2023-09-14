@@ -1,6 +1,6 @@
 paisa.db
 paisa.yaml
-paisa
+./paisa
 web/static
 example.ledger
 personal.ledger

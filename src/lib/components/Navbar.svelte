@@ -11,6 +11,7 @@
   import ThemeSwitcher from "./ThemeSwitcher.svelte";
   import BoxedTabs from "./BoxedTabs.svelte";
   import MonthPicker from "./MonthPicker.svelte";
+  import Logo from "./Logo.svelte";
   export let isBurger: boolean = null;
 
   onMount(async () => {
@@ -137,7 +138,7 @@
 
 <nav class="navbar px-3 is-transparent" aria-label="main navigation">
   <div class="navbar-brand">
-    <span class="navbar-item is-size-4 has-text-weight-medium">₹ Paisa</span>
+    <span class="navbar-item is-size-4 has-text-weight-medium"><Logo size={20} /> Paisa</span>
     <a
       role="button"
       tabindex="-1"

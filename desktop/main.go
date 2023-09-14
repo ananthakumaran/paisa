@@ -16,7 +16,7 @@ func main() {
 	cmd.InitConfig()
 	app := NewApp()
 	err := wails.Run(&options.App{
-		Title:  "desktop",
+		Title:  "Paisa",
 		Width:  1024,
 		Height: 768,
 		AssetServer: &assetserver.Options{

@@ -26,9 +26,10 @@ nav:
   - 'Demo': 'https://demo.paisa.fyi'
 
 theme:
+  custom_dir: overrides
   name: material
   icon:
-    logo: material/currency-rupee
+    logo: paisa/logo
     repo: fontawesome/brands/github
   palette:
     - scheme: default
@@ -72,6 +73,9 @@ markdown_extensions:
   - pymdownx.emoji:
       emoji_index: !!python/name:materialx.emoji.twemoji
       emoji_generator: !!python/name:materialx.emoji.to_svg
+      options:
+        custom_icons:
+          - overrides/.icons
   - pymdownx.superfences:
       custom_fences:
         - name: mermaid
@@ -116,5 +120,3 @@ extra:
 
 plugins:
   - search
-  - git-revision-date-localized:
-      enable_creation_date: true

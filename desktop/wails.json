@@ -1,11 +1,18 @@
 {
   "$schema": "https://wails.io/schemas/config.v2.json",
-  "name": "desktop",
-  "outputfilename": "desktop",
+  "name": "paisa",
+  "outputfilename": "paisa",
   "frontend:install": "",
   "frontend:build": "",
   "author": {
     "name": "Anantha Kumaran",
     "email": "ananthakumaran@gmail.com"
+  },
+  "Info": {
+    "companyName": "Paisa",
+    "productName": "Paisa",
+    "productVersion": "0.4.9",
+    "copyright": "Copyright 2022 - 2023 Anantha Kumaran",
+    "comments": "Personal Finance App"
   }
 }

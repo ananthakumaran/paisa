@@ -3,14 +3,13 @@
   import _ from "lodash";
   import { renderFlow } from "$lib/cash_flow";
   import { ajax, depth, firstName, type Graph, type Posting } from "$lib/utils";
+  import { dateMin, year } from "../../../store";
   import {
-    dateMin,
-    year,
     cashflowType,
     setCashflowDepthAllowed,
     cashflowExpenseDepth,
     cashflowIncomeDepth
-  } from "../../../store";
+  } from "../../../persisted_store";
   import ZeroState from "$lib/components/ZeroState.svelte";
 
   let graph: Record<string, Record<string, Graph>>, expenses: Posting[];

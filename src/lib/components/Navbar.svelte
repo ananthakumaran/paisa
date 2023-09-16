@@ -1,18 +1,14 @@
 <script lang="ts">
   import { page } from "$app/stores";
   import Actions from "$lib/components/Actions.svelte";
+  import { month, year, dateMax, dateMin, dateRangeOption } from "../../store";
   import {
-    month,
-    year,
-    dateMax,
-    dateMin,
-    dateRangeOption,
     cashflowType,
     cashflowExpenseDepth,
     cashflowExpenseDepthAllowed,
     cashflowIncomeDepth,
     cashflowIncomeDepthAllowed
-  } from "../../store";
+  } from "../../persisted_store";
   import _ from "lodash";
   import { financialYear, forEachFinancialYear, helpUrl } from "$lib/utils";
   import { onMount } from "svelte";

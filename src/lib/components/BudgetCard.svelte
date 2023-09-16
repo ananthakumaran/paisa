@@ -12,6 +12,16 @@
     return accountBudget.forecast !== 0 || accountBudget.actual !== 0;
   }
 
+  function color(accountBudget: AccountBudget): string {
+    if (accountBudget.available == 0) {
+      return "info";
+    } else if (accountBudget.available > 0) {
+      return "success";
+    } else {
+      return "danger";
+    }
+  }
+
   const chart: Action<HTMLElement, { ab: AccountBudget }> = (element, props) => {
     renderBudget(element, props.ab);
     return {};
@@ -60,7 +70,7 @@
         <span class="budget-label mr-1"
           >{accountBudget.available >= 0 ? "Available" : "Overspent"}</span
         >
-        <span class="budget-amount {accountBudget.available >= 0 ? 'success' : 'danger'}"
+        <span class="budget-amount {color(accountBudget)}"
           >{formatCurrency(Math.abs(accountBudget.available))}</span
         >
       </div>

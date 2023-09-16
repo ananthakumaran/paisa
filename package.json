@@ -51,6 +51,7 @@
     "svelte-carousel": "^1.0.25",
     "svelte-file-dropzone": "^2.0.1",
     "svelte-language-server": "^0.15.0",
+    "svelte-local-storage-store": "^0.6.0",
     "svelte-select": "^5.6.0",
     "svelte-tiny-virtual-list": "^2.0.5",
     "textures": "^1.2.3",

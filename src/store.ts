@@ -1,4 +1,5 @@
-import { writable, derived } from "svelte/store";
+import { persisted } from "svelte-local-storage-store";
+import { writable, derived, get } from "svelte/store";
 import * as d3 from "d3";
 
 import type { AccountTfIdf } from "$lib/utils";
@@ -25,7 +26,24 @@ export const dateRange = derived(
   }
 );
 
-export const cashflowType = writable("hierarchy");
+export const cashflowType = persisted("cashflowType", "hierarchy");
+
+export const cashflowExpenseDepthAllowed = writable({ min: 1, max: 1 });
+export const cashflowExpenseDepth = persisted("cashflowExpenseDepth", 0);
+export const cashflowIncomeDepthAllowed = writable({ min: 1, max: 1 });
+export const cashflowIncomeDepth = persisted("cashflowIncomeDepth", 0);
+
+export function setCashflowDepthAllowed(expense: number, income: number) {
+  cashflowExpenseDepthAllowed.set({ min: 1, max: expense });
+  if (get(cashflowExpenseDepth) == 0 || get(cashflowExpenseDepth) > expense) {
+    cashflowExpenseDepth.set(expense);
+  }
+
+  cashflowIncomeDepthAllowed.set({ min: 1, max: income });
+  if (get(cashflowIncomeDepth) == 0 || get(cashflowIncomeDepth) > income) {
+    cashflowIncomeDepth.set(income);
+  }
+}
 
 export const theme = writable("light");
 

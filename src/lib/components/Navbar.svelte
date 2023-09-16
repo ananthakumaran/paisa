@@ -1,7 +1,18 @@
 <script lang="ts">
   import { page } from "$app/stores";
   import Actions from "$lib/components/Actions.svelte";
-  import { month, year, dateMax, dateMin, dateRangeOption, cashflowType } from "../../store";
+  import {
+    month,
+    year,
+    dateMax,
+    dateMin,
+    dateRangeOption,
+    cashflowType,
+    cashflowExpenseDepth,
+    cashflowExpenseDepthAllowed,
+    cashflowIncomeDepth,
+    cashflowIncomeDepthAllowed
+  } from "../../store";
   import _ from "lodash";
   import { financialYear, forEachFinancialYear, helpUrl } from "$lib/utils";
   import { onMount } from "svelte";
@@ -12,6 +23,7 @@
   import BoxedTabs from "./BoxedTabs.svelte";
   import MonthPicker from "./MonthPicker.svelte";
   import Logo from "./Logo.svelte";
+  import MaxDepthSelector from "./MaxDepthSelector.svelte";
   export let isBurger: boolean = null;
 
   onMount(async () => {
@@ -29,6 +41,7 @@
     monthPicker?: boolean;
     cashflowTypePicker?: boolean;
     financialYearPicker?: boolean;
+    maxDepthSelector?: boolean;
     children?: Link[];
   }
   const links: Link[] = [
@@ -38,7 +51,13 @@
       href: "/cash_flow",
       children: [
         { label: "Monthly", href: "/monthly", dateRangeSelector: true },
-        { label: "Yearly", href: "/yearly", cashflowTypePicker: true, financialYearPicker: true },
+        {
+          label: "Yearly",
+          href: "/yearly",
+          cashflowTypePicker: true,
+          financialYearPicker: true,
+          maxDepthSelector: true
+        },
         { label: "Recurring", href: "/recurring", help: "recurring" }
       ]
     },
@@ -259,6 +278,32 @@
         ]}
         bind:value={$cashflowType}
       />
+    {/if}
+
+    {#if selectedSubLink?.maxDepthSelector && ($cashflowExpenseDepthAllowed.max > 1 || $cashflowIncomeDepthAllowed.max > 1) && $cashflowType == "hierarchy"}
+      <div class="dropdown is-right is-hoverable">
+        <div class="dropdown-trigger">
+          <button class="button is-small" aria-haspopup="true">
+            <span class="icon is-small">
+              <i class="fas fa-sliders" />
+            </span>
+          </button>
+        </div>
+        <div class="dropdown-menu" id="dropdown-menu4" role="menu">
+          <div class="dropdown-content px-3 py-2">
+            <MaxDepthSelector
+              label="Expenses"
+              bind:value={$cashflowExpenseDepth}
+              allowed={$cashflowExpenseDepthAllowed}
+            />
+            <MaxDepthSelector
+              label="Income"
+              bind:value={$cashflowIncomeDepth}
+              allowed={$cashflowIncomeDepthAllowed}
+            />
+          </div>
+        </div>
+      </div>
     {/if}
 
     {#if selectedSubLink?.dateRangeSelector || selectedLink?.dateRangeSelector}

@@ -28,7 +28,7 @@
 === "Windows"
 
     * Download the prebuilt [binary](https://github.com/ananthakumaran/paisa/releases/latest) named `paisa-windows-amd64.exe`
-    * Since the binary is not signed with a certificate, You might get
+    * Since the binary is not signed with a certificate, you might get
     a warning from Windows. You would have to click `keep anyway`.
     * Run the following command in a Windows PowerShell. Make sure
     you are in the correct folder. You should see something like `PS C:\Users\yourname>`

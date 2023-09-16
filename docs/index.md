@@ -65,7 +65,7 @@ hide:
 
 <div class="features-container" markdown>
 <div class="features" markdown>
-- :material-file-table: builds on top of the **[ledger](https://www.ledger-cli.org/)** double entry accounting tool.
+- :material-file-table: Builds on top of the **[ledger](https://www.ledger-cli.org/)** double entry accounting tool.
 - :simple-gnuprivacyguard: Your financial **data** never leaves your system.
 - :simple-git: The journal and config information are stored in **plain text** files
   that can be easily version controlled. You can collaborate with

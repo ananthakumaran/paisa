@@ -1,5 +1,10 @@
 # CHANGELOG
 
+### 0.5.0 (2023-09-16)
+
+* Add config page
+* Embed ledger binary inside paisa
+* Bug fixes
 
 ### 0.4.9 (2023-09-09)
 

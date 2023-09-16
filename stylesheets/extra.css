@@ -27,9 +27,18 @@
   color: rgb(161, 161, 161);
 }
 
-.tabbed-set {
-  max-width: 600px;
+.home .tabbed-set {
+  max-width: 510px;
   margin: -70px auto 30px auto !important;
+}
+
+.home ul li {
+  list-style: none;
+  margin-left: 0 !important;
+}
+
+.home ul {
+  margin-left: 0 !important;
 }
 
 .features-container {

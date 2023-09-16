@@ -5,7 +5,7 @@ const DATE = /^\d{4}[/-]\d{2}[/-]\d{2}/;
 const DATE_TIME = /^\d{4}[/-]\d{2}[/-]\d{2} \d{2}:\d{2}:\d{2}/;
 const AMOUNT = /^[+-]?(?:[0-9,])+(\.(?:[0-9,])+)?/;
 const KEYWORDS = /^(?:commodity)/;
-const COMMODITY = /^[A-Za-z]+/;
+const COMMODITY = /^([A-Za-z_]+)|("[^"]+")/;
 const ACCOUNT = /^[^\][(); \t\n]((?!\s{2})[^\][();\t\n])*/;
 
 interface State {
@@ -86,9 +86,17 @@ export const ledger: StreamParser<State> = {
       return "operator";
     }
 
+    if (_.includes(["~", "="], ch)) {
+      state.inTransaction = true;
+      state.inPosting = false;
+      return "operator";
+    }
+
     if (_.includes(["€", "$"], ch)) {
       return "unit";
     }
+
+    stream.backUp(1);
 
     if (state.inTransaction) {
       state.inTransaction = false;
@@ -105,5 +113,7 @@ export const ledger: StreamParser<State> = {
     if (state.inPosting && state.accountConsumed && stream.match(COMMODITY)) {
       return "unit";
     }
+
+    stream.next();
   }
 };

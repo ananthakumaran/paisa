@@ -3,7 +3,7 @@ repo_url: https://github.com/ananthakumaran/paisa
 repo_name: ananthakumaran/paisa
 nav:
   - index.md
-  - 'Getting Starteed':
+  - 'Getting Started':
     - getting-started/installation.md
     - getting-started/tutorial.md
   - 'Reference':

@@ -198,7 +198,7 @@ func parseLedgerPrices(output string, defaultCurrency string) ([]price.Price, er
 			continue
 		}
 
-		commodity := match[2]
+		commodity := utils.UnQuote(match[2])
 
 		date, err := time.ParseInLocation("2006/01/02", match[1], time.Local)
 		if err != nil {
@@ -226,7 +226,7 @@ func parseHLedgerPrices(output string, defaultCurrency string) ([]price.Price, e
 			continue
 		}
 
-		commodity := match[2]
+		commodity := utils.UnQuote(match[2])
 
 		date, err := time.ParseInLocation("2006-01-02", match[1], time.Local)
 		if err != nil {
@@ -338,7 +338,7 @@ func execLedgerCommand(journalPath string, flags []string) ([]*posting.Posting, 
 			Date:                 date,
 			Payee:                record[1],
 			Account:              record[2],
-			Commodity:            record[3],
+			Commodity:            utils.UnQuote(record[3]),
 			Quantity:             quantity,
 			Amount:               amount,
 			TransactionID:        transactionID,

@@ -9,7 +9,7 @@ are recurring. This metadata can be added in couple of ways. Let's say
 you pay rent every month and you want to mark it as recurring, a
 typical journal would like below
 
-```go
+```ledger
 2023/07/01 Rent
     Expenses:Rent                             15,000 INR
     Assets:Checking
@@ -21,7 +21,7 @@ typical journal would like below
 
 You can manually tag a posting by adding `; Recurring: Rent`.
 
-```go
+```ledger
 2023/07/01 Rent
     ; Recurring: Rent
     Expenses:Rent                             15,000 INR
@@ -40,7 +40,7 @@ used to group transactions.
 Tagging each and every posting can be tiresome. Ledger has a feature
 called [Automated Transaction](https://ledger-cli.org/doc/ledger3.html#Automated-Transactions) which can make this process simpler.
 
-```go
+```ledger
 = Expenses:Rent
     ; Recurring: Rent
 ```
@@ -51,7 +51,7 @@ name. But you can target other attributes like payee, amount etc. You
 can find more examples below, more info about predicate is available on
 Ledger [docs](https://ledger-cli.org/doc/ledger3.html#Complex-expressions)
 
-```go
+```ledger
 = expr payee=~/^PPF$/
     ; Recurring: PPF
 

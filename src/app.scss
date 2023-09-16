@@ -1,6 +1,8 @@
 $family-sans-serif: "Roboto Flex Variable", sans-serif, "Font Awesome 6 Free Solid",
   "Font Awesome 6 Free Brands";
 
+$family-monospace: "Roboto Mono Variable", monospace;
+
 $box-radius: 4px;
 $box-shadow: none;
 $box-padding: 1.25rem 0;
@@ -412,6 +414,10 @@ nav.level.grid-2 {
     color: $link;
   }
 
+  .cm-line .ͼ9 {
+    font-weight: bold;
+  }
+
   .cm-cursor,
   .cm-dropCursor {
     border-left-color: $black;
@@ -552,6 +558,8 @@ nav.level.grid-2 {
 }
 .cm-scroller {
   overflow: auto;
+  font-family: $family-monospace !important;
+  font-size: 13px;
 }
 
 .cm-focused {
@@ -559,7 +567,7 @@ nav.level.grid-2 {
 }
 
 .cm-tooltip-hover {
-  font-family: monospace;
+  font-family: $family-monospace;
 }
 
 .svelte-select {

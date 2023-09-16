@@ -16,3 +16,4 @@ vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 *.backup.*
 *.test
+docs/lexer/__pycache__/

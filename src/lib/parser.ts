@@ -1,9 +1,11 @@
 import type { StreamParser, StringStream } from "@codemirror/language";
+import _ from "lodash";
 
 const DATE = /^\d{4}[/-]\d{2}[/-]\d{2}/;
+const DATE_TIME = /^\d{4}[/-]\d{2}[/-]\d{2} \d{2}:\d{2}:\d{2}/;
 const AMOUNT = /^[+-]?(?:[0-9,])+(\.(?:[0-9,])+)?/;
 const KEYWORDS = /^(?:commodity)/;
-const COMMODITY = /^[A-Za-z]*/;
+const COMMODITY = /^[A-Za-z]+/;
 const ACCOUNT = /^[^\][(); \t\n]((?!\s{2})[^\][();\t\n])*/;
 
 interface State {
@@ -11,6 +13,7 @@ interface State {
   inPosting: boolean;
   inInclude: boolean;
   accountConsumed: boolean;
+  inPrice: boolean;
 }
 
 export const ledger: StreamParser<State> = {
@@ -20,13 +23,15 @@ export const ledger: StreamParser<State> = {
       accountConsumed: false,
       inTransaction: false,
       inPosting: false,
-      inInclude: false
+      inInclude: false,
+      inPrice: false
     };
   },
   token: function (stream: StringStream, state: State) {
     if (stream.sol()) {
       state.inTransaction = false;
       state.accountConsumed = false;
+      state.inPrice = false;
     }
 
     if (stream.eatSpace()) return null;
@@ -36,13 +41,28 @@ export const ledger: StreamParser<State> = {
       return "keyword";
     }
 
+    if (stream.match("P ")) {
+      state.inPrice = true;
+      return "keyword";
+    }
+
     if (state.inInclude) {
       state.inInclude = false;
       stream.skipToEnd();
       return "link";
     }
 
+    if (state.inPrice && stream.match(COMMODITY)) {
+      return "unit";
+    }
+
     if (stream.match(KEYWORDS)) return "keyword";
+
+    if (stream.match(DATE_TIME)) {
+      state.inTransaction = false;
+      state.inPosting = false;
+      return "tagName";
+    }
 
     if (stream.match(DATE)) {
       state.inTransaction = true;
@@ -62,6 +82,14 @@ export const ledger: StreamParser<State> = {
       return "comment";
     }
 
+    if (ch == "@") {
+      return "operator";
+    }
+
+    if (_.includes(["€", "$"], ch)) {
+      return "unit";
+    }
+
     if (state.inTransaction) {
       state.inTransaction = false;
       state.inPosting = true;
@@ -76,10 +104,6 @@ export const ledger: StreamParser<State> = {
 
     if (state.inPosting && state.accountConsumed && stream.match(COMMODITY)) {
       return "unit";
-    }
-
-    if (ch == "@") {
-      return "operator";
     }
   }
 };

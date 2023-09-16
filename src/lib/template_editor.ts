@@ -61,11 +61,6 @@ export function createEditor(content: string, dom: Element) {
     extensions: [
       keymap.of([{ key: "Tab", run: insertTab }]),
       basicSetup,
-      EditorView.theme({
-        "&": {
-          fontSize: "12px"
-        }
-      }),
       EditorView.contentAttributes.of({ "data-enable-grammarly": "false" }),
       StreamLanguage.define(handlebars),
       lintGutter(),

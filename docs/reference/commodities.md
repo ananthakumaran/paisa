@@ -4,7 +4,7 @@ There are no restrictions on the type of **commodities** that can be
 used in **paisa**. Anything like gold, mutual fund, NPS, etc can be
 tracked as a commodity. Few example transactions can be found below.
 
-```go
+```ledger
 2019/02/18 NPS
     Assets:Equity:NPS:SBI:E/*(1)!*/       /*(2)!*/15.9378 NPS_SBI_E/*(3)!*/ @ /*(4)!*/23.5289 INR/*(5)!*/
     Assets:Checking
@@ -116,7 +116,7 @@ should match the code used in yahoo.
 Some commodities like real estate are bought once and the price
 changes over time. Ledger allows you to set the price as on date.
 
-```go
+```ledger
 2014/01/01 Home purchase
     Assets:House                                1 APT @ 4000000 INR
     Liabilities:Homeloan
@@ -136,7 +136,7 @@ always try to convert other currencies to the
 [default_currency](./config.md). As long as the exchange rate from a currency to
 default\_currency is available, paisa would work without issue
 
-```go
+```ledger
 P 2023/05/01 00:00:00 USD 81.75 INR
 
 2023/05/01 Freelance Income

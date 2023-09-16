@@ -33,12 +33,12 @@ theme:
     repo: fontawesome/brands/github
   palette:
     - scheme: default
-      primary: white
+      primary: hsl(229deg, 53%, 53%)
       toggle:
         icon: material/brightness-7
         name: Switch to dark mode
     - scheme: slate
-      primary: black
+      primary: hsl(229deg, 53%, 53%)
       toggle:
         icon: material/brightness-4
         name: Switch to light mode
@@ -55,8 +55,11 @@ theme:
     - search.highlight
 
 markdown_extensions:
+  - md_in_html
+  - pymdownx.tabbed:
+      alternate_style: true
   - pymdownx.highlight:
-      linenums: true
+      linenums: false
       anchor_linenums: true
       line_spans: __span
       pygments_lang_class: true
@@ -84,6 +87,8 @@ markdown_extensions:
 
 extra_javascript:
   - javascripts/extra.js
+extra_css:
+  - stylesheets/extra.css
 
 copyright: |
   Copyright &copy; 2022 - 2023 Anantha Kumaran <br \> <a href="#__consent">Change cookie settings</a>
@@ -120,3 +125,6 @@ extra:
 
 plugins:
   - search
+
+hooks:
+  - docs/lexer/hook.py

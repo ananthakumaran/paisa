@@ -6,7 +6,7 @@ figure out how much you can spend on each category.
 
 Let's add a salary transaction to the ledger:
 
-```go
+```ledger
 2023/08/01 Salary
     Income:Salary:Acme                         -50,000 INR
     Assets:Checking
@@ -14,7 +14,7 @@ Let's add a salary transaction to the ledger:
 
 Now you have 50k in your checking account. Let's budget this amount:
 
-```go
+```ledger
 ~ Monthly in 2023/08/01
     Expenses:Rent                              15,000 INR
     Expenses:Food                              10,000 INR
@@ -44,7 +44,7 @@ available under that category.
 
 Let's add some real transactions.
 
-```go
+```ledger
 2023/08/02 Rent
     Expenses:Rent                             15,000 INR
     Assets:Checking
@@ -83,7 +83,7 @@ now. That means, you can't actually spend as per your budget. You have
 to first bring the deficit back to 0. Let's cut down the entertainment
 and clothing budget to 0
 
-```go hl_lines="4-5"
+```ledger hl_lines="4-5"
 ~ Monthly in 2023/08/01
     Expenses:Rent                             15,000 INR
     Expenses:Food                             10,000 INR
@@ -99,7 +99,7 @@ and clothing budget to 0
 You can go back and adjust your budget anytime. Let's move on to the
 next month, assuming you haven't made any further transaction.
 
-```go
+```ledger
 2023/09/01 Salary
     Income:Salary:Acme                       -50,000 INR
     Assets:Checking

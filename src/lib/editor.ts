@@ -57,11 +57,6 @@ export function createDiffEditor(oldContent: string, newContent: string, dom: El
   const extensions = [
     basicSetup,
     State.readOnly.of(true),
-    EditorView.theme({
-      "&": {
-        fontSize: "12px"
-      }
-    }),
     StreamLanguage.define(ledger),
     EditorView.contentAttributes.of({ "data-enable-grammarly": "false" }),
     lintGutter(),
@@ -90,11 +85,6 @@ export function createEditor(
       keymap.of([{ key: "Tab", run: insertTab }]),
       basicSetup,
       State.readOnly.of(!!opts.readonly),
-      EditorView.theme({
-        "&": {
-          fontSize: "12px"
-        }
-      }),
       EditorView.contentAttributes.of({ "data-enable-grammarly": "false" }),
       StreamLanguage.define(ledger),
       lintGutter(),

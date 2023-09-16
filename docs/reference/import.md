@@ -32,7 +32,7 @@ fourth line constructs the second posting.
 Effectively a single row in the CSV file is converted to a single
 transaction like this.
 
-```go
+```ledger
 2023/03/28 AMAZON HTTP://WWW.AM IN
     Expenses:Shopping		249.00 INR
     Assets:Checking

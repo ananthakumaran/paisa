@@ -1,7 +1,7 @@
 {
   "$schema": "https://wails.io/schemas/config.v2.json",
-  "name": "paisa",
-  "outputfilename": "paisa",
+  "name": "Paisa",
+  "outputfilename": "Paisa",
   "frontend:install": "",
   "frontend:build": "",
   "author": {
@@ -12,7 +12,7 @@
     "companyName": "Paisa",
     "productName": "Paisa",
     "productVersion": "0.5.0",
-    "copyright": "Copyright 2022 - 2023 Anantha Kumaran",
+    "copyright": "Copyright © 2022 - 2023 Anantha Kumaran",
     "comments": "Personal Finance App"
   }
 }

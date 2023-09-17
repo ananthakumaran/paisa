@@ -2,24 +2,24 @@
 
 === "Linux"
 
-    * Download the prebuilt [binary](https://github.com/ananthakumaran/paisa/releases/latest) named `paisa-linux-amd64`
+    * Download the prebuilt [binary](https://github.com/ananthakumaran/paisa/releases/latest) named `paisa-cli-linux-amd64`
     * Run the following commands in a Terminal
 
     ```console
     # cd ~/Downloads
-    # mv paisa-linux-amd64 paisa
+    # mv paisa-cli-linux-amd64 paisa
     # chmod u+x paisa
     # mv paisa /usr/local/bin
     ```
 
 === "Mac"
 
-    * Download the prebuilt [binary](https://github.com/ananthakumaran/paisa/releases/latest) named `paisa-macos-amd64`
+    * Download the prebuilt [binary](https://github.com/ananthakumaran/paisa/releases/latest) named `paisa-cli-macos-amd64`
     * Run the following commands in a Terminal
 
     ```console
     # cd ~/Downloads
-    # mv paisa-macos-amd64 paisa
+    # mv paisa-cli-macos-amd64 paisa
     # chmod u+x paisa
     # xattr -dr com.apple.quarantine paisa
     # mv paisa /usr/local/bin
@@ -27,14 +27,14 @@
 
 === "Windows"
 
-    * Download the prebuilt [binary](https://github.com/ananthakumaran/paisa/releases/latest) named `paisa-windows-amd64.exe`
+    * Download the prebuilt [binary](https://github.com/ananthakumaran/paisa/releases/latest) named `paisa-cli-windows-amd64.exe`
     * Since the binary is not signed with a certificate, you might get
     a warning from Windows. You would have to click `keep anyway`.
     * Run the following command in a Windows PowerShell. Make sure
     you are in the correct folder. You should see something like `PS C:\Users\yourname>`
 
     ```pwsh-session
-    PS C:\Users\john> mv .\Downloads\paisa-windows-amd64.exe .\paisa.exe
+    PS C:\Users\john> mv .\Downloads\paisa-cli-windows-amd64.exe .\paisa.exe
     ```
 
     * The `paisa.exe` binary will be placed in the user's home directory. You

@@ -1,6 +1,8 @@
 package main
 
 import (
+	_ "embed"
+
 	"github.com/ananthakumaran/paisa/cmd"
 	"github.com/ananthakumaran/paisa/desktop/logger"
 	"github.com/ananthakumaran/paisa/internal/server"
@@ -9,7 +11,12 @@ import (
 	"github.com/wailsapp/wails/v2"
 	"github.com/wailsapp/wails/v2/pkg/options"
 	"github.com/wailsapp/wails/v2/pkg/options/assetserver"
+	"github.com/wailsapp/wails/v2/pkg/options/linux"
+	"github.com/wailsapp/wails/v2/pkg/options/mac"
 )
+
+//go:embed build/appicon.png
+var icon []byte
 
 func main() {
 	decimal.MarshalJSONWithoutQuotes = true
@@ -24,18 +31,29 @@ func main() {
 		},
 	})
 	err := wails.Run(&options.App{
-		Title:  "Paisa",
-		Width:  1024,
-		Height: 768,
+		Title: "Paisa",
 		AssetServer: &assetserver.Options{
 			Handler: server.Build(&app.db).Handler(),
 		},
-		BackgroundColour: &options.RGBA{R: 27, G: 38, B: 54, A: 1},
+		BackgroundColour: &options.RGBA{R: 250, G: 250, B: 250, A: 1},
 		OnStartup:        app.startup,
 		Bind: []interface{}{
 			app,
 		},
-		Logger: &logger.Logger{},
+		WindowStartState: options.Maximised,
+		Logger:           &logger.Logger{},
+		Mac: &mac.Options{
+			About: &mac.AboutInfo{
+				Title:   "Paisa",
+				Message: "Copyright © 2022 - 2023 Anantha Kumaran",
+				Icon:    icon,
+			},
+		},
+
+		Linux: &linux.Options{
+			Icon:        icon,
+			ProgramName: "Paisa",
+		},
 	})
 
 	if err != nil {

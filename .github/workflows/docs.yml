@@ -3,7 +3,10 @@ name: Docs
 on:
   push:
     branches:
-      - master
+      - docs/*
+    tags:
+      - '*'
+
 jobs:
   publish:
     runs-on: ubuntu-latest

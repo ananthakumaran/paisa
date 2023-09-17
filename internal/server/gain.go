@@ -3,6 +3,7 @@ package server
 import (
 	"github.com/ananthakumaran/paisa/internal/model/posting"
 	"github.com/ananthakumaran/paisa/internal/query"
+	"github.com/ananthakumaran/paisa/internal/server/assets"
 	"github.com/ananthakumaran/paisa/internal/service"
 	"github.com/gin-gonic/gin"
 	"github.com/samber/lo"
@@ -48,5 +49,7 @@ func GetAccountGain(db *gorm.DB, account string) gin.H {
 		portfolio_groups = PortfolioAllocationGroups{Commomdities: []string{}, NameAndSecurityType: []PortfolioAggregate{}, SecurityType: []PortfolioAggregate{}, Rating: []PortfolioAggregate{}, Industry: []PortfolioAggregate{}}
 	}
 
-	return gin.H{"gain_timeline_breakdown": gain, "portfolio_allocation": portfolio_groups}
+	assetBreakdown := assets.ComputeBreakdown(db, postings, false, account)
+
+	return gin.H{"gain_timeline_breakdown": gain, "portfolio_allocation": portfolio_groups, "asset_breakdown": assetBreakdown}
 }

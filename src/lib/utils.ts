@@ -68,7 +68,6 @@ export interface Networth {
   gainAmount: number;
   balanceAmount: number;
   netInvestmentAmount: number;
-  absoluteReturn: number;
 }
 
 export interface Gain {
@@ -108,11 +107,13 @@ export interface AccountTfIdf {
 
 export interface AssetBreakdown {
   group: string;
-  investment_amount: number;
-  withdrawal_amount: number;
-  balance_units: number;
-  market_amount: number;
+  investmentAmount: number;
+  withdrawalAmount: number;
+  balanceUnits: number;
+  marketAmount: number;
   xirr: number;
+  gainAmount: number;
+  absoluteReturn: number;
 }
 
 export interface LiabilityBreakdown {
@@ -434,6 +435,7 @@ export function ajax(
 ): Promise<{
   gain_timeline_breakdown: AccountGain;
   portfolio_allocation: PortfolioAllocation;
+  asset_breakdown: AssetBreakdown;
 }>;
 export function ajax(route: "/api/allocation"): Promise<{
   aggregates: { [key: string]: Aggregate };

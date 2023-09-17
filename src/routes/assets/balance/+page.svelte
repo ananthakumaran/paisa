@@ -7,7 +7,8 @@
     formatFloat,
     lastName,
     type AssetBreakdown,
-    isZero
+    isZero,
+    formatPercentage
   } from "$lib/utils";
   import _ from "lodash";
   import { onMount } from "svelte";
@@ -44,12 +45,13 @@
                 <th class="has-text-right">Market Value</th>
                 <th class="has-text-right">Change</th>
                 <th class="has-text-right">XIRR</th>
+                <th class="has-text-right">Absolute Return</th>
               </tr>
             </thead>
             <tbody>
               {#each Object.values(breakdowns) as b}
                 {@const indent = _.repeat("&emsp;&emsp;", depth(b.group) - 1)}
-                {@const gain = b.market_amount + b.withdrawal_amount - b.investment_amount}
+                {@const gain = b.gainAmount}
                 {@const changeClass = calculateChangeClass(gain)}
                 <tr>
                   <td style="max-width: 200px; overflow: hidden;"
@@ -57,22 +59,25 @@
                     <a href="/assets/gain/{b.group}">{lastName(b.group)}</a></td
                   >
                   <td class="has-text-right"
-                    >{!isZero(b.investment_amount) ? formatCurrency(b.investment_amount) : ""}</td
+                    >{!isZero(b.investmentAmount) ? formatCurrency(b.investmentAmount) : ""}</td
                   >
                   <td class="has-text-right"
-                    >{!isZero(b.withdrawal_amount) ? formatCurrency(b.withdrawal_amount) : ""}</td
+                    >{!isZero(b.withdrawalAmount) ? formatCurrency(b.withdrawalAmount) : ""}</td
                   >
                   <td class="has-text-right"
-                    >{b.balance_units > 0 ? formatFloat(b.balance_units, 4) : ""}</td
+                    >{b.balanceUnits > 0 ? formatFloat(b.balanceUnits, 4) : ""}</td
                   >
                   <td class="has-text-right"
-                    >{!isZero(b.market_amount) ? formatCurrency(b.market_amount) : ""}</td
+                    >{!isZero(b.marketAmount) ? formatCurrency(b.marketAmount) : ""}</td
                   >
                   <td class="{changeClass} has-text-right"
-                    >{!isZero(b.investment_amount) && !isZero(gain) ? formatCurrency(gain) : ""}</td
+                    >{!isZero(b.investmentAmount) && !isZero(gain) ? formatCurrency(gain) : ""}</td
                   >
                   <td class="{changeClass} has-text-right"
                     >{!isZero(b.xirr) ? formatFloat(b.xirr) : ""}</td
+                  >
+                  <td class="{changeClass} has-text-right"
+                    >{!isZero(b.absoluteReturn) ? formatPercentage(b.absoluteReturn, 2) : ""}</td
                   >
                 </tr>
               {/each}

@@ -43,9 +43,9 @@
                     on:click={(e) => onclick(e)}
                   >
                     <td>
-                      <span class="icon">
+                      <span class="icon has-text-link">
                         <i
-                          class="fas {active ? 'fa-chevron-down' : 'fa-chevron-right'}"
+                          class="fas {active ? 'fa-chevron-up' : 'fa-chevron-down'}"
                           aria-hidden="true"
                         />
                       </span>

@@ -15,8 +15,7 @@
     formatCurrency,
     formatFloat,
     type Transaction,
-    type Budget,
-    formatPercentage
+    type Budget
   } from "$lib/utils";
   import _ from "lodash";
   import { onMount } from "svelte";
@@ -171,12 +170,7 @@
                           value={formatCurrency(networth.gainAmount)}
                         />
 
-                        <LevelItem
-                          narrow
-                          title="XIRR"
-                          value={formatFloat(xirr)}
-                          subtitle="{formatPercentage(networth.absoluteReturn, 2)} absolute return"
-                        />
+                        <LevelItem narrow title="XIRR" value={formatFloat(xirr)} />
                       </nav>
                     {/if}
                   </div>

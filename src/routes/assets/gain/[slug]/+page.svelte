@@ -9,7 +9,9 @@
     formatFloat,
     type AccountGain,
     type Networth,
-    type PortfolioAggregate
+    type PortfolioAggregate,
+    type AssetBreakdown,
+    formatPercentage
   } from "$lib/utils";
   import _ from "lodash";
   import { onMount, onDestroy } from "svelte";
@@ -33,6 +35,7 @@
   export let data: PageData;
   let gain: AccountGain;
   let overview: Networth;
+  let assetBreakdown: AssetBreakdown;
 
   let destroyCallback = () => {};
   let postings: Posting[] = [];
@@ -49,6 +52,7 @@
   onMount(async () => {
     ({
       gain_timeline_breakdown: gain,
+      asset_breakdown: assetBreakdown,
       portfolio_allocation: { name_and_security_type, security_type, rating, industry, commodities }
     } = await ajax("/api/gain/:name", null, data));
 
@@ -110,7 +114,7 @@
           {#if overview}
             <div class="column is-full">
               <div>
-                <nav class="level">
+                <nav class="level grid-2">
                   <LevelItem
                     narrow
                     title="Balance"
@@ -128,7 +132,7 @@
             </div>
             <div class="column is-full">
               <div>
-                <nav class="level">
+                <nav class="level grid-2">
                   <LevelItem
                     narrow
                     title="Gain / Loss"
@@ -136,7 +140,12 @@
                     value={formatCurrency(overview.gainAmount)}
                   />
 
-                  <LevelItem narrow title="XIRR" value={formatFloat(gain.xirr)} />
+                  <LevelItem
+                    narrow
+                    title="XIRR"
+                    value={formatFloat(gain.xirr)}
+                    subtitle="{formatPercentage(assetBreakdown.absoluteReturn, 2)} absolute return"
+                  />
                 </nav>
               </div>
             </div>

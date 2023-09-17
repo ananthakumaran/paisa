@@ -3,15 +3,14 @@ package cmd
 import (
 	"strings"
 
-	"github.com/ananthakumaran/paisa/internal/config"
 	"github.com/ananthakumaran/paisa/internal/model"
 	"github.com/ananthakumaran/paisa/internal/model/mutualfund/scheme"
 	"github.com/ananthakumaran/paisa/internal/scraper/mutualfund"
+	"github.com/ananthakumaran/paisa/internal/utils"
 	"github.com/logrusorgru/aurora"
 	"github.com/manifoldco/promptui"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
-	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
 
@@ -21,7 +20,7 @@ var mutualfundCmd = &cobra.Command{
 	Use:   "mutualfund",
 	Short: "Search mutual fund",
 	Run: func(cmd *cobra.Command, args []string) {
-		db, err := gorm.Open(sqlite.Open(config.GetConfig().DBPath), &gorm.Config{})
+		db, err := utils.OpenDB()
 		if err != nil {
 			log.Fatal(err)
 		}

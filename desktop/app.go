@@ -6,10 +6,10 @@ import (
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 	"gorm.io/gorm"
 
-	"github.com/ananthakumaran/paisa/internal/config"
+	"github.com/ananthakumaran/paisa/cmd"
 	"github.com/ananthakumaran/paisa/internal/model"
+	"github.com/ananthakumaran/paisa/internal/utils"
 	log "github.com/sirupsen/logrus"
-	"gorm.io/driver/sqlite"
 )
 
 // App struct
@@ -26,9 +26,11 @@ func NewApp() *App {
 // startup is called when the app starts. The context is saved
 // so we can call the runtime methods
 func (a *App) startup(ctx context.Context) {
+	a.ctx = ctx
+	cmd.InitConfig()
 	runtime.WindowMaximise(ctx)
 
-	db, err := gorm.Open(sqlite.Open(config.GetConfig().DBPath), &gorm.Config{})
+	db, err := utils.OpenDB()
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -36,5 +38,4 @@ func (a *App) startup(ctx context.Context) {
 	model.AutoMigrate(db)
 
 	a.db = *db
-	a.ctx = ctx
 }

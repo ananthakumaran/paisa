@@ -10,9 +10,12 @@ import (
 	"github.com/ananthakumaran/paisa/internal/config"
 	"github.com/ananthakumaran/paisa/internal/model/posting"
 	"github.com/google/btree"
+	"github.com/onrik/gorm-logrus"
 	"github.com/samber/lo"
 	"github.com/shopspring/decimal"
 	"golang.org/x/exp/constraints"
+	"gorm.io/driver/sqlite"
+	"gorm.io/gorm"
 )
 
 func BTreeDescendFirstLessOrEqual[I btree.Item](tree *btree.BTree, item I) I {
@@ -185,4 +188,9 @@ func UnQuote(str string) string {
 		return str[1 : len(str)-1]
 	}
 	return str
+}
+
+func OpenDB() (*gorm.DB, error) {
+	db, err := gorm.Open(sqlite.Open(config.GetConfig().DBPath), &gorm.Config{Logger: gorm_logrus.New()})
+	return db, err
 }

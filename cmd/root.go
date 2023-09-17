@@ -37,7 +37,24 @@ func init() {
 }
 
 func Initialize() {
-	formatter := log.TextFormatter{DisableTimestamp: true, ForceColors: true}
+	InitLogger(false, nil)
+	currentCommand, _, _ := rootCmd.Find(os.Args[1:])
+
+	if !lo.Contains([]string{"serve", "update"}, currentCommand.Name()) {
+		return
+	}
+
+	InitConfig()
+
+}
+
+func InitLogger(desktop bool, hook log.Hook) {
+	formatter := log.TextFormatter{
+		DisableTimestamp: true,
+		ForceColors:      !desktop,
+		DisableColors:    desktop,
+		PadLevelText:     true,
+	}
 	if os.Getenv("PAISA_DEBUG") == "true" {
 		log.SetReportCaller(true)
 		log.SetLevel(log.DebugLevel)
@@ -48,16 +65,29 @@ func Initialize() {
 		}
 	}
 
-	log.SetFormatter(&formatter)
-
-	currentCommand, _, _ := rootCmd.Find(os.Args[1:])
-
-	if !lo.Contains([]string{"serve", "update"}, currentCommand.Name()) {
-		return
+	if desktop && os.Getenv("PAISA_DEBUG") != "true" {
+		log.SetReportCaller(true)
 	}
 
-	InitConfig()
+	if desktop {
+		cacheDir, err := os.UserCacheDir()
+		if err == nil {
+			p := filepath.Join(cacheDir, "paisa", "paisa.log")
+			err = os.MkdirAll(filepath.Dir(p), 0750)
+			if err == nil {
+				file, err := os.OpenFile(p, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0640)
+				if err == nil {
+					log.SetOutput(file)
+				}
+			}
+		}
+	}
 
+	log.SetFormatter(&formatter)
+
+	if hook != nil {
+		log.AddHook(hook)
+	}
 }
 
 func InitConfig() {

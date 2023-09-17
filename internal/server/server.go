@@ -21,7 +21,8 @@ import (
 func Build(db *gorm.DB) *gin.Engine {
 	gin.SetMode(gin.ReleaseMode)
 
-	router := gin.Default()
+	router := gin.New()
+	router.Use(Logger(log.StandardLogger()), gin.Recovery())
 
 	router.GET("/_app/*filepath", func(c *gin.Context) {
 		c.FileFromFS("/static"+c.Request.URL.Path, http.FS(web.Static))

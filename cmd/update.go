@@ -1,12 +1,10 @@
 package cmd
 
 import (
-	"github.com/ananthakumaran/paisa/internal/config"
 	"github.com/ananthakumaran/paisa/internal/model"
+	"github.com/ananthakumaran/paisa/internal/utils"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
-	"gorm.io/driver/sqlite"
-	"gorm.io/gorm"
 )
 
 var updateJournal bool
@@ -17,7 +15,7 @@ var updateCmd = &cobra.Command{
 	Use:   "update",
 	Short: "Sync journal data",
 	Run: func(cmd *cobra.Command, args []string) {
-		db, err := gorm.Open(sqlite.Open(config.GetConfig().DBPath), &gorm.Config{})
+		db, err := utils.OpenDB()
 		if err != nil {
 			log.Fatal(err)
 		}

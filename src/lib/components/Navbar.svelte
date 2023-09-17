@@ -19,7 +19,7 @@
   import BoxedTabs from "./BoxedTabs.svelte";
   import MonthPicker from "./MonthPicker.svelte";
   import Logo from "./Logo.svelte";
-  import MaxDepthSelector from "./MaxDepthSelector.svelte";
+  import InputRange from "./InputRange.svelte";
   export let isBurger: boolean = null;
 
   onMount(async () => {
@@ -286,13 +286,13 @@
           </button>
         </div>
         <div class="dropdown-menu" id="dropdown-menu4" role="menu">
-          <div class="dropdown-content px-3 py-2">
-            <MaxDepthSelector
+          <div class="dropdown-content px-2 py-2">
+            <InputRange
               label="Expenses"
               bind:value={$cashflowExpenseDepth}
               allowed={$cashflowExpenseDepthAllowed}
             />
-            <MaxDepthSelector
+            <InputRange
               label="Income"
               bind:value={$cashflowIncomeDepth}
               allowed={$cashflowIncomeDepthAllowed}

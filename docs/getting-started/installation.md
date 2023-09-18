@@ -1,5 +1,36 @@
 # Installation
 
+Paisa is available in two formats: a Desktop Application and a CLI (Command Line Interface).
+
+## Desktop Application
+
+=== "Mac"
+
+    * Download the prebuilt [binary](https://github.com/ananthakumaran/paisa/releases/latest) named `paisa-app-macos-amd64.dmg`
+    * Open the dmg file and drag the Paisa app into Application folder
+    * Since the app is not signed[^1], Mac will show a warning when
+    you try to open the app. You can check the
+    [support](https://support.apple.com/en-us/HT202491) page for more
+    details. If you don't get any option to open the app, go to the
+    Application folder, right click on the icon and select
+    open. Usually, this should present you with an option to open.
+    * Paisa will store all your journals, configuration files, and other
+    related files in a folder named `paisa` which will be located in your
+    `Documents` folder. When you open the app on your Mac for the
+    first time, a permission dialog will appear. Click Allow, then close and reopen the app.
+
+=== "Windows"
+
+    * Download the prebuilt [binary](https://github.com/ananthakumaran/paisa/releases/latest) named `paisa-app-windows-amd64.exe`
+    * Since the app is not signed[^1], Windows will show multiple
+    warnings, You might have to click `Keep anyway`, `More info`, `Run
+    anyway` etc.
+    * Paisa will store all your journals, configuration files, and other
+    related files in a folder named `paisa` which will be located in your
+    `Documents` folder.
+
+## CLI
+
 === "Linux"
 
     * Download the prebuilt [binary](https://github.com/ananthakumaran/paisa/releases/latest) named `paisa-cli-linux-amd64`
@@ -28,7 +59,7 @@
 === "Windows"
 
     * Download the prebuilt [binary](https://github.com/ananthakumaran/paisa/releases/latest) named `paisa-cli-windows-amd64.exe`
-    * Since the binary is not signed with a certificate, you might get
+    * Since the binary is not signed[^1] with a certificate, you might get
     a warning from Windows. You would have to click `keep anyway`.
     * Run the following command in a Windows PowerShell. Make sure
     you are in the correct folder. You should see something like `PS C:\Users\yourname>`
@@ -48,7 +79,7 @@
     it's not already installed on your system. If you prefer to install the
     ledger yourself, follow the installation instructions on [ledger](https://www.ledger-cli.org/download.html) site.
 
-## Quick Start
+## CLI Quick Start
 
 Paisa will store all your journals, configuration files, and other
 related files in a folder named `paisa` which will be located in your
@@ -73,3 +104,10 @@ related files in a folder named `paisa` which will be located in your
     ```
 
 Go to [http://localhost:7500](http://localhost:7500). Read the [tutorial](./tutorial.md) to learn more.
+
+[^1]: I offer Paisa as a free app, and I don't generate any revenue
+      from it. Code signing would require me to pay $99 for Mac and
+      approximately $300 for Windows each and every year to get the
+      necessary certificates. I can't justify spending that much for
+      an app that doesn't generate any income. Unfortunately, as a
+      result, you would have to jump through hoops to get it working.

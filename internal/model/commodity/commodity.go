@@ -15,7 +15,7 @@ func FindByName(name string) config.Commodity {
 }
 
 func FindByCode(name string) config.Commodity {
-	c, _ := lo.Find(All(), func(c config.Commodity) bool { return c.Code == name })
+	c, _ := lo.Find(All(), func(c config.Commodity) bool { return c.Price.Code == name })
 	return c
 }
 

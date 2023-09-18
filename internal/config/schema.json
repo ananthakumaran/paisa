@@ -75,6 +75,7 @@
       ],
       "items": {
         "type": "object",
+        "ui:header": "code",
         "properties": {
           "code": {
             "type": "string",
@@ -108,6 +109,7 @@
       "default": [{ "name": "Debt", "target": 20, "accounts": ["Assets:Debt:*"] }],
       "items": {
         "type": "object",
+        "ui:header": "name",
         "properties": {
           "name": {
             "type": "string"
@@ -134,10 +136,15 @@
     "commodities": {
       "type": "array",
       "default": [
-        { "name": "AAPL", "type": "stock", "code": "AAPL", "tax_category": "unlisted_equity" }
+        {
+          "name": "AAPL",
+          "price": { "provider": "com-yahoo", "code": "AAPL" },
+          "tax_category": "unlisted_equity"
+        }
       ],
       "items": {
         "type": "object",
+        "ui:header": "name",
         "properties": {
           "name": {
             "type": "string",
@@ -147,9 +154,21 @@
             "type": "string",
             "enum": ["mutualfund", "stock", "nps", "unknown"]
           },
-          "code": {
-            "type": ["string", "integer"]
+          "price": {
+            "type": "object",
+            "ui:widget": "price",
+            "properties": {
+              "provider": {
+                "type": "string",
+                "enum": ["in-mfapi", "com-yahoo", "com-purifiedbytes-nps"]
+              },
+              "code": {
+                "type": ["string", "integer"]
+              }
+            },
+            "required": ["provider", "code"]
           },
+
           "harvest": {
             "type": "integer"
           },
@@ -158,7 +177,7 @@
             "enum": ["", "debt", "equity", "equity65", "equity35", "unlisted_equity"]
           }
         },
-        "required": ["name", "type", "code"],
+        "required": ["name", "type", "price"],
         "additionalProperties": false
       }
     }

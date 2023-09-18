@@ -37,10 +37,15 @@ const (
 	Unknown    CommodityType = "unknown"
 )
 
+type Price struct {
+	Provider string `json:"provider" yaml:"provider"`
+	Code     string `json:"code" yaml:"code"`
+}
+
 type Commodity struct {
 	Name        string          `json:"name" yaml:"name"`
 	Type        CommodityType   `json:"type" yaml:"type"`
-	Code        string          `json:"code" yaml:"code"`
+	Price       Price           `json:"price" yaml:"price"`
 	Harvest     int             `json:"harvest" yaml:"harvest"`
 	TaxCategory TaxCategoryType `json:"tax_category" yaml:"tax_category"`
 }

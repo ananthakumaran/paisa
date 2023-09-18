@@ -9,7 +9,7 @@ directory. It can also be set via flag `--config` or env variable
 # config file. The main journal file can refer other files using
 # `include` as long as all the files are in the same or sub directory
 # REQUIRED
-journal_path: /home/john/finance/personal.ledger
+journal_path: /home/john/finance/main.ledger
 
 # Path to your database file. It can be absolute or relative to the
 # config file. The database file will be created if it does not exist.

@@ -56,7 +56,7 @@ theme:
     - search.highlight
 
 markdown_extensions:
-  - md_in_html
+  - footnotes
   - pymdownx.tabbed:
       alternate_style: true
   - pymdownx.highlight:

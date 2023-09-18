@@ -1,6 +1,8 @@
 package scheme
 
 import (
+	"github.com/ananthakumaran/paisa/internal/model/price"
+	"github.com/samber/lo"
 	log "github.com/sirupsen/logrus"
 	"gorm.io/gorm"
 )
@@ -42,23 +44,18 @@ func UpsertAll(db *gorm.DB, schemes []*Scheme) {
 	}
 }
 
-func GetAMCs(db *gorm.DB) []string {
+func GetAMCCompletions(db *gorm.DB) []price.AutoCompleteItem {
 	var amcs []string
 	db.Model(&Scheme{}).Distinct().Pluck("AMC", &amcs)
-	return amcs
+	return lo.Map(amcs, func(amc string, _ int) price.AutoCompleteItem {
+		return price.AutoCompleteItem{Label: amc, ID: amc}
+	})
 }
 
-func GetNAVNames(db *gorm.DB, amc string) []string {
-	var navNames []string
-	db.Model(&Scheme{}).Where("amc = ? and type = 'Open Ended'", amc).Pluck("NAVName", &navNames)
-	return navNames
-}
-
-func FindScheme(db *gorm.DB, amc string, NAVName string) Scheme {
-	var scheme Scheme
-	result := db.Where("amc = ? and nav_name = ?", amc, NAVName).First(&scheme)
-	if result.Error != nil {
-		log.Fatal(result.Error)
-	}
-	return scheme
+func GetNAVNameCompletions(db *gorm.DB, amc string) []price.AutoCompleteItem {
+	var schemes []Scheme
+	db.Model(&Scheme{}).Where("amc = ? and type = 'Open Ended'", amc).Find(&schemes)
+	return lo.Map(schemes, func(scheme Scheme, _ int) price.AutoCompleteItem {
+		return price.AutoCompleteItem{Label: scheme.NAVName, ID: scheme.Code}
+	})
 }

@@ -2,9 +2,9 @@
 
 [![Matrix](https://img.shields.io/matrix/paisa%3Amatrix.org?logo=matrix)](https://matrix.to/#/#paisa:matrix.org)
 
-**Paisa** is a command line tool and Web UI to visualize personal
-finance. It builds on top of the [ledger](https://www.ledger-cli.org/) double entry accounting
-tool. Checkout [documentation](https://paisa.fyi) to get started.
+**Paisa** is a Personal finance manager. It builds on
+top of the [ledger](https://www.ledger-cli.org/) double entry accounting tool. Checkout
+[documentation](https://paisa.fyi) to get started.
 
 # Demo
 

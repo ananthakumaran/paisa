@@ -43,7 +43,7 @@ install:
 
 fixture/main.transactions.json:
 	cd /tmp && paisa init
-	cp fixture/main.ledger /tmp/personal.ledger
+	cp fixture/main.ledger /tmp/main.ledger
 	cd /tmp && paisa update --journal && paisa serve -p 6500 &
 	sleep 1
 	curl http://localhost:6500/api/transaction | jq .transactions > fixture/main.transactions.json

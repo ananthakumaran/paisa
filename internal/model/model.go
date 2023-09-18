@@ -55,7 +55,7 @@ func SyncCommodities(db *gorm.DB) {
 	for _, commodity := range commodities {
 		name := commodity.Name
 		log.Info("Fetching commodity ", aurora.Bold(name))
-		code := commodity.Code
+		code := commodity.Price.Code
 		var prices []*price.Price
 		var err error
 
@@ -93,12 +93,12 @@ func SyncPortfolios(db *gorm.DB) {
 	for _, commodity := range commodities {
 		name := commodity.Name
 		log.Info("Fetching portfolio for ", aurora.Bold(name))
-		portfolios, err := mutualfund.GetPortfolio(commodity.Code, commodity.Name)
+		portfolios, err := mutualfund.GetPortfolio(commodity.Price.Code, commodity.Name)
 
 		if err != nil {
 			log.Fatal(err)
 		}
 
-		portfolio.UpsertAll(db, commodity.Type, commodity.Code, portfolios)
+		portfolio.UpsertAll(db, commodity.Type, commodity.Price.Code, portfolios)
 	}
 }

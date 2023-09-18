@@ -43,7 +43,7 @@ journal_path: '%s'
 db_path: '%s'
 `
 	log.Info("Generating config file: ", configFilePath)
-	journalFilePath := filepath.Join(cwd, "personal.ledger")
+	journalFilePath := filepath.Join(cwd, "main.ledger")
 	dbFilePath := filepath.Join(cwd, "paisa.db")
 	err := os.WriteFile(configFilePath, []byte(fmt.Sprintf(config, journalFilePath, dbFilePath)), 0644)
 	if err != nil {
@@ -104,31 +104,43 @@ schedule_al:
 commodities:
   - name: NIFTY
     type: mutualfund
-    code: 120716
+    price:
+      provider: in-mfapi
+      code: 120716
     harvest: 365
     tax_category: equity65
   - name: PPFAS
     type: mutualfund
-    code: 122639
+    price:
+      provider: in-mfapi
+      code: 122639
     harvest: 365
     tax_category: equity65
   - name: ABCBF
     type: mutualfund
-    code: 119533
+    price:
+      provider: in-mfapi
+      code: 119533
     harvest: 1095
     tax_category: debt
   - name: NPS_HDFC_E
     type: nps
-    code: SM008001
+    price:
+      provider: com-purifiedbytes-nps
+      code: SM008001
   - name: NPS_HDFC_C
     type: nps
-    code: SM008002
+    price:
+      provider: com-purifiedbytes-nps
+      code: SM008002
   - name: NPS_HDFC_G
     type: nps
-    code: SM008003
+    price:
+      provider: com-purifiedbytes-nps
+      code: SM008003
 `
 	log.Info("Generating config file: ", configFilePath)
-	journalFilePath := filepath.Join(cwd, "personal.ledger")
+	journalFilePath := filepath.Join(cwd, "main.ledger")
 	dbFilePath := filepath.Join(cwd, "paisa.db")
 	err := os.WriteFile(configFilePath, []byte(fmt.Sprintf(config, journalFilePath, dbFilePath)), 0644)
 	if err != nil {
@@ -362,7 +374,7 @@ func emitInvestment(state *GeneratorState, start time.Time) {
 }
 
 func generateJournalFile(cwd string) {
-	journalFilePath := filepath.Join(cwd, "personal.ledger")
+	journalFilePath := filepath.Join(cwd, "main.ledger")
 	log.Info("Generating journal file: ", journalFilePath)
 	ledgerFile, err := os.OpenFile(journalFilePath, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0644)
 	if err != nil {

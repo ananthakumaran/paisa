@@ -6,15 +6,15 @@ tracked as a commodity. Few example transactions can be found below.
 
 ```ledger
 2019/02/18 NPS
-    Assets:Equity:NPS:SBI:E/*(1)!*/       /*(2)!*/15.9378 NPS_SBI_E/*(3)!*/ @ /*(4)!*/23.5289 INR/*(5)!*/
+    Assets:Equity:NPS:SBI:E/*(1)!*/  /*(2)!*/15.9378 NPS_SBI_E/*(3)!*/ @ /*(4)!*/23.5289 INR/*(5)!*/
     Assets:Checking
 
 2019/02/21 NPS
-    Assets:Equity:NPS:SBI:E           1557.2175 NPS_SBI_E @ 23.8406 INR
+    Assets:Equity:NPS:SBI:E      1557.2175 NPS_SBI_E @ 23.8406 INR
     Assets:Checking
 
 2020/06/25 Gold
-    Assets:Gold                       40 GOLD @ 4650 INR
+    Assets:Gold                         40 GOLD @ 4650 INR
     Assets:Checking
 ```
 
@@ -31,7 +31,18 @@ when you enter the second NPS transaction on `2019/02/21`, the
 valuation of your existing holdings will be adjusted based on the new
 purchase price.
 
-## Mutual Fund
+To link a commodity with a commodity price provider, Go to `Config`
+page and expand the `Commodities` section. You can click the
+:fontawesome-solid-circle-plus: icon to add a new one. Edit the name
+to commodity name. Click the :fontawesome-solid-pen-to-square: icon
+near Price section and select the price provider details. Once done,
+save the config and click the `Update Prices` from the top right hand
+side menu. If you had done everything correctly, you would see the
+latest price of the commodity under `Assets` :material-chevron-right:
+`Balance`. You can also view the full price history on `Ledger`
+:material-chevron-right: `Price`
+
+## Mutual Fund <sub>:flag_in:</sub>
 
 To automatically track the latest value of your mutual funds holdings,
 you need to link the commodity and the fund scheme code.
@@ -40,30 +51,20 @@ you need to link the commodity and the fund scheme code.
 commodities:
   - name: NIFTY # (1)!
     type: mutualfund # (2)!
-    code: 120716 # (3)!
-  - name: NIFTY_JR
-    type: mutualfund
-    code: 120684
+    price:
+        provider: in-mfapi # (3)!
+        code: 120716 # (4)!
 ```
 
 1. commodity name
 1. commodity type
+1. price provider name
 1. mutual fund scheme code
 
-The example config above links two commodities with their respective
-mutual fund scheme code. The scheme code can be found using the
-*search* command.
+The example config above links nifty commodity with the respective
+mutual fund scheme code.
 
-```console
-# paisa search mutualfund
-INFO Using config file: /home/john/finance/paisa.yaml
-INFO Using cached results; pass '-u' to update the cache
-✔ ICICI Prudential Asset Management Company Limited
-✔ ICICI Prudential Nifty Next 50 Index Fund - Direct Plan -  Growth
-INFO Mutual Fund Scheme Code: 120684
-```
-
-## NPS
+## NPS <sub>:flag_in:</sub>
 
 To automatically track the latest value of your nps funds holdings,
 you need to link the commodity and the fund scheme code.
@@ -72,27 +73,20 @@ you need to link the commodity and the fund scheme code.
 commodities:
   - name: NPS_HDFC_E # (1)!
     type: nps # (2)!
-    code: SM008002 # (3)!
+    price:
+        provider: com-purifiedbytes-nps # (3)!
+        code: SM008002 # (4)!
 ```
 
 1. commodity name
 1. type
+1. price provider name
 1. nps fund scheme code
 
 The example config above links NPS fund commodity with their
-respective NPS fund scheme code. The scheme code can be found using
-the *search* command.
+respective NPS fund scheme code.
 
-```console
-# paisa search nps
-INFO Using config file: /home/john/finance/paisa.yaml
-INFO Using cached results; pass '-u' to update the cache
-✔ HDFC Pension Management Company Limited
-✔ HDFC PENSION MANAGEMENT COMPANY LIMITED SCHEME C - TIER I
-INFO NPS Fund Scheme Code: SM008002
-```
-
-## Stock
+## Stock <sub>:globe_with_meridians:</sub>
 
 To automatically track the latest value of your stock holdings,
 you need to link the commodity and the stock ticker name.
@@ -101,12 +95,15 @@ you need to link the commodity and the stock ticker name.
 commodities:
   - name: APPLE # (1)!
     type: stock # (2)!
-    code: AAPL # (3)!
+    price:
+        provider: com-yahoo # (3)!
+        code: AAPL # (4)!
 ```
 
 1. commodity name
-2. type
-3. stock ticker code
+1. type
+1. price provider name
+1. stock ticker code
 
 Stock prices are fetched from yahoo finance website. The ticker code
 should match the code used in yahoo.
@@ -140,18 +137,20 @@ default\_currency is available, paisa would work without issue
 P 2023/05/01 00:00:00 USD 81.75 INR
 
 2023/05/01 Freelance Income
-    ;; conversion rate will be picked up from the price directive above
-    Income:Freelance                            -100 USD
+    ;; conversion rate will be picked up
+    ;; from the price directive above
+    Income:Freelance      -100 USD
     Assets:Checking
 
 2023/06/01 Freelance Income
     ;; conversion rate is specified inline
-    Income:Freelance                            -200 USD @ 82.75 INR
+    Income:Freelance      -200 USD @ 82.75 INR
     Assets:Checking
 
 2023/07/01 Netflix
-    ;; if not available for a date, will use previous known conversion rate (82.75)
-    Expenses:Entertainment                        10 USD
+    ;; if not available for a date,
+    ;; will use previous known conversion rate (82.75)
+    Expenses:Entertainment  10 USD
     Assets:Checking
 ```
 
@@ -161,4 +160,4 @@ P 2023/05/01 00:00:00 USD 81.75 INR
 *update* command is used. Make sure to run `paisa update` command
 after you make any changes to your journal file or you want to fetch
 the latest value of the commodities. The update can be performed from
-the UI as well via the dropdown in the top right corner.
+the UI as well via the dropdown in the top right hand side corner.

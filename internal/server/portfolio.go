@@ -142,7 +142,7 @@ func GetAccountPortfolioAllocation(db *gorm.DB, account string) PortfolioAllocat
 
 func computePortfolioAggregate(db *gorm.DB, commodityName string, total decimal.Decimal) []CommodityBreakdown {
 	commodity := commodity.FindByName(commodityName)
-	portfolios := portfolio.GetPortfolios(db, commodity.Code)
+	portfolios := portfolio.GetPortfolios(db, commodity.Price.Code)
 	return lo.Map(portfolios, func(p portfolio.Portfolio, _ int) CommodityBreakdown {
 		amount := (total.Mul(p.Percentage)).Div(decimal.NewFromInt(100))
 		return CommodityBreakdown{

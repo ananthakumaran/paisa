@@ -1,6 +1,8 @@
 package scheme
 
 import (
+	"github.com/ananthakumaran/paisa/internal/model/price"
+	"github.com/samber/lo"
 	log "github.com/sirupsen/logrus"
 	"gorm.io/gorm"
 )
@@ -43,23 +45,18 @@ func UpsertAll(db *gorm.DB, schemes []*Scheme) {
 	}
 }
 
-func GetPFMs(db *gorm.DB) []string {
+func GetPFMCompletions(db *gorm.DB) []price.AutoCompleteItem {
 	var pfms []string
 	db.Model(&Scheme{}).Distinct().Pluck("PFMName", &pfms)
-	return pfms
+	return lo.Map(pfms, func(pfm string, _ int) price.AutoCompleteItem {
+		return price.AutoCompleteItem{Label: pfm, ID: pfm}
+	})
 }
 
-func GetSchemeNames(db *gorm.DB, pfm string) []string {
-	var schemeNames []string
-	db.Model(&Scheme{}).Where("pfm_name = ?", pfm).Pluck("SchemeName", &schemeNames)
-	return schemeNames
-}
-
-func FindScheme(db *gorm.DB, pfm string, schemeName string) Scheme {
-	var scheme Scheme
-	result := db.Where("pfm_name = ? and scheme_name = ?", pfm, schemeName).First(&scheme)
-	if result.Error != nil {
-		log.Fatal(result.Error)
-	}
-	return scheme
+func GetSchemeNameCompletions(db *gorm.DB, pfm string) []price.AutoCompleteItem {
+	var schemes []Scheme
+	db.Model(&Scheme{}).Where("pfm_name = ?", pfm).Find(&schemes)
+	return lo.Map(schemes, func(scheme Scheme, _ int) price.AutoCompleteItem {
+		return price.AutoCompleteItem{Label: scheme.SchemeName, ID: scheme.SchemeID}
+	})
 }

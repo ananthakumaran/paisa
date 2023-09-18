@@ -4,7 +4,7 @@ paisa
 web/static/dist*
 node_modules
 example.ledger
-personal.ledger
+main.ledger
 Dockerfile
 fly.toml
 .dockerignore

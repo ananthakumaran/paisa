@@ -20,7 +20,7 @@ describe("bulk_editor", () => {
           const after = fs.readFileSync(`fixture/bulk_edit/${dir}/${name}.ledger`).toString();
           const ledgerFile: LedgerFile = {
             type: "file",
-            name: "personal.ledger",
+            name: "main.ledger",
             content: before.toString(),
             versions: []
           };

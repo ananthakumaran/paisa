@@ -116,6 +116,24 @@ func Build(db *gorm.DB) *gin.Engine {
 	router.GET("/api/price", func(c *gin.Context) {
 		c.JSON(200, GetPrices(db))
 	})
+	router.GET("/api/price/providers", func(c *gin.Context) {
+		c.JSON(200, GetPriceProviders(db))
+	})
+
+	router.POST("/api/price/providers/delete/:provider", func(c *gin.Context) {
+		provider := c.Param("provider")
+		c.JSON(200, ClearPriceProviderCache(db, provider))
+	})
+
+	router.POST("/api/price/autocomplete", func(c *gin.Context) {
+		var autoCompleteRequest AutoCompleteRequest
+		if err := c.ShouldBindJSON(&autoCompleteRequest); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+
+		c.JSON(200, GetPriceAutoCompletions(db, autoCompleteRequest))
+	})
 	router.GET("/api/transaction", func(c *gin.Context) {
 		c.JSON(200, GetTransactions(db))
 	})
@@ -233,7 +251,7 @@ func Build(db *gorm.DB) *gin.Engine {
 func Listen(db *gorm.DB, port int) {
 	router := Build(db)
 
-	log.Info("Listening on ", port)
+	log.Infof("Listening on http://localhost:%d", port)
 	err := router.Run(fmt.Sprintf(":%d", port))
 	if err != nil {
 		log.Fatal(err)

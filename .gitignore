@@ -3,7 +3,7 @@ paisa.yaml
 ./paisa
 web/static
 example.ledger
-personal.ledger
+main.ledger
 .DS_Store
 node_modules
 /build

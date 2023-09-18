@@ -17,7 +17,7 @@
         "tag_recurring": "",
         "transaction_begin_line": 13,
         "transaction_end_line": 15,
-        "file_name": "personal.ledger",
+        "file_name": "main.ledger",
         "market_amount": 0
       },
       {
@@ -33,14 +33,14 @@
         "tag_recurring": "",
         "transaction_begin_line": 13,
         "transaction_end_line": 15,
-        "file_name": "personal.ledger",
+        "file_name": "main.ledger",
         "market_amount": 0
       }
     ],
     "tag_recurring": "",
     "beginLine": 13,
     "endLine": 15,
-    "fileName": "personal.ledger"
+    "fileName": "main.ledger"
   },
   {
     "id": "ae8edbd5-7bfc-5520-a2b5-fd1d7668adc4",
@@ -60,7 +60,7 @@
         "tag_recurring": "",
         "transaction_begin_line": 9,
         "transaction_end_line": 11,
-        "file_name": "personal.ledger",
+        "file_name": "main.ledger",
         "market_amount": 0
       },
       {
@@ -76,14 +76,14 @@
         "tag_recurring": "",
         "transaction_begin_line": 9,
         "transaction_end_line": 11,
-        "file_name": "personal.ledger",
+        "file_name": "main.ledger",
         "market_amount": 0
       }
     ],
     "tag_recurring": "",
     "beginLine": 9,
     "endLine": 11,
-    "fileName": "personal.ledger"
+    "fileName": "main.ledger"
   },
   {
     "id": "97f59855-0f29-571c-a529-0fe288597b3b",
@@ -103,7 +103,7 @@
         "tag_recurring": "",
         "transaction_begin_line": 5,
         "transaction_end_line": 7,
-        "file_name": "personal.ledger",
+        "file_name": "main.ledger",
         "market_amount": 0
       },
       {
@@ -119,14 +119,14 @@
         "tag_recurring": "",
         "transaction_begin_line": 5,
         "transaction_end_line": 7,
-        "file_name": "personal.ledger",
+        "file_name": "main.ledger",
         "market_amount": 0
       }
     ],
     "tag_recurring": "",
     "beginLine": 5,
     "endLine": 7,
-    "fileName": "personal.ledger"
+    "fileName": "main.ledger"
   },
   {
     "id": "185550f9-08e0-5df8-9381-21d689f889f6",
@@ -146,7 +146,7 @@
         "tag_recurring": "",
         "transaction_begin_line": 1,
         "transaction_end_line": 3,
-        "file_name": "personal.ledger",
+        "file_name": "main.ledger",
         "market_amount": 0
       },
       {
@@ -162,13 +162,13 @@
         "tag_recurring": "",
         "transaction_begin_line": 1,
         "transaction_end_line": 3,
-        "file_name": "personal.ledger",
+        "file_name": "main.ledger",
         "market_amount": 0
       }
     ],
     "tag_recurring": "",
     "beginLine": 1,
     "endLine": 3,
-    "fileName": "personal.ledger"
+    "fileName": "main.ledger"
   }
 ]

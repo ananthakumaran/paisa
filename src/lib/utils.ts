@@ -5,6 +5,24 @@ import * as d3 from "d3";
 import { loading } from "../store";
 import type { JSONSchema7 } from "json-schema";
 
+export interface AutoCompleteItem {
+  label: string;
+  id: string;
+}
+
+export interface AutoCompleteField {
+  id: string;
+  label: string;
+  help: string;
+  inputType: string;
+}
+
+export interface PriceProvider {
+  code: string;
+  fields: AutoCompleteField[];
+  label: string;
+}
+
 export interface Posting {
   id: string;
   date: dayjs.Dayjs;
@@ -386,7 +404,9 @@ const BACKGROUND = [
   "/api/editor/file/delete_backups",
   "/api/templates",
   "/api/templates/upsert",
-  "/api/templates/delete"
+  "/api/templates/delete",
+  "/api/price/autocomplete",
+  "/api/price/providers/delete/:provider"
 ];
 
 export function ajax(route: "/api/config"): Promise<{ config: UserConfig; schema: JSONSchema7 }>;
@@ -437,6 +457,7 @@ export function ajax(
   portfolio_allocation: PortfolioAllocation;
   asset_breakdown: AssetBreakdown;
 }>;
+
 export function ajax(route: "/api/allocation"): Promise<{
   aggregates: { [key: string]: Aggregate };
   aggregates_timeline: { [key: string]: Aggregate }[];
@@ -514,6 +535,25 @@ export function ajax(
 ): Promise<{ file: LedgerFile }>;
 
 export function ajax(route: "/api/sync", options?: RequestInit): Promise<any>;
+export function ajax(
+  route: "/api/price/providers",
+  options?: RequestInit
+): Promise<{ providers: PriceProvider[] }>;
+
+export function ajax(
+  route: "/api/price/providers/delete/:provider",
+  options?: RequestInit,
+  params?: Record<string, string>
+): Promise<{
+  gain_timeline_breakdown: AccountGain;
+  portfolio_allocation: PortfolioAllocation;
+  asset_breakdown: AssetBreakdown;
+}>;
+
+export function ajax(
+  route: "/api/price/autocomplete",
+  options?: RequestInit
+): Promise<{ completions: AutoCompleteItem[] }>;
 export function ajax(route: "/api/init", options?: RequestInit): Promise<any>;
 
 export function ajax(

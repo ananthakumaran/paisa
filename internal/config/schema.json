@@ -7,11 +7,11 @@
   "properties": {
     "journal_path": {
       "type": "string",
-      "description": "Path to your journal file. It can be absolute or relative to the config file. The main journal file can refer other files using <code>include</code> as long as all the files are in the same or sub directory"
+      "description": "Path to your journal file. It can be absolute or relative to the configuration file. The main journal file can refer other files using <code>include</code> as long as all the files are in the same or sub directory"
     },
     "db_path": {
       "type": "string",
-      "description": "Path to your database file. It can be absolute or relative to the config file. The database file will be created if it does not exist."
+      "description": "Path to your database file. It can be absolute or relative to the configuration file. The database file will be created if it does not exist."
     },
     "ledger_cli": {
       "type": "string",
@@ -34,7 +34,7 @@
       "description": "First month of the financial year. This can be set to 1 to follow January to December."
     },
     "retirement": {
-      "description": "Retirement config",
+      "description": "Retirement configuration",
       "type": "object",
       "properties": {
         "swr": {
@@ -59,13 +59,13 @@
         },
         "yearly_expenses": {
           "type": "integer",
-          "description": "By default, average of last 3 year expenses will be used to calculate your yearly expenses. This can be overriden by setting this config to positive value"
+          "description": "By default, average of last 3 year expenses will be used to calculate your yearly expenses. This can be overriden by setting this configuration to positive value"
         }
       },
       "additionalProperties": false
     },
     "schedule_al": {
-      "description": "Schedule AL config",
+      "description": "Schedule AL configuration",
       "type": "array",
       "default": [
         {

@@ -39,7 +39,12 @@ func GetPriceProviders(db *gorm.DB) gin.H {
 	providers := scraper.GetAllProviders()
 	return gin.H{
 		"providers": lo.Map(providers, func(provider price.PriceProvider, _ int) gin.H {
-			return gin.H{"code": provider.Code(), "label": provider.Label(), "fields": provider.AutoCompleteFields()}
+			return gin.H{
+				"code":        provider.Code(),
+				"label":       provider.Label(),
+				"description": provider.Description(),
+				"fields":      provider.AutoCompleteFields(),
+			}
 		}),
 	}
 

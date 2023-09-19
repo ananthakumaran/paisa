@@ -1,7 +1,7 @@
 # Commodities
 
 There are no restrictions on the type of **commodities** that can be
-used in **paisa**. Anything like gold, mutual fund, NPS, etc can be
+used in Paisa. Anything like gold, mutual fund, NPS, etc can be
 tracked as a commodity. Few example transactions can be found below.
 
 ```ledger
@@ -24,25 +24,25 @@ tracked as a commodity. Few example transactions can be found below.
 4.  Purchase Price per Unit
 5.  Currency
 
-**paisa** comes with inbuilt support for fetching the latest price of
+Paisa comes with inbuilt support for fetching the latest price of
 some commodities like mutual fund and NPS. For others, it will try to
 use the latest purchase price specified in the journal. For example,
 when you enter the second NPS transaction on `2019/02/21`, the
 valuation of your existing holdings will be adjusted based on the new
 purchase price.
 
-To link a commodity with a commodity price provider, Go to `Config`
+To link a commodity with a commodity price provider, Go to `Configuration`
 page and expand the `Commodities` section. You can click the
 :fontawesome-solid-circle-plus: icon to add a new one. Edit the name
 to commodity name. Click the :fontawesome-solid-pen-to-square: icon
 near Price section and select the price provider details. Once done,
-save the config and click the `Update Prices` from the top right hand
+save the configuration and click the `Update Prices` from the top right hand
 side menu. If you had done everything correctly, you would see the
 latest price of the commodity under `Assets` :material-chevron-right:
 `Balance`. You can also view the full price history on `Ledger`
 :material-chevron-right: `Price`
 
-## Mutual Fund <sub>:flag_in:</sub>
+## MF API Mutual Fund <sub>:flag_in:</sub>
 
 To automatically track the latest value of your mutual funds holdings,
 you need to link the commodity and the fund scheme code.
@@ -61,10 +61,10 @@ commodities:
 1. price provider name
 1. mutual fund scheme code
 
-The example config above links nifty commodity with the respective
+The example configuration above links nifty commodity with the respective
 mutual fund scheme code.
 
-## NPS <sub>:flag_in:</sub>
+## Purified Bytes NPS <sub>:flag_in:</sub>
 
 To automatically track the latest value of your nps funds holdings,
 you need to link the commodity and the fund scheme code.
@@ -83,10 +83,10 @@ commodities:
 1. price provider name
 1. nps fund scheme code
 
-The example config above links NPS fund commodity with their
+The example configuration above links NPS fund commodity with their
 respective NPS fund scheme code.
 
-## Stock <sub>:globe_with_meridians:</sub>
+## Yahoo <sub>:globe_with_meridians:</sub>
 
 To automatically track the latest value of your stock holdings,
 you need to link the commodity and the stock ticker name.
@@ -154,10 +154,10 @@ P 2023/05/01 00:00:00 USD 81.75 INR
     Assets:Checking
 ```
 
-## Updates
+## Update
 
-**paisa** fetches the latest price of the commodities only when
-*update* command is used. Make sure to run `paisa update` command
-after you make any changes to your journal file or you want to fetch
-the latest value of the commodities. The update can be performed from
-the UI as well via the dropdown in the top right hand side corner.
+Paisa fetches the latest price of the commodities only when you
+**update** the prices. This can be done via UI using the dropdown in
+the top right hand side corner or via `paisa update` command. Make
+sure to update the prices after you make any changes to your journal
+file or you want to fetch the latest value of the commodities.

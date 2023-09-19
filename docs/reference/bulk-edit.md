@@ -86,7 +86,7 @@ Not all the combinations of property, operator and value would work,
 if in doubt, just try it out, the UI will show you an error if the
 query is not valid.
 
-In fact, in the previous format we saw, the property and operator is
+In fact, in the previous format we saw, if the property and operator is
 not specified and a default set is chosen based on the value type. For
 example, `42` will be treated as `amount = 42`, `Expenses:Utilities`
 will be treated as `account = Expenses:Utilities`,

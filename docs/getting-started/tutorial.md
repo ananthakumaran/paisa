@@ -9,7 +9,7 @@ some time to familiarize the [terms and concepts](https://github.com/ledger/ledg
     Even though the tutorial focuses on Indian users, Paisa is
     capable of handling any currency. You can change the default
     currency, locale and financial year start etc. Check the
-    [config](../reference/config.md) reference for more details.
+    [configuration](../reference/config.md) reference for more details.
 
 
 ## :fontawesome-regular-file-lines: Journal
@@ -132,11 +132,11 @@ NIFTY` is the name of the commodity and we have bought `#!ledger
 148.0865` units at `#!ledger 67.5281 INR` per unit.
 
 Paisa has support for fetching commodity price history from few
-[providers](../reference/commodities.md). Go to `Config` page and expand the `Commodities`
+[providers](../reference/commodities.md). Go to `Configuration` page and expand the `Commodities`
 section. You can click the :fontawesome-solid-circle-plus: icon to
 add a new one. Edit the name to `#!ledger NIFTY`. Click the
 :fontawesome-solid-pen-to-square: icon near Price section and select
-the price provider details. Once done, save the config and click the
+the price provider details. Once done, save the configuration and click the
 `Update Prices` from the top right hand side menu. If you had done
 everything correctly, you would see the latest price of the commodity
 under `Assets` :material-chevron-right: `Balance`
@@ -162,26 +162,26 @@ bot side. If you leave one side, **ledger** will deduct it.
                    0
 ```
 
-## Config
+## Configuration
 
-All the configuration related to paisa is stored in a yaml file name
-`paisa.yaml`. The config can be edited via the web interface. The
+All the configuration related to paisa is stored in a yaml file named
+`paisa.yaml`. The configuration can be edited via the web interface. The
 sequence in which it look for the file is described below
 
 1. `PAISA_CONFIG` environment variable
 1. via --config flag
 1. Current working directory
-1. `paisa/paisa.yaml` folder inside User Documents folder.
+1. `paisa/paisa.yaml` file inside User Documents folder.
 
-If it can't find the config file, it will create a default config file
-`paisa/paisa.yaml` folder inside User Documents folder. The default
-config is tuned for Indians, users from other countries would have to
-change the `default_currency` and `locale`. Check the [config](../reference/config.md)
-reference for details.
+If it can't find the configuration file, it will create a default
+configuration file name `paisa/paisa.yaml` inside User Documents
+folder. The default configuration is tuned for Indians, users from
+other countries would have to change the `default_currency` and
+`locale`. Check the [configuration](../reference/config.md) reference for details.
 
 ## Update
 
-**paisa** fetches the latest price of the commodities only when
+Paisa fetches the latest price of the commodities only when
 *update* command is used. Make sure to run `paisa update` command
 after you make any changes to your journal file or you want to fetch
 the latest value of the commodities. The update can be performed from

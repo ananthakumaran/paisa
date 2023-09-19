@@ -28,7 +28,7 @@ export function renderMonthlyFlow(
     balance: 0
   }
 ) {
-  const MAX_BAR_WIDTH = 40;
+  const MAX_BAR_WIDTH = 20;
   const svg = d3.select(id),
     margin = { top: 50, right: 30, bottom: options.rotate ? 50 : 20, left: 40 },
     width =

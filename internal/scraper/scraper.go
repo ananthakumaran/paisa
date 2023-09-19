@@ -10,9 +10,9 @@ import (
 
 func GetAllProviders() []price.PriceProvider {
 	return []price.PriceProvider{
+		&stock.PriceProvider{},
 		&mutualfund.PriceProvider{},
 		&nps.PriceProvider{},
-		&stock.PriceProvider{},
 	}
 
 }

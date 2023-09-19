@@ -123,7 +123,7 @@
     links.push(tax);
   }
 
-  links.push({ label: "Config", href: "/config", tag: "alpha" });
+  links.push({ label: "Configuration", href: "/config", tag: "alpha" });
 
   let selectedLink: Link = null;
   let selectedSubLink: Link = null;

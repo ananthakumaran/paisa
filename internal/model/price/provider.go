@@ -17,6 +17,7 @@ type AutoCompleteField struct {
 type PriceProvider interface {
 	Code() string
 	Label() string
+	Description() string
 	AutoCompleteFields() []AutoCompleteField
 	AutoComplete(db *gorm.DB, field string, filter map[string]string) []AutoCompleteItem
 	ClearCache(db *gorm.DB)

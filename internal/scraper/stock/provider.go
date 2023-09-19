@@ -16,9 +16,13 @@ func (p *PriceProvider) Label() string {
 	return "Yahoo Finance"
 }
 
+func (p *PriceProvider) Description() string {
+	return "Supports a large set of stocks, ETFs, mutual funds, currencies, bonds, commodities, and cryptocurrencies. The stock price will be automatically converted to your default currency using the yahoo exchange rate."
+}
+
 func (p *PriceProvider) AutoCompleteFields() []price.AutoCompleteField {
 	return []price.AutoCompleteField{
-		{Label: "Ticker", ID: "ticker", Help: "Stock ticker symbol", InputType: "text"},
+		{Label: "Ticker", ID: "ticker", Help: "Stock ticker symbol, can be located on Yahoo's website. For example, AAPL is the ticker symbol for Apple Inc. (AAPL)", InputType: "text"},
 	}
 }
 

@@ -21,6 +21,7 @@ export interface PriceProvider {
   code: string;
   fields: AutoCompleteField[];
   label: string;
+  description: string;
 }
 
 export interface Posting {
@@ -406,7 +407,8 @@ const BACKGROUND = [
   "/api/templates/upsert",
   "/api/templates/delete",
   "/api/price/autocomplete",
-  "/api/price/providers/delete/:provider"
+  "/api/price/providers/delete/:provider",
+  "/api/price/providers"
 ];
 
 export function ajax(route: "/api/config"): Promise<{ config: UserConfig; schema: JSONSchema7 }>;

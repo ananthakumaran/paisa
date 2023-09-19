@@ -30,6 +30,7 @@
       );
     } finally {
       isLoading = false;
+      reset();
     }
   }
 
@@ -84,8 +85,8 @@
   <div style="min-height: 500px;" slot="body">
     {#if selectedProvider}
       <div class="field">
-        <label class="label" for="price-provider">Provider</label>
-        <div class="control" id="price-provider">
+        <label class="label" for="">Provider</label>
+        <div class="control">
           <div class="select">
             <select bind:value={selectedProvider} required on:change={(_e) => reset()}>
               {#each providers as provider}
@@ -93,6 +94,7 @@
               {/each}
             </select>
           </div>
+          <div class="help">{selectedProvider.description}</div>
         </div>
       </div>
       <div class="field">

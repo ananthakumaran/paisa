@@ -4,6 +4,10 @@ Paisa provides ability to convert **CSV**, **TXT**, **XLS**, **XLSX**
 or **PDF** files to Ledger file format. The import page is made of
 three components.
 
+!!! example "Experimental"
+    PDF support is in an experimental stage and may not consistently detect rows accurately.
+
+
 1) File Preview - You can drag and drop files here to preview the
 contents.
 
@@ -43,13 +47,16 @@ helper functions to make it easier to write the template.
 
 #### Template Management
 
-Paisa ships with a few builtin templates. You can also create your
+Paisa ships with a few built-in templates. You can also create your
 own. To create a new template, edit the template and click on the
 `Save As` button.
 
-> The import system is designed to be extensible. If you are unable to
-> create a template suitable for your CSV file, please open an issue
-> with a sample CSV file.
+!!! tip
+    The import system is designed to be extensible and might not be
+    intuitive if you are not accustomed to coding. If you are unable
+    to create a template suitable for your file, please open an issue
+    with a sample file, and we will provide assistance, possibly
+    adding it to the built-in templates.
 
 #### Template Data
 

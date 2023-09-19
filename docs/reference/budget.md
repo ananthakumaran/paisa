@@ -8,7 +8,7 @@ Let's add a salary transaction to the ledger:
 
 ```ledger
 2023/08/01 Salary
-    Income:Salary:Acme                         -50,000 INR
+    Income:Salary:Acme         -50,000 INR
     Assets:Checking
 ```
 
@@ -16,12 +16,12 @@ Now you have 50k in your checking account. Let's budget this amount:
 
 ```ledger
 ~ Monthly in 2023/08/01
-    Expenses:Rent                              15,000 INR
-    Expenses:Food                              10,000 INR
-    Expenses:Clothing                           5,000 INR
-    Expenses:Entertainment                      5,000 INR
-    Expenses:Transport                          5,000 INR
-    Expenses:Personal                           5,000 INR
+    Expenses:Rent               15,000 INR
+    Expenses:Food               10,000 INR
+    Expenses:Clothing            5,000 INR
+    Expenses:Entertainment       5,000 INR
+    Expenses:Transport           5,000 INR
+    Expenses:Personal            5,000 INR
     Assets:Checking
 ```
 
@@ -46,31 +46,31 @@ Let's add some real transactions.
 
 ```ledger
 2023/08/02 Rent
-    Expenses:Rent                             15,000 INR
+    Expenses:Rent               15,000 INR
     Assets:Checking
 
 2023/08/03 Transport
-    Expenses:Transport                         1,000 INR
+    Expenses:Transport           1,000 INR
     Assets:Checking
 
 2023/08/03 Food
-    Expenses:Food                              8,500 INR
+    Expenses:Food                8,500 INR
     Assets:Checking
 
 2023/08/05 Transport
-    Expenses:Transport                         2,000 INR
+    Expenses:Transport           2,000 INR
     Assets:Checking
 
 2023/08/07 Transport
-    Expenses:Transport                         3,000 INR
+    Expenses:Transport           3,000 INR
     Assets:Checking
 
 2023/08/10 Personal
-    Expenses:Personal                          4,000 INR
+    Expenses:Personal            4,000 INR
     Assets:Checking
 
 2023/08/15 Insurance
-    Expenses:Insurance                         10000 INR
+    Expenses:Insurance           10000 INR
     Assets:Checking
 ```
 
@@ -85,12 +85,12 @@ and clothing budget to 0
 
 ```ledger hl_lines="4-5"
 ~ Monthly in 2023/08/01
-    Expenses:Rent                             15,000 INR
-    Expenses:Food                             10,000 INR
-    Expenses:Clothing                              0 INR
-    Expenses:Entertainment                         0 INR
-    Expenses:Transport                         5,000 INR
-    Expenses:Personal                          5,000 INR
+    Expenses:Rent              15,000 INR
+    Expenses:Food              10,000 INR
+    Expenses:Clothing               0 INR
+    Expenses:Entertainment          0 INR
+    Expenses:Transport          5,000 INR
+    Expenses:Personal           5,000 INR
     Assets:Checking
 ```
 
@@ -101,16 +101,16 @@ next month, assuming you haven't made any further transaction.
 
 ```ledger
 2023/09/01 Salary
-    Income:Salary:Acme                       -50,000 INR
+    Income:Salary:Acme        -50,000 INR
     Assets:Checking
 
 ~ Monthly in 2023/09/01
-    Expenses:Rent                             15,000 INR
-    Expenses:Food                             10,000 INR
-    Expenses:Clothing                          5,000 INR
-    Expenses:Entertainment                     5,000 INR
-    Expenses:Transport                         5,000 INR
-    Expenses:Personal                          5,000 INR
+    Expenses:Rent              15,000 INR
+    Expenses:Food              10,000 INR
+    Expenses:Clothing           5,000 INR
+    Expenses:Entertainment      5,000 INR
+    Expenses:Transport          5,000 INR
+    Expenses:Personal           5,000 INR
     Assets:Checking
 ```
 

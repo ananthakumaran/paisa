@@ -1,18 +1,29 @@
-# Config
+# Configuration
 
-**paisa** checks for a config file named `paisa.yaml` in the current
-directory. It can also be set via flag `--config` or env variable
-`PAISA_CONFIG`.
+All the configuration related to paisa is stored in a yaml file named
+`paisa.yaml`. The configuration can be edited via the web
+interface. The sequence in which paisa looks for the file is described
+below
+
+1. `PAISA_CONFIG` environment variable
+1. via --config flag
+1. Current working directory
+1. `paisa/paisa.yaml` file inside User Documents folder.
+
+If it can't find the configuration file, it will create a default
+configuration file named `paisa/paisa.yaml` inside User Documents folder. The
+default configuration is tuned for Indians, users from other countries
+would have to change the `default_currency` and `locale`.
 
 ```yaml
 # Path to your journal file. It can be absolute or relative to the
-# config file. The main journal file can refer other files using
+# configuration file. The main journal file can refer other files using
 # `include` as long as all the files are in the same or sub directory
 # REQUIRED
 journal_path: /home/john/finance/main.ledger
 
 # Path to your database file. It can be absolute or relative to the
-# config file. The database file will be created if it does not exist.
+# configuration file. The database file will be created if it does not exist.
 # REQUIRED
 db_path: /home/john/finance/paisa.db
 
@@ -64,7 +75,7 @@ retirement:
     - Assets:Debt:*
   # By default, average of last 3 year expenses will be used to
   # calculate your yearly expenses. This can be overriden by setting
-  # this config to positive value
+  # this configuration to positive value
   # OPTIONAL, DEFAULT: 0
   yearly_expenses: 0
 
@@ -124,19 +135,26 @@ commodities:
   - name: NASDAQ
     # Required, ENUM: mutualfund, stock, nps, unknown
     type: mutualfund
-    # differs based on type
-    code: 145552
+    price:
+      # Required, ENUM: in-mfapi, com-yahoo, com-purifiedbytes-nps
+      provider: in-mfapi
+      # differs based on provider
+      code: 145552
     harvest: 1095
     # Optional, ENUM: equity65, equity35, debt, unlisted_equity
     tax_category: debt
   - name: NIFTY
     type: mutualfund
-    code: 120716
+    price:
+      provider: in-mfapi
+      code: 120716
     harvest: 365
     tax_category: equity65
   - name: APPLE
     type: stock
-    code: AAPL
+    price:
+      provider: com-yahoo
+      code: AAPL
     harvest: 1095
     tax_category: equity65
 ```

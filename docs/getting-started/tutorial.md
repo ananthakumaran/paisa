@@ -1,14 +1,23 @@
 # Tutorial
 
 This tutorial will introduce all the concepts necessary to get
-started. **Paisa** builds on top of **ledger**, so we will first spend
-some time to familiarize the [terms and concepts](https://github.com/ledger/ledger/blob/master/doc/GLOSSARY.md) used by **ledger**
+started. **Paisa** builds on top of the **[ledger](https://ledger-cli.org/)**[^1], a command
+line tool that follows the principles of [plain text accounting](https://plaintextaccounting.org/).
+**ledger** primarily focuses on command line users and doesn't provide
+any graphical user interface. Paisa aims to create a low-friction
+graphical user interface on top of **ledger**, thereby making it
+accessible to a wider range of users.
+
+As an end user, you should be familiar with the [terms and
+concepts](https://github.com/ledger/ledger/blob/master/doc/GLOSSARY.md) used by **ledger**, which we will cover below. Paisa
+comes with an embedded **ledger** and you are not required to use
+**ledger** via command line unless you want to.
 
 !!! tip
 
     Even though the tutorial focuses on Indian users, Paisa is
     capable of handling any currency. You can change the default
-    currency, locale and financial year start etc. Check the
+    currency, locale and financial year starting month etc. Check the
     [configuration](../reference/config.md) reference for more details.
 
 
@@ -186,3 +195,6 @@ Paisa fetches the latest price of the commodities only when
 after you make any changes to your journal file or you want to fetch
 the latest value of the commodities. The update can be performed from
 the UI as well via the dropdown in the top right hand side corner.
+
+[^1]: [hledger](hled) is also supported, refer to the [configuration](../reference/config.md)
+    to see how to modify the `ledger_cli`.

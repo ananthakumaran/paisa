@@ -19,5 +19,6 @@ RUN apk --no-cache add ca-certificates ledger
 WORKDIR /root/
 COPY --from=go /usr/src/paisa/paisa ./
 RUN ./paisa init && ./paisa update
+ENV PAISA_DISABLE_LOG_FILE=true
 EXPOSE 7500
 CMD ["./paisa", "serve"]

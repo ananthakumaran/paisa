@@ -397,6 +397,12 @@ export interface Template {
   template_type: string;
 }
 
+export interface Log {
+  time: dayjs.Dayjs;
+  level: string;
+  msg: string;
+}
+
 const BACKGROUND = [
   "/api/editor/validate",
   "/api/editor/save",
@@ -421,6 +427,7 @@ export function ajax(route: "/api/schedule_al"): Promise<{
   schedule_als: Record<string, ScheduleAL>;
 }>;
 export function ajax(route: "/api/diagnosis"): Promise<{ issues: Issue[] }>;
+export function ajax(route: "/api/logs"): Promise<{ logs: Log[] }>;
 export function ajax(
   route: "/api/investment"
 ): Promise<{ assets: Posting[]; yearly_cards: InvestmentYearlyCard[] }>;
@@ -588,7 +595,7 @@ export async function ajax(route: string, options?: RequestInit, params?: Record
   return JSON.parse(body, (key, value) => {
     if (
       _.isString(value) &&
-      /date/.test(key) &&
+      /date|time/.test(key) &&
       /^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(Z|[+-][0-9]{2}:[0-9]{2})$/.test(value)
     ) {
       return dayjs(value);
@@ -848,7 +855,7 @@ export function financialYear(date: dayjs.Dayjs) {
 }
 
 export function helpUrl(section: string) {
-  return `https://paisa.fyi/${section}.html`;
+  return `https://paisa.fyi/reference/${section}`;
 }
 
 export function postingUrl(posting: Posting) {

@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+	"io"
 	"os"
 	"path"
 	"path/filepath"
@@ -14,6 +15,7 @@ import (
 	"github.com/ananthakumaran/paisa/internal/utils"
 	"github.com/samber/lo"
 	log "github.com/sirupsen/logrus"
+	"github.com/snowzach/rotatefilehook"
 	"github.com/spf13/cobra"
 )
 
@@ -69,21 +71,28 @@ func InitLogger(desktop bool, hook log.Hook) {
 		log.SetReportCaller(true)
 	}
 
-	if desktop {
-		cacheDir, err := os.UserCacheDir()
+	if os.Getenv("PAISA_DISABLE_LOG_FILE") != "true" {
+		p, err := config.EnsureLogFilePath()
 		if err == nil {
-			p := filepath.Join(cacheDir, "paisa", "paisa.log")
-			err = os.MkdirAll(filepath.Dir(p), 0750)
+			rotateFileHook, err := rotatefilehook.NewRotateFileHook(rotatefilehook.RotateFileConfig{
+				Filename:   p,
+				MaxSize:    50,
+				MaxBackups: 7,
+				MaxAge:     30,
+				Level:      log.InfoLevel,
+				Formatter:  &log.JSONFormatter{},
+			})
 			if err == nil {
-				file, err := os.OpenFile(p, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0640)
-				if err == nil {
-					log.SetOutput(file)
-				}
+				log.AddHook(rotateFileHook)
 			}
 		}
 	}
 
-	log.SetFormatter(&formatter)
+	if desktop {
+		log.SetOutput(io.Discard)
+	} else {
+		log.SetFormatter(&formatter)
+	}
 
 	if hook != nil {
 		log.AddHook(hook)

@@ -33,6 +33,7 @@
     href: string;
     tag?: string;
     help?: string;
+    hide?: boolean;
     dateRangeSelector?: boolean;
     monthPicker?: boolean;
     cashflowTypePicker?: boolean;
@@ -41,7 +42,7 @@
     children?: Link[];
   }
   const links: Link[] = [
-    { label: "Dashboard", href: "/" },
+    { label: "Dashboard", href: "/", hide: true },
     {
       label: "Cash Flow",
       href: "/cash_flow",
@@ -96,11 +97,19 @@
         { label: "Editor", href: "/editor" },
         { label: "Transactions", href: "/transaction", help: "bulk-edit" },
         { label: "Postings", href: "/posting" },
-        { label: "Price", href: "/price" },
-        { label: "Doctor", href: "/doctor" }
+        { label: "Price", href: "/price" }
       ]
     },
-    { label: "Retirement", href: "/retirement/progress", help: "retirement" }
+    {
+      label: "More",
+      href: "/more",
+      children: [
+        { label: "Configuration", href: "/config", tag: "alpha" },
+        { label: "Retirement", href: "/retirement/progress", help: "retirement" },
+        { label: "Doctor", href: "/doctor" },
+        { label: "Logs", href: "/logs" }
+      ]
+    }
   ];
 
   const tax = {
@@ -120,16 +129,16 @@
   };
 
   if (USER_CONFIG.default_currency == "INR") {
-    links.push(tax);
+    _.last(links).children.push(tax);
   }
-
-  links.push({ label: "Configuration", href: "/config", tag: "alpha" });
 
   let selectedLink: Link = null;
   let selectedSubLink: Link = null;
+  let selectedSubSubLink: Link = null;
 
   $: if ($page.url.pathname) {
     selectedSubLink = null;
+    selectedSubSubLink = null;
     selectedLink = _.find(links, (l) => $page.url.pathname == l.href);
     if (!selectedLink) {
       selectedLink = _.find(
@@ -146,6 +155,12 @@
         selectedSubLink = _.find(selectedLink.children, (l) =>
           $page.url.pathname.startsWith(selectedLink.href + l.href)
         );
+
+        if (!_.isEmpty(selectedSubLink.children)) {
+          selectedSubSubLink = _.find(selectedSubLink.children, (l) =>
+            $page.url.pathname.startsWith(selectedLink.href + selectedSubLink.href + l.href)
+          );
+        }
       }
     }
   }
@@ -153,7 +168,11 @@
 
 <nav class="navbar px-3 is-transparent" aria-label="main navigation">
   <div class="navbar-brand">
-    <span class="navbar-item is-size-4 has-text-weight-medium"><Logo size={20} /> Paisa</span>
+    <a
+      href="/"
+      class:is-active={$page.url.pathname == "/"}
+      class="navbar-item is-size-4 has-text-weight-medium"><Logo size={20} /> Paisa</a
+    >
     <a
       role="button"
       tabindex="-1"
@@ -174,9 +193,13 @@
     <div class="navbar-start">
       {#each links as link}
         {#if _.isEmpty(link.children)}
-          <a class="navbar-item" href={link.href} class:is-active={$page.url.pathname == link.href}
-            >{link.label}</a
-          >
+          {#if !link.hide}
+            <a
+              class="navbar-item"
+              href={link.href}
+              class:is-active={$page.url.pathname == link.href}>{link.label}</a
+            >
+          {/if}
         {:else}
           <div class="navbar-item has-dropdown is-hoverable">
             <a class="navbar-link" class:is-active={$page.url.pathname.startsWith(link.href)}
@@ -185,9 +208,38 @@
             <div class="navbar-dropdown is-boxed">
               {#each link.children as sublink}
                 {@const href = link.href + sublink.href}
-                <a class="navbar-item" {href} class:is-active={$page.url.pathname.startsWith(href)}
-                  >{sublink.label}</a
-                >
+                {#if _.isEmpty(sublink.children)}
+                  <a
+                    class="navbar-item"
+                    {href}
+                    class:is-active={$page.url.pathname.startsWith(href)}>{sublink.label}</a
+                  >
+                {:else}
+                  <div class="nested has-dropdown navbar-item">
+                    <a
+                      class="navbar-link is-arrowless is-flex is-justify-content-space-between is-active"
+                      class:is-active={$page.url.pathname.startsWith(href)}
+                    >
+                      <span>{sublink.label}</span>
+                      <span class="icon is-small">
+                        <i class="fas fa-angle-right" aria-hidden="true"></i>
+                      </span>
+                    </a>
+
+                    <div class="dropdown-menu">
+                      <div class="dropdown-content">
+                        {#each sublink.children as subsublink}
+                          <a
+                            href={href + subsublink.href}
+                            class="navbar-item"
+                            class:is-active={$page.url.pathname == href + subsublink.href}
+                            >{subsublink.label}</a
+                          >
+                        {/each}
+                      </div>
+                    </div>
+                  </div>
+                {/if}
               {/each}
             </div>
           </div>
@@ -238,10 +290,7 @@
             <a class="is-inactive">{selectedSubLink.label}</a>
 
             {#if selectedSubLink.help}
-              <a
-                style="margin-left: -10px;"
-                class="p-0"
-                href={`https://paisa.fyi/${selectedSubLink.help}.html`}
+              <a style="margin-left: -10px;" class="p-0" href={helpUrl(selectedSubLink.help)}
                 ><span class="icon is-small">
                   <i class="fas fa-question fa-border" />
                 </span></a
@@ -256,10 +305,16 @@
           </li>
         {/if}
 
-        {#if selectedSubLink && selectedLink.href + selectedSubLink.href != $page.url.pathname}
-          <li>
-            <a class="is-inactive">{decodeURIComponent(_.last($page.url.pathname.split("/")))}</a>
-          </li>
+        {#if selectedSubLink}
+          {#if selectedSubSubLink}
+            <li>
+              <a class="is-inactive">{selectedSubSubLink.label}</a>
+            </li>
+          {:else if selectedLink.href + selectedSubLink.href != $page.url.pathname}
+            <li>
+              <a class="is-inactive">{decodeURIComponent(_.last($page.url.pathname.split("/")))}</a>
+            </li>
+          {/if}
         {/if}
       </ul>
     </nav>

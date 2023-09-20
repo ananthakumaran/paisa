@@ -15,7 +15,6 @@ import (
 	"github.com/ananthakumaran/paisa/internal/scraper/mutualfund"
 	"github.com/ananthakumaran/paisa/internal/scraper/nps"
 	"github.com/ananthakumaran/paisa/internal/scraper/stock"
-	"github.com/logrusorgru/aurora"
 	log "github.com/sirupsen/logrus"
 	"gorm.io/gorm"
 )
@@ -54,7 +53,7 @@ func SyncCommodities(db *gorm.DB) {
 	commodities := commodity.All()
 	for _, commodity := range commodities {
 		name := commodity.Name
-		log.Info("Fetching commodity ", aurora.Bold(name))
+		log.Info("Fetching commodity ", name)
 		code := commodity.Price.Code
 		var prices []*price.Price
 		var err error
@@ -92,7 +91,7 @@ func SyncPortfolios(db *gorm.DB) {
 	commodities := commodity.FindByType(config.MutualFund)
 	for _, commodity := range commodities {
 		name := commodity.Name
-		log.Info("Fetching portfolio for ", aurora.Bold(name))
+		log.Info("Fetching portfolio for ", name)
 		portfolios, err := mutualfund.GetPortfolio(commodity.Price.Code, commodity.Name)
 
 		if err != nil {

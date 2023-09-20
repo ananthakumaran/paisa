@@ -208,6 +208,32 @@ func GetSchema() any {
 	return schemaObject
 }
 
+func EnsureLogFilePath() (string, error) {
+	cacheDir, err := os.UserCacheDir()
+	if err != nil {
+		return "", err
+	}
+
+	path := filepath.Join(cacheDir, "paisa", "paisa.log")
+
+	err = os.MkdirAll(filepath.Dir(path), 0750)
+	if err != nil {
+		return "", err
+	}
+
+	file, err := os.OpenFile(path, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0640)
+	if err != nil {
+		return "", err
+	}
+
+	err = file.Close()
+	if err != nil {
+		return "", err
+	}
+
+	return path, err
+}
+
 func DefaultCurrency() string {
 	return config.DefaultCurrency
 }

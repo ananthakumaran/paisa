@@ -3,7 +3,7 @@
   import _ from "lodash";
   import { ajax, type ScheduleAL } from "$lib/utils";
   import { onMount } from "svelte";
-  import { dateMin, year } from "../../../store";
+  import { dateMin, year } from "../../../../store";
 
   let scheduleAls: Record<string, ScheduleAL>;
   let selectedScheduleAl: ScheduleAL;

@@ -5,7 +5,7 @@
   import JsonSchemaForm from "$lib/components/JsonSchemaForm.svelte";
   import _ from "lodash";
   import * as toast from "bulma-toast";
-  import { refresh } from "../../store";
+  import { refresh } from "../../../store";
 
   let lastConfig: UserConfig;
   let config: UserConfig;

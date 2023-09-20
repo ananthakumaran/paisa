@@ -41,6 +41,14 @@ html[data-theme="dark"] {
       box-shadow: $shadow;
     }
 
+    .nested.has-dropdown {
+      .dropdown-menu {
+        .dropdown-content {
+          box-shadow: $shadow;
+        }
+      }
+    }
+
     .tippy-box[data-theme~="light"] {
       color: $grey-darker;
       background-color: $white;

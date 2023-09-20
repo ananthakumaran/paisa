@@ -1,6 +1,8 @@
 # Installation
 
-Paisa is available in two formats: a Desktop Application and a CLI (Command Line Interface).
+Paisa is available in two formats: a **Desktop Application** and a **CLI**
+(Command Line Interface). Both provide the same list of features, with
+the primary difference being how the user interface is launched.
 
 ## Desktop Application
 

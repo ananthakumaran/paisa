@@ -24,12 +24,12 @@ tracked as a commodity. Few example transactions can be found below.
 4.  Purchase Price per Unit
 5.  Currency
 
-Paisa comes with inbuilt support for fetching the latest price of
-some commodities like mutual fund and NPS. For others, it will try to
-use the latest purchase price specified in the journal. For example,
-when you enter the second NPS transaction on `2019/02/21`, the
-valuation of your existing holdings will be adjusted based on the new
-purchase price.
+Paisa comes with inbuilt support for fetching the latest price of some
+commodities like mutual fund, NPS, stocks, etc from few providers. For
+others, it will try to use the latest purchase price specified in the
+journal. For example, when you enter the second NPS transaction on
+`#!ledger 2019/02/21`, the valuation of your existing holdings will be
+adjusted based on the new purchase price.
 
 To link a commodity with a commodity price provider, Go to `Configuration`
 page and expand the `Commodities` section. You can click the

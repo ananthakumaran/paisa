@@ -818,3 +818,29 @@ span.progress-percent.less-than-10 {
 input:invalid {
   border-color: $danger;
 }
+
+.nested.has-dropdown {
+  &:hover > .dropdown-menu {
+    display: block;
+  }
+
+  > .navbar-link {
+    padding: 0;
+    width: 100%;
+
+    > span.icon {
+      float: right;
+    }
+  }
+
+  .dropdown-menu {
+    top: -15px;
+    margin-left: calc(100% - 10px);
+
+    .dropdown-content {
+      box-shadow:
+        0 8px 8px rgba(10, 10, 10, 0.1),
+        0 0 0 1px rgba(10, 10, 10, 0.1);
+    }
+  }
+}

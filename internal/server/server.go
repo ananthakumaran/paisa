@@ -168,6 +168,10 @@ func Build(db *gorm.DB) *gin.Engine {
 		c.JSON(200, liabilities.GetRepayment(db))
 	})
 
+	router.GET("/api/logs", func(c *gin.Context) {
+		c.JSON(200, GetLogs())
+	})
+
 	router.GET("/api/editor/files", func(c *gin.Context) {
 		c.JSON(200, GetFiles(db))
 	})

@@ -6,7 +6,7 @@ interface. The sequence in which paisa looks for the file is described
 below
 
 1. `PAISA_CONFIG` environment variable
-1. via --config flag
+1. via `--config` flag
 1. Current working directory
 1. `paisa/paisa.yaml` file inside User Documents folder.
 

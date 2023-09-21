@@ -1,8 +1,6 @@
 package service
 
 import (
-	"time"
-
 	"github.com/ChizhovVadim/xirr"
 	"github.com/ananthakumaran/paisa/internal/model/posting"
 	"github.com/ananthakumaran/paisa/internal/utils"
@@ -13,12 +11,12 @@ import (
 )
 
 func XIRR(db *gorm.DB, ps []posting.Posting) decimal.Decimal {
-	today := time.Now()
+	today := utils.EndOfToday()
 	marketAmount := utils.SumBy(ps, func(p posting.Posting) decimal.Decimal {
 		return p.MarketAmount
 	})
 	payments := lo.Reverse(lo.Map(ps, func(p posting.Posting, _ int) xirr.Payment {
-		if IsInterest(db, p) {
+		if IsInterest(db, p) || IsInterestRepayment(db, p) {
 			return xirr.Payment{Date: p.Date, Amount: 0}
 		} else {
 			return xirr.Payment{Date: p.Date, Amount: p.Amount.Neg().Round(4).InexactFloat64()}
@@ -35,7 +33,7 @@ func XIRR(db *gorm.DB, ps []posting.Posting) decimal.Decimal {
 }
 
 func APR(db *gorm.DB, ps []posting.Posting) decimal.Decimal {
-	today := time.Now()
+	today := utils.EndOfToday()
 	marketAmount := utils.SumBy(ps, func(p posting.Posting) decimal.Decimal {
 		return p.MarketAmount
 	})

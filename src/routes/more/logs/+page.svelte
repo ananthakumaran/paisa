@@ -13,15 +13,20 @@
   function levelClass(level: string) {
     switch (level) {
       case "info":
-        return "has-text-info";
+        return "is-info";
       case "warning":
-        return "has-text-warning";
+        return "is-warning";
       case "error":
       case "fatal":
-        return "has-text-danger";
+        return "is-danger";
       default:
         return "";
     }
+  }
+  function formatFields(log: Log) {
+    return _.map(_.omit(log, ["time", "level", "msg"]), (value, key) => `${key}=${value}`).join(
+      ", "
+    );
   }
 </script>
 
@@ -43,9 +48,15 @@
                   {@const fields = _.omit(log, ["time", "level", "msg"])}
                   <div class="is-flex log is-align-items-baseline">
                     <div class="time is-size-7">{log.time.format("YYYY-MM-DD HH:mm:ss")}</div>
-                    <div class="is-size-7 level {levelClass(log.level)}">{log.level}</div>
-                    <div class="msg truncate">{log.msg}</div>
-                    <div class="fields is-size-7 truncate">
+                    <div
+                      class="is-size-7 tag is-small is-light invertable py-0 log-level {levelClass(
+                        log.level
+                      )}"
+                    >
+                      {log.level}
+                    </div>
+                    <div class="msg truncate" title={log.msg}>{log.msg}</div>
+                    <div class="fields is-size-7 truncate" title={formatFields(log)}>
                       {#each Object.entries(fields) as [key, value]}
                         <span class="px-1 field"><span>{key}</span>=<span>{value}</span></span>
                       {/each}
@@ -74,9 +85,10 @@
       padding: 0 5px;
     }
 
-    .level {
+    .log-level {
       text-transform: uppercase;
-      width: 50px;
+      width: 60px;
+      height: 1.4em !important;
     }
 
     .msg {

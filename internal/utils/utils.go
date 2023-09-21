@@ -13,6 +13,7 @@ import (
 	"github.com/onrik/gorm-logrus"
 	"github.com/samber/lo"
 	"github.com/shopspring/decimal"
+	log "github.com/sirupsen/logrus"
 	"golang.org/x/exp/constraints"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
@@ -80,15 +81,37 @@ func BeginningOfMonth(date time.Time) time.Time {
 }
 
 func EndOfMonth(date time.Time) time.Time {
-	return toDate(date.AddDate(0, 1, -date.Day()))
+	return EndOfDay(toDate(date.AddDate(0, 1, -date.Day())))
 }
 
 func IsWithDate(date time.Time, start time.Time, end time.Time) bool {
 	return (date.Equal(start) || date.After(start)) && (date.Before(end) || date.Equal(end))
 }
 
-func BeginingOfDay(date time.Time) time.Time {
-	return toDate(date)
+func EndOfDay(date time.Time) time.Time {
+	return toDate(date).AddDate(0, 0, 1).Add(-time.Nanosecond)
+}
+
+var now *time.Time
+
+func SetNow(date string) {
+	t, err := time.ParseInLocation("2006-01-02", date, time.Local)
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Infof("Setting now to %s", t)
+	now = &t
+}
+
+func Now() time.Time {
+	if now != nil {
+		return *now
+	}
+	return time.Now()
+}
+
+func EndOfToday() time.Time {
+	return EndOfDay(Now())
 }
 
 func toDate(date time.Time) time.Time {
@@ -109,6 +132,10 @@ func IsCurrency(currency string) bool {
 
 func IsCheckingAccount(account string) bool {
 	return IsSameOrParent(account, "Assets:Checking")
+}
+
+func IsExpenseInterestAccount(account string) bool {
+	return IsSameOrParent(account, "Expenses:Interest")
 }
 
 func MaxTime(a time.Time, b time.Time) time.Time {

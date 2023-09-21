@@ -2,11 +2,11 @@ package server
 
 import (
 	"sort"
-	"time"
 
 	"github.com/ananthakumaran/paisa/internal/model/posting"
 	"github.com/ananthakumaran/paisa/internal/model/transaction"
 	"github.com/ananthakumaran/paisa/internal/query"
+	"github.com/ananthakumaran/paisa/internal/utils"
 	"github.com/gin-gonic/gin"
 	"github.com/samber/lo"
 	"gorm.io/gorm"
@@ -28,7 +28,7 @@ type TransactionSequenceKey struct {
 }
 
 func ComputeRecurringTransactions(postings []posting.Posting) []TransactionSequence {
-	now := time.Now()
+	now := utils.EndOfToday()
 
 	postings = lo.Filter(postings, func(p posting.Posting, _ int) bool {
 		return p.Date.Before(now)

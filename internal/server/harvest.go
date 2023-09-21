@@ -10,6 +10,7 @@ import (
 	"github.com/ananthakumaran/paisa/internal/query"
 	"github.com/ananthakumaran/paisa/internal/service"
 	"github.com/ananthakumaran/paisa/internal/taxation"
+	"github.com/ananthakumaran/paisa/internal/utils"
 	"github.com/gin-gonic/gin"
 	"github.com/samber/lo"
 	"github.com/shopspring/decimal"
@@ -52,11 +53,11 @@ func GetHarvest(db *gorm.DB) gin.H {
 func computeHarvestable(db *gorm.DB, account string, commodity config.Commodity, postings []posting.Posting) Harvestable {
 	available := accounting.FIFO(postings)
 
-	today := time.Now()
+	today := utils.EndOfToday()
 	currentPrice := service.GetUnitPrice(db, commodity.Name, today)
 
 	harvestable := Harvestable{Account: account, TaxCategory: string(commodity.TaxCategory), HarvestBreakdown: []HarvestBreakdown{}, CurrentUnitPrice: currentPrice.Value, CurrentUnitDate: currentPrice.Date}
-	cutoff := time.Now().AddDate(0, 0, -commodity.Harvest)
+	cutoff := utils.Now().AddDate(0, 0, -commodity.Harvest)
 	for _, p := range available {
 		harvestable.TotalUnits = harvestable.TotalUnits.Add(p.Quantity)
 		if p.Date.Before(cutoff) {

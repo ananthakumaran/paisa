@@ -32,7 +32,6 @@ func GetNetworth(db *gorm.DB) gin.H {
 
 func GetCurrentNetworth(db *gorm.DB) gin.H {
 	postings := query.Init(db).Like("Assets:%", "Liabilities:%").UntilToday().All()
-
 	postings = service.PopulateMarketPrice(db, postings)
 	networth := computeNetworth(db, postings)
 	xirr := service.XIRR(db, postings)
@@ -50,21 +49,22 @@ func computeNetworth(db *gorm.DB, postings []posting.Posting) Networth {
 	var withdrawal decimal.Decimal = decimal.Zero
 	var balance decimal.Decimal = decimal.Zero
 
-	now := utils.BeginingOfDay(time.Now())
+	now := utils.EndOfToday()
 	for _, p := range postings {
 		isInterest := service.IsInterest(db, p)
+		isInterestRepayment := service.IsInterestRepayment(db, p)
 
-		if p.Amount.GreaterThan(decimal.Zero) && !isInterest {
-			investment = investment.Add(p.Amount)
-		}
-
-		if p.Amount.LessThan(decimal.Zero) && !isInterest {
-			withdrawal = withdrawal.Add(p.Amount.Neg())
-		}
-
-		if isInterest {
+		if isInterest || isInterestRepayment {
 			balance = balance.Add(p.Amount)
 		} else {
+			if p.Amount.GreaterThan(decimal.Zero) {
+				investment = investment.Add(p.Amount)
+			}
+
+			if p.Amount.LessThan(decimal.Zero) {
+				withdrawal = withdrawal.Add(p.Amount.Neg())
+			}
+
 			balance = balance.Add(service.GetMarketPrice(db, p, now))
 		}
 	}
@@ -101,7 +101,7 @@ func computeNetworthTimeline(db *gorm.DB, postings []posting.Posting) []Networth
 
 	accumulator := make(map[string]RunningSum)
 
-	end := time.Now()
+	end := utils.EndOfToday()
 	for start := postings[0].Date; start.Before(end); start = start.AddDate(0, 0, 1) {
 		for len(postings) > 0 && (postings[0].Date.Before(start) || postings[0].Date.Equal(start)) {
 			p, postings = postings[0], postings[1:]

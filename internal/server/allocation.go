@@ -40,7 +40,7 @@ type AllocationTarget struct {
 func GetAllocation(db *gorm.DB) gin.H {
 	postings := query.Init(db).Like("Assets:%").All()
 
-	now := time.Now()
+	now := utils.EndOfToday()
 	postings = lo.Map(postings, func(p posting.Posting, _ int) posting.Posting {
 		p.MarketAmount = service.GetMarketPrice(db, p, now)
 		return p
@@ -67,7 +67,7 @@ func computeAggregateTimeline(db *gorm.DB, postings []posting.Posting) []map[str
 		return timeline
 	}
 
-	end := time.Now()
+	end := utils.EndOfToday()
 	for start := postings[0].Date; start.Before(end); start = start.AddDate(0, 0, 1) {
 		for len(postings) > 0 && (postings[0].Date.Before(start) || postings[0].Date.Equal(start)) {
 			p, postings = postings[0], postings[1:]
@@ -133,7 +133,7 @@ func computeAllocationTargets(db *gorm.DB, postings []posting.Posting) []Allocat
 }
 
 func computeAllocationTarget(db *gorm.DB, postings []posting.Posting, allocationTargetConfig config.AllocationTarget, total decimal.Decimal) AllocationTarget {
-	date := time.Now()
+	date := utils.EndOfToday()
 	postings = accounting.FilterByGlob(postings, allocationTargetConfig.Accounts)
 	aggregates := computeAggregate(db, postings, date)
 	currentTotal := accounting.CurrentBalance(postings)

@@ -1,6 +1,12 @@
-{{#if (and (isDate ROW.A "YYYY-MM-DD") (eq ROW.D "buy"))}}
+{{#if (isDate ROW.A "YYYY-MM-DD")}}
  {{date ROW.A "YYYY-MM-DD"}} {{ROW.C}}
+    {{#if (eq ROW.D "buy")}}
     {{predictAccount prefix="Assets"}}		{{ROW.E}} {{acronym ROW.C}} @ {{ROW.F}} INR
     Assets:Checking                       {{negate ROW.H}} INR
-    Expense:Misc ;; balance any rounding errors
+    {{/if}}
+    {{#if (eq ROW.D "sell")}}
+    {{predictAccount prefix="Assets"}}	-{{ROW.E}} {{acronym ROW.C}} @ {{ROW.F}} INR
+    Assets:Checking                              {{ROW.H}} INR
+    {{/if}}
+    Expense:Misc   ;; balance any rounding errors
 {{/if}}

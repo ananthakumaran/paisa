@@ -178,7 +178,7 @@ All the configuration related to paisa is stored in a yaml file named
 sequence in which it look for the file is described below
 
 1. `PAISA_CONFIG` environment variable
-1. via --config flag
+1. via `--config` flag
 1. Current working directory
 1. `paisa/paisa.yaml` file inside User Documents folder.
 

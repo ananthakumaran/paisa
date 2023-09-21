@@ -80,7 +80,7 @@ func (LedgerCLI) Parse(journalPath string, _prices []price.Price) ([]*posting.Po
 		return nil, err
 	}
 
-	budgetPostings, err := execLedgerCommand(journalPath, []string{"--now", strconv.Itoa(time.Now().Year() + 3), "--budget"})
+	budgetPostings, err := execLedgerCommand(journalPath, []string{"--now", strconv.Itoa(utils.Now().Year() + 3), "--budget"})
 	budgetPostings = lo.Filter(budgetPostings, func(p *posting.Posting, _ int) bool {
 		return p.Payee == "Budget transaction"
 	})
@@ -155,7 +155,7 @@ func (HLedgerCLI) Parse(journalPath string, prices []price.Price) ([]*posting.Po
 		return nil, err
 	}
 
-	timeRange := fmt.Sprintf("%d..%d", time.Now().Year()-3, time.Now().Year()+3)
+	timeRange := fmt.Sprintf("%d..%d", utils.Now().Year()-3, utils.Now().Year()+3)
 	budgetPostings, err := execHLedgerCommand(journalPath, prices, []string{"--forecast=" + timeRange, "tag:_generated-transaction"})
 
 	if err != nil {

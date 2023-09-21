@@ -51,7 +51,7 @@ func GetScheduleAL(db *gorm.DB) gin.H {
 	postings := query.Init(db).Like("Assets:%", "Liabilities:%").All()
 	var scheduleALs map[string]ScheduleAL = make(map[string]ScheduleAL)
 
-	start := time.Now().AddDate(1, 0, 0)
+	start := utils.Now().AddDate(1, 0, 0)
 
 	for {
 		start = utils.BeginningOfFinancialYear(start)

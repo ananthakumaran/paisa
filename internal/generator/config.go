@@ -381,7 +381,7 @@ func generateJournalFile(cwd string) {
 		log.Fatal(err)
 	}
 
-	startMonth := utils.BeginningOfMonth(time.Now())
+	startMonth := utils.BeginningOfMonth(utils.EndOfToday())
 	endMonth := startMonth.AddDate(0, 2, 0)
 
 	_, err = ledgerFile.WriteString(`
@@ -418,7 +418,7 @@ func generateJournalFile(cwd string) {
 		log.Fatal(err)
 	}
 
-	end := time.Now()
+	end := utils.EndOfToday()
 	start, err := time.Parse("02-01-2006", fmt.Sprintf("01-01-%d", START_YEAR))
 	if err != nil {
 		log.Fatal(err)

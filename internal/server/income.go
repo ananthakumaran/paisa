@@ -51,7 +51,7 @@ func computeIncomeTimeline(postings []posting.Posting) []Income {
 	}
 
 	var p posting.Posting
-	end := time.Now()
+	end := utils.EndOfToday()
 	for start := utils.BeginningOfMonth(postings[0].Date); start.Before(end); start = start.AddDate(0, 1, 0) {
 		var currentMonthPostings []posting.Posting = make([]posting.Posting, 0)
 		for len(postings) > 0 && (postings[0].Date.Before(utils.EndOfMonth(start)) || postings[0].Date.Equal(start)) {
@@ -73,7 +73,7 @@ func computeTaxTimeline(postings []posting.Posting) []Tax {
 	}
 
 	var p posting.Posting
-	end := time.Now()
+	end := utils.EndOfToday()
 	for start := utils.BeginningOfFinancialYear(postings[0].Date); start.Before(end); start = start.AddDate(1, 0, 0) {
 		yearEnd := utils.EndOfFinancialYear(start)
 		var currentMonthPostings []posting.Posting = make([]posting.Posting, 0)
@@ -92,7 +92,7 @@ func computeIncomeYearlyCard(start time.Time, taxes []posting.Posting, incomes [
 	var yearlyCards []IncomeYearlyCard = make([]IncomeYearlyCard, 0)
 
 	var p posting.Posting
-	end := time.Now()
+	end := utils.EndOfToday()
 	for start = utils.BeginningOfFinancialYear(start); start.Before(end); start = start.AddDate(1, 0, 0) {
 		yearEnd := utils.EndOfFinancialYear(start)
 		var netTax decimal.Decimal = decimal.Zero

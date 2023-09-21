@@ -2,7 +2,6 @@ package query
 
 import (
 	"errors"
-	"time"
 
 	"github.com/ananthakumaran/paisa/internal/config"
 	"github.com/ananthakumaran/paisa/internal/model/posting"
@@ -42,24 +41,24 @@ func (q *Query) Clone() *Query {
 }
 
 func (q *Query) BeforeNMonths(n int) *Query {
-	monthStart := utils.BeginningOfMonth(time.Now())
+	monthStart := utils.BeginningOfMonth(utils.Now())
 	start := monthStart.AddDate(0, -(n - 1), 0)
 	q.context = q.context.Where("date < ?", start)
 	return q
 }
 
 func (q *Query) UntilToday() *Query {
-	q.context = q.context.Where("date < ?", time.Now())
+	q.context = q.context.Where("date < ?", utils.EndOfToday())
 	return q
 }
 
 func (q *Query) UntilThisMonthEnd() *Query {
-	q.context = q.context.Where("date <= ?", utils.EndOfMonth(time.Now()))
+	q.context = q.context.Where("date <= ?", utils.EndOfMonth(utils.Now()))
 	return q
 }
 
 func (q *Query) LastNMonths(n int) *Query {
-	monthStart := utils.BeginningOfMonth(time.Now())
+	monthStart := utils.BeginningOfMonth(utils.Now())
 	start := monthStart.AddDate(0, -(n - 1), 0)
 	end := monthStart.AddDate(0, 1, 0)
 	q.context = q.context.Where("date >= ? and date < ?", start, end)

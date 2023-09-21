@@ -11,7 +11,6 @@ require (
 	github.com/gofrs/uuid v4.4.0+incompatible
 	github.com/google/btree v1.1.2
 	github.com/icza/backscanner v0.0.0-20230330133933-bf6beb754c70
-	github.com/logrusorgru/aurora v2.0.3+incompatible
 	github.com/onrik/gorm-logrus v0.5.0
 	github.com/samber/lo v1.38.1
 	github.com/santhosh-tekuri/jsonschema/v5 v5.3.0

@@ -596,7 +596,9 @@ export async function ajax(route: string, options?: RequestInit, params?: Record
     if (
       _.isString(value) &&
       /date|time/.test(key) &&
-      /^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(Z|[+-][0-9]{2}:[0-9]{2})$/.test(value)
+      /^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(.[0-9]+)?(Z|[+-][0-9]{2}:[0-9]{2})$/.test(
+        value
+      )
     ) {
       return dayjs(value);
     }

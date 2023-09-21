@@ -20,6 +20,7 @@ import (
 )
 
 var configFile string
+var now string
 
 var rootCmd = &cobra.Command{
 	Use:   "paisa",
@@ -36,10 +37,14 @@ func Execute() {
 func init() {
 	cobra.OnInitialize(Initialize)
 	rootCmd.PersistentFlags().StringVar(&configFile, "config", "", "config file (default is ./paisa.yaml)")
+	rootCmd.PersistentFlags().StringVar(&now, "now", "", "set the current date (default is today)")
 }
 
 func Initialize() {
 	InitLogger(false, nil)
+	if now != "" {
+		utils.SetNow(now)
+	}
 	currentCommand, _, _ := rootCmd.Find(os.Args[1:])
 
 	if !lo.Contains([]string{"serve", "update"}, currentCommand.Name()) {

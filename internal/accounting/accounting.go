@@ -156,7 +156,7 @@ func RunningBalance(db *gorm.DB, postings []posting.Posting) []Point {
 	var p posting.Posting
 	var pastPostings []posting.Posting
 
-	end := time.Now()
+	end := utils.EndOfToday()
 	for start := postings[0].Date; start.Before(end); start = start.AddDate(0, 0, 1) {
 		for len(postings) > 0 && (postings[0].Date.Before(start) || postings[0].Date.Equal(start)) {
 			p, postings = postings[0], postings[1:]

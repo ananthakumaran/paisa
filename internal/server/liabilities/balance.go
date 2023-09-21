@@ -53,7 +53,7 @@ func computeBreakdown(db *gorm.DB, postings, expenses []posting.Posting) map[str
 		ps = append(ps, es...)
 
 		drawn := lo.Reduce(ps, func(agg decimal.Decimal, p posting.Posting, _ int) decimal.Decimal {
-			if p.Amount.GreaterThan(decimal.Zero) || service.IsInterest(db, p) {
+			if p.Amount.GreaterThan(decimal.Zero) || utils.IsExpenseInterestAccount(p.Account) {
 				return agg
 			} else {
 				return p.Amount.Neg().Add(agg)
@@ -69,7 +69,7 @@ func computeBreakdown(db *gorm.DB, postings, expenses []posting.Posting) map[str
 		}, decimal.Zero)
 
 		balance := lo.Reduce(ps, func(agg decimal.Decimal, p posting.Posting, _ int) decimal.Decimal {
-			if service.IsInterest(db, p) {
+			if utils.IsExpenseInterestAccount(p.Account) {
 				return agg
 			} else {
 				return p.MarketAmount.Neg().Add(agg)

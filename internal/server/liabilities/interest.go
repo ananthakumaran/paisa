@@ -53,7 +53,7 @@ func computeOverviewTimeline(db *gorm.DB, postings []posting.Posting) []Overview
 		return netliabilities
 	}
 
-	end := utils.MaxTime(time.Now(), postings[len(postings)-1].Date)
+	end := utils.MaxTime(utils.EndOfToday(), postings[len(postings)-1].Date)
 	for start := postings[0].Date; start.Before(end) || start.Equal(end); start = start.AddDate(0, 0, 1) {
 		for len(postings) > 0 && (postings[0].Date.Before(start) || postings[0].Date.Equal(start)) {
 			p, postings = postings[0], postings[1:]
@@ -61,7 +61,7 @@ func computeOverviewTimeline(db *gorm.DB, postings []posting.Posting) []Overview
 		}
 
 		drawn := lo.Reduce(pastPostings, func(agg decimal.Decimal, p posting.Posting, _ int) decimal.Decimal {
-			if p.Amount.GreaterThan(decimal.Zero) || service.IsInterest(db, p) {
+			if p.Amount.GreaterThan(decimal.Zero) || utils.IsExpenseInterestAccount(p.Account) {
 				return agg
 			} else {
 				return p.Amount.Neg().Add(agg)
@@ -77,7 +77,7 @@ func computeOverviewTimeline(db *gorm.DB, postings []posting.Posting) []Overview
 		}, decimal.Zero)
 
 		balance := lo.Reduce(pastPostings, func(agg decimal.Decimal, p posting.Posting, _ int) decimal.Decimal {
-			if service.IsInterest(db, p) {
+			if utils.IsExpenseInterestAccount(p.Account) {
 				return agg
 			} else {
 				return service.GetMarketPrice(db, p, start).Neg().Add(agg)

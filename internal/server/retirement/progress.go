@@ -1,8 +1,6 @@
 package retirement
 
 import (
-	"time"
-
 	"github.com/ananthakumaran/paisa/internal/accounting"
 	"github.com/ananthakumaran/paisa/internal/config"
 	"github.com/ananthakumaran/paisa/internal/model/posting"
@@ -30,7 +28,7 @@ func GetRetirementProgress(db *gorm.DB) gin.H {
 }
 
 func calculateAverageExpense(db *gorm.DB, retirementConfig config.Retirement) decimal.Decimal {
-	now := time.Now()
+	now := utils.Now()
 	end := utils.BeginningOfMonth(now)
 	start := end.AddDate(-2, 0, 0)
 	expenses := accounting.FilterByGlob(query.Init(db).Like("Expenses:%").Where("date between ? AND ?", start, end).All(), retirementConfig.Expenses)

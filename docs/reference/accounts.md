@@ -7,7 +7,7 @@ the organization. For example you can treat EPF and PPF as two
 accounts namely `#!ledger Assets:Debt:EPF` and `#!ledger
 Assets:Debt:PPF`. The hierarchy helps you ask questions like what is
 the balance of `#!ledger Assets:Debt`, which will include both EPF and
-PPF
+PPF.
 
 Even though **ledger** doesn't have any strict Account naming
 convention, Paisa expects you to follow the standard naming

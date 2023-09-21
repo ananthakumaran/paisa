@@ -101,7 +101,7 @@
               <p class="is-size-4">I want to get started</p>
               <ol class="ml-5 mt-2 mb-4">
                 <li>
-                  Go to <a href="/config">config</a> page and set your default currency and locale.
+                  Go to <a href="/more/config">config</a> page and set your default currency and locale.
                 </li>
                 <li>
                   Go to <a href="/ledger/editor">editor</a> page and start adding transactions to your
@@ -120,7 +120,7 @@
                   > page and select all the content and delete them.
                 </li>
                 <li>
-                  Go to <a href="/config">config</a> page and click the reset to defaults button.
+                  Go to <a href="/more/config">config</a> page and click the reset to defaults button.
                 </li>
               </ol>
 

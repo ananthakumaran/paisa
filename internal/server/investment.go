@@ -49,7 +49,7 @@ func computeInvestmentYearlyCard(start time.Time, assets []posting.Posting, expe
 	}
 
 	var p posting.Posting
-	end := time.Now()
+	end := utils.EndOfToday()
 	for start = utils.BeginningOfFinancialYear(start); start.Before(end); start = start.AddDate(1, 0, 0) {
 		yearEnd := utils.EndOfFinancialYear(start)
 		var currentYearPostings []posting.Posting = make([]posting.Posting, 0)

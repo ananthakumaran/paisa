@@ -1,8 +1,9 @@
 # CHANGELOG
 
-### 0.5.1 (2023-09-22)
+### 0.5.2 (2023-09-22)
 
 * Add Desktop app
+* Support password protected PDF on import page
 * Bug fixes
 
 ## Breaking Changes :rotating_light:

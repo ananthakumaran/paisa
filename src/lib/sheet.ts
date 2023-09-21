@@ -2,14 +2,11 @@ import Papa from "papaparse";
 import * as XLSX from "xlsx";
 import _ from "lodash";
 import { format } from "./journal";
-import { pdf2array, pdfjs } from "pdf2array";
-import pdfjsWorkerUrl from "pdfjs-dist/build/pdf.worker.js?url";
+import { pdf2array } from "./pdf";
 
 interface Result {
   data: string[][];
 }
-
-pdfjs.GlobalWorkerOptions.workerSrc = pdfjsWorkerUrl;
 
 export function parse(file: File): Promise<Result> {
   const extension = file.name.split(".").pop();

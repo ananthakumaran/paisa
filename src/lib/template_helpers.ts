@@ -149,6 +149,9 @@ export default {
       const cell = row[column] || "";
       const match = cell.match(regexp);
       if (match) {
+        if (options.hash.group) {
+          return match[options.hash.group];
+        }
         return cell;
       }
       i--;

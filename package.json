@@ -45,7 +45,7 @@
     "handlebars": "^4.7.7",
     "lodash": "^4.17.21",
     "papaparse": "^5.4.1",
-    "pdf2array": "^0.0.1",
+    "pdfjs-dist": "^3.10.111",
     "sprintf-js": "^1.1.2",
     "stemmer": "^2.0.1",
     "svelte-carousel": "^1.0.25",

@@ -1,6 +1,4 @@
-import { describe, expect, test, jest } from "@jest/globals";
-
-jest.mock("pdfjs-dist/build/pdf.worker.js?url", () => ({}), { virtual: true });
+import { describe, expect, test } from "@jest/globals";
 
 import { parse, render, asRows } from "./sheet";
 import fs from "fs";

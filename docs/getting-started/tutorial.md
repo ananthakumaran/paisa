@@ -183,7 +183,7 @@ sequence in which it look for the file is described below
 1. `paisa/paisa.yaml` file inside User Documents folder.
 
 If it can't find the configuration file, it will create a default
-configuration file name `paisa/paisa.yaml` inside User Documents
+configuration file named `paisa/paisa.yaml` inside User Documents
 folder. The default configuration is tuned for Indians, users from
 other countries would have to change the `default_currency` and
 `locale`. Check the [configuration](../reference/config.md) reference for details.

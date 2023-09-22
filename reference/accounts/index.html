@@ -655,7 +655,7 @@
   
     <li class="md-nav__item">
       <a href="../config/" class="md-nav__link">
-        Config
+        Configuration
       </a>
     </li>
   
@@ -900,26 +900,27 @@
 ledger, you call them <strong>Account</strong>. At least two accounts are involved
 in any transaction. Accounts are also hierarchical. This helps with
 the organization. For example you can treat EPF and PPF as two
-accounts namely <code>Assets:Debt:EPF</code> and <code>Assets:Debt:PPF</code>. The
-hierarchy helps you ask questions like what is the balance of
-<code>Assets:Debt</code>, which will include both EPF and PPF</p>
+accounts namely <code class="language-ledger highlight"><span class="s">Assets:Debt:EPF</span></code> and <code class="language-ledger highlight"><span class="s">Assets:Debt:PPF</span></code>. The hierarchy helps you ask questions like what is
+the balance of <code class="language-ledger highlight"><span class="s">Assets:Debt</span></code>, which will include both EPF and
+PPF</p>
 <p>Even though <strong>ledger</strong> doesn't have any strict Account naming
-convention, <strong>paisa</strong> expects you to follow the standard naming
+convention, Paisa expects you to follow the standard naming
 convention.</p>
 <p>There are four types of account namely</p>
 <ol>
-<li>Assets</li>
-<li>Liabilities</li>
-<li>Income</li>
-<li>Expenses</li>
+<li><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M320 96H192l-47.4-71.1c-7.1-10.7.5-24.9 13.3-24.9h196.2c12.8 0 20.4 14.2 13.3 24.9L320 96zm-128 32h128c3.8 2.5 8.1 5.3 13 8.4 56.7 36.3 179 114.5 179 279.6 0 53-43 96-96 96H96c-53 0-96-43-96-96 0-165.1 122.3-243.3 179-279.6 4.8-3.1 9.2-5.9 13-8.4zm84 88c0-11-9-20-20-20s-20 9-20 20v14c-7.6 1.7-15.2 4.4-22.2 8.5-13.9 8.3-25.9 22.8-25.8 43.9.1 20.3 12 33.1 24.7 40.7 11 6.6 24.7 10.8 35.6 14l1.7.5c12.6 3.8 21.8 6.8 28 10.7 5.1 3.2 5.8 5.4 5.9 8.2.1 5-1.8 8-5.9 10.5-5 3.1-12.9 5-21.4 4.7-11.1-.4-21.5-3.9-35.1-8.5-2.3-.8-4.7-1.6-7.2-2.4-10.5-3.5-21.8 2.2-25.3 12.6s2.2 21.8 12.6 25.3c1.9.6 4 1.3 6.1 2.1 8.3 2.9 17.9 6.2 28.2 8.4V424c0 11 9 20 20 20s20-9 20-20v-13.8c8-1.7 16-4.5 23.2-9 14.3-8.9 25.1-24.1 24.8-45-.3-20.3-11.7-33.4-24.6-41.6-11.5-7.2-25.9-11.6-37.1-15l-.7-.2c-12.8-3.9-21.9-6.7-28.3-10.5-5.2-3.1-5.3-4.9-5.3-6.7 0-3.7 1.4-6.5 6.2-9.3 5.4-3.2 13.6-5.1 21.5-5 9.6.1 20.2 2.2 31.2 5.2 10.7 2.8 21.6-3.5 24.5-14.2s-3.5-21.6-14.2-24.5c-6.5-1.7-13.7-3.4-21.1-4.7V216z"/></svg></span> Assets</li>
+<li><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M64 32C28.7 32 0 60.7 0 96v32h576V96c0-35.3-28.7-64-64-64H64zm512 192H0v192c0 35.3 28.7 64 64 64h448c35.3 0 64-28.7 64-64V224zM112 352h64c8.8 0 16 7.2 16 16s-7.2 16-16 16h-64c-8.8 0-16-7.2-16-16s7.2-16 16-16zm112 16c0-8.8 7.2-16 16-16h128c8.8 0 16 7.2 16 16s-7.2 16-16 16H240c-8.8 0-16-7.2-16-16z"/></svg></span> Liabilities</li>
+<li><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M48 0C21.5 0 0 21.5 0 48v416c0 26.5 21.5 48 48 48h96v-80c0-26.5 21.5-48 48-48s48 21.5 48 48v80h96c26.5 0 48-21.5 48-48V48c0-26.5-21.5-48-48-48H48zm16 240c0-8.8 7.2-16 16-16h32c8.8 0 16 7.2 16 16v32c0 8.8-7.2 16-16 16H80c-8.8 0-16-7.2-16-16v-32zm112-16h32c8.8 0 16 7.2 16 16v32c0 8.8-7.2 16-16 16h-32c-8.8 0-16-7.2-16-16v-32c0-8.8 7.2-16 16-16zm80 16c0-8.8 7.2-16 16-16h32c8.8 0 16 7.2 16 16v32c0 8.8-7.2 16-16 16h-32c-8.8 0-16-7.2-16-16v-32zM80 96h32c8.8 0 16 7.2 16 16v32c0 8.8-7.2 16-16 16H80c-8.8 0-16-7.2-16-16v-32c0-8.8 7.2-16 16-16zm80 16c0-8.8 7.2-16 16-16h32c8.8 0 16 7.2 16 16v32c0 8.8-7.2 16-16 16h-32c-8.8 0-16-7.2-16-16v-32zm112-16h32c8.8 0 16 7.2 16 16v32c0 8.8-7.2 16-16 16h-32c-8.8 0-16-7.2-16-16v-32c0-8.8 7.2-16 16-16z"/></svg></span> Income</li>
+<li><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M64 32C28.7 32 0 60.7 0 96v320c0 35.3 28.7 64 64 64h384c35.3 0 64-28.7 64-64V192c0-35.3-28.7-64-64-64H80c-8.8 0-16-7.2-16-16s7.2-16 16-16h368c17.7 0 32-14.3 32-32s-14.3-32-32-32H64zm352 240a32 32 0 1 1 0 64 32 32 0 1 1 0-64z"/></svg></span> Expenses</li>
 </ol>
 <p>All the accounts you create should be under one of these
 accounts. This naming convention is a necessity, because without
 which, it's not possible to tell whether you are spending money or
-investing money. A transaction from Assets account to Expenses account
-implies that you are spending money.</p>
-<p>Money typically flows from Income to Assets, from Assets to either
-Expenses, Liabilities or other Assets, from Liabilities to Expenses.</p>
+investing money. A transaction from <code class="language-ledger highlight"><span class="s">Assets</span></code> account to
+<code class="language-ledger highlight"><span class="s">Expenses</span></code> account implies that you are spending money.</p>
+<p>Money typically flows from <code class="language-ledger highlight"><span class="s">Income</span></code> to <code class="language-ledger highlight"><span class="s">Assets</span></code>,
+from <code class="language-ledger highlight"><span class="s">Assets</span></code> to either <code class="language-ledger highlight"><span class="s">Expenses</span></code>, <code class="language-ledger highlight"><span class="s">Liabilities</span></code> or other <code class="language-ledger highlight"><span class="s">Assets</span></code>, from <code class="language-ledger highlight"><span class="s">Liabilities</span></code>
+to <code class="language-ledger highlight"><span class="s">Expenses</span></code>.</p>
 <pre class="mermaid"><code>graph LR
   I[Income] --&gt; A[Assets];
   A --&gt; E[Expenses];
@@ -929,28 +930,29 @@ Expenses, Liabilities or other Assets, from Liabilities to Expenses.</p>
 <p>As a general principle, try not to create too many accounts at second
 level. The UI works best when you create less than or equal to 12
 second level accounts under each type. For example, you can have 12
-accounts under <code>Expenses</code>. But if you want more, try to add them under
-3 level, example <code>Expenses:Food:Subway</code>.</p>
+accounts under <code class="language-ledger highlight"><span class="s">Expenses</span></code>. But if you want more, try to add them under
+3<sup>rd</sup> level, example <code class="language-ledger highlight"><span class="s">Expenses:Food:Subway</span></code>.</p>
 <h3 id="assets">Assets</h3>
-<p>All your assets should go under <code>Assets:</code>. The level of granularity is
+<p>All your assets should go under <code class="language-ledger highlight"><span class="s">Assets:</span></code>. The level of granularity is
 up to you. The recommended convention is to use
-<code>Assets:{instrument_type}:{instrument_name}</code>. The instrument type may
+<code class="language-ledger highlight"><span class="s">Assets:{instrument_type}:{instrument_name}</span></code>. The instrument type may
 be <code>Cash</code>, <code>Equity</code>, <code>Debt</code>, etc. The instrument name may be the name of
 the fund, stock, etc</p>
 <h3 id="checking">Checking</h3>
-<p><code>Assets:Checking</code> is a special account where you keep your money for
+<p><code class="language-ledger highlight"><span class="s">Assets:Checking</span></code> is a special account where you keep your money for
 daily use. This will be included in your net worth, but will not be
 treated as an investment. So gain page for example, will exclude this
-account and won't show the returns.</p>
+account and won't show the returns. If you have multiple checking
+accounts, you can use sub accounts as well, for example <code class="language-ledger highlight"><span class="s">Assets:Checking:HDFC</span></code> and <code class="language-ledger highlight"><span class="s">Assets:Checking:AXIS</span></code>.</p>
+<p>The distinction is necessary because Checking account is an asset, but
+not an investment. So you ideally you want to disregard them when you
+calculate your absolute returns etc.</p>
 <h3 id="income">Income</h3>
-<p>All your income should come from <code>Income:</code>. The typical way is to
-treat each employer as a separate account.</p>
-<ul>
-<li><code>Income:Salary:{company}</code> - salary debit account</li>
-</ul>
+<p>All your income should come from <code class="language-ledger highlight"><span class="s">Income:</span></code>. The typical way
+is to treat each employer as a separate account like <code class="language-ledger highlight"><span class="s">Income:Salary:{company}</span></code></p>
 <h3 id="interest">Interest</h3>
-<p><code>Income:Interest</code> is a special type of account from the perspective of
-returns calculation. Let's assume you have bought APPLE stock. You
+<p><code class="language-ledger highlight"><span class="s">Income:Interest</span></code> is a special type of account from the perspective of
+returns calculation. Let's assume you have bought <code class="language-ledger highlight"><span class="k">APPLE</span></code> stock. You
 might be buying them at regular intervals. To calculate your returns,
 we can compute the difference between purchase price and current
 price.</p>
@@ -958,21 +960,19 @@ price.</p>
 account. The returns is the difference between the amount you
 deposited and the final balance. It's essential we need to know which
 transactions are deposits and which are interest credits.</p>
-<p>Any money that comes from the sub account of <code>Income:Interest</code> will be
-treated as interest. This convention allows paisa to calculate the
-returns of any debt instrument without explicitly specifying anything
-else.</p>
+<p>Any money that comes from the sub account of <code class="language-ledger highlight"><span class="s">Income:Interest</span></code> will be treated as interest. This convention allows
+paisa to calculate the returns of any debt instrument without
+explicitly specifying anything else.</p>
 <ul>
-<li><code>Income:Interest:{name}</code> - interest debit account</li>
+<li><code class="language-ledger highlight"><span class="s">Income:Interest:{name}</span></code> - interest debit account</li>
 </ul>
 <h3 id="tax">Tax</h3>
-<p>Income tax paid to government should be credited to <code>Expenses:Tax</code>
-account. This is used to calculate your Net Income and your Savings
-Rate.</p>
+<p>Income tax paid to government should be credited to <code class="language-ledger highlight"><span class="s">Expenses:Tax</span></code> account. This is used to calculate your Net Income and
+your Savings Rate.</p>
 <h3 id="expenses">Expenses</h3>
-<p>All your expenses should go to <code>Expenses:{category}</code> accounts. You can
-also have more than 2 levels as well. The expense page will roll it up
-to 2 level wherever necessary.</p>
+<p>All your expenses should go to <code class="language-ledger highlight"><span class="s">Expenses:{category}</span></code>
+accounts. You can also have more than 2 levels as well. The expense
+page will roll it up to 2 level wherever necessary.</p>
 
 
   
@@ -1081,7 +1081,7 @@ to 2 level wherever necessary.</p>
       <div class="md-copyright">
   
     <div class="md-copyright__highlight">
-      Copyright &copy; 2022 - 2023 Anantha Kumaran <br \> <a href="#__consent">Change cookie settings</a>
+      Copyright © 2022 - 2023 Anantha Kumaran <br \> <a href="#__consent">Change cookie settings</a>
 
     </div>
   

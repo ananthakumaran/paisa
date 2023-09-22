@@ -25,5 +25,6 @@ class LedgerLexer(RegexLexer):
                (r'[$€]', Keyword),
                (r'\b[A-Z_]+\b', Keyword),
                (r'^\s{4}[^\][(); \t\n]((?!\s{2})[^/\][();\t\n])*', String),
+               (r'^[^\][(); \t\n]((?!\s{2})[^/\][();\t\n])*$', String),
           ]
      }

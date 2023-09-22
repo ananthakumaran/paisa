@@ -424,28 +424,28 @@
       
         <li class="md-nav__item">
   <a href="#journal" class="md-nav__link">
-    Journal
+     Journal
   </a>
   
 </li>
       
         <li class="md-nav__item">
   <a href="#commodity" class="md-nav__link">
-    Commodity
+     Commodity
   </a>
   
 </li>
       
         <li class="md-nav__item">
   <a href="#interest" class="md-nav__link">
-    Interest
+     Interest
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#config" class="md-nav__link">
-    Config
+  <a href="#configuration" class="md-nav__link">
+    Configuration
   </a>
   
 </li>
@@ -648,7 +648,7 @@
   
     <li class="md-nav__item">
       <a href="../../reference/config/" class="md-nav__link">
-        Config
+        Configuration
       </a>
     </li>
   
@@ -830,28 +830,28 @@
       
         <li class="md-nav__item">
   <a href="#journal" class="md-nav__link">
-    Journal
+     Journal
   </a>
   
 </li>
       
         <li class="md-nav__item">
   <a href="#commodity" class="md-nav__link">
-    Commodity
+     Commodity
   </a>
   
 </li>
       
         <li class="md-nav__item">
   <a href="#interest" class="md-nav__link">
-    Interest
+     Interest
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#config" class="md-nav__link">
-    Config
+  <a href="#configuration" class="md-nav__link">
+    Configuration
   </a>
   
 </li>
@@ -883,16 +883,32 @@
 
 <h1 id="tutorial">Tutorial</h1>
 <p>This tutorial will introduce all the concepts necessary to get
-started. <strong>Paisa</strong> builds on top of <strong>ledger</strong>, so we will first spend
-some time to familiarize the <a href="https://github.com/ledger/ledger/blob/master/doc/GLOSSARY.md">terms and concepts</a> used by <strong>ledger</strong></p>
-<h2 id="journal">Journal</h2>
+started. <strong>Paisa</strong> builds on top of the <strong><a href="https://ledger-cli.org/">ledger</a></strong><sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup>, a command
+line tool that follows the principles of <a href="https://plaintextaccounting.org/">plain text accounting</a>.
+<strong>ledger</strong> primarily focuses on command line users and doesn't provide
+any graphical user interface. Paisa aims to create a low-friction
+graphical user interface on top of <strong>ledger</strong>, thereby making it
+accessible to a wider range of users.</p>
+<p>As an end user, you should be familiar with the <a href="https://github.com/ledger/ledger/blob/master/doc/GLOSSARY.md">terms and
+concepts</a> used by <strong>ledger</strong>, which we will cover below. Paisa
+comes with an embedded <strong>ledger</strong> and you are not required to use
+<strong>ledger</strong> via command line unless you want to.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Even though the tutorial focuses on Indian users, Paisa is
+capable of handling any currency. You can change the default
+currency, locale and financial year starting month etc. Check the
+<a href="../../reference/config/">configuration</a> reference for more details.</p>
+</div>
+<h2 id="journal"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M64 464c-8.8 0-16-7.2-16-16V64c0-8.8 7.2-16 16-16h160v80c0 17.7 14.3 32 32 32h80v288c0 8.8-7.2 16-16 16H64zM64 0C28.7 0 0 28.7 0 64v384c0 35.3 28.7 64 64 64h256c35.3 0 64-28.7 64-64V154.5c0-17-6.7-33.3-18.7-45.3l-90.6-90.5C262.7 6.7 246.5 0 229.5 0H64zm56 256c-13.3 0-24 10.7-24 24s10.7 24 24 24h144c13.3 0 24-10.7 24-24s-10.7-24-24-24H120zm0 96c-13.3 0-24 10.7-24 24s10.7 24 24 24h144c13.3 0 24-10.7 24-24s-10.7-24-24-24H120z"/></svg></span> Journal</h2>
 <p>A journal file captures all your financial transactions. A transaction
-may represent a mutual fund purchase, EPF contribution and so
-on. Let's create a file named <code>personal.ledger</code> with the following
-content</p>
+may represent a mutual fund purchase, retirement contribution, grocery
+purchase and so on. Paisa creates a journal named <code>main.ledger</code>, Let's
+add our first transaction there. To open the editor, go to <code>Ledger</code>
+<span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.59 16.58 13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.42Z"/></svg></span> <code>Editor</code></p>
 <div class="language-ledger highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="na">2022/01/01</span><span class="cm">/*(1)!*/</span> <span class="gh">Salary</span><span class="cm">/*(2)!*/</span>
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="s">    Income:Salary:Acme</span><span class="cm">/*(3)!*/</span><span class="err">                         </span><span class="m">-100,000</span><span class="err"> </span><span class="k">INR</span><span class="cm">/*(6)!*/</span>
-</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="s">    Assets:Checking</span><span class="cm">/*(4)!*/</span><span class="err">                          </span><span class="cm">/*(5)!*/</span><span class="m">100,000</span><span class="err"> </span><span class="k">INR</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="s">    Income:Salary:Acme</span><span class="cm">/*(3)!*/</span><span class="err">   </span><span class="m">-100,000</span><span class="err"> </span><span class="k">INR</span><span class="cm">/*(6)!*/</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="s">    Assets:Checking</span><span class="cm">/*(4)!*/</span><span class="err">    </span><span class="cm">/*(5)!*/</span><span class="m">100,000</span><span class="err"> </span><span class="k">INR</span>
 </span></code></pre></div>
 <ol>
 <li>Transaction <code>Date</code></li>
@@ -904,150 +920,135 @@ content</p>
 </ol>
 <p><strong>ledger</strong> follows the double-entry accounting system. In simple terms, it
 tracks the movement of money from debit account to credit
-account. Here <code>Income:Salary:Acme</code> is the debit account and
-<code>Assets:Checking</code> is the credit account. The date at which the
+account. Here <code class="language-ledger highlight"><span class="s">Income:Salary:Acme</span></code> is the debit account and
+<code class="language-ledger highlight"><span class="s">Assets:Checking</span></code> is the credit account. The date at which the
 transaction took place and a description of the transaction is written
 in the first line followed by the list of credit or debit
 entry. Account <a href="../../reference/accounts/">naming conventions</a> are explained later. The <code>:</code> in the account name
-represents hierarchy. Its use will become more clear when we look at
-the reports generated by ledger. The sum of the balance of all the
-accounts must be zero.</p>
+represents hierarchy.</p>
 <div class="language-ledger highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="na">2022/01/01</span> <span class="gh">Salary</span>
-</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="s">    Income:Salary:Acme</span><span class="err">                         </span><span class="m">-100,000</span><span class="err"> </span><span class="k">INR</span>
-</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="s">    Assets:Checking</span><span class="err">                             </span><span class="m">100,000</span><span class="err"> </span><span class="k">INR</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="s">    Income:Salary:Acme</span><span class="err">      </span><span class="m">-100,000</span><span class="err"> </span><span class="k">INR</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="s">    Assets:Checking</span><span class="err">          </span><span class="m">100,000</span><span class="err"> </span><span class="k">INR</span>
 </span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>
 </span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="na">2022/02/01</span> <span class="gh">Salary</span>
-</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="s">    Income:Salary:Acme</span><span class="err">                         </span><span class="m">-100,000</span><span class="err"> </span><span class="k">INR</span>
-</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="s">    Assets:Checking</span><span class="err">                             </span><span class="m">100,000</span><span class="err"> </span><span class="k">INR</span>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="s">    Income:Salary:Acme</span><span class="err">      </span><span class="m">-100,000</span><span class="err"> </span><span class="k">INR</span>
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="s">    Assets:Checking</span><span class="err">          </span><span class="m">100,000</span><span class="err"> </span><span class="k">INR</span>
 </span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>
 </span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="na">2022/03/01</span> <span class="gh">Salary</span>
-</span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="s">    Income:Salary:Acme</span><span class="err">                         </span><span class="m">-100,000</span><span class="err"> </span><span class="k">INR</span>
-</span><span id="__span-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="s">    Assets:Checking</span><span class="err">                             </span><span class="m">100,000</span><span class="err"> </span><span class="k">INR</span>
+</span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="s">    Income:Salary:Acme</span><span class="err">      </span><span class="m">-100,000</span><span class="err"> </span><span class="k">INR</span>
+</span><span id="__span-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="s">    Assets:Checking</span><span class="err">          </span><span class="m">100,000</span><span class="err"> </span><span class="k">INR</span>
 </span></code></pre></div>
-<p>let's add few more entries. The total balance in your savings account
-could be found by</p>
-<div class="language-console highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="gp"># </span>ledger<span class="w"> </span>-f<span class="w"> </span>personal.ledger<span class="w"> </span>balance<span class="w"> </span>Assets:Checking
-</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="go">300,000 INR  Assets:Checking</span>
+<p>Let's add few more transactions. As you edit your journal file, the
+balance of the journal will be shown on the right hand side.</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>         300,000 INR  Assets:Checking
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>        -300,000 INR  Income:Salary:Acme
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>--------------------
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>                   0
 </span></code></pre></div>
-<p>Let's say your company deducts 12,000 INR and contributes it to EPF,
+<p>You would notice zero balance and a checking account with 3 lakhs and
+an income account with -3 lakhs. Double-entry accounting will always
+results in 0 balance since you have to always enter both the credit
+and debit side.</p>
+<p>Let's say your company deducts <code class="language-ledger highlight"><span class="m">12,000</span><span class="err"> </span><span class="k">INR</span></code> and contributes it to EPF,
 we could represent it as follows</p>
 <div class="language-ledger highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="na">2022/01/01</span> <span class="gh">Salary</span>
-</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="s">    Income:Salary:Acme</span><span class="err">                         </span><span class="m">-100,000</span><span class="err"> </span><span class="k">INR</span>
-</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="s">    Assets:Checking</span><span class="err">                              </span><span class="m">88,000</span><span class="err"> </span><span class="k">INR</span>
-</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="s">    Assets:Debt:EPF</span><span class="err">                              </span><span class="m">12,000</span><span class="err"> </span><span class="k">INR</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="s">    Income:Salary:Acme</span><span class="err">    </span><span class="m">-100,000</span><span class="err"> </span><span class="k">INR</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="s">    Assets:Checking</span><span class="err">         </span><span class="m">88,000</span><span class="err"> </span><span class="k">INR</span>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="s">    Assets:Debt:EPF</span><span class="err">         </span><span class="m">12,000</span><span class="err"> </span><span class="k">INR</span>
 </span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>
 </span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="na">2022/02/01</span> <span class="gh">Salary</span>
-</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="s">    Income:Salary:Acme</span><span class="err">                         </span><span class="m">-100,000</span><span class="err"> </span><span class="k">INR</span>
-</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="s">    Assets:Checking</span><span class="err">                              </span><span class="m">88,000</span><span class="err"> </span><span class="k">INR</span>
-</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="s">    Assets:Debt:EPF</span><span class="err">                              </span><span class="m">12,000</span><span class="err"> </span><span class="k">INR</span>
+</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="s">    Income:Salary:Acme</span><span class="err">    </span><span class="m">-100,000</span><span class="err"> </span><span class="k">INR</span>
+</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="s">    Assets:Checking</span><span class="err">         </span><span class="m">88,000</span><span class="err"> </span><span class="k">INR</span>
+</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="s">    Assets:Debt:EPF</span><span class="err">         </span><span class="m">12,000</span><span class="err"> </span><span class="k">INR</span>
 </span><span id="__span-3-10"><a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>
 </span><span id="__span-3-11"><a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="na">2022/03/01</span> <span class="gh">Salary</span>
-</span><span id="__span-3-12"><a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="s">    Income:Salary:Acme</span><span class="err">                         </span><span class="m">-100,000</span><span class="err"> </span><span class="k">INR</span>
-</span><span id="__span-3-13"><a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="s">    Assets:Checking</span><span class="err">                              </span><span class="m">88,000</span><span class="err"> </span><span class="k">INR</span>
-</span><span id="__span-3-14"><a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="s">    Assets:Debt:EPF</span><span class="err">                              </span><span class="m">12,000</span><span class="err"> </span><span class="k">INR</span>
+</span><span id="__span-3-12"><a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="s">    Income:Salary:Acme</span><span class="err">    </span><span class="m">-100,000</span><span class="err"> </span><span class="k">INR</span>
+</span><span id="__span-3-13"><a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="s">    Assets:Checking</span><span class="err">         </span><span class="m">88,000</span><span class="err"> </span><span class="k">INR</span>
+</span><span id="__span-3-14"><a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="s">    Assets:Debt:EPF</span><span class="err">         </span><span class="m">12,000</span><span class="err"> </span><span class="k">INR</span>
 </span></code></pre></div>
-<div class="language-console highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="gp"># </span>ledger<span class="w"> </span>-f<span class="w"> </span>personal.ledger<span class="w"> </span>balance<span class="w"> </span>Assets
-</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="go">          36,000 INR  Assets:Debt:EPF</span>
-</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="go">         264,000 INR  Assets:Checking</span>
-</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="go">--------------------</span>
-</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="go">         300,000 INR</span>
+<p>You can now see the use of <code>:</code> hierarchy in the account name.</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>         300,000 INR  Assets
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>         264,000 INR    Checking
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>          36,000 INR    Debt:EPF
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>        -300,000 INR  Income:Salary:Acme
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>--------------------
+</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>                   0
 </span></code></pre></div>
-<h2 id="commodity">Commodity</h2>
+<h2 id="commodity"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m1 22 1.5-5h7l1.5 5H1m12 0 1.5-5h7l1.5 5H13m-7-7 1.5-5h7l1.5 5H6m17-8.95-3.86 1.09L18.05 11l-1.09-3.86-3.86-1.09 3.86-1.09 1.09-3.86 1.09 3.86L23 6.05Z"/></svg></span> Commodity</h2>
 <p>So far we have only dealt with INR. <strong>ledger</strong> can handle commodity as
-well. Let's say you are also investing 10,000 INR in UTI Nifty Index
-Fund and 10,000 INR in ICICI Nifty Next 50 Index Fund every
+well. Let's say you are also investing <code class="language-ledger highlight"><span class="m">10,000</span><span class="err"> </span><span class="k">INR</span></code> in UTI Nifty Index
+Fund and <code class="language-ledger highlight"><span class="m">10,000</span><span class="err"> </span><span class="k">INR</span></code> in ICICI Nifty Next 50 Index Fund every
 month.</p>
 <div class="language-ledger highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="na">2018/01/01</span> <span class="gh">Investment</span>
-</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="s">    Assets:Checking</span><span class="err">                              </span><span class="m">-20,000</span><span class="err"> </span><span class="k">INR</span>
-</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="s">    Assets:Equity:NIFTY</span><span class="err">         </span><span class="m">148.0865</span><span class="err"> </span><span class="k">NIFTY</span><span class="err"> </span><span class="o">@</span><span class="err"> </span><span class="m">67.5281</span><span class="err"> </span><span class="k">INR</span>
-</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="s">    Assets:Equity:NIFTY_JR</span><span class="err">   </span><span class="m">358.6659</span><span class="err"> </span><span class="k">NIFTY_JR</span><span class="err"> </span><span class="o">@</span><span class="err"> </span><span class="m">27.8811</span><span class="err"> </span><span class="k">INR</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="s">    Assets:Checking</span><span class="err">               </span><span class="m">-20,000</span><span class="err"> </span><span class="k">INR</span>
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="s">    Assets:Equity:NIFTY</span><span class="err">        </span><span class="m">148.0865</span><span class="err"> </span><span class="k">NIFTY</span><span class="err"> </span><span class="o">@</span><span class="err"> </span><span class="m">67.5281</span><span class="err"> </span><span class="k">INR</span>
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="s">    Assets:Equity:NIFTY_JR</span><span class="err">  </span><span class="m">358.6659</span><span class="err"> </span><span class="k">NIFTY_JR</span><span class="err"> </span><span class="o">@</span><span class="err"> </span><span class="m">27.8811</span><span class="err"> </span><span class="k">INR</span>
 </span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>
 </span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="na">2018/02/01</span> <span class="gh">Investment</span>
-</span><span id="__span-5-7"><a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="s">    Assets:Checking</span><span class="err">                              </span><span class="m">-20,000</span><span class="err"> </span><span class="k">INR</span>
-</span><span id="__span-5-8"><a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="s">    Assets:Equity:NIFTY</span><span class="err">         </span><span class="m">140.2870</span><span class="err"> </span><span class="k">NIFTY</span><span class="err"> </span><span class="o">@</span><span class="err"> </span><span class="m">71.2824</span><span class="err"> </span><span class="k">INR</span>
-</span><span id="__span-5-9"><a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="s">    Assets:Equity:NIFTY_JR</span><span class="err">   </span><span class="m">363.2242</span><span class="err"> </span><span class="k">NIFTY_JR</span><span class="err"> </span><span class="o">@</span><span class="err"> </span><span class="m">27.5312</span><span class="err"> </span><span class="k">INR</span>
+</span><span id="__span-5-7"><a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="s">    Assets:Checking</span><span class="err">               </span><span class="m">-20,000</span><span class="err"> </span><span class="k">INR</span>
+</span><span id="__span-5-8"><a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="s">    Assets:Equity:NIFTY</span><span class="err">        </span><span class="m">140.2870</span><span class="err"> </span><span class="k">NIFTY</span><span class="err"> </span><span class="o">@</span><span class="err"> </span><span class="m">71.2824</span><span class="err"> </span><span class="k">INR</span>
+</span><span id="__span-5-9"><a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="s">    Assets:Equity:NIFTY_JR</span><span class="err">  </span><span class="m">363.2242</span><span class="err"> </span><span class="k">NIFTY_JR</span><span class="err"> </span><span class="o">@</span><span class="err"> </span><span class="m">27.5312</span><span class="err"> </span><span class="k">INR</span>
 </span><span id="__span-5-10"><a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a>
 </span><span id="__span-5-11"><a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a><span class="na">2018/03/01</span> <span class="gh">Investment</span>
-</span><span id="__span-5-12"><a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a><span class="s">    Assets:Checking</span><span class="err">                              </span><span class="m">-20,000</span><span class="err"> </span><span class="k">INR</span>
-</span><span id="__span-5-13"><a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a><span class="s">    Assets:Equity:NIFTY</span><span class="err">         </span><span class="m">147.5908</span><span class="err"> </span><span class="k">NIFTY</span><span class="err"> </span><span class="o">@</span><span class="err"> </span><span class="m">67.7549</span><span class="err"> </span><span class="k">INR</span>
-</span><span id="__span-5-14"><a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a><span class="s">    Assets:Equity:NIFTY_JR</span><span class="err">   </span><span class="m">378.4323</span><span class="err"> </span><span class="k">NIFTY_JR</span><span class="err"> </span><span class="o">@</span><span class="err"> </span><span class="m">26.4248</span><span class="err"> </span><span class="k">INR</span>
+</span><span id="__span-5-12"><a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a><span class="s">    Assets:Checking</span><span class="err">               </span><span class="m">-20,000</span><span class="err"> </span><span class="k">INR</span>
+</span><span id="__span-5-13"><a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a><span class="s">    Assets:Equity:NIFTY</span><span class="err">        </span><span class="m">147.5908</span><span class="err"> </span><span class="k">NIFTY</span><span class="err"> </span><span class="o">@</span><span class="err"> </span><span class="m">67.7549</span><span class="err"> </span><span class="k">INR</span>
+</span><span id="__span-5-14"><a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a><span class="s">    Assets:Equity:NIFTY_JR</span><span class="err">  </span><span class="m">378.4323</span><span class="err"> </span><span class="k">NIFTY_JR</span><span class="err"> </span><span class="o">@</span><span class="err"> </span><span class="m">26.4248</span><span class="err"> </span><span class="k">INR</span>
 </span></code></pre></div>
-<p>Let's consider <code>148.0865 NIFTY @ 67.5281 INR</code>. Here NIFTY is the name
-of the commodity and we have bought 148.0865 units at 67.5281 INR per
-unit.</p>
-<div class="language-console highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="gp"># </span>ledger<span class="w"> </span>-f<span class="w"> </span>personal.ledger<span class="w"> </span>balance<span class="w"> </span>Assets<span class="w"> </span>--market
-</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="go">          94,615 INR  Assets</span>
-</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="go">          36,000 INR    Debt:EPF</span>
-</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="go">          58,615 INR    Equity</span>
-</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="go">          29,539 INR      NIFTY</span>
-</span><span id="__span-6-6"><a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="go">          29,076 INR      NIFTY_JR</span>
-</span><span id="__span-6-7"><a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="go">--------------------</span>
-</span><span id="__span-6-8"><a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="go">          94,615 INR</span>
-</span></code></pre></div>
-<h2 id="interest">Interest</h2>
+<p>Let's consider <code class="language-ledger highlight"><span class="m">148.0865</span><span class="err"> </span><span class="k">NIFTY</span><span class="err"> </span><span class="o">@</span><span class="err"> </span><span class="m">67.5281</span><span class="err"> </span><span class="k">INR</span></code>. Here <code class="language-ledger highlight"><span class="k">NIFTY</span></code> is the name of the commodity and we have bought <code class="language-ledger highlight"><span class="m">148.0865</span></code> units at <code class="language-ledger highlight"><span class="m">67.5281</span><span class="err"> </span><span class="k">INR</span></code> per unit.</p>
+<p>Paisa has support for fetching commodity price history from few
+<a href="../../reference/commodities/">providers</a>. Go to <code>Configuration</code> page and expand the <code>Commodities</code>
+section. You can click the <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M256 512a256 256 0 1 0 0-512 256 256 0 1 0 0 512zm-24-168v-64h-64c-13.3 0-24-10.7-24-24s10.7-24 24-24h64v-64c0-13.3 10.7-24 24-24s24 10.7 24 24v64h64c13.3 0 24 10.7 24 24s-10.7 24-24 24h-64v64c0 13.3-10.7 24-24 24s-24-10.7-24-24z"/></svg></span> icon to
+add a new one. Edit the name to <code class="language-ledger highlight"><span class="k">NIFTY</span></code>. Click the
+<span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M471.6 21.7c-21.9-21.9-57.3-21.9-79.2 0l-30.1 30 97.9 97.9 30.1-30.1c21.9-21.9 21.9-57.3 0-79.2l-18.7-18.6zm-299.2 220c-6.1 6.1-10.8 13.6-13.5 21.9l-29.6 88.8c-2.9 8.6-.6 18.1 5.8 24.6s15.9 8.7 24.6 5.8l88.8-29.6c8.2-2.7 15.7-7.4 21.9-13.5l167.3-167.4-98-98-167.3 167.4zM96 64c-53 0-96 43-96 96v256c0 53 43 96 96 96h256c53 0 96-43 96-96v-96c0-17.7-14.3-32-32-32s-32 14.3-32 32v96c0 17.7-14.3 32-32 32H96c-17.7 0-32-14.3-32-32V160c0-17.7 14.3-32 32-32h96c17.7 0 32-14.3 32-32s-14.3-32-32-32H96z"/></svg></span> icon near Price section and select
+the price provider details. Once done, save the configuration and click the
+<code>Update Prices</code> from the top right hand side menu. If you had done
+everything correctly, you would see the latest price of the commodity
+under <code>Assets</code> <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.59 16.58 13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.42Z"/></svg></span> <code>Balance</code></p>
+<h2 id="interest"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M312 24v10.5c6.4 1.2 12.6 2.7 18.2 4.2 12.8 3.4 20.4 16.6 17 29.4s-16.6 20.4-29.4 17c-10.9-2.9-21.1-4.9-30.2-5-7.3-.1-14.7 1.7-19.4 4.4-2.1 1.3-3.1 2.4-3.5 3-.3.5-.7 1.2-.7 2.8v.6c.2.2.9 1.2 3.3 2.6 5.8 3.5 14.4 6.2 27.4 10.1l.9.3c11.1 3.3 25.9 7.8 37.9 15.3 13.7 8.6 26.1 22.9 26.4 44.9.3 22.5-11.4 38.9-26.7 48.5-6.7 4.1-13.9 7-21.3 8.8V232c0 13.3-10.7 24-24 24s-24-10.7-24-24v-11.4c-9.5-2.3-18.2-5.3-25.6-7.8-2.1-.7-4.1-1.4-6-2-12.6-4.2-19.4-17.8-15.2-30.4s17.8-19.4 30.4-15.2c2.6.9 5 1.7 7.3 2.5 13.6 4.6 23.4 7.9 33.9 8.3 8 .3 15.1-1.6 19.2-4.1 1.9-1.2 2.8-2.2 3.2-2.9.4-.6.9-1.8.8-4.1v-.2c0-1 0-2.1-4-4.6-5.7-3.6-14.3-6.4-27.1-10.3l-1.9-.6c-10.8-3.2-25-7.5-36.4-14.4-13.5-8.1-26.5-22-26.6-44.1-.1-22.9 12.9-38.6 27.7-47.4 6.4-3.8 13.3-6.4 20.2-8.2V24c0-13.3 10.7-24 24-24s24 10.7 24 24zm256.2 312.3c13.1 17.8 9.3 42.8-8.5 55.9l-126.6 93.3c-23.4 17.2-51.6 26.5-80.7 26.5H32c-17.7 0-32-14.3-32-32v-64c0-17.7 14.3-32 32-32h36.8l44.9-36c22.7-18.2 50.9-28 80-28H352c17.7 0 32 14.3 32 32s-14.3 32-32 32h-80c-8.8 0-16 7.2-16 16s7.2 16 16 16h120.6l119.7-88.2c17.8-13.1 42.8-9.3 55.9 8.5zM193.6 384h-.9.9z"/></svg></span> Interest</h2>
 <p>There are many instruments like EPF, FD, etc that pay interest at
-regular intervals. We can treat it as just another transaction.</p>
-<div class="language-ledger highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="na">2022/03/31</span> <span class="gh">EPF Interest</span>
-</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="s">    Income:Interest:EPF</span><span class="err">                         </span><span class="m">-15,000</span><span class="err"> </span><span class="k">INR</span>
-</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="s">    Assets:Debt:EPF</span><span class="err">                              </span><span class="m">15,000</span><span class="err"> </span><span class="k">INR</span>
+regular intervals. We can treat it as just another transaction. Any
+income account that has a prefix <code class="language-ledger highlight"><span class="s">Income:Interest:</span></code> can be
+used as the debit account. It's not mandatory to specify the amount at
+bot side. If you leave one side, <strong>ledger</strong> will deduct it.</p>
+<div class="language-ledger highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="na">2022/03/31</span> <span class="gh">EPF Interest</span>
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="s">    Income:Interest:EPF</span><span class="err">     </span><span class="m">-5,000</span><span class="err"> </span><span class="k">INR</span>
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="s">    Assets:Debt:EPF</span>
 </span></code></pre></div>
-<h2 id="config">Config</h2>
-<p>So far we have been mostly talking about <strong>ledger</strong>. We need to know
-the basics of <strong>ledger</strong> because <strong>paisa</strong> builds on top of
-<strong>ledger</strong>.</p>
-<p><strong>paisa</strong> checks for a config file named <code>paisa.yaml</code> in the current
-directory. It can also be set via flag <code>--config</code> or env variable
-<code>PAISA_CONFIG</code>. The default config is tuned for Indians, users from
-other countries would have to change the <code>default_currency</code> and
-<code>locale</code>. Check the <a href="../../reference/config/">config</a> section for details.</p>
-<div class="language-yaml highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="nt">journal_path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/home/john/finance/personal.ledger</span><span class="w"> </span><span class="c1"># (1)!</span>
-</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="nt">db_path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/home/john/finance/paisa.db</span><span class="w"> </span><span class="c1"># (2)!</span>
-</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="nt">commodities</span><span class="p">:</span><span class="w"> </span><span class="c1"># (3)!</span>
-</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">NIFTY</span>
-</span><span id="__span-8-5"><a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mutualfund</span>
-</span><span id="__span-8-6"><a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="w">    </span><span class="nt">code</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">120716</span>
-</span><span id="__span-8-7"><a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">NIFTY_JR</span>
-</span><span id="__span-8-8"><a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a><span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mutualfund</span>
-</span><span id="__span-8-9"><a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a><span class="w">    </span><span class="nt">code</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">120684</span>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>           5,000 INR  Assets:Debt:EPF
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>          -5,000 INR  Income:Interest:EPF
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>--------------------
+</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>                   0
 </span></code></pre></div>
+<h2 id="configuration">Configuration</h2>
+<p>All the configuration related to paisa is stored in a yaml file named
+<code>paisa.yaml</code>. The configuration can be edited via the web interface. The
+sequence in which it look for the file is described below</p>
 <ol>
-<li>absolute path of journal file</li>
-<li>absolute path of sql database</li>
-<li>commodities list</li>
+<li><code>PAISA_CONFIG</code> environment variable</li>
+<li>via --config flag</li>
+<li>Current working directory</li>
+<li><code>paisa/paisa.yaml</code> file inside User Documents folder.</li>
 </ol>
-<p><strong>paisa</strong> can fetch the latest price of mutual funds, nps funds and
-stocks as of today. For other types of commodities, the purchase/sell
-price of the last transaction would be considered the latest
-price. The code is the scheme code of the fund. The <em>search</em> command
-can be used to find scheme code</p>
-<div class="language-console highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="gp"># </span>paisa<span class="w"> </span>search<span class="w"> </span>mutualfund
-</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="go">INFO Using config file: /home/john/finance/paisa.yaml</span>
-</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="go">INFO Using cached results; pass &#39;-u&#39; to update the cache</span>
-</span><span id="__span-9-4"><a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="go">✔ ICICI Prudential Asset Management Company Limited</span>
-</span><span id="__span-9-5"><a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="go">✔ ICICI Prudential Nifty Next 50 Index Fund - Direct Plan -  Growth</span>
-</span><span id="__span-9-6"><a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="go">INFO Mutual Fund Scheme Code: 120684</span>
-</span></code></pre></div>
-<p>You might see a lot of funds with similar names. The search command
-supports crude fuzzy search. For example, <code>nifty next grow direct</code> would match the above fund.</p>
+<p>If it can't find the configuration file, it will create a default
+configuration file name <code>paisa/paisa.yaml</code> inside User Documents
+folder. The default configuration is tuned for Indians, users from
+other countries would have to change the <code>default_currency</code> and
+<code>locale</code>. Check the <a href="../../reference/config/">configuration</a> reference for details.</p>
 <h2 id="update">Update</h2>
-<p>Once the config file is created, run the update command, followed by
-the serve command.</p>
-<div class="language-console highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="gp"># </span>paisa<span class="w"> </span>update
-</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="go">INFO Using config file: /home/john/finance/paisa.yaml</span>
-</span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="go">INFO Syncing transactions from journal</span>
-</span><span id="__span-10-4"><a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="go">INFO Fetching commodities price history</span>
-</span><span id="__span-10-5"><a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="go">INFO Fetching commodity NIFTY</span>
-</span><span id="__span-10-6"><a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a><span class="go">INFO Fetching commodity NIFTY_JR</span>
-</span><span id="__span-10-7"><a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a><span class="gp"># </span>paisa<span class="w"> </span>serve
-</span><span id="__span-10-8"><a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a><span class="go">INFO Using config file: /home/john/finance/paisa.yaml</span>
-</span><span id="__span-10-9"><a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a><span class="go">INFO Listening on 7500</span>
-</span></code></pre></div>
-<p>You can then go to <a href="http://localhost:7500">http://localhost:7500</a> to view more
-details. The update command loads all the transactions from journal
-file and fetch the latest price of all the commodities. Whenever you
-make any changes to the journal file, you need to run the update
-command. The serve command starts a local server and provides the
-Web UI.</p>
+<p>Paisa fetches the latest price of the commodities only when
+<em>update</em> command is used. Make sure to run <code>paisa update</code> command
+after you make any changes to your journal file or you want to fetch
+the latest value of the commodities. The update can be performed from
+the UI as well via the dropdown in the top right hand side corner.</p>
+<div class="footnote">
+<hr />
+<ol>
+<li id="fn:1">
+<p><a href="hled">hledger</a> is also supported, refer to the <a href="../../reference/config/">configuration</a>
+to see how to modify the <code>ledger_cli</code>.&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+</li>
+</ol>
+</div>
 
 
   
@@ -1156,7 +1157,7 @@ Web UI.</p>
       <div class="md-copyright">
   
     <div class="md-copyright__highlight">
-      Copyright &copy; 2022 - 2023 Anantha Kumaran <br \> <a href="#__consent">Change cookie settings</a>
+      Copyright © 2022 - 2023 Anantha Kumaran <br \> <a href="#__consent">Change cookie settings</a>
 
     </div>
   

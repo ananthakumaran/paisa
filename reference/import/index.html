@@ -634,7 +634,7 @@
   
     <li class="md-nav__item">
       <a href="../config/" class="md-nav__link">
-        Config
+        Configuration
       </a>
     </li>
   
@@ -857,6 +857,10 @@
 <p>Paisa provides ability to convert <strong>CSV</strong>, <strong>TXT</strong>, <strong>XLS</strong>, <strong>XLSX</strong>
 or <strong>PDF</strong> files to Ledger file format. The import page is made of
 three components.</p>
+<div class="admonition example">
+<p class="admonition-title">Experimental</p>
+<p>PDF support is in an experimental stage and may not consistently detect rows accurately.</p>
+</div>
 <p>1) File Preview - You can drag and drop files here to preview the
 contents.</p>
 <p>2) Ledger Preview - This is where the converted ledger file will be
@@ -884,14 +888,17 @@ transaction like this.</p>
 <p>The template is written in <a href="https://handlebarsjs.com/">Handlebars</a>. Paisa provides a few
 helper functions to make it easier to write the template.</p>
 <h4 id="template-management">Template Management</h4>
-<p>Paisa ships with a few builtin templates. You can also create your
+<p>Paisa ships with a few built-in templates. You can also create your
 own. To create a new template, edit the template and click on the
 <code>Save As</code> button.</p>
-<blockquote>
-<p>The import system is designed to be extensible. If you are unable to
-create a template suitable for your CSV file, please open an issue
-with a sample CSV file.</p>
-</blockquote>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>The import system is designed to be extensible and might not be
+intuitive if you are not accustomed to coding. If you are unable
+to create a template suitable for your file, please open an issue
+with a sample file, and we will provide assistance, possibly
+adding it to the built-in templates.</p>
+</div>
 <h4 id="template-data">Template Data</h4>
 <ol>
 <li><strong>ROW</strong> - This is the current row being processed. You can refer to
@@ -1141,7 +1148,7 @@ used. Examples <code>(0.9534)</code> to <code>-0.9534</code>, <code>₹ 1,234.56
       <div class="md-copyright">
   
     <div class="md-copyright__highlight">
-      Copyright &copy; 2022 - 2023 Anantha Kumaran <br \> <a href="#__consent">Change cookie settings</a>
+      Copyright © 2022 - 2023 Anantha Kumaran <br \> <a href="#__consent">Change cookie settings</a>
 
     </div>
   

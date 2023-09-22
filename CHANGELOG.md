@@ -1,5 +1,27 @@
 # CHANGELOG
 
+### 0.5.1 (2023-09-22)
+
+* Add Desktop app
+* Bug fixes
+
+## Breaking Changes :rotating_light:
+
+* The structure of price code configuration has been updated to make
+  it easier to add more price provider in the future. In addition to
+  the code, the provider name also has to be added. Refer the
+  [config](https://paisa.fyi/reference/config/) documentation for more details
+
+```diff
+     type: mutualfund
+-    code: 122639
++    price:
++      provider: in-mfapi
++      code: 122639
+     harvest: 365
+```
+
+
 ### 0.5.0 (2023-09-16)
 
 * Add config page

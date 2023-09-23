@@ -1,4 +1,4 @@
-import { ajax, type LedgerFileError } from "$lib/utils";
+import { ajax } from "$lib/utils";
 import { ledger } from "$lib/parser";
 import { StreamLanguage } from "@codemirror/language";
 import { keymap } from "@codemirror/view";
@@ -8,27 +8,11 @@ import { basicSetup } from "./editor/base";
 import { insertTab, history, undoDepth, redoDepth } from "@codemirror/commands";
 import { linter, lintGutter, type Diagnostic } from "@codemirror/lint";
 import _ from "lodash";
-import { writable } from "svelte/store";
+import { editorState, initialEditorState } from "../store";
 import { autocompletion, completeFromList, ifIn } from "@codemirror/autocomplete";
 import { MergeView } from "@codemirror/merge";
 
-interface EditorState {
-  hasUnsavedChanges: boolean;
-  undoDepth: number;
-  redoDepth: number;
-  errors: LedgerFileError[];
-  output: string;
-}
-
-const initialEditorState: EditorState = {
-  hasUnsavedChanges: false,
-  undoDepth: 0,
-  redoDepth: 0,
-  errors: [],
-  output: ""
-};
-
-export const editorState = writable(initialEditorState);
+export { editorState } from "../store";
 
 async function lint(editor: EditorView): Promise<Diagnostic[]> {
   const doc = editor.state.doc;

@@ -7,7 +7,7 @@
   import { format } from "$lib/journal";
   import _ from "lodash";
   import { onMount } from "svelte";
-  import { goto } from "$app/navigation";
+  import { beforeNavigate, goto } from "$app/navigation";
   import type { PageData } from "./$types";
   import FileTree from "$lib/components/FileTree.svelte";
   import FileModal from "$lib/components/FileModal.svelte";
@@ -23,6 +23,28 @@
   let payees: string[] = [];
   let selectedVersion: string = null;
   let lineNumber = 0;
+
+  let cancelled = false;
+  beforeNavigate(async ({ cancel }) => {
+    if ($editorState.hasUnsavedChanges) {
+      const confirmed = confirm("You have unsaved changes. Are you sure you want to leave?");
+      if (!confirmed) {
+        cancel();
+        cancelled = true;
+      } else {
+        $editorState = _.assign({}, $editorState, { hasUnsavedChanges: false });
+      }
+    }
+  });
+
+  async function navigate(url: string) {
+    await goto(url, { noScroll: true });
+    if (cancelled) {
+      cancelled = false;
+      return false;
+    }
+    return true;
+  }
 
   onMount(async () => {
     loadFiles(data.name);
@@ -42,8 +64,10 @@
   }
 
   async function selectFile(file: LedgerFile) {
-    selectedFile = file;
-    await goto(`/ledger/editor/${encodeURIComponent(file.name)}`, { noScroll: true });
+    const success = await navigate(`/ledger/editor/${encodeURIComponent(file.name)}`);
+    if (success) {
+      selectedFile = file;
+    }
   }
 
   async function revert(version: string) {
@@ -143,8 +167,11 @@
         type: "is-success",
         duration: 5000
       });
-      await goto(`/ledger/editor/${encodeURIComponent(destinationFile)}`, { noScroll: true });
-      await loadFiles(destinationFile);
+
+      const success = await navigate(`/ledger/editor/${encodeURIComponent(destinationFile)}`);
+      if (success) {
+        await loadFiles(destinationFile);
+      }
     } else {
       toast.toast({
         message: `Failed to create ${destinationFile}. reason: ${message}`,
@@ -166,6 +193,7 @@
             <p class="control">
               <button
                 class="button is-small is-link invertable is-light"
+                disabled={$editorState.hasUnsavedChanges}
                 on:click={(_e) => openCreateModal()}
               >
                 <span class="icon is-small">

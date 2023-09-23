@@ -5,7 +5,7 @@ or **PDF** files to Ledger file format. The import page is made of
 three components.
 
 !!! example "Experimental"
-    PDF support is in an experimental stage and may not consistently detect rows accurately.
+    PDF support is in an experimental stage and may not accurately detect rows.
 
 
 1) File Preview - You can drag and drop files here to preview the

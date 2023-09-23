@@ -11,11 +11,11 @@ typical journal would like below
 
 ```ledger
 2023/07/01 Rent
-    Expenses:Rent                             15,000 INR
+    Expenses:Rent             15,000 INR
     Assets:Checking
 
 2023/08/01 Rent
-    Expenses:Rent                             15,000 INR
+    Expenses:Rent             15,000 INR
     Assets:Checking
 ```
 
@@ -24,12 +24,12 @@ You can manually tag a posting by adding `; Recurring: Rent`.
 ```ledger
 2023/07/01 Rent
     ; Recurring: Rent
-    Expenses:Rent                             15,000 INR
+    Expenses:Rent             15,000 INR
     Assets:Checking
 
 2023/08/01 Rent
     ; Recurring: Rent
-    Expenses:Rent                             15,000 INR
+    Expenses:Rent             15,000 INR
     Assets:Checking
 ```
 

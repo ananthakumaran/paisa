@@ -55,7 +55,7 @@ func (LedgerCLI) ValidateFile(journalPath string) ([]LedgerFileError, string, er
 	errors := []LedgerFileError{}
 
 	var output, error bytes.Buffer
-	err := utils.Exec(binary.LedgerBinaryPath(), &output, &error, "-f", journalPath, "balance")
+	err := utils.Exec(binary.LedgerBinaryPath(), &output, &error, "--args-only", "-f", journalPath, "balance")
 	if err == nil {
 		return errors, output.String(), nil
 	}
@@ -96,7 +96,7 @@ func (LedgerCLI) Prices(journalPath string) ([]price.Price, error) {
 	var prices []price.Price
 
 	var output, error bytes.Buffer
-	err := utils.Exec(binary.LedgerBinaryPath(), &output, &error, "-f", journalPath, "pricesdb")
+	err := utils.Exec(binary.LedgerBinaryPath(), &output, &error, "--args-only", "-f", journalPath, "pricesdb")
 	if err != nil {
 		return prices, err
 	}
@@ -253,7 +253,7 @@ func parseAmount(amount string) (string, decimal.Decimal, error) {
 func execLedgerCommand(journalPath string, flags []string) ([]*posting.Posting, error) {
 	var postings []*posting.Posting
 
-	args := append(append([]string{"-f", journalPath}, flags...), "csv", "--csv-format", "%(quoted(date)),%(quoted(payee)),%(quoted(display_account)),%(quoted(commodity(scrub(display_amount)))),%(quoted(quantity(scrub(display_amount)))),%(quoted(scrub(market(amount,date,'"+config.DefaultCurrency()+"') * 100000000))),%(quoted(xact.filename)),%(quoted(xact.id)),%(quoted(cleared ? \"*\" : (pending ? \"!\" : \"\"))),%(quoted(tag('Recurring'))),%(quoted(xact.beg_line)),%(quoted(xact.end_line))\n")
+	args := append(append([]string{"--args-only", "-f", journalPath}, flags...), "csv", "--csv-format", "%(quoted(date)),%(quoted(payee)),%(quoted(display_account)),%(quoted(commodity(scrub(display_amount)))),%(quoted(quantity(scrub(display_amount)))),%(quoted(scrub(market(amount,date,'"+config.DefaultCurrency()+"') * 100000000))),%(quoted(xact.filename)),%(quoted(xact.id)),%(quoted(cleared ? \"*\" : (pending ? \"!\" : \"\"))),%(quoted(tag('Recurring'))),%(quoted(xact.beg_line)),%(quoted(xact.end_line))\n")
 
 	var output, error bytes.Buffer
 	err := utils.Exec(binary.LedgerBinaryPath(), &output, &error, args...)

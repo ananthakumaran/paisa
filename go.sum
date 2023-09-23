@@ -1,7 +1,5 @@
 dario.cat/mergo v1.0.0 h1:AGCNq9Evsj31mOgNPcLyXc+4PNABt905YmuqPYYpBWk=
 dario.cat/mergo v1.0.0/go.mod h1:uNxQE+84aUszobStD9th8a29P2fMDhsBdgRYvZOxGmk=
-github.com/ChizhovVadim/xirr v0.0.0-20210210181856-508bc36c62aa h1:FwRnTf9b00fcD1w4pkV23+LBBrxxm91CTfrgsYAG9VE=
-github.com/ChizhovVadim/xirr v0.0.0-20210210181856-508bc36c62aa/go.mod h1:Ncy9etDvS9TBbvZHS4de6sxzeuJtc9H79dKHTHAwMz8=
 github.com/adrg/xdg v0.4.0 h1:RzRqFcjH4nE5C6oTAxhBtoE2IRyjBSa62SCbyPidvls=
 github.com/adrg/xdg v0.4.0/go.mod h1:N6ag73EX4wyxeaoeHctc1mas01KZgsj5tYiAIwqJE/E=
 github.com/bep/debounce v1.2.1 h1:v67fRdBA9UQu2NhLFXrSg0Brw7CexQekrBwDMM8bzeY=

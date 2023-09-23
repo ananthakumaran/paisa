@@ -100,6 +100,10 @@ extra:
     - icon: simple/matrix
       link: https://matrix.to/#/#paisa:matrix.org
   consent:
+    actions:
+      - accept
+      - reject
+      - manage
     title: Cookie consent
     description: >-
       We use cookies to recognize your repeated visits and preferences, as well

@@ -60,11 +60,36 @@ function findMatch(query: string) {
     .value();
 }
 
+function scrubAmount(str: string) {
+  const amount = _.trim(str)
+    .replace(/\((.+)\)/, "-$1")
+    .replace(/[^0-9.-]/g, "");
+
+  if (!isNaN(amount as any) && !isNaN(parseFloat(amount))) {
+    return amount;
+  }
+}
+
+function parseAmount(str: string | number) {
+  if (_.isNumber(str)) {
+    return str;
+  }
+
+  const amount = scrubAmount(str);
+  if (amount) {
+    return parseFloat(amount);
+  }
+}
+
 export default {
   eq: (a: any, b: any) => a === b,
   ne: (a: any, b: any) => a !== b,
   not: (value: any) => !value,
-  negate: (value: string) => parseFloat(value) * -1,
+  gte: (a: string | number, b: string | number) => parseAmount(a) >= parseAmount(b),
+  gt: (a: string | number, b: string | number) => parseAmount(a) > parseAmount(b),
+  lte: (a: string | number, b: string | number) => parseAmount(a) <= parseAmount(b),
+  lt: (a: string | number, b: string | number) => parseAmount(a) < parseAmount(b),
+  negate: (value: string) => parseAmount(value) * -1,
   and(...args: any[]) {
     return Array.prototype.every.call(Array.prototype.slice.call(args, 0, -1), Boolean);
   },
@@ -112,15 +137,8 @@ export default {
     return _.isEmpty(str) || _.trim(str) === "";
   },
   amount(str: string, options: any) {
-    const amount = _.trim(str)
-      .replace(/\((.+)\)/, "-$1")
-      .replace(/[^0-9.-]/g, "");
-
-    if (!isNaN(amount as any) && !isNaN(parseFloat(amount))) {
-      return amount;
-    }
-
-    return options.hash.default || "";
+    const amount = scrubAmount(str);
+    return amount || options.hash.default || "";
   },
   date(str: string, format: string) {
     return dayjs(_.trim(str), format, true).format("YYYY/MM/DD");
@@ -140,6 +158,18 @@ export default {
     }
 
     return new RegExp(regexp).test(str);
+  },
+  regexpMatch(str: string, regexp: string, options: any) {
+    if (!_.isString(str)) {
+      return;
+    }
+
+    const group = options.hash.group || 0;
+
+    const match = new RegExp(regexp).exec(str);
+    if (match) {
+      return match[group];
+    }
   },
   findAbove(column: string, options: any) {
     const regexp = new RegExp(options.hash.regexp || ".+");

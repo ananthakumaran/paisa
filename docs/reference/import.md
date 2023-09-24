@@ -149,29 +149,63 @@ own. To create a new template, edit the template and click on the
 
 #### Template Helpers
 
-1) `#!typescript eq(a: any, b: any): boolean` - Checks if the two values are
-   equal.
+#### `#!typescript eq(a: any, b: any): boolean`
 
-2) `#!typescript not(value: any): boolean` - Negates the given value.
+Checks if the two values are equal.
 
-3) `#!typescript and(...args: any[]): boolean` - Returns true if all the
-   arguments are true.
+#### `#!typescript not(value: any): boolean`
 
-4) `#!typescript or(...args: any[]): boolean` - Returns true if any of the
-   arguments are true.
+Negates the given value.
 
-5) `#!typescript isDate(str: string, format: string): boolean` - Checks if the
-   given string is a valid date in the given format. Refer [Day.js](https://day.js.org/docs/en/parse/string-format#list-of-all-available-parsing-tokens)
-   for the full list of supported formats.
+#### `#!typescript and(...args: any[]): boolean`
 
-6) `#!typescript predictAccount(...corpus: string[], {prefix?: string}): string` -
-   Predicts the account name based on your existing ledger file. The
-   corpus provided will be matched with the existing transaction
-   description and amount.
+Returns true if all the arguments are true.
 
-   If `corpus` is not provided, the entire `ROW` will be used.
-   The `prefix` is optional and will be used to filter out matching
-   accounts. If no match is found, `Unknown` will be returned.
+#### `#!typescript or(...args: any[]): boolean`
+
+Returns true if any of the arguments are true.
+
+#### `#!typescript gte(a: string | number, b: string | number): boolean`
+
+Checks if a is greater than or equal to b.
+
+#### `#!typescript gt(a: string | number, b: string | number): boolean`
+
+Checks if a is greater than b.
+
+#### `#!typescript lte(a: string | number, b: string | number): boolean`
+
+Checks if a is less than or equal to b.
+
+#### `#!typescript lt(a: string | number, b: string | number): boolean`
+
+Checks if a is less than b.
+
+#### `#!typescript negate(value: string | number): number`
+
+Negates the given value. For example, `negate("123.45")` will return
+`-123.45`
+
+#### `#!typescript amount(str: string, {default?: string}): string`
+
+Converts the given string to a valid amount. If the string is blank,
+the default value is used. Examples `(0.9534)` to `-0.9534`, `₹
+1,234.56` to `1234.56`
+
+
+#### `#!typescript isDate(str: string, format: string): boolean`
+
+Checks if the given string is a valid date in the given format. Refer
+[Day.js](https://day.js.org/docs/en/parse/string-format#list-of-all-available-parsing-tokens) for the full list of supported formats.
+
+#### `#!typescript predictAccount(...corpus: string[], {prefix?: string}): string`
+
+corpus provided will be matched with the existing transaction
+description and amount.
+
+If `corpus` is not provided, the entire `ROW` will be used.  The
+`prefix` is optional and will be used to filter out matching
+accounts. If no match is found, `Unknown` will be returned.
 
 ```handlebars
 {{predictAccount prefix="Income"}}
@@ -179,43 +213,48 @@ own. To create a new template, edit the template and click on the
 ```
 
 !!! tip
+
     Prediction will only work if you have similar transactions in
     ledger file. It usually means, first time you have to manually fix
     the Unknown account and then subsequent imports will work
 
-7) `#!typescript isBlank(str: string): boolean` - Checks if the given string is
-   blank.
+#### `#!typescript isBlank(str: string): boolean`
 
-8) `#!typescript date(str: string, format: string): string` - Parses the given
-   string as a date in the given format and returns the date in the
-   format `YYYY/MM/DD`. Refer [Day.js](https://day.js.org/docs/en/parse/string-format#list-of-all-available-parsing-tokens)
-   for the full list of supported formats.
+Checks if the given string is blank.
 
-9) `#!typescript findAbove(column: string, {regexp?: string}): string` - Finds the
-first cell above the current row in the given column. If `regexp` is
-provided, the search will continue till a match is found
+#### `#!typescript date(str: string, format: string): string`
+
+Parses the given string as a date in the given format and returns the
+date in the format `YYYY/MM/DD`. Refer [Day.js](https://day.js.org/docs/en/parse/string-format#list-of-all-available-parsing-tokens) for the full list
+of supported formats.
+
+#### `#!typescript findAbove(column: string, {regexp?: string}): string`
+
+Finds the first cell above the current row in the given column. If
+`regexp` is provided, the search will continue till a match is found
 
 ```handlebars
 {{findAbove B regexp="LIMITED"}}
 ```
 
-10) `#!typescript acronym(str: string): string` - Returns the acronym of the given
-    string that is suitable to be used as a commodity symbol. For
-    example, `UTI Nifty Next 50 Index Growth Direct Plan` will be
-    converted to `UNNI`
+#### `#!typescript acronym(str: string): string`
 
-11) `#!typescript negate(value: string): number` - Negates the given value. For
-    example, `negate("123.45")` will return `-123.45`
+Returns the acronym of the given string that is suitable to be used as
+a commodity symbol. For example, `UTI Nifty Next 50 Index Growth
+Direct Plan` will be converted to `UNNI`
 
-12) `#!typescript replace(str: string, search: string, replace: string): string` -
-    Replaces all the occurrences of `search` with `replace` in the
-    given string.
+#### `#!typescript replace(str: string, search: string, replace: string): string`
 
-13) `#!typescript trim(str: string): string` - Trims the given string.
+Trims the given string.
 
-14) `#!typescript amount(str: string, {default?: string}): string` - Converts the given
-string to a valid amount. If the string is blank, the default value is
-used. Examples `(0.9534)` to `-0.9534`, `₹ 1,234.56` to `1234.56`
+#### `#!typescript regexpTest(str: string, regexp: string): boolean`
 
-15) `#!typescript regexpTest(str: string, regexp: string): boolean` - Tests the
-    given string against the given regular expression.
+Tests the given string against the given regular expression.
+
+
+#### `#!typescript regexpMatch(str: string, regexp: string, {group?: number}): string`
+
+Extract part of a string. Let's say you have `Axis Long Term
+  Equity Growth Direct Plan` and you want to extract `Axis Long Term
+  Equity`, you can use `#!handlebars {{regexpMatch ROW.C "(.*) Growth Direct Plan" group=1}}` assuming the string is in the column
+  `C`. `group` is optional and defaults to `0`.

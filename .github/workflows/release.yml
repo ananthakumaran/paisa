@@ -8,7 +8,7 @@ on:
       - '*'
 
 jobs:
-  linux-binary:
+  linux-cli-binary:
     runs-on: ubuntu-20.04
     steps:
     - uses: actions/checkout@v2.4.0
@@ -30,6 +30,45 @@ jobs:
         cp ./result/bin/ledger internal/binary/ledger
         go build
         cp paisa paisa-cli-linux-amd64
+    - name: Release
+      uses: softprops/action-gh-release@v1
+      with:
+        draft: true
+        files: |
+          paisa-*
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  linux-app-binary:
+    runs-on: ubuntu-22.04
+    steps:
+    - uses: actions/checkout@v2.4.0
+    - uses: cachix/install-nix-action@v22
+      with:
+        nix_path: nixpkgs=channel:nixos-unstable
+    - uses: actions/setup-node@v3
+      with:
+        node-version: 18
+        cache: npm
+    - uses: actions/setup-go@v4
+      with:
+        go-version: '1.20.5'
+    - run: |
+        sudo apt-get install -y sqlite3 libgtk-3-dev libwebkit2gtk-4.0-dev build-essential pkg-config
+        npm install
+        npm run build
+        nix-build ledger.nix
+        cp ./result/bin/ledger internal/binary/ledger
+        go build
+        cp paisa paisa-cli-linux-amd64
+        cd desktop
+        go install github.com/wailsapp/wails/v2/cmd/wails@latest
+        wails doctor
+        wails build -tags webkit2_40
+        cp build/bin/Paisa build/linux/usr/local/bin
+        cp -r build/linux paisa_0.5.2_amd64
+        dpkg --build paisa_0.5.2_amd64
+        cd ..
+        mv desktop/paisa_0.5.2_amd64.deb paisa-app-linux-amd64.deb
     - name: Release
       uses: softprops/action-gh-release@v1
       with:

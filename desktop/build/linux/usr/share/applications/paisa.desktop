@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Paisa
+Exec=/usr/local/bin/Paisa %U
+Terminal=false
+Type=Application
+Icon=paisa
+StartupWMClass=paisa
+Comment=Personal finance manager
+Categories=Office;Finance;

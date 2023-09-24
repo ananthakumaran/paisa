@@ -1,0 +1,8 @@
+Package: paisa
+Version: 0.5.2
+Section: misc
+Priority: optional
+Architecture: amd64
+Maintainer: Anantha Kumaran <ananthakumaran@gmail.com>
+Homepage: https://paisa.fyi
+Description: Personal finance manager

@@ -53,15 +53,16 @@ func computeNetworth(db *gorm.DB, postings []posting.Posting) Networth {
 	for _, p := range postings {
 		isInterest := service.IsInterest(db, p)
 		isInterestRepayment := service.IsInterestRepayment(db, p)
+		isStockSplit := service.IsStockSplit(db, p)
 
 		if isInterest || isInterestRepayment {
 			balance = balance.Add(p.Amount)
 		} else {
-			if p.Amount.GreaterThan(decimal.Zero) {
+			if p.Amount.GreaterThan(decimal.Zero) && !isStockSplit {
 				investment = investment.Add(p.Amount)
 			}
 
-			if p.Amount.LessThan(decimal.Zero) {
+			if p.Amount.LessThan(decimal.Zero) && !isStockSplit {
 				withdrawal = withdrawal.Add(p.Amount.Neg())
 			}
 

@@ -253,7 +253,7 @@ func parseAmount(amount string) (string, decimal.Decimal, error) {
 func execLedgerCommand(journalPath string, flags []string) ([]*posting.Posting, error) {
 	var postings []*posting.Posting
 
-	args := append(append([]string{"--args-only", "-f", journalPath}, flags...), "csv", "--csv-format", "%(quoted(date)),%(quoted(payee)),%(quoted(display_account)),%(quoted(commodity(scrub(display_amount)))),%(quoted(quantity(scrub(display_amount)))),%(quoted(scrub(market(amount,date,'"+config.DefaultCurrency()+"') * 100000000))),%(quoted(xact.filename)),%(quoted(xact.id)),%(quoted(cleared ? \"*\" : (pending ? \"!\" : \"\"))),%(quoted(tag('Recurring'))),%(quoted(xact.beg_line)),%(quoted(xact.end_line))\n")
+	args := append(append([]string{"--args-only", "-f", journalPath}, flags...), "csv", "--csv-format", "%(quoted(date)),%(quoted(payee)),%(quoted(display_account)),%(quoted(commodity(scrub(display_amount)))),%(quoted(quantity(scrub(display_amount)))),%(quoted(scrub(market(amount,date,'"+config.DefaultCurrency()+"') * 100000000))),%(quoted(xact.filename)),%(quoted(xact.id)),%(quoted(cleared ? \"*\" : (pending ? \"!\" : \"\"))),%(quoted(tag('Recurring'))),%(quoted(xact.beg_line)),%(quoted(xact.end_line)),%(quoted(lot_price(amount)))\n")
 
 	var output, error bytes.Buffer
 	err := utils.Exec(binary.LedgerBinaryPath(), &output, &error, args...)
@@ -283,11 +283,30 @@ func execLedgerCommand(journalPath string, flags []string) ([]*posting.Posting, 
 			return nil, err
 		}
 
-		_, amount, err := parseAmount(record[5])
-		if err != nil {
-			return nil, err
+		var amount decimal.Decimal
+		amountAvailable := false
+
+		lotString := record[12]
+		if lotString != "" {
+			lotCurrency, lotAmount, err := parseAmount(record[12])
+			if err != nil {
+				return nil, err
+			}
+
+			if lotCurrency == config.DefaultCurrency() {
+				amount = lotAmount.Mul(quantity)
+				amountAvailable = true
+			}
 		}
-		amount = amount.Div(decimal.NewFromInt(100000000))
+
+		if !amountAvailable {
+			_, amount, err = parseAmount(record[5])
+			if err != nil {
+				return nil, err
+			}
+			amount = amount.Div(decimal.NewFromInt(100000000))
+		}
+
 		if record[1] == "Budget transaction" {
 			amount = amount.Neg()
 		}

@@ -83,7 +83,7 @@ hide:
 
 <div class="thumbnail-container">
   <div class="thumbnail">
-    <iframe src="https://demo.paisa.fyi" frameborder="0" scrolling="no"></iframe>
+    <iframe src="https://demo1.paisa.fyi" frameborder="0" scrolling="no"></iframe>
   </div>
 </div>
 </div>

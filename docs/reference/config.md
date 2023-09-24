@@ -74,7 +74,7 @@ retirement:
     - Assets:Equity:*
     - Assets:Debt:*
   # By default, average of last 3 year expenses will be used to
-  # calculate your yearly expenses. This can be overriden by setting
+  # calculate your yearly expenses. This can be overridden by setting
   # this configuration to positive value
   # OPTIONAL, DEFAULT: 0
   yearly_expenses: 0

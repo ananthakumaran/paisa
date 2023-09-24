@@ -34,7 +34,6 @@ windows:
 deploy:
 	docker build -t paisa .
 	fly deploy -i paisa:latest --local-only
-	fly scale count 1
 
 install:
 	npm run build

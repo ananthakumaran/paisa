@@ -14,7 +14,7 @@
   import { get } from "svelte/store";
 
   let buldEditOpen = false;
-  let transactions: T[] = [];
+  let transactions: T[] = null;
   let filtered: T[] = [];
   let files: LedgerFile[] = [];
   let newFiles: LedgerFile[] = [];
@@ -31,9 +31,11 @@
     return _.filter(t.postings, (p) => p.amount >= 0);
   };
 
-  const handleInput = _.debounce((predicate: (t: T) => boolean) => {
+  function handleInputRaw(predicate: (t: T) => boolean) {
     filtered = _.filter(transactions, predicate);
-  }, 100);
+  }
+
+  const handleInput = _.debounce(handleInputRaw, 100);
 
   editorState.subscribe((state) => {
     handleInput(state.predicate);
@@ -47,7 +49,7 @@
   async function loadTransactions() {
     ({ files, accounts, commodities } = await ajax("/api/editor/files"));
     ({ transactions } = await ajax("/api/transaction"));
-    handleInput(get(editorState).predicate);
+    handleInputRaw(get(editorState).predicate);
 
     newFiles = files;
   }
@@ -98,74 +100,76 @@
   {updatedTransactionsCount}
 />
 
-<section class="section tab-journal">
-  <div class="container is-fluid">
-    <div class="columns">
-      <div class="column is-12">
-        <nav class="level">
-          <div class="level-left">
-            <div class="level-item">
-              <div class="field">
-                <div class="control">
-                  <SearchQuery
-                    autocomplete={{
-                      account: accounts,
-                      commodity: commodities,
-                      filename: files.map((f) => f.name)
-                    }}
-                  />
-                </div>
-              </div>
-            </div>
-            <div class="level-item">
-              <div class="field">
-                <div class="control">
-                  <button
-                    class="button is-link is-light invertable"
-                    on:click={(_e) => (buldEditOpen = !buldEditOpen)}
-                  >
-                    <span>Bulk Edit</span>
-                    <span class="icon is-small">
-                      <i class="fas {buldEditOpen ? 'fa-angle-up' : 'fa-angle-down'}"></i>
-                    </span>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="level-right">
-            <div class="level-item">
-              <p class="is-6"><b>{filtered.length}</b> transaction(s)</p>
-            </div>
-          </div>
-        </nav>
-      </div>
-    </div>
-
-    {#if buldEditOpen}
+{#if transactions}
+  <section class="section tab-journal">
+    <div class="container is-fluid">
       <div class="columns">
-        <div class="column is-12" transition:slide>
-          <BulkEditForm {accounts} on:preview={(e) => showPreview(e.detail)} />
+        <div class="column is-12">
+          <nav class="level">
+            <div class="level-left">
+              <div class="level-item">
+                <div class="field">
+                  <div class="control">
+                    <SearchQuery
+                      autocomplete={{
+                        account: accounts,
+                        commodity: commodities,
+                        filename: files.map((f) => f.name)
+                      }}
+                    />
+                  </div>
+                </div>
+              </div>
+              <div class="level-item">
+                <div class="field">
+                  <div class="control">
+                    <button
+                      class="button is-link is-light invertable"
+                      on:click={(_e) => (buldEditOpen = !buldEditOpen)}
+                    >
+                      <span>Bulk Edit</span>
+                      <span class="icon is-small">
+                        <i class="fas {buldEditOpen ? 'fa-angle-up' : 'fa-angle-down'}"></i>
+                      </span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="level-right">
+              <div class="level-item">
+                <p class="is-6"><b>{filtered.length}</b> transaction(s)</p>
+              </div>
+            </div>
+          </nav>
         </div>
       </div>
-    {/if}
 
-    <div class="columns">
-      <div class="column is-12">
-        <div class="box">
-          <VirtualList
-            width="100%"
-            height={window.innerHeight - 150}
-            itemCount={filtered.length}
-            {itemSize}
-          >
-            <div slot="item" let:index let:style {style}>
-              {@const t = filtered[index]}
-              <Transaction {t} />
-            </div>
-          </VirtualList>
+      {#if buldEditOpen}
+        <div class="columns">
+          <div class="column is-12" transition:slide>
+            <BulkEditForm {accounts} on:preview={(e) => showPreview(e.detail)} />
+          </div>
+        </div>
+      {/if}
+
+      <div class="columns">
+        <div class="column is-12">
+          <div class="box">
+            <VirtualList
+              width="100%"
+              height={window.innerHeight - 150}
+              itemCount={filtered.length}
+              {itemSize}
+            >
+              <div slot="item" let:index let:style {style}>
+                {@const t = filtered[index]}
+                <Transaction {t} />
+              </div>
+            </VirtualList>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
+{/if}

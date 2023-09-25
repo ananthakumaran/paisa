@@ -13,15 +13,20 @@ import (
 	"github.com/ananthakumaran/paisa/internal/server/liabilities"
 	"github.com/ananthakumaran/paisa/internal/server/retirement"
 	"github.com/ananthakumaran/paisa/web"
+	"github.com/gin-contrib/gzip"
 	"github.com/gin-gonic/gin"
 	log "github.com/sirupsen/logrus"
 	"gorm.io/gorm"
 )
 
-func Build(db *gorm.DB) *gin.Engine {
+func Build(db *gorm.DB, enableCompression bool) *gin.Engine {
 	gin.SetMode(gin.ReleaseMode)
 
 	router := gin.New()
+	if enableCompression {
+		router.Use(gzip.Gzip(gzip.DefaultCompression))
+	}
+
 	router.Use(Logger(log.StandardLogger()), gin.Recovery())
 
 	router.GET("/_app/*filepath", func(c *gin.Context) {
@@ -253,7 +258,7 @@ func Build(db *gorm.DB) *gin.Engine {
 }
 
 func Listen(db *gorm.DB, port int) {
-	router := Build(db)
+	router := Build(db, true)
 
 	log.Infof("Listening on http://localhost:%d", port)
 	err := router.Run(fmt.Sprintf(":%d", port))

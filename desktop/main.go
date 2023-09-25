@@ -33,7 +33,7 @@ func main() {
 	err := wails.Run(&options.App{
 		Title: "Paisa",
 		AssetServer: &assetserver.Options{
-			Handler: server.Build(&app.db).Handler(),
+			Handler: server.Build(&app.db, false).Handler(),
 		},
 		BackgroundColour: &options.RGBA{R: 250, G: 250, B: 250, A: 1},
 		OnStartup:        app.startup,

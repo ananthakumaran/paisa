@@ -24,7 +24,7 @@
     },
     "locale": {
       "type": "string",
-      "pattern": "^en-[A-Z]{2}$",
+      "pattern": "^[a-z]{2}-[A-Z]{2}$",
       "description": "The locale used to format numbers. The list of locales supported depends on your browser. It's known to work well with en-US and en-IN."
     },
     "financial_year_starting_month": {

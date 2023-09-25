@@ -1,0 +1,45 @@
+name: Windows Release
+
+on:
+  push:
+    branches:
+      - ci/windows-*
+    tags:
+      - '*'
+
+jobs:
+  windows-binary:
+    runs-on: windows-2019
+    steps:
+    - uses: actions/checkout@v2.4.0
+    - uses: actions/setup-node@v3
+      with:
+        node-version: 18
+        cache: npm
+    - uses: actions/setup-go@v4
+      with:
+        go-version: '1.20.5'
+    - run: |
+        choco install sqlite
+        choco install wget
+        choco install nsis
+        npm install
+        npm run build
+        wget https://github.com/FullofQuarks/Windows-Ledger-Binaries/releases/download/v3.3.2/ledger.exe
+        cp ledger.exe internal/binary/ledger
+        go build
+        cp paisa.exe paisa-cli-windows-amd64.exe
+        $env:PATH += ";C:\Program Files (x86)\NSIS\Bin"
+        cd desktop
+        go install github.com/wailsapp/wails/v2/cmd/wails@latest
+        wails build -tags webkit2_40 -nsis -webview2 embed
+        cd ..
+        cp .\desktop\build\bin\paisa-amd64-installer.exe paisa-app-windows-amd64.exe
+    - name: Release
+      uses: softprops/action-gh-release@v1
+      with:
+        draft: true
+        files: |
+          paisa-*
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

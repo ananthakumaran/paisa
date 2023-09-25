@@ -1,0 +1,40 @@
+name: Linux CLI Release
+
+on:
+  push:
+    branches:
+      - ci/linux-cli-*
+    tags:
+      - '*'
+
+jobs:
+  linux-cli-binary:
+    runs-on: ubuntu-20.04
+    steps:
+    - uses: actions/checkout@v2.4.0
+    - uses: cachix/install-nix-action@v22
+      with:
+        nix_path: nixpkgs=channel:nixos-unstable
+    - uses: actions/setup-node@v3
+      with:
+        node-version: 18
+        cache: npm
+    - uses: actions/setup-go@v4
+      with:
+        go-version: '1.20.5'
+    - run: |
+        sudo apt-get install -y sqlite3
+        npm install
+        npm run build
+        nix-build ledger.nix
+        cp ./result/bin/ledger internal/binary/ledger
+        go build
+        cp paisa paisa-cli-linux-amd64
+    - name: Release
+      uses: softprops/action-gh-release@v1
+      with:
+        draft: true
+        files: |
+          paisa-*
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

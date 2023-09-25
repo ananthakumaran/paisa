@@ -32,8 +32,10 @@ windows:
 
 
 deploy:
-	docker build -t paisa .
+	fly scale count 2 --region lax --yes
+	docker build -t paisa . --file Dockerfile.demo
 	fly deploy -i paisa:latest --local-only
+	fly scale count 1 --region lax --yes
 
 install:
 	npm run build

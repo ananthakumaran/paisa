@@ -1,0 +1,43 @@
+name: Mac OS Release
+
+on:
+  push:
+    branches:
+      - ci/mac-*
+    tags:
+      - '*'
+
+jobs:
+  mac-binary:
+    runs-on: macos-11
+    steps:
+    - uses: actions/checkout@v2.4.0
+    - uses: actions/setup-node@v3
+      with:
+        node-version: 18
+        cache: npm
+    - uses: actions/setup-go@v4
+      with:
+        go-version: '1.20.5'
+    - run: |
+        brew install --force --overwrite sqlite3 create-dmg
+        brew install --build-from-source --verbose ./ledger.rb
+        cp "$(brew --prefix ledger)/bin/ledger" internal/binary/ledger
+        npm install
+        npm run build
+        go build
+        cp paisa paisa-cli-macos-amd64
+        cd desktop
+        go install github.com/wailsapp/wails/v2/cmd/wails@latest
+        wails build
+        create-dmg --volname "Paisa" --window-pos 200 120 --window-size 800 400 --icon-size 100  --icon "Paisa.app" 200 190 --app-drop-link 600 185 --hide-extension "Paisa.app" --volicon build/bin/Paisa.app/Contents/Resources/iconfile.icns  "Paisa.dmg" build/bin/Paisa.app
+        cd ..
+        cp desktop/Paisa.dmg paisa-app-macos-amd64.dmg
+    - name: Release
+      uses: softprops/action-gh-release@v1
+      with:
+        draft: true
+        files: |
+          paisa-*
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

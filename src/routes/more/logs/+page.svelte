@@ -79,7 +79,8 @@
     gap: 5px;
 
     .time {
-      width: 110px;
+      width: 125px;
+      flex-shrink: 0;
     }
     div {
       padding: 0 5px;

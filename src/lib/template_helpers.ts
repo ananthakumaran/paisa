@@ -4,7 +4,7 @@ import { get } from "svelte/store";
 import { accountTfIdf } from "../store";
 import similarity from "compute-cosine-similarity";
 
-const STOP_WORDS = ["fof", "growth", "direct", "plan", "the"];
+const STOP_WORDS = ["", "fof", "growth", "direct", "plan", "the"];
 
 function tokenize(s: string) {
   return _.mapValues(
@@ -189,13 +189,10 @@ export default {
     return null;
   },
   acronym(str: string) {
-    return _.chain(str.split(" "))
+    return _.chain(str.replaceAll(/[^a-zA-Z ]/g, "").split(" "))
       .filter((s) => !_.includes(STOP_WORDS, s.toLowerCase()))
       .map((s) => {
-        if (s.match(/^[0-9]+$/)) {
-          return "";
-        }
-        return s[0];
+        return s[0].toUpperCase();
       })
       .value()
       .join("");

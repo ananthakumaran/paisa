@@ -170,16 +170,6 @@ func LoadConfig(content []byte, cp string) error {
 		return err
 	}
 
-	journalDir := filepath.Dir(configPath)
-
-	if !filepath.IsAbs(config.JournalPath) {
-		config.JournalPath = filepath.Join(journalDir, config.JournalPath)
-	}
-
-	if !filepath.IsAbs(config.DBPath) {
-		config.DBPath = filepath.Join(journalDir, config.DBPath)
-	}
-
 	if cp != "" && configPath == "" {
 		configPath = cp
 	}
@@ -189,6 +179,22 @@ func LoadConfig(content []byte, cp string) error {
 
 func GetConfig() Config {
 	return config
+}
+
+func GetJournalPath() string {
+	if !filepath.IsAbs(config.JournalPath) {
+		return filepath.Join(GetConfigDir(), config.JournalPath)
+	}
+
+	return config.JournalPath
+}
+
+func GetDBPath() string {
+	if !filepath.IsAbs(config.DBPath) {
+		return filepath.Join(GetConfigDir(), config.DBPath)
+	}
+
+	return config.DBPath
 }
 
 func GetConfigDir() string {

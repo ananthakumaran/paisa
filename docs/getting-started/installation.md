@@ -6,6 +6,16 @@ the primary difference being how the user interface is launched.
 
 ## Desktop Application
 
+=== "Linux"
+
+    * Download the prebuilt [binary](https://github.com/ananthakumaran/paisa/releases/latest) named `paisa-app-linux-amd64.deb`
+    * You can install it either by double clicking the deb file or run the following commands in a Terminal
+
+    ```console
+    # cd ~/Downloads
+    # sudo dpkg -i paisa-app-linux-amd64.deb
+    ```
+
 === "Mac"
 
     * Download the prebuilt [binary](https://github.com/ananthakumaran/paisa/releases/latest) named `paisa-app-macos-amd64.dmg`
@@ -105,7 +115,27 @@ related files in a folder named `paisa` which will be located in your
     PS C:\Users\john> .\paisa.exe serve
     ```
 
-Go to [http://localhost:7500](http://localhost:7500). Read the [tutorial](./tutorial.md) to learn more.
+Go to [http://localhost:7500](http://localhost:7500). Read the [tutorial](./tutorial.md) to learn
+more.
+
+## Docker
+
+Paisa CLI is available on [dockerhub](https://hub.docker.com/r/ananthakumaran/paisa).
+
+=== "Linux"
+
+    ```console
+    # mkdir -p /home/john/Documents/paisa/
+    # docker run -p 7500:7500 -v /home/john/Documents/paisa/:/root/Documents/paisa/ ananthakumaran/paisa:latest
+    ```
+
+=== "Mac"
+
+    ```console
+    # mkdir -p /Users/john/Documents/paisa/
+    # docker run -p 7500:7500 -v /Users/john/Documents/paisa/:/root/Documents/paisa/ ananthakumaran/paisa:latest
+    ```
+
 
 [^1]: I offer Paisa as a free app, and I don't generate any revenue
       from it. Code signing would require me to pay $99 for Mac and

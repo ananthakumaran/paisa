@@ -270,7 +270,7 @@ func execLedgerCommand(journalPath string, flags []string) ([]*posting.Posting, 
 		return nil, err
 	}
 
-	dir := filepath.Dir(config.GetConfig().JournalPath)
+	dir := filepath.Dir(config.GetJournalPath())
 
 	for _, record := range records {
 		date, err := time.ParseInLocation("2006/01/02", record[0], time.Local)
@@ -431,7 +431,7 @@ func execHLedgerCommand(journalPath string, prices []price.Price, flags []string
 		pricesTree[price.CommodityName].ReplaceOrInsert(price)
 	}
 
-	dir := filepath.Dir(config.GetConfig().JournalPath)
+	dir := filepath.Dir(config.GetJournalPath())
 
 	for _, t := range transactions {
 		forecast := false

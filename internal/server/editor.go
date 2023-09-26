@@ -32,7 +32,7 @@ func GetFiles(db *gorm.DB) gin.H {
 	db.Model(&posting.Posting{}).Distinct().Pluck("Payee", &payees)
 	db.Model(&posting.Posting{}).Distinct().Pluck("Commodity", &commodities)
 
-	path := config.GetConfig().JournalPath
+	path := config.GetJournalPath()
 
 	files := []*LedgerFile{}
 	dir := filepath.Dir(path)
@@ -46,13 +46,13 @@ func GetFiles(db *gorm.DB) gin.H {
 }
 
 func GetFile(file LedgerFile) gin.H {
-	path := config.GetConfig().JournalPath
+	path := config.GetJournalPath()
 	dir := filepath.Dir(path)
 	return gin.H{"file": readLedgerFile(dir, filepath.Join(dir, file.Name))}
 }
 
 func DeleteBackups(file LedgerFile) gin.H {
-	path := config.GetConfig().JournalPath
+	path := config.GetJournalPath()
 	dir := filepath.Dir(path)
 
 	versions, _ := filepath.Glob(filepath.Join(dir, file.Name+".backup.*"))
@@ -72,7 +72,7 @@ func SaveFile(db *gorm.DB, file LedgerFile) gin.H {
 		return gin.H{"errors": errors, "saved": false, "message": "Validation failed"}
 	}
 
-	path := config.GetConfig().JournalPath
+	path := config.GetJournalPath()
 	dir := filepath.Dir(path)
 
 	filePath := filepath.Join(dir, file.Name)
@@ -127,7 +127,7 @@ func ValidateFile(file LedgerFile) gin.H {
 }
 
 func validateFile(file LedgerFile) ([]ledger.LedgerFileError, string, error) {
-	path := config.GetConfig().JournalPath
+	path := config.GetJournalPath()
 
 	tmpfile, err := os.CreateTemp(filepath.Dir(path), "paisa-tmp-")
 	if err != nil {

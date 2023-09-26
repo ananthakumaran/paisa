@@ -198,13 +198,19 @@ the default value is used. Examples `(0.9534)` to `-0.9534`, `₹
 Checks if the given string is a valid date in the given format. Refer
 [Day.js](https://day.js.org/docs/en/parse/string-format#list-of-all-available-parsing-tokens) for the full list of supported formats.
 
-#### `#!typescript predictAccount(...corpus: string[], {prefix?: string}): string`
+#### `#!typescript predictAccount(...terms: string[], {prefix?: string}): string`
 
-corpus provided will be matched with the existing transaction
-description and amount.
+Helps with prediction of account name to be used in a
+transaction. Let's say you import your Credit Card bill, you would
+prefer the system to automatically assign the account name for
+you. `predictAccount` acts like a search engine. It will try to find a
+transaction that is similar to the current transaction. The search
+requires input (referred as terms) and it will match transactions with
+similar **description** and will pick the accounts from the top match.
 
-If `corpus` is not provided, the entire `ROW` will be used.  The
-`prefix` is optional and will be used to filter out matching
+If `terms` are not provided, the entire `ROW` will be used.
+
+The `prefix` is optional and will be used to filter out matching
 accounts. If no match is found, `Unknown` will be returned.
 
 ```handlebars

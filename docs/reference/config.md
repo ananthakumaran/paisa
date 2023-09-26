@@ -20,12 +20,12 @@ would have to change the `default_currency` and `locale`.
 # configuration file. The main journal file can refer other files using
 # `include` as long as all the files are in the same or sub directory
 # REQUIRED
-journal_path: /home/john/finance/main.ledger
+journal_path: /home/john/Documents/paisa/main.ledger
 
 # Path to your database file. It can be absolute or relative to the
 # configuration file. The database file will be created if it does not exist.
 # REQUIRED
-db_path: /home/john/finance/paisa.db
+db_path: /home/john/Documents/paisa/paisa.db
 
 # The ledger client to use
 # OPTIONAL, DEFAULT: ledger, ENUM: ledger, hledger

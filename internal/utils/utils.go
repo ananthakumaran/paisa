@@ -218,6 +218,6 @@ func UnQuote(str string) string {
 }
 
 func OpenDB() (*gorm.DB, error) {
-	db, err := gorm.Open(sqlite.Open(config.GetConfig().DBPath), &gorm.Config{Logger: gorm_logrus.New()})
+	db, err := gorm.Open(sqlite.Open(config.GetDBPath()), &gorm.Config{Logger: gorm_logrus.New()})
 	return db, err
 }

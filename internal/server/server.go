@@ -7,6 +7,7 @@ import (
 
 	"github.com/ananthakumaran/paisa/internal/config"
 	"github.com/ananthakumaran/paisa/internal/generator"
+	"github.com/ananthakumaran/paisa/internal/ledger"
 	"github.com/ananthakumaran/paisa/internal/model/template"
 	"github.com/ananthakumaran/paisa/internal/prediction"
 	"github.com/ananthakumaran/paisa/internal/server/assets"
@@ -38,6 +39,11 @@ func Build(db *gorm.DB, enableCompression bool) *gin.Engine {
 	})
 
 	router.POST("/api/config", func(c *gin.Context) {
+		if config.GetConfig().Readonly {
+			c.JSON(200, gin.H{"success": true})
+			return
+		}
+
 		body, err := io.ReadAll(c.Request.Body)
 		if err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"success": false, "error": err.Error()})
@@ -54,6 +60,11 @@ func Build(db *gorm.DB, enableCompression bool) *gin.Engine {
 	})
 
 	router.POST("/api/init", func(c *gin.Context) {
+		if config.GetConfig().Readonly {
+			c.JSON(200, gin.H{"success": true})
+			return
+		}
+
 		generator.Demo(config.GetConfigDir())
 		config.LoadConfigFile(config.GetConfigPath())
 		Sync(db, SyncRequest{Journal: true, Prices: true, Portfolios: true})
@@ -61,6 +72,11 @@ func Build(db *gorm.DB, enableCompression bool) *gin.Engine {
 	})
 
 	router.POST("/api/sync", func(c *gin.Context) {
+		if config.GetConfig().Readonly {
+			c.JSON(200, gin.H{"success": true})
+			return
+		}
+
 		var syncRequest SyncRequest
 		if err := c.ShouldBindJSON(&syncRequest); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -126,6 +142,11 @@ func Build(db *gorm.DB, enableCompression bool) *gin.Engine {
 	})
 
 	router.POST("/api/price/providers/delete/:provider", func(c *gin.Context) {
+		if config.GetConfig().Readonly {
+			c.JSON(200, gin.H{"success": true})
+			return
+		}
+
 		provider := c.Param("provider")
 		c.JSON(200, ClearPriceProviderCache(db, provider))
 	})
@@ -212,6 +233,11 @@ func Build(db *gorm.DB, enableCompression bool) *gin.Engine {
 	})
 
 	router.POST("/api/editor/save", func(c *gin.Context) {
+		if config.GetConfig().Readonly {
+			c.JSON(200, gin.H{"errors": []ledger.LedgerFileError{}, "saved": false, "message": "Readonly mode"})
+			return
+		}
+
 		var ledgerFile LedgerFile
 		if err := c.ShouldBindJSON(&ledgerFile); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -240,6 +266,11 @@ func Build(db *gorm.DB, enableCompression bool) *gin.Engine {
 	})
 
 	router.POST("/api/templates/delete", func(c *gin.Context) {
+		if config.GetConfig().Readonly {
+			c.JSON(200, gin.H{})
+			return
+		}
+
 		var t template.Template
 		if err := c.ShouldBindJSON(&t); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})

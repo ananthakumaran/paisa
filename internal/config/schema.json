@@ -13,6 +13,11 @@
       "type": "string",
       "description": "Path to your database file. It can be absolute or relative to the configuration file. The database file will be created if it does not exist."
     },
+    "readonly": {
+      "type": "boolean",
+      "description": "Run in readonly mode.",
+      "ui:widget": "hidden"
+    },
     "ledger_cli": {
       "type": "string",
       "description": "The ledger client to use",

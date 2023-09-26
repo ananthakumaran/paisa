@@ -51,7 +51,9 @@
   </a>
 {/if}
 
-{#if schema.type === "string" || _.isEqual(schema.type, ["string", "integer"])}
+{#if schema["ui:widget"] == "hidden"}
+  <div></div>
+{:else if schema.type === "string" || _.isEqual(schema.type, ["string", "integer"])}
   <div class="field is-horizontal">
     <div class="field-label is-small">
       <label data-tippy-content={documentation(schema)} for="" class="label">{title}</label>

@@ -71,6 +71,7 @@ type AllocationTarget struct {
 type Config struct {
 	JournalPath                string     `json:"journal_path" yaml:"journal_path"`
 	DBPath                     string     `json:"db_path" yaml:"db_path"`
+	Readonly                   bool       `json:"readonly" yaml:"readonly"`
 	LedgerCli                  string     `json:"ledger_cli" yaml:"ledger_cli"`
 	DefaultCurrency            string     `json:"default_currency" yaml:"default_currency"`
 	Locale                     string     `json:"locale" yaml:"locale"`
@@ -89,6 +90,7 @@ var config Config
 var configPath string
 
 var defaultConfig = Config{
+	Readonly:                   false,
 	LedgerCli:                  "ledger",
 	DefaultCurrency:            "INR",
 	Locale:                     "en-IN",

@@ -3,11 +3,13 @@ package template
 import (
 	"embed"
 	"fmt"
+	"path/filepath"
+	"strings"
+
+	"github.com/ananthakumaran/paisa/internal/config"
 	log "github.com/sirupsen/logrus"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
-	"path/filepath"
-	"strings"
 )
 
 //go:embed all:templates
@@ -52,6 +54,11 @@ func All(db *gorm.DB) []Template {
 
 func Upsert(db *gorm.DB, name string, content string) Template {
 	template := Template{Name: name, Content: content, TemplateType: Custom}
+
+	if config.GetConfig().Readonly {
+		return template
+	}
+
 	result := db.Clauses(clause.OnConflict{
 		Columns:   []clause.Column{{Name: "name"}},
 		UpdateAll: true,

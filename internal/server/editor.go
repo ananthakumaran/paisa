@@ -55,11 +55,13 @@ func DeleteBackups(file LedgerFile) gin.H {
 	path := config.GetJournalPath()
 	dir := filepath.Dir(path)
 
-	versions, _ := filepath.Glob(filepath.Join(dir, file.Name+".backup.*"))
-	for _, version := range versions {
-		err := os.Remove(version)
-		if err != nil {
-			log.Fatal(err)
+	if !config.GetConfig().Readonly {
+		versions, _ := filepath.Glob(filepath.Join(dir, file.Name+".backup.*"))
+		for _, version := range versions {
+			err := os.Remove(version)
+			if err != nil {
+				log.Fatal(err)
+			}
 		}
 	}
 

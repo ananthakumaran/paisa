@@ -21,6 +21,7 @@
   import Logo from "./Logo.svelte";
   import InputRange from "./InputRange.svelte";
   export let isBurger: boolean = null;
+  const readonly = USER_CONFIG.readonly;
 
   onMount(async () => {
     if (get(year) == "") {
@@ -249,6 +250,15 @@
     <div class="navbar-end">
       <div class="navbar-item">
         <div class="field is-grouped">
+          {#if readonly}
+            <p class="control">
+              <span
+                class="mt-1 tag is-rounded is-danger is-light invertable"
+                data-tippy-content="<p>Paisa is in readonly mode</p>">readonly</span
+              >
+            </p>
+          {/if}
+
           <p class="control">
             <ThemeSwitcher />
           </p>

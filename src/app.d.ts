@@ -2,6 +2,7 @@
 
 interface UserConfig {
   default_currency: string;
+  readonly: boolean;
   locale: string;
   journal_path: string;
   db_path: string;

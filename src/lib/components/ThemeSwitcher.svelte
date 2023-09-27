@@ -15,8 +15,9 @@
   }
 
   const toggle = () => {
-    setTheme(theme === "light" ? "dark" : "light");
-    refresh();
+    if (refresh()) {
+      setTheme(theme === "light" ? "dark" : "light");
+    }
   };
 
   const reflectPreference = () => {

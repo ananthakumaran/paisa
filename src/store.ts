@@ -80,10 +80,11 @@ export function refresh() {
   if (get(editorState).hasUnsavedChanges) {
     const confirmed = confirm("You have unsaved changes. Are you sure you want to leave?");
     if (!confirmed) {
-      return;
+      return false;
     } else {
       editorState.update((current) => _.assign({}, current, { hasUnsavedChanges: false }));
     }
   }
   willRefresh.update((n) => n + 1);
+  return true;
 }

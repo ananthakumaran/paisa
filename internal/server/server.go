@@ -252,7 +252,7 @@ func Build(db *gorm.DB, enableCompression bool) *gin.Engine {
 	})
 
 	router.GET("/api/templates", func(c *gin.Context) {
-		c.JSON(200, gin.H{"templates": template.All(db)})
+		c.JSON(200, gin.H{"templates": template.All()})
 	})
 
 	router.POST("/api/templates/upsert", func(c *gin.Context) {
@@ -262,7 +262,7 @@ func Build(db *gorm.DB, enableCompression bool) *gin.Engine {
 			return
 		}
 
-		c.JSON(200, template.Upsert(db, t.Name, t.Content))
+		c.JSON(200, template.Upsert(t.Name, t.Content))
 	})
 
 	router.POST("/api/templates/delete", func(c *gin.Context) {
@@ -277,7 +277,7 @@ func Build(db *gorm.DB, enableCompression bool) *gin.Engine {
 			return
 		}
 
-		template.Delete(db, t.ID)
+		template.Delete(t.Name)
 		c.JSON(200, gin.H{})
 	})
 

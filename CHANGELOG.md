@@ -1,5 +1,26 @@
 # CHANGELOG
 
+### 0.5.3
+
+* Add Docker Image
+* Add Linux Application (deb package)
+* Move import templates to configuration file
+* Bug fixes
+
+## Breaking Changes :rotating_light:
+
+User's custom import templates used to be stored in Database, which is
+a bad idea in hindsight. It's being moved to the configuration
+file. With is change, all the data in paisa.db would be transient and
+can be deleted and re created from the journal and configuration files
+without any data loss.
+
+If you have custom template, take a backup before you upgrade and add
+it again via new version. If you have already upgraded, you can still
+get the data directly from the db file using the following query
+`sqlite3 paisa.db "select * from templates";`
+
+
 ### 0.5.2 (2023-09-22)
 
 * Add Desktop app

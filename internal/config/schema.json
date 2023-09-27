@@ -185,6 +185,32 @@
         "required": ["name", "type", "price"],
         "additionalProperties": false
       }
+    },
+    "import_templates": {
+      "type": "array",
+      "default": [
+        {
+          "name": "ICICI Bank",
+          "content": ""
+        }
+      ],
+      "items": {
+        "type": "object",
+        "ui:header": "name",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "name of the template",
+            "minLength": 1
+          },
+          "content": {
+            "type": "string",
+            "ui:widget": "textarea"
+          }
+        },
+        "required": ["name"],
+        "additionalProperties": false
+      }
     }
   },
   "required": ["journal_path", "db_path"],

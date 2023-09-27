@@ -10,7 +10,6 @@ import (
 	"github.com/ananthakumaran/paisa/internal/model/portfolio"
 	"github.com/ananthakumaran/paisa/internal/model/posting"
 	"github.com/ananthakumaran/paisa/internal/model/price"
-	"github.com/ananthakumaran/paisa/internal/model/template"
 	"github.com/ananthakumaran/paisa/internal/scraper/india"
 	"github.com/ananthakumaran/paisa/internal/scraper/mutualfund"
 	"github.com/ananthakumaran/paisa/internal/scraper/nps"
@@ -25,7 +24,6 @@ func AutoMigrate(db *gorm.DB) {
 	db.AutoMigrate(&posting.Posting{})
 	db.AutoMigrate(&price.Price{})
 	db.AutoMigrate(&portfolio.Portfolio{})
-	db.AutoMigrate(&template.Template{})
 	db.AutoMigrate(&price.Price{})
 	db.AutoMigrate(&cii.CII{})
 }

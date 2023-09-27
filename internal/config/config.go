@@ -37,6 +37,11 @@ const (
 	Unknown    CommodityType = "unknown"
 )
 
+type ImportTemplate struct {
+	Name    string `json:"name" yaml:"name"`
+	Content string `json:"content" yaml:"content"`
+}
+
 type Price struct {
 	Provider string `json:"provider" yaml:"provider"`
 	Code     string `json:"code" yaml:"code"`
@@ -84,6 +89,8 @@ type Config struct {
 	AllocationTargets []AllocationTarget `json:"allocation_targets" yaml:"allocation_targets"`
 
 	Commodities []Commodity `json:"commodities" yaml:"commodities"`
+
+	ImportTemplates []ImportTemplate `json:"import_templates" yaml:"import_templates"`
 }
 
 var config Config
@@ -99,6 +106,7 @@ var defaultConfig = Config{
 	ScheduleALs:                []ScheduleAL{},
 	AllocationTargets:          []AllocationTarget{},
 	Commodities:                []Commodity{},
+	ImportTemplates:            []ImportTemplate{},
 }
 
 //go:embed schema.json
@@ -107,6 +115,14 @@ var schema *jsonschema.Schema
 
 func init() {
 	schema = jsonschema.MustCompileString("", SchemaJson)
+}
+
+func SaveConfigObject(config Config) error {
+	content, err := yaml.Marshal(config)
+	if err != nil {
+		return err
+	}
+	return SaveConfig(content)
 }
 
 func SaveConfig(content []byte) error {

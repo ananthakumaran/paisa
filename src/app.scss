@@ -815,7 +815,8 @@ span.progress-percent.less-than-10 {
   color: $success;
 }
 
-input:invalid {
+input:invalid,
+textarea:invalid {
   border-color: $danger;
 }
 

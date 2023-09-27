@@ -390,8 +390,8 @@ export interface Graph {
   links: Link[];
 }
 
-export interface Template {
-  id: number;
+export interface ImportTemplate {
+  id: string;
   name: string;
   content: string;
   template_type: string;
@@ -512,8 +512,11 @@ export function ajax(route: "/api/liabilities/interest"): Promise<{
 }>;
 
 export function ajax(route: "/api/account/tf_idf"): Promise<AccountTfIdf>;
-export function ajax(route: "/api/templates"): Promise<{ templates: Template[] }>;
-export function ajax(route: "/api/templates/upsert", options?: RequestInit): Promise<Template>;
+export function ajax(route: "/api/templates"): Promise<{ templates: ImportTemplate[] }>;
+export function ajax(
+  route: "/api/templates/upsert",
+  options?: RequestInit
+): Promise<ImportTemplate>;
 export function ajax(route: "/api/templates/delete", options?: RequestInit): Promise<void>;
 
 export function ajax(route: "/api/editor/files"): Promise<{

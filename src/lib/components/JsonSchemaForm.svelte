@@ -69,6 +69,17 @@
                 {/each}
               </select>
             </div>
+          {:else if schema["ui:widget"] == "textarea"}
+            <textarea
+              {disabled}
+              {required}
+              class="textarea is-small"
+              style="min-width: 350px;max-width: 350px; width: 350px;"
+              rows="5"
+              bind:value
+              spellcheck="false"
+              data-enable-grammarly="false"
+            />
           {:else}
             <input
               {disabled}

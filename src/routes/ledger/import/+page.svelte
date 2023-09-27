@@ -13,13 +13,13 @@
   import _ from "lodash";
   import type { EditorView } from "codemirror";
   import { onMount } from "svelte";
-  import { ajax, type Template } from "$lib/utils";
+  import { ajax, type ImportTemplate } from "$lib/utils";
   import { accountTfIdf } from "../../../store";
   import * as toast from "bulma-toast";
   import FileModal from "$lib/components/FileModal.svelte";
 
-  let templates: Template[] = [];
-  let selectedTemplate: Template;
+  let templates: ImportTemplate[] = [];
+  let selectedTemplate: ImportTemplate;
   let saveAsName: string;
   let lastTemplate: any;
   let lastData: any;
@@ -67,7 +67,7 @@
     await ajax("/api/templates/delete", {
       method: "POST",
       body: JSON.stringify({
-        id: selectedTemplate.id
+        name: selectedTemplate.name
       })
     });
     ({ templates } = await ajax("/api/templates"));

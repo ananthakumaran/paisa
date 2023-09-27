@@ -192,6 +192,10 @@ Converts the given string to a valid amount. If the string is blank,
 the default value is used. Examples `(0.9534)` to `-0.9534`, `₹
 1,234.56` to `1234.56`
 
+#### `#!typescript round(str: string, {precision?: number}): number`
+
+Rounds the given value to the given precision. If precision is not
+set, defaults to `0`
 
 #### `#!typescript isDate(str: string, format: string): boolean`
 

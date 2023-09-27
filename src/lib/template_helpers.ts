@@ -90,6 +90,9 @@ export default {
   lte: (a: string | number, b: string | number) => parseAmount(a) <= parseAmount(b),
   lt: (a: string | number, b: string | number) => parseAmount(a) < parseAmount(b),
   negate: (value: string) => parseAmount(value) * -1,
+  round(str: string, options: any) {
+    return _.round(parseAmount(str), options.hash.precision || 0);
+  },
   and(...args: any[]) {
     return Array.prototype.every.call(Array.prototype.slice.call(args, 0, -1), Boolean);
   },

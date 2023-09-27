@@ -1,0 +1,12 @@
+{{#if (isDate ROW.C "YYYY-MM-DD")}}
+  {{#if (eq ROW.G "buy")}}
+  {{date ROW.C "YYYY-MM-DD"}} Purchased {{round ROW.I}} Shares of {{ROW.A}}
+        Assets:Stocks:{{ROW.A}}	    	{{round ROW.I}} "{{ROW.A}}" @ {{round ROW.J precision=4}} INR
+        Assets:Broker:Zerodha
+  {{/if}}
+  {{#if (eq ROW.G "sell")}}
+  {{date ROW.C "YYYY-MM-DD"}} Sold {{round ROW.I}} Shares of {{ROW.A}}
+        Assets:Stocks:{{ROW.A}}	{{negate (round ROW.I)}} "{{ROW.A}}" @ {{round ROW.J precision=4}} INR
+        Assets:Broker:Zerodha
+    {{/if}}
+{{/if}}

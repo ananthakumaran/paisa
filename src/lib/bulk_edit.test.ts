@@ -1,4 +1,4 @@
-import { describe, expect, test } from "@jest/globals";
+import { describe, expect, test } from "bun:test";
 import fs from "fs";
 
 import { applyChanges } from "./bulk_edit";

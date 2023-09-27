@@ -8,6 +8,7 @@ pkgs.mkShell {
     pkgs.sqlite
     pkgs.nodejs-18_x
     pkgs.libuuid
+    pkgs.bun
     # pkgs.pkgsCross.mingwW64.buildPackages.gcc
 
     pkgs.python311Packages.mkdocs

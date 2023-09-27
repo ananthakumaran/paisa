@@ -1,4 +1,4 @@
-import { describe, test } from "@jest/globals";
+import { describe, test } from "bun:test";
 import { jsonLanguage } from "./query";
 import { fileTests } from "@lezer/generator/dist/test";
 

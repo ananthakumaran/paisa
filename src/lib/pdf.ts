@@ -1,10 +1,5 @@
 import * as pdfjs from "pdfjs-dist";
 import type { TextItem } from "pdfjs-dist/types/src/display/api";
-import pdfjsWorkerUrl from "pdfjs-dist/build/pdf.worker.js?url";
-
-if (pdfjs.GlobalWorkerOptions) {
-  pdfjs.GlobalWorkerOptions.workerSrc = pdfjsWorkerUrl;
-}
 
 export type TextItemWithPosition = TextItem & {
   x: number;

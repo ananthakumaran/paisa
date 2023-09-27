@@ -17,3 +17,4 @@ vite.config.ts.timestamp-*
 *.backup.*
 *.test
 docs/lexer/__pycache__/
+bun.lockb

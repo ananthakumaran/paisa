@@ -31,6 +31,13 @@ dayjs.extend(relativeTime, {
   ]
 });
 
+import * as pdfjs from "pdfjs-dist";
+import pdfjsWorkerUrl from "pdfjs-dist/build/pdf.worker.js?url";
+
+if (pdfjs.GlobalWorkerOptions) {
+  pdfjs.GlobalWorkerOptions.workerSrc = pdfjsWorkerUrl;
+}
+
 import Handlebars from "handlebars";
 import helpers from "$lib/template_helpers";
 import * as toast from "bulma-toast";

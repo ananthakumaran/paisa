@@ -1,4 +1,4 @@
-import { describe, expect, test } from "@jest/globals";
+import { describe, expect, test } from "bun:test";
 import { parseDate } from "./search_query_editor";
 
 function assertRange(text: string, start: string, end: string) {

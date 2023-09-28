@@ -11,6 +11,7 @@
 
   onMount(async () => {
     ({ prices: prices } = await ajax("/api/price"));
+    prices = _.omitBy(prices, (v) => v.length === 0);
   });
 </script>
 

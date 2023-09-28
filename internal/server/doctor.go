@@ -3,6 +3,7 @@ package server
 import (
 	"errors"
 	"fmt"
+	"net/url"
 
 	"github.com/ananthakumaran/paisa/internal/accounting"
 	"github.com/ananthakumaran/paisa/internal/config"
@@ -61,6 +62,12 @@ func init() {
 			Predicate: ruleNonDebitAccount},
 		{
 			Issue: Issue{
+				Level:       ERROR,
+				Summary:     "Exchange Price Missing",
+				Description: "Exchange price is missing for the commodity."},
+			Predicate: ruleExchangePriceMissing},
+		{
+			Issue: Issue{
 				Level:       WARN,
 				Summary:     "Unit Price Mismatch",
 				Description: "Unit price used in the journal doesn't match the price fetched from external system."},
@@ -115,6 +122,21 @@ func ruleNonDebitAccount(db *gorm.DB) []error {
 	return errs
 }
 
+func ruleExchangePriceMissing(db *gorm.DB) []error {
+	errs := make([]error, 0)
+	postings := query.Init(db).Desc().All()
+
+	for _, p := range postings {
+		if !utils.IsCurrency(p.Commodity) {
+			externalPrice := service.GetUnitPrice(db, p.Commodity, p.Date)
+			if externalPrice.CommodityName != p.Commodity {
+				errs = append(errs, errors.New(fmt.Sprintf("Exchange price from <b>%s</b> to your default currency <b>%s</b> is not specified for posting %s", p.Commodity, config.DefaultCurrency(), formatPosting(p))))
+			}
+		}
+	}
+	return errs
+}
+
 func ruleJournalPriceMismatch(db *gorm.DB) []error {
 	errs := make([]error, 0)
 	postings := query.Init(db).Desc().All()
@@ -122,10 +144,24 @@ func ruleJournalPriceMismatch(db *gorm.DB) []error {
 		if !utils.IsCurrency(p.Commodity) {
 			externalPrice := service.GetUnitPrice(db, p.Commodity, p.Date)
 			diff := externalPrice.Value.Sub(p.Price()).Abs()
-			if externalPrice.CommodityType != config.Unknown && diff.GreaterThanOrEqual(decimal.NewFromFloat(0.0001)) {
-				errs = append(errs, errors.New(fmt.Sprintf("%s\t%s\t%.4f @ <b>%.4f</b> %s <br />doesn't match the price %s <b>%.4f</b> fetched from external system", p.Date.Format(DATE_FORMAT), p.Account, p.Quantity.InexactFloat64(), p.Price().InexactFloat64(), config.DefaultCurrency(), externalPrice.Date.Format(DATE_FORMAT), externalPrice.Value.InexactFloat64())))
+			if externalPrice.CommodityName == p.Commodity &&
+				externalPrice.CommodityType != config.Unknown &&
+				diff.GreaterThanOrEqual(decimal.NewFromFloat(0.0001)) {
+				errs = append(errs, errors.New(fmt.Sprintf("The price specified in your posting %s doesn't match the price <b>%.4f</b> (%s) fetched from external system", formatPosting(p), externalPrice.Value.InexactFloat64(), externalPrice.Date.Format(DATE_FORMAT))))
 			}
 		}
 	}
 	return errs
+}
+
+func formatPosting(p posting.Posting) string {
+	var price string
+	if p.Quantity.Equal(p.Amount) {
+		price = fmt.Sprintf("%.4f %s", p.Quantity.InexactFloat64(), p.Commodity)
+	} else {
+		price = fmt.Sprintf("%.4f %s @ %.4f %s", p.Quantity.InexactFloat64(), p.Commodity, p.Price().InexactFloat64(), config.DefaultCurrency())
+	}
+
+	postingUrl := fmt.Sprintf("/ledger/editor/%s#%d", url.PathEscape(p.FileName), p.TransactionBeginLine)
+	return fmt.Sprintf("<a href=\"%s\"> %s\t%s\t%s</a>", postingUrl, p.Date.Format(DATE_FORMAT), p.Account, price)
 }

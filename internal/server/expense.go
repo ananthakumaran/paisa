@@ -35,15 +35,15 @@ type Graph struct {
 }
 
 func GetCurrentExpense(db *gorm.DB) map[string][]posting.Posting {
-	expenses := query.Init(db).LastNMonths(3).Like("Expenses:%").NotLike("Expenses:Tax").All()
+	expenses := query.Init(db).LastNMonths(3).Like("Expenses:%").NotAccountPrefix("Expenses:Tax").All()
 	return utils.GroupByMonth(expenses)
 }
 
 func GetExpense(db *gorm.DB) gin.H {
-	expenses := query.Init(db).Like("Expenses:%").NotLike("Expenses:Tax").All()
+	expenses := query.Init(db).Like("Expenses:%").NotAccountPrefix("Expenses:Tax").All()
 	incomes := query.Init(db).Like("Income:%").All()
 	investments := query.Init(db).Like("Assets:%").NotAccountPrefix("Assets:Checking").All()
-	taxes := query.Init(db).Like("Expenses:Tax").All()
+	taxes := query.Init(db).AccountPrefix("Expenses:Tax").All()
 	postings := query.Init(db).All()
 
 	graph := make(map[string]map[string]Graph)

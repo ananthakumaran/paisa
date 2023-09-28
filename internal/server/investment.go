@@ -66,7 +66,7 @@ func computeInvestmentYearlyCard(start time.Time, assets []posting.Posting, expe
 
 		for len(expenses) > 0 && utils.IsWithDate(expenses[0].Date, start, yearEnd) {
 			p, expenses = expenses[0], expenses[1:]
-			if p.Account == "Expenses:Tax" {
+			if utils.IsSameOrParent(p.Account, "Expenses:Tax") {
 				currentYearTaxes = append(currentYearTaxes, p)
 			} else {
 				currentYearExpenses = append(currentYearExpenses, p)

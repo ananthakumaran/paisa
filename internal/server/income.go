@@ -33,7 +33,7 @@ type Tax struct {
 
 func GetIncome(db *gorm.DB) gin.H {
 	incomePostings := query.Init(db).Like("Income:%").All()
-	taxPostings := query.Init(db).Like("Expenses:Tax").All()
+	taxPostings := query.Init(db).AccountPrefix("Expenses:Tax").All()
 	p := query.Init(db).First()
 
 	if p == nil {

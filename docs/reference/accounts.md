@@ -99,7 +99,9 @@ explicitly specifying anything else.
 
 Income tax paid to government should be credited to `#!ledger
 Expenses:Tax` account. This is used to calculate your Net Income and
-your Savings Rate.
+your Savings Rate. If you want to track different types of taxes, you
+can use sub accounts as well, for example `#!ledger Expenses:Tax:Income`
+and `#!ledger Expenses:Tax:GST`.
 
 ### Expenses
 

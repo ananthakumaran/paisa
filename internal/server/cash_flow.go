@@ -38,11 +38,11 @@ func GetCurrentCashFlow(db *gorm.DB) []CashFlow {
 func computeCashFlow(db *gorm.DB, q *query.Query, balance decimal.Decimal) []CashFlow {
 	var cashFlows []CashFlow
 
-	expenses := utils.GroupByMonth(q.Clone().Like("Expenses:%").NotLike("Expenses:Tax").All())
+	expenses := utils.GroupByMonth(q.Clone().Like("Expenses:%").NotAccountPrefix("Expenses:Tax").All())
 	incomes := utils.GroupByMonth(q.Clone().Like("Income:%").All())
 	liabilities := utils.GroupByMonth(q.Clone().Like("Liabilities:%").All())
 	investments := utils.GroupByMonth(q.Clone().Like("Assets:%").NotAccountPrefix("Assets:Checking").All())
-	taxes := utils.GroupByMonth(q.Clone().Like("Expenses:Tax").All())
+	taxes := utils.GroupByMonth(q.Clone().AccountPrefix("Expenses:Tax").All())
 	checkings := utils.GroupByMonth(q.Clone().AccountPrefix("Assets:Checking").All())
 	postings := q.Clone().All()
 

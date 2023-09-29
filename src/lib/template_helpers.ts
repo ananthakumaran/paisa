@@ -176,7 +176,7 @@ export default {
   },
   findAbove(column: string, options: any) {
     const regexp = new RegExp(options.hash.regexp || ".+");
-    let i: number = options.data.root.ROW.index;
+    let i: number = options.data.root.ROW.index - 1;
     while (i >= 0) {
       const row = options.data.root.SHEET[i];
       const cell = row[column] || "";

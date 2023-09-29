@@ -18,6 +18,6 @@
         </div>
       </div>
     </div>
-    <div class="columns is-flex-wrap-wrap" id="d3-harvestables" />
+    <div class="columns is-flex-wrap-wrap has-text-grey-dark" id="d3-harvestables" />
   </div>
 </section>

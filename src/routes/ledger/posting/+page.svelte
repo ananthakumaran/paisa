@@ -66,7 +66,7 @@
                   <th class="has-text-right">CAGR</th>
                 </tr>
               </thead>
-              <tbody class="d3-postings clusterize-content" id="d3-postings" />
+              <tbody class="d3-postings clusterize-content has-text-grey-dark" id="d3-postings" />
             </table>
           </div>
         </div>

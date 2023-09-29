@@ -14,7 +14,7 @@ import {
   restName,
   firstName
 } from "$lib/utils";
-import COLORS, { generateColorScheme } from "$lib/colors";
+import COLORS, { generateColorScheme, white } from "$lib/colors";
 import { get, type Readable, type Writable } from "svelte/store";
 import { iconify } from "$lib/icon";
 import { byExpenseGroup, expenseGroup, pieData } from "$lib/expense";
@@ -253,12 +253,20 @@ export function renderMonthlyExpensesTimeline(
   const yAxis = g.append("g").attr("class", "axis y");
 
   const bars = g.append("g");
-  const line = g
+  const line1 = g
     .append("path")
-    .attr("stroke", COLORS.primary)
+    .attr("fill", "none")
+    .attr("stroke", white())
+    .attr("stroke-width", "2px")
+    .attr("stroke-linecap", "round");
+
+  const line2 = g
+    .append("path")
+    .attr("fill", "none")
+    .attr("stroke", COLORS.expenses)
     .attr("stroke-width", "2px")
     .attr("stroke-linecap", "round")
-    .attr("stroke-dasharray", "5,5");
+    .attr("stroke-dasharray", "4 6");
 
   let firstRender = true;
 
@@ -292,22 +300,22 @@ export function renderMonthlyExpensesTimeline(
 
     yAxis.transition(t).call(d3.axisLeft(y).tickSize(-width).tickFormat(formatCurrencyCrude));
 
-    line.attr("fill", "none").attr(
-      "d",
-      d3
-        .line<Point>()
-        .curve(d3.curveStepAfter)
-        .x((p) => x(p.month))
-        .y((p) => {
-          const total = _.chain(ys[p.timestamp.format("YYYY")])
-            .pick(allowedGroups)
-            .values()
-            .sum()
-            .value();
+    const path = d3
+      .line<Point>()
+      .curve(d3.curveStepAfter)
+      .x((p) => x(p.month))
+      .y((p) => {
+        const total = _.chain(ys[p.timestamp.format("YYYY")])
+          .pick(allowedGroups)
+          .values()
+          .sum()
+          .value();
 
-          return y(total);
-        })(allowedPoints)
-    );
+        return y(total);
+      })(allowedPoints);
+
+    line1.attr("d", path);
+    line2.attr("d", path);
 
     bars
       .selectAll("g")
@@ -380,7 +388,7 @@ export function renderMonthlyExpensesTimeline(
   let selectedGroups = groups;
   render(selectedGroups, get(dateRangeStore));
 
-  dateRangeStore.subscribe((dateRange) => render(get(groupsStore), dateRange));
+  const destroy = dateRangeStore.subscribe((dateRange) => render(get(groupsStore), dateRange));
 
   svg.append("g").attr("class", "legendOrdinal").attr("transform", "translate(40,0)");
 
@@ -408,7 +416,7 @@ export function renderMonthlyExpensesTimeline(
     .scale(z);
 
   svg.select(".legendOrdinal").call(legendOrdinal as any);
-  return { z: z };
+  return { z: z, destroy: destroy };
 }
 
 export function renderCurrentExpensesBreakdown(z: d3.ScaleOrdinal<string, string, never>) {

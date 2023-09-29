@@ -86,7 +86,7 @@ export function renderOverview(gains: Interest[]) {
     .scaleBand()
     .range([0, y.bandwidth()])
     .domain(["0", "1"])
-    .paddingInner(0)
+    .paddingInner(0.15)
     .paddingOuter(0.6);
 
   const keys = ["balance", "drawn", "repaid", "gain", "loss"];
@@ -287,6 +287,11 @@ export function renderOverview(gains: Interest[]) {
     .attr("fill", (d) => {
       return z(d.key);
     })
+    .attr("stroke", (d) => {
+      return z(d.key);
+    })
+    .attr("stroke-opacity", (d) => (_.includes(areaKeys, d.key) ? 0.0 : 0.4))
+    .attr("fill-opacity", (d) => (_.includes(areaKeys, d.key) ? 1 : 0.6))
     .attr("x", (d) => x(d[0][0]))
     .attr("y", (d: any) => y2(d[0].data.i))
     .attr("height", y2.bandwidth())

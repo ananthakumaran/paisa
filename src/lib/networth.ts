@@ -105,7 +105,7 @@ export function renderNetworth(points: Networth[], element: Element): () => void
     .append("path")
     .attr("clip-path", `url(${new URL("#" + clipAboveID, window.location.toString())})`)
     .style("fill", z("gain"))
-    .style("opacity", "0.8")
+    .style("fill-opacity", "0.4")
     .attr(
       "d",
       area(0, (d) => {
@@ -117,7 +117,7 @@ export function renderNetworth(points: Networth[], element: Element): () => void
     .append("path")
     .attr("clip-path", `url(${new URL("#" + clipBelowID, window.location.toString())})`)
     .style("fill", z("loss"))
-    .style("opacity", "0.8")
+    .style("fill-opacity", "0.4")
     .attr(
       "d",
       area(height, (d) => {

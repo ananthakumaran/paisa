@@ -48,7 +48,7 @@
                 <th class="has-text-right">Absolute Return</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody class="has-text-grey-dark">
               {#each Object.values(breakdowns) as b}
                 {@const indent = _.repeat("&emsp;&emsp;", depth(b.group) - 1)}
                 {@const gain = b.gainAmount}

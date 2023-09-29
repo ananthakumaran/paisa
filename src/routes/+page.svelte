@@ -225,9 +225,8 @@
             <p class="subtitle is-flex is-justify-content-space-between is-align-items-end">
               <span
                 ><a class="secondary-link" href="/expense/monthly">Expenses</a>
-                <span
-                  class="is-size-5 has-text-weight-bold px-2 has-text-white"
-                  style="background-color: {COLORS.lossText};">{formatCurrency(totalExpense)}</span
+                <span class="is-size-5 has-text-weight-bold px-2" style="color: {COLORS.expenses}"
+                  >{formatCurrency(totalExpense)}</span
                 ></span
               >
               <LastNMonths n={3} bind:value={month} />

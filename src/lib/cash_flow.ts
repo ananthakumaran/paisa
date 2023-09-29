@@ -43,7 +43,7 @@ export function renderMonthlyFlow(
     .strokeWidth(1)
     .size(4)
     .orientation("vertical")
-    .background(chroma(COLORS.expenses).brighten().hex())
+    .background(chroma(COLORS.expenses).brighten(1.5).hex())
     .stroke(COLORS.expenses);
   svg.call(texture);
 
@@ -67,7 +67,7 @@ export function renderMonthlyFlow(
     y = d3.scaleLinear().range([height, 0]),
     z = d3.scaleOrdinal<string>(colors).domain(areaKeys);
 
-  const x1 = d3.scaleBand().domain(["0", "1"]).paddingInner(0).paddingOuter(0.1);
+  const x1 = d3.scaleBand().domain(["0", "1"]).paddingInner(0.1).paddingOuter(0.1);
 
   const xAxis = g
     .append("g")
@@ -81,7 +81,7 @@ export function renderMonthlyFlow(
   const line = g
     .append("path")
     .attr("stroke", COLORS.primary)
-    .attr("stroke-width", "1px")
+    .attr("stroke-width", "2px")
     .attr("fill", "none");
 
   const tooltipRects = g.append("g");
@@ -213,6 +213,7 @@ export function renderMonthlyFlow(
               }
               return z(d.key);
             })
+            .attr("fill-opacity", 0.6)
             .attr("x", (d: any) =>
               d[0].data.i === "0"
                 ? x1(d[0].data.i) + x1.bandwidth() - Math.min(x1.bandwidth(), MAX_BAR_WIDTH)

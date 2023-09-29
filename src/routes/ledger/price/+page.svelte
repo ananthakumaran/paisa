@@ -31,7 +31,7 @@
                 <th class="has-text-right">Value</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody class="has-text-grey-dark">
               {#each Object.keys(prices) as commodity}
                 {@const p = prices[commodity][0]}
                 <Toggleable>

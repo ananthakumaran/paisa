@@ -1,7 +1,7 @@
 <script lang="ts">
   import { ajax, type LedgerFile, type Transaction as T } from "$lib/utils";
   import _ from "lodash";
-  import { onMount } from "svelte";
+  import { onDestroy, onMount } from "svelte";
   import VirtualList from "svelte-tiny-virtual-list";
   import Transaction from "$lib/components/Transaction.svelte";
   import BulkEditForm from "$lib/components/BulkEditForm.svelte";
@@ -37,8 +37,12 @@
 
   const handleInput = _.debounce(handleInputRaw, 100);
 
-  editorState.subscribe((state) => {
+  const unsubscribe = editorState.subscribe((state) => {
     handleInput(state.predicate);
+  });
+
+  onDestroy(async () => {
+    unsubscribe();
   });
 
   const itemSize = (i: number) => {

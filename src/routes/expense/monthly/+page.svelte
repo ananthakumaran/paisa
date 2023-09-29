@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onMount } from "svelte";
+  import { onDestroy, onMount } from "svelte";
   import _ from "lodash";
   import { ajax, secondName, type Posting, formatCurrency, formatPercentage } from "$lib/utils";
   import {
@@ -21,7 +21,8 @@
     grouped_expenses: Record<string, Posting[]>,
     grouped_incomes: Record<string, Posting[]>,
     grouped_investments: Record<string, Posting[]>,
-    grouped_taxes: Record<string, Posting[]>;
+    grouped_taxes: Record<string, Posting[]>,
+    destroy: () => void;
 
   let taxRate = "",
     netIncome = "",
@@ -72,6 +73,12 @@
     renderer(expenses);
   }
 
+  onDestroy(async () => {
+    if (destroy) {
+      destroy();
+    }
+  });
+
   onMount(async () => {
     ({
       expenses: expenses,
@@ -84,7 +91,7 @@
     } = await ajax("/api/expense"));
 
     setAllowedDateRange(_.map(expenses, (e) => e.date));
-    ({ z } = renderMonthlyExpensesTimeline(expenses, groups, month, dateRange));
+    ({ z, destroy } = renderMonthlyExpensesTimeline(expenses, groups, month, dateRange));
     renderer = renderCurrentExpensesBreakdown(z);
   });
 

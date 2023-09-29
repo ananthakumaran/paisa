@@ -46,3 +46,37 @@ func TestParseHLegerPrices(t *testing.T) {
 	parsedPrices, _ = parseHLedgerPrices("P 2023-05-01 USD $0.9\n", "INR")
 	assert.Len(t, parsedPrices, 0)
 }
+
+func TestParseAmount(t *testing.T) {
+	commodity, amount, _ := parseAmount("0.9 USD")
+	assert.Equal(t, "USD", commodity)
+	assert.Equal(t, 0.9, amount.InexactFloat64())
+
+	commodity, amount, _ = parseAmount("$0.9")
+	assert.Equal(t, "$", commodity)
+	assert.Equal(t, 0.9, amount.InexactFloat64())
+
+	commodity, amount, _ = parseAmount("0.9$")
+	assert.Equal(t, "$", commodity)
+	assert.Equal(t, 0.9, amount.InexactFloat64())
+
+	commodity, amount, _ = parseAmount("$-0.9")
+	assert.Equal(t, "$", commodity)
+	assert.Equal(t, -0.9, amount.InexactFloat64())
+
+	commodity, amount, _ = parseAmount("-0.9$")
+	assert.Equal(t, "$", commodity)
+	assert.Equal(t, -0.9, amount.InexactFloat64())
+
+	commodity, amount, _ = parseAmount("100,000 EUR")
+	assert.Equal(t, "EUR", commodity)
+	assert.Equal(t, 100000.0, amount.InexactFloat64())
+
+	commodity, amount, _ = parseAmount("100,000.00 \"EUR0-0\"")
+	assert.Equal(t, "EUR0-0", commodity)
+	assert.Equal(t, 100000.0, amount.InexactFloat64())
+
+	commodity, amount, _ = parseAmount("-100,000.00 \"EUR0-0\"")
+	assert.Equal(t, "EUR0-0", commodity)
+	assert.Equal(t, -100000.0, amount.InexactFloat64())
+}

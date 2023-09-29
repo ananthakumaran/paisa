@@ -240,14 +240,21 @@ func parseHLedgerPrices(output string, defaultCurrency string) ([]price.Price, e
 }
 
 func parseAmount(amount string) (string, decimal.Decimal, error) {
-	match := regexp.MustCompile(`^(-?[0-9.,]+)([^\d,.-]+)|([^\d,.-]+)(-?[0-9.,]+)$`).FindStringSubmatch(amount)
-	if match[1] == "" {
-		value, err := decimal.NewFromString(strings.ReplaceAll(match[4], ",", ""))
-		return strings.Trim(match[3], " "), value, err
+	match := regexp.MustCompile(`^(-?[0-9.,]+)([^\d,.-]+)$|([^\d,.-]+)(-?[0-9.,]+)$|(-?[0-9.,]+)\s*("[^"]+")$`).FindStringSubmatch(amount)
+	if match[1] != "" {
+		value, err := decimal.NewFromString(strings.ReplaceAll(match[1], ",", ""))
+		return utils.UnQuote(strings.Trim(match[2], " ")), value, err
+
 	}
 
-	value, err := decimal.NewFromString(strings.ReplaceAll(match[1], ",", ""))
-	return strings.Trim(match[2], " "), value, err
+	if match[3] != "" {
+		value, err := decimal.NewFromString(strings.ReplaceAll(match[4], ",", ""))
+		return utils.UnQuote(strings.Trim(match[3], " ")), value, err
+	}
+
+	value, err := decimal.NewFromString(strings.ReplaceAll(match[5], ",", ""))
+	return utils.UnQuote(strings.Trim(match[6], " ")), value, err
+
 }
 
 func execLedgerCommand(journalPath string, flags []string) ([]*posting.Posting, error) {

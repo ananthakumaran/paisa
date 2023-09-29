@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
 	"time"
 
 	_ "embed"
@@ -109,12 +110,66 @@ var defaultConfig = Config{
 	ImportTemplates:            []ImportTemplate{},
 }
 
+var itemsUniquePropertiesMeta = jsonschema.MustCompileString("itemsUniqueProperties.json", `{
+  "properties": {
+    "itemsUniqueProperties": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1
+    }
+  }
+}`)
+
+type itemsUniquePropertiesSchema []string
+type itemsUniquePropertiessCompiler struct{}
+
+func (itemsUniquePropertiessCompiler) Compile(ctx jsonschema.CompilerContext, m map[string]interface{}) (jsonschema.ExtSchema, error) {
+
+	if items, ok := m["itemsUniqueProperties"]; ok {
+		itemsInterface := items.([]interface{})
+		itemsString := make([]string, len(itemsInterface))
+		for i, v := range itemsInterface {
+			itemsString[i] = v.(string)
+		}
+		return itemsUniquePropertiesSchema(itemsString), nil
+	}
+
+	return nil, nil
+}
+
+func (s itemsUniquePropertiesSchema) Validate(ctx jsonschema.ValidationContext, v interface{}) error {
+	for _, uniqueProperty := range s {
+		items := v.([]interface{})
+		seen := make(map[string]bool)
+		for _, item := range items {
+			itemMap := item.(map[string]interface{})
+			if _, ok := itemMap[uniqueProperty]; ok {
+				value := itemMap[uniqueProperty].(string)
+				if seen[value] {
+					return ctx.Error("itemsUniqueProperty", "duplicate %s %s", uniqueProperty, value)
+				}
+				seen[value] = true
+			}
+		}
+	}
+	return nil
+}
+
 //go:embed schema.json
 var SchemaJson string
 var schema *jsonschema.Schema
 
 func init() {
-	schema = jsonschema.MustCompileString("", SchemaJson)
+	c := jsonschema.NewCompiler()
+	c.RegisterExtension("itemsUniqueProperties", itemsUniquePropertiesMeta, itemsUniquePropertiessCompiler{})
+	err := c.AddResource("schema.json", strings.NewReader(SchemaJson))
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	schema = c.MustCompile("schema.json")
 }
 
 func SaveConfigObject(config Config) error {

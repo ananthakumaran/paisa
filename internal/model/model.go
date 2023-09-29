@@ -28,9 +28,19 @@ func AutoMigrate(db *gorm.DB) {
 	db.AutoMigrate(&cii.CII{})
 }
 
-func SyncJournal(db *gorm.DB) {
+func SyncJournal(db *gorm.DB) (string, error) {
 	AutoMigrate(db)
 	log.Info("Syncing transactions from journal")
+
+	errors, _, err := ledger.Cli().ValidateFile(config.GetJournalPath())
+	if err != nil {
+		var message string
+		for _, error := range errors {
+			message += error.Message + "\n"
+		}
+		return message, err
+	}
+
 	prices, err := ledger.Cli().Prices(config.GetJournalPath())
 	if err != nil {
 		log.Fatal(err)
@@ -43,6 +53,8 @@ func SyncJournal(db *gorm.DB) {
 		log.Fatal(err)
 	}
 	posting.UpsertAll(db, postings)
+
+	return "", nil
 }
 
 func SyncCommodities(db *gorm.DB) {

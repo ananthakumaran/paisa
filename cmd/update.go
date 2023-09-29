@@ -23,7 +23,10 @@ var updateCmd = &cobra.Command{
 		syncAll := !updateJournal && !updateCommodities && !updatePortfolios
 
 		if syncAll || updateJournal {
-			model.SyncJournal(db)
+			message, err := model.SyncJournal(db)
+			if err != nil {
+				log.Fatal(message)
+			}
 		}
 
 		if syncAll || updateCommodities {

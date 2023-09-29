@@ -546,7 +546,10 @@ export function ajax(
   options?: RequestInit
 ): Promise<{ file: LedgerFile }>;
 
-export function ajax(route: "/api/sync", options?: RequestInit): Promise<any>;
+export function ajax(
+  route: "/api/sync",
+  options?: RequestInit
+): Promise<{ success: boolean; message: string }>;
 export function ajax(
   route: "/api/price/providers",
   options?: RequestInit

@@ -16,7 +16,10 @@ type SyncRequest struct {
 
 func Sync(db *gorm.DB, request SyncRequest) gin.H {
 	if request.Journal {
-		model.SyncJournal(db)
+		message, err := model.SyncJournal(db)
+		if err != nil {
+			return gin.H{"success": false, "message": message}
+		}
 	}
 
 	if request.Prices {

@@ -1,5 +1,6 @@
 <script lang="ts">
   import { ajax } from "$lib/utils";
+  import * as toast from "bulma-toast";
   import { refresh } from "../../store";
 
   let isLoading = false;
@@ -7,7 +8,18 @@
   async function sync(request: Record<string, any>) {
     isLoading = true;
     try {
-      await ajax("/api/sync", { method: "POST", body: JSON.stringify(request) });
+      const { success, message } = await ajax("/api/sync", {
+        method: "POST",
+        body: JSON.stringify(request)
+      });
+
+      if (!success) {
+        toast.toast({
+          message: `<b>Failed to sync</b>\n${message}`,
+          type: "is-danger",
+          duration: 5000
+        });
+      }
     } finally {
       isLoading = false;
       refresh();

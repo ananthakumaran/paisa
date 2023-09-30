@@ -60,7 +60,7 @@ func (LedgerCLI) ValidateFile(journalPath string) ([]LedgerFileError, string, er
 		return errors, output.String(), nil
 	}
 
-	re := regexp.MustCompile(`(?m)While parsing file "[^"]+", line ([0-9]+):\s*\n(?:(?:While|>).*\n)*((?:.*\n)*?Error: .*\n)`)
+	re := regexp.MustCompile(`(?m)While parsing file "[^"]+", line ([0-9]+):\s*[\r\n]+(?:(?:While|>).*[\r\n]+)*((?:.*[\r\n]+)*?Error: .*[\r\n]+)`)
 
 	matches := re.FindAllStringSubmatch(error.String(), -1)
 
@@ -117,7 +117,7 @@ func (HLedgerCLI) ValidateFile(journalPath string) ([]LedgerFileError, string, e
 		return errors, output.String(), nil
 	}
 
-	re := regexp.MustCompile(`(?m)hledger: Error: [^:]*:([0-9:-]+)\n((?:.*\n)*)`)
+	re := regexp.MustCompile(`(?m)hledger: Error: [^:]*:([0-9:-]+)[\r\n]+((?:.*[\r\n]+)*)`)
 	matches := re.FindAllStringSubmatch(error.String(), -1)
 
 	for _, match := range matches {
@@ -185,7 +185,7 @@ func (HLedgerCLI) Prices(journalPath string) ([]price.Price, error) {
 
 func parseLedgerPrices(output string, defaultCurrency string) ([]price.Price, error) {
 	var prices []price.Price
-	re := regexp.MustCompile(`P (\d{4}\/\d{2}\/\d{2}) (?:\d{2}:\d{2}:\d{2}) ([^\s\d.-]+|"[^"]+") (.+)\n`)
+	re := regexp.MustCompile(`P (\d{4}\/\d{2}\/\d{2}) (?:\d{2}:\d{2}:\d{2}) ([^\s\d.-]+|"[^"]+") ([^\r\n]+)[\r\n]+`)
 	matches := re.FindAllStringSubmatch(output, -1)
 
 	for _, match := range matches {
@@ -213,7 +213,7 @@ func parseLedgerPrices(output string, defaultCurrency string) ([]price.Price, er
 
 func parseHLedgerPrices(output string, defaultCurrency string) ([]price.Price, error) {
 	var prices []price.Price
-	re := regexp.MustCompile(`P (\d{4}-\d{2}-\d{2}) ([^\s\d.-]+) (.+)\n`)
+	re := regexp.MustCompile(`P (\d{4}-\d{2}-\d{2}) ([^\s\d.-]+|"[^"]+") ([^\r\n]+)[\r\n]+`)
 	matches := re.FindAllStringSubmatch(output, -1)
 
 	for _, match := range matches {
@@ -240,20 +240,18 @@ func parseHLedgerPrices(output string, defaultCurrency string) ([]price.Price, e
 }
 
 func parseAmount(amount string) (string, decimal.Decimal, error) {
-	match := regexp.MustCompile(`^(-?[0-9.,]+)([^\d,.-]+)$|([^\d,.-]+)(-?[0-9.,]+)$|(-?[0-9.,]+)\s*("[^"]+")$`).FindStringSubmatch(amount)
+	match := regexp.MustCompile(`^(-?[0-9.,]+)([^\d,.-]+|\s*"[^"]+")$|([^\d,.-]+|\s*"[^"]+"\s*)(-?[0-9.,]+)$`).FindStringSubmatch(amount)
+	if len(match) == 0 {
+		log.Fatalf("Could not parse amount: <%s>", amount)
+	}
+
 	if match[1] != "" {
 		value, err := decimal.NewFromString(strings.ReplaceAll(match[1], ",", ""))
 		return utils.UnQuote(strings.Trim(match[2], " ")), value, err
 
 	}
-
-	if match[3] != "" {
-		value, err := decimal.NewFromString(strings.ReplaceAll(match[4], ",", ""))
-		return utils.UnQuote(strings.Trim(match[3], " ")), value, err
-	}
-
-	value, err := decimal.NewFromString(strings.ReplaceAll(match[5], ",", ""))
-	return utils.UnQuote(strings.Trim(match[6], " ")), value, err
+	value, err := decimal.NewFromString(strings.ReplaceAll(match[4], ",", ""))
+	return utils.UnQuote(strings.Trim(match[3], " ")), value, err
 
 }
 

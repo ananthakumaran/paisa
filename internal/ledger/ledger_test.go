@@ -41,9 +41,16 @@ func TestParseHLegerPrices(t *testing.T) {
 	parsedPrices, _ = parseHLedgerPrices("P 2023-05-01 EUR 1.1$\n", "$")
 	assertPriceEqual(t, parsedPrices[0], "2023/05/01", "EUR", 1.1)
 
+	parsedPrices, _ = parseHLedgerPrices("P 2023-05-01 \"AAPL0\" \"USD0\" 45.5\n", "USD0")
+	assertPriceEqual(t, parsedPrices[0], "2023/05/01", "AAPL0", 45.5)
+
 	parsedPrices, _ = parseHLedgerPrices("P 2023-05-01 USD 0.9 EUR\n", "INR")
 	assert.Len(t, parsedPrices, 0)
+
 	parsedPrices, _ = parseHLedgerPrices("P 2023-05-01 USD $0.9\n", "INR")
+	assert.Len(t, parsedPrices, 0)
+
+	parsedPrices, _ = parseHLedgerPrices("P 2023-05-01 USD $0.9\r\n", "INR")
 	assert.Len(t, parsedPrices, 0)
 }
 
@@ -79,4 +86,12 @@ func TestParseAmount(t *testing.T) {
 	commodity, amount, _ = parseAmount("-100,000.00 \"EUR0-0\"")
 	assert.Equal(t, "EUR0-0", commodity)
 	assert.Equal(t, -100000.0, amount.InexactFloat64())
+
+	commodity, amount, _ = parseAmount("\"EUR0-0\" -100,000.00")
+	assert.Equal(t, "EUR0-0", commodity)
+	assert.Equal(t, -100000.0, amount.InexactFloat64())
+
+	commodity, amount, _ = parseAmount("INR 70.0099")
+	assert.Equal(t, "INR", commodity)
+	assert.Equal(t, 70.0099, amount.InexactFloat64())
 }

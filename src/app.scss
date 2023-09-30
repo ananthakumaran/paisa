@@ -19,6 +19,8 @@ $menu-item-hover-background-color: $link-light;
 $menu-item-active-color: $link-dark;
 $menu-item-active-background-color: $link-light;
 
+$editor-full-height: calc(100vh - 21px - 57.75px - 10.5px);
+
 @import "bulma/bulma.sass";
 @import "bulma-switch/src/sass/index.sass";
 @import "@cityssm/bulma-sticky-table/sticky-table";
@@ -56,7 +58,7 @@ $menu-item-active-background-color: $link-light;
 
   a.du-active {
     color: $link !important;
-    background-color: $white-ter !important;
+    background-color: $white !important;
     font-weight: bold;
   }
 }
@@ -393,6 +395,8 @@ nav.level.grid-2 {
     background-color: $white-ter;
     color: $grey-light;
     border: none;
+    border-top-left-radius: $radius-small;
+    border-bottom-left-radius: $radius-small;
   }
 
   .cm-activeLineGutter {
@@ -557,9 +561,14 @@ nav.level.grid-2 {
   width: 800px;
 }
 
-.editor .cm-editor {
-  max-height: calc(100vh - 185px);
+.full-height {
+  max-height: $editor-full-height;
 }
+
+.editor .cm-editor {
+  max-height: $editor-full-height;
+}
+
 .cm-scroller {
   overflow: auto;
   font-family: $family-monospace !important;

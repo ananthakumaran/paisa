@@ -9,7 +9,8 @@ interface Result {
 }
 
 export function parse(file: File): Promise<Result> {
-  const extension = file.name.split(".").pop();
+  let extension = file.name.split(".").pop();
+  extension = extension?.toLowerCase();
   if (extension === "csv" || extension === "txt") {
     return parseCSV(file);
   } else if (extension === "xlsx" || extension === "xls") {

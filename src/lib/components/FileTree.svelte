@@ -26,7 +26,7 @@
           <span class="icon is-small">
             <i class="fa-regular fa-file-lines" />
           </span>
-          {fileName(file.name)}
+          <span title={fileName(file.name)} class="truncate">{fileName(file.name)}</span>
           {#if file.name == selectedFileName && hasUnsavedChanges}
             <span class="ml-1 tag is-danger">unsaved</span>
           {/if}
@@ -39,7 +39,7 @@
             <span class="icon is-small">
               <i class="fa-regular fa-folder" />
             </span>
-            {file.name}
+            <span title={file.name} class="truncate">{file.name}</span>
           </summary>
           <svelte:self
             on:select={(e) => dispatch("select", e.detail)}

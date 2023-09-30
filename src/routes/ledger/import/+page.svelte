@@ -279,7 +279,7 @@
           <Dropzone
             multiple={false}
             inputElement={input}
-            accept=".csv,.txt,.xls,.xlsx,.pdf"
+            accept=".csv,.txt,.xls,.xlsx,.pdf,.CSV,.TXT,.XLS,.XLSX,.PDF"
             on:drop={handleFilesSelect}
           >
             Drag 'n' drop CSV, TXT, XLS, XLSX, PDF file here or click to select
@@ -320,6 +320,8 @@
 <style lang="scss">
   @import "bulma/sass/utilities/_all.sass";
 
+  $import-full-height: calc(100vh - 205px);
+
   .clipboard {
     float: right;
     position: absolute;
@@ -337,6 +339,6 @@
   .table-wrapper {
     overflow-x: auto;
     overflow-y: auto;
-    max-height: calc(100vh - 225px);
+    max-height: $import-full-height;
   }
 </style>

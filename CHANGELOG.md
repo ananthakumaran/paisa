@@ -1,6 +1,6 @@
 # CHANGELOG
 
-### 0.5.3
+### 0.5.3 (2023-09-30)
 
 * Add Docker Image
 * Add Linux Application (deb package)

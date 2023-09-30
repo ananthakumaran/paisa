@@ -663,6 +663,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#roundstr-string-precision-number-number" class="md-nav__link">
+    round(str: string, {precision?: number}): number
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#isdatestr-string-format-string-boolean" class="md-nav__link">
     isDate(str: string, format: string): boolean
   </a>
@@ -670,8 +677,8 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#predictaccountcorpus-string-prefix-string-string" class="md-nav__link">
-    predictAccount(...corpus: string[], {prefix?: string}): string
+  <a href="#predictaccountterms-string-prefix-string-string" class="md-nav__link">
+    predictAccount(...terms: string[], {prefix?: string}): string
   </a>
   
 </li>
@@ -1041,6 +1048,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#roundstr-string-precision-number-number" class="md-nav__link">
+    round(str: string, {precision?: number}): number
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#isdatestr-string-format-string-boolean" class="md-nav__link">
     isDate(str: string, format: string): boolean
   </a>
@@ -1048,8 +1062,8 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#predictaccountcorpus-string-prefix-string-string" class="md-nav__link">
-    predictAccount(...corpus: string[], {prefix?: string}): string
+  <a href="#predictaccountterms-string-prefix-string-string" class="md-nav__link">
+    predictAccount(...terms: string[], {prefix?: string}): string
   </a>
   
 </li>
@@ -1279,14 +1293,22 @@ adding it to the built-in templates.</p>
 <p>Converts the given string to a valid amount. If the string is blank,
 the default value is used. Examples <code>(0.9534)</code> to <code>-0.9534</code>, <code>₹
 1,234.56</code> to <code>1234.56</code></p>
+<h4 id="roundstr-string-precision-number-number"><code class="language-typescript highlight"><span class="nx">round</span><span class="p">(</span><span class="nx">str</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="nx">precision?</span><span class="o">:</span><span class="w"> </span><span class="kt">number</span><span class="p">})</span><span class="o">:</span><span class="w"> </span><span class="kt">number</span></code></h4>
+<p>Rounds the given value to the given precision. If precision is not
+set, defaults to <code>0</code></p>
 <h4 id="isdatestr-string-format-string-boolean"><code class="language-typescript highlight"><span class="nx">isDate</span><span class="p">(</span><span class="nx">str</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="nx">format</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="o">:</span><span class="w"> </span><span class="kt">boolean</span></code></h4>
 <p>Checks if the given string is a valid date in the given format. Refer
 <a href="https://day.js.org/docs/en/parse/string-format#list-of-all-available-parsing-tokens">Day.js</a> for the full list of supported formats.</p>
-<h4 id="predictaccountcorpus-string-prefix-string-string"><code class="language-typescript highlight"><span class="nx">predictAccount</span><span class="p">(</span><span class="nx">...corpus</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">[],</span><span class="w"> </span><span class="p">{</span><span class="nx">prefix?</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">})</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span></code></h4>
-<p>corpus provided will be matched with the existing transaction
-description and amount.</p>
-<p>If <code>corpus</code> is not provided, the entire <code>ROW</code> will be used.  The
-<code>prefix</code> is optional and will be used to filter out matching
+<h4 id="predictaccountterms-string-prefix-string-string"><code class="language-typescript highlight"><span class="nx">predictAccount</span><span class="p">(</span><span class="nx">...terms</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">[],</span><span class="w"> </span><span class="p">{</span><span class="nx">prefix?</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">})</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span></code></h4>
+<p>Helps with prediction of account name to be used in a
+transaction. Let's say you import your Credit Card bill, you would
+prefer the system to automatically assign the account name for
+you. <code>predictAccount</code> acts like a search engine. It will try to find a
+transaction that is similar to the current transaction. The search
+requires input (referred as terms) and it will match transactions with
+similar <strong>description</strong> and will pick the accounts from the top match.</p>
+<p>If <code>terms</code> are not provided, the entire <code>ROW</code> will be used.</p>
+<p>The <code>prefix</code> is optional and will be used to filter out matching
 accounts. If no match is found, <code>Unknown</code> will be returned.</p>
 <div class="language-handlebars highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="cp">{{</span><span class="nv">predictAccount</span> <span class="na">prefix</span><span class="o">=</span><span class="s2">&quot;Income&quot;</span><span class="cp">}}</span>
 </span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="cp">{{</span><span class="nv">predictAccount</span> <span class="nv">ROW.C</span> <span class="nv">ROW.F</span> <span class="na">prefix</span><span class="o">=</span><span class="s2">&quot;Income&quot;</span><span class="cp">}}</span>

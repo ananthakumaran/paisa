@@ -1,5 +1,10 @@
 import _ from "lodash";
-import type { Transaction, TransactionSchedule, TransactionSequence } from "./utils";
+import {
+  prefixMinutesSeconds,
+  type Transaction,
+  type TransactionSchedule,
+  type TransactionSequence
+} from "./utils";
 import dayjs from "dayjs";
 import { parse, type CronExprs } from "@datasert/cronjs-parser";
 import { getFutureMatches } from "@datasert/cronjs-matcher";
@@ -83,7 +88,7 @@ function enrich(ts: TransactionSequence) {
   let cron: CronExprs;
   try {
     if (ts.period != "") {
-      cron = parse("0 0 " + ts.period, { hasSeconds: false });
+      cron = parse(prefixMinutesSeconds(ts.period), { hasSeconds: false });
       periodAvailable = true;
     } else {
       periodAvailable = false;

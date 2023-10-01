@@ -919,3 +919,10 @@ export function monthDays(month: string) {
   }
   return { days, monthStart, monthEnd };
 }
+
+export function prefixMinutesSeconds(cronExpression: string) {
+  return cronExpression
+    .split("|")
+    .map((cron) => "0 0 " + cron)
+    .join("|");
+}

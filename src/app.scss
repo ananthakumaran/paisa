@@ -623,6 +623,10 @@ nav.level.grid-2 {
   font-family: $family-monospace;
 }
 
+.cm-tag {
+  height: 1.5em !important;
+}
+
 .svelte-select {
   --chevron-color: hsl(229deg, 53%, 53%);
   --font-size: 14px;

@@ -11,6 +11,7 @@ import _ from "lodash";
 import { editorState, initialEditorState } from "../store";
 import { autocompletion, completeFromList, ifIn } from "@codemirror/autocomplete";
 import { MergeView } from "@codemirror/merge";
+import { schedulePlugin } from "./transaction_tag";
 
 export { editorState } from "../store";
 
@@ -87,7 +88,8 @@ export function createEditor(
             redoDepth: redoDepth(viewUpdate.state)
           })
         );
-      })
+      }),
+      schedulePlugin
     ],
     doc: content,
     parent: dom

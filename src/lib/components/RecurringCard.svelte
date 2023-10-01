@@ -1,12 +1,8 @@
 <script lang="ts">
   import Carousel from "svelte-carousel";
   import Transaction from "$lib/components/Transaction.svelte";
-  import {
-    formatCurrencyCrude,
-    intervalText,
-    totalRecurring,
-    type TransactionSequence
-  } from "$lib/utils";
+  import { intervalText, totalRecurring } from "$lib/transaction_sequence";
+  import { formatCurrencyCrude, type TransactionSequence } from "$lib/utils";
   import dayjs from "dayjs";
   import type { Action } from "svelte/action";
   import { renderRecurring } from "$lib/recurring";
@@ -15,6 +11,7 @@
   export let ts: TransactionSequence;
   export let n: dayjs.Dayjs;
   const now = dayjs();
+  const HEIGHT = 50;
 
   let carousel: Carousel;
   let pageSize = _.min([20, ts.transactions.length]);
@@ -27,23 +24,24 @@
     element,
     props
   ) => {
-    renderRecurring(element, props.ts, props.next, showPage);
+    renderRecurring(element, props.ts, showPage);
     return {};
   };
 </script>
 
-<div class="columns">
+<div class="columns mb-0">
+  <div class="column is-12 py-0">
+    <div class="is-size-5">{ts.key}</div>
+  </div>
+</div>
+<div class="columns mb-4">
   <div class="column is-4">
     <div class="box p-2">
       <div
         class="is-flex is-flex-wrap-wrap is-align-items-baseline is-justify-content-space-between"
       >
-        <span
-          class="icon-text tag invertable is-medium is-light {n.isBefore(now)
-            ? 'is-danger'
-            : 'is-success'}"
-        >
-          <span class="icon">
+        <span class="icon-text">
+          <span class="icon {n.isBefore(now) ? 'has-text-danger' : 'has-text-success'}">
             <i class="fas {n.isBefore(now) ? 'fa-hourglass-end' : 'fa-hourglass-half'}" />
           </span>
           <span>{formatCurrencyCrude(totalRecurring(ts))} due {n.fromNow()}</span>
@@ -58,10 +56,10 @@
       </div>
       <hr class="m-1" />
       <div use:chart={{ ts: ts, next: n }}>
-        <svg height="50" width="100%" />
+        <svg height={HEIGHT} width="100%" />
       </div>
       <div class="">
-        <span><b>{ts.key.tagRecurring}</b> started on</span>
+        <span><b>{ts.key}</b> started on</span>
         <b>{_.last(ts.transactions).date.format("DD MMM YYYY")}</b>, with a total of
         <b>{ts.transactions.length}</b> transactions so far.
       </div>

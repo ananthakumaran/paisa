@@ -1,4 +1,4 @@
-import dayjs from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 import { sprintf } from "sprintf-js";
 import _ from "lodash";
 import * as d3 from "d3";
@@ -51,14 +51,25 @@ export interface CashFlow {
   balance: number;
 }
 
-export interface TransactionSequenceKey {
-  tagRecurring: string;
+export interface TransactionSchedule {
+  actual: dayjs.Dayjs;
+  scheduled: dayjs.Dayjs;
+  transaction: Transaction;
+  key: string;
+  amount: number;
 }
 
 export interface TransactionSequence {
   transactions: Transaction[];
-  key: TransactionSequenceKey;
+  period: string;
+  key: string;
   interval: number;
+
+  // computed
+  schedules: TransactionSchedule[];
+  pastSchedules: TransactionSchedule[];
+  futureSchedules: TransactionSchedule[];
+  schedulesByMonth: Record<string, TransactionSchedule[]>;
 }
 
 export interface Transaction {
@@ -872,60 +883,6 @@ export function postingUrl(posting: Posting) {
   }`;
 }
 
-export function intervalText(ts: TransactionSequence) {
-  if (ts.interval >= 7 && ts.interval <= 8) {
-    return "weekly";
-  }
-
-  if (ts.interval >= 14 && ts.interval <= 16) {
-    return "bi-weekly";
-  }
-
-  if (ts.interval >= 28 && ts.interval <= 33) {
-    return "monthly";
-  }
-
-  if (ts.interval >= 87 && ts.interval <= 100) {
-    return "quarterly";
-  }
-
-  if (ts.interval >= 175 && ts.interval <= 190) {
-    return "half-yearly";
-  }
-
-  if (ts.interval >= 350 && ts.interval <= 395) {
-    return "yearly";
-  }
-
-  return `every ${ts.interval} days`;
-}
-
-export function nextDate(ts: TransactionSequence) {
-  const lastTransaction = ts.transactions[0];
-  if (ts.interval >= 28 && ts.interval <= 33) {
-    return lastTransaction.date.add(1, "month");
-  }
-
-  if (ts.interval >= 360 && ts.interval <= 370) {
-    return lastTransaction.date.add(1, "year");
-  }
-
-  return lastTransaction.date.add(ts.interval, "day");
-}
-
-export function totalRecurring(ts: TransactionSequence) {
-  const lastTransaction = ts.transactions[0];
-  return _.sumBy(lastTransaction.postings, (t) => _.max([0, t.amount]));
-}
-
-export function sortTrantionSequence(transactionSequences: TransactionSequence[]) {
-  return _.chain(transactionSequences)
-    .sortBy((ts) => {
-      return Math.abs(nextDate(ts).diff(dayjs()));
-    })
-    .value();
-}
-
 const storageKey = "theme-preference";
 
 export function getColorPreference() {
@@ -946,4 +903,19 @@ export function setColorPreference(theme: string) {
 
 export function isZero(n: number) {
   return n < 0.0001 && n > -0.0001;
+}
+
+export function monthDays(month: string) {
+  const monthStart = dayjs(month, "YYYY-MM");
+  const monthEnd = monthStart.endOf("month");
+  const weekStart = monthStart.startOf("week");
+  const weekEnd = monthEnd.endOf("week");
+
+  const days: Dayjs[] = [];
+  let d = weekStart;
+  while (d.isSameOrBefore(weekEnd)) {
+    days.push(d);
+    d = d.add(1, "day");
+  }
+  return { days, monthStart, monthEnd };
 }

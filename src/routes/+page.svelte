@@ -1,33 +1,36 @@
 <script lang="ts">
-  import * as expense from "$lib/expense/monthly";
   import * as cashFlow from "$lib/cash_flow";
-  import {
-    ajax,
-    sortTrantionSequence,
-    type CashFlow,
-    type Posting,
-    type TransactionSequence,
-    nextDate,
-    totalRecurring,
-    formatCurrencyCrude,
-    intervalText,
-    type Networth,
-    formatCurrency,
-    formatFloat,
-    type Transaction,
-    type Budget
-  } from "$lib/utils";
-  import _ from "lodash";
-  import { onMount } from "svelte";
   import COLORS from "$lib/colors";
-  import dayjs from "dayjs";
   import LastNMonths from "$lib/components/LastNMonths.svelte";
   import TransactionCard from "$lib/components/TransactionCard.svelte";
+  import * as expense from "$lib/expense/monthly";
+  import {
+    enrichTrantionSequence,
+    intervalText,
+    nextUnpaidSchedule,
+    sortTrantionSequence,
+    totalRecurring
+  } from "$lib/transaction_sequence";
+  import {
+    ajax,
+    formatCurrency,
+    formatCurrencyCrude,
+    formatFloat,
+    type Budget,
+    type CashFlow,
+    type Networth,
+    type Posting,
+    type Transaction,
+    type TransactionSequence
+  } from "$lib/utils";
+  import dayjs from "dayjs";
+  import _ from "lodash";
+  import { onMount } from "svelte";
 
-  import { MasonryGrid } from "@egjs/svelte-grid";
   import BudgetCard from "$lib/components/BudgetCard.svelte";
   import LevelItem from "$lib/components/LevelItem.svelte";
   import ZeroState from "$lib/components/ZeroState.svelte";
+  import { MasonryGrid } from "@egjs/svelte-grid";
   import { refresh } from "../store";
 
   let UntypedMasonryGrid = MasonryGrid as any;
@@ -84,7 +87,10 @@
       rotate: false,
       balance: _.last(cashFlows)?.balance || 0
     })(cashFlows);
-    transactionSequences = _.take(sortTrantionSequence(transactionSequences), 16);
+    transactionSequences = _.take(
+      sortTrantionSequence(enrichTrantionSequence(transactionSequences)),
+      16
+    );
   });
 </script>
 
@@ -253,9 +259,9 @@
                       style="overflow: hidden; max-height: 190px"
                     >
                       {#each transactionSequences as ts}
-                        {@const n = nextDate(ts)}
+                        {@const n = nextUnpaidSchedule(ts).scheduled}
                         <div class="has-text-centered mb-3 mr-3 max-w-[200px]">
-                          <div class="is-size-7 truncate">{ts.key.tagRecurring}</div>
+                          <div class="is-size-7 truncate">{ts.key}</div>
                           <div class="my-1">
                             <span class="tag is-light">{intervalText(ts)}</span>
                           </div>

@@ -102,6 +102,10 @@ code {
   visibility: hidden;
 }
 
+.is-bordered.is-link {
+  border: 1px solid rgba($link, 0.4);
+}
+
 .is-bordered-bottom {
   border-bottom: 1px solid $grey-lighter;
 }
@@ -116,6 +120,10 @@ code {
 
 .is-bordered-left {
   border-left: 1px solid $grey-lighter;
+}
+
+.is-bordered.is-link {
+  border: 2px solid $link;
 }
 
 svg text {
@@ -152,6 +160,18 @@ svg text {
 
 .svg-text-grey-dark {
   fill: $grey-dark;
+}
+
+.svg-text-success {
+  fill: $success;
+}
+
+.svg-text-danger {
+  fill: $danger;
+}
+
+.svg-text-warning-dark {
+  fill: $warning-dark;
 }
 
 .svg-grey-light {
@@ -202,6 +222,12 @@ svg text {
     fill: none;
     stroke: $grey-lighter;
     shape-rendering: crispEdges;
+  }
+
+  &.light-domain {
+    path.domain {
+      stroke: $grey-lightest;
+    }
   }
 
   .tick line {
@@ -315,6 +341,16 @@ svg text {
   cursor: zoom-in;
 }
 
+.weekdays-grid {
+  border-radius: $radius-small;
+
+  div {
+    padding: 2px 0;
+    color: $grey-dark;
+    background: $white-ter;
+  }
+}
+
 .d3-calendar .days,
 .d3-calendar .months,
 .d3-calendar .weekdays {
@@ -420,6 +456,10 @@ nav.level.grid-2 {
 
   .cm-line .ͼg {
     color: $link;
+  }
+
+  .cm-line .ͼm {
+    color: $grey;
   }
 
   .cm-line .ͼ9 {

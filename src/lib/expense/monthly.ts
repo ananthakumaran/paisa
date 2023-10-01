@@ -1,6 +1,6 @@
 import * as d3 from "d3";
 import legend from "d3-svg-legend";
-import dayjs, { Dayjs } from "dayjs";
+import type { Dayjs } from "dayjs";
 import chroma from "chroma-js";
 import _ from "lodash";
 import {
@@ -12,7 +12,8 @@ import {
   skipTicks,
   tooltip,
   restName,
-  firstName
+  firstName,
+  monthDays
 } from "$lib/utils";
 import COLORS, { generateColorScheme, white } from "$lib/colors";
 import { get, type Readable, type Writable } from "svelte/store";
@@ -26,25 +27,16 @@ export function renderCalendar(
   groups: string[]
 ) {
   const id = "#d3-current-month-expense-calendar";
-  const monthStart = dayjs(month, "YYYY-MM");
-  const monthEnd = monthStart.endOf("month");
-  const weekStart = monthStart.startOf("week");
-  const weekEnd = monthEnd.endOf("week");
 
   const alpha = d3.scaleLinear().range([0.3, 1]);
-
   const expensesByDay: Record<string, Posting[]> = {};
-  const days: Dayjs[] = [];
-  let d = weekStart;
-  while (d.isSameOrBefore(weekEnd)) {
-    days.push(d);
+  const { days, monthStart, monthEnd } = monthDays(month);
+  _.each(days, (d) => {
     expensesByDay[d.format("YYYY-MM-DD")] = _.filter(
       expenses,
       (e) => e.date.isSame(d, "day") && _.includes(groups, expenseGroup(e))
     );
-
-    d = d.add(1, "day");
-  }
+  });
 
   const expensesByDayTotal = _.mapValues(expensesByDay, (ps) => _.sumBy(ps, (p) => p.amount));
 
@@ -139,7 +131,7 @@ export function renderMonthlyExpensesTimeline(
   postings: Posting[],
   groupsStore: Writable<string[]>,
   monthStore: Writable<string>,
-  dateRangeStore: Readable<{ from: dayjs.Dayjs; to: dayjs.Dayjs }>
+  dateRangeStore: Readable<{ from: Dayjs; to: Dayjs }>
 ) {
   const id = "#d3-monthly-expense-timeline";
   const timeFormat = "MMM-YYYY";
@@ -270,7 +262,7 @@ export function renderMonthlyExpensesTimeline(
 
   let firstRender = true;
 
-  const render = (allowedGroups: string[], dateRange: { from: dayjs.Dayjs; to: dayjs.Dayjs }) => {
+  const render = (allowedGroups: string[], dateRange: { from: Dayjs; to: Dayjs }) => {
     groupsStore.set(allowedGroups);
     const allowedPoints = _.filter(
       points,

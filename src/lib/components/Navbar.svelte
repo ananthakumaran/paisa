@@ -29,6 +29,13 @@
     }
   });
 
+  const RecurringIcons = [
+    { icon: "fa-circle-check", color: "success", label: "Cleared" },
+    { icon: "fa-circle-check", color: "warning-dark", label: "Cleared late" },
+    { icon: "fa-exclamation-triangle", color: "danger", label: "Past due" },
+    { icon: "fa-circle-check", color: "grey", label: "Upcoming" }
+  ];
+
   interface Link {
     label: string;
     href: string;
@@ -40,6 +47,7 @@
     cashflowTypePicker?: boolean;
     financialYearPicker?: boolean;
     maxDepthSelector?: boolean;
+    recurringIcons?: boolean;
     children?: Link[];
   }
   const links: Link[] = [
@@ -56,7 +64,13 @@
           financialYearPicker: true,
           maxDepthSelector: true
         },
-        { label: "Recurring", href: "/recurring", help: "recurring" }
+        {
+          label: "Recurring",
+          href: "/recurring",
+          help: "recurring",
+          monthPicker: true,
+          recurringIcons: true
+        }
       ]
     },
     {
@@ -331,6 +345,19 @@
   {/if}
 
   <div class="mr-3 is-flex" style="gap: 12px">
+    {#if selectedSubLink?.recurringIcons}
+      <div class="flex gap-5 items-center">
+        {#each RecurringIcons as icon}
+          <div>
+            <span class="icon is-small has-text-{icon.color}">
+              <i class={"fas " + icon.icon} />
+            </span>
+            <span>{icon.label}</span>
+          </div>
+        {/each}
+      </div>
+    {/if}
+
     {#if selectedSubLink?.cashflowTypePicker}
       <BoxedTabs
         options={[

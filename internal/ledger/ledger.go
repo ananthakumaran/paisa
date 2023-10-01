@@ -258,7 +258,23 @@ func parseAmount(amount string) (string, decimal.Decimal, error) {
 func execLedgerCommand(journalPath string, flags []string) ([]*posting.Posting, error) {
 	var postings []*posting.Posting
 
-	args := append(append([]string{"--args-only", "-f", journalPath}, flags...), "csv", "--csv-format", "%(quoted(date)),%(quoted(payee)),%(quoted(display_account)),%(quoted(commodity(scrub(display_amount)))),%(quoted(quantity(scrub(display_amount)))),%(quoted(scrub(market(amount,date,'"+config.DefaultCurrency()+"') * 100000000))),%(quoted(xact.filename)),%(quoted(xact.id)),%(quoted(cleared ? \"*\" : (pending ? \"!\" : \"\"))),%(quoted(tag('Recurring'))),%(quoted(xact.beg_line)),%(quoted(xact.end_line)),%(quoted(lot_price(amount)))\n")
+	const (
+		Date = iota
+		Payee
+		Account
+		Commodity
+		Quantity
+		Amount
+		FileName
+		SequenceID
+		Status
+		TransactionBeginLine
+		TransactionEndLine
+		LotPrice
+		TagRecurring
+		TagPeriod
+	)
+	args := append(append([]string{"--args-only", "-f", journalPath}, flags...), "csv", "--csv-format", "%(quoted(date)),%(quoted(payee)),%(quoted(display_account)),%(quoted(commodity(scrub(display_amount)))),%(quoted(quantity(scrub(display_amount)))),%(quoted(scrub(market(amount,date,'"+config.DefaultCurrency()+"') * 100000000))),%(quoted(xact.filename)),%(quoted(xact.id)),%(quoted(cleared ? \"*\" : (pending ? \"!\" : \"\"))),%(quoted(xact.beg_line)),%(quoted(xact.end_line)),%(quoted(lot_price(amount))),%(quoted(tag('Recurring'))),%(quoted(tag('Period')))\n")
 
 	var output, error bytes.Buffer
 	err := utils.Exec(binary.LedgerBinaryPath(), &output, &error, args...)
@@ -278,12 +294,12 @@ func execLedgerCommand(journalPath string, flags []string) ([]*posting.Posting, 
 	dir := filepath.Dir(config.GetJournalPath())
 
 	for _, record := range records {
-		date, err := time.ParseInLocation("2006/01/02", record[0], time.Local)
+		date, err := time.ParseInLocation("2006/01/02", record[Date], time.Local)
 		if err != nil {
 			return nil, err
 		}
 
-		quantity, err := decimal.NewFromString(record[4])
+		quantity, err := decimal.NewFromString(record[Quantity])
 		if err != nil {
 			return nil, err
 		}
@@ -291,9 +307,9 @@ func execLedgerCommand(journalPath string, flags []string) ([]*posting.Posting, 
 		var amount decimal.Decimal
 		amountAvailable := false
 
-		lotString := record[12]
+		lotString := record[LotPrice]
 		if lotString != "" {
-			lotCurrency, lotAmount, err := parseAmount(record[12])
+			lotCurrency, lotAmount, err := parseAmount(record[LotPrice])
 			if err != nil {
 				return nil, err
 			}
@@ -305,14 +321,14 @@ func execLedgerCommand(journalPath string, flags []string) ([]*posting.Posting, 
 		}
 
 		if !amountAvailable {
-			_, amount, err = parseAmount(record[5])
+			_, amount, err = parseAmount(record[Amount])
 			if err != nil {
 				return nil, err
 			}
 			amount = amount.Div(decimal.NewFromInt(100000000))
 		}
 
-		if record[1] == "Budget transaction" {
+		if record[Payee] == "Budget transaction" {
 			amount = amount.Neg()
 		}
 
@@ -321,53 +337,59 @@ func execLedgerCommand(journalPath string, flags []string) ([]*posting.Posting, 
 		var fileName string
 		var forecast bool
 
-		if record[1] == "Budget transaction" || record[1] == "Forecast transaction" {
-			transactionID = uuid.NewV5(namespace, record[0]+":"+record[1]).String()
+		if record[Payee] == "Budget transaction" || record[Payee] == "Forecast transaction" {
+			transactionID = uuid.NewV5(namespace, record[Date]+":"+record[Payee]).String()
 			forecast = true
 		} else {
-			fileName, err = filepath.Rel(dir, record[6])
+			fileName, err = filepath.Rel(dir, record[FileName])
 			if err != nil {
 				return nil, err
 			}
 
-			transactionID = uuid.NewV5(namespace, fileName+":"+record[7]).String()
+			transactionID = uuid.NewV5(namespace, fileName+":"+record[SequenceID]).String()
 			forecast = false
 		}
 
 		var status string
-		if record[8] == "*" {
+		if record[Status] == "*" {
 			status = "cleared"
-		} else if record[8] == "!" {
+		} else if record[Status] == "!" {
 			status = "pending"
 		} else {
 			status = "unmarked"
 		}
 
+		transactionBeginLine, err := strconv.ParseUint(record[TransactionBeginLine], 10, 64)
+		if err != nil {
+			return nil, err
+		}
+
+		transactionEndLine, err := strconv.ParseUint(record[TransactionEndLine], 10, 64)
+		if err != nil {
+			return nil, err
+		}
+
 		var tagRecurring string
-		if record[9] != "" {
-			tagRecurring = record[9]
+		if record[TagRecurring] != "" {
+			tagRecurring = record[TagRecurring]
 		}
 
-		transactionBeginLine, err := strconv.ParseUint(record[10], 10, 64)
-		if err != nil {
-			return nil, err
-		}
-
-		transactionEndLine, err := strconv.ParseUint(record[11], 10, 64)
-		if err != nil {
-			return nil, err
+		var tagPeriod string
+		if record[TagPeriod] != "" {
+			tagPeriod = record[TagPeriod]
 		}
 
 		posting := posting.Posting{
 			Date:                 date,
-			Payee:                record[1],
-			Account:              record[2],
-			Commodity:            utils.UnQuote(record[3]),
+			Payee:                record[Payee],
+			Account:              record[Account],
+			Commodity:            utils.UnQuote(record[Commodity]),
 			Quantity:             quantity,
 			Amount:               amount,
 			TransactionID:        transactionID,
 			Status:               status,
 			TagRecurring:         tagRecurring,
+			TagPeriod:            tagPeriod,
 			TransactionBeginLine: transactionBeginLine,
 			TransactionEndLine:   transactionEndLine,
 			Forecast:             forecast,
@@ -463,12 +485,16 @@ func execHLedgerCommand(journalPath string, prices []price.Price, flags []string
 				}
 			}
 
-			var tagRecurring string
+			var tagRecurring, tagPeriod string
 
 			for _, tag := range t.Tags {
 				if len(tag) == 2 {
 					if tag[0] == "Recurring" {
 						tagRecurring = tag[1]
+					}
+
+					if tag[0] == "Period" {
+						tagPeriod = tag[1]
 					}
 
 					if tag[0] == "_generated-transaction" {
@@ -481,6 +507,10 @@ func execHLedgerCommand(journalPath string, prices []price.Price, flags []string
 			for _, tag := range p.Tags {
 				if len(tag) == 2 && tag[0] == "Recurring" {
 					tagRecurring = tag[1]
+				}
+
+				if len(tag) == 2 && tag[0] == "Period" {
+					tagPeriod = tag[1]
 				}
 				break
 			}
@@ -504,6 +534,7 @@ func execHLedgerCommand(journalPath string, prices []price.Price, flags []string
 				TransactionID:        strconv.FormatInt(t.ID, 10),
 				Status:               strings.ToLower(t.Status),
 				TagRecurring:         tagRecurring,
+				TagPeriod:            tagPeriod,
 				TransactionBeginLine: t.TSourcePos[0].SourceLine,
 				TransactionEndLine:   t.TSourcePos[1].SourceLine,
 				Forecast:             forecast,

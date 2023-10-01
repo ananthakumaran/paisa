@@ -10,6 +10,10 @@ import customParseFormat from "dayjs/plugin/customParseFormat";
 dayjs.extend(customParseFormat);
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
 dayjs.extend(isSameOrBefore);
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone"; // dependent on utc plugin
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 Handlebars.registerHelper(
   _.mapValues(helpers, (helper, name) => {

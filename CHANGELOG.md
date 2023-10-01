@@ -20,7 +20,6 @@ it again via new version. If you have already upgraded, you can still
 get the data directly from the db file using the following query
 `sqlite3 paisa.db "select * from templates";`
 
-
 ### 0.5.2 (2023-09-22)
 
 * Add Desktop app

@@ -1,13 +1,12 @@
 import * as d3 from "d3";
 import dayjs from "dayjs";
 import _ from "lodash";
-import COLORS from "./colors";
 import { skipTicks, type TransactionSequence } from "./utils";
+import { scheduleIcon } from "./transaction_sequence";
 
 export function renderRecurring(
   element: Element,
   transactionSequence: TransactionSequence,
-  next: dayjs.Dayjs,
   showPage: (pageIndex: number) => void
 ) {
   const svg = d3.select(element).select("svg"),
@@ -16,61 +15,37 @@ export function renderRecurring(
     height = +svg.attr("height") - margin.top - margin.bottom,
     g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-  const transactions = _.reverse(_.take(transactionSequence.transactions, 3));
+  let schedules = _.takeRight(transactionSequence.pastSchedules, 3);
+  schedules = schedules.concat(_.take(transactionSequence.futureSchedules, 1));
 
-  const dates = _.map(transactions, (d) => d.date).concat([next, dayjs()]);
+  const dates = _.map(schedules, (s) => s.scheduled);
   const [start, end] = d3.extent(dates);
-  dates.pop();
   const x = d3.scaleTime().domain([start, end]).range([0, width]);
 
   g.append("g")
-    .attr("class", "axis x")
+    .attr("class", "axis light-domain x")
     .attr("transform", "translate(0," + height + ")")
     .call(
       d3
         .axisBottom(x)
         .tickValues(dates)
-        .tickFormat(skipTicks(45, x, (d: any) => dayjs(d).format("DD MMM")))
+        .tickFormat(skipTicks(45, x, (d: any) => dayjs(d).format("DD MMM YY")))
     );
 
   g.append("g")
-    .selectAll("circle.past")
-    .data(transactions)
-    .join("circle")
-    .attr("class", "past")
-    .attr("r", 5)
-    .attr("fill", "#d5d5d5")
-    .attr("cx", (d) => x(d.date))
-    .attr("cy", "10")
-    .style("cursor", "pointer")
-    .on("click", (_event, d) =>
-      showPage(_.findIndex(transactionSequence.transactions, (t) => t.id === d.id))
-    );
-
-  function color(d: dayjs.Dayjs) {
-    return d.isAfter(dayjs()) ? COLORS.success : COLORS.danger;
-  }
-
-  g.append("g")
-    .selectAll("circle.next")
-    .data([next])
-    .join("circle")
-    .attr("class", "next")
-    .attr("r", 5)
-    .attr("fill", color)
-    .attr("cx", (d) => x(d))
-    .attr("cy", "10");
-
-  g.append("g")
-    .selectAll("line")
-    .data([next])
-    .join("line")
-    .attr("class", "next")
-    .attr("stroke", color)
-    .attr("stroke-linecap", "round")
-    .attr("stroke-width", 3)
-    .attr("x1", (d) => x(d))
-    .attr("x2", x(dayjs()))
-    .attr("y1", "10")
-    .attr("y2", height);
+    .selectAll("text")
+    .data(schedules)
+    .join("text")
+    .attr("class", (d) => "svg-background-white " + scheduleIcon(d).svgColor)
+    .attr("dx", "-0.5em")
+    .attr("dy", "-0.3em")
+    .attr("x", (d) => x(d.scheduled))
+    .attr("y", "10")
+    .style("cursor", (d) => (d.transaction ? "pointer" : "default"))
+    .on("click", (_event, d) => {
+      if (d.transaction) {
+        showPage(_.findIndex(transactionSequence.transactions, (t) => t.id === d.transaction.id));
+      }
+    })
+    .text((d) => scheduleIcon(d).glyph);
 }

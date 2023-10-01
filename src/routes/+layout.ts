@@ -30,6 +30,10 @@ dayjs.extend(relativeTime, {
     { l: "yy", d: "year" }
   ]
 });
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone"; // dependent on utc plugin
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 import * as pdfjs from "pdfjs-dist";
 import pdfjsWorkerUrl from "pdfjs-dist/build/pdf.worker.js?url";

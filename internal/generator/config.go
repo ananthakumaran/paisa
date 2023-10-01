@@ -387,9 +387,11 @@ func generateJournalFile(cwd string) {
 	_, err = ledgerFile.WriteString(`
 = Expenses:Rent
     ; Recurring: Rent
+    ; Period: 1 * ?
 
 = expr payee=~/Internet/
     ; Recurring: Internet
+    ; Period: 1 * ?
 
 = expr payee=~/EPF/
     ; Recurring: EPF

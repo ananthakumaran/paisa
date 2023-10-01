@@ -67,3 +67,56 @@ Ledger [docs](https://ledger-cli.org/doc/ledger3.html#Complex-expressions)
 = expr payee=~/Savings Interest/
     ; Recurring: Savings Interest
 ```
+
+## Period
+
+Paisa will try to infer the recurring period of the transactions
+automatically, but this might not be perfect. Recurring period can
+also be explicitly specified via metadata.
+
+```ledger
+= expr payee=~/Savings Interest/
+    ; Recurring: Savings Interest
+    ; Period: L MAR,JUN,SEP,DEC ?
+```
+
+Let's say your bank deposits the interest on the last day of the last
+month of the quarter, we can specify like the example above. Paisa
+editor recognizes **period syntax** and shows the upcoming 3 schedules
+right next to period metadata.
+
+```
+┌─────────── day of the month 1-31
+│  ┌─────────── month 1-12
+│  │  ┌─────────── day of the week 0-6 (Sunday to Saturday)
+│  │  │
+*  *  *
+```
+
+The syntax of the period is similar to [cron](https://en.wikipedia.org/wiki/Cron), with the omission of
+seconds and hours.
+
+| Field        | Allowed value       | Special characters |
+|--------------|---------------------|--------------------|
+| Day of month | `1–31`              | `* , - ? L W`      |
+| Month        | `1-12` or `JAN-DEC` | `* , -`            |
+| Day of week  | `0-6` or `SUN-SAT`  | `* , - ? L`        |
+
+`?` means you want to omit the field, usually you use it on the day of
+month or day of week. `L` means last day of the month or week. `,` can
+be used to specify multiple entries. `-` can be used to specify
+range. `W` means the closest business day to given day of month
+
+Multiple cron expressions can be specified by joining them using
+`|`. Refer the [wikipedia](https://en.wikipedia.org/wiki/Cron) for more information. If you are not
+sure, just type it out and the editor will show you whether it is
+valid and the next 3 schedules if valid.
+
+
+### Examples
+
+* Last day of every month `#!ledger ; Period: L * ?`
+* 5<sup>th</sup> every month `#!ledger ; Period: 5 * ?`
+* Every Sunday `#!ledger ; Period: ? * 0`
+* 1<sup>st</sup> of Jan and 7<sup>th</sup> of Feb `#!ledger ; Period 1 JAN ? | 7 FEB ?`
+* Closest business day to the 15<sup>th</sup> day of every month. `#!ledger ; Period 15W * ?`

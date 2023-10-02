@@ -17,11 +17,10 @@ func GetRecurringTransactions(db *gorm.DB) gin.H {
 }
 
 type TransactionSequence struct {
-	Transactions             []transaction.Transaction `json:"transactions"`
-	Key                      string                    `json:"key"`
-	Period                   string                    `json:"period"`
-	Interval                 int                       `json:"interval"`
-	DaysSinceLastTransaction int                       `json:"days_since_last_transaction"`
+	Transactions []transaction.Transaction `json:"transactions"`
+	Key          string                    `json:"key"`
+	Period       string                    `json:"period"`
+	Interval     int                       `json:"interval"`
 }
 
 func ComputeRecurringTransactions(postings []posting.Posting) []TransactionSequence {
@@ -45,7 +44,6 @@ func ComputeRecurringTransactions(postings []posting.Posting) []TransactionSeque
 		})
 
 		interval := 0
-		daysSinceLastTransaction := 0
 		var period string
 		if ts[0].TagPeriod != "" {
 			period = ts[0].TagPeriod
@@ -53,10 +51,9 @@ func ComputeRecurringTransactions(postings []posting.Posting) []TransactionSeque
 
 		if len(ts) > 1 {
 			interval = int(ts[0].Date.Sub(ts[1].Date).Hours() / 24)
-			daysSinceLastTransaction = int(now.Sub(ts[0].Date).Hours() / 24)
 		}
 
-		return TransactionSequence{Transactions: ts, Key: key, Interval: interval, DaysSinceLastTransaction: daysSinceLastTransaction, Period: period}
+		return TransactionSequence{Transactions: ts, Key: key, Interval: interval, Period: period}
 	})
 
 	sort.SliceStable(transaction_sequences, func(i, j int) bool {

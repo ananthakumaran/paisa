@@ -89,7 +89,15 @@ function enrich(ts: TransactionSequence) {
   try {
     if (ts.period != "") {
       cron = parse(prefixMinutesSeconds(ts.period), { hasSeconds: false });
-      periodAvailable = true;
+      const schedules = getFutureMatches(cron, {
+        startAt: start.toISOString(),
+        endAt: end.toISOString(),
+        matchCount: 1,
+        timezone: dayjs.tz.guess()
+      });
+      if (!_.isEmpty(schedules)) {
+        periodAvailable = true;
+      }
     } else {
       periodAvailable = false;
     }

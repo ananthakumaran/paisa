@@ -21,6 +21,7 @@
 
   let isEmpty = false;
   let transactionSequences: TransactionSequence[] = [];
+  let transactionSequencesDelayed: TransactionSequence[] = [];
 
   let days: Dayjs[] = [];
   let schedulesByDate: Record<string, TransactionSchedule[]> = {};
@@ -45,6 +46,10 @@
     setAllowedDateRange(
       _.compact(_.flatMap(transactionSequences, (ts) => ts.schedules.map((s) => s.scheduled)))
     );
+
+    setTimeout(() => {
+      transactionSequencesDelayed = transactionSequences;
+    }, 100);
   });
 </script>
 
@@ -64,7 +69,7 @@
           <div>Sat</div>
         </div>
         <div
-          class="grid grid-cols-7 gap-2 auto-cols-[1fr] auto-rows-[1fr]"
+          class="grid grid-cols-7 gap-2 auto-cols-[1fr] auto-rows-[1fr] overflow-y-auto"
           style="height: calc(100vh - 150px);"
         >
           {#each days as day (day)}
@@ -83,7 +88,7 @@
           <strong>Oops!</strong> You haven't configured any recurring transactions yet. Checkout the
           <a href={helpUrl("recurring")}>docs</a> page to get started.
         </ZeroState>
-        {#each transactionSequences as ts}
+        {#each transactionSequencesDelayed as ts}
           <RecurringCard {ts} n={nextUnpaidSchedule(ts).scheduled} />
         {/each}
       </div>

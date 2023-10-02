@@ -346,7 +346,7 @@
 
   <div class="mr-3 is-flex" style="gap: 12px">
     {#if selectedSubLink?.recurringIcons}
-      <div class="flex gap-5 items-center">
+      <div class="flex gap-5 items-center has-text-grey">
         {#each RecurringIcons as icon}
           <div>
             <span class="icon is-small has-text-{icon.color}">

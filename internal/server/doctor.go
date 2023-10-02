@@ -92,7 +92,7 @@ func ruleAssetRegisterNonNegative(db *gorm.DB) []error {
 	for account, ps := range lo.GroupBy(assets, func(posting posting.Posting) string { return posting.Account }) {
 		for _, balance := range accounting.Register(ps) {
 			if balance.Quantity.LessThan(decimal.NewFromFloat(0.01).Neg()) {
-				errs = append(errs, errors.New(fmt.Sprintf("<b>%s</b> account went negative on %s", account, balance.Date.Format(DATE_FORMAT))))
+				errs = append(errs, errors.New(fmt.Sprintf("<b>%s</b> account went negative (%.2f) on %s", account, balance.Quantity.InexactFloat64(), balance.Date.Format(DATE_FORMAT))))
 				break
 			}
 		}

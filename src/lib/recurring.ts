@@ -29,7 +29,7 @@ export function renderRecurring(
       d3
         .axisBottom(x)
         .tickValues(dates)
-        .tickFormat(skipTicks(45, x, (d: any) => dayjs(d).format("DD MMM YY")))
+        .tickFormat(skipTicks(50, x, (d: any) => dayjs(d).format("DD MMM YY"), dates.length))
     );
 
   g.append("g")

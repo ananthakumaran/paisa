@@ -31,7 +31,7 @@
 
 <div class="columns mb-0">
   <div class="column is-12 py-0">
-    <div class="is-size-5">{ts.key}</div>
+    <div class="is-size-5 has-text-grey">{ts.key}</div>
   </div>
 </div>
 <div class="columns mb-4">
@@ -44,7 +44,9 @@
           <span class="icon {n.isBefore(now) ? 'has-text-danger' : 'has-text-success'}">
             <i class="fas {n.isBefore(now) ? 'fa-hourglass-end' : 'fa-hourglass-half'}" />
           </span>
-          <span>{formatCurrencyCrude(totalRecurring(ts))} due {n.fromNow()}</span>
+          <span class="has-text-grey">{formatCurrencyCrude(totalRecurring(ts))} due</span><span
+            ><b>&nbsp;{n.fromNow()}</b></span
+          >
         </span>
         <div class="has-text-grey">
           <span class="tag is-light">{intervalText(ts)}</span>
@@ -58,10 +60,10 @@
       <div use:chart={{ ts: ts, next: n }}>
         <svg height={HEIGHT} width="100%" />
       </div>
-      <div class="">
-        <span><b>{ts.key}</b> started on</span>
-        <b>{_.last(ts.transactions).date.format("DD MMM YYYY")}</b>, with a total of
-        <b>{ts.transactions.length}</b> transactions so far.
+      <div class="has-text-grey-light is-size-7">
+        <span>{ts.key} started on</span>
+        {_.last(ts.transactions).date.format("DD MMM YYYY")}, with a total of
+        {ts.transactions.length} transactions so far.
       </div>
     </div>
   </div>
@@ -77,7 +79,7 @@
         <i class="fa-solid has-text-grey-light fa-angle-left" />
       </div>
       {#each _.reverse(_.take(ts.transactions, 20)) as t}
-        <div class="box px-5 py-3 my-0">
+        <div class="box px-5 py-3 my-0 has-text-grey">
           <Transaction {t} compact={true} />
         </div>
       {/each}

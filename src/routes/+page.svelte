@@ -4,17 +4,10 @@
   import LastNMonths from "$lib/components/LastNMonths.svelte";
   import TransactionCard from "$lib/components/TransactionCard.svelte";
   import * as expense from "$lib/expense/monthly";
-  import {
-    enrichTrantionSequence,
-    intervalText,
-    nextUnpaidSchedule,
-    sortTrantionSequence,
-    totalRecurring
-  } from "$lib/transaction_sequence";
+  import { enrichTrantionSequence, sortTrantionSequence } from "$lib/transaction_sequence";
   import {
     ajax,
     formatCurrency,
-    formatCurrencyCrude,
     formatFloat,
     type Budget,
     type CashFlow,
@@ -32,6 +25,7 @@
   import ZeroState from "$lib/components/ZeroState.svelte";
   import { MasonryGrid } from "@egjs/svelte-grid";
   import { refresh } from "../store";
+  import UpcomingCard from "$lib/components/UpcomingCard.svelte";
 
   let UntypedMasonryGrid = MasonryGrid as any;
 
@@ -48,8 +42,6 @@
   let currentBudget: Budget;
   let selectedExpenses: Posting[] = [];
   let isEmpty = false;
-
-  const now = dayjs();
 
   $: if (renderer) {
     selectedExpenses = expenses[month] || [];
@@ -258,32 +250,8 @@
                       class="is-flex is-justify-content-flex-start is-flex-wrap-wrap"
                       style="overflow: hidden; max-height: 190px"
                     >
-                      {#each transactionSequences as ts}
-                        {@const n = nextUnpaidSchedule(ts).scheduled}
-                        <div class="has-text-centered mb-3 mr-3 max-w-[200px]">
-                          <div class="is-size-7 truncate">{ts.key}</div>
-                          <div class="my-1">
-                            <span class="tag is-light">{intervalText(ts)}</span>
-                          </div>
-                          <div class="has-text-grey is-size-7">
-                            <span class="icon has-text-grey-light">
-                              <i class="fas fa-calendar" />
-                            </span>
-                            {n.format("DD MMM YYYY")}
-                          </div>
-                          <div
-                            class="m-3 du-radial-progress is-size-7"
-                            style="--value: {n.isBefore(now)
-                              ? '0'
-                              : (n.diff(now, 'day') / ts.interval) *
-                                100}; --thickness: 3px; --size: 100px; color: {n.isBefore(now)
-                              ? COLORS.danger
-                              : COLORS.success};"
-                          >
-                            <span>{formatCurrencyCrude(totalRecurring(ts))}</span>
-                            <span>due {n.fromNow()}</span>
-                          </div>
-                        </div>
+                      {#each transactionSequences as ts (ts)}
+                        <UpcomingCard transactionSequece={ts} />
                       {/each}
                     </div>
                   </div>

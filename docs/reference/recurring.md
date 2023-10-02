@@ -90,22 +90,23 @@ right next to period metadata.
 │  ┌─────────── month 1-12
 │  │  ┌─────────── day of the week 0-6 (Sunday to Saturday)
 │  │  │
-*  *  *
+1  *  ?
 ```
 
 The syntax of the period is similar to [cron](https://en.wikipedia.org/wiki/Cron), with the omission of
 seconds and hours.
 
-| Field        | Allowed value       | Special characters |
+| Field        | Allowed values      | Special characters |
 |--------------|---------------------|--------------------|
 | Day of month | `1–31`              | `* , - ? L W`      |
 | Month        | `1-12` or `JAN-DEC` | `* , -`            |
 | Day of week  | `0-6` or `SUN-SAT`  | `* , - ? L`        |
 
-`?` means you want to omit the field, usually you use it on the day of
-month or day of week. `L` means last day of the month or week. `,` can
-be used to specify multiple entries. `-` can be used to specify
-range. `W` means the closest business day to given day of month
+`*` also known as wildcard represents all valid values. `?` means you
+want to omit the field, usually you use it on the day of month or day
+of week. `L` means last day of the month or week. `,` can be used to
+specify multiple entries. `-` can be used to specify range. `W` means
+the closest business day to given day of month
 
 Multiple cron expressions can be specified by joining them using
 `|`. Refer the [wikipedia](https://en.wikipedia.org/wiki/Cron) for more information. If you are not

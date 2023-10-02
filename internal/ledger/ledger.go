@@ -175,7 +175,7 @@ func (HLedgerCLI) Prices(journalPath string) ([]price.Price, error) {
 	}
 
 	var output, error bytes.Buffer
-	err = utils.Exec("hledger", &output, &error, "-f", journalPath, "--auto", "--infer-market-prices", "prices")
+	err = utils.Exec("hledger", &output, &error, "-f", journalPath, "--auto", "--infer-market-prices", "--infer-costs", "prices")
 	if err != nil {
 		return prices, err
 	}
@@ -222,11 +222,16 @@ func parseHLedgerPrices(output string, defaultCurrency string) ([]price.Price, e
 			return nil, err
 		}
 
-		if target != defaultCurrency {
-			continue
-		}
-
 		commodity := utils.UnQuote(match[2])
+		if target != defaultCurrency {
+			if commodity == defaultCurrency && !value.Equal(decimal.Zero) {
+				commodity = target
+				target = defaultCurrency
+				value = decimal.NewFromInt(1).Div(value)
+			} else {
+				continue
+			}
+		}
 
 		date, err := time.ParseInLocation("2006-01-02", match[1], time.Local)
 		if err != nil {

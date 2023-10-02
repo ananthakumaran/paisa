@@ -40,8 +40,9 @@ func main() {
 		Bind: []interface{}{
 			app,
 		},
-		WindowStartState: options.Maximised,
-		Logger:           &logger.Logger{},
+		WindowStartState:         options.Maximised,
+		EnableDefaultContextMenu: true,
+		Logger:                   &logger.Logger{},
 		Mac: &mac.Options{
 			About: &mac.AboutInfo{
 				Title:   "Paisa",

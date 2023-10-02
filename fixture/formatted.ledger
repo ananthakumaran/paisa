@@ -4,6 +4,15 @@ commodity INR
     nomarket
     default
 
+~ Monthly from 2023-10-01 to 2023-12-01
+    Expenses:Rent                              15000 INR
+    Expenses:Interest:Homeloan                  6000 INR
+    Expenses:Food                               5000 INR
+    Expenses:Utilities                          2000 INR
+    Expenses:Shopping                           3000 INR
+    Expenses:Clothing                           1000 INR
+    Assets:Checking
+
 2010-06-17 Sample
     Assets:Bank                              $400.00
     Income:Check1                           $-100.00  ; Payee: Person One

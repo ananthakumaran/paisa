@@ -24,7 +24,7 @@ const DATE = /^\d{4}[/-]\d{2}[/-]\d{2}/;
 
 // https://ledger-cli.org/doc/ledger3.html#Journal-Format
 function formatLine(line: string, state: State) {
-  if (line.match(DATE)) {
+  if (line.match(DATE) || line.match(/^[~=]/)) {
     state.inTransaction = true;
     return line;
   }

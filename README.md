@@ -10,7 +10,7 @@ top of the [ledger](https://www.ledger-cli.org/) double entry accounting tool. C
 
 A demo of the Web UI can be found at [https://demo.paisa.fyi](https://demo.paisa.fyi)
 
-## Status
+## Status 🔎
 
 I use it to track my personal finance. It's more like alpha product
 now, usable, but I might update things based on the feedback I

@@ -23,7 +23,16 @@
   color: rgb(74, 74, 74);
 }
 
+.highlight .kn {
+  color: rgb(74, 74, 74);
+  text-decoration: underline;
+}
+
 [data-md-color-scheme="slate"] .highlight .gh {
+  color: rgb(161, 161, 161);
+}
+
+[data-md-color-scheme="slate"] .highlight .kn {
   color: rgb(161, 161, 161);
 }
 

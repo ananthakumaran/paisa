@@ -10,6 +10,7 @@ nav:
   - 'Reference':
     - reference/accounts.md
     - reference/commodities.md
+    - reference/journal.md
     - reference/allocation-targets.md
     - reference/budget.md
     - reference/bulk-edit.md

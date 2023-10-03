@@ -23,7 +23,7 @@ comes with an embedded **ledger** and you are not required to use
 
 ## :fontawesome-regular-file-lines: Journal
 
-A journal file captures all your financial transactions. A transaction
+A [journal](../reference/journal.md) file captures all your financial transactions. A transaction
 may represent a mutual fund purchase, retirement contribution, grocery
 purchase and so on. Paisa creates a journal named `main.ledger`, Let's
 add our first transaction there. To open the editor, go to `Ledger`

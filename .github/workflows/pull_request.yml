@@ -1,0 +1,16 @@
+name: Close Pull Request
+
+on:
+  pull_request_target:
+    types: [opened]
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: superbrothers/close-pull-request@v3
+      with:
+        comment: |
+          I do not plan to accept any pull request for now. If you
+          have a feature request, start a discussion, or if you found
+          a bug, create a new issue.

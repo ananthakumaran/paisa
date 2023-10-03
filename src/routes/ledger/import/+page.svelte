@@ -155,7 +155,7 @@
       toast.toast({
         message: `Failed to save ${destinationFile}. reason: ${message}`,
         type: "is-danger",
-        duration: 5000
+        duration: 10000
       });
     }
   }

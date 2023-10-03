@@ -79,7 +79,7 @@
         toast.toast({
           message: `Failed to save ${newFile.name}. reason: ${message}`,
           type: "is-danger",
-          duration: 5000
+          duration: 10000
         });
       } else {
         toast.toast({

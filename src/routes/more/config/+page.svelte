@@ -6,6 +6,7 @@
   import _ from "lodash";
   import * as toast from "bulma-toast";
   import { refresh } from "../../../store";
+  import { sync } from "$lib/sync";
 
   let lastConfig: UserConfig;
   let config: UserConfig;
@@ -49,6 +50,8 @@
           message: `Saved config`,
           type: "is-success"
         });
+
+        await sync({ journal: true });
       }
     } finally {
       isLoading = false;
@@ -64,6 +67,14 @@
       <div class="column is-12">
         {#if schema}
           <div class="box px-3" style="max-width: 1024px;">
+            <article class="message">
+              <div class="message-body">
+                Prices are <b>not</b> automatically updated after config change. Use the menu at the
+                top right corner to update prices. If the journal failed to sync due to any issues, fix
+                the issues and use the menu to sync again.
+              </div>
+            </article>
+
             {#if error}
               <article class="message is-danger">
                 <div class="message-body" style="overflow: auto; white-space: pre;">
@@ -91,7 +102,7 @@
                 >
               </div>
             </div>
-            <JsonSchemaForm key="config" bind:value={config} {schema} />
+            <JsonSchemaForm key="configuration" bind:value={config} {schema} />
           </div>
         {/if}
       </div>

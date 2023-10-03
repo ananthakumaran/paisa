@@ -106,7 +106,7 @@
       toast.toast({
         message: `Failed to save ${selectedFile.name}. reason: ${message}`,
         type: "is-danger",
-        duration: 5000
+        duration: 10000
       });
       if (!_.isEmpty(errors)) {
         moveToLine(editor, errors[0].line_from);
@@ -176,7 +176,7 @@
       toast.toast({
         message: `Failed to create ${destinationFile}. reason: ${message}`,
         type: "is-danger",
-        duration: 5000
+        duration: 10000
       });
     }
   }

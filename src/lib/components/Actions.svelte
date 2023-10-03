@@ -1,25 +1,13 @@
 <script lang="ts">
-  import { ajax } from "$lib/utils";
-  import * as toast from "bulma-toast";
+  import { sync } from "$lib/sync";
   import { refresh } from "../../store";
 
   let isLoading = false;
 
-  async function sync(request: Record<string, any>) {
+  async function syncWithLoader(request: Record<string, any>) {
     isLoading = true;
     try {
-      const { success, message } = await ajax("/api/sync", {
-        method: "POST",
-        body: JSON.stringify(request)
-      });
-
-      if (!success) {
-        toast.toast({
-          message: `<b>Failed to sync</b>\n${message}`,
-          type: "is-danger",
-          duration: 5000
-        });
-      }
+      await sync(request);
     } finally {
       isLoading = false;
       refresh();
@@ -47,19 +35,19 @@
   </div>
   <div class="dropdown-menu" id="dropdown-menu4" role="menu">
     <div class="dropdown-content">
-      <a on:click={(_e) => sync({ journal: true })} class="dropdown-item icon-text">
+      <a on:click={(_e) => syncWithLoader({ journal: true })} class="dropdown-item icon-text">
         <span class="icon is-small">
           <i class="fa-regular fa-file-lines" />
         </span>
         <span>Sync Journal</span>
       </a>
-      <a on:click={(_e) => sync({ prices: true })} class="dropdown-item icon-text">
+      <a on:click={(_e) => syncWithLoader({ prices: true })} class="dropdown-item icon-text">
         <span class="icon is-small">
           <i class="fas fa-dollar-sign" />
         </span>
         <span>Update Prices</span></a
       >
-      <a on:click={(_e) => sync({ portfolios: true })} class="dropdown-item icon-text">
+      <a on:click={(_e) => syncWithLoader({ portfolios: true })} class="dropdown-item icon-text">
         <span class="icon is-small">
           <i class="fas fa-layer-group" />
         </span>

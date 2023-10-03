@@ -8,7 +8,6 @@ import (
 	"regexp"
 	"strings"
 
-	"os/exec"
 	"strconv"
 	"time"
 
@@ -54,8 +53,13 @@ func Cli() Ledger {
 func (LedgerCLI) ValidateFile(journalPath string) ([]LedgerFileError, string, error) {
 	errors := []LedgerFileError{}
 
+	ledgerPath, err := binary.LedgerBinaryPath()
+	if err != nil {
+		return errors, "", err
+	}
+
 	var output, error bytes.Buffer
-	err := utils.Exec(binary.LedgerBinaryPath(), &output, &error, "--args-only", "-f", journalPath, "balance")
+	err = utils.Exec(ledgerPath, &output, &error, "--args-only", "-f", journalPath, "balance")
 	if err == nil {
 		return errors, output.String(), nil
 	}
@@ -95,8 +99,13 @@ func (LedgerCLI) Parse(journalPath string, _prices []price.Price) ([]*posting.Po
 func (LedgerCLI) Prices(journalPath string) ([]price.Price, error) {
 	var prices []price.Price
 
+	ledgerPath, err := binary.LedgerBinaryPath()
+	if err != nil {
+		return prices, err
+	}
+
 	var output, error bytes.Buffer
-	err := utils.Exec(binary.LedgerBinaryPath(), &output, &error, "--args-only", "-f", journalPath, "pricesdb")
+	err = utils.Exec(ledgerPath, &output, &error, "--args-only", "-f", journalPath, "pricesdb")
 	if err != nil {
 		return prices, err
 	}
@@ -106,13 +115,13 @@ func (LedgerCLI) Prices(journalPath string) ([]price.Price, error) {
 
 func (HLedgerCLI) ValidateFile(journalPath string) ([]LedgerFileError, string, error) {
 	errors := []LedgerFileError{}
-	_, err := exec.LookPath("hledger")
+	path, err := binary.LookPath("hledger")
 	if err != nil {
-		log.Fatal(err)
+		return errors, "", err
 	}
 
 	var output, error bytes.Buffer
-	err = utils.Exec("hledger", &output, &error, "-f", journalPath, "--auto", "balance")
+	err = utils.Exec(path, &output, &error, "-f", journalPath, "--auto", "balance")
 	if err == nil {
 		return errors, output.String(), nil
 	}
@@ -145,12 +154,7 @@ func (HLedgerCLI) ValidateFile(journalPath string) ([]LedgerFileError, string, e
 func (HLedgerCLI) Parse(journalPath string, prices []price.Price) ([]*posting.Posting, error) {
 	var postings []*posting.Posting
 
-	_, err := exec.LookPath("hledger")
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	postings, err = execHLedgerCommand(journalPath, prices, []string{})
+	postings, err := execHLedgerCommand(journalPath, prices, []string{})
 	if err != nil {
 		return nil, err
 	}
@@ -169,13 +173,13 @@ func (HLedgerCLI) Parse(journalPath string, prices []price.Price) ([]*posting.Po
 func (HLedgerCLI) Prices(journalPath string) ([]price.Price, error) {
 	var prices []price.Price
 
-	_, err := exec.LookPath("hledger")
+	path, err := binary.LookPath("hledger")
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	var output, error bytes.Buffer
-	err = utils.Exec("hledger", &output, &error, "-f", journalPath, "--auto", "--infer-market-prices", "--infer-costs", "prices")
+	err = utils.Exec(path, &output, &error, "-f", journalPath, "--auto", "--infer-market-prices", "--infer-costs", "prices")
 	if err != nil {
 		return prices, err
 	}
@@ -281,8 +285,13 @@ func execLedgerCommand(journalPath string, flags []string) ([]*posting.Posting, 
 	)
 	args := append(append([]string{"--args-only", "-f", journalPath}, flags...), "csv", "--csv-format", "%(quoted(date)),%(quoted(payee)),%(quoted(display_account)),%(quoted(commodity(scrub(display_amount)))),%(quoted(quantity(scrub(display_amount)))),%(quoted(scrub(market(amount,date,'"+config.DefaultCurrency()+"') * 100000000))),%(quoted(xact.filename)),%(quoted(xact.id)),%(quoted(cleared ? \"*\" : (pending ? \"!\" : \"\"))),%(quoted(xact.beg_line)),%(quoted(xact.end_line)),%(quoted(lot_price(amount))),%(quoted(tag('Recurring'))),%(quoted(tag('Period')))\n")
 
+	ledgerPath, err := binary.LedgerBinaryPath()
+	if err != nil {
+		return postings, err
+	}
+
 	var output, error bytes.Buffer
-	err := utils.Exec(binary.LedgerBinaryPath(), &output, &error, args...)
+	err = utils.Exec(ledgerPath, &output, &error, args...)
 	if err != nil {
 		log.Fatal(error.String())
 		return nil, err
@@ -409,10 +418,15 @@ func execLedgerCommand(journalPath string, flags []string) ([]*posting.Posting, 
 func execHLedgerCommand(journalPath string, prices []price.Price, flags []string) ([]*posting.Posting, error) {
 	var postings []*posting.Posting
 
+	path, err := binary.LookPath("hledger")
+	if err != nil {
+		return nil, err
+	}
+
 	args := append([]string{"-f", journalPath, "--auto", "print", "-Ojson"}, flags...)
 
 	var output, error bytes.Buffer
-	err := utils.Exec("hledger", &output, &error, args...)
+	err = utils.Exec(path, &output, &error, args...)
 	if err != nil {
 		log.Fatal(error.String())
 		return nil, err

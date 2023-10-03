@@ -11,22 +11,52 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
+var DEFAULT_PATH = []string{
+	"/bin",
+	"/usr/bin",
+	"/usr/local/bin",
+	"/sbin",
+	"/usr/sbin",
+}
+
 var cachedLedgerBinaryPath string
 
-func LedgerBinaryPath() string {
-	if cachedLedgerBinaryPath != "" {
-		return cachedLedgerBinaryPath
+func LookPath(name string) (string, error) {
+	path, err := exec.LookPath(name)
+	if err != nil {
+		// macOS doesn't set $PATH correctly for GUI apps
+		if runtime.GOOS == "darwin" {
+			for _, p := range DEFAULT_PATH {
+				path = filepath.Join(p, name)
+				_, err := os.Stat(path)
+				if err == nil {
+					return path, nil
+				}
+			}
+		}
+
+		log.Error(err)
+		return "", err
 	}
 
-	path, err := exec.LookPath("ledger")
+	return path, nil
+}
+
+func LedgerBinaryPath() (string, error) {
+	if cachedLedgerBinaryPath != "" {
+		return cachedLedgerBinaryPath, nil
+	}
+
+	path, err := LookPath("ledger")
 	if err == nil {
 		cachedLedgerBinaryPath = path
-		return path
+		return path, nil
 	}
 
 	cacheDir, err := os.UserCacheDir()
 	if err != nil {
-		log.Fatal(err)
+		log.Error(err)
+		return "", err
 	}
 
 	binDir := filepath.Join(cacheDir, "paisa")
@@ -38,11 +68,12 @@ func LedgerBinaryPath() string {
 	path = filepath.Join(binDir, binaryPath)
 	err = stage(path, ledgerBinary, 0750)
 	if err != nil {
-		log.Fatal(err)
+		log.Error(err)
+		return "", err
 	}
 
 	cachedLedgerBinaryPath = path
-	return path
+	return path, nil
 }
 
 //go:embed ledger

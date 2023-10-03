@@ -34,6 +34,11 @@ func SyncJournal(db *gorm.DB) (string, error) {
 
 	errors, _, err := ledger.Cli().ValidateFile(config.GetJournalPath())
 	if err != nil {
+
+		if len(errors) == 0 {
+			return err.Error(), err
+		}
+
 		var message string
 		for _, error := range errors {
 			message += error.Message + "\n"

@@ -48,14 +48,14 @@ func SyncJournal(db *gorm.DB) (string, error) {
 
 	prices, err := ledger.Cli().Prices(config.GetJournalPath())
 	if err != nil {
-		log.Fatal(err)
+		return err.Error(), err
 	}
 
 	price.UpsertAllByType(db, config.Unknown, prices)
 
 	postings, err := ledger.Cli().Parse(config.GetJournalPath(), prices)
 	if err != nil {
-		log.Fatal(err)
+		return err.Error(), err
 	}
 	posting.UpsertAll(db, postings)
 

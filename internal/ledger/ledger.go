@@ -175,7 +175,8 @@ func (HLedgerCLI) Prices(journalPath string) ([]price.Price, error) {
 
 	path, err := binary.LookPath("hledger")
 	if err != nil {
-		log.Fatal(err)
+		log.Error(err)
+		return prices, err
 	}
 
 	var output, error bytes.Buffer
@@ -251,7 +252,8 @@ func parseHLedgerPrices(output string, defaultCurrency string) ([]price.Price, e
 func parseAmount(amount string) (string, decimal.Decimal, error) {
 	match := regexp.MustCompile(`^(-?[0-9.,]+)([^\d,.-]+|\s*"[^"]+")$|([^\d,.-]+|\s*"[^"]+"\s*)(-?[0-9.,]+)$`).FindStringSubmatch(amount)
 	if len(match) == 0 {
-		log.Fatalf("Could not parse amount: <%s>", amount)
+		log.Errorf("Could not parse amount: <%s>", amount)
+		return "", decimal.Zero, fmt.Errorf("Could not parse amount: <%s>", amount)
 	}
 
 	if match[1] != "" {
@@ -293,7 +295,7 @@ func execLedgerCommand(journalPath string, flags []string) ([]*posting.Posting, 
 	var output, error bytes.Buffer
 	err = utils.Exec(ledgerPath, &output, &error, args...)
 	if err != nil {
-		log.Fatal(error.String())
+		log.Error(error)
 		return nil, err
 	}
 
@@ -428,7 +430,7 @@ func execHLedgerCommand(journalPath string, prices []price.Price, flags []string
 	var output, error bytes.Buffer
 	err = utils.Exec(path, &output, &error, args...)
 	if err != nil {
-		log.Fatal(error.String())
+		log.Error(error)
 		return nil, err
 	}
 

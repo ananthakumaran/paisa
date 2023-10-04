@@ -459,6 +459,7 @@ func execHLedgerCommand(journalPath string, prices []price.Price, flags []string
 							Value float64 `json:"floatingPoint"`
 						} `json:"aquantity"`
 					} `json:"contents"`
+					Tag string `json:"tag"`
 				} `json:"aprice"`
 			} `json:"pamount"`
 		} `json:"tpostings"`
@@ -494,7 +495,11 @@ func execHLedgerCommand(journalPath string, prices []price.Price, flags []string
 
 			if amount.Commodity != config.DefaultCurrency() {
 				if amount.Price.Contents.Quantity.Value != 0 {
-					totalAmount = decimal.NewFromFloat(amount.Price.Contents.Quantity.Value).Mul(decimal.NewFromFloat(amount.Quantity.Value))
+					if amount.Price.Tag == "TotalPrice" {
+						totalAmount = decimal.NewFromFloat(amount.Price.Contents.Quantity.Value)
+					} else {
+						totalAmount = decimal.NewFromFloat(amount.Price.Contents.Quantity.Value).Mul(decimal.NewFromFloat(amount.Quantity.Value))
+					}
 				} else {
 					pt := pricesTree[amount.Commodity]
 					if pt != nil {

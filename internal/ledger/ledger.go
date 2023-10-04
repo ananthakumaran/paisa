@@ -455,7 +455,8 @@ func execHLedgerCommand(journalPath string, prices []price.Price, flags []string
 				} `json:"aquantity"`
 				Price struct {
 					Contents struct {
-						Quantity struct {
+						Commodity string `json:"acommodity"`
+						Quantity  struct {
 							Value float64 `json:"floatingPoint"`
 						} `json:"aquantity"`
 					} `json:"contents"`
@@ -495,10 +496,20 @@ func execHLedgerCommand(journalPath string, prices []price.Price, flags []string
 
 			if amount.Commodity != config.DefaultCurrency() {
 				if amount.Price.Contents.Quantity.Value != 0 {
-					if amount.Price.Tag == "TotalPrice" {
-						totalAmount = decimal.NewFromFloat(amount.Price.Contents.Quantity.Value)
+					if amount.Price.Contents.Commodity != config.DefaultCurrency() {
+						pt := pricesTree[amount.Commodity]
+						if pt != nil {
+							pc := utils.BTreeDescendFirstLessOrEqual(pt, price.Price{Date: date})
+							if !pc.Value.Equal(decimal.Zero) {
+								totalAmount = decimal.NewFromFloat(amount.Quantity.Value).Mul(pc.Value)
+							}
+						}
 					} else {
-						totalAmount = decimal.NewFromFloat(amount.Price.Contents.Quantity.Value).Mul(decimal.NewFromFloat(amount.Quantity.Value))
+						if amount.Price.Tag == "TotalPrice" {
+							totalAmount = decimal.NewFromFloat(amount.Price.Contents.Quantity.Value)
+						} else {
+							totalAmount = decimal.NewFromFloat(amount.Price.Contents.Quantity.Value).Mul(decimal.NewFromFloat(amount.Quantity.Value))
+						}
 					}
 				} else {
 					pt := pricesTree[amount.Commodity]

@@ -89,7 +89,7 @@
           <a href={helpUrl("recurring")}>docs</a> page to get started.
         </ZeroState>
         {#each transactionSequencesDelayed as ts}
-          <RecurringCard {ts} n={nextUnpaidSchedule(ts).scheduled} />
+          <RecurringCard {ts} schedule={nextUnpaidSchedule(ts)} />
         {/each}
       </div>
     </div>

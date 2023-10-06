@@ -1,17 +1,21 @@
 <script lang="ts">
   import Carousel from "svelte-carousel";
   import Transaction from "$lib/components/Transaction.svelte";
-  import { intervalText, totalRecurring } from "$lib/transaction_sequence";
-  import { formatCurrencyCrude, type TransactionSequence } from "$lib/utils";
-  import dayjs from "dayjs";
+  import { intervalText, scheduleIcon, totalRecurring } from "$lib/transaction_sequence";
+  import {
+    formatCurrencyCrude,
+    type TransactionSchedule,
+    type TransactionSequence
+  } from "$lib/utils";
+  import type dayjs from "dayjs";
   import type { Action } from "svelte/action";
   import { renderRecurring } from "$lib/recurring";
   import _ from "lodash";
 
   export let ts: TransactionSequence;
-  export let n: dayjs.Dayjs;
-  const now = dayjs();
+  export let schedule: TransactionSchedule;
   const HEIGHT = 50;
+  const icon = scheduleIcon(schedule);
 
   let carousel: Carousel;
   let pageSize = _.min([20, ts.transactions.length]);
@@ -41,11 +45,11 @@
         class="is-flex is-flex-wrap-wrap is-align-items-baseline is-justify-content-space-between"
       >
         <span class="icon-text">
-          <span class="icon {n.isBefore(now) ? 'has-text-danger' : 'has-text-success'}">
-            <i class="fas {n.isBefore(now) ? 'fa-hourglass-end' : 'fa-hourglass-half'}" />
+          <span class="icon {icon.color}">
+            <i class="fas {icon.icon}" />
           </span>
           <span class="has-text-grey">{formatCurrencyCrude(totalRecurring(ts))} due</span><span
-            ><b>&nbsp;{n.fromNow()}</b></span
+            ><b>&nbsp;{schedule.scheduled.fromNow()}</b></span
           >
         </span>
         <div class="has-text-grey">
@@ -53,11 +57,11 @@
           <span class="icon has-text-grey-light">
             <i class="fas fa-calendar" />
           </span>
-          {n.format("DD MMM YYYY")}
+          {schedule.scheduled.format("DD MMM YYYY")}
         </div>
       </div>
       <hr class="m-1" />
-      <div use:chart={{ ts: ts, next: n }}>
+      <div use:chart={{ ts: ts, next: schedule.scheduled }}>
         <svg height={HEIGHT} width="100%" />
       </div>
       <div class="has-text-grey-light is-size-7">

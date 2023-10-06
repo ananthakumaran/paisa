@@ -1,6 +1,8 @@
 package model
 
 import (
+	"strings"
+
 	"github.com/ananthakumaran/paisa/internal/config"
 	"github.com/ananthakumaran/paisa/internal/ledger"
 	"github.com/ananthakumaran/paisa/internal/model/cii"
@@ -41,9 +43,9 @@ func SyncJournal(db *gorm.DB) (string, error) {
 
 		var message string
 		for _, error := range errors {
-			message += error.Message + "\n"
+			message += error.Message + "\n\n"
 		}
-		return message, err
+		return strings.TrimRight(message, "\n"), err
 	}
 
 	prices, err := ledger.Cli().Prices(config.GetJournalPath())

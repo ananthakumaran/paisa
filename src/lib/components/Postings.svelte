@@ -2,8 +2,8 @@
   import { iconify } from "$lib/icon";
   import { formatCurrency, formatFloat, type Posting } from "$lib/utils";
 
-  const unlessINR = (p: Posting) => {
-    if (p.commodity == "INR") {
+  const unlessDefaultCurrency = (p: Posting) => {
+    if (p.commodity == USER_CONFIG.default_currency) {
       return "";
     } else {
       return `${formatFloat(p.quantity, 3)} ${p.commodity} @ ${formatFloat(
@@ -22,7 +22,7 @@
       <div class="truncate" style="min-width: 100px;" title={p.account}>{iconify(p.account)}</div>
       <div class="is-flex is-align-items-baseline is-justify-content-right">
         <div class="has-text-right has-text-grey is-size-7 mr-2 truncate">
-          {unlessINR(p)}
+          {unlessDefaultCurrency(p)}
         </div>
         <div class="has-text-right" style="min-width: 50px;">
           {formatCurrency(p.amount, 2)}

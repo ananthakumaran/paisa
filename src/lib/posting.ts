@@ -15,7 +15,7 @@ export function renderPostings(postings: Posting[]) {
       changeClass = "",
       price = "",
       units = "";
-    if (p.commodity !== "INR") {
+    if (p.commodity !== USER_CONFIG.default_currency) {
       units = formatFloat(p.quantity, 4);
       price = formatCurrency(Math.abs(p.amount / p.quantity), 4);
       const days = dayjs().diff(p.date, "days");

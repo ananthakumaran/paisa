@@ -1,0 +1,36 @@
+{
+  "gain_breakdown": [
+    {
+      "account": "Assets:Equity:NIFTY",
+      "networth": {
+        "date": "2022-02-07T23:59:59.999999999Z",
+        "investmentAmount": 80000,
+        "withdrawalAmount": 0,
+        "gainAmount": 0,
+        "balanceAmount": 80000,
+        "netInvestmentAmount": 80000
+      },
+      "xirr": 0,
+      "postings": [
+        {
+          "id": 6,
+          "transaction_id": "3",
+          "date": "2022-01-07T00:00:00Z",
+          "payee": "Investment",
+          "account": "Assets:Equity:NIFTY",
+          "commodity": "NIFTY",
+          "quantity": 800,
+          "amount": 80000,
+          "status": "unmarked",
+          "tag_recurring": "",
+          "tag_period": "",
+          "transaction_begin_line": 14,
+          "transaction_end_line": 17,
+          "file_name": "main.ledger",
+          "forecast": false,
+          "market_amount": 80000
+        }
+      ]
+    }
+  ]
+}

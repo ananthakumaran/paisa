@@ -1,0 +1,16 @@
+commodity INR 9,99,99,999.00
+
+P 2022/01/07 00:00:00 NIFTY 100 INR
+P 2022/08/07 00:00:00 NIFTY 150 INR
+
+2022/01/01 Salary
+    Income:Salary:Acme                      -100,000 INR
+    Assets:Checking                          100,000 INR
+
+2022/01/03 Rent
+    Assets:Checking                          -20,000 INR
+    Expenses:Rent
+
+2022/01/07 Investment
+    Assets:Checking                          -80,000 INR
+    Assets:Equity:NIFTY                          800 NIFTY @ 100 INR

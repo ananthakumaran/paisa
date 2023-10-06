@@ -13,6 +13,10 @@ pkgs.mkShell {
 
     pkgs.python311Packages.mkdocs
     pkgs.python311Packages.mkdocs-material
+
+    # test
+    pkgs.ledger
+    pkgs.hledger
   ] ++ (pkgs.lib.optional pkgs.stdenv.isLinux pkgs.wails);
 
   shellHook = ''

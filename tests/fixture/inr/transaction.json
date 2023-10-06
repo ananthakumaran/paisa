@@ -1,0 +1,148 @@
+{
+  "transactions": [
+    {
+      "id": "3",
+      "date": "2022-01-07T00:00:00Z",
+      "payee": "Investment",
+      "postings": [
+        {
+          "id": 6,
+          "transaction_id": "3",
+          "date": "2022-01-07T00:00:00Z",
+          "payee": "Investment",
+          "account": "Assets:Equity:NIFTY",
+          "commodity": "NIFTY",
+          "quantity": 800,
+          "amount": 80000,
+          "status": "unmarked",
+          "tag_recurring": "",
+          "tag_period": "",
+          "transaction_begin_line": 14,
+          "transaction_end_line": 17,
+          "file_name": "main.ledger",
+          "forecast": false,
+          "market_amount": 0
+        },
+        {
+          "id": 5,
+          "transaction_id": "3",
+          "date": "2022-01-07T00:00:00Z",
+          "payee": "Investment",
+          "account": "Assets:Checking",
+          "commodity": "INR",
+          "quantity": -80000,
+          "amount": -80000,
+          "status": "unmarked",
+          "tag_recurring": "",
+          "tag_period": "",
+          "transaction_begin_line": 14,
+          "transaction_end_line": 17,
+          "file_name": "main.ledger",
+          "forecast": false,
+          "market_amount": 0
+        }
+      ],
+      "tag_recurring": "",
+      "tag_period": "",
+      "beginLine": 14,
+      "endLine": 17,
+      "fileName": "main.ledger"
+    },
+    {
+      "id": "2",
+      "date": "2022-01-03T00:00:00Z",
+      "payee": "Rent",
+      "postings": [
+        {
+          "id": 4,
+          "transaction_id": "2",
+          "date": "2022-01-03T00:00:00Z",
+          "payee": "Rent",
+          "account": "Expenses:Rent",
+          "commodity": "INR",
+          "quantity": 20000,
+          "amount": 20000,
+          "status": "unmarked",
+          "tag_recurring": "",
+          "tag_period": "",
+          "transaction_begin_line": 10,
+          "transaction_end_line": 13,
+          "file_name": "main.ledger",
+          "forecast": false,
+          "market_amount": 0
+        },
+        {
+          "id": 3,
+          "transaction_id": "2",
+          "date": "2022-01-03T00:00:00Z",
+          "payee": "Rent",
+          "account": "Assets:Checking",
+          "commodity": "INR",
+          "quantity": -20000,
+          "amount": -20000,
+          "status": "unmarked",
+          "tag_recurring": "",
+          "tag_period": "",
+          "transaction_begin_line": 10,
+          "transaction_end_line": 13,
+          "file_name": "main.ledger",
+          "forecast": false,
+          "market_amount": 0
+        }
+      ],
+      "tag_recurring": "",
+      "tag_period": "",
+      "beginLine": 10,
+      "endLine": 13,
+      "fileName": "main.ledger"
+    },
+    {
+      "id": "1",
+      "date": "2022-01-01T00:00:00Z",
+      "payee": "Salary",
+      "postings": [
+        {
+          "id": 2,
+          "transaction_id": "1",
+          "date": "2022-01-01T00:00:00Z",
+          "payee": "Salary",
+          "account": "Assets:Checking",
+          "commodity": "INR",
+          "quantity": 100000,
+          "amount": 100000,
+          "status": "unmarked",
+          "tag_recurring": "",
+          "tag_period": "",
+          "transaction_begin_line": 6,
+          "transaction_end_line": 9,
+          "file_name": "main.ledger",
+          "forecast": false,
+          "market_amount": 0
+        },
+        {
+          "id": 1,
+          "transaction_id": "1",
+          "date": "2022-01-01T00:00:00Z",
+          "payee": "Salary",
+          "account": "Income:Salary:Acme",
+          "commodity": "INR",
+          "quantity": -100000,
+          "amount": -100000,
+          "status": "unmarked",
+          "tag_recurring": "",
+          "tag_period": "",
+          "transaction_begin_line": 6,
+          "transaction_end_line": 9,
+          "file_name": "main.ledger",
+          "forecast": false,
+          "market_amount": 0
+        }
+      ],
+      "tag_recurring": "",
+      "tag_period": "",
+      "beginLine": 6,
+      "endLine": 9,
+      "fileName": "main.ledger"
+    }
+  ]
+}

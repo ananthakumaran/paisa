@@ -22,8 +22,16 @@ lint:
 	npm run check
 	test -z $$(gofmt -l .)
 
-test:
-	npm run test
+regen:
+	go build
+	REGENERATE=true TZ=UTC bun test tests
+
+jstest:
+	bun test --preload ./src/happydom.ts src
+	go build
+	TZ=UTC bun test tests
+
+test: jstest
 	npm run build
 	go test ./...
 

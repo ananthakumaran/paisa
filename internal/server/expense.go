@@ -1,6 +1,7 @@
 package server
 
 import (
+	"sort"
 	"strings"
 
 	"github.com/ananthakumaran/paisa/internal/model/posting"
@@ -49,8 +50,8 @@ func GetExpense(db *gorm.DB) gin.H {
 	graph := make(map[string]map[string]Graph)
 	for fy, ps := range utils.GroupByFY(postings) {
 		graph[fy] = make(map[string]Graph)
-		graph[fy]["flat"] = computeGraph(ps)
-		graph[fy]["hierarchy"] = computeHierarchyGraph(ps)
+		graph[fy]["flat"] = sortGraph(computeGraph(ps))
+		graph[fy]["hierarchy"] = sortGraph(computeHierarchyGraph(ps))
 	}
 
 	return gin.H{
@@ -66,6 +67,23 @@ func GetExpense(db *gorm.DB) gin.H {
 			"investments": utils.GroupByFY(investments),
 			"taxes":       utils.GroupByFY(taxes)},
 		"graph": graph}
+}
+
+func sortGraph(graph Graph) Graph {
+	nodes := graph.Nodes
+	sort.Slice(nodes, func(i, j int) bool {
+		return graph.Nodes[i].Name < graph.Nodes[j].Name
+	})
+
+	links := graph.Links
+	sort.Slice(links, func(i, j int) bool {
+		return graph.Links[i].Source < graph.Links[j].Source || (graph.Links[i].Source == graph.Links[j].Source && graph.Links[i].Target < graph.Links[j].Target)
+	})
+	return Graph{
+		Nodes: nodes,
+		Links: links,
+	}
+
 }
 
 func computeGraph(postings []posting.Posting) Graph {

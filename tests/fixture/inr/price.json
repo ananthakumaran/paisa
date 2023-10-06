@@ -1,0 +1,22 @@
+{
+  "prices": {
+    "NIFTY": [
+      {
+        "id": 3,
+        "date": "2022-08-07T00:00:00Z",
+        "commodity_type": "unknown",
+        "commodity_id": "NIFTY",
+        "commodity_name": "NIFTY",
+        "value": 150
+      },
+      {
+        "id": 2,
+        "date": "2022-01-07T00:00:00Z",
+        "commodity_type": "unknown",
+        "commodity_id": "NIFTY",
+        "commodity_name": "NIFTY",
+        "value": 100
+      }
+    ]
+  }
+}

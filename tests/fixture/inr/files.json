@@ -1,0 +1,25 @@
+{
+  "accounts": [
+    "Income:Salary:Acme",
+    "Assets:Checking",
+    "Expenses:Rent",
+    "Assets:Equity:NIFTY"
+  ],
+  "commodities": [
+    "INR",
+    "NIFTY"
+  ],
+  "files": [
+    {
+      "name": "main.ledger",
+      "content": "commodity INR 9,99,99,999.00\n\nP 2022/01/07 00:00:00 NIFTY 100 INR\nP 2022/08/07 00:00:00 NIFTY 150 INR\n\n2022/01/01 Salary\n    Income:Salary:Acme                      -100,000 INR\n    Assets:Checking                          100,000 INR\n\n2022/01/03 Rent\n    Assets:Checking                          -20,000 INR\n    Expenses:Rent\n\n2022/01/07 Investment\n    Assets:Checking                          -80,000 INR\n    Assets:Equity:NIFTY                          800 NIFTY @ 100 INR\n",
+      "versions": [],
+      "operation": ""
+    }
+  ],
+  "payees": [
+    "Salary",
+    "Rent",
+    "Investment"
+  ]
+}

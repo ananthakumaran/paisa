@@ -1,0 +1,55 @@
+{
+  "assets": [
+    {
+      "id": 6,
+      "transaction_id": "3",
+      "date": "2022-01-07T00:00:00Z",
+      "payee": "Investment",
+      "account": "Assets:Equity:NIFTY",
+      "commodity": "NIFTY",
+      "quantity": 800,
+      "amount": 80000,
+      "status": "unmarked",
+      "tag_recurring": "",
+      "tag_period": "",
+      "transaction_begin_line": 14,
+      "transaction_end_line": 17,
+      "file_name": "main.ledger",
+      "forecast": false,
+      "market_amount": 0
+    }
+  ],
+  "yearly_cards": [
+    {
+      "start_date": "2021-04-01T00:00:00Z",
+      "end_date": "2022-03-31T23:59:59.999999999Z",
+      "postings": [
+        {
+          "id": 6,
+          "transaction_id": "3",
+          "date": "2022-01-07T00:00:00Z",
+          "payee": "Investment",
+          "account": "Assets:Equity:NIFTY",
+          "commodity": "NIFTY",
+          "quantity": 800,
+          "amount": 80000,
+          "status": "unmarked",
+          "tag_recurring": "",
+          "tag_period": "",
+          "transaction_begin_line": 14,
+          "transaction_end_line": 17,
+          "file_name": "main.ledger",
+          "forecast": false,
+          "market_amount": 0
+        }
+      ],
+      "gross_salary_income": 100000,
+      "gross_other_income": 0,
+      "net_tax": 0,
+      "net_income": 100000,
+      "net_investment": 80000,
+      "net_expense": 20000,
+      "savings_rate": 80
+    }
+  ]
+}

@@ -20,6 +20,24 @@
           "file_name": "main.ledger",
           "forecast": false,
           "market_amount": 0
+        },
+        {
+          "id": 7,
+          "transaction_id": "4",
+          "date": "2022-01-08T00:00:00Z",
+          "payee": "Bonus",
+          "account": "Income:Salary:Acme",
+          "commodity": "INR",
+          "quantity": -10000,
+          "amount": -10000,
+          "status": "unmarked",
+          "tag_recurring": "",
+          "tag_period": "",
+          "transaction_begin_line": 18,
+          "transaction_end_line": 21,
+          "file_name": "main.ledger",
+          "forecast": false,
+          "market_amount": 0
         }
       ]
     },
@@ -51,11 +69,29 @@
           "file_name": "main.ledger",
           "forecast": false,
           "market_amount": 0
+        },
+        {
+          "id": 7,
+          "transaction_id": "4",
+          "date": "2022-01-08T00:00:00Z",
+          "payee": "Bonus",
+          "account": "Income:Salary:Acme",
+          "commodity": "INR",
+          "quantity": -10000,
+          "amount": -10000,
+          "status": "unmarked",
+          "tag_recurring": "",
+          "tag_period": "",
+          "transaction_begin_line": 18,
+          "transaction_end_line": 21,
+          "file_name": "main.ledger",
+          "forecast": false,
+          "market_amount": 0
         }
       ],
-      "gross_income": 100000,
+      "gross_income": 110000,
       "net_tax": 0,
-      "net_income": 100000
+      "net_income": 110000
     }
   ]
 }

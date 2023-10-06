@@ -6,6 +6,14 @@ develop:
 
 serve:
 	./node_modules/.bin/nodemon --signal SIGTERM --delay 2000ms --watch '.' --ext go,json --exec 'go run . serve || exit 1'
+
+debug:
+	./node_modules/.bin/concurrently --names "GO,JS" -c "auto" "make serve-now" "npm run dev"
+
+serve-now:
+	./node_modules/.bin/nodemon --signal SIGTERM --delay 2000ms --watch '.' --ext go,json --exec 'TZ=UTC go run . serve --now 2022-02-07 || exit 1'
+
+
 watch:
 	npm run "build:watch"
 docs:

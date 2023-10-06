@@ -1,19 +1,19 @@
 {
   "budget": {
-    "availableForBudgeting": 0,
+    "availableForBudgeting": 1974.683,
     "budgetsByMonth": {},
-    "checkingBalance": 0
+    "checkingBalance": 1974.683
   },
   "cashFlows": [
     {
       "date": "2022-01-01T00:00:00Z",
-      "income": 100000,
+      "income": 110000,
       "expenses": 20000,
       "liabilities": 0,
-      "investment": 80000,
+      "investment": 88025.317,
       "tax": 0,
-      "checking": 0,
-      "balance": 0
+      "checking": 1974.683,
+      "balance": 1974.683
     },
     {
       "date": "2022-02-01T00:00:00Z",
@@ -23,7 +23,7 @@
       "investment": 0,
       "tax": 0,
       "checking": 0,
-      "balance": 0
+      "balance": 1974.683
     }
   ],
   "expenses": {
@@ -51,16 +51,112 @@
   "networth": {
     "networth": {
       "date": "2022-02-07T23:59:59.999999999Z",
-      "investmentAmount": 180000,
-      "withdrawalAmount": 100000,
-      "gainAmount": 0,
-      "balanceAmount": 80000,
-      "netInvestmentAmount": 80000
+      "investmentAmount": 198025.317,
+      "withdrawalAmount": 108025.317,
+      "gainAmount": 800,
+      "balanceAmount": 90800,
+      "netInvestmentAmount": 90000
     },
-    "xirr": 0
+    "xirr": 8.95
   },
   "transactionSequences": [],
   "transactions": [
+    {
+      "id": "5",
+      "date": "2022-01-08T00:00:00Z",
+      "payee": "Buy ABNB",
+      "postings": [
+        {
+          "id": 9,
+          "transaction_id": "5",
+          "date": "2022-01-08T00:00:00Z",
+          "payee": "Buy ABNB",
+          "account": "Assets:Equity:ABNB",
+          "commodity": "ABNB",
+          "quantity": 0.76,
+          "amount": 8025.317,
+          "status": "unmarked",
+          "tag_recurring": "",
+          "tag_period": "",
+          "transaction_begin_line": 24,
+          "transaction_end_line": 27,
+          "file_name": "main.ledger",
+          "forecast": false,
+          "market_amount": 0
+        },
+        {
+          "id": 10,
+          "transaction_id": "5",
+          "date": "2022-01-08T00:00:00Z",
+          "payee": "Buy ABNB",
+          "account": "Assets:Checking",
+          "commodity": "USD",
+          "quantity": -99.7652,
+          "amount": -8025.317,
+          "status": "unmarked",
+          "tag_recurring": "",
+          "tag_period": "",
+          "transaction_begin_line": 24,
+          "transaction_end_line": 27,
+          "file_name": "main.ledger",
+          "forecast": false,
+          "market_amount": 0
+        }
+      ],
+      "tag_recurring": "",
+      "tag_period": "",
+      "beginLine": 24,
+      "endLine": 27,
+      "fileName": "main.ledger"
+    },
+    {
+      "id": "4",
+      "date": "2022-01-08T00:00:00Z",
+      "payee": "Bonus",
+      "postings": [
+        {
+          "id": 8,
+          "transaction_id": "4",
+          "date": "2022-01-08T00:00:00Z",
+          "payee": "Bonus",
+          "account": "Assets:Checking",
+          "commodity": "INR",
+          "quantity": 10000,
+          "amount": 10000,
+          "status": "unmarked",
+          "tag_recurring": "",
+          "tag_period": "",
+          "transaction_begin_line": 18,
+          "transaction_end_line": 21,
+          "file_name": "main.ledger",
+          "forecast": false,
+          "market_amount": 0
+        },
+        {
+          "id": 7,
+          "transaction_id": "4",
+          "date": "2022-01-08T00:00:00Z",
+          "payee": "Bonus",
+          "account": "Income:Salary:Acme",
+          "commodity": "INR",
+          "quantity": -10000,
+          "amount": -10000,
+          "status": "unmarked",
+          "tag_recurring": "",
+          "tag_period": "",
+          "transaction_begin_line": 18,
+          "transaction_end_line": 21,
+          "file_name": "main.ledger",
+          "forecast": false,
+          "market_amount": 0
+        }
+      ],
+      "tag_recurring": "",
+      "tag_period": "",
+      "beginLine": 18,
+      "endLine": 21,
+      "fileName": "main.ledger"
+    },
     {
       "id": "3",
       "date": "2022-01-07T00:00:00Z",

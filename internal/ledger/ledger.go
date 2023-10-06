@@ -493,6 +493,7 @@ func execHLedgerCommand(journalPath string, prices []price.Price, flags []string
 		for _, p := range t.Postings {
 			amount := p.Amount[0]
 			totalAmount := decimal.NewFromFloat(amount.Quantity.Value)
+			totalAmountSet := false
 
 			if amount.Commodity != config.DefaultCurrency() {
 				if amount.Price.Contents.Quantity.Value != 0 {
@@ -502,6 +503,18 @@ func execHLedgerCommand(journalPath string, prices []price.Price, flags []string
 							pc := utils.BTreeDescendFirstLessOrEqual(pt, price.Price{Date: date})
 							if !pc.Value.Equal(decimal.Zero) {
 								totalAmount = decimal.NewFromFloat(amount.Quantity.Value).Mul(pc.Value)
+								totalAmountSet = true
+							}
+						}
+
+						if !totalAmountSet {
+							pt = pricesTree[amount.Price.Contents.Commodity]
+							if pt != nil {
+								pc := utils.BTreeDescendFirstLessOrEqual(pt, price.Price{Date: date})
+
+								if !pc.Value.Equal(decimal.Zero) {
+									totalAmount = decimal.NewFromFloat(amount.Quantity.Value).Mul(decimal.NewFromFloat(amount.Price.Contents.Quantity.Value).Mul(pc.Value))
+								}
 							}
 						}
 					} else {

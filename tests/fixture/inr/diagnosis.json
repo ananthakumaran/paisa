@@ -1,3 +1,10 @@
 {
-  "issues": []
+  "issues": [
+    {
+      "level": "danger",
+      "summary": "Exchange Price Missing",
+      "description": "Exchange price is missing for the commodity.",
+      "details": "Exchange price from <b>ABNB</b> to your default currency <b>INR</b> is not specified for posting <a href=\"/ledger/editor/main.ledger#24\"> 08 Jan 2022\tAssets:Equity:ABNB\t0.7600 ABNB @ 10559.6276 INR</a>"
+    }
+  ]
 }

@@ -12,6 +12,10 @@ interface UserConfig {
   journal_path: string;
   db_path: string;
   financial_year_starting_month: number;
+  accounts: {
+    name: string;
+    icon: string;
+  }[];
 }
 
 // eslint-disable-next-line no-var

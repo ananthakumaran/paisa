@@ -1,6 +1,8 @@
 $family-sans-serif: "Roboto Flex Variable", sans-serif, "Font Awesome 6 Free Solid",
   "Font Awesome 6 Free Brands";
 
+$family-sans-serif-icon: "Roboto Flex Variable", sans-serif, "Paisa";
+
 $family-monospace: "Roboto Mono Variable", monospace;
 
 $box-radius: 4px;
@@ -127,7 +129,7 @@ code {
 }
 
 svg text {
-  font-family: $family-sans-serif;
+  font-family: $family-sans-serif-icon;
 }
 
 .svg-text-grey-lighter {
@@ -199,7 +201,7 @@ svg text {
 }
 
 .axis {
-  font-family: $family-sans-serif;
+  font-family: $family-sans-serif-icon;
 
   &.dark text {
     fill: $grey;
@@ -897,4 +899,9 @@ textarea:invalid {
         0 0 0 1px rgba(10, 10, 10, 0.1);
     }
   }
+}
+
+.custom-icon,
+[data-tippy-root] {
+  font-family: $family-sans-serif-icon;
 }

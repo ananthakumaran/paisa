@@ -56,6 +56,11 @@ type Commodity struct {
 	TaxCategory TaxCategoryType `json:"tax_category" yaml:"tax_category"`
 }
 
+type Account struct {
+	Name string `json:"name" yaml:"name"`
+	Icon string `json:"icon" yaml:"icon"`
+}
+
 type Retirement struct {
 	SWR            float64  `json:"swr" yaml:"swr"`
 	Expenses       []string `json:"expenses" yaml:"expenses"`
@@ -92,6 +97,8 @@ type Config struct {
 	Commodities []Commodity `json:"commodities" yaml:"commodities"`
 
 	ImportTemplates []ImportTemplate `json:"import_templates" yaml:"import_templates"`
+
+	Accounts []Account `json:"accounts" yaml:"accounts"`
 }
 
 var config Config
@@ -108,6 +115,7 @@ var defaultConfig = Config{
 	AllocationTargets:          []AllocationTarget{},
 	Commodities:                []Commodity{},
 	ImportTemplates:            []ImportTemplate{},
+	Accounts:                   []Account{},
 }
 
 var itemsUniquePropertiesMeta = jsonschema.MustCompileString("itemsUniqueProperties.json", `{

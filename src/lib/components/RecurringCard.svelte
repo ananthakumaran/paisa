@@ -53,7 +53,7 @@
           >
         </span>
         <div class="has-text-grey">
-          <span class="tag is-light">{intervalText(ts)}</span>
+          <span class="tag">{intervalText(ts)}</span>
           <span class="icon has-text-grey-light">
             <i class="fas fa-calendar" />
           </span>

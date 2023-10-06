@@ -1,12 +1,16 @@
 <script lang="ts">
   import type { JSONSchema7 } from "json-schema";
+  import Select from "svelte-select";
   import _ from "lodash";
   import PriceCodeSearchModal from "./PriceCodeSearchModal.svelte";
+  import { iconGlyph, iconsList } from "$lib/icon";
 
   interface Schema extends JSONSchema7 {
     "ui:header"?: string;
     "ui:widget"?: string;
   }
+
+  const ICON_MAX_RESULTS = 200;
 
   export let key: string;
   export let value: any;
@@ -41,6 +45,17 @@
     }
     return null;
   }
+
+  async function searchIcons(text: string) {
+    text = text.toLowerCase();
+    if (_.isEmpty(text)) {
+      return _.take(iconsList, ICON_MAX_RESULTS);
+    }
+    return _.take(
+      iconsList.filter((icon) => icon.includes(text)),
+      ICON_MAX_RESULTS
+    );
+  }
 </script>
 
 {#if deletable}
@@ -53,6 +68,34 @@
 
 {#if schema["ui:widget"] == "hidden"}
   <div></div>
+{:else if schema["ui:widget"] == "icon"}
+  <div class="field is-horizontal">
+    <div class="field-label is-small">
+      <label for="" data-tippy-content={documentation(schema)} class="label">{title}</label>
+    </div>
+    <div class="field-body">
+      <div class="field">
+        <div class="control" style="max-width: 350px">
+          <Select
+            bind:justValue={value}
+            class="icon-select is-small"
+            {value}
+            showChevron={true}
+            loadOptions={searchIcons}
+            searchable={true}
+            clearable={!required}
+          >
+            <div class="custom-icon" slot="selection" let:selection>
+              <span>{iconGlyph(selection.value)} {selection.value}</span>
+            </div>
+            <div class="custom-icon" slot="item" let:item>
+              <span class="name">{iconGlyph(item.value)} {item.value}</span>
+            </div>
+          </Select>
+        </div>
+      </div>
+    </div>
+  </div>
 {:else if schema.type === "string" || _.isEqual(schema.type, ["string", "integer"])}
   <div class="field is-horizontal">
     <div class="field-label is-small">

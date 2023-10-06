@@ -55,7 +55,8 @@
                 {@const changeClass = calculateChangeClass(gain)}
                 <tr>
                   <td style="max-width: 200px; overflow: hidden;"
-                    >{@html indent}<span class="has-text-grey">{iconText(b.group)}</span>
+                    >{@html indent}<span class="has-text-grey custom-icon">{iconText(b.group)}</span
+                    >
                     <a href="/assets/gain/{b.group}">{lastName(b.group)}</a></td
                   >
                   <td class="has-text-right"

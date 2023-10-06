@@ -35,7 +35,7 @@
   {#each t.postings as posting}
     {@const color = accountColor(firstName(posting.account))}
     <div class="my-1 is-flex is-justify-content-space-between">
-      <div class="has-text-grey truncate" title={posting.account}>
+      <div class="has-text-grey truncate custom-icon" title={posting.account}>
         <span style:color style:opacity={0.6}>{iconText(posting.account)}</span>
         {restName(posting.account)}
       </div>

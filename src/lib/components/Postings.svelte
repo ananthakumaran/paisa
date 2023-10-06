@@ -19,7 +19,9 @@
 <div style="margin: 4px 0;">
   {#each postings as p}
     <div class="is-flex is-justify-content-space-between is-hoverable" style="margin: 1px 0;">
-      <div class="truncate" style="min-width: 100px;" title={p.account}>{iconify(p.account)}</div>
+      <div class="truncate custom-icon" style="min-width: 100px;" title={p.account}>
+        {iconify(p.account)}
+      </div>
       <div class="is-flex is-align-items-baseline is-justify-content-right">
         <div class="has-text-right has-text-grey is-size-7 mr-2 truncate">
           {unlessDefaultCurrency(p)}

@@ -67,3 +67,7 @@ fixture/main.transactions.json:
 	sleep 1
 	curl http://localhost:6500/api/transaction | jq .transactions > fixture/main.transactions.json
 	pkill -f 'paisa serve -p 6500'
+
+generate-fonts:
+	bun download-svgs.js
+	node generate-font.js

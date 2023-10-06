@@ -69,7 +69,8 @@
                 {@const changeClass = calculateChangeClass(-b.interest_amount)}
                 <tr>
                   <td style="max-width: 200px; overflow: hidden;"
-                    >{@html indent}<span class="has-text-grey">{iconText(b.group)}</span>
+                    >{@html indent}<span class="has-text-grey custom-icon">{iconText(b.group)}</span
+                    >
                     {lastName(b.group)}</td
                   >
                   <td class="has-text-right"

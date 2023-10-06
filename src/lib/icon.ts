@@ -1,45 +1,58 @@
 import _ from "lodash";
+import icons from "../../fonts/info.json";
 import { stemmer } from "stemmer";
 
+export function iconGlyph(symbol: string): string {
+  if (!symbol) {
+    return String.fromCodePoint(65533);
+  }
+  const [font, name] = symbol.split(":");
+  const code = (icons as Record<string, Record<string, number>>)[font]?.[name] || 65533;
+  return String.fromCodePoint(code);
+}
+
+export const iconsList = _.flatMap(icons, (glyph, font) => {
+  return _.map(glyph, (code, name) => `${font}:${name}`);
+});
+
 interface IconLookup {
-  class: string;
-  glyph: string;
+  symbol: string;
   words: string[];
 }
 
 const ICON_LOOKUP: IconLookup[] = [
-  { class: "house-user", glyph: "\ue065", words: ["rent"] },
-  { class: "motorcycle", glyph: "\uf21c", words: ["bike", "motorcycl"] },
-  { class: "car", glyph: "\uf1b9", words: ["car", "vehicl"] },
-  { class: "piggy-bank", glyph: "\uf4d3", words: ["check", "bank"] },
-  { class: "sack-dollar", glyph: "\uf81d", words: ["asset"] },
-  { class: "chart-line", glyph: "\uf201", words: ["equiti"] },
-  { class: "money-check-dollar", glyph: "\uf53d", words: ["debt"] },
-  { class: "ring", glyph: "\uf70b", words: ["gold"] },
-  { class: "house", glyph: "\uf015", words: ["realest", "hous", "homeloan"] },
-  { class: "credit-card", glyph: "\uf09d", words: ["liabil"] },
-  { class: "cc-visa", glyph: "\uf1f0", words: ["idfc"] },
-  { class: "cc-amazon-pay", glyph: "\uf42d", words: ["icici"] },
-  { class: "wallet", glyph: "\uf555", words: ["expens"] },
-  { class: "building", glyph: "\uf1ad", words: ["incom"] },
-  { class: "gift", glyph: "\uf06b", words: ["gift", "reward"] },
-  { class: "tshirt", glyph: "\uf553", words: ["cloth"] },
-  { class: "graduation-cap", glyph: "\uf19d", words: ["educ"] },
-  { class: "hamburger", glyph: "\uf805", words: ["food"] },
-  { class: "film", glyph: "\uf008", words: ["entertain"] },
-  { class: "car-crash", glyph: "\uf5e1", words: ["insur"] },
-  { class: "hand-holding-dollar", glyph: "\uf4c0", words: ["interest"] },
-  { class: "shopping-car", glyph: "\uf07a", words: ["shop"] },
-  { class: "utensils", glyph: "\uf2e7", words: ["restaur"] },
-  { class: "layer-group", glyph: "\uf5fd", words: ["misc"] },
-  { class: "plug-circle-bolt", glyph: "\ue55b", words: ["util"] },
-  { class: "carrot", glyph: "\uf787", words: ["veget"] },
-  { class: "taxi", glyph: "\uf1ba", words: ["transport"] },
-  { class: "money-bill", glyph: "\uf0d6", words: ["cash"] }
+  { symbol: "fa6-solid:house-user", words: ["rent"] },
+  { symbol: "fa6-solid:motorcycle", words: ["bike", "motorcycl"] },
+  { symbol: "fa6-solid:car", words: ["car", "vehicl"] },
+  { symbol: "fa6-solid:piggy-bank", words: ["check", "bank"] },
+  { symbol: "fa6-solid:sack-dollar", words: ["asset"] },
+  { symbol: "fa6-solid:chart-line", words: ["equiti"] },
+  { symbol: "fa6-solid:money-check-dollar", words: ["debt"] },
+  { symbol: "fa6-solid:ring", words: ["gold"] },
+  { symbol: "fa6-solid:house", words: ["realest", "hous", "homeloan"] },
+  { symbol: "fa6-solid:credit-card", words: ["liabil"] },
+  { symbol: "fa6-brands:cc-visa", words: ["idfc"] },
+  { symbol: "fa6-brands:cc-amazon-pay", words: ["icici"] },
+  { symbol: "fa6-solid:wallet", words: ["expens"] },
+  { symbol: "fa6-solid:building", words: ["incom"] },
+  { symbol: "fa6-solid:gift", words: ["gift", "reward"] },
+  { symbol: "fa6-solid:shirt", words: ["cloth"] },
+  { symbol: "fa6-solid:graduation-cap", words: ["educ"] },
+  { symbol: "fa6-solid:burger", words: ["food"] },
+  { symbol: "fa6-solid:film", words: ["entertain"] },
+  { symbol: "fa6-solid:car-crash", words: ["insur"] },
+  { symbol: "fa6-solid:hand-holding-dollar", words: ["interest"] },
+  { symbol: "fa6-solid:cart-shopping", words: ["shop"] },
+  { symbol: "fa6-solid:utensils", words: ["restaur"] },
+  { symbol: "fa6-solid:layer-group", words: ["misc"] },
+  { symbol: "fa6-solid:plug-circle-bolt", words: ["util"] },
+  { symbol: "fa6-solid:carrot", words: ["veget"] },
+  { symbol: "fa6-solid:taxi", words: ["transport"] },
+  { symbol: "fa6-solid:money-bill", words: ["cash"] }
 ];
 
 const ICONS: Record<string, string> = _.chain(ICON_LOOKUP)
-  .flatMap((icon) => _.map(icon.words, (word) => [word, icon.glyph]))
+  .flatMap((icon) => _.map(icon.words, (word) => [word, iconGlyph(icon.symbol)]))
   .fromPairs()
   .value();
 
@@ -47,6 +60,12 @@ export function iconText(account: string): string {
   if (account == "") {
     return "";
   }
+
+  const accountConfig = (USER_CONFIG.accounts || []).find((a) => a.name == account);
+  if (!_.isEmpty(accountConfig?.icon)) {
+    return iconGlyph(accountConfig.icon);
+  }
+
   const parts = account.split(":");
   const part = stemmer(_.last(parts).toLowerCase());
   return ICONS[part] || iconText(_.dropRight(parts, 1).join(":"));

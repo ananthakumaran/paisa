@@ -19,3 +19,6 @@ vite.config.ts.timestamp-*
 docs/lexer/__pycache__/
 bun.lockb
 svg/*
+fonts/*
+!fonts/paisa.woff2
+!fonts/info.json

@@ -8,6 +8,7 @@ import {
 import dayjs from "dayjs";
 import { parse, type CronExprs } from "@datasert/cronjs-parser";
 import { getFutureMatches } from "@datasert/cronjs-matcher";
+import { iconGlyph } from "./icon";
 
 const now = dayjs();
 const end = dayjs().add(36, "month");
@@ -147,7 +148,7 @@ export function nextUnpaidSchedule(ts: TransactionSequence) {
 
 export function scheduleIcon(schedule: TransactionSchedule) {
   let icon = "fa-circle-check";
-  let glyph = "";
+  let glyph = iconGlyph("fa6-solid:circle-check");
   let color = "has-text-success";
   let svgColor = "svg-text-success";
 
@@ -155,7 +156,7 @@ export function scheduleIcon(schedule: TransactionSchedule) {
     if (schedule.scheduled.isBefore(now, "day")) {
       color = "has-text-danger";
       icon = "fa-exclamation-triangle";
-      glyph = "";
+      glyph = iconGlyph("fa6-solid:triangle-exclamation");
       svgColor = "svg-text-danger";
     } else {
       color = "has-text-grey";

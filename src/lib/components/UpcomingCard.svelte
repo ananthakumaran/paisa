@@ -20,7 +20,7 @@
 <div class="has-text-centered mb-3 mr-3 max-w-[200px]">
   <div class="is-size-7 truncate">{transactionSequece.key}</div>
   <div class="my-1">
-    <span class="tag is-light">{intervalText(transactionSequece)}</span>
+    <span class="tag">{intervalText(transactionSequece)}</span>
   </div>
   <div class="has-text-grey is-size-7">
     <span class="icon has-text-grey-light">

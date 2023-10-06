@@ -218,6 +218,34 @@
         "required": ["name"],
         "additionalProperties": false
       }
+    },
+    "accounts": {
+      "type": "array",
+      "default": [
+        {
+          "name": "Assets:Equity:AAPL",
+          "icon": "fa6-brands:apple"
+        }
+      ],
+      "itemsUniqueProperties": ["name"],
+      "items": {
+        "type": "object",
+        "ui:header": "name",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "name of the account",
+            "minLength": 1
+          },
+          "icon": {
+            "type": "string",
+            "description": "account icon in svg format",
+            "ui:widget": "icon"
+          }
+        },
+        "required": ["name"],
+        "additionalProperties": false
+      }
     }
   },
   "required": ["journal_path", "db_path"],

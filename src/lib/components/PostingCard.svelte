@@ -30,7 +30,7 @@
   </div>
   <hr class="m-1" />
   <div class="is-flex is-justify-content-space-between">
-    <div class="has-text-grey truncate">
+    <div class="has-text-grey truncate custom-icon">
       {#if icon}
         {iconify(restName(posting.account), { group: firstName(posting.account) })}
       {:else}

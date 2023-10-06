@@ -8,6 +8,9 @@ const config = {
       "/api": {
         target: "http://localhost:7500"
       }
+    },
+    fs: {
+      allow: ["./fonts"]
     }
   }
 };

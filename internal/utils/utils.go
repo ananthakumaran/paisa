@@ -221,3 +221,7 @@ func OpenDB() (*gorm.DB, error) {
 	db, err := gorm.Open(sqlite.Open(config.GetDBPath()), &gorm.Config{Logger: gorm_logrus.New()})
 	return db, err
 }
+
+func Dos2Unix(str string) string {
+	return strings.ReplaceAll(str, "\r\n", "\n")
+}

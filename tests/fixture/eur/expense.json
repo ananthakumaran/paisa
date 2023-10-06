@@ -1,0 +1,177 @@
+{
+  "expenses": [],
+  "graph": {
+    "2021 - 22": {
+      "flat": {
+        "nodes": [
+          {
+            "id": 1,
+            "name": "Assets:Checking"
+          },
+          {
+            "id": 3,
+            "name": "Assets:Equity:AAPL"
+          },
+          {
+            "id": 2,
+            "name": "Income:Salary:Acme"
+          }
+        ],
+        "links": [
+          {
+            "source": 1,
+            "target": 3,
+            "value": 10005.05
+          },
+          {
+            "source": 2,
+            "target": 1,
+            "value": 11000
+          }
+        ]
+      },
+      "hierarchy": {
+        "nodes": [
+          {
+            "id": 1,
+            "name": "Assets:Checking"
+          },
+          {
+            "id": 5,
+            "name": "Assets:Equity:AAPL"
+          },
+          {
+            "id": 2,
+            "name": "Income"
+          },
+          {
+            "id": 3,
+            "name": "Income:Salary"
+          },
+          {
+            "id": 4,
+            "name": "Income:Salary:Acme"
+          }
+        ],
+        "links": [
+          {
+            "source": 1,
+            "target": 5,
+            "value": 10005.05
+          },
+          {
+            "source": 2,
+            "target": 1,
+            "value": 11000
+          },
+          {
+            "source": 3,
+            "target": 2,
+            "value": 11000
+          },
+          {
+            "source": 4,
+            "target": 3,
+            "value": 11000
+          }
+        ]
+      }
+    }
+  },
+  "month_wise": {
+    "expenses": {},
+    "incomes": {
+      "2022-01": [
+        {
+          "id": 1,
+          "transaction_id": "1",
+          "date": "2022-01-01T00:00:00Z",
+          "payee": "Salary",
+          "account": "Income:Salary:Acme",
+          "commodity": "EUR",
+          "quantity": -11000,
+          "amount": -11000,
+          "status": "unmarked",
+          "tag_recurring": "",
+          "tag_period": "",
+          "transaction_begin_line": 4,
+          "transaction_end_line": 7,
+          "file_name": "main.ledger",
+          "forecast": false,
+          "market_amount": 0
+        }
+      ]
+    },
+    "investments": {
+      "2022-01": [
+        {
+          "id": 3,
+          "transaction_id": "2",
+          "date": "2022-01-05T00:00:00Z",
+          "payee": "Buy stock",
+          "account": "Assets:Equity:AAPL",
+          "commodity": "AAPL",
+          "quantity": 1,
+          "amount": 10005.05,
+          "status": "unmarked",
+          "tag_recurring": "",
+          "tag_period": "",
+          "transaction_begin_line": 11,
+          "transaction_end_line": 14,
+          "file_name": "main.ledger",
+          "forecast": false,
+          "market_amount": 0
+        }
+      ]
+    },
+    "taxes": {}
+  },
+  "year_wise": {
+    "expenses": {},
+    "incomes": {
+      "2021 - 22": [
+        {
+          "id": 1,
+          "transaction_id": "1",
+          "date": "2022-01-01T00:00:00Z",
+          "payee": "Salary",
+          "account": "Income:Salary:Acme",
+          "commodity": "EUR",
+          "quantity": -11000,
+          "amount": -11000,
+          "status": "unmarked",
+          "tag_recurring": "",
+          "tag_period": "",
+          "transaction_begin_line": 4,
+          "transaction_end_line": 7,
+          "file_name": "main.ledger",
+          "forecast": false,
+          "market_amount": 0
+        }
+      ]
+    },
+    "investments": {
+      "2021 - 22": [
+        {
+          "id": 3,
+          "transaction_id": "2",
+          "date": "2022-01-05T00:00:00Z",
+          "payee": "Buy stock",
+          "account": "Assets:Equity:AAPL",
+          "commodity": "AAPL",
+          "quantity": 1,
+          "amount": 10005.05,
+          "status": "unmarked",
+          "tag_recurring": "",
+          "tag_period": "",
+          "transaction_begin_line": 11,
+          "transaction_end_line": 14,
+          "file_name": "main.ledger",
+          "forecast": false,
+          "market_amount": 0
+        }
+      ]
+    },
+    "taxes": {}
+  }
+}

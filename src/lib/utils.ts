@@ -1,5 +1,4 @@
 import dayjs, { Dayjs } from "dayjs";
-import { sprintf } from "sprintf-js";
 import _ from "lodash";
 import * as d3 from "d3";
 import { loading } from "../store";
@@ -670,7 +669,10 @@ export function formatFloat(value: number, precision = 2) {
   if (obscure()) {
     return "00";
   }
-  return sprintf(`%.${precision}f`, value);
+  return value.toLocaleString(USER_CONFIG.locale, {
+    minimumFractionDigits: precision,
+    maximumFractionDigits: precision
+  });
 }
 
 export function formatPercentage(value: number, precision = 0) {
@@ -697,7 +699,16 @@ export function formatFixedWidthFloat(value: number, width: number, precision = 
   if (obscure()) {
     value = 0;
   }
-  return sprintf(`%${width}.${precision}f`, value);
+
+  const formatted = value.toLocaleString(USER_CONFIG.locale, {
+    minimumFractionDigits: precision,
+    maximumFractionDigits: precision
+  });
+
+  if (formatted.length < width) {
+    return formatted.padStart(width, " ");
+  }
+  return formatted;
 }
 
 export function forEachMonth(

@@ -1,0 +1,36 @@
+{
+  "gain_breakdown": [
+    {
+      "account": "Assets:Equity:AAPL",
+      "networth": {
+        "date": "2022-02-07T23:59:59.999999999Z",
+        "investmentAmount": 10005.05,
+        "withdrawalAmount": 0,
+        "gainAmount": 20,
+        "balanceAmount": 10025.05,
+        "netInvestmentAmount": 10005.05
+      },
+      "xirr": 2.17,
+      "postings": [
+        {
+          "id": 3,
+          "transaction_id": "2",
+          "date": "2022-01-05T00:00:00Z",
+          "payee": "Buy stock",
+          "account": "Assets:Equity:AAPL",
+          "commodity": "AAPL",
+          "quantity": 1,
+          "amount": 10005.05,
+          "status": "unmarked",
+          "tag_recurring": "",
+          "tag_period": "",
+          "transaction_begin_line": 11,
+          "transaction_end_line": 14,
+          "file_name": "main.ledger",
+          "forecast": false,
+          "market_amount": 10025.05
+        }
+      ]
+    }
+  ]
+}

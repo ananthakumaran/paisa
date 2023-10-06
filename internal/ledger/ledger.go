@@ -61,12 +61,12 @@ func (LedgerCLI) ValidateFile(journalPath string) ([]LedgerFileError, string, er
 	var output, error bytes.Buffer
 	err = utils.Exec(ledgerPath, &output, &error, "--args-only", "-f", journalPath, "balance")
 	if err == nil {
-		return errors, output.String(), nil
+		return errors, utils.Dos2Unix(output.String()), nil
 	}
 
-	re := regexp.MustCompile(`(?m)While parsing file "[^"]+", line ([0-9]+):\s*[\r\n]+(?:(?:While|>).*[\r\n]+)*((?:.*[\r\n]+)*?Error: .*[\r\n]+)`)
+	re := regexp.MustCompile(`(?m)While parsing file "[^"]+", line ([0-9]+):\s*\n(?:(?:While|>).*\n)*((?:.*\n)*?Error: .*\n)`)
 
-	matches := re.FindAllStringSubmatch(error.String(), -1)
+	matches := re.FindAllStringSubmatch(utils.Dos2Unix(error.String()), -1)
 
 	for _, match := range matches {
 		line, _ := strconv.ParseUint(match[1], 10, 64)
@@ -105,12 +105,13 @@ func (LedgerCLI) Prices(journalPath string) ([]price.Price, error) {
 	}
 
 	var output, error bytes.Buffer
-	err = utils.Exec(ledgerPath, &output, &error, "--args-only", "-f", journalPath, "pricesdb")
+	err = utils.Exec(ledgerPath, &output, &error, "--args-only", "-f", journalPath, "pricesdb", "--pricedb-format", "P %(datetime) %(display_account) %(quantity(scrub(display_amount))) %(commodity(scrub(display_amount)))\n")
 	if err != nil {
+		log.Error(error.String())
 		return prices, err
 	}
 
-	return parseLedgerPrices(output.String(), config.DefaultCurrency())
+	return parseLedgerPrices(utils.Dos2Unix(output.String()), config.DefaultCurrency())
 }
 
 func (HLedgerCLI) ValidateFile(journalPath string) ([]LedgerFileError, string, error) {
@@ -123,11 +124,11 @@ func (HLedgerCLI) ValidateFile(journalPath string) ([]LedgerFileError, string, e
 	var output, error bytes.Buffer
 	err = utils.Exec(path, &output, &error, "-f", journalPath, "--auto", "balance")
 	if err == nil {
-		return errors, output.String(), nil
+		return errors, utils.Dos2Unix(output.String()), nil
 	}
 
-	re := regexp.MustCompile(`(?m)hledger: Error: [^:]*:([0-9:-]+)[\r\n]+((?:.*[\r\n]+)*)`)
-	matches := re.FindAllStringSubmatch(error.String(), -1)
+	re := regexp.MustCompile(`(?m)hledger: Error: [^:]*:([0-9:-]+)\n((?:.*\n)*)`)
+	matches := re.FindAllStringSubmatch(utils.Dos2Unix(error.String()), -1)
 
 	for _, match := range matches {
 		lineRange := match[1]
@@ -179,18 +180,55 @@ func (HLedgerCLI) Prices(journalPath string) ([]price.Price, error) {
 		return prices, err
 	}
 
-	var output, error bytes.Buffer
-	err = utils.Exec(path, &output, &error, "-f", journalPath, "--auto", "--infer-market-prices", "--infer-costs", "prices")
+	commodities, err := parseHLedgerCommodities(journalPath)
 	if err != nil {
+		log.Error(err)
 		return prices, err
 	}
 
-	return parseHLedgerPrices(output.String(), config.DefaultCurrency())
+	commoditiesStyles := lo.Map(commodities, func(c string, _ int) string {
+		return fmt.Sprintf(`--commodity-style="%s" 1,000.00`, c)
+	})
+
+	args := append([]string{"-f", journalPath, "--infer-market-prices", "--infer-costs", "prices"}, commoditiesStyles...)
+
+	var output, error bytes.Buffer
+	err = utils.Exec(path, &output, &error, args...)
+	if err != nil {
+		log.Error(error.String())
+		return prices, err
+	}
+
+	return parseHLedgerPrices(utils.Dos2Unix(output.String()), config.DefaultCurrency())
+}
+
+func parseHLedgerCommodities(journalPath string) ([]string, error) {
+	var commodities []string
+
+	path, err := binary.LookPath("hledger")
+	if err != nil {
+		return commodities, err
+	}
+
+	var output, error bytes.Buffer
+	err = utils.Exec(path, &output, &error, "-f", journalPath, "commodities")
+	if err != nil {
+		log.Error(error.String())
+		return commodities, err
+	}
+
+	lines := strings.Split(utils.Dos2Unix(output.String()), "\n")
+
+	for _, line := range lines {
+		commodities = append(commodities, utils.UnQuote(strings.TrimSpace(line)))
+	}
+
+	return commodities, nil
 }
 
 func parseLedgerPrices(output string, defaultCurrency string) ([]price.Price, error) {
 	var prices []price.Price
-	re := regexp.MustCompile(`P (\d{4}\/\d{2}\/\d{2}) (?:\d{2}:\d{2}:\d{2}) ([^\s\d.-]+|"[^"]+") ([^\r\n]+)[\r\n]+`)
+	re := regexp.MustCompile(`P (\d{4}\/\d{2}\/\d{2}) (?:\d{2}:\d{2}:\d{2}) ([^\s\d.-]+|"[^"]+") ([^\n]+)\n`)
 	matches := re.FindAllStringSubmatch(output, -1)
 
 	for _, match := range matches {
@@ -218,7 +256,7 @@ func parseLedgerPrices(output string, defaultCurrency string) ([]price.Price, er
 
 func parseHLedgerPrices(output string, defaultCurrency string) ([]price.Price, error) {
 	var prices []price.Price
-	re := regexp.MustCompile(`P (\d{4}-\d{2}-\d{2}) ([^\s\d.-]+|"[^"]+") ([^\r\n]+)[\r\n]+`)
+	re := regexp.MustCompile(`P (\d{4}-\d{2}-\d{2}) ([^\s\d.-]+|"[^"]+") ([^\n]+)\n`)
 	matches := re.FindAllStringSubmatch(output, -1)
 
 	for _, match := range matches {
@@ -282,10 +320,11 @@ func execLedgerCommand(journalPath string, flags []string) ([]*posting.Posting, 
 		TransactionBeginLine
 		TransactionEndLine
 		LotPrice
+		LotCommodity
 		TagRecurring
 		TagPeriod
 	)
-	args := append(append([]string{"--args-only", "-f", journalPath}, flags...), "csv", "--csv-format", "%(quoted(date)),%(quoted(payee)),%(quoted(display_account)),%(quoted(commodity(scrub(display_amount)))),%(quoted(quantity(scrub(display_amount)))),%(quoted(scrub(market(amount,date,'"+config.DefaultCurrency()+"') * 100000000))),%(quoted(xact.filename)),%(quoted(xact.id)),%(quoted(cleared ? \"*\" : (pending ? \"!\" : \"\"))),%(quoted(xact.beg_line)),%(quoted(xact.end_line)),%(quoted(lot_price(amount))),%(quoted(tag('Recurring'))),%(quoted(tag('Period')))\n")
+	args := append(append([]string{"--args-only", "-f", journalPath}, flags...), "csv", "--csv-format", "%(quoted(date)),%(quoted(payee)),%(quoted(display_account)),%(quoted(commodity(scrub(display_amount)))),%(quoted(quantity(scrub(display_amount)))),%(quoted(quantity(scrub(market(amount,date,'"+config.DefaultCurrency()+"') * 100000000)))),%(quoted(xact.filename)),%(quoted(xact.id)),%(quoted(cleared ? \"*\" : (pending ? \"!\" : \"\"))),%(quoted(xact.beg_line)),%(quoted(xact.end_line)),%(quoted(quantity(lot_price(amount)))),%(quoted(commodity(lot_price(amount)))),%(quoted(tag('Recurring'))),%(quoted(tag('Period')))\n")
 
 	ledgerPath, err := binary.LedgerBinaryPath()
 	if err != nil {
@@ -324,12 +363,13 @@ func execLedgerCommand(journalPath string, flags []string) ([]*posting.Posting, 
 		amountAvailable := false
 
 		lotString := record[LotPrice]
-		if lotString != "" {
-			lotCurrency, lotAmount, err := parseAmount(record[LotPrice])
+		if lotString != "" && lotString != "0" {
+			lotAmount, err := decimal.NewFromString(record[LotPrice])
 			if err != nil {
 				return nil, err
 			}
 
+			lotCurrency := utils.UnQuote(record[LotCommodity])
 			if lotCurrency == config.DefaultCurrency() {
 				amount = lotAmount.Mul(quantity)
 				amountAvailable = true
@@ -337,7 +377,7 @@ func execLedgerCommand(journalPath string, flags []string) ([]*posting.Posting, 
 		}
 
 		if !amountAvailable {
-			_, amount, err = parseAmount(record[Amount])
+			amount, err = decimal.NewFromString(record[Amount])
 			if err != nil {
 				return nil, err
 			}

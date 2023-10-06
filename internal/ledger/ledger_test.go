@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/ananthakumaran/paisa/internal/model/price"
+	"github.com/ananthakumaran/paisa/internal/utils"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -39,6 +40,9 @@ func TestParseHLegerPrices(t *testing.T) {
 	assertPriceEqual(t, parsedPrices[0], "2023/05/01", "EUR", 1.1)
 
 	parsedPrices, _ = parseHLedgerPrices("P 2023-05-01 EUR 1.1$\n", "$")
+	assertPriceEqual(t, parsedPrices[0], "2023/05/01", "EUR", 1.1)
+
+	parsedPrices, _ = parseHLedgerPrices(utils.Dos2Unix("P 2023-05-01 EUR 1.1$\r\n"), "$")
 	assertPriceEqual(t, parsedPrices[0], "2023/05/01", "EUR", 1.1)
 
 	parsedPrices, _ = parseHLedgerPrices("P 2023-05-01 \"AAPL0\" \"USD0\" 45.5\n", "USD0")

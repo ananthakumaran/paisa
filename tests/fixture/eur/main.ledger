@@ -1,0 +1,13 @@
+commodity EUR
+	format 1.000,00 EUR
+
+2022/01/01 Salary
+    Income:Salary:Acme                    -11.000,00 EUR
+    Assets:Checking                        11.000,00 EUR
+
+P 2022/01/05 00:00:00 AAPL 10.005,05 EUR
+P 2022/01/15 00:00:00 AAPL 10.025,05 EUR
+
+2022/01/05 Buy stock
+    Assets:Equity:AAPL                             1 AAPL @ 10.005,05 EUR
+    Assets:Checking                       -10.005,05 EUR

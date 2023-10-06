@@ -32,12 +32,12 @@ lint:
 
 regen:
 	go build
-	REGENERATE=true TZ=UTC bun test tests
+	unset PAISA_CONFIG && REGENERATE=true TZ=UTC bun test tests
 
 jstest:
 	bun test --preload ./src/happydom.ts src
 	go build
-	TZ=UTC bun test tests
+	unset PAISA_CONFIG && TZ=UTC bun test tests
 
 jsbuild:
 	npm run build

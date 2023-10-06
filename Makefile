@@ -31,8 +31,10 @@ jstest:
 	go build
 	TZ=UTC bun test tests
 
-test: jstest
+jsbuild:
 	npm run build
+
+test: jsbuild jstest
 	go test ./...
 
 windows:

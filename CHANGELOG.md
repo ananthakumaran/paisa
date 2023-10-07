@@ -1,5 +1,12 @@
 # CHANGELOG
 
+### 0.5.4 (2023-10-07)
+
+* Add calendar view to recurring page
+* Support [recurring period](https://paisa.fyi/reference/recurring/#period) configuration
+* Support European number format
+* Bug fixes
+
 ### 0.5.3 (2023-09-30)
 
 * Add Docker Image

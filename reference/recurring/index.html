@@ -448,6 +448,8 @@
         
           
         
+          
+        
       
       
         <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
@@ -484,6 +486,20 @@
     <li class="md-nav__item">
       <a href="../commodities/" class="md-nav__link">
         Commodities
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../journal/" class="md-nav__link">
+        Journal
       </a>
     </li>
   
@@ -575,9 +591,53 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Recurring
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         Recurring
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#period" class="md-nav__link">
+    Period
+  </a>
+  
+    <nav class="md-nav" aria-label="Period">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#examples" class="md-nav__link">
+    Examples
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -639,7 +699,7 @@
       
         
       
-      <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3_12" >
+      <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3_13" >
       
       
         
@@ -660,14 +720,14 @@
         <div class="md-nav__link md-nav__link--index ">
           <a href="../tax/">Tax</a>
           
-            <label for="__nav_3_12">
+            <label for="__nav_3_13">
               <span class="md-nav__icon md-icon"></span>
             </label>
           
         </div>
       
-      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_12_label" aria-expanded="false">
-        <label class="md-nav__title" for="__nav_3_12">
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_13_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_3_13">
           <span class="md-nav__icon md-icon"></span>
           Tax
         </label>
@@ -765,6 +825,34 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#period" class="md-nav__link">
+    Period
+  </a>
+  
+    <nav class="md-nav" aria-label="Period">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#examples" class="md-nav__link">
+    Examples
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -836,6 +924,69 @@ Ledger <a href="https://ledger-cli.org/doc/ledger3.html#Complex-expressions">doc
 </span><span id="__span-3-13"><a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a>= expr payee=~/Savings Interest/
 </span><span id="__span-3-14"><a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="err">    </span><span class="c1">; Recurring: Savings Interest</span>
 </span></code></pre></div>
+<h2 id="period">Period</h2>
+<p>Paisa will try to infer the recurring period of the transactions
+automatically, but this might not be perfect. Recurring period can
+also be explicitly specified via metadata.</p>
+<div class="language-ledger highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>= expr payee=~/Savings Interest/
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="err">    </span><span class="c1">; Recurring: Savings Interest</span>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="err">    </span><span class="c1">; Period: L MAR,JUN,SEP,DEC ?</span>
+</span></code></pre></div>
+<p>Let's say your bank deposits the interest on the last day of the last
+month of the quarter, we can specify like the example above. Paisa
+editor recognizes <strong>period syntax</strong> and shows the upcoming 3 schedules
+right next to period metadata.</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>┌─────────── day of the month 1-31
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>│  ┌─────────── month 1-12
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>│  │  ┌─────────── day of the week 0-6 (Sunday to Saturday)
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>│  │  │
+</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>1  *  ?
+</span></code></pre></div>
+<p>The syntax of the period is similar to <a href="https://en.wikipedia.org/wiki/Cron">cron</a>, with the omission of
+seconds and hours.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Allowed values</th>
+<th>Special characters</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Day of month</td>
+<td><code>1–31</code></td>
+<td><code>* , - ? L W</code></td>
+</tr>
+<tr>
+<td>Month</td>
+<td><code>1-12</code> or <code>JAN-DEC</code></td>
+<td><code>* , -</code></td>
+</tr>
+<tr>
+<td>Day of week</td>
+<td><code>0-6</code> or <code>SUN-SAT</code></td>
+<td><code>* , - ? L</code></td>
+</tr>
+</tbody>
+</table>
+<p><code>*</code> also known as wildcard represents all valid values. <code>?</code> means you
+want to omit the field, usually you use it on the day of month or day
+of week. <code>L</code> means last day of the month or week. <code>,</code> can be used to
+specify multiple entries. <code>-</code> can be used to specify range. <code>W</code> means
+the closest business day to given day of month</p>
+<p>Multiple cron expressions can be specified by joining them using
+<code>|</code>. Refer the <a href="https://en.wikipedia.org/wiki/Cron">wikipedia</a> for more information. If you are not
+sure, just type it out and the editor will show you whether it is
+valid and the next 3 schedules if valid.</p>
+<h3 id="examples">Examples</h3>
+<ul>
+<li>Last day of every month <code class="language-ledger highlight"><span class="c1">; Period: L * ?</span></code></li>
+<li>5<sup>th</sup> every month <code class="language-ledger highlight"><span class="c1">; Period: 5 * ?</span></code></li>
+<li>Every Sunday <code class="language-ledger highlight"><span class="c1">; Period: ? * 0</span></code></li>
+<li>1<sup>st</sup> of Jan and 7<sup>th</sup> of Feb <code class="language-ledger highlight"><span class="c1">; Period 1 JAN ? | 7 FEB ?</span></code></li>
+<li>Closest business day to the 15<sup>th</sup> day of every month. <code class="language-ledger highlight"><span class="c1">; Period 15W * ?</span></code></li>
+</ul>
 
 
   

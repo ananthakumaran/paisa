@@ -458,6 +458,8 @@
         
           
         
+          
+        
       
       
         <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
@@ -494,6 +496,20 @@
     <li class="md-nav__item">
       <a href="reference/commodities/" class="md-nav__link">
         Commodities
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="reference/journal/" class="md-nav__link">
+        Journal
       </a>
     </li>
   
@@ -639,7 +655,7 @@
       
         
       
-      <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3_12" >
+      <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3_13" >
       
       
         
@@ -660,14 +676,14 @@
         <div class="md-nav__link md-nav__link--index ">
           <a href="reference/tax/">Tax</a>
           
-            <label for="__nav_3_12">
+            <label for="__nav_3_13">
               <span class="md-nav__icon md-icon"></span>
             </label>
           
         </div>
       
-      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_12_label" aria-expanded="false">
-        <label class="md-nav__title" for="__nav_3_12">
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_13_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_3_13">
           <span class="md-nav__icon md-icon"></span>
           Tax
         </label>
@@ -816,17 +832,23 @@
 </span></code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="language-ledger highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="na">2022/01/01</span> <span class="gh">Salary</span>
-</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="s">    Income:Salary:Acme</span><span class="err">      </span><span class="m">-5,000</span><span class="k">€</span>
-</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="s">    Assets:Checking</span><span class="err">          </span><span class="m">5,000</span><span class="k">€</span>
-</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>
-</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="na">2022/01/03</span> <span class="gh">Rent</span>
-</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="s">    Assets:Checking</span><span class="err">         </span><span class="m">-2,000</span><span class="k">€</span>
-</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="s">    Expenses:Rent</span>
-</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>
-</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="na">2022/01/07</span> <span class="gh">Investment</span>
-</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="s">    Assets:Checking</span><span class="err">         </span><span class="m">-1,000</span><span class="k">€</span>
-</span><span id="__span-2-11"><a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="s">    Assets:Equity:AAPL</span><span class="err">   </span><span class="m">6.452</span><span class="err"> </span><span class="k">AAPL</span><span class="err"> </span><span class="o">@</span><span class="err"> </span><span class="m">154.97</span><span class="k">€</span>
+<div class="language-ledger highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="s">commodity €</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="s">    format €1.000,00</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="s">commodity AAPL</span>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="s">    format 1.000,00 AAPL</span>
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="na">2022/01/01</span> <span class="gh">Salary</span>
+</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="s">    Income:Salary:Acme</span><span class="err">      </span><span class="k">€</span><span class="m">-5.000</span>
+</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="s">    Assets:Checking</span><span class="err">          </span><span class="k">€</span><span class="m">5.000</span>
+</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>
+</span><span id="__span-2-11"><a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="na">2022/01/03</span> <span class="gh">Rent</span>
+</span><span id="__span-2-12"><a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="s">    Assets:Checking</span><span class="err">         </span><span class="k">€</span><span class="m">-2.000</span>
+</span><span id="__span-2-13"><a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="s">    Expenses:Rent</span>
+</span><span id="__span-2-14"><a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a>
+</span><span id="__span-2-15"><a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="na">2022/01/07</span> <span class="gh">Investment</span>
+</span><span id="__span-2-16"><a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a><span class="s">    Assets:Checking</span><span class="err">      </span><span class="k">€</span><span class="m">-1.000,02</span>
+</span><span id="__span-2-17"><a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a><span class="s">    Assets:Equity:AAPL</span><span class="err">   </span><span class="m">6,453</span><span class="err"> </span><span class="k">AAPL</span><span class="err"> </span><span class="o">@</span><span class="err"> </span><span class="k">€</span><span class="m">154,97</span>
 </span></code></pre></div>
 </div>
 </div>

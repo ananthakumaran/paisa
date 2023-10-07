@@ -9,7 +9,7 @@
   /* --md-code-hl-name-color */
   /* --md-code-hl-operator-color */
   /* --md-code-hl-punctuation-color */
-  --md-code-hl-comment-color: #940;
+  --md-code-hl-comment-color: #7a7a7a;
   /* --md-code-hl-generic-color */
   --md-code-hl-variable-color: #085;
 }
@@ -23,7 +23,16 @@
   color: rgb(74, 74, 74);
 }
 
+.highlight .kn {
+  color: rgb(74, 74, 74);
+  text-decoration: underline;
+}
+
 [data-md-color-scheme="slate"] .highlight .gh {
+  color: rgb(161, 161, 161);
+}
+
+[data-md-color-scheme="slate"] .highlight .kn {
   color: rgb(161, 161, 161);
 }
 

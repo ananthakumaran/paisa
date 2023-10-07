@@ -15,7 +15,6 @@ node_modules
 !.env.example
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
-*.backup.*
 *.test
 docs/lexer/__pycache__/
 bun.lockb

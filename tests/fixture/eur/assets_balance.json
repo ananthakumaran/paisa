@@ -9,7 +9,7 @@
       "latestPrice": 0,
       "xirr": 1.76,
       "gainAmount": 1014.95,
-      "absoluteReturn": 0.1014
+      "absoluteReturn": 0.1014437708956977
     },
     "Assets:Checking": {
       "group": "Assets:Checking",
@@ -31,7 +31,7 @@
       "latestPrice": 0,
       "xirr": 2.17,
       "gainAmount": 20,
-      "absoluteReturn": 0.002
+      "absoluteReturn": 0.0019989905097926
     },
     "Assets:Equity:AAPL": {
       "group": "Assets:Equity:AAPL",
@@ -42,7 +42,7 @@
       "latestPrice": 0,
       "xirr": 2.17,
       "gainAmount": 20,
-      "absoluteReturn": 0.002
+      "absoluteReturn": 0.0019989905097926
     }
   }
 }

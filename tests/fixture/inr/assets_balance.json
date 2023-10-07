@@ -2,42 +2,42 @@
   "asset_breakdowns": {
     "Assets": {
       "group": "Assets",
-      "investmentAmount": 88025.317,
+      "investmentAmount": 88025.3170071296,
       "withdrawalAmount": 0,
       "marketAmount": 90800,
       "balanceUnits": 0,
       "latestPrice": 0,
       "xirr": 8.95,
-      "gainAmount": 2774.683,
-      "absoluteReturn": 0.0315
+      "gainAmount": 2774.6829928704,
+      "absoluteReturn": 0.0315214200551605
     },
     "Assets:Checking": {
       "group": "Assets:Checking",
       "investmentAmount": 0,
       "withdrawalAmount": 0,
-      "marketAmount": 1974.683,
+      "marketAmount": 1974.6829928704,
       "balanceUnits": -99.7652,
       "latestPrice": 0,
       "xirr": 0,
-      "gainAmount": 1974.683,
+      "gainAmount": 1974.6829928704,
       "absoluteReturn": 0
     },
     "Assets:Equity": {
       "group": "Assets:Equity",
-      "investmentAmount": 88025.317,
+      "investmentAmount": 88025.3170071296,
       "withdrawalAmount": 0,
-      "marketAmount": 88825.317,
+      "marketAmount": 88825.3170071296,
       "balanceUnits": 0,
       "latestPrice": 0,
       "xirr": 10.9,
       "gainAmount": 800,
-      "absoluteReturn": 0.0091
+      "absoluteReturn": 0.0090882944498252
     },
     "Assets:Equity:ABNB": {
       "group": "Assets:Equity:ABNB",
-      "investmentAmount": 8025.317,
+      "investmentAmount": 8025.3170071296,
       "withdrawalAmount": 0,
-      "marketAmount": 8025.317,
+      "marketAmount": 8025.3170071296,
       "balanceUnits": 0.76,
       "latestPrice": 0,
       "xirr": 0,

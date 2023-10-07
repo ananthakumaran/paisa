@@ -1,8 +1,8 @@
 {
   "budget": {
-    "availableForBudgeting": 1974.683,
+    "availableForBudgeting": 1974.6829928704,
     "budgetsByMonth": {},
-    "checkingBalance": 1974.683
+    "checkingBalance": 1974.6829928704
   },
   "cashFlows": [
     {
@@ -10,10 +10,10 @@
       "income": 110000,
       "expenses": 20000,
       "liabilities": 0,
-      "investment": 88025.317,
+      "investment": 88025.3170071296,
       "tax": 0,
-      "checking": 1974.683,
-      "balance": 1974.683
+      "checking": 1974.6829928704,
+      "balance": 1974.6829928704
     },
     {
       "date": "2022-02-01T00:00:00Z",
@@ -23,7 +23,7 @@
       "investment": 0,
       "tax": 0,
       "checking": 0,
-      "balance": 1974.683
+      "balance": 1974.6829928704
     }
   ],
   "expenses": {
@@ -51,8 +51,8 @@
   "networth": {
     "networth": {
       "date": "2022-02-07T23:59:59.999999999Z",
-      "investmentAmount": 198025.317,
-      "withdrawalAmount": 108025.317,
+      "investmentAmount": 198025.3170071296,
+      "withdrawalAmount": 108025.3170071296,
       "gainAmount": 800,
       "balanceAmount": 90800,
       "netInvestmentAmount": 90000
@@ -74,7 +74,7 @@
           "account": "Assets:Equity:ABNB",
           "commodity": "ABNB",
           "quantity": 0.76,
-          "amount": 8025.317,
+          "amount": 8025.3170071296,
           "status": "unmarked",
           "tag_recurring": "",
           "tag_period": "",
@@ -92,7 +92,7 @@
           "account": "Assets:Checking",
           "commodity": "USD",
           "quantity": -99.7652,
-          "amount": -8025.317,
+          "amount": -8025.3170071296,
           "status": "unmarked",
           "tag_recurring": "",
           "tag_period": "",

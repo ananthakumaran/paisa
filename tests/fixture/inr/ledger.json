@@ -8,7 +8,7 @@
       "account": "Assets:Equity:ABNB",
       "commodity": "ABNB",
       "quantity": 0.76,
-      "amount": 8025.317,
+      "amount": 8025.3170071296,
       "status": "unmarked",
       "tag_recurring": "",
       "tag_period": "",
@@ -16,7 +16,7 @@
       "transaction_end_line": 27,
       "file_name": "main.ledger",
       "forecast": false,
-      "market_amount": 8025.317
+      "market_amount": 8025.3170071296
     },
     {
       "id": 8,
@@ -44,7 +44,7 @@
       "account": "Assets:Checking",
       "commodity": "USD",
       "quantity": -99.7652,
-      "amount": -8025.317,
+      "amount": -8025.3170071296,
       "status": "unmarked",
       "tag_recurring": "",
       "tag_period": "",
@@ -52,7 +52,7 @@
       "transaction_end_line": 27,
       "file_name": "main.ledger",
       "forecast": false,
-      "market_amount": -8025.317
+      "market_amount": -8025.3170071296
     },
     {
       "id": 7,

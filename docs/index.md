@@ -43,17 +43,23 @@ hide:
 === ":fontawesome-solid-euro-sign: EURO"
 
     ```ledger
+    commodity €
+        format €1.000,00
+
+    commodity AAPL
+        format 1.000,00 AAPL
+
     2022/01/01 Salary
-        Income:Salary:Acme      -5,000€
-        Assets:Checking          5,000€
+        Income:Salary:Acme      €-5.000
+        Assets:Checking          €5.000
 
     2022/01/03 Rent
-        Assets:Checking         -2,000€
+        Assets:Checking         €-2.000
         Expenses:Rent
 
     2022/01/07 Investment
-        Assets:Checking         -1,000€
-        Assets:Equity:AAPL   6.452 AAPL @ 154.97€
+        Assets:Checking      €-1.000,02
+        Assets:Equity:AAPL   6,453 AAPL @ €154,97
     ```
 
 

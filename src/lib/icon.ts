@@ -31,8 +31,6 @@ const ICON_LOOKUP: IconLookup[] = [
   { symbol: "fa6-solid:ring", words: ["gold"] },
   { symbol: "fa6-solid:house", words: ["realest", "hous", "homeloan"] },
   { symbol: "fa6-solid:credit-card", words: ["liabil"] },
-  { symbol: "fa6-brands:cc-visa", words: ["idfc"] },
-  { symbol: "fa6-brands:cc-amazon-pay", words: ["icici"] },
   { symbol: "fa6-solid:wallet", words: ["expens"] },
   { symbol: "fa6-solid:building", words: ["incom"] },
   { symbol: "fa6-solid:gift", words: ["gift", "reward"] },

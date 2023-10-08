@@ -7,7 +7,6 @@ $fa-font-path: "../node_modules/@fortawesome/fontawesome-free/webfonts";
 @import "@fortawesome/fontawesome-free/scss/fontawesome.scss";
 @import "@fortawesome/fontawesome-free/scss/regular.scss";
 @import "@fortawesome/fontawesome-free/scss/solid.scss";
-@import "@fortawesome/fontawesome-free/scss/brands.scss";
 
 @font-face {
   font-family: "Font Awesome 6 Free Solid";
@@ -15,14 +14,6 @@ $fa-font-path: "../node_modules/@fortawesome/fontawesome-free/webfonts";
   font-weight: 900;
   font-display: $fa-font-display;
   src: url("#{$fa-font-path}/fa-solid-900.woff2") format("woff2");
-}
-
-@font-face {
-  font-family: "Font Awesome 6 Free Brands";
-  font-style: normal;
-  font-weight: 900;
-  font-display: $fa-font-display;
-  src: url("#{$fa-font-path}/fa-brands-400.woff2") format("woff2");
 }
 
 $paisa-font-path: "../fonts";

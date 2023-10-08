@@ -70,7 +70,7 @@
               </tbody>
             </table>
           </div>
-          <div class="column is-8">
+          <div class="column is-8 overflow-x-auto">
             <table class="table is-narrow is-fullwidth is-hoverable">
               <thead>
                 <tr>

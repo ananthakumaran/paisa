@@ -17,6 +17,7 @@ var DEFAULT_PATH = []string{
 	"/usr/local/bin",
 	"/sbin",
 	"/usr/sbin",
+	"/opt/homebrew/bin",
 }
 
 var cachedLedgerBinaryPath string

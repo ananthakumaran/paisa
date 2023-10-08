@@ -6,7 +6,8 @@ import {
   type CashFlow,
   skipTicks,
   lastName,
-  parentName
+  parentName,
+  rem
 } from "$lib/utils";
 import legend from "d3-svg-legend";
 import * as d3 from "d3";
@@ -29,9 +30,14 @@ export function renderMonthlyFlow(
     balance: 0
   }
 ) {
-  const MAX_BAR_WIDTH = 20;
+  const MAX_BAR_WIDTH = rem(20);
   const svg = d3.select(id),
-    margin = { top: 50, right: 30, bottom: options.rotate ? 50 : 20, left: 40 },
+    margin = {
+      top: rem(50),
+      right: rem(30),
+      bottom: options.rotate ? rem(50) : rem(20),
+      left: rem(40)
+    },
     width =
       document.getElementById(id.substring(1)).parentElement.clientWidth -
       margin.left -
@@ -283,9 +289,9 @@ export function renderMonthlyFlow(
 export function renderFlow(graph: Graph, cashflowType: string) {
   const id = "#d3-expense-flow";
   const svg = d3.select(id);
-  const margin = { top: 60, right: 40, bottom: 40, left: 40 },
+  const margin = { top: rem(60), right: rem(20), bottom: rem(40), left: rem(20) },
     width =
-      document.getElementById(id.substring(1)).parentElement.clientWidth -
+      Math.max(document.getElementById(id.substring(1)).parentElement.clientWidth, 1000) -
       margin.left -
       margin.right,
     height = +svg.attr("height") - margin.top - margin.bottom;
@@ -310,7 +316,7 @@ export function renderFlow(graph: Graph, cashflowType: string) {
     .legendColor()
     .shape("rect")
     .orient("horizontal")
-    .shapePadding(50)
+    .shapePadding(rem(50))
     .labels(accounts)
     .scale(color);
 
@@ -323,7 +329,7 @@ export function renderFlow(graph: Graph, cashflowType: string) {
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
   const sankey = sankeyCircular()
-    .nodeWidth(20)
+    .nodeWidth(rem(20))
     .nodePaddingRatio(0.7)
     .size([width, height])
     .nodeId((d: Node) => d.id)
@@ -342,7 +348,7 @@ export function renderFlow(graph: Graph, cashflowType: string) {
     .append("g")
     .attr("class", "nodes")
     .attr("font-family", "sans-serif")
-    .attr("font-size", 10)
+    .attr("font-size", "0.754rem")
     .selectAll("g");
 
   const sankeyData = sankey(graph);

@@ -10,7 +10,8 @@ import {
   formatFloat,
   tooltip,
   type Forecast,
-  type Point
+  type Point,
+  rem
 } from "./utils";
 
 export function renderProgress(
@@ -25,10 +26,12 @@ export function renderProgress(
   const positions = _.map(points.concat(predictions), (p) => p.value);
 
   const svg = d3.select(element),
-    margin = { top: 40, right: 80, bottom: 20, left: 40 },
-    width = element.parentElement.clientWidth - margin.left - margin.right,
+    margin = { top: rem(40), right: rem(80), bottom: rem(20), left: rem(40) },
+    width = Math.max(element.parentElement.clientWidth, 1000) - margin.left - margin.right,
     height = +svg.attr("height") - margin.top - margin.bottom,
     g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+  svg.attr("width", width + margin.left + margin.right);
 
   const lineKeys = ["actual", "forecast"];
   const lineScale = d3

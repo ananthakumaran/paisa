@@ -1,0 +1,9 @@
+@import "bulma/sass/utilities/_all.sass";
+
+:root {
+  font-size: 12px;
+
+  @include desktop {
+    font-size: 14px;
+  }
+}

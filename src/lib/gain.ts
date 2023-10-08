@@ -15,7 +15,8 @@ import {
   tooltip,
   skipTicks,
   restName,
-  type Posting
+  type Posting,
+  rem
 } from "./utils";
 import { goto } from "$app/navigation";
 
@@ -30,17 +31,19 @@ const typeScale = d3
 
 export function renderOverview(gains: Gain[]) {
   gains = _.sortBy(gains, (g) => g.account);
-  const BAR_HEIGHT = 15;
+  const BAR_HEIGHT = rem(15);
   const id = "#d3-gain-overview";
   const svg = d3.select(id),
-    margin = { top: 20, right: 20, bottom: 10, left: 150 },
+    margin = { top: rem(20), right: rem(20), bottom: rem(10), left: rem(150) },
     width =
-      document.getElementById(id.substring(1)).parentElement.clientWidth -
+      Math.max(document.getElementById(id.substring(1)).parentElement.clientWidth, 1000) -
       margin.left -
       margin.right,
     height = gains.length * BAR_HEIGHT * 2,
     g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
   svg.attr("height", height + margin.top + margin.bottom);
+
+  svg.attr("width", width + margin.left + margin.right);
 
   const y = d3.scaleBand().range([0, height]).paddingInner(0).paddingOuter(0);
   y.domain(gains.map((g) => restName(g.account)));
@@ -73,10 +76,10 @@ export function renderOverview(gains: Gain[]) {
     .map((g) => getInvestmentAmount(g) + _.max([getGainAmount(g), 0]))
     .max()
     .value();
-  const xirrWidth = 250;
-  const xirrTextWidth = 40;
-  const xirrMargin = 20;
-  const textGroupWidth = 225;
+  const xirrWidth = rem(250);
+  const xirrTextWidth = rem(40);
+  const xirrMargin = rem(20);
+  const textGroupWidth = rem(225);
   const textGroupZero = xirrWidth + xirrTextWidth + xirrMargin;
 
   const x = d3.scaleLinear().range([textGroupZero + textGroupWidth, width]);

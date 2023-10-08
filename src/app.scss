@@ -1,7 +1,7 @@
+$body-size: 14px;
+
 $family-sans-serif: "Roboto Flex Variable", sans-serif, "Font Awesome 6 Free Solid";
-
 $family-sans-serif-icon: "Roboto Flex Variable", sans-serif, "Paisa";
-
 $family-monospace: "Roboto Mono Variable", monospace;
 
 $box-radius: 4px;
@@ -78,7 +78,6 @@ $editor-full-height: calc(100vh - 21px - 57.75px - 10.5px);
 
 html,
 body {
-  font-size: 14px;
   background: $white-bis;
 }
 
@@ -95,7 +94,7 @@ code {
 }
 
 .inline-text text {
-  font-size: 12px;
+  font-size: 0.857rem;
   font-weight: bold;
 }
 
@@ -200,17 +199,17 @@ svg text {
 
   &.dark text {
     fill: $grey;
-    font-size: 12px;
+    font-size: 0.857rem;
   }
 
   &.link text {
     fill: $link;
-    font-size: 12px;
+    font-size: 0.857rem;
     cursor: pointer;
   }
 
   text {
-    font-size: 10px;
+    font-size: 0.714rem;
     fill: $grey-light;
   }
 
@@ -260,7 +259,7 @@ svg text {
 .legendLine {
   .label {
     display: block;
-    font-size: 11px;
+    font-size: 0.785rem;
     text-transform: capitalize;
     font-weight: normal;
     color: $grey;
@@ -278,7 +277,7 @@ svg text {
 #d3-income-timeline .legendOrdinal .label,
 #d3-repayment-timeline .legendOrdinal .label,
 #d3-breakdown .legendOrdinal .label {
-  font-size: 10px;
+  font-size: 0.857rem;
 }
 
 #d3-salary-timeline .x.axis > g.tick {
@@ -320,7 +319,7 @@ svg text {
   border-bottom: 1px solid $grey-light;
   box-shadow: none;
   width: 80px;
-  font-size: 1em !important;
+  font-size: 1rem !important;
   margin-left: 5px;
   padding-top: 0;
   padding-bottom: 0;
@@ -395,8 +394,8 @@ svg text {
 }
 
 .container.is-fluid {
-  padding-left: 24px;
-  padding-right: 24px;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
 }
 
 .level-item p.title {
@@ -499,7 +498,7 @@ nav.level.grid-2 {
   .cm-diagnostic {
     background: $white !important;
     color: $black-ter;
-    font-size: 14px;
+    font-size: 1rem;
     box-shadow: $shadow;
   }
 
@@ -512,7 +511,7 @@ nav.level.grid-2 {
       @include control;
       background: $white;
       border: 1px solid $grey-lighter;
-      font-size: 12px;
+      font-size: 0.875rem;
     }
 
     .cm-textfield {
@@ -534,7 +533,7 @@ nav.level.grid-2 {
     }
 
     [name="close"] {
-      font-size: 14px;
+      font-size: 1rem;
       color: $black;
     }
   }
@@ -595,7 +594,10 @@ nav.level.grid-2 {
   border-radius: $radius;
   background: $white;
   padding: 2px 5px;
-  width: 800px;
+  width: calc(100vw - 20px);
+  @include desktop {
+    width: 800px;
+  }
 }
 
 .full-height {
@@ -609,7 +611,7 @@ nav.level.grid-2 {
 .cm-scroller {
   overflow: auto;
   font-family: $family-monospace !important;
-  font-size: 13px;
+  font-size: 0.928rem;
 }
 
 .cm-focused {
@@ -626,7 +628,7 @@ nav.level.grid-2 {
 
 .svelte-select {
   --chevron-color: hsl(229deg, 53%, 53%);
-  --font-size: 14px;
+  --font-size: 1rem;
   --background: #{$white};
   --list-background: #{$white};
   --item-hover-bg: #{$white-bis};
@@ -653,7 +655,7 @@ nav.level.grid-2 {
 }
 
 .sc-carousel-dots__dot-container {
-  margin-top: 10px;
+  margin-top: 0.714em;
 }
 
 .sc-carousel-button.sc-carousel-dot__dot {
@@ -682,7 +684,7 @@ nav.level.grid-2 {
 }
 
 .custom-arrow {
-  width: 25px;
+  width: 1.5rem;
   position: absolute;
   top: 0;
   bottom: 0;
@@ -693,10 +695,11 @@ nav.level.grid-2 {
   justify-content: center;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
-  background-color: $white-bis;
+  background-color: $white-ter;
+  opacity: 0.5;
 
   &:hover {
-    background-color: $white-ter;
+    opacity: 1;
   }
 }
 

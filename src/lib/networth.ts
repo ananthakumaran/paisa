@@ -26,9 +26,11 @@ export function renderNetworth(points: Networth[], element: Element): () => void
 
   const right = isMobile() ? 10 : 80,
     margin = { top: 40, right: right, bottom: 20, left: 40 },
-    width = element.parentElement.clientWidth - margin.left - margin.right,
+    width = Math.max(element.parentElement.clientWidth, 800) - margin.left - margin.right,
     height = +svg.attr("height") - margin.top - margin.bottom,
     g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+  svg.attr("width", width + margin.left + margin.right);
 
   const areaKeys = ["gain", "loss"];
   const colors = [COLORS.gain, COLORS.loss];

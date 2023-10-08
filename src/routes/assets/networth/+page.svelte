@@ -72,11 +72,11 @@
   <div class="container is-fluid">
     <div class="columns">
       <div class="column is-12">
-        <div class="box">
+        <div class="box overflow-x-auto">
           <ZeroState item={points}>
             <strong>Oops!</strong> You have no transactions.
           </ZeroState>
-          <svg id="d3-networth-timeline" width="100%" height="500" bind:this={svg} />
+          <svg id="d3-networth-timeline" height="500" bind:this={svg} />
         </div>
       </div>
     </div>
@@ -86,11 +86,6 @@
           <p class="heading">Networth Timeline</p>
         </div>
       </div>
-    </div>
-  </div>
-  <div class="container is-fluid">
-    <div class="columns">
-      <div id="d3-networth-timeline-breakdown" class="column is-12" />
     </div>
   </div>
 </section>

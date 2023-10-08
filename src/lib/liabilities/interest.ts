@@ -12,7 +12,8 @@ import {
   type InterestOverview,
   tooltip,
   skipTicks,
-  restName
+  restName,
+  rem
 } from "$lib/utils";
 
 const areaKeys = ["gain", "loss"];
@@ -61,17 +62,19 @@ function renderTable(interest: Interest) {
 
 export function renderOverview(gains: Interest[]) {
   gains = _.sortBy(gains, (g) => g.account);
-  const BAR_HEIGHT = 15;
+  const BAR_HEIGHT = rem(15);
   const id = "#d3-interest-overview";
   const svg = d3.select(id),
-    margin = { top: 5, right: 20, bottom: 30, left: 150 },
+    margin = { top: rem(5), right: rem(20), bottom: rem(30), left: rem(150) },
     width =
-      document.getElementById(id.substring(1)).parentElement.clientWidth -
+      Math.max(document.getElementById(id.substring(1)).parentElement.clientWidth, 850) -
       margin.left -
       margin.right,
     height = gains.length * BAR_HEIGHT * 2,
     g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
   svg.attr("height", height + margin.top + margin.bottom);
+
+  svg.attr("width", width + margin.left + margin.right);
 
   const y = d3.scaleBand().range([0, height]).paddingInner(0).paddingOuter(0);
   y.domain(gains.map((g) => restName(g.account)));
@@ -107,10 +110,10 @@ export function renderOverview(gains: Interest[]) {
     .map((g) => getDrawnAmount(g) + _.max([getInterestAmount(g), 0]))
     .max()
     .value();
-  const aprWidth = 250;
-  const aprTextWidth = 40;
-  const aprMargin = 20;
-  const textGroupWidth = 225;
+  const aprWidth = rem(250);
+  const aprTextWidth = rem(40);
+  const aprMargin = rem(20);
+  const textGroupWidth = rem(225);
   const textGroupZero = aprWidth + aprTextWidth + aprMargin;
 
   const x = d3.scaleLinear().range([textGroupZero + textGroupWidth, width]);
@@ -375,9 +378,8 @@ export function renderPerAccountOverview(interests: Interest[]) {
   const rightColumn = columns.append("div").attr("class", "column");
   rightColumn
     .append("div")
-    .attr("class", "box")
+    .attr("class", "box overflow-x-auto")
     .append("svg")
-    .attr("width", "100%")
     .attr("height", "150")
     .each(function (gain) {
       renderOverviewSmall(gain.overview_timeline, this, [start, end]);
@@ -391,9 +393,11 @@ function renderOverviewSmall(
 ) {
   const svg = d3.select(element),
     margin = { top: 5, right: 80, bottom: 20, left: 40 },
-    width = element.parentElement.clientWidth - margin.left - margin.right,
+    width = Math.max(element.parentElement.clientWidth, 800) - margin.left - margin.right,
     height = +svg.attr("height") - margin.top - margin.bottom,
     g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+  svg.attr("width", width + margin.left + margin.right);
 
   const x = d3.scaleTime().range([0, width]).domain(xDomain),
     y = d3

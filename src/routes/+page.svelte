@@ -248,7 +248,7 @@
                   <div class="content box">
                     <div
                       class="is-flex is-justify-content-flex-start is-flex-wrap-wrap"
-                      style="overflow: hidden; max-height: 190px"
+                      style="overflow: hidden; max-height: 13.571rem;"
                     >
                       {#each transactionSequences as ts (ts)}
                         <UpcomingCard transactionSequece={ts} />

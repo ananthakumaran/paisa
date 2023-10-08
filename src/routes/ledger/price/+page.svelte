@@ -19,7 +19,7 @@
   <div class="container is-fluid">
     <div class="columns">
       <div class="column is-12">
-        <div class="box">
+        <div class="box overflow-x-auto">
           <table class="table is-narrow is-fullwidth">
             <thead>
               <tr>

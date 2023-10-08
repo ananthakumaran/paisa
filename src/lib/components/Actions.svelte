@@ -1,5 +1,6 @@
 <script lang="ts">
   import { sync } from "$lib/sync";
+  import { isMobile } from "$lib/utils";
   import { refresh } from "../../store";
 
   let isLoading = false;
@@ -25,7 +26,7 @@
   }
 </script>
 
-<div class="dropdown is-right" class:is-hoverable={!isLoading}>
+<div class="dropdown {isMobile() ? 'is-left' : 'is-right'}" class:is-hoverable={!isLoading}>
   <div class="dropdown-trigger">
     <button class:is-loading={isLoading} class="button is-small" aria-haspopup="true">
       <span class="icon is-small">

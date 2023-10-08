@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { ajax, type LedgerFile, type Transaction as T } from "$lib/utils";
+  import { ajax, isMobile, type LedgerFile, type Transaction as T } from "$lib/utils";
   import _ from "lodash";
   import { onDestroy, onMount } from "svelte";
   import VirtualList from "svelte-tiny-virtual-list";
@@ -45,9 +45,12 @@
     unsubscribe();
   });
 
+  const mobile = isMobile();
+
   const itemSize = (i: number) => {
     const t = filtered[i];
-    return 8 + Math.max(credits(t).length, debits(t).length) * 22;
+    const count = mobile ? t.postings.length : Math.max(credits(t).length, debits(t).length);
+    return 8 + count * 22 + (mobile ? 25 : 0);
   };
 
   async function loadTransactions() {

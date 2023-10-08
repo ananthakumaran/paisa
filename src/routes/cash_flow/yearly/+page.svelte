@@ -79,7 +79,7 @@
   <div class="container is-fluid">
     <div class="columns">
       <div class="column is-12">
-        <div class="box">
+        <div class="box overflow-x-auto">
           <ZeroState item={!isEmpty}
             ><strong>Oops!</strong> You have not made any transactions for the selected year.</ZeroState
           >

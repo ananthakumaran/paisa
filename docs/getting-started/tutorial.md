@@ -175,7 +175,7 @@ bot side. If you leave one side, **ledger** will deduct it.
 
 All the configuration related to paisa is stored in a yaml file named
 `paisa.yaml`. The configuration can be edited via the web interface. The
-sequence in which it look for the file is described below
+sequence in which it looks for the file is described below
 
 1. `PAISA_CONFIG` environment variable
 1. via `--config` flag

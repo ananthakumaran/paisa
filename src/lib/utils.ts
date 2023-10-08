@@ -866,7 +866,15 @@ export function tooltip(
 }
 
 export function isMobile() {
-  return window.innerWidth < 1024;
+  return window.innerWidth < 769;
+}
+
+export function rem(value: number) {
+  if (isMobile()) {
+    return value * 0.857;
+  } else {
+    return value;
+  }
 }
 
 export function financialYear(date: dayjs.Dayjs) {

@@ -90,9 +90,9 @@
     </div>
     <div class="columns">
       <div class="column is-12 has-text-centered">
-        <div class="box mb-2">
+        <div class="box mb-2 overflow-x-auto">
           <div id="d3-portfolio-security-type-treemap" style="width: 100%; position: relative" />
-          <svg id="d3-portfolio-security-type" width="100%" />
+          <svg id="d3-portfolio-security-type" />
         </div>
         <div class="has-text-centered">
           <p class="heading">Security Type</p>
@@ -101,9 +101,9 @@
     </div>
     <div class="columns">
       <div class="column is-12 has-text-centered">
-        <div class="box mb-2">
+        <div class="box mb-2 overflow-x-auto">
           <div id="d3-portfolio-security-rating-treemap" style="width: 100%; position: relative" />
-          <svg id="d3-portfolio-security-rating" width="100%" />
+          <svg id="d3-portfolio-security-rating" />
         </div>
         <div class="has-text-centered">
           <p class="heading">Security Rating</p>
@@ -112,12 +112,12 @@
     </div>
     <div class="columns">
       <div class="column is-12 has-text-centered">
-        <div class="box mb-2">
+        <div class="box mb-2 overflow-x-auto">
           <div
             id="d3-portfolio-security-industry-treemap"
             style="width: 100%; position: relative"
           />
-          <svg id="d3-portfolio-security-industry" width="100%" />
+          <svg id="d3-portfolio-security-industry" />
         </div>
         <div class="has-text-centered">
           <p class="heading">Industry</p>
@@ -126,9 +126,9 @@
     </div>
     <div class="columns">
       <div class="column is-12 has-text-centered">
-        <div class="box mb-2">
+        <div class="box mb-2 overflow-x-auto">
           <div id="d3-portfolio-treemap" style="width: 100%; position: relative" />
-          <svg id="d3-portfolio" width="100%" />
+          <svg id="d3-portfolio" />
         </div>
         <div class="has-text-centered">
           <p class="heading">Security</p>

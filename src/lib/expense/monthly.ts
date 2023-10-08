@@ -13,7 +13,8 @@ import {
   tooltip,
   restName,
   firstName,
-  monthDays
+  monthDays,
+  rem
 } from "$lib/utils";
 import COLORS, { generateColorScheme, white } from "$lib/colors";
 import { get, type Readable, type Writable } from "svelte/store";
@@ -135,9 +136,9 @@ export function renderMonthlyExpensesTimeline(
 ) {
   const id = "#d3-monthly-expense-timeline";
   const timeFormat = "MMM-YYYY";
-  const MAX_BAR_WIDTH = 40;
+  const MAX_BAR_WIDTH = rem(40);
   const svg = d3.select(id),
-    margin = { top: 40, right: 30, bottom: 60, left: 40 },
+    margin = { top: rem(60), right: rem(30), bottom: rem(60), left: rem(40) },
     width =
       document.getElementById(id.substring(1)).parentElement.clientWidth -
       margin.left -
@@ -382,7 +383,7 @@ export function renderMonthlyExpensesTimeline(
 
   const destroy = dateRangeStore.subscribe((dateRange) => render(get(groupsStore), dateRange));
 
-  svg.append("g").attr("class", "legendOrdinal").attr("transform", "translate(40,0)");
+  svg.append("g").attr("class", "legendOrdinal").attr("transform", `translate(${margin.top},0)`);
 
   const legendOrdinal = legend
     .legendColor()
@@ -413,9 +414,10 @@ export function renderMonthlyExpensesTimeline(
 
 export function renderCurrentExpensesBreakdown(z: d3.ScaleOrdinal<string, string, never>) {
   const id = "#d3-current-month-breakdown";
-  const BAR_HEIGHT = 20;
+  const BAR_HEIGHT = rem(20);
+  const TEXT_WIDTH = rem(135);
   const svg = d3.select(id),
-    margin = { top: 0, right: 160, bottom: 20, left: 100 },
+    margin = { top: 0, right: rem(160), bottom: rem(20), left: rem(100) },
     width =
       document.getElementById(id.substring(1)).parentElement.clientWidth -
       margin.left -
@@ -540,9 +542,9 @@ export function renderCurrentExpensesBreakdown(z: d3.ScaleOrdinal<string, string
             .attr("y", function (d) {
               return y(d.category) + y.bandwidth() / 2;
             })
-            .attr("x", width + 135)
+            .attr("x", width + TEXT_WIDTH)
             .style("white-space", "pre")
-            .style("font-size", "13px")
+            .style("font-size", "0.928rem")
             .style("font-weight", "bold")
             .style("fill", function (d) {
               return chroma(z(d.category)).darken(0.8).hex();

@@ -37,9 +37,9 @@
   <div class="container is-fluid">
     <div class="columns">
       <div class="column is-12 has-text-centered">
-        <div class="box">
+        <div class="box overflow-x-auto">
           <div id="d3-allocation-target-treemap" style="width: 100%; position: relative" />
-          <svg id="d3-allocation-target" width="100%" />
+          <svg id="d3-allocation-target" />
         </div>
       </div>
     </div>

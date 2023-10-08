@@ -42,7 +42,7 @@
   class="budget-card box px-2 pt-2 pb-2 my-2 has-background-white"
   data-tippy-content={_.isEmpty(accountBudget.expenses) ? null : tooltipContent}
 >
-  <div class="is-flex is-justify-content-space-between">
+  <div class="md:flex is-justify-content-space-between">
     <div class="has-text-weight-bold ml-2 truncate custom-icon" title={accountBudget.account}>
       {iconify(restName(accountBudget.account), { group: firstName(accountBudget.account) })}
     </div>

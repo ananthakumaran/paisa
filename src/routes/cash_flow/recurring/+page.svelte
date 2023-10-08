@@ -7,6 +7,7 @@
   import {
     ajax,
     helpUrl,
+    isMobile,
     monthDays,
     type TransactionSchedule,
     type TransactionSequence
@@ -58,7 +59,7 @@
     <div class="columns" class:is-hidden={isEmpty}>
       <div class="column is-12">
         <div
-          class="has-text-centered grid grid-cols-7 auto-cols-[1fr] auto-rows-[1fr] weekdays-grid uppercase mb-3"
+          class="has-text-centered grid grid-cols-7 auto-cols-[1fr] auto-rows-[1fr] weekdays-grid uppercase mb-3 is-hidden-mobile"
         >
           <div>Sun</div>
           <div>Mon</div>
@@ -69,8 +70,8 @@
           <div>Sat</div>
         </div>
         <div
-          class="grid grid-cols-7 gap-2 auto-cols-[1fr] auto-rows-[1fr] overflow-y-auto"
-          style="height: calc(100vh - 150px);"
+          class="grid grid-cols-1 md:grid-cols-7 gap-2 auto-cols-[1fr] auto-rows-[1fr] overflow-y-auto"
+          style={isMobile() ? "" : "height: calc(100vh - 150px);"}
         >
           {#each days as day (day)}
             <RecurringDay

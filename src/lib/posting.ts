@@ -49,7 +49,7 @@ export function renderPostings(postings: Posting[]) {
 
     const markup = `
 <tr>
-       <td>${date}</td>
+       <td class='whitespace-nowrap'>${date}</td>
        <td class='is-size-7' style='vertical-align: middle'>${postingStatus}<a class="secondary-link" href=${postingUrl(
          p
        )}>${p.payee}</a></td>

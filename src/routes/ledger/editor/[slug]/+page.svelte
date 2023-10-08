@@ -188,7 +188,7 @@
   <div class="container is-fluid">
     <div class="columuns">
       <div class="column is-12 px-0 pt-0 mb-2">
-        <div class="box p-3 is-flex is-align-items-center" style="width: 100%">
+        <div class="box p-3 is-flex is-align-items-center overflow-x-auto" style="width: 100%">
           <div class="field has-addons mb-0">
             <p class="control">
               <button
@@ -301,7 +301,7 @@
     <div class="columns">
       <div class="column is-3-widescreen is-2-fullhd is-4">
         <div class="box px-2">
-          <aside class="menu full-height">
+          <aside class="menu full-height overflow-y-auto">
             <FileTree
               on:select={(e) => selectFile(e.detail)}
               files={buildLedgerTree(_.values(filesMap))}

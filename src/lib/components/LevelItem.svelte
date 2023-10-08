@@ -25,7 +25,7 @@
 <style lang="scss">
   .heading {
     font-weight: 400 !important;
-    font-size: 14px !important;
+    font-size: 1rem !important;
     text-transform: capitalize !important;
     letter-spacing: normal !important;
     margin-bottom: 0 !important;

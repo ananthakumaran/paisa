@@ -496,7 +496,7 @@ export function renderCurrentExpensesBreakdown(z: d3.ScaleOrdinal<string, string
             })
             .attr("x", width + 135)
             .style("white-space", "pre")
-            .style("font-size", "13px")
+            .style("font-size", "0.928rem")
             .style("font-weight", "bold")
             .style("fill", function (d) {
               return chroma(z(d.category)).darken(0.8).hex();

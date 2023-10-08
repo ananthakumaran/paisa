@@ -23,8 +23,8 @@
   <div class="container is-fluid">
     <div class="columns">
       <div class="column is-12">
-        <div class="box">
-          <svg id="d3-gain-overview" width="100%" />
+        <div class="box overflow-x-auto">
+          <svg id="d3-gain-overview" />
         </div>
       </div>
     </div>

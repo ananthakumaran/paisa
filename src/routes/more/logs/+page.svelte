@@ -36,7 +36,7 @@
       <div class="column is-12">
         <div class="columns">
           <div class="column is-12">
-            <div class="box px-2">
+            <div class="box px-2 overflow-x-auto">
               <VirtualList
                 width="100%"
                 height={window.innerHeight - 130}
@@ -46,7 +46,7 @@
                 <div slot="item" let:index let:style {style}>
                   {@const log = logs[index]}
                   {@const fields = _.omit(log, ["time", "level", "msg"])}
-                  <div class="is-flex log is-align-items-baseline">
+                  <div class="is-flex log is-align-items-baseline" style="min-width: 1000px;">
                     <div class="time is-size-7">{log.time.format("YYYY-MM-DD HH:mm:ss")}</div>
                     <div
                       class="is-size-7 tag is-small is-light invertable py-0 log-level {levelClass(

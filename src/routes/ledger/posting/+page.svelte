@@ -25,14 +25,10 @@
         <nav class="level">
           <div class="level-left">
             <div class="level-item">
-              <p class="subtitle is-5">Postings</p>
-            </div>
-            <div class="level-item">
               <div class="field">
                 <p class="control">
                   <input
                     class="d3-posting-filter input"
-                    style="width: 440px"
                     type="text"
                     placeholder="filter by account or description or date"
                     on:input={handleInput}
@@ -74,3 +70,14 @@
     </div>
   </div>
 </section>
+
+<style lang="scss">
+  @import "bulma/sass/utilities/_all.sass";
+  .d3-posting-filter {
+    width: calc(100vw - 35px);
+
+    @include desktop {
+      width: 440px;
+    }
+  }
+</style>

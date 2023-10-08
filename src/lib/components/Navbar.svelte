@@ -181,7 +181,7 @@
   }
 </script>
 
-<nav class="navbar px-3 is-transparent" aria-label="main navigation">
+<nav class="navbar px-2 is-transparent" aria-label="main navigation">
   <div class="navbar-brand">
     <a
       href="/"
@@ -261,7 +261,7 @@
         {/if}
       {/each}
     </div>
-    <div class="navbar-end">
+    <div class="navbar-end" style="margin-right: 0.3em">
       <div class="navbar-item">
         <div class="field is-grouped">
           {#if readonly}
@@ -288,7 +288,7 @@
 <div class="mt-2 px-3 is-flex is-justify-content-space-between">
   {#if selectedLink}
     <nav
-      style="margin-left: 12px;"
+      style="margin-left: 0.73rem;"
       class="breadcrumb has-chevron-separator mb-0 is-small"
       aria-label="breadcrumbs"
     >
@@ -348,11 +348,11 @@
     {#if selectedSubLink?.recurringIcons}
       <div class="flex gap-5 items-center has-text-grey">
         {#each RecurringIcons as icon}
-          <div>
+          <div data-tippy-content="<p>{icon.label}</p>">
             <span class="icon is-small has-text-{icon.color}">
               <i class={"fas " + icon.icon} />
             </span>
-            <span>{icon.label}</span>
+            <span class="is-hidden-mobile">{icon.label}</span>
           </div>
         {/each}
       </div>
@@ -377,7 +377,7 @@
             </span>
           </button>
         </div>
-        <div class="dropdown-menu" id="dropdown-menu4" role="menu">
+        <div class="dropdown-menu" role="menu">
           <div class="dropdown-content px-2 py-2">
             <InputRange
               label="Expenses"

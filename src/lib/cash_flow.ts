@@ -5,7 +5,8 @@ import {
   restName,
   type CashFlow,
   skipTicks,
-  lastName
+  lastName,
+  parentName
 } from "$lib/utils";
 import legend from "d3-svg-legend";
 import * as d3 from "d3";
@@ -394,12 +395,7 @@ export function renderFlow(graph: Graph, cashflowType: string) {
       return "middle";
     })
     .classed("svg-text-grey-dark", true)
-    .text(
-      (d: any) =>
-        `${iconify(name(d, cashflowType), { group: firstName(d.name) })} ${formatCurrencyCrude(
-          d.value
-        )}`
-    );
+    .text((d: any) => `${name(d, cashflowType)} ${formatCurrencyCrude(d.value)}`);
 
   const link = linkG.data(sankeyLinks).enter().append("g");
 
@@ -428,11 +424,17 @@ export function renderFlow(graph: Graph, cashflowType: string) {
 }
 
 function name(node: Node, cashflowType: string) {
+  let name: string, group: string;
   if (
     cashflowType === "hierarchy" &&
     (node.name.startsWith("Income") || node.name.startsWith("Expenses"))
   ) {
-    return lastName(node.name);
+    name = lastName(node.name);
+    group = parentName(node.name);
+  } else {
+    name = restName(node.name);
+    group = firstName(node.name);
   }
-  return restName(node.name);
+
+  return iconify(name, { group: group });
 }

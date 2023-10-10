@@ -316,7 +316,7 @@ const COLORS = {
   assets: MaterialUI.lightblue.a400,
   expenses: MaterialUI.red.a400,
   income: MaterialUI.lime.a700,
-  liabilities: MaterialUI.amber.a400,
+  liabilities: MaterialUI.amber.a700,
   equity: MaterialUI.purple.a400
 };
 export default COLORS;
@@ -405,14 +405,31 @@ export function genericBarColor() {
   return getColorPreference() == "dark" ? "hsl(215, 18%, 15%)" : "hsl(0, 0%, 91%)";
 }
 
-export function accountColor(account: string) {
+const OPACITY: Record<string, Record<string, number>> = {
+  dark: {
+    assets: 0.6,
+    expenses: 0.5,
+    income: 0.6,
+    liabilities: 0.6
+  },
+  light: {
+    assets: 0.8,
+    expenses: 0.7,
+    income: 1,
+    liabilities: 1
+  }
+};
+
+export function accountColorStyle(account: string) {
   const normalized = account.toLowerCase();
+  const opacity = OPACITY[getColorPreference()]?.[normalized] || 1.0;
+  let color = "hsl(0, 0%, 48%)";
 
   if (_.includes(["assets", "expenses", "income", "liabilities", "equity"], normalized)) {
-    return (COLORS as Record<string, string>)[normalized];
+    color = (COLORS as Record<string, string>)[normalized];
   }
 
-  return "hsl(0, 0%, 48%)";
+  return `color: ${color}; opacity: ${opacity};`;
 }
 
 export function white() {

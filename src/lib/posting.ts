@@ -1,8 +1,9 @@
 import dayjs from "dayjs";
 import _ from "lodash";
 import Clusturize from "clusterize.js";
-import { formatCurrency, formatFloat, postingUrl, type Posting } from "./utils";
-import { iconify } from "./icon";
+import { formatCurrency, formatFloat, postingUrl, type Posting, firstName } from "./utils";
+import { iconText } from "./icon";
+import { accountColorStyle } from "./colors";
 
 export function renderPostings(postings: Posting[]) {
   const rows = _.map(postings, (p) => {
@@ -47,10 +48,14 @@ export function renderPostings(postings: Posting[]) {
     }
 
     const markup = `
-<tr class="${p.date.month() % 2 == 0 ? "has-background-white-ter" : ""}">
+<tr>
        <td>${date}</td>
-       <td>${postingStatus}<a class="secondary-link" href=${postingUrl(p)}>${p.payee}</a></td>
-       <td class='custom-icon'>${iconify(p.account)}</td>
+       <td class='is-size-7' style='vertical-align: middle'>${postingStatus}<a class="secondary-link" href=${postingUrl(
+         p
+       )}>${p.payee}</a></td>
+       <td class='custom-icon'><span style='${accountColorStyle(firstName(p.account))}'>${iconText(
+         p.account
+       )}</span> ${p.account}</td>
        <td class='has-text-right'>${purchase}</td>
        <td class='has-text-right'>${units}</td>
        <td class='has-text-right'>${price}</td>

@@ -897,9 +897,9 @@ export function postingUrl(posting: Posting) {
 
 const storageKey = "theme-preference";
 
-export function getColorPreference() {
+export function getColorPreference(): "light" | "dark" {
   if (localStorage.getItem(storageKey)) {
-    return localStorage.getItem(storageKey);
+    return localStorage.getItem(storageKey) as "light" | "dark";
   } else {
     return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
   }

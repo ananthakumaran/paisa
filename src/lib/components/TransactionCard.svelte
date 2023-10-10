@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { accountColor } from "$lib/colors";
+  import { accountColorStyle } from "$lib/colors";
   import { iconText } from "$lib/icon";
   import {
     formatCurrency,
@@ -33,10 +33,11 @@
   </div>
   <hr class="m-1" />
   {#each t.postings as posting}
-    {@const color = accountColor(firstName(posting.account))}
     <div class="my-1 is-flex is-justify-content-space-between">
       <div class="has-text-grey truncate custom-icon" title={posting.account}>
-        <span style:color style:opacity={0.6}>{iconText(posting.account)}</span>
+        <span style={accountColorStyle(firstName(posting.account))}
+          >{iconText(posting.account)}</span
+        >
         {restName(posting.account)}
       </div>
       <div class="has-text-weight-bold is-size-6">

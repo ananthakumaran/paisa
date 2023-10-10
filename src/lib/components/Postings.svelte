@@ -1,6 +1,7 @@
 <script lang="ts">
-  import { iconify } from "$lib/icon";
-  import { formatCurrency, formatFloat, type Posting } from "$lib/utils";
+  import { accountColorStyle } from "$lib/colors";
+  import { iconText } from "$lib/icon";
+  import { firstName, formatCurrency, formatFloat, type Posting } from "$lib/utils";
 
   const unlessDefaultCurrency = (p: Posting) => {
     if (p.commodity == USER_CONFIG.default_currency) {
@@ -20,7 +21,8 @@
   {#each postings as p}
     <div class="is-flex is-justify-content-space-between is-hoverable" style="margin: 1px 0;">
       <div class="truncate custom-icon" style="min-width: 100px;" title={p.account}>
-        {iconify(p.account)}
+        <span style={accountColorStyle(firstName(p.account))}>{iconText(p.account)}</span>
+        {p.account}
       </div>
       <div class="is-flex is-align-items-baseline is-justify-content-right">
         <div class="has-text-right has-text-grey is-size-7 mr-2 truncate">

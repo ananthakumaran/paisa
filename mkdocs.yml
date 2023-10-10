@@ -1,3 +1,5 @@
+site_description: Paisa is an open source personal finance manager. It builds on top of the ledger double entry accounting tool.
+site_author: Anantha Kumaran
 site_name: Paisa
 site_url: https://paisa.fyi
 repo_url: https://github.com/ananthakumaran/paisa

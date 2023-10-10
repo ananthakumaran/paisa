@@ -82,9 +82,9 @@ func computeCapitalGains(db *gorm.DB, account string, commodity config.Commodity
 			fy := utils.FY(p.Date)
 			fyCapitalGain := capitalGain.FY[fy]
 			fyCapitalGain.Tax = taxation.Add(fyCapitalGain.Tax, totalTax)
-			fyCapitalGain.Units.Add(p.Quantity.Neg())
-			fyCapitalGain.PurchasePrice.Add(purchasePrice)
-			fyCapitalGain.SellPrice.Add(p.Amount.Neg())
+			fyCapitalGain.Units = fyCapitalGain.Units.Add(p.Quantity.Neg())
+			fyCapitalGain.PurchasePrice = fyCapitalGain.PurchasePrice.Add(purchasePrice)
+			fyCapitalGain.SellPrice = fyCapitalGain.SellPrice.Add(p.Amount.Neg())
 			fyCapitalGain.PostingPairs = append(fyCapitalGain.PostingPairs, postingPairs...)
 
 			capitalGain.FY[fy] = fyCapitalGain

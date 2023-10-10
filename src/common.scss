@@ -8,22 +8,12 @@ $fa-font-path: "../node_modules/@fortawesome/fontawesome-free/webfonts";
 @import "@fortawesome/fontawesome-free/scss/regular.scss";
 @import "@fortawesome/fontawesome-free/scss/solid.scss";
 
-@font-face {
-  font-family: "Font Awesome 6 Free Solid";
-  font-style: normal;
-  font-weight: 900;
-  font-display: $fa-font-display;
-  src: url("#{$fa-font-path}/fa-solid-900.woff2") format("woff2");
-}
-
-$paisa-font-path: "../fonts";
-
-@font-face {
-  font-family: "Paisa";
-  font-style: normal;
-  font-weight: 900;
-  src: url("#{$paisa-font-path}/paisa.woff2") format("woff2");
-}
+@import "../fonts/arcticons.scss";
+@import "../fonts/fa6-brands.scss";
+@import "../fonts/fa6-regular.scss";
+@import "../fonts/fa6-solid.scss";
+@import "../fonts/fluent-emoji-high-contrast.scss";
+@import "../fonts/mdi.scss";
 
 @import "@fontsource-variable/roboto-flex";
 @import "@fontsource-variable/roboto-mono";

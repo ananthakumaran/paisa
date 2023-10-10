@@ -20,5 +20,6 @@ docs/lexer/__pycache__/
 bun.lockb
 svg/*
 fonts/*
-!fonts/paisa.woff2
-!fonts/info.json
+!fonts/*.woff2
+!fonts/*.json
+!fonts/*.scss

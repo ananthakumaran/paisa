@@ -1,4 +1,5 @@
 import { spawnSync } from "bun";
+import { join } from "path";
 import { mkdirSync, readFileSync, rmdirSync, writeFileSync } from "fs";
 import { locate } from "@iconify/json";
 import { IconSet } from "@iconify/tools";
@@ -9,6 +10,8 @@ const outputDir = "svg";
 
 async function downloadSVGs(sets) {
   for (const set of sets) {
+    const targetDir = join(outputDir, set);
+    mkdirSync(targetDir, { recursive: true });
     const filename = locate(set);
     const data = JSON.parse(readFileSync(filename, "utf8"));
     const iconSet = new IconSet(data);
@@ -33,7 +36,8 @@ async function downloadSVGs(sets) {
           'stroke-width="3px" stroke="currentColor"'
         );
       }
-      writeFileSync(`${outputDir}/${set}:${name}.svg`, svgString, "utf8");
+      const basename = `${name}.svg`;
+      writeFileSync(join(targetDir, basename), svgString, "utf8");
     });
   }
 }
@@ -44,7 +48,7 @@ async function main() {
   console.log("downloading arcticons");
   downloadSVGs(["arcticons"]);
   try {
-    spawnSync(["npx", "oslllo-svg-fixer", "-s", "svg", "-d", "svg"]);
+    spawnSync(["npx", "oslllo-svg-fixer", "-s", "svg/arcticons", "-d", "svg/arcticons"]);
   } catch (e) {
     // ignore
   }

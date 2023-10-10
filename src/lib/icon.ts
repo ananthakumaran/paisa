@@ -1,6 +1,20 @@
 import _ from "lodash";
-import icons from "../../fonts/info.json";
+import arcticons from "../../fonts/arcticons-info.json";
+import fa6brands from "../../fonts/fa6-brands-info.json";
+import fa6regular from "../../fonts/fa6-regular-info.json";
+import fa6solid from "../../fonts/fa6-solid-info.json";
+import fluentemoji from "../../fonts/fluent-emoji-high-contrast-info.json";
+import mdi from "../../fonts/mdi-info.json";
 import { stemmer } from "stemmer";
+
+const icons = {
+  arcticons: arcticons["codepoints"],
+  "fa6-brands": fa6brands["codepoints"],
+  "fa6-regular": fa6regular["codepoints"],
+  "fa6-solid": fa6solid["codepoints"],
+  "fluent-emoji-high-contrast": fluentemoji["codepoints"],
+  mdi: mdi["codepoints"]
+};
 
 export function iconGlyph(symbol: string): string {
   if (!symbol) {

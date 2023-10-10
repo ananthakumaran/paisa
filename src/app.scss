@@ -1,7 +1,8 @@
 $body-size: 14px;
 
-$family-sans-serif: "Roboto Flex Variable", sans-serif, "Font Awesome 6 Free Solid";
-$family-sans-serif-icon: "Roboto Flex Variable", sans-serif, "Paisa";
+$family-sans-serif: "Roboto Flex Variable", sans-serif;
+$family-sans-serif-icon: "Roboto Flex Variable", sans-serif, "arcticons", "fa6-brands",
+  "fa6-regular", "fa6-solid", "fluent-emoji-high-contrast", "mdi";
 $family-monospace: "Roboto Mono Variable", monospace;
 
 $box-radius: 4px;
@@ -15,6 +16,7 @@ $danger-light: hsl(347, 90%, 96%);
 $switch-focus: none;
 
 @import "bulma/sass/utilities/_all.sass";
+@import "@fortawesome/fontawesome-free/scss/fontawesome.scss";
 
 $menu-item-hover-background-color: $link-light;
 $menu-item-active-color: $link-dark;
@@ -710,7 +712,9 @@ nav.breadcrumb a.is-inactive {
 }
 
 .breadcrumb.has-chevron-separator li + li::before {
-  content: "";
+  font-family: "Font Awesome 6 Free";
+  font-weight: 900;
+  content: unquote('"#{ $fa-var-chevron-right }"');
   color: $link;
 }
 

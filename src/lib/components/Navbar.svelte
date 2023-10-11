@@ -147,6 +147,9 @@
     _.last(links).children.push(tax);
   }
 
+  const about = { label: "About", href: "/about" };
+  _.last(links).children.push(about);
+
   let selectedLink: Link = null;
   let selectedSubLink: Link = null;
   let selectedSubSubLink: Link = null;

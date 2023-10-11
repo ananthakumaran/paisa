@@ -49,7 +49,8 @@ helper functions to make it easier to write the template.
 
 Paisa ships with a few built-in templates. You can also create your
 own. To create a new template, edit the template and click on the
-`Save As` button.
+`Save As` button. User defined custom templates are stored in the
+configuration file.
 
 !!! tip
     The import system is designed to be extensible and might not be

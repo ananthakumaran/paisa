@@ -157,4 +157,30 @@ commodities:
       code: AAPL
     harvest: 1095
     tax_category: equity65
+
+## Import Templates
+# OPTIONAL, DEFAULT: []
+import_templates:
+  - name: SBI Account Statement
+    # Required
+    content: |
+      {{#if (isDate ROW.A "D MMM YYYY")}}
+        {{date ROW.A "D MMM YYYY"}} {{ROW.C}}
+        {{#if (isBlank ROW.F)}}
+          {{predictAccount prefix="Expenses"}}      {{amount ROW.E}} INR
+          Assets:Checking:SBI
+        {{else}}
+          Assets:Checking:SBI                       {{amount ROW.F}} INR
+          {{predictAccount prefix="Income"}}
+        {{/if}}
+      {{/if}}
+    # Should be a valid handlerbar template
+
+## Accounts: account customization
+# OPTIONAL, DEFAULT: []
+accounts:
+  - name: Liabilities:CreditCard:IDFC
+    # Required, name of the account
+    icon: arcticons:idfc-first-bank
+    # Optional, use the UI to select the icon.
 ```

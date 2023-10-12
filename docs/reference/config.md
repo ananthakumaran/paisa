@@ -28,8 +28,8 @@ journal_path: /home/john/Documents/paisa/main.ledger
 db_path: /home/john/Documents/paisa/paisa.db
 
 # The ledger client to use
-# OPTIONAL, DEFAULT: ledger, ENUM: ledger, hledger
-ledger_cli: hledger
+# OPTIONAL, DEFAULT: ledger, ENUM: ledger, hledger, beancount
+ledger_cli: ledger
 
 # The default currency to use. NOTE: Paisa tries to convert other
 # currencies to default currency, so make sure it's possible to
@@ -174,7 +174,7 @@ import_templates:
           {{predictAccount prefix="Income"}}
         {{/if}}
       {{/if}}
-    # Should be a valid handlerbar template
+    # Should be a valid handlebar template
 
 ## Accounts: account customization
 # OPTIONAL, DEFAULT: []

@@ -13,6 +13,7 @@ pkgs.mkShell {
 
     pkgs.python311Packages.mkdocs
     pkgs.python311Packages.mkdocs-material
+    pkgs.python311Packages.beancount
 
     # test
     pkgs.ledger

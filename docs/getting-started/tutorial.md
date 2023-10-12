@@ -196,5 +196,5 @@ after you make any changes to your journal file or you want to fetch
 the latest value of the commodities. The update can be performed from
 the UI as well via the dropdown in the top right hand side corner.
 
-[^1]: [hledger](hled) is also supported, refer to the [configuration](../reference/config.md)
+[^1]: [hledger](https://hledger.org) and [beancount](https://beancount.github.io/) is also supported, refer to the [configuration](../reference/config.md)
     to see how to modify the `ledger_cli`.

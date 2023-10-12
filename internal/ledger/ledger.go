@@ -41,10 +41,15 @@ type Ledger interface {
 
 type LedgerCLI struct{}
 type HLedgerCLI struct{}
+type Beancount struct{}
 
 func Cli() Ledger {
 	if config.GetConfig().LedgerCli == "hledger" {
 		return HLedgerCLI{}
+	}
+
+	if config.GetConfig().LedgerCli == "beancount" {
+		return Beancount{}
 	}
 
 	return LedgerCLI{}
@@ -202,6 +207,198 @@ func (HLedgerCLI) Prices(journalPath string) ([]price.Price, error) {
 	return parseHLedgerPrices(utils.Dos2Unix(output.String()), config.DefaultCurrency())
 }
 
+func (Beancount) ValidateFile(journalPath string) ([]LedgerFileError, string, error) {
+	errors := []LedgerFileError{}
+
+	path, err := binary.LookPath("bean-check")
+	if err != nil {
+		return errors, "", err
+	}
+
+	var output, error bytes.Buffer
+	err = utils.Exec(path, &output, &error, journalPath)
+	if err == nil {
+
+		path, err = binary.LookPath("bean-report")
+		if err != nil {
+			return errors, "", err
+		}
+
+		err = utils.Exec(path, &output, &error, journalPath, "bal")
+		if err != nil {
+			log.Error(error)
+			return nil, "", err
+		}
+		return errors, utils.Dos2Unix(output.String()), nil
+	}
+
+	re := regexp.MustCompile(`(?:.*):([0-9]+):\s+(.+)`)
+
+	lines := strings.Split(utils.Dos2Unix(error.String()), "\n")
+	for _, line := range lines {
+		log.Info(line)
+		match := re.FindStringSubmatch(line)
+		if len(match) == 0 {
+			lastError := errors[len(errors)-1]
+			lastError.Message = lastError.Message + "\n" + line
+			errors[len(errors)-1] = lastError
+		} else {
+			lineno, _ := strconv.ParseUint(match[1], 10, 64)
+			errors = append(errors, LedgerFileError{LineFrom: lineno, LineTo: lineno, Message: match[2]})
+		}
+	}
+	return errors, "", err
+}
+
+func (Beancount) Parse(journalPath string, _prices []price.Price) ([]*posting.Posting, error) {
+	type Range struct {
+		Begin uint64
+		End   uint64
+	}
+
+	transactionRanges := make(map[string]Range)
+
+	var postings []*posting.Posting
+	const (
+		Date = iota
+		Payee
+		Narration
+		Account
+		Commodity
+		Quantity
+		Amount
+		FileName
+		Location
+		TransactionID
+		Status
+		TagRecurring
+		TagPeriod
+	)
+	args := []string{"-f", "csv", journalPath, "select date,payee,narration,account,currency,units(position),cost(position),filename,location,id,flag,ANY_META('recurring'),ANY_META('period')"}
+
+	path, err := binary.LookPath("bean-query")
+	if err != nil {
+		return postings, err
+	}
+
+	var output, error bytes.Buffer
+	err = utils.Exec(path, &output, &error, args...)
+	if err != nil {
+		log.Error(error)
+		return nil, err
+	}
+
+	reader := csv.NewReader(bytes.NewBuffer(output.Bytes()))
+	records, err := reader.ReadAll()
+	if err != nil {
+		return nil, err
+	}
+
+	dir := filepath.Dir(config.GetJournalPath())
+
+	locationRegex := regexp.MustCompile(`.*:(\d+):`)
+
+	for _, record := range records[1:] {
+		date, err := time.ParseInLocation("2006-01-02", record[Date], time.Local)
+		if err != nil {
+			return nil, err
+		}
+
+		_, quantity, err := parseAmount(strings.TrimSpace(record[Quantity]))
+		if err != nil {
+			return nil, err
+		}
+
+		_, amount, err := parseAmount(strings.TrimSpace(record[Amount]))
+		if err != nil {
+			return nil, err
+		}
+
+		fileName, err := filepath.Rel(dir, record[FileName])
+
+		payee := strings.TrimSpace(record[Payee])
+		narration := strings.TrimSpace(record[Narration])
+		if narration != "" {
+			if payee != "" {
+				payee += " | "
+			}
+			payee += narration
+		}
+
+		var status string
+		if record[Status] == "*" {
+			status = "cleared"
+		} else if record[Status] == "!" {
+			status = "pending"
+		} else {
+			status = "unmarked"
+		}
+
+		match := locationRegex.FindStringSubmatch(strings.TrimSpace(record[Location]))
+		if len(match) == 0 {
+			return nil, fmt.Errorf("Could not parse location: %s", record[Location])
+		}
+
+		lineNumber, err := strconv.ParseUint(match[1], 10, 64)
+		if err != nil {
+			return nil, err
+		}
+
+		r := transactionRanges[record[TransactionID]]
+		if r.Begin == 0 || r.Begin > lineNumber {
+			r.Begin = lineNumber
+		}
+
+		if r.End == 0 || r.End < lineNumber {
+			r.End = lineNumber
+		}
+		transactionRanges[record[TransactionID]] = r
+
+		posting := posting.Posting{
+			Date:          date,
+			Payee:         payee,
+			Account:       strings.TrimSpace(record[Account]),
+			Commodity:     utils.UnQuote(strings.TrimSpace(record[Commodity])),
+			Quantity:      quantity,
+			Amount:        amount,
+			TransactionID: record[TransactionID],
+			Status:        status,
+			TagRecurring:  strings.TrimSpace(record[TagRecurring]),
+			TagPeriod:     strings.TrimSpace(record[TagPeriod]),
+			Forecast:      false,
+			FileName:      fileName}
+		postings = append(postings, &posting)
+
+	}
+
+	postings = lo.Map(postings, func(p *posting.Posting, _ int) *posting.Posting {
+		r := transactionRanges[p.TransactionID]
+		p.TransactionBeginLine = r.Begin - 1
+		p.TransactionEndLine = r.End + 1
+		return p
+	})
+
+	return postings, nil
+}
+
+func (Beancount) Prices(journalPath string) ([]price.Price, error) {
+	var prices []price.Price
+	path, err := binary.LookPath("bean-report")
+	if err != nil {
+		log.Error(err)
+		return prices, err
+	}
+
+	var output, error bytes.Buffer
+	err = utils.Exec(path, &output, &error, journalPath, "pricesdb")
+	if err != nil {
+		log.Error(error.String())
+		return prices, err
+	}
+
+	return parseBeancountPrices(utils.Dos2Unix(output.String()), config.DefaultCurrency())
+}
+
 func parseHLedgerCommodities(journalPath string) ([]string, error) {
 	var commodities []string
 
@@ -257,6 +454,39 @@ func parseLedgerPrices(output string, defaultCurrency string) ([]price.Price, er
 func parseHLedgerPrices(output string, defaultCurrency string) ([]price.Price, error) {
 	var prices []price.Price
 	re := regexp.MustCompile(`P (\d{4}-\d{2}-\d{2}) ([^\s\d.-]+|"[^"]+") ([^\n]+)\n`)
+	matches := re.FindAllStringSubmatch(output, -1)
+
+	for _, match := range matches {
+		target, value, err := parseAmount(match[3])
+		if err != nil {
+			return nil, err
+		}
+
+		commodity := utils.UnQuote(match[2])
+		if target != defaultCurrency {
+			if commodity == defaultCurrency && !value.Equal(decimal.Zero) {
+				commodity = target
+				target = defaultCurrency
+				value = decimal.NewFromInt(1).Div(value)
+			} else {
+				continue
+			}
+		}
+
+		date, err := time.ParseInLocation("2006-01-02", match[1], time.Local)
+		if err != nil {
+			return nil, err
+		}
+
+		prices = append(prices, price.Price{Date: date, CommodityName: commodity, CommodityID: commodity, CommodityType: config.Unknown, Value: value})
+
+	}
+	return prices, nil
+}
+
+func parseBeancountPrices(output string, defaultCurrency string) ([]price.Price, error) {
+	var prices []price.Price
+	re := regexp.MustCompile(`(\d{4}-\d{2}-\d{2}) price ([^ ]+)\s*([^\n]+)\n`)
 	matches := re.FindAllStringSubmatch(output, -1)
 
 	for _, match := range matches {

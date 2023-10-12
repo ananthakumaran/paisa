@@ -21,7 +21,7 @@
     "ledger_cli": {
       "type": "string",
       "description": "The ledger client to use",
-      "enum": ["", "ledger", "hledger"]
+      "enum": ["", "ledger", "hledger", "beancount"]
     },
     "default_currency": {
       "type": "string",

@@ -247,8 +247,8 @@
                   </p>
                   <div class="content box">
                     <div
-                      class="is-flex is-justify-content-flex-start is-flex-wrap-wrap"
-                      style="overflow: hidden; max-height: 13.571rem;"
+                      class="grid grid-rows-1 overflow-hidden"
+                      style="grid-auto-rows: 0px; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));"
                     >
                       {#each transactionSequences as ts (ts)}
                         <UpcomingCard transactionSequece={ts} />

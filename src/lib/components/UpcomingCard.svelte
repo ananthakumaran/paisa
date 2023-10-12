@@ -1,5 +1,4 @@
 <script lang="ts">
-  import COLORS from "$lib/colors";
   import {
     intervalText,
     nextUnpaidSchedule,

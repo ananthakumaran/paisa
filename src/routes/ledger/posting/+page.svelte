@@ -73,7 +73,8 @@
 
 <style lang="scss">
   @import "bulma/sass/utilities/_all.sass";
-  .d3-posting-filter {
+
+  input.d3-posting-filter {
     width: calc(100vw - 35px);
 
     @include desktop {

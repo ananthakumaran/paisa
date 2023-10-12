@@ -45,6 +45,9 @@ func (p Posting) Negate() Posting {
 }
 
 func (p *Posting) Price() decimal.Decimal {
+	if p.Quantity.IsZero() {
+		return decimal.Zero
+	}
 	return p.Amount.Div(p.Quantity)
 }
 

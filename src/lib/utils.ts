@@ -626,15 +626,25 @@ function obscure() {
   return localStorage.getItem("obscure") == "true";
 }
 
-export function formatCurrency(value: number, precision = 0) {
+function normalize(value: number) {
   if (obscure()) {
-    return "00";
+    value = 0;
   }
 
   // minus 0
   if (1 / value === -Infinity) {
     value = 0;
   }
+
+  if (!Number.isFinite(value)) {
+    value = 0;
+  }
+
+  return value;
+}
+
+export function formatCurrency(value: number, precision = 0) {
+  value = normalize(value);
 
   return value.toLocaleString(USER_CONFIG.locale, {
     minimumFractionDigits: precision,
@@ -647,9 +657,7 @@ export function formatCurrencyCrude(value: number) {
 }
 
 export function formatCurrencyCrudeWithPrecision(value: number, precision: number) {
-  if (obscure()) {
-    return "00";
-  }
+  value = normalize(value);
 
   const options: Intl.NumberFormatOptions = {
     notation: "compact"
@@ -666,9 +674,8 @@ export function formatCurrencyCrudeWithPrecision(value: number, precision: numbe
 }
 
 export function formatFloat(value: number, precision = 2) {
-  if (obscure()) {
-    return "00";
-  }
+  value = normalize(value);
+
   return value.toLocaleString(USER_CONFIG.locale, {
     minimumFractionDigits: precision,
     maximumFractionDigits: precision
@@ -676,18 +683,7 @@ export function formatFloat(value: number, precision = 2) {
 }
 
 export function formatPercentage(value: number, precision = 0) {
-  if (obscure()) {
-    return "00";
-  }
-
-  if (!Number.isFinite(value)) {
-    value = 0;
-  }
-
-  // minus 0
-  if (1 / value === -Infinity) {
-    value = 0;
-  }
+  value = normalize(value);
 
   return value.toLocaleString(USER_CONFIG.locale, {
     style: "percent",
@@ -696,9 +692,7 @@ export function formatPercentage(value: number, precision = 0) {
 }
 
 export function formatFixedWidthFloat(value: number, width: number, precision = 2) {
-  if (obscure()) {
-    value = 0;
-  }
+  value = normalize(value);
 
   const formatted = value.toLocaleString(USER_CONFIG.locale, {
     minimumFractionDigits: precision,

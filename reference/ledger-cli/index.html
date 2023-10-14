@@ -6,6 +6,10 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
+        <meta name="description" content="Paisa is an open source personal finance manager. It builds on top of the ledger double entry accounting tool.">
+      
+      
+        <meta name="author" content="Anantha Kumaran">
       
       
         <link rel="canonical" href="https://paisa.fyi/reference/ledger-cli/">
@@ -798,11 +802,15 @@
 
 
 <h1 id="ledger-cli">Ledger CLI</h1>
-<p>Paisa is compatible with <a href="https://www.ledger-cli.org">ledger</a> and <a href="https://hledger.org/">hledger</a>. By default
-paisa will try to use <strong>ledger</strong>, if you prefer to use <strong>hledger</strong>
-instead, change the <code>ledger_cli</code> value in paisa.yaml</p>
-<div class="language-yaml highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nt">ledger_cli</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hledger</span>
+<p>Paisa is compatible with <a href="https://www.ledger-cli.org">ledger</a>, <a href="https://hledger.org/">hledger</a> and
+<a href="https://beancount.github.io/">beancount</a>. By default paisa will try to use <strong>ledger</strong>, if you
+prefer to use <strong>hledger</strong> or <strong>beancount</strong> instead, change the
+<code>ledger_cli</code> value in <a href="../config/">paisa.yaml</a></p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># OPTIONAL, DEFAULT: ledger, ENUM: ledger, hledger, beancount</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="nt">ledger_cli</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hledger</span>
 </span></code></pre></div>
+<p>Paisa ships with ledger binary. If you use hledger or beancount, make
+sure that the binaries are installed.</p>
 
 
   

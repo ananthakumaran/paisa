@@ -22,6 +22,7 @@ jobs:
     - uses: actions/setup-go@v4
       with:
         go-version: '1.20.5'
+    - uses: vegardit/fast-apt-mirror.sh@v1
     - run: |
         sudo apt-get install -y sqlite3
         npm install

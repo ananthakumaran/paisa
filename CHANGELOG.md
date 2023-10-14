@@ -1,5 +1,10 @@
 # CHANGELOG
 
+### 0.5.5 (2023-10-07)
+
+* Support account icon customization
+* Add beancount ledger client support
+
 ### 0.5.4 (2023-10-07)
 
 * Add calendar view to recurring page

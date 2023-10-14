@@ -236,7 +236,6 @@ func (Beancount) ValidateFile(journalPath string) ([]LedgerFileError, string, er
 
 	lines := strings.Split(utils.Dos2Unix(error.String()), "\n")
 	for _, line := range lines {
-		log.Info(line)
 		match := re.FindStringSubmatch(line)
 		if len(match) == 0 {
 			lastError := errors[len(errors)-1]

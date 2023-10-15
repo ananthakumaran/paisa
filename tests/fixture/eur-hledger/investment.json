@@ -1,0 +1,55 @@
+{
+  "assets": [
+    {
+      "id": 3,
+      "transaction_id": "2",
+      "date": "2022-01-05T00:00:00Z",
+      "payee": "Buy stock",
+      "account": "Assets:Equity:AAPL",
+      "commodity": "AAPL",
+      "quantity": 1,
+      "amount": 10005.05,
+      "status": "unmarked",
+      "tag_recurring": "",
+      "tag_period": "",
+      "transaction_begin_line": 11,
+      "transaction_end_line": 14,
+      "file_name": "main.ledger",
+      "forecast": false,
+      "market_amount": 0
+    }
+  ],
+  "yearly_cards": [
+    {
+      "start_date": "2021-04-01T00:00:00Z",
+      "end_date": "2022-03-31T23:59:59.999999999Z",
+      "postings": [
+        {
+          "id": 3,
+          "transaction_id": "2",
+          "date": "2022-01-05T00:00:00Z",
+          "payee": "Buy stock",
+          "account": "Assets:Equity:AAPL",
+          "commodity": "AAPL",
+          "quantity": 1,
+          "amount": 10005.05,
+          "status": "unmarked",
+          "tag_recurring": "",
+          "tag_period": "",
+          "transaction_begin_line": 11,
+          "transaction_end_line": 14,
+          "file_name": "main.ledger",
+          "forecast": false,
+          "market_amount": 0
+        }
+      ],
+      "gross_salary_income": 11000,
+      "gross_other_income": 0,
+      "net_tax": 0,
+      "net_income": 11000,
+      "net_investment": 10005.05,
+      "net_expense": 0,
+      "savings_rate": 90.955
+    }
+  ]
+}

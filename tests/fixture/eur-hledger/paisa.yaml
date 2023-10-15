@@ -1,0 +1,5 @@
+journal_path: main.ledger
+db_path: paisa.db
+ledger_cli: hledger
+default_currency: EUR
+locale: es-EU

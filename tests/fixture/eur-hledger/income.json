@@ -1,0 +1,61 @@
+{
+  "income_timeline": [
+    {
+      "date": "2022-01-01T00:00:00Z",
+      "postings": [
+        {
+          "id": 1,
+          "transaction_id": "1",
+          "date": "2022-01-01T00:00:00Z",
+          "payee": "Salary",
+          "account": "Income:Salary:Acme",
+          "commodity": "EUR",
+          "quantity": -11000,
+          "amount": -11000,
+          "status": "unmarked",
+          "tag_recurring": "",
+          "tag_period": "",
+          "transaction_begin_line": 4,
+          "transaction_end_line": 7,
+          "file_name": "main.ledger",
+          "forecast": false,
+          "market_amount": 0
+        }
+      ]
+    },
+    {
+      "date": "2022-02-01T00:00:00Z",
+      "postings": []
+    }
+  ],
+  "tax_timeline": [],
+  "yearly_cards": [
+    {
+      "start_date": "2021-04-01T00:00:00Z",
+      "end_date": "2022-03-31T23:59:59.999999999Z",
+      "postings": [
+        {
+          "id": 1,
+          "transaction_id": "1",
+          "date": "2022-01-01T00:00:00Z",
+          "payee": "Salary",
+          "account": "Income:Salary:Acme",
+          "commodity": "EUR",
+          "quantity": -11000,
+          "amount": -11000,
+          "status": "unmarked",
+          "tag_recurring": "",
+          "tag_period": "",
+          "transaction_begin_line": 4,
+          "transaction_end_line": 7,
+          "file_name": "main.ledger",
+          "forecast": false,
+          "market_amount": 0
+        }
+      ],
+      "gross_income": 11000,
+      "net_tax": 0,
+      "net_income": 11000
+    }
+  ]
+}

@@ -1,0 +1,140 @@
+{
+  "budget": {
+    "availableForBudgeting": 994.95,
+    "budgetsByMonth": {},
+    "checkingBalance": 994.95
+  },
+  "cashFlows": [
+    {
+      "date": "2022-01-01T00:00:00Z",
+      "income": 11000,
+      "expenses": 0,
+      "liabilities": 0,
+      "investment": 10005.05,
+      "tax": 0,
+      "checking": 994.95,
+      "balance": 994.95
+    },
+    {
+      "date": "2022-02-01T00:00:00Z",
+      "income": 0,
+      "expenses": 0,
+      "liabilities": 0,
+      "investment": 0,
+      "tax": 0,
+      "checking": 0,
+      "balance": 994.95
+    }
+  ],
+  "expenses": {},
+  "networth": {
+    "networth": {
+      "date": "2022-02-07T23:59:59.999999999Z",
+      "investmentAmount": 21005.05,
+      "withdrawalAmount": 10005.05,
+      "gainAmount": 20,
+      "balanceAmount": 11020,
+      "netInvestmentAmount": 11000
+    },
+    "xirr": 1.76
+  },
+  "transactionSequences": [],
+  "transactions": [
+    {
+      "id": "2",
+      "date": "2022-01-05T00:00:00Z",
+      "payee": "Buy stock",
+      "postings": [
+        {
+          "id": 3,
+          "transaction_id": "2",
+          "date": "2022-01-05T00:00:00Z",
+          "payee": "Buy stock",
+          "account": "Assets:Equity:AAPL",
+          "commodity": "AAPL",
+          "quantity": 1,
+          "amount": 10005.05,
+          "status": "unmarked",
+          "tag_recurring": "",
+          "tag_period": "",
+          "transaction_begin_line": 11,
+          "transaction_end_line": 14,
+          "file_name": "main.ledger",
+          "forecast": false,
+          "market_amount": 0
+        },
+        {
+          "id": 4,
+          "transaction_id": "2",
+          "date": "2022-01-05T00:00:00Z",
+          "payee": "Buy stock",
+          "account": "Assets:Checking",
+          "commodity": "EUR",
+          "quantity": -10005.05,
+          "amount": -10005.05,
+          "status": "unmarked",
+          "tag_recurring": "",
+          "tag_period": "",
+          "transaction_begin_line": 11,
+          "transaction_end_line": 14,
+          "file_name": "main.ledger",
+          "forecast": false,
+          "market_amount": 0
+        }
+      ],
+      "tag_recurring": "",
+      "tag_period": "",
+      "beginLine": 11,
+      "endLine": 14,
+      "fileName": "main.ledger"
+    },
+    {
+      "id": "1",
+      "date": "2022-01-01T00:00:00Z",
+      "payee": "Salary",
+      "postings": [
+        {
+          "id": 2,
+          "transaction_id": "1",
+          "date": "2022-01-01T00:00:00Z",
+          "payee": "Salary",
+          "account": "Assets:Checking",
+          "commodity": "EUR",
+          "quantity": 11000,
+          "amount": 11000,
+          "status": "unmarked",
+          "tag_recurring": "",
+          "tag_period": "",
+          "transaction_begin_line": 4,
+          "transaction_end_line": 7,
+          "file_name": "main.ledger",
+          "forecast": false,
+          "market_amount": 0
+        },
+        {
+          "id": 1,
+          "transaction_id": "1",
+          "date": "2022-01-01T00:00:00Z",
+          "payee": "Salary",
+          "account": "Income:Salary:Acme",
+          "commodity": "EUR",
+          "quantity": -11000,
+          "amount": -11000,
+          "status": "unmarked",
+          "tag_recurring": "",
+          "tag_period": "",
+          "transaction_begin_line": 4,
+          "transaction_end_line": 7,
+          "file_name": "main.ledger",
+          "forecast": false,
+          "market_amount": 0
+        }
+      ],
+      "tag_recurring": "",
+      "tag_period": "",
+      "beginLine": 4,
+      "endLine": 7,
+      "fileName": "main.ledger"
+    }
+  ]
+}

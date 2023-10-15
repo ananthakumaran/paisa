@@ -1,0 +1,48 @@
+{
+  "asset_breakdowns": {
+    "Assets": {
+      "group": "Assets",
+      "investmentAmount": 10005.05,
+      "withdrawalAmount": 0,
+      "marketAmount": 11020,
+      "balanceUnits": 0,
+      "latestPrice": 0,
+      "xirr": 1.76,
+      "gainAmount": 1014.95,
+      "absoluteReturn": 0.1014437708956977
+    },
+    "Assets:Checking": {
+      "group": "Assets:Checking",
+      "investmentAmount": 0,
+      "withdrawalAmount": 0,
+      "marketAmount": 994.95,
+      "balanceUnits": 0,
+      "latestPrice": 0,
+      "xirr": 0,
+      "gainAmount": 994.95,
+      "absoluteReturn": 0
+    },
+    "Assets:Equity": {
+      "group": "Assets:Equity",
+      "investmentAmount": 10005.05,
+      "withdrawalAmount": 0,
+      "marketAmount": 10025.05,
+      "balanceUnits": 0,
+      "latestPrice": 0,
+      "xirr": 2.17,
+      "gainAmount": 20,
+      "absoluteReturn": 0.0019989905097926
+    },
+    "Assets:Equity:AAPL": {
+      "group": "Assets:Equity:AAPL",
+      "investmentAmount": 10005.05,
+      "withdrawalAmount": 0,
+      "marketAmount": 10025.05,
+      "balanceUnits": 1,
+      "latestPrice": 0,
+      "xirr": 2.17,
+      "gainAmount": 20,
+      "absoluteReturn": 0.0019989905097926
+    }
+  }
+}

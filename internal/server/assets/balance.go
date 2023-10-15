@@ -28,7 +28,7 @@ type AssetBreakdown struct {
 }
 
 func GetBalance(db *gorm.DB) gin.H {
-	postings := query.Init(db).Like("Assets:%").All()
+	postings := query.Init(db).Like("Assets:%", "Income:CapitalGains:%").All()
 	postings = service.PopulateMarketPrice(db, postings)
 	breakdowns := computeBreakdowns(db, postings)
 	return gin.H{"asset_breakdowns": breakdowns}
@@ -37,6 +37,10 @@ func GetBalance(db *gorm.DB) gin.H {
 func computeBreakdowns(db *gorm.DB, postings []posting.Posting) map[string]AssetBreakdown {
 	accounts := make(map[string]bool)
 	for _, p := range postings {
+		if service.IsCapitalGains(p) {
+			continue
+		}
+
 		var parts []string
 		for _, part := range strings.Split(p.Account, ":") {
 			parts = append(parts, part)
@@ -49,7 +53,13 @@ func computeBreakdowns(db *gorm.DB, postings []posting.Posting) map[string]Asset
 	result := make(map[string]AssetBreakdown)
 
 	for group, leaf := range accounts {
-		ps := lo.Filter(postings, func(p posting.Posting, _ int) bool { return utils.IsSameOrParent(p.Account, group) })
+		ps := lo.Filter(postings, func(p posting.Posting, _ int) bool {
+			account := p.Account
+			if service.IsCapitalGains(p) {
+				account = service.CapitalGainsSourceAccount(p.Account)
+			}
+			return utils.IsSameOrParent(account, group)
+		})
 		result[group] = ComputeBreakdown(db, ps, leaf, group)
 	}
 
@@ -58,20 +68,23 @@ func computeBreakdowns(db *gorm.DB, postings []posting.Posting) map[string]Asset
 
 func ComputeBreakdown(db *gorm.DB, ps []posting.Posting, leaf bool, group string) AssetBreakdown {
 	investmentAmount := lo.Reduce(ps, func(acc decimal.Decimal, p posting.Posting, _ int) decimal.Decimal {
-		if utils.IsCheckingAccount(p.Account) || p.Amount.LessThan(decimal.Zero) || service.IsInterest(db, p) || service.IsStockSplit(db, p) {
+		if utils.IsCheckingAccount(p.Account) || p.Amount.LessThan(decimal.Zero) || service.IsInterest(db, p) || service.IsStockSplit(db, p) || service.IsCapitalGains(p) {
 			return acc
 		} else {
 			return acc.Add(p.Amount)
 		}
 	}, decimal.Zero)
 	withdrawalAmount := lo.Reduce(ps, func(acc decimal.Decimal, p posting.Posting, _ int) decimal.Decimal {
-		if utils.IsCheckingAccount(p.Account) || p.Amount.GreaterThan(decimal.Zero) || service.IsInterest(db, p) || service.IsStockSplit(db, p) {
+		if !service.IsCapitalGains(p) && (utils.IsCheckingAccount(p.Account) || p.Amount.GreaterThan(decimal.Zero) || service.IsInterest(db, p) || service.IsStockSplit(db, p)) {
 			return acc
 		} else {
 			return acc.Add(p.Amount.Neg())
 		}
 	}, decimal.Zero)
-	marketAmount := accounting.CurrentBalance(ps)
+	psWithoutCapitalGains := lo.Filter(ps, func(p posting.Posting, _ int) bool {
+		return !service.IsCapitalGains(p)
+	})
+	marketAmount := accounting.CurrentBalance(psWithoutCapitalGains)
 	var balanceUnits decimal.Decimal
 	if leaf {
 		balanceUnits = lo.Reduce(ps, func(acc decimal.Decimal, p posting.Posting, _ int) decimal.Decimal {

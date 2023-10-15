@@ -156,7 +156,13 @@
             {#each postings as posting}
               <PostingCard
                 {posting}
-                color={posting.amount >= 0 ? COLORS.secondary : COLORS.tertiary}
+                color={posting.amount >= 0
+                  ? posting.account.startsWith("Income:CapitalGains")
+                    ? COLORS.gain
+                    : COLORS.secondary
+                  : posting.account.startsWith("Income:CapitalGains")
+                  ? COLORS.loss
+                  : COLORS.tertiary}
               />
             {/each}
           </div>

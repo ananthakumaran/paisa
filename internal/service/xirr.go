@@ -12,10 +12,13 @@ import (
 func XIRR(db *gorm.DB, ps []posting.Posting) decimal.Decimal {
 	today := utils.EndOfToday()
 	marketAmount := utils.SumBy(ps, func(p posting.Posting) decimal.Decimal {
+		if IsCapitalGains(p) {
+			return p.Amount.Neg()
+		}
 		return p.MarketAmount
 	})
 	cashflows := lo.Reverse(lo.Map(ps, func(p posting.Posting, _ int) xirr.Cashflow {
-		if IsInterest(db, p) || IsInterestRepayment(db, p) {
+		if IsInterest(db, p) || IsInterestRepayment(db, p) || IsCapitalGains(p) {
 			return xirr.Cashflow{Date: p.Date, Amount: 0}
 		} else {
 			return xirr.Cashflow{Date: p.Date, Amount: p.Amount.Neg().Round(4).InexactFloat64()}

@@ -1,0 +1,23 @@
+{
+  "accounts": [
+    "Income:Salary:Acme",
+    "Assets:Checking",
+    "Assets:Equity:AAPL"
+  ],
+  "commodities": [
+    "EUR",
+    "AAPL"
+  ],
+  "files": [
+    {
+      "name": "main.ledger",
+      "content": "commodity EUR\n\tformat 1.000,00 EUR\n\n2022/01/01 Salary\n    Income:Salary:Acme                    -11.000,00 EUR\n    Assets:Checking                        11.000,00 EUR\n\nP 2022/01/05 00:00:00 AAPL 10.005,05 EUR\nP 2022/01/15 00:00:00 AAPL 10.025,05 EUR\n\n2022/01/05 Buy stock\n    Assets:Equity:AAPL                             1 AAPL @ 10.005,05 EUR\n    Assets:Checking                       -10.005,05 EUR\n",
+      "versions": [],
+      "operation": ""
+    }
+  ],
+  "payees": [
+    "Salary",
+    "Buy stock"
+  ]
+}

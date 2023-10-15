@@ -1,0 +1,48 @@
+{
+  "asset_breakdowns": {
+    "Assets": {
+      "group": "Assets",
+      "investmentAmount": 80000,
+      "withdrawalAmount": 0,
+      "marketAmount": 80000,
+      "balanceUnits": 0,
+      "latestPrice": 0,
+      "xirr": 0,
+      "gainAmount": 0,
+      "absoluteReturn": 0
+    },
+    "Assets:Checking": {
+      "group": "Assets:Checking",
+      "investmentAmount": 0,
+      "withdrawalAmount": 0,
+      "marketAmount": 0,
+      "balanceUnits": 0,
+      "latestPrice": 0,
+      "xirr": 0,
+      "gainAmount": 0,
+      "absoluteReturn": 0
+    },
+    "Assets:Equity": {
+      "group": "Assets:Equity",
+      "investmentAmount": 80000,
+      "withdrawalAmount": 0,
+      "marketAmount": 80000,
+      "balanceUnits": 0,
+      "latestPrice": 0,
+      "xirr": 0,
+      "gainAmount": 0,
+      "absoluteReturn": 0
+    },
+    "Assets:Equity:NIFTY": {
+      "group": "Assets:Equity:NIFTY",
+      "investmentAmount": 80000,
+      "withdrawalAmount": 0,
+      "marketAmount": 80000,
+      "balanceUnits": 800,
+      "latestPrice": 0,
+      "xirr": 0,
+      "gainAmount": 0,
+      "absoluteReturn": 0
+    }
+  }
+}

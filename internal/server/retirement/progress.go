@@ -17,6 +17,8 @@ func GetRetirementProgress(db *gorm.DB) gin.H {
 
 	savings := accounting.FilterByGlob(query.Init(db).Like("Assets:%").All(), retirementConfig.Savings)
 	savings = service.PopulateMarketPrice(db, savings)
+	savingsWithCapitalGains := accounting.FilterByGlob(query.Init(db).Like("Assets:%", "Income:CapitalGains:%").All(), retirementConfig.Savings)
+	savingsWithCapitalGains = service.PopulateMarketPrice(db, savingsWithCapitalGains)
 	savingsTotal := accounting.CurrentBalance(savings)
 
 	yearlyExpenses := decimal.NewFromFloat(retirementConfig.YearlyExpenses)
@@ -24,7 +26,7 @@ func GetRetirementProgress(db *gorm.DB) gin.H {
 		yearlyExpenses = calculateAverageExpense(db, retirementConfig)
 	}
 
-	return gin.H{"savings_timeline": accounting.RunningBalance(db, savings), "savings_total": savingsTotal, "swr": retirementConfig.SWR, "yearly_expense": yearlyExpenses, "xirr": service.XIRR(db, savings)}
+	return gin.H{"savings_timeline": accounting.RunningBalance(db, savings), "savings_total": savingsTotal, "swr": retirementConfig.SWR, "yearly_expense": yearlyExpenses, "xirr": service.XIRR(db, savingsWithCapitalGains)}
 }
 
 func calculateAverageExpense(db *gorm.DB, retirementConfig config.Retirement) decimal.Decimal {

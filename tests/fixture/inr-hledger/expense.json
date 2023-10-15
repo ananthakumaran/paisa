@@ -1,0 +1,590 @@
+{
+  "expenses": [
+    {
+      "id": 4,
+      "transaction_id": "2",
+      "date": "2022-01-03T00:00:00Z",
+      "payee": "Rent",
+      "account": "Expenses:Rent",
+      "commodity": "INR",
+      "quantity": 20000,
+      "amount": 20000,
+      "status": "unmarked",
+      "tag_recurring": "",
+      "tag_period": "",
+      "transaction_begin_line": 10,
+      "transaction_end_line": 13,
+      "file_name": "main.ledger",
+      "forecast": false,
+      "market_amount": 0
+    }
+  ],
+  "graph": {
+    "2021 - 22": {
+      "flat": {
+        "nodes": [
+          {
+            "id": 1,
+            "name": "Assets:Checking"
+          },
+          {
+            "id": 6,
+            "name": "Assets:Equity:AAPL"
+          },
+          {
+            "id": 5,
+            "name": "Assets:Equity:ABNB"
+          },
+          {
+            "id": 4,
+            "name": "Assets:Equity:NIFTY"
+          },
+          {
+            "id": 3,
+            "name": "Expenses:Rent"
+          },
+          {
+            "id": 7,
+            "name": "Income:CapitalGains:Equity:AAPL"
+          },
+          {
+            "id": 8,
+            "name": "Income:Interest:Checking"
+          },
+          {
+            "id": 2,
+            "name": "Income:Salary:Acme"
+          }
+        ],
+        "links": [
+          {
+            "source": 1,
+            "target": 3,
+            "value": 20000
+          },
+          {
+            "source": 1,
+            "target": 4,
+            "value": 80000
+          },
+          {
+            "source": 1,
+            "target": 5,
+            "value": 8025.3170071296
+          },
+          {
+            "source": 1,
+            "target": 6,
+            "value": 10000
+          },
+          {
+            "source": 2,
+            "target": 1,
+            "value": 120000
+          },
+          {
+            "source": 6,
+            "target": 1,
+            "value": 10000
+          },
+          {
+            "source": 7,
+            "target": 1,
+            "value": 27.3
+          },
+          {
+            "source": 8,
+            "target": 1,
+            "value": 1000
+          }
+        ]
+      },
+      "hierarchy": {
+        "nodes": [
+          {
+            "id": 1,
+            "name": "Assets:Checking"
+          },
+          {
+            "id": 9,
+            "name": "Assets:Equity:AAPL"
+          },
+          {
+            "id": 8,
+            "name": "Assets:Equity:ABNB"
+          },
+          {
+            "id": 7,
+            "name": "Assets:Equity:NIFTY"
+          },
+          {
+            "id": 5,
+            "name": "Expenses"
+          },
+          {
+            "id": 6,
+            "name": "Expenses:Rent"
+          },
+          {
+            "id": 2,
+            "name": "Income"
+          },
+          {
+            "id": 10,
+            "name": "Income:CapitalGains"
+          },
+          {
+            "id": 11,
+            "name": "Income:CapitalGains:Equity"
+          },
+          {
+            "id": 12,
+            "name": "Income:CapitalGains:Equity:AAPL"
+          },
+          {
+            "id": 13,
+            "name": "Income:Interest"
+          },
+          {
+            "id": 14,
+            "name": "Income:Interest:Checking"
+          },
+          {
+            "id": 3,
+            "name": "Income:Salary"
+          },
+          {
+            "id": 4,
+            "name": "Income:Salary:Acme"
+          }
+        ],
+        "links": [
+          {
+            "source": 1,
+            "target": 5,
+            "value": 20000
+          },
+          {
+            "source": 1,
+            "target": 7,
+            "value": 80000
+          },
+          {
+            "source": 1,
+            "target": 8,
+            "value": 8025.3170071296
+          },
+          {
+            "source": 1,
+            "target": 9,
+            "value": 10000
+          },
+          {
+            "source": 2,
+            "target": 1,
+            "value": 121027.3
+          },
+          {
+            "source": 3,
+            "target": 2,
+            "value": 120000
+          },
+          {
+            "source": 4,
+            "target": 3,
+            "value": 120000
+          },
+          {
+            "source": 5,
+            "target": 6,
+            "value": 20000
+          },
+          {
+            "source": 9,
+            "target": 1,
+            "value": 10000
+          },
+          {
+            "source": 10,
+            "target": 2,
+            "value": 27.3
+          },
+          {
+            "source": 11,
+            "target": 10,
+            "value": 27.3
+          },
+          {
+            "source": 12,
+            "target": 11,
+            "value": 27.3
+          },
+          {
+            "source": 13,
+            "target": 2,
+            "value": 1000
+          },
+          {
+            "source": 14,
+            "target": 13,
+            "value": 1000
+          }
+        ]
+      }
+    }
+  },
+  "month_wise": {
+    "expenses": {
+      "2022-01": [
+        {
+          "id": 4,
+          "transaction_id": "2",
+          "date": "2022-01-03T00:00:00Z",
+          "payee": "Rent",
+          "account": "Expenses:Rent",
+          "commodity": "INR",
+          "quantity": 20000,
+          "amount": 20000,
+          "status": "unmarked",
+          "tag_recurring": "",
+          "tag_period": "",
+          "transaction_begin_line": 10,
+          "transaction_end_line": 13,
+          "file_name": "main.ledger",
+          "forecast": false,
+          "market_amount": 0
+        }
+      ]
+    },
+    "incomes": {
+      "2022-01": [
+        {
+          "id": 1,
+          "transaction_id": "1",
+          "date": "2022-01-01T00:00:00Z",
+          "payee": "Salary",
+          "account": "Income:Salary:Acme",
+          "commodity": "INR",
+          "quantity": -100000,
+          "amount": -100000,
+          "status": "unmarked",
+          "tag_recurring": "",
+          "tag_period": "",
+          "transaction_begin_line": 6,
+          "transaction_end_line": 9,
+          "file_name": "main.ledger",
+          "forecast": false,
+          "market_amount": 0
+        },
+        {
+          "id": 5,
+          "transaction_id": "3",
+          "date": "2022-01-06T00:00:00Z",
+          "payee": "Bonus",
+          "account": "Income:Salary:Acme",
+          "commodity": "INR",
+          "quantity": -20000,
+          "amount": -20000,
+          "status": "unmarked",
+          "tag_recurring": "",
+          "tag_period": "",
+          "transaction_begin_line": 14,
+          "transaction_end_line": 17,
+          "file_name": "main.ledger",
+          "forecast": false,
+          "market_amount": 0
+        },
+        {
+          "id": 14,
+          "transaction_id": "7",
+          "date": "2022-01-09T00:00:00Z",
+          "payee": "Sell",
+          "account": "Income:CapitalGains:Equity:AAPL",
+          "commodity": "INR",
+          "quantity": -27.3,
+          "amount": -27.3,
+          "status": "unmarked",
+          "tag_recurring": "",
+          "tag_period": "",
+          "transaction_begin_line": 30,
+          "transaction_end_line": 34,
+          "file_name": "main.ledger",
+          "forecast": false,
+          "market_amount": 0
+        },
+        {
+          "id": 16,
+          "transaction_id": "8",
+          "date": "2022-01-31T00:00:00Z",
+          "payee": "Interest",
+          "account": "Income:Interest:Checking",
+          "commodity": "INR",
+          "quantity": -1000,
+          "amount": -1000,
+          "status": "unmarked",
+          "tag_recurring": "",
+          "tag_period": "",
+          "transaction_begin_line": 37,
+          "transaction_end_line": 40,
+          "file_name": "main.ledger",
+          "forecast": false,
+          "market_amount": 0
+        }
+      ]
+    },
+    "investments": {
+      "2022-01": [
+        {
+          "id": 8,
+          "transaction_id": "4",
+          "date": "2022-01-07T00:00:00Z",
+          "payee": "Investment",
+          "account": "Assets:Equity:NIFTY",
+          "commodity": "NIFTY",
+          "quantity": 800,
+          "amount": 80000,
+          "status": "unmarked",
+          "tag_recurring": "",
+          "tag_period": "",
+          "transaction_begin_line": 18,
+          "transaction_end_line": 21,
+          "file_name": "main.ledger",
+          "forecast": false,
+          "market_amount": 0
+        },
+        {
+          "id": 9,
+          "transaction_id": "5",
+          "date": "2022-01-08T00:00:00Z",
+          "payee": "Buy ABNB",
+          "account": "Assets:Equity:ABNB",
+          "commodity": "ABNB",
+          "quantity": 0.76,
+          "amount": 8025.3170071296,
+          "status": "unmarked",
+          "tag_recurring": "",
+          "tag_period": "",
+          "transaction_begin_line": 22,
+          "transaction_end_line": 25,
+          "file_name": "main.ledger",
+          "forecast": false,
+          "market_amount": 0
+        },
+        {
+          "id": 11,
+          "transaction_id": "6",
+          "date": "2022-01-08T00:00:00Z",
+          "payee": "Buy Apple",
+          "account": "Assets:Equity:AAPL",
+          "commodity": "AAPL",
+          "quantity": 100,
+          "amount": 10000,
+          "status": "unmarked",
+          "tag_recurring": "",
+          "tag_period": "",
+          "transaction_begin_line": 26,
+          "transaction_end_line": 29,
+          "file_name": "main.ledger",
+          "forecast": false,
+          "market_amount": 0
+        },
+        {
+          "id": 13,
+          "transaction_id": "7",
+          "date": "2022-01-09T00:00:00Z",
+          "payee": "Sell",
+          "account": "Assets:Equity:AAPL",
+          "commodity": "AAPL",
+          "quantity": -100,
+          "amount": -10000,
+          "status": "unmarked",
+          "tag_recurring": "",
+          "tag_period": "",
+          "transaction_begin_line": 30,
+          "transaction_end_line": 34,
+          "file_name": "main.ledger",
+          "forecast": false,
+          "market_amount": 0
+        }
+      ]
+    },
+    "taxes": {}
+  },
+  "year_wise": {
+    "expenses": {
+      "2021 - 22": [
+        {
+          "id": 4,
+          "transaction_id": "2",
+          "date": "2022-01-03T00:00:00Z",
+          "payee": "Rent",
+          "account": "Expenses:Rent",
+          "commodity": "INR",
+          "quantity": 20000,
+          "amount": 20000,
+          "status": "unmarked",
+          "tag_recurring": "",
+          "tag_period": "",
+          "transaction_begin_line": 10,
+          "transaction_end_line": 13,
+          "file_name": "main.ledger",
+          "forecast": false,
+          "market_amount": 0
+        }
+      ]
+    },
+    "incomes": {
+      "2021 - 22": [
+        {
+          "id": 1,
+          "transaction_id": "1",
+          "date": "2022-01-01T00:00:00Z",
+          "payee": "Salary",
+          "account": "Income:Salary:Acme",
+          "commodity": "INR",
+          "quantity": -100000,
+          "amount": -100000,
+          "status": "unmarked",
+          "tag_recurring": "",
+          "tag_period": "",
+          "transaction_begin_line": 6,
+          "transaction_end_line": 9,
+          "file_name": "main.ledger",
+          "forecast": false,
+          "market_amount": 0
+        },
+        {
+          "id": 5,
+          "transaction_id": "3",
+          "date": "2022-01-06T00:00:00Z",
+          "payee": "Bonus",
+          "account": "Income:Salary:Acme",
+          "commodity": "INR",
+          "quantity": -20000,
+          "amount": -20000,
+          "status": "unmarked",
+          "tag_recurring": "",
+          "tag_period": "",
+          "transaction_begin_line": 14,
+          "transaction_end_line": 17,
+          "file_name": "main.ledger",
+          "forecast": false,
+          "market_amount": 0
+        },
+        {
+          "id": 14,
+          "transaction_id": "7",
+          "date": "2022-01-09T00:00:00Z",
+          "payee": "Sell",
+          "account": "Income:CapitalGains:Equity:AAPL",
+          "commodity": "INR",
+          "quantity": -27.3,
+          "amount": -27.3,
+          "status": "unmarked",
+          "tag_recurring": "",
+          "tag_period": "",
+          "transaction_begin_line": 30,
+          "transaction_end_line": 34,
+          "file_name": "main.ledger",
+          "forecast": false,
+          "market_amount": 0
+        },
+        {
+          "id": 16,
+          "transaction_id": "8",
+          "date": "2022-01-31T00:00:00Z",
+          "payee": "Interest",
+          "account": "Income:Interest:Checking",
+          "commodity": "INR",
+          "quantity": -1000,
+          "amount": -1000,
+          "status": "unmarked",
+          "tag_recurring": "",
+          "tag_period": "",
+          "transaction_begin_line": 37,
+          "transaction_end_line": 40,
+          "file_name": "main.ledger",
+          "forecast": false,
+          "market_amount": 0
+        }
+      ]
+    },
+    "investments": {
+      "2021 - 22": [
+        {
+          "id": 8,
+          "transaction_id": "4",
+          "date": "2022-01-07T00:00:00Z",
+          "payee": "Investment",
+          "account": "Assets:Equity:NIFTY",
+          "commodity": "NIFTY",
+          "quantity": 800,
+          "amount": 80000,
+          "status": "unmarked",
+          "tag_recurring": "",
+          "tag_period": "",
+          "transaction_begin_line": 18,
+          "transaction_end_line": 21,
+          "file_name": "main.ledger",
+          "forecast": false,
+          "market_amount": 0
+        },
+        {
+          "id": 9,
+          "transaction_id": "5",
+          "date": "2022-01-08T00:00:00Z",
+          "payee": "Buy ABNB",
+          "account": "Assets:Equity:ABNB",
+          "commodity": "ABNB",
+          "quantity": 0.76,
+          "amount": 8025.3170071296,
+          "status": "unmarked",
+          "tag_recurring": "",
+          "tag_period": "",
+          "transaction_begin_line": 22,
+          "transaction_end_line": 25,
+          "file_name": "main.ledger",
+          "forecast": false,
+          "market_amount": 0
+        },
+        {
+          "id": 11,
+          "transaction_id": "6",
+          "date": "2022-01-08T00:00:00Z",
+          "payee": "Buy Apple",
+          "account": "Assets:Equity:AAPL",
+          "commodity": "AAPL",
+          "quantity": 100,
+          "amount": 10000,
+          "status": "unmarked",
+          "tag_recurring": "",
+          "tag_period": "",
+          "transaction_begin_line": 26,
+          "transaction_end_line": 29,
+          "file_name": "main.ledger",
+          "forecast": false,
+          "market_amount": 0
+        },
+        {
+          "id": 13,
+          "transaction_id": "7",
+          "date": "2022-01-09T00:00:00Z",
+          "payee": "Sell",
+          "account": "Assets:Equity:AAPL",
+          "commodity": "AAPL",
+          "quantity": -100,
+          "amount": -10000,
+          "status": "unmarked",
+          "tag_recurring": "",
+          "tag_period": "",
+          "transaction_begin_line": 30,
+          "transaction_end_line": 34,
+          "file_name": "main.ledger",
+          "forecast": false,
+          "market_amount": 0
+        }
+      ]
+    },
+    "taxes": {}
+  }
+}

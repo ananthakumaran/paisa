@@ -1,0 +1,136 @@
+{
+  "gain_breakdown": [
+    {
+      "account": "Assets:Equity:AAPL",
+      "networth": {
+        "date": "2022-02-07T23:59:59.999999999Z",
+        "investmentAmount": 10000,
+        "withdrawalAmount": 10027.3,
+        "gainAmount": 27.3,
+        "balanceAmount": 0,
+        "netInvestmentAmount": -27.3
+      },
+      "xirr": 151.56,
+      "postings": [
+        {
+          "id": 11,
+          "transaction_id": "6",
+          "date": "2022-01-08T00:00:00Z",
+          "payee": "Buy Apple",
+          "account": "Assets:Equity:AAPL",
+          "commodity": "AAPL",
+          "quantity": 100,
+          "amount": 10000,
+          "status": "unmarked",
+          "tag_recurring": "",
+          "tag_period": "",
+          "transaction_begin_line": 26,
+          "transaction_end_line": 29,
+          "file_name": "main.ledger",
+          "forecast": false,
+          "market_amount": 10000
+        },
+        {
+          "id": 14,
+          "transaction_id": "7",
+          "date": "2022-01-09T00:00:00Z",
+          "payee": "Sell",
+          "account": "Income:CapitalGains:Equity:AAPL",
+          "commodity": "INR",
+          "quantity": -27.3,
+          "amount": -27.3,
+          "status": "unmarked",
+          "tag_recurring": "",
+          "tag_period": "",
+          "transaction_begin_line": 30,
+          "transaction_end_line": 34,
+          "file_name": "main.ledger",
+          "forecast": false,
+          "market_amount": -27.3
+        },
+        {
+          "id": 13,
+          "transaction_id": "7",
+          "date": "2022-01-09T00:00:00Z",
+          "payee": "Sell",
+          "account": "Assets:Equity:AAPL",
+          "commodity": "AAPL",
+          "quantity": -100,
+          "amount": -10000,
+          "status": "unmarked",
+          "tag_recurring": "",
+          "tag_period": "",
+          "transaction_begin_line": 30,
+          "transaction_end_line": 34,
+          "file_name": "main.ledger",
+          "forecast": false,
+          "market_amount": -10000
+        }
+      ]
+    },
+    {
+      "account": "Assets:Equity:ABNB",
+      "networth": {
+        "date": "2022-02-07T23:59:59.999999999Z",
+        "investmentAmount": 8025.3170071296,
+        "withdrawalAmount": 0,
+        "gainAmount": 0,
+        "balanceAmount": 8025.3170071296,
+        "netInvestmentAmount": 8025.3170071296
+      },
+      "xirr": 0,
+      "postings": [
+        {
+          "id": 9,
+          "transaction_id": "5",
+          "date": "2022-01-08T00:00:00Z",
+          "payee": "Buy ABNB",
+          "account": "Assets:Equity:ABNB",
+          "commodity": "ABNB",
+          "quantity": 0.76,
+          "amount": 8025.3170071296,
+          "status": "unmarked",
+          "tag_recurring": "",
+          "tag_period": "",
+          "transaction_begin_line": 22,
+          "transaction_end_line": 25,
+          "file_name": "main.ledger",
+          "forecast": false,
+          "market_amount": 8025.3170071296
+        }
+      ]
+    },
+    {
+      "account": "Assets:Equity:NIFTY",
+      "networth": {
+        "date": "2022-02-07T23:59:59.999999999Z",
+        "investmentAmount": 80000,
+        "withdrawalAmount": 0,
+        "gainAmount": 218.4,
+        "balanceAmount": 80218.4,
+        "netInvestmentAmount": 80000
+      },
+      "xirr": 3.16,
+      "postings": [
+        {
+          "id": 8,
+          "transaction_id": "4",
+          "date": "2022-01-07T00:00:00Z",
+          "payee": "Investment",
+          "account": "Assets:Equity:NIFTY",
+          "commodity": "NIFTY",
+          "quantity": 800,
+          "amount": 80000,
+          "status": "unmarked",
+          "tag_recurring": "",
+          "tag_period": "",
+          "transaction_begin_line": 18,
+          "transaction_end_line": 21,
+          "file_name": "main.ledger",
+          "forecast": false,
+          "market_amount": 80218.4
+        }
+      ]
+    }
+  ]
+}

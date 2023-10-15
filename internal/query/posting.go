@@ -82,8 +82,18 @@ func (q *Query) Credit() *Query {
 	return q
 }
 
-func (q *Query) AccountPrefix(account string) *Query {
-	q.context = q.context.Where("account like ? or account = ?", account+":%", account)
+func (q *Query) AccountPrefix(account ...string) *Query {
+	query := "account like ? or account = ?"
+	for range account[1:] {
+		query += " or account like ? or account = ?"
+	}
+
+	args := make([]interface{}, len(account)*2)
+	for i, a := range account {
+		args[i*2] = a + ":%"
+		args[i*2+1] = a
+	}
+	q.context = q.context.Where(query, args...)
 	return q
 }
 

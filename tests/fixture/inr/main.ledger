@@ -1,7 +1,7 @@
 commodity INR 9,99,99,999.00
 
 P 2022/01/07 00:00:00 NIFTY 100 INR
-P 2022/02/07 00:00:00 NIFTY 101 INR
+P 2022/02/07 00:00:00 NIFTY 100.273 INR
 
 2022/01/01 Salary
     Income:Salary:Acme                      -100,000 INR
@@ -12,8 +12,8 @@ P 2022/02/07 00:00:00 NIFTY 101 INR
     Expenses:Rent
 
 2022/01/06 Bonus
-    Income:Salary:Acme                       -10,000 INR
-    Assets:Checking                           10,000 INR
+    Income:Salary:Acme                       -20,000 INR
+    Assets:Checking                           20,000 INR
 
 2022/01/07 Investment
     Assets:Checking                          -80,000 INR
@@ -22,6 +22,15 @@ P 2022/02/07 00:00:00 NIFTY 101 INR
 2022/01/08 Buy ABNB
     Assets:Equity:ABNB                          0.76 ABNB @ 131.27 USD
     Assets:Checking
+
+2022/01/08 Buy Apple
+    Assets:Equity:AAPL                           100 AAPL @ 100 INR
+    Assets:Checking
+
+2022/01/09 Sell
+    Assets:Equity:AAPL                          -100 AAPL {100 INR} @ 100.273 INR
+    Income:CapitalGains:Equity:AAPL            -27.3 INR
+    Assets:Checking                          10027.3 INR
 
 P 2022/01/08 00:00:00 USD 80.442048 INR
 

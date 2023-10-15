@@ -1,6 +1,8 @@
 package server
 
 import (
+	"strings"
+
 	"github.com/ananthakumaran/paisa/internal/model/posting"
 	"github.com/ananthakumaran/paisa/internal/query"
 	"github.com/ananthakumaran/paisa/internal/server/assets"
@@ -27,9 +29,14 @@ type AccountGain struct {
 }
 
 func GetGain(db *gorm.DB) gin.H {
-	postings := query.Init(db).Like("Assets:%").NotAccountPrefix("Assets:Checking").All()
+	postings := query.Init(db).Like("Assets:%", "Income:CapitalGains:%").NotAccountPrefix("Assets:Checking").All()
 	postings = service.PopulateMarketPrice(db, postings)
-	byAccount := lo.GroupBy(postings, func(p posting.Posting) string { return p.Account })
+	byAccount := lo.GroupBy(postings, func(p posting.Posting) string {
+		if service.IsCapitalGains(p) {
+			return service.CapitalGainsSourceAccount(p.Account)
+		}
+		return p.Account
+	})
 	var gains []Gain
 	for _, account := range utils.SortedKeys(byAccount) {
 		ps := byAccount[account]
@@ -40,7 +47,8 @@ func GetGain(db *gorm.DB) gin.H {
 }
 
 func GetAccountGain(db *gorm.DB, account string) gin.H {
-	postings := query.Init(db).AccountPrefix(account).All()
+	capitalGainsAccount := strings.Replace(account, "Assets", "Income:CapitalGains", 1)
+	postings := query.Init(db).AccountPrefix(account, capitalGainsAccount).All()
 	postings = service.PopulateMarketPrice(db, postings)
 	gain := AccountGain{Account: account, XIRR: service.XIRR(db, postings), NetworthTimeline: computeNetworthTimeline(db, postings), Postings: postings}
 

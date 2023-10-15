@@ -22,7 +22,7 @@ type Networth struct {
 }
 
 func GetNetworth(db *gorm.DB) gin.H {
-	postings := query.Init(db).Like("Assets:%", "Liabilities:%").UntilToday().All()
+	postings := query.Init(db).Like("Assets:%", "Income:CapitalGains:%", "Liabilities:%").UntilToday().All()
 
 	postings = service.PopulateMarketPrice(db, postings)
 	networthTimeline := computeNetworthTimeline(db, postings)
@@ -31,7 +31,7 @@ func GetNetworth(db *gorm.DB) gin.H {
 }
 
 func GetCurrentNetworth(db *gorm.DB) gin.H {
-	postings := query.Init(db).Like("Assets:%", "Liabilities:%").UntilToday().All()
+	postings := query.Init(db).Like("Assets:%", "Income:CapitalGains:%", "Liabilities:%").UntilToday().All()
 	postings = service.PopulateMarketPrice(db, postings)
 	networth := computeNetworth(db, postings)
 	xirr := service.XIRR(db, postings)
@@ -54,9 +54,12 @@ func computeNetworth(db *gorm.DB, postings []posting.Posting) Networth {
 		isInterest := service.IsInterest(db, p)
 		isInterestRepayment := service.IsInterestRepayment(db, p)
 		isStockSplit := service.IsStockSplit(db, p)
+		isCapitalGains := service.IsCapitalGains(p)
 
 		if isInterest || isInterestRepayment {
 			balance = balance.Add(p.Amount)
+		} else if isCapitalGains {
+			withdrawal = withdrawal.Add(p.Amount.Neg())
 		} else {
 			if p.Amount.GreaterThan(decimal.Zero) && !isStockSplit {
 				investment = investment.Add(p.Amount)
@@ -109,6 +112,7 @@ func computeNetworthTimeline(db *gorm.DB, postings []posting.Posting) []Networth
 			rs := accumulator[p.Commodity]
 
 			isInterest := service.IsInterest(db, p)
+			isCapitalGains := service.IsCapitalGains(p)
 
 			if p.Amount.GreaterThan(decimal.Zero) && !isInterest {
 				rs.investment = rs.investment.Add(p.Amount)
@@ -118,8 +122,10 @@ func computeNetworthTimeline(db *gorm.DB, postings []posting.Posting) []Networth
 				rs.withdrawal = rs.withdrawal.Add(p.Amount.Neg())
 			}
 
-			rs.balance = rs.balance.Add(service.GetMarketPrice(db, p, start))
-			rs.balanceUnits = rs.balanceUnits.Add(p.Quantity)
+			if !isCapitalGains {
+				rs.balance = rs.balance.Add(service.GetMarketPrice(db, p, start))
+				rs.balanceUnits = rs.balanceUnits.Add(p.Quantity)
+			}
 
 			accumulator[p.Commodity] = rs
 

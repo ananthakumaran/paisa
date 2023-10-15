@@ -95,9 +95,6 @@ describe("regression", () => {
     test(dir, async () => {
       const directory = path.join(fixture, dir);
       await check(directory);
-      updateConfig(directory, "ledger_cli: ledger", "ledger_cli: hledger");
-      await check(directory);
-      updateConfig(directory, "ledger_cli: hledger", "ledger_cli: ledger");
     });
   });
 });

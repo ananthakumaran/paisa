@@ -174,7 +174,7 @@
         <div class="columns">
           <div class="column is-6">
             <div class="mt-5" class:is-hidden={securityTypeEmpty}>
-              <div class="box mb-2">
+              <div class="box mb-2 overflow-x-auto">
                 <div
                   id="d3-portfolio-security-type-treemap"
                   style="width: 100%; position: relative"
@@ -187,7 +187,7 @@
             </div>
 
             <div class="mt-5" class:is-hidden={ratingEmpty}>
-              <div class="box mb-2">
+              <div class="box mb-2 overflow-x-auto">
                 <div
                   id="d3-portfolio-security-rating-treemap"
                   style="width: 100%; position: relative"
@@ -200,7 +200,7 @@
             </div>
 
             <div class="mt-5" class:is-hidden={industryEmpty}>
-              <div class="box mb-2">
+              <div class="box mb-2 overflow-x-auto">
                 <div
                   id="d3-portfolio-security-industry-treemap"
                   style="width: 100%; position: relative"
@@ -214,7 +214,7 @@
           </div>
           <div class="column is-6 mt-5">
             <div class:is-hidden={nameAndSecurityTypeEmpty}>
-              <div class="box mb-2">
+              <div class="box mb-2 overflow-x-auto">
                 <div id="d3-portfolio-treemap" style="width: 100%; position: relative" />
                 <svg id="d3-portfolio" width="100%" />
               </div>

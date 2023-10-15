@@ -1,6 +1,5 @@
 import * as d3 from "d3";
 import legend from "d3-svg-legend";
-import dayjs, { Dayjs } from "dayjs";
 import chroma from "chroma-js";
 import _ from "lodash";
 import {
@@ -14,12 +13,14 @@ import {
   secondName,
   financialYear,
   forEachFinancialYear,
-  formatCurrencyCrudeWithPrecision
+  formatCurrencyCrudeWithPrecision,
+  now
 } from "$lib/utils";
 import COLORS, { generateColorScheme } from "$lib/colors";
 import type { Writable } from "svelte/store";
 import { iconify } from "$lib/icon";
 import { byExpenseGroup, expenseGroup, pieData } from "$lib/expense";
+import type { Dayjs } from "dayjs";
 
 export function renderCalendar(
   expenses: Posting[],
@@ -177,7 +178,7 @@ export function renderYearlyExpensesTimeline(
   );
 
   const start = _.min(_.map(postings, (p) => p.date)),
-    end = dayjs().startOf("month");
+    end = now().startOf("month");
   const ms = _.groupBy(postings, (p) => financialYear(p.date));
 
   interface Point {

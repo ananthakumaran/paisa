@@ -1,6 +1,5 @@
 import * as d3 from "d3";
 import legend from "d3-svg-legend";
-import dayjs from "dayjs";
 import _ from "lodash";
 import {
   forEachMonth,
@@ -10,10 +9,12 @@ import {
   restName,
   skipTicks,
   tooltip,
-  rem
+  rem,
+  now
 } from "./utils";
 import { generateColorScheme } from "./colors";
 import { iconify } from "./icon";
+import type dayjs from "dayjs";
 
 export function renderMonthlyRepaymentTimeline(postings: Posting[]) {
   const id = "#d3-repayment-timeline";
@@ -40,7 +41,7 @@ export function renderMonthlyRepaymentTimeline(postings: Posting[]) {
   );
 
   const start = _.min(_.map(postings, (p) => p.date)),
-    end = dayjs().startOf("month");
+    end = now().startOf("month");
   const ts = _.groupBy(postings, (p) => p.date.format(timeFormat));
 
   interface Point {

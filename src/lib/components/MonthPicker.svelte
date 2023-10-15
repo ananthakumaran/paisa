@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { now } from "$lib/utils";
   import dayjs from "dayjs";
   import _ from "lodash";
 
@@ -16,8 +17,8 @@
 
   $: {
     if (!isAllowed(valueDate, min, max)) {
-      if (isAllowed(dayjs(), min, max)) {
-        select(dayjs());
+      if (isAllowed(now(), min, max)) {
+        select(now());
       } else {
         select(max);
       }

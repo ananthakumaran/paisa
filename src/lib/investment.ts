@@ -1,6 +1,5 @@
 import * as d3 from "d3";
 import legend from "d3-svg-legend";
-import dayjs from "dayjs";
 import _ from "lodash";
 import {
   forEachMonth,
@@ -12,9 +11,11 @@ import {
   skipTicks,
   tooltip,
   type InvestmentYearlyCard,
-  rem
+  rem,
+  now
 } from "./utils";
 import { generateColorScheme } from "./colors";
+import type dayjs from "dayjs";
 
 function financialYear(card: InvestmentYearlyCard) {
   return `${card.start_date.format("YYYY")} - ${card.end_date.format("YY")}`;
@@ -46,7 +47,7 @@ export function renderMonthlyInvestmentTimeline(postings: Posting[]) {
   );
 
   const start = _.min(_.map(postings, (p) => p.date)),
-    end = dayjs().startOf("month");
+    end = now().startOf("month");
   const ts = _.groupBy(postings, (p) => p.date.format(timeFormat));
 
   interface Point {

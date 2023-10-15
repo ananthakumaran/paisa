@@ -1,6 +1,6 @@
 import * as d3 from "d3";
 import legend from "d3-svg-legend";
-import dayjs from "dayjs";
+import type dayjs from "dayjs";
 import _ from "lodash";
 import {
   type Aggregate,
@@ -13,7 +13,8 @@ import {
   textColor,
   tooltip,
   skipTicks,
-  rem
+  rem,
+  now
 } from "./utils";
 import COLORS, { generateColorScheme } from "./colors";
 import chroma from "chroma-js";
@@ -330,7 +331,7 @@ export function renderAllocationTimeline(aggregatesTimeline: { [key: string]: Ag
     _.map(assets, () => 0)
   );
   const start = timeline[0][0].timestamp,
-    end = dayjs();
+    end = now();
 
   interface Point {
     date: dayjs.Dayjs;

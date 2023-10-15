@@ -2,7 +2,6 @@ import chroma from "chroma-js";
 import * as d3 from "d3";
 import { Delaunay } from "d3";
 import legend from "d3-svg-legend";
-import dayjs from "dayjs";
 import _ from "lodash";
 import COLORS from "./colors";
 import tippy from "tippy.js";
@@ -16,7 +15,8 @@ import {
   skipTicks,
   restName,
   type Posting,
-  rem
+  rem,
+  now
 } from "./utils";
 import { goto } from "$app/navigation";
 
@@ -314,7 +314,7 @@ export function renderOverview(gains: Gain[]) {
 
 export function renderAccountOverview(points: Networth[], postings: Posting[], id: string) {
   const start = _.min(_.map(points, (p) => p.date)),
-    end = dayjs();
+    end = now();
 
   const element = document.getElementById(id);
 

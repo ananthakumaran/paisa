@@ -4,7 +4,8 @@
     "Assets:Checking",
     "Expenses:Rent",
     "Assets:Equity:NIFTY",
-    "Assets:Equity:ABNB"
+    "Assets:Equity:ABNB",
+    "Income:Interest:Checking"
   ],
   "commodities": [
     "INR",
@@ -15,7 +16,7 @@
   "files": [
     {
       "name": "main.ledger",
-      "content": "commodity INR 9,99,99,999.00\n\nP 2022/01/07 00:00:00 NIFTY 100 INR\nP 2022/02/07 00:00:00 NIFTY 101 INR\n\n2022/01/01 Salary\n    Income:Salary:Acme                      -100,000 INR\n    Assets:Checking                          100,000 INR\n\n2022/01/03 Rent\n    Assets:Checking                          -20,000 INR\n    Expenses:Rent\n\n2022/01/07 Investment\n    Assets:Checking                          -80,000 INR\n    Assets:Equity:NIFTY                          800 NIFTY @ 100 INR\n\n2022/01/08 Bonus\n    Income:Salary:Acme                       -10,000 INR\n    Assets:Checking                           10,000 INR\n\nP 2022/01/08 00:00:00 USD 80.442048 INR\n\n2022/01/08 Buy ABNB\n    Assets:Equity:ABNB                          0.76 ABNB @ 131.27 USD\n    Assets:Checking\n",
+      "content": "commodity INR 9,99,99,999.00\n\nP 2022/01/07 00:00:00 NIFTY 100 INR\nP 2022/02/07 00:00:00 NIFTY 101 INR\n\n2022/01/01 Salary\n    Income:Salary:Acme                      -100,000 INR\n    Assets:Checking                          100,000 INR\n\n2022/01/03 Rent\n    Assets:Checking                          -20,000 INR\n    Expenses:Rent\n\n2022/01/06 Bonus\n    Income:Salary:Acme                       -10,000 INR\n    Assets:Checking                           10,000 INR\n\n2022/01/07 Investment\n    Assets:Checking                          -80,000 INR\n    Assets:Equity:NIFTY                          800 NIFTY @ 100 INR\n\n2022/01/08 Buy ABNB\n    Assets:Equity:ABNB                          0.76 ABNB @ 131.27 USD\n    Assets:Checking\n\nP 2022/01/08 00:00:00 USD 80.442048 INR\n\n2022/01/31 Interest\n    Income:Interest:Checking                  -1,000 INR\n    Assets:Checking\n",
       "versions": [],
       "operation": ""
     }
@@ -23,8 +24,9 @@
   "payees": [
     "Salary",
     "Rent",
-    "Investment",
     "Bonus",
-    "Buy ABNB"
+    "Investment",
+    "Buy ABNB",
+    "Interest"
   ]
 }

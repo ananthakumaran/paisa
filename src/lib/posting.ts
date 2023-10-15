@@ -1,7 +1,6 @@
-import dayjs from "dayjs";
 import _ from "lodash";
 import Clusturize from "clusterize.js";
-import { formatCurrency, formatFloat, postingUrl, type Posting, firstName } from "./utils";
+import { formatCurrency, formatFloat, postingUrl, type Posting, firstName, now } from "./utils";
 import { iconText } from "./icon";
 import { accountColorStyle } from "./colors";
 
@@ -19,7 +18,7 @@ export function renderPostings(postings: Posting[]) {
     if (p.commodity !== USER_CONFIG.default_currency) {
       units = formatFloat(p.quantity, 4);
       price = formatCurrency(Math.abs(p.amount / p.quantity), 4);
-      const days = dayjs().diff(p.date, "days");
+      const days = now().diff(p.date, "days");
       if (p.quantity > 0 && days > 0) {
         market = formatCurrency(p.market_amount);
         const changeAmount = p.market_amount - p.amount;

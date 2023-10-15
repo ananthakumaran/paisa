@@ -5,14 +5,12 @@
     scheduleIcon,
     totalRecurring
   } from "$lib/transaction_sequence";
-  import { formatCurrencyCrude, type TransactionSequence } from "$lib/utils";
-  import dayjs from "dayjs";
+  import { formatCurrencyCrude, now, type TransactionSequence } from "$lib/utils";
 
   export let transactionSequece: TransactionSequence;
 
   let schedule = nextUnpaidSchedule(transactionSequece);
   let n = schedule.scheduled;
-  const now = dayjs();
   const icon = scheduleIcon(schedule);
 </script>
 
@@ -29,9 +27,9 @@
   </div>
   <div
     class="m-3 du-radial-progress is-size-7 {icon.color}"
-    style="--value: {n.isBefore(now)
+    style="--value: {n.isBefore(now())
       ? '0'
-      : (schedule.scheduled.diff(now, 'day') / transactionSequece.interval) *
+      : (schedule.scheduled.diff(now(), 'day') / transactionSequece.interval) *
         100}; --thickness: 3px; --size: 100px;"
   >
     <div class="is-size-6">

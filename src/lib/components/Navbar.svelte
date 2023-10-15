@@ -10,10 +10,9 @@
     cashflowIncomeDepthAllowed
   } from "../../persisted_store";
   import _ from "lodash";
-  import { financialYear, forEachFinancialYear, helpUrl } from "$lib/utils";
+  import { financialYear, forEachFinancialYear, helpUrl, now } from "$lib/utils";
   import { onMount } from "svelte";
   import { get } from "svelte/store";
-  import dayjs from "dayjs";
   import DateRange from "./DateRange.svelte";
   import ThemeSwitcher from "./ThemeSwitcher.svelte";
   import BoxedTabs from "./BoxedTabs.svelte";
@@ -25,7 +24,7 @@
 
   onMount(async () => {
     if (get(year) == "") {
-      year.set(financialYear(dayjs()));
+      year.set(financialYear(now()));
     }
   });
 

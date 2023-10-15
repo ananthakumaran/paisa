@@ -1,5 +1,6 @@
 import _ from "lodash";
 import {
+  now,
   prefixMinutesSeconds,
   type Transaction,
   type TransactionSchedule,
@@ -10,8 +11,7 @@ import { parse, type CronExprs } from "@datasert/cronjs-parser";
 import { getFutureMatches } from "@datasert/cronjs-matcher";
 import { iconGlyph } from "./icon";
 
-const now = dayjs();
-const end = dayjs().add(36, "month");
+const end = now().add(36, "month");
 
 function zip(schedules: dayjs.Dayjs[], transactions: Transaction[], key: string, amount: number) {
   let si = 0;
@@ -130,7 +130,7 @@ function enrich(ts: TransactionSequence) {
     ts.schedules = zip(schedules, transactions, ts.key, amount);
   }
 
-  const [past, future] = _.partition(ts.schedules, (s) => s.scheduled?.isBefore(now));
+  const [past, future] = _.partition(ts.schedules, (s) => s.scheduled?.isBefore(now()));
   ts.pastSchedules = past;
   ts.futureSchedules = future;
   ts.schedulesByMonth = _.groupBy(ts.schedules, (s) => s.scheduled?.format("YYYY-MM") || "NA");
@@ -153,7 +153,7 @@ export function scheduleIcon(schedule: TransactionSchedule) {
   let svgColor = "svg-text-success";
 
   if (!schedule.actual) {
-    if (schedule.scheduled.isBefore(now, "day")) {
+    if (schedule.scheduled.isBefore(now(), "day")) {
       color = "has-text-danger";
       icon = "fa-exclamation-triangle";
       glyph = iconGlyph("fa6-solid:triangle-exclamation");
@@ -227,7 +227,7 @@ export function enrichTrantionSequence(transactionSequences: TransactionSequence
 export function sortTrantionSequence(transactionSequences: TransactionSequence[]) {
   return _.chain(transactionSequences)
     .sortBy((ts) => {
-      return Math.abs(nextUnpaidSchedule(ts).scheduled.diff(now));
+      return Math.abs(nextUnpaidSchedule(ts).scheduled.diff(now()));
     })
     .value();
 }

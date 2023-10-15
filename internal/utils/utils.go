@@ -8,7 +8,6 @@ import (
 	"time"
 
 	"github.com/ananthakumaran/paisa/internal/config"
-	"github.com/ananthakumaran/paisa/internal/model/posting"
 	"github.com/google/btree"
 	"github.com/onrik/gorm-logrus"
 	"github.com/samber/lo"
@@ -92,7 +91,7 @@ func EndOfDay(date time.Time) time.Time {
 	return toDate(date).AddDate(0, 0, 1).Add(-time.Nanosecond)
 }
 
-var now *time.Time
+var now time.Time
 
 func SetNow(date string) {
 	t, err := time.ParseInLocation("2006-01-02", date, time.Local)
@@ -100,14 +99,18 @@ func SetNow(date string) {
 		log.Fatal(err)
 	}
 	log.Infof("Setting now to %s", t)
-	now = &t
+	now = t
 }
 
 func Now() time.Time {
-	if now != nil {
-		return *now
+	if !now.Equal(time.Time{}) {
+		return now
 	}
 	return time.Now()
+}
+
+func IsNowDefined() bool {
+	return !now.Equal(time.Time{})
 }
 
 func EndOfToday() time.Time {
@@ -123,6 +126,10 @@ func IsSameOrParent(account string, comparison string) bool {
 		return true
 	}
 
+	return strings.HasPrefix(account, comparison+":")
+}
+
+func IsParent(account string, comparison string) bool {
 	return strings.HasPrefix(account, comparison+":")
 }
 
@@ -144,12 +151,6 @@ func MaxTime(a time.Time, b time.Time) time.Time {
 	} else {
 		return b
 	}
-}
-
-func GroupByAccount(posts []posting.Posting) map[string][]posting.Posting {
-	return lo.GroupBy(posts, func(post posting.Posting) string {
-		return post.Account
-	})
 }
 
 type GroupableByDate interface {

@@ -74,8 +74,8 @@ func computeBudet(db *gorm.DB, forecastPostings, expensesPostings []posting.Post
 				expensesByMonth = []posting.Posting{}
 			}
 
-			forecastsByAccount := utils.GroupByAccount(forecastsByMonth)
-			expensesByAccount := utils.GroupByAccount(expensesByMonth)
+			forecastsByAccount := accounting.GroupByAccount(forecastsByMonth)
+			expensesByAccount := accounting.GroupByAccount(expensesByMonth)
 
 			for _, account := range accounts {
 				fs := forecastsByAccount[account]

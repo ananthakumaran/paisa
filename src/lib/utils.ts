@@ -1,4 +1,4 @@
-import dayjs, { Dayjs } from "dayjs";
+import dayjs from "dayjs";
 import _ from "lodash";
 import * as d3 from "d3";
 import { loading } from "../store";
@@ -427,7 +427,9 @@ const BACKGROUND = [
   "/api/price/providers"
 ];
 
-export function ajax(route: "/api/config"): Promise<{ config: UserConfig; schema: JSONSchema7 }>;
+export function ajax(
+  route: "/api/config"
+): Promise<{ config: UserConfig; schema: JSONSchema7; now: dayjs.Dayjs }>;
 export function ajax(route: "/api/retirement/progress"): Promise<RetirementProgress>;
 export function ajax(route: "/api/harvest"): Promise<{ harvestables: Record<string, Harvestable> }>;
 export function ajax(
@@ -611,7 +613,7 @@ export async function ajax(route: string, options?: RequestInit, params?: Record
   return JSON.parse(body, (key, value) => {
     if (
       _.isString(value) &&
-      /date|time/.test(key) &&
+      /date|time|now/.test(key) &&
       /^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(.[0-9]+)?(Z|[+-][0-9]{2}:[0-9]{2})$/.test(
         value
       )
@@ -641,6 +643,19 @@ function normalize(value: number) {
   }
 
   return value;
+}
+
+export function setNow(value: dayjs.Dayjs) {
+  if (value) {
+    globalThis.__now = value;
+  }
+}
+
+export function now() {
+  if (globalThis.__now) {
+    return globalThis.__now;
+  }
+  return dayjs();
 }
 
 export function formatCurrency(value: number, precision = 0) {
@@ -925,7 +940,7 @@ export function monthDays(month: string) {
   const weekStart = monthStart.startOf("week");
   const weekEnd = monthEnd.endOf("week");
 
-  const days: Dayjs[] = [];
+  const days: dayjs.Dayjs[] = [];
   let d = weekStart;
   while (d.isSameOrBefore(weekEnd)) {
     days.push(d);
@@ -939,4 +954,17 @@ export function prefixMinutesSeconds(cronExpression: string) {
     .split("|")
     .map((cron) => "0 0 " + cron)
     .join("|");
+}
+
+export function svgTruncate(width: number) {
+  return function () {
+    const self = d3.select(this);
+    let textLength = self.node().getComputedTextLength(),
+      text = self.text();
+    while (textLength > width && text.length > 0) {
+      text = text.slice(0, -1);
+      self.text(text + "...");
+      textLength = self.node().getComputedTextLength();
+    }
+  };
 }

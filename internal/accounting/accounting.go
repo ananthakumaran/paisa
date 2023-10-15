@@ -170,3 +170,9 @@ func RunningBalance(db *gorm.DB, postings []posting.Posting) []Point {
 	}
 	return series
 }
+
+func GroupByAccount(posts []posting.Posting) map[string][]posting.Posting {
+	return lo.GroupBy(posts, func(post posting.Posting) string {
+		return post.Account
+	})
+}

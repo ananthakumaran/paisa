@@ -9,8 +9,8 @@
     "Assets:Checking": {
       "date": "2022-02-07T23:59:59.999999999Z",
       "account": "Assets:Checking",
-      "amount": 1974.6829928704,
-      "market_amount": 1974.6829928704
+      "amount": 2974.6829928704,
+      "market_amount": 2974.6829928704
     },
     "Assets:Equity": {
       "date": "0001-01-01T00:00:00Z",
@@ -76,16 +76,16 @@
       "Assets:Checking": {
         "date": "2022-01-06T00:00:00Z",
         "account": "Assets:Checking",
-        "amount": 80000,
-        "market_amount": 80000
+        "amount": 90000,
+        "market_amount": 90000
       }
     },
     {
       "Assets:Checking": {
         "date": "2022-01-07T00:00:00Z",
         "account": "Assets:Checking",
-        "amount": 0,
-        "market_amount": 0
+        "amount": 10000,
+        "market_amount": 10000
       },
       "Assets:Equity:NIFTY": {
         "date": "2022-01-07T00:00:00Z",
@@ -558,8 +558,8 @@
       "Assets:Checking": {
         "date": "2022-01-31T00:00:00Z",
         "account": "Assets:Checking",
-        "amount": 1974.6829928704,
-        "market_amount": 1974.6829928704
+        "amount": 2974.6829928704,
+        "market_amount": 2974.6829928704
       },
       "Assets:Equity:ABNB": {
         "date": "2022-01-31T00:00:00Z",
@@ -578,8 +578,8 @@
       "Assets:Checking": {
         "date": "2022-02-01T00:00:00Z",
         "account": "Assets:Checking",
-        "amount": 1974.6829928704,
-        "market_amount": 1974.6829928704
+        "amount": 2974.6829928704,
+        "market_amount": 2974.6829928704
       },
       "Assets:Equity:ABNB": {
         "date": "2022-02-01T00:00:00Z",
@@ -598,8 +598,8 @@
       "Assets:Checking": {
         "date": "2022-02-02T00:00:00Z",
         "account": "Assets:Checking",
-        "amount": 1974.6829928704,
-        "market_amount": 1974.6829928704
+        "amount": 2974.6829928704,
+        "market_amount": 2974.6829928704
       },
       "Assets:Equity:ABNB": {
         "date": "2022-02-02T00:00:00Z",
@@ -618,8 +618,8 @@
       "Assets:Checking": {
         "date": "2022-02-03T00:00:00Z",
         "account": "Assets:Checking",
-        "amount": 1974.6829928704,
-        "market_amount": 1974.6829928704
+        "amount": 2974.6829928704,
+        "market_amount": 2974.6829928704
       },
       "Assets:Equity:ABNB": {
         "date": "2022-02-03T00:00:00Z",
@@ -638,8 +638,8 @@
       "Assets:Checking": {
         "date": "2022-02-04T00:00:00Z",
         "account": "Assets:Checking",
-        "amount": 1974.6829928704,
-        "market_amount": 1974.6829928704
+        "amount": 2974.6829928704,
+        "market_amount": 2974.6829928704
       },
       "Assets:Equity:ABNB": {
         "date": "2022-02-04T00:00:00Z",
@@ -658,8 +658,8 @@
       "Assets:Checking": {
         "date": "2022-02-05T00:00:00Z",
         "account": "Assets:Checking",
-        "amount": 1974.6829928704,
-        "market_amount": 1974.6829928704
+        "amount": 2974.6829928704,
+        "market_amount": 2974.6829928704
       },
       "Assets:Equity:ABNB": {
         "date": "2022-02-05T00:00:00Z",
@@ -678,8 +678,8 @@
       "Assets:Checking": {
         "date": "2022-02-06T00:00:00Z",
         "account": "Assets:Checking",
-        "amount": 1974.6829928704,
-        "market_amount": 1974.6829928704
+        "amount": 2974.6829928704,
+        "market_amount": 2974.6829928704
       },
       "Assets:Equity:ABNB": {
         "date": "2022-02-06T00:00:00Z",
@@ -698,8 +698,8 @@
       "Assets:Checking": {
         "date": "2022-02-07T00:00:00Z",
         "account": "Assets:Checking",
-        "amount": 1974.6829928704,
-        "market_amount": 1974.6829928704
+        "amount": 2974.6829928704,
+        "market_amount": 2974.6829928704
       },
       "Assets:Equity:ABNB": {
         "date": "2022-02-07T00:00:00Z",

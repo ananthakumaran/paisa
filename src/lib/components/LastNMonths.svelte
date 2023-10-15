@@ -1,11 +1,11 @@
 <script lang="ts">
-  import dayjs from "dayjs";
   import _ from "lodash";
   import BoxedTabs from "./BoxedTabs.svelte";
+  import { now } from "$lib/utils";
 
   export let n = 2;
 
-  let currentMonth = dayjs();
+  let currentMonth = now();
   export let value: string = currentMonth.format("YYYY-MM");
 
   let options: { label: string; value: string }[] = _.reverse(

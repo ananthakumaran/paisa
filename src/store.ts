@@ -1,9 +1,16 @@
 import { writable, derived, get } from "svelte/store";
 import * as d3 from "d3";
 
-import type { AccountTfIdf, LedgerFileError } from "$lib/utils";
 import dayjs from "dayjs";
+import type { AccountTfIdf, LedgerFileError } from "$lib/utils";
 import _ from "lodash";
+
+export function now() {
+  if (globalThis.__now) {
+    return globalThis.__now;
+  }
+  return dayjs();
+}
 
 interface EditorState {
   hasUnsavedChanges: boolean;
@@ -23,12 +30,12 @@ export const initialEditorState: EditorState = {
 
 export const editorState = writable(initialEditorState);
 
-export const month = writable(dayjs().format("YYYY-MM"));
+export const month = writable(now().format("YYYY-MM"));
 export const year = writable<string>("");
 export const dateRangeOption = writable<number>(3);
 
 export const dateMin = writable(dayjs("1980", "YYYY"));
-export const dateMax = writable(dayjs());
+export const dateMax = writable(now());
 
 export const dateRange = derived(
   [dateMin, dateMax, dateRangeOption],

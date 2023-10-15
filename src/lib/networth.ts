@@ -1,11 +1,10 @@
 import * as d3 from "d3";
 import { Delaunay } from "d3";
 import legend from "d3-svg-legend";
-import dayjs from "dayjs";
 import _ from "lodash";
 import tippy from "tippy.js";
 import COLORS from "./colors";
-import { formatCurrency, isMobile } from "./utils";
+import { formatCurrency, isMobile, now } from "./utils";
 import { formatCurrencyCrude, tooltip, type Networth } from "./utils";
 
 function networth(d: Networth) {
@@ -18,7 +17,7 @@ function investment(d: Networth) {
 
 export function renderNetworth(points: Networth[], element: Element): () => void {
   const start = _.min(_.map(points, (p) => p.date)),
-    end = dayjs();
+    end = now();
 
   const svg = d3.select(element);
 

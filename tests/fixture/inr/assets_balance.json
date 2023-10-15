@@ -4,22 +4,22 @@
       "group": "Assets",
       "investmentAmount": 88025.3170071296,
       "withdrawalAmount": 0,
-      "marketAmount": 90800,
+      "marketAmount": 91800,
       "balanceUnits": 0,
       "latestPrice": 0,
-      "xirr": 8.95,
-      "gainAmount": 2774.6829928704,
-      "absoluteReturn": 0.0315214200551605
+      "xirr": 21.02,
+      "gainAmount": 3774.6829928704,
+      "absoluteReturn": 0.0428817881174421
     },
     "Assets:Checking": {
       "group": "Assets:Checking",
       "investmentAmount": 0,
       "withdrawalAmount": 0,
-      "marketAmount": 1974.6829928704,
-      "balanceUnits": -99.7652,
+      "marketAmount": 2974.6829928704,
+      "balanceUnits": 0,
       "latestPrice": 0,
-      "xirr": 0,
-      "gainAmount": 1974.6829928704,
+      "xirr": 77.93,
+      "gainAmount": 2974.6829928704,
       "absoluteReturn": 0
     },
     "Assets:Equity": {

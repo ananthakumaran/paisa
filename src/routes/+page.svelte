@@ -14,9 +14,9 @@
     type Networth,
     type Posting,
     type Transaction,
-    type TransactionSequence
+    type TransactionSequence,
+    now
   } from "$lib/utils";
-  import dayjs from "dayjs";
   import _ from "lodash";
   import { onMount } from "svelte";
 
@@ -29,7 +29,7 @@
 
   let UntypedMasonryGrid = MasonryGrid as any;
 
-  let month = dayjs().format("YYYY-MM");
+  let month = now().format("YYYY-MM");
   let transactionSequences: TransactionSequence[] = [];
   let cashFlows: CashFlow[] = [];
   let expenses: { [key: string]: Posting[] } = {};
@@ -248,7 +248,7 @@
                   <div class="content box">
                     <div
                       class="grid grid-rows-1 overflow-hidden"
-                      style="grid-auto-rows: 0px; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));"
+                      style="grid-auto-rows: 0px; grid-template-columns: repeat(auto-fit, minmax(130px, 150px));"
                     >
                       {#each transactionSequences as ts (ts)}
                         <UpcomingCard transactionSequece={ts} />

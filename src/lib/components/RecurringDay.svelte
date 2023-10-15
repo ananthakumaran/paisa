@@ -1,13 +1,12 @@
 <script lang="ts">
-  import { isMobile, type TransactionSchedule } from "$lib/utils";
+  import { isMobile, now, type TransactionSchedule } from "$lib/utils";
   import type { Dayjs } from "dayjs";
   import RecurringSchedule from "./RecurringSchedule.svelte";
-  import dayjs from "dayjs";
 
   export let month: string;
   export let day: Dayjs;
   export let schedules: TransactionSchedule[];
-  const isToday = day.isSame(dayjs(), "day");
+  const isToday = day.isSame(now(), "day");
 </script>
 
 <div class="box m-0 p-0 {day.format('YYYY-MM') != month && 'is-invisible is-hidden-mobile'}">

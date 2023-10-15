@@ -24,8 +24,8 @@
           "status": "unmarked",
           "tag_recurring": "",
           "tag_period": "",
-          "transaction_begin_line": 24,
-          "transaction_end_line": 27,
+          "transaction_begin_line": 22,
+          "transaction_end_line": 25,
           "file_name": "main.ledger",
           "forecast": false,
           "market_amount": 8025.3170071296
@@ -45,8 +45,8 @@
       "xirr": 12.02,
       "postings": [
         {
-          "id": 6,
-          "transaction_id": "3",
+          "id": 8,
+          "transaction_id": "4",
           "date": "2022-01-07T00:00:00Z",
           "payee": "Investment",
           "account": "Assets:Equity:NIFTY",
@@ -56,8 +56,8 @@
           "status": "unmarked",
           "tag_recurring": "",
           "tag_period": "",
-          "transaction_begin_line": 14,
-          "transaction_end_line": 17,
+          "transaction_begin_line": 18,
+          "transaction_end_line": 21,
           "file_name": "main.ledger",
           "forecast": false,
           "market_amount": 80800

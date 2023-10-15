@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"time"
 
 	"github.com/ananthakumaran/paisa/internal/config"
 	"github.com/ananthakumaran/paisa/internal/generator"
@@ -13,6 +14,7 @@ import (
 	"github.com/ananthakumaran/paisa/internal/server/assets"
 	"github.com/ananthakumaran/paisa/internal/server/liabilities"
 	"github.com/ananthakumaran/paisa/internal/server/retirement"
+	"github.com/ananthakumaran/paisa/internal/utils"
 	"github.com/ananthakumaran/paisa/web"
 	"github.com/gin-contrib/gzip"
 	"github.com/gin-gonic/gin"
@@ -35,7 +37,12 @@ func Build(db *gorm.DB, enableCompression bool) *gin.Engine {
 	})
 
 	router.GET("/api/config", func(c *gin.Context) {
-		c.JSON(200, gin.H{"config": config.GetConfig(), "schema": config.GetSchema()})
+		var now *time.Time
+		if utils.IsNowDefined() {
+			n := utils.Now()
+			now = &n
+		}
+		c.JSON(200, gin.H{"config": config.GetConfig(), "now": now, "schema": config.GetSchema()})
 	})
 
 	router.POST("/api/config", func(c *gin.Context) {

@@ -10,7 +10,8 @@ import {
   type PortfolioAggregate,
   type CommodityBreakdown,
   getColorPreference,
-  rem
+  rem,
+  svgTruncate
 } from "./utils";
 
 export function filterCommodityBreakdowns(
@@ -53,7 +54,11 @@ export function renderPortfolioBreakdown(
   const BAR_HEIGHT = rem(25);
   const svg = d3.select(id),
     margin = { top: showLegend ? rem(60) : rem(20), right: 0, bottom: rem(10), left: rem(20) },
-    fullWidth = Math.max(document.getElementById(id.substring(1)).parentElement.clientWidth, 800),
+    fullWidth =
+      Math.max(
+        document.getElementById(id.substring(1)).parentElement.clientWidth,
+        small ? 320 : 800
+      ) - 2,
     width = fullWidth - margin.left - margin.right,
     g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
@@ -142,7 +147,7 @@ export function renderPortfolioBreakdown(
     const paddingTop = (BAR_HEIGHT - y.bandwidth()) / 2;
 
     if (showLegend) {
-      legendg.attr("class", "legendOrdinal").attr("transform", "translate(280,3)");
+      legendg.attr("class", "legendOrdinal").attr("transform", `translate(${margin.left},3)`);
 
       const legendOrdinal = legend
         .legendColor()
@@ -215,7 +220,8 @@ export function renderPortfolioBreakdown(
       .attr("dominant-baseline", "middle")
       .classed("svg-text-black svg-text-shadow", true)
       .attr("x", 5)
-      .attr("y", (t) => y(t.id) + BAR_HEIGHT / 2);
+      .attr("y", (t) => y(t.id) + BAR_HEIGHT / 2)
+      .each(svgTruncate(targetWidth));
 
     labelGroup.exit().remove();
 

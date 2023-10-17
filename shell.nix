@@ -9,6 +9,7 @@ pkgs.mkShell {
     pkgs.nodejs-18_x
     pkgs.libuuid
     pkgs.bun
+    pkgs.node2nix
     # pkgs.pkgsCross.mingwW64.buildPackages.gcc
 
     pkgs.python311Packages.mkdocs

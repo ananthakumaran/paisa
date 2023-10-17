@@ -23,3 +23,4 @@ fonts/*
 !fonts/*.woff2
 !fonts/*.json
 !fonts/*.scss
+/result

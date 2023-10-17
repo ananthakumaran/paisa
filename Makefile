@@ -71,3 +71,10 @@ fixture/main.transactions.json:
 generate-fonts:
 	bun download-svgs.js
 	node generate-font.js
+
+node2nix:
+	node2nix --development -18 --input package.json \
+	--lock package-lock.json \
+	--node-env ./flake/node-env.nix \
+	--composition ./flake/default.nix \
+	--output ./flake/node-package.nix

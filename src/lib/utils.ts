@@ -697,6 +697,14 @@ export function formatFloat(value: number, precision = 2) {
   });
 }
 
+export function formatFloatUptoPrecision(value: number, precision = 2) {
+  value = normalize(value);
+
+  return value.toLocaleString(USER_CONFIG.locale, {
+    maximumFractionDigits: precision
+  });
+}
+
 export function formatPercentage(value: number, precision = 0) {
   value = normalize(value);
 

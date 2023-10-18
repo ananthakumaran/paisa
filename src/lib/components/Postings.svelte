@@ -1,16 +1,15 @@
 <script lang="ts">
   import { accountColorStyle } from "$lib/colors";
   import { iconText } from "$lib/icon";
-  import { firstName, formatCurrency, formatFloat, type Posting } from "$lib/utils";
+  import { firstName, formatCurrency, formatFloatUptoPrecision, type Posting } from "$lib/utils";
 
   const unlessDefaultCurrency = (p: Posting) => {
     if (p.commodity == USER_CONFIG.default_currency) {
       return "";
     } else {
-      return `${formatFloat(p.quantity, 3)} ${p.commodity} @ ${formatFloat(
-        p.amount / p.quantity,
-        4
-      )}`;
+      return `${formatFloatUptoPrecision(p.quantity, 3)} ${
+        p.commodity
+      } @ ${formatFloatUptoPrecision(p.amount / p.quantity, 4)}`;
     }
   };
 

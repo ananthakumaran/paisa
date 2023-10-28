@@ -19,7 +19,8 @@
           "transaction_end_line": 7,
           "file_name": "main.ledger",
           "forecast": false,
-          "market_amount": 0
+          "market_amount": 0,
+          "balance": 0
         }
       ]
     },
@@ -50,7 +51,8 @@
           "transaction_end_line": 7,
           "file_name": "main.ledger",
           "forecast": false,
-          "market_amount": 0
+          "market_amount": 0,
+          "balance": 0
         }
       ],
       "gross_income": 11000,

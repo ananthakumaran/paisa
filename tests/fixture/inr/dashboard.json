@@ -44,7 +44,8 @@
         "transaction_end_line": 12,
         "file_name": "main.ledger",
         "forecast": false,
-        "market_amount": 0
+        "market_amount": 0,
+        "balance": 0
       }
     ]
   },
@@ -83,7 +84,8 @@
           "transaction_end_line": 39,
           "file_name": "main.ledger",
           "forecast": false,
-          "market_amount": 0
+          "market_amount": 0,
+          "balance": 0
         },
         {
           "id": 16,
@@ -101,7 +103,8 @@
           "transaction_end_line": 39,
           "file_name": "main.ledger",
           "forecast": false,
-          "market_amount": 0
+          "market_amount": 0,
+          "balance": 0
         }
       ],
       "tag_recurring": "",
@@ -131,7 +134,8 @@
           "transaction_end_line": 33,
           "file_name": "main.ledger",
           "forecast": false,
-          "market_amount": 0
+          "market_amount": 0,
+          "balance": 0
         },
         {
           "id": 14,
@@ -149,7 +153,8 @@
           "transaction_end_line": 33,
           "file_name": "main.ledger",
           "forecast": false,
-          "market_amount": 0
+          "market_amount": 0,
+          "balance": 0
         },
         {
           "id": 13,
@@ -167,7 +172,8 @@
           "transaction_end_line": 33,
           "file_name": "main.ledger",
           "forecast": false,
-          "market_amount": 0
+          "market_amount": 0,
+          "balance": 0
         }
       ],
       "tag_recurring": "",
@@ -197,7 +203,8 @@
           "transaction_end_line": 24,
           "file_name": "main.ledger",
           "forecast": false,
-          "market_amount": 0
+          "market_amount": 0,
+          "balance": 0
         },
         {
           "id": 10,
@@ -215,7 +222,8 @@
           "transaction_end_line": 24,
           "file_name": "main.ledger",
           "forecast": false,
-          "market_amount": 0
+          "market_amount": 0,
+          "balance": 0
         }
       ],
       "tag_recurring": "",
@@ -245,7 +253,8 @@
           "transaction_end_line": 28,
           "file_name": "main.ledger",
           "forecast": false,
-          "market_amount": 0
+          "market_amount": 0,
+          "balance": 0
         },
         {
           "id": 12,
@@ -263,7 +272,8 @@
           "transaction_end_line": 28,
           "file_name": "main.ledger",
           "forecast": false,
-          "market_amount": 0
+          "market_amount": 0,
+          "balance": 0
         }
       ],
       "tag_recurring": "",
@@ -293,7 +303,8 @@
           "transaction_end_line": 20,
           "file_name": "main.ledger",
           "forecast": false,
-          "market_amount": 0
+          "market_amount": 0,
+          "balance": 0
         },
         {
           "id": 7,
@@ -311,7 +322,8 @@
           "transaction_end_line": 20,
           "file_name": "main.ledger",
           "forecast": false,
-          "market_amount": 0
+          "market_amount": 0,
+          "balance": 0
         }
       ],
       "tag_recurring": "",
@@ -341,7 +353,8 @@
           "transaction_end_line": 16,
           "file_name": "main.ledger",
           "forecast": false,
-          "market_amount": 0
+          "market_amount": 0,
+          "balance": 0
         },
         {
           "id": 5,
@@ -359,7 +372,8 @@
           "transaction_end_line": 16,
           "file_name": "main.ledger",
           "forecast": false,
-          "market_amount": 0
+          "market_amount": 0,
+          "balance": 0
         }
       ],
       "tag_recurring": "",
@@ -389,7 +403,8 @@
           "transaction_end_line": 12,
           "file_name": "main.ledger",
           "forecast": false,
-          "market_amount": 0
+          "market_amount": 0,
+          "balance": 0
         },
         {
           "id": 3,
@@ -407,7 +422,8 @@
           "transaction_end_line": 12,
           "file_name": "main.ledger",
           "forecast": false,
-          "market_amount": 0
+          "market_amount": 0,
+          "balance": 0
         }
       ],
       "tag_recurring": "",
@@ -437,7 +453,8 @@
           "transaction_end_line": 8,
           "file_name": "main.ledger",
           "forecast": false,
-          "market_amount": 0
+          "market_amount": 0,
+          "balance": 0
         },
         {
           "id": 1,
@@ -455,7 +472,8 @@
           "transaction_end_line": 8,
           "file_name": "main.ledger",
           "forecast": false,
-          "market_amount": 0
+          "market_amount": 0,
+          "balance": 0
         }
       ],
       "tag_recurring": "",

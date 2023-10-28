@@ -19,7 +19,8 @@
           "transaction_end_line": 8,
           "file_name": "main.ledger",
           "forecast": false,
-          "market_amount": 0
+          "market_amount": 0,
+          "balance": 0
         },
         {
           "id": 5,
@@ -37,7 +38,8 @@
           "transaction_end_line": 16,
           "file_name": "main.ledger",
           "forecast": false,
-          "market_amount": 0
+          "market_amount": 0,
+          "balance": 0
         },
         {
           "id": 14,
@@ -55,7 +57,8 @@
           "transaction_end_line": 33,
           "file_name": "main.ledger",
           "forecast": false,
-          "market_amount": 0
+          "market_amount": 0,
+          "balance": 0
         },
         {
           "id": 16,
@@ -73,7 +76,8 @@
           "transaction_end_line": 39,
           "file_name": "main.ledger",
           "forecast": false,
-          "market_amount": 0
+          "market_amount": 0,
+          "balance": 0
         }
       ]
     },
@@ -104,7 +108,8 @@
           "transaction_end_line": 8,
           "file_name": "main.ledger",
           "forecast": false,
-          "market_amount": 0
+          "market_amount": 0,
+          "balance": 0
         },
         {
           "id": 5,
@@ -122,7 +127,8 @@
           "transaction_end_line": 16,
           "file_name": "main.ledger",
           "forecast": false,
-          "market_amount": 0
+          "market_amount": 0,
+          "balance": 0
         },
         {
           "id": 14,
@@ -140,7 +146,8 @@
           "transaction_end_line": 33,
           "file_name": "main.ledger",
           "forecast": false,
-          "market_amount": 0
+          "market_amount": 0,
+          "balance": 0
         },
         {
           "id": 16,
@@ -158,7 +165,8 @@
           "transaction_end_line": 39,
           "file_name": "main.ledger",
           "forecast": false,
-          "market_amount": 0
+          "market_amount": 0,
+          "balance": 0
         }
       ],
       "gross_income": 121027.3,

@@ -33,12 +33,14 @@ export interface Posting {
   commodity: string;
   quantity: number;
   amount: number;
-  market_amount: number;
   status: string;
   tag_recurring: string;
   transaction_begin_line: number;
   transaction_end_line: number;
   file_name: string;
+
+  market_amount: number;
+  balance: number;
 }
 
 export interface CashFlow {

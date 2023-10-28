@@ -41,6 +41,7 @@ type Posting struct {
 	Forecast             bool            `json:"forecast"`
 
 	MarketAmount decimal.Decimal `gorm:"-:all" json:"market_amount"`
+	Balance      decimal.Decimal `gorm:"-:all" json:"balance"`
 
 	behaviours []string `gorm:"-:all"`
 }

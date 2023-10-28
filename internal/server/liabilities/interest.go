@@ -1,9 +1,9 @@
 package liabilities
 
 import (
-	"sort"
 	"time"
 
+	"github.com/ananthakumaran/paisa/internal/accounting"
 	"github.com/ananthakumaran/paisa/internal/model/posting"
 	"github.com/ananthakumaran/paisa/internal/query"
 	"github.com/ananthakumaran/paisa/internal/service"
@@ -43,7 +43,7 @@ func GetInterest(db *gorm.DB) gin.H {
 }
 
 func computeOverviewTimeline(db *gorm.DB, postings []posting.Posting) []Overview {
-	sort.Slice(postings, func(i, j int) bool { return postings[i].Date.Before(postings[j].Date) })
+	accounting.SortAsc(postings)
 	netliabilities := []Overview{}
 
 	var p posting.Posting

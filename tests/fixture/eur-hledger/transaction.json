@@ -21,7 +21,8 @@
           "transaction_end_line": 14,
           "file_name": "main.ledger",
           "forecast": false,
-          "market_amount": 0
+          "market_amount": 0,
+          "balance": 0
         },
         {
           "id": 4,
@@ -39,7 +40,8 @@
           "transaction_end_line": 14,
           "file_name": "main.ledger",
           "forecast": false,
-          "market_amount": 0
+          "market_amount": 0,
+          "balance": 0
         }
       ],
       "tag_recurring": "",
@@ -69,7 +71,8 @@
           "transaction_end_line": 7,
           "file_name": "main.ledger",
           "forecast": false,
-          "market_amount": 0
+          "market_amount": 0,
+          "balance": 0
         },
         {
           "id": 1,
@@ -87,7 +90,8 @@
           "transaction_end_line": 7,
           "file_name": "main.ledger",
           "forecast": false,
-          "market_amount": 0
+          "market_amount": 0,
+          "balance": 0
         }
       ],
       "tag_recurring": "",

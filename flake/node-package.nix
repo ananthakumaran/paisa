@@ -1516,15 +1516,6 @@ let
         sha512 = "l9hWzP7cp7yleJUI7P2acmpllTJNYf5uU6wh50JzSIZt3fFHe+w2FM6w9oZGBTYzjjm2qHdnQvI+fF/JF/E5jQ==";
       };
     };
-    "@types/clusterize.js-0.18.1" = {
-      name = "_at_types_slash_clusterize.js";
-      packageName = "@types/clusterize.js";
-      version = "0.18.1";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/@types/clusterize.js/-/clusterize.js-0.18.1.tgz";
-        sha512 = "yRALTOHnKi/F3IvzO7AfBWXBAsOdl3sMgvLqTOV3DNAxz2lNOP0NraLkqMCeJdaCYvV4yF7WEYAhJCWuRMITeQ==";
-      };
-    };
     "@types/cookie-0.5.1" = {
       name = "_at_types_slash_cookie";
       packageName = "@types/cookie";
@@ -2819,15 +2810,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/cliui/-/cliui-8.0.1.tgz";
         sha512 = "BSeNnyus75C4//NQ9gQt1/csTXyo/8Sb+afLAkzAptFuMsod9HFokGNudZpi/oQV73hnVK+sR+5PVRMd+Dr7YQ==";
-      };
-    };
-    "clusterize.js-0.19.0" = {
-      name = "clusterize.js";
-      packageName = "clusterize.js";
-      version = "0.19.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/clusterize.js/-/clusterize.js-0.19.0.tgz";
-        sha512 = "P+sdBFVn2ha0PqChOwhBX0At6hCLxjbKMxYlMSzOj/452ieR2s6ytUG0lQPyhX0f6J9qabU2QRx2ZGJ0hDPkEA==";
       };
     };
     "code-red-1.0.3" = {
@@ -9408,7 +9390,6 @@ let
       sources."@tsconfig/node16-1.0.4"
       sources."@types/cheerio-0.22.32"
       sources."@types/chroma-js-2.1.4"
-      sources."@types/clusterize.js-0.18.1"
       sources."@types/cookie-0.5.1"
       sources."@types/d3-7.4.0"
       sources."@types/d3-array-3.0.2"
@@ -9615,7 +9596,6 @@ let
       sources."cli-progress-3.12.0"
       sources."clipboard-2.0.11"
       sources."cliui-8.0.1"
-      sources."clusterize.js-0.19.0"
       (sources."code-red-1.0.3" // {
         dependencies = [
           sources."estree-walker-3.0.3"

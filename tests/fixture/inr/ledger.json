@@ -1,24 +1,6 @@
 {
   "postings": [
     {
-      "id": 17,
-      "transaction_id": "13751d3a-ebfe-5de8-aca5-8870bc86ff9d",
-      "date": "2022-01-31T00:00:00Z",
-      "payee": "Interest",
-      "account": "Assets:Checking",
-      "commodity": "INR",
-      "quantity": 1000,
-      "amount": 1000,
-      "status": "unmarked",
-      "tag_recurring": "",
-      "tag_period": "",
-      "transaction_begin_line": 37,
-      "transaction_end_line": 39,
-      "file_name": "main.ledger",
-      "forecast": false,
-      "market_amount": 1000
-    },
-    {
       "id": 16,
       "transaction_id": "13751d3a-ebfe-5de8-aca5-8870bc86ff9d",
       "date": "2022-01-31T00:00:00Z",
@@ -34,43 +16,27 @@
       "transaction_end_line": 39,
       "file_name": "main.ledger",
       "forecast": false,
-      "market_amount": -1000
+      "market_amount": -1000,
+      "balance": -1000
     },
     {
-      "id": 15,
-      "transaction_id": "b2e50492-9dc7-5845-8ed9-9f4590b301a8",
-      "date": "2022-01-09T00:00:00Z",
-      "payee": "Sell",
+      "id": 17,
+      "transaction_id": "13751d3a-ebfe-5de8-aca5-8870bc86ff9d",
+      "date": "2022-01-31T00:00:00Z",
+      "payee": "Interest",
       "account": "Assets:Checking",
       "commodity": "INR",
-      "quantity": 10027.3,
-      "amount": 10027.3,
+      "quantity": 1000,
+      "amount": 1000,
       "status": "unmarked",
       "tag_recurring": "",
       "tag_period": "",
-      "transaction_begin_line": 30,
-      "transaction_end_line": 33,
+      "transaction_begin_line": 37,
+      "transaction_end_line": 39,
       "file_name": "main.ledger",
       "forecast": false,
-      "market_amount": 10027.3
-    },
-    {
-      "id": 14,
-      "transaction_id": "b2e50492-9dc7-5845-8ed9-9f4590b301a8",
-      "date": "2022-01-09T00:00:00Z",
-      "payee": "Sell",
-      "account": "Income:CapitalGains:Equity:AAPL",
-      "commodity": "INR",
-      "quantity": -27.3,
-      "amount": -27.3,
-      "status": "unmarked",
-      "tag_recurring": "",
-      "tag_period": "",
-      "transaction_begin_line": 30,
-      "transaction_end_line": 33,
-      "file_name": "main.ledger",
-      "forecast": false,
-      "market_amount": -27.3
+      "market_amount": 1000,
+      "balance": 20927.5348
     },
     {
       "id": 13,
@@ -88,61 +54,46 @@
       "transaction_end_line": 33,
       "file_name": "main.ledger",
       "forecast": false,
-      "market_amount": -10027.3
+      "market_amount": -10027.3,
+      "balance": 0
     },
     {
-      "id": 9,
-      "transaction_id": "c4ee69cc-e6bc-56a4-b573-e5519afb2a45",
-      "date": "2022-01-08T00:00:00Z",
-      "payee": "Buy ABNB",
-      "account": "Assets:Equity:ABNB",
-      "commodity": "ABNB",
-      "quantity": 0.76,
-      "amount": 8025.3170071296,
-      "status": "unmarked",
-      "tag_recurring": "",
-      "tag_period": "",
-      "transaction_begin_line": 22,
-      "transaction_end_line": 24,
-      "file_name": "main.ledger",
-      "forecast": false,
-      "market_amount": 8025.3170071296
-    },
-    {
-      "id": 11,
-      "transaction_id": "608fccf0-e80c-570e-87df-63a9a959c59a",
-      "date": "2022-01-08T00:00:00Z",
-      "payee": "Buy Apple",
-      "account": "Assets:Equity:AAPL",
-      "commodity": "AAPL",
-      "quantity": 100,
-      "amount": 10000,
-      "status": "unmarked",
-      "tag_recurring": "",
-      "tag_period": "",
-      "transaction_begin_line": 26,
-      "transaction_end_line": 28,
-      "file_name": "main.ledger",
-      "forecast": false,
-      "market_amount": 10027.3
-    },
-    {
-      "id": 10,
-      "transaction_id": "c4ee69cc-e6bc-56a4-b573-e5519afb2a45",
-      "date": "2022-01-08T00:00:00Z",
-      "payee": "Buy ABNB",
+      "id": 15,
+      "transaction_id": "b2e50492-9dc7-5845-8ed9-9f4590b301a8",
+      "date": "2022-01-09T00:00:00Z",
+      "payee": "Sell",
       "account": "Assets:Checking",
-      "commodity": "USD",
-      "quantity": -99.7652,
-      "amount": -8025.3170071296,
+      "commodity": "INR",
+      "quantity": 10027.3,
+      "amount": 10027.3,
       "status": "unmarked",
       "tag_recurring": "",
       "tag_period": "",
-      "transaction_begin_line": 22,
-      "transaction_end_line": 24,
+      "transaction_begin_line": 30,
+      "transaction_end_line": 33,
       "file_name": "main.ledger",
       "forecast": false,
-      "market_amount": -8025.3170071296
+      "market_amount": 10027.3,
+      "balance": 19927.5348
+    },
+    {
+      "id": 14,
+      "transaction_id": "b2e50492-9dc7-5845-8ed9-9f4590b301a8",
+      "date": "2022-01-09T00:00:00Z",
+      "payee": "Sell",
+      "account": "Income:CapitalGains:Equity:AAPL",
+      "commodity": "INR",
+      "quantity": -27.3,
+      "amount": -27.3,
+      "status": "unmarked",
+      "tag_recurring": "",
+      "tag_period": "",
+      "transaction_begin_line": 30,
+      "transaction_end_line": 33,
+      "file_name": "main.ledger",
+      "forecast": false,
+      "market_amount": -27.3,
+      "balance": -27.3
     },
     {
       "id": 12,
@@ -160,7 +111,65 @@
       "transaction_end_line": 28,
       "file_name": "main.ledger",
       "forecast": false,
-      "market_amount": -10000
+      "market_amount": -10000,
+      "balance": 10000
+    },
+    {
+      "id": 10,
+      "transaction_id": "c4ee69cc-e6bc-56a4-b573-e5519afb2a45",
+      "date": "2022-01-08T00:00:00Z",
+      "payee": "Buy ABNB",
+      "account": "Assets:Checking",
+      "commodity": "USD",
+      "quantity": -99.7652,
+      "amount": -8025.3170071296,
+      "status": "unmarked",
+      "tag_recurring": "",
+      "tag_period": "",
+      "transaction_begin_line": 22,
+      "transaction_end_line": 24,
+      "file_name": "main.ledger",
+      "forecast": false,
+      "market_amount": -8025.3170071296,
+      "balance": 9900.2348
+    },
+    {
+      "id": 11,
+      "transaction_id": "608fccf0-e80c-570e-87df-63a9a959c59a",
+      "date": "2022-01-08T00:00:00Z",
+      "payee": "Buy Apple",
+      "account": "Assets:Equity:AAPL",
+      "commodity": "AAPL",
+      "quantity": 100,
+      "amount": 10000,
+      "status": "unmarked",
+      "tag_recurring": "",
+      "tag_period": "",
+      "transaction_begin_line": 26,
+      "transaction_end_line": 28,
+      "file_name": "main.ledger",
+      "forecast": false,
+      "market_amount": 10027.3,
+      "balance": 100
+    },
+    {
+      "id": 9,
+      "transaction_id": "c4ee69cc-e6bc-56a4-b573-e5519afb2a45",
+      "date": "2022-01-08T00:00:00Z",
+      "payee": "Buy ABNB",
+      "account": "Assets:Equity:ABNB",
+      "commodity": "ABNB",
+      "quantity": 0.76,
+      "amount": 8025.3170071296,
+      "status": "unmarked",
+      "tag_recurring": "",
+      "tag_period": "",
+      "transaction_begin_line": 22,
+      "transaction_end_line": 24,
+      "file_name": "main.ledger",
+      "forecast": false,
+      "market_amount": 8025.3170071296,
+      "balance": 0.76
     },
     {
       "id": 8,
@@ -178,7 +187,8 @@
       "transaction_end_line": 20,
       "file_name": "main.ledger",
       "forecast": false,
-      "market_amount": 80218.4
+      "market_amount": 80218.4,
+      "balance": 800
     },
     {
       "id": 7,
@@ -196,7 +206,8 @@
       "transaction_end_line": 20,
       "file_name": "main.ledger",
       "forecast": false,
-      "market_amount": -80000
+      "market_amount": -80000,
+      "balance": 20000
     },
     {
       "id": 6,
@@ -214,7 +225,8 @@
       "transaction_end_line": 16,
       "file_name": "main.ledger",
       "forecast": false,
-      "market_amount": 20000
+      "market_amount": 20000,
+      "balance": 100000
     },
     {
       "id": 5,
@@ -232,7 +244,8 @@
       "transaction_end_line": 16,
       "file_name": "main.ledger",
       "forecast": false,
-      "market_amount": -20000
+      "market_amount": -20000,
+      "balance": -120000
     },
     {
       "id": 4,
@@ -250,7 +263,8 @@
       "transaction_end_line": 12,
       "file_name": "main.ledger",
       "forecast": false,
-      "market_amount": 20000
+      "market_amount": 20000,
+      "balance": 20000
     },
     {
       "id": 3,
@@ -268,25 +282,8 @@
       "transaction_end_line": 12,
       "file_name": "main.ledger",
       "forecast": false,
-      "market_amount": -20000
-    },
-    {
-      "id": 2,
-      "transaction_id": "d84b6999-200b-5b90-9a3e-f94dc8a177da",
-      "date": "2022-01-01T00:00:00Z",
-      "payee": "Salary",
-      "account": "Assets:Checking",
-      "commodity": "INR",
-      "quantity": 100000,
-      "amount": 100000,
-      "status": "unmarked",
-      "tag_recurring": "",
-      "tag_period": "",
-      "transaction_begin_line": 6,
-      "transaction_end_line": 8,
-      "file_name": "main.ledger",
-      "forecast": false,
-      "market_amount": 100000
+      "market_amount": -20000,
+      "balance": 80000
     },
     {
       "id": 1,
@@ -304,7 +301,27 @@
       "transaction_end_line": 8,
       "file_name": "main.ledger",
       "forecast": false,
-      "market_amount": -100000
+      "market_amount": -100000,
+      "balance": -100000
+    },
+    {
+      "id": 2,
+      "transaction_id": "d84b6999-200b-5b90-9a3e-f94dc8a177da",
+      "date": "2022-01-01T00:00:00Z",
+      "payee": "Salary",
+      "account": "Assets:Checking",
+      "commodity": "INR",
+      "quantity": 100000,
+      "amount": 100000,
+      "status": "unmarked",
+      "tag_recurring": "",
+      "tag_period": "",
+      "transaction_begin_line": 6,
+      "transaction_end_line": 8,
+      "file_name": "main.ledger",
+      "forecast": false,
+      "market_amount": 100000,
+      "balance": 100000
     }
   ]
 }

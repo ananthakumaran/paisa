@@ -150,7 +150,7 @@ type Point struct {
 }
 
 func RunningBalance(db *gorm.DB, postings []posting.Posting) []Point {
-	sort.Slice(postings, func(i, j int) bool { return postings[i].Date.Before(postings[j].Date) })
+	SortAsc(postings)
 	var series []Point
 
 	if len(postings) == 0 {
@@ -184,6 +184,27 @@ func RunningBalance(db *gorm.DB, postings []posting.Posting) []Point {
 		series = append(series, Point{Date: start, Value: balance})
 	}
 	return series
+}
+
+func SortAsc(postings []posting.Posting) []posting.Posting {
+	sort.Slice(postings, func(i, j int) bool { return postings[i].Date.Before(postings[j].Date) })
+	return postings
+}
+
+func SortDesc(postings []posting.Posting) []posting.Posting {
+	sort.Slice(postings, func(i, j int) bool { return postings[i].Date.After(postings[j].Date) })
+	return postings
+}
+
+func PopulateBalance(postings []posting.Posting) []posting.Posting {
+	SortAsc(postings)
+	accumulator := make(map[string]decimal.Decimal)
+
+	for i, p := range postings {
+		accumulator[p.Account] = accumulator[p.Account].Add(p.Quantity)
+		postings[i].Balance = accumulator[p.Account]
+	}
+	return postings
 }
 
 func GroupByAccount(posts []posting.Posting) map[string][]posting.Posting {

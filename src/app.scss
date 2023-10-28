@@ -973,3 +973,14 @@ textarea:invalid {
 [data-tippy-root] {
   font-family: $family-sans-serif-icon;
 }
+
+.posting-row {
+  grid-template-columns: 6rem 20rem 16rem 8rem 10rem 8rem 6rem 6rem 6rem 6rem;
+  grid-auto-flow: column;
+  overflow-x: auto;
+  border-bottom: 1px solid rgba($grey-lightest, 0.5);
+}
+
+div.is-hoverable:hover {
+  background-color: $white-bis;
+}

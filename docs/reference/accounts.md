@@ -47,7 +47,7 @@ accounts under `#!ledger Expenses`. But if you want more, try to add them under
 3<sup>rd</sup> level, example `#!ledger Expenses:Food:Subway`.
 
 
-### Assets
+## Assets
 
 All your assets should go under `#!ledger Assets:`. The level of granularity is
 up to you. The recommended convention is to use
@@ -69,7 +69,7 @@ not an investment. So you ideally you want to disregard them when you
 calculate your absolute returns etc.
 
 
-### Income
+## Income
 
 All your income should come from `#!ledger Income:`. The typical way
 is to treat each employer as a separate account like `#!ledger
@@ -95,6 +95,12 @@ explicitly specifying anything else.
 
 * `#!ledger Income:Interest:{name}` - interest debit account
 
+## Expenses
+
+All your expenses should go to `#!ledger Expenses:{category}`
+accounts. You can also have more than 2 levels as well. The expense
+page will roll it up to 2 level wherever necessary.
+
 ### Tax
 
 Income tax paid to government should be credited to `#!ledger
@@ -102,12 +108,6 @@ Expenses:Tax` account. This is used to calculate your Net Income and
 your Savings Rate. If you want to track different types of taxes, you
 can use sub accounts as well, for example `#!ledger Expenses:Tax:Income`
 and `#!ledger Expenses:Tax:GST`.
-
-### Expenses
-
-All your expenses should go to `#!ledger Expenses:{category}`
-accounts. You can also have more than 2 levels as well. The expense
-page will roll it up to 2 level wherever necessary.
 
 
 ## Icons

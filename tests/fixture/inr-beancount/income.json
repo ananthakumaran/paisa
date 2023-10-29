@@ -1,0 +1,169 @@
+{
+  "income_timeline": [
+    {
+      "date": "2022-01-01T00:00:00Z",
+      "postings": [
+        {
+          "id": 1,
+          "transaction_id": "b55f3fb49ff1273180674122d47419e2",
+          "date": "2022-01-01T00:00:00Z",
+          "payee": "Salary",
+          "account": "Income:Salary:Acme",
+          "commodity": "INR",
+          "quantity": -100000,
+          "amount": -100000,
+          "status": "cleared",
+          "tag_recurring": "",
+          "tag_period": "",
+          "transaction_begin_line": 19,
+          "transaction_end_line": 22,
+          "file_name": "main.beancount",
+          "forecast": false,
+          "market_amount": 0
+        },
+        {
+          "id": 5,
+          "transaction_id": "fdfcf45cb83539494492acb348bead1e",
+          "date": "2022-01-06T00:00:00Z",
+          "payee": "Bonus",
+          "account": "Income:Salary:Acme",
+          "commodity": "INR",
+          "quantity": -20000,
+          "amount": -20000,
+          "status": "cleared",
+          "tag_recurring": "",
+          "tag_period": "",
+          "transaction_begin_line": 27,
+          "transaction_end_line": 30,
+          "file_name": "main.beancount",
+          "forecast": false,
+          "market_amount": 0
+        },
+        {
+          "id": 14,
+          "transaction_id": "5791326dad5ac24abe481334280732b6",
+          "date": "2022-01-09T00:00:00Z",
+          "payee": "Sell",
+          "account": "Income:CapitalGains:Equity:AAPL",
+          "commodity": "INR",
+          "quantity": -27.3,
+          "amount": -27.3,
+          "status": "cleared",
+          "tag_recurring": "",
+          "tag_period": "",
+          "transaction_begin_line": 43,
+          "transaction_end_line": 47,
+          "file_name": "main.beancount",
+          "forecast": false,
+          "market_amount": 0
+        },
+        {
+          "id": 16,
+          "transaction_id": "31d6ce1218ae117cf19e993e338c0104",
+          "date": "2022-01-31T00:00:00Z",
+          "payee": "Interest",
+          "account": "Income:Interest:Checking",
+          "commodity": "INR",
+          "quantity": -1000,
+          "amount": -1000,
+          "status": "cleared",
+          "tag_recurring": "",
+          "tag_period": "",
+          "transaction_begin_line": 50,
+          "transaction_end_line": 53,
+          "file_name": "main.beancount",
+          "forecast": false,
+          "market_amount": 0
+        }
+      ]
+    },
+    {
+      "date": "2022-02-01T00:00:00Z",
+      "postings": []
+    }
+  ],
+  "tax_timeline": [],
+  "yearly_cards": [
+    {
+      "start_date": "2021-04-01T00:00:00Z",
+      "end_date": "2022-03-31T23:59:59.999999999Z",
+      "postings": [
+        {
+          "id": 1,
+          "transaction_id": "b55f3fb49ff1273180674122d47419e2",
+          "date": "2022-01-01T00:00:00Z",
+          "payee": "Salary",
+          "account": "Income:Salary:Acme",
+          "commodity": "INR",
+          "quantity": -100000,
+          "amount": -100000,
+          "status": "cleared",
+          "tag_recurring": "",
+          "tag_period": "",
+          "transaction_begin_line": 19,
+          "transaction_end_line": 22,
+          "file_name": "main.beancount",
+          "forecast": false,
+          "market_amount": 0
+        },
+        {
+          "id": 5,
+          "transaction_id": "fdfcf45cb83539494492acb348bead1e",
+          "date": "2022-01-06T00:00:00Z",
+          "payee": "Bonus",
+          "account": "Income:Salary:Acme",
+          "commodity": "INR",
+          "quantity": -20000,
+          "amount": -20000,
+          "status": "cleared",
+          "tag_recurring": "",
+          "tag_period": "",
+          "transaction_begin_line": 27,
+          "transaction_end_line": 30,
+          "file_name": "main.beancount",
+          "forecast": false,
+          "market_amount": 0
+        },
+        {
+          "id": 14,
+          "transaction_id": "5791326dad5ac24abe481334280732b6",
+          "date": "2022-01-09T00:00:00Z",
+          "payee": "Sell",
+          "account": "Income:CapitalGains:Equity:AAPL",
+          "commodity": "INR",
+          "quantity": -27.3,
+          "amount": -27.3,
+          "status": "cleared",
+          "tag_recurring": "",
+          "tag_period": "",
+          "transaction_begin_line": 43,
+          "transaction_end_line": 47,
+          "file_name": "main.beancount",
+          "forecast": false,
+          "market_amount": 0
+        },
+        {
+          "id": 16,
+          "transaction_id": "31d6ce1218ae117cf19e993e338c0104",
+          "date": "2022-01-31T00:00:00Z",
+          "payee": "Interest",
+          "account": "Income:Interest:Checking",
+          "commodity": "INR",
+          "quantity": -1000,
+          "amount": -1000,
+          "status": "cleared",
+          "tag_recurring": "",
+          "tag_period": "",
+          "transaction_begin_line": 50,
+          "transaction_end_line": 53,
+          "file_name": "main.beancount",
+          "forecast": false,
+          "market_amount": 0
+        }
+      ],
+      "gross_income": 121027.3,
+      "net_tax": 0,
+      "net_income": 121027.3
+    }
+  ]
+}

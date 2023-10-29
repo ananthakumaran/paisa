@@ -249,7 +249,9 @@ func (Beancount) ValidateFile(journalPath string) ([]LedgerFileError, string, er
 	return errors, "", err
 }
 
-func (Beancount) Parse(journalPath string, _prices []price.Price) ([]*posting.Posting, error) {
+func (Beancount) Parse(journalPath string, prices []price.Price) ([]*posting.Posting, error) {
+	pricesTree := buildPricesTree(prices)
+
 	type Range struct {
 		Begin uint64
 		End   uint64
@@ -308,9 +310,16 @@ func (Beancount) Parse(journalPath string, _prices []price.Price) ([]*posting.Po
 			return nil, err
 		}
 
-		_, amount, err := parseAmount(strings.TrimSpace(record[Amount]))
+		costCurrency, amount, err := parseAmount(strings.TrimSpace(record[Amount]))
 		if err != nil {
 			return nil, err
+		}
+
+		if costCurrency != config.DefaultCurrency() {
+			pr := lookupPrice(pricesTree, costCurrency, date)
+			if !pr.Equal(decimal.Zero) {
+				amount = amount.Mul(pr)
+			}
 		}
 
 		fileName, err := filepath.Rel(dir, record[FileName])
@@ -741,15 +750,7 @@ func execHLedgerCommand(journalPath string, prices []price.Price, flags []string
 		return nil, err
 	}
 
-	pricesTree := make(map[string]*btree.BTree)
-	for _, price := range prices {
-		if pricesTree[price.CommodityName] == nil {
-			pricesTree[price.CommodityName] = btree.New(2)
-		}
-
-		pricesTree[price.CommodityName].ReplaceOrInsert(price)
-	}
-
+	pricesTree := buildPricesTree(prices)
 	dir := filepath.Dir(config.GetJournalPath())
 
 	for _, t := range transactions {
@@ -767,24 +768,17 @@ func execHLedgerCommand(journalPath string, prices []price.Price, flags []string
 			if amount.Commodity != config.DefaultCurrency() {
 				if amount.Price.Contents.Quantity.Value != 0 {
 					if amount.Price.Contents.Commodity != config.DefaultCurrency() {
-						pt := pricesTree[amount.Commodity]
-						if pt != nil {
-							pc := utils.BTreeDescendFirstLessOrEqual(pt, price.Price{Date: date})
-							if !pc.Value.Equal(decimal.Zero) {
-								totalAmount = decimal.NewFromFloat(amount.Quantity.Value).Mul(pc.Value)
-								totalAmountSet = true
-							}
+						pr := lookupPrice(pricesTree, amount.Commodity, date)
+						if !pr.Equal(decimal.Zero) {
+							totalAmount = decimal.NewFromFloat(amount.Quantity.Value).Mul(pr)
+							totalAmountSet = true
 						}
-
 						if !totalAmountSet {
-							pt = pricesTree[amount.Price.Contents.Commodity]
-							if pt != nil {
-								pc := utils.BTreeDescendFirstLessOrEqual(pt, price.Price{Date: date})
-
-								if !pc.Value.Equal(decimal.Zero) {
-									totalAmount = decimal.NewFromFloat(amount.Quantity.Value).Mul(decimal.NewFromFloat(amount.Price.Contents.Quantity.Value).Mul(pc.Value))
-								}
+							pr = lookupPrice(pricesTree, amount.Price.Contents.Commodity, date)
+							if !pr.Equal(decimal.Zero) {
+								totalAmount = decimal.NewFromFloat(amount.Quantity.Value).Mul(decimal.NewFromFloat(amount.Price.Contents.Quantity.Value).Mul(pr))
 							}
+
 						}
 					} else {
 						if amount.Price.Tag == "TotalPrice" {
@@ -794,13 +788,11 @@ func execHLedgerCommand(journalPath string, prices []price.Price, flags []string
 						}
 					}
 				} else {
-					pt := pricesTree[amount.Commodity]
-					if pt != nil {
-						pc := utils.BTreeDescendFirstLessOrEqual(pt, price.Price{Date: date})
-						if !pc.Value.Equal(decimal.Zero) {
-							totalAmount = decimal.NewFromFloat(amount.Quantity.Value).Mul(pc.Value)
-						}
+					pr := lookupPrice(pricesTree, amount.Commodity, date)
+					if !pr.Equal(decimal.Zero) {
+						totalAmount = decimal.NewFromFloat(amount.Quantity.Value).Mul(pr)
 					}
+
 				}
 			}
 
@@ -865,4 +857,29 @@ func execHLedgerCommand(journalPath string, prices []price.Price, flags []string
 	}
 
 	return postings, nil
+}
+
+func buildPricesTree(prices []price.Price) map[string]*btree.BTree {
+	pricesTree := make(map[string]*btree.BTree)
+	for _, price := range prices {
+		if pricesTree[price.CommodityName] == nil {
+			pricesTree[price.CommodityName] = btree.New(2)
+		}
+
+		pricesTree[price.CommodityName].ReplaceOrInsert(price)
+	}
+
+	return pricesTree
+}
+
+func lookupPrice(pricesTree map[string]*btree.BTree, commodity string, date time.Time) decimal.Decimal {
+	pt := pricesTree[commodity]
+	if pt != nil {
+		pc := utils.BTreeDescendFirstLessOrEqual(pt, price.Price{Date: date})
+		if !pc.Value.Equal(decimal.Zero) {
+			return pc.Value
+		}
+	}
+
+	return decimal.Zero
 }

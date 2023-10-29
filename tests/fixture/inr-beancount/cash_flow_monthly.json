@@ -1,0 +1,24 @@
+{
+  "cash_flows": [
+    {
+      "date": "2022-01-01T00:00:00+05:30",
+      "income": 100000,
+      "expenses": 20000,
+      "liabilities": 0,
+      "investment": 80000,
+      "tax": 0,
+      "checking": 0,
+      "balance": 0
+    },
+    {
+      "date": "2022-02-01T00:00:00+05:30",
+      "income": 0,
+      "expenses": 0,
+      "liabilities": 0,
+      "investment": 0,
+      "tax": 0,
+      "checking": 0,
+      "balance": 0
+    }
+  ]
+}

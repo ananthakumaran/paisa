@@ -1,0 +1,4 @@
+journal_path: main.beancount
+db_path: paisa.db
+ledger_cli: beancount
+

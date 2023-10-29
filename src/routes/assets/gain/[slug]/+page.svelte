@@ -158,10 +158,10 @@
                 {posting}
                 color={posting.amount >= 0
                   ? posting.account.startsWith("Income:CapitalGains")
-                    ? COLORS.gain
+                    ? COLORS.loss
                     : COLORS.secondary
                   : posting.account.startsWith("Income:CapitalGains")
-                  ? COLORS.loss
+                  ? COLORS.gain
                   : COLORS.tertiary}
               />
             {/each}

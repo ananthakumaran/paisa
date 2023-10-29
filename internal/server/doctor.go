@@ -102,7 +102,7 @@ func ruleAssetRegisterNonNegative(db *gorm.DB) []error {
 
 func ruleNonCreditAccount(db *gorm.DB) []error {
 	errs := make([]error, 0)
-	incomes := query.Init(db).Like("Income:%").All()
+	incomes := query.Init(db).Like("Income:%").NotLike("Income:CapitalGains:%").All()
 	for _, p := range incomes {
 		if p.Amount.GreaterThan(decimal.NewFromFloat(0.01)) {
 			errs = append(errs, errors.New(fmt.Sprintf("<b>%.4f</b> got credited to <b>%s</b> on %s", p.Amount.InexactFloat64(), p.Account, p.Date.Format(DATE_FORMAT))))

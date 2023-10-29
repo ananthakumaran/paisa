@@ -52,8 +52,10 @@ func main() {
 		},
 
 		Linux: &linux.Options{
-			Icon:        icon,
-			ProgramName: "Paisa",
+			Icon:                icon,
+			WindowIsTranslucent: false,
+			WebviewGpuPolicy:    linux.WebviewGpuPolicyNever,
+			ProgramName:         "Paisa",
 		},
 	})
 

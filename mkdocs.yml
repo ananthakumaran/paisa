@@ -28,6 +28,7 @@ nav:
       - reference/tax/capital-gains.md
       - reference/tax/schedule-al.md
   - 'Demo': 'https://demo.paisa.fyi'
+  - faq.md
 
 theme:
   custom_dir: overrides

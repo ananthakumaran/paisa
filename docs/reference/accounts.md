@@ -95,6 +95,20 @@ explicitly specifying anything else.
 
 * `#!ledger Income:Interest:{name}` - interest debit account
 
+
+### Capital Gains
+
+```ledger
+2018/03/01 Withdrawal
+    Assets:Checking                          6775.49 INR
+    Income:CapitalGains:Equity:NIFTY          -22.68 INR
+    Assets:Equity:NIFTY          -100 NIFTY {67.5281 INR} [2018/01/01] @ 67.7549 INR
+```
+
+Let's say you have an asset account named `#!ledger Assets:{name}` and
+you make some profit when you sell the asset, this profit should come
+from capital gains account named `#!ledger Income:CapitalGains:{name}`.
+
 ## Expenses
 
 All your expenses should go to `#!ledger Expenses:{category}`

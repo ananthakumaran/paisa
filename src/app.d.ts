@@ -10,6 +10,7 @@ interface UserConfig {
   readonly: boolean;
   locale: string;
   journal_path: string;
+  display_precision: number;
   db_path: string;
   financial_year_starting_month: number;
   accounts: {

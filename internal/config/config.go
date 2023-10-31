@@ -85,6 +85,7 @@ type Config struct {
 	Readonly                   bool       `json:"readonly" yaml:"readonly"`
 	LedgerCli                  string     `json:"ledger_cli" yaml:"ledger_cli"`
 	DefaultCurrency            string     `json:"default_currency" yaml:"default_currency"`
+	DisplayPrecision           int        `json:"display_precision" yaml:"display_precision"`
 	Locale                     string     `json:"locale" yaml:"locale"`
 	FinancialYearStartingMonth time.Month `json:"financial_year_starting_month" yaml:"financial_year_starting_month"`
 
@@ -108,6 +109,7 @@ var defaultConfig = Config{
 	Readonly:                   false,
 	LedgerCli:                  "ledger",
 	DefaultCurrency:            "INR",
+	DisplayPrecision:           0,
 	Locale:                     "en-IN",
 	Retirement:                 Retirement{SWR: 4, Savings: []string{"Assets:*"}, Expenses: []string{"Expenses:*"}, YearlyExpenses: 0},
 	FinancialYearStartingMonth: 4,

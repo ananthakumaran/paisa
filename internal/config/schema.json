@@ -27,6 +27,12 @@
       "type": "string",
       "description": "The default currency to use. NOTE: Paisa tries to convert other currencies to default currency, so make sure it's possible to convert to default currency by specifying the exchange rate."
     },
+    "display_precision": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 4,
+      "description": "The precision to show in UI. NOTE: This applies only to the UI, not to the entries in journal."
+    },
     "locale": {
       "type": "string",
       "pattern": "^[a-z]{2}-[A-Z]{2}$",

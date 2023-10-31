@@ -658,8 +658,12 @@ export function now() {
   return dayjs();
 }
 
-export function formatCurrency(value: number, precision = 0) {
+export function formatCurrency(value: number, precision: number = null) {
   value = normalize(value);
+
+  if (precision == null) {
+    precision = USER_CONFIG.display_precision;
+  }
 
   return value.toLocaleString(USER_CONFIG.locale, {
     minimumFractionDigits: precision,

@@ -35,6 +35,7 @@ const (
 	MutualFund CommodityType = "mutualfund"
 	NPS        CommodityType = "nps"
 	Stock      CommodityType = "stock"
+	Metal      CommodityType = "metal"
 	Unknown    CommodityType = "unknown"
 )
 

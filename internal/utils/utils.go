@@ -87,6 +87,10 @@ func IsWithDate(date time.Time, start time.Time, end time.Time) bool {
 	return (date.Equal(start) || date.After(start)) && (date.Before(end) || date.Equal(end))
 }
 
+func IsSameDate(a time.Time, b time.Time) bool {
+	return a.Year() == b.Year() && a.Month() == b.Month() && a.Day() == b.Day()
+}
+
 func EndOfDay(date time.Time) time.Time {
 	return toDate(date).AddDate(0, 0, 1).Add(-time.Nanosecond)
 }

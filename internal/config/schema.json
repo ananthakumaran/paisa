@@ -169,7 +169,7 @@
           },
           "type": {
             "type": "string",
-            "enum": ["mutualfund", "stock", "nps", "unknown"]
+            "enum": ["mutualfund", "stock", "nps", "metal", "unknown"]
           },
           "price": {
             "type": "object",
@@ -177,7 +177,12 @@
             "properties": {
               "provider": {
                 "type": "string",
-                "enum": ["in-mfapi", "com-yahoo", "com-purifiedbytes-nps"]
+                "enum": [
+                  "in-mfapi",
+                  "com-yahoo",
+                  "com-purifiedbytes-nps",
+                  "com-purifiedbytes-metal"
+                ]
               },
               "code": {
                 "type": ["string", "integer"]

@@ -129,7 +129,7 @@ func ruleExchangePriceMissing(db *gorm.DB) []error {
 	for _, p := range postings {
 		if !utils.IsCurrency(p.Commodity) {
 			externalPrice := service.GetUnitPrice(db, p.Commodity, p.Date)
-			if externalPrice.CommodityName != p.Commodity {
+			if externalPrice.CommodityName != "" && externalPrice.CommodityName != p.Commodity {
 				errs = append(errs, errors.New(fmt.Sprintf("Exchange price from <b>%s</b> to your default currency <b>%s</b> is not specified for posting %s", p.Commodity, config.DefaultCurrency(), formatPosting(p))))
 			}
 		}

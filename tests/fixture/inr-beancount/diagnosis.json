@@ -1,22 +1,3 @@
 {
-  "issues": [
-    {
-      "level": "danger",
-      "summary": "Exchange Price Missing",
-      "description": "Exchange price is missing for the commodity.",
-      "details": "Exchange price from <b>AAPL</b> to your default currency <b>INR</b> is not specified for posting <a href=\"/ledger/editor/main.beancount#43\"> 09 Jan 2022\tAssets:Equity:AAPL\t-100.0000 AAPL @ 100.0000 INR</a>"
-    },
-    {
-      "level": "danger",
-      "summary": "Exchange Price Missing",
-      "description": "Exchange price is missing for the commodity.",
-      "details": "Exchange price from <b>ABNB</b> to your default currency <b>INR</b> is not specified for posting <a href=\"/ledger/editor/main.beancount#35\"> 08 Jan 2022\tAssets:Equity:ABNB\t0.7600 ABNB @ 10559.0772 INR</a>"
-    },
-    {
-      "level": "danger",
-      "summary": "Exchange Price Missing",
-      "description": "Exchange price is missing for the commodity.",
-      "details": "Exchange price from <b>AAPL</b> to your default currency <b>INR</b> is not specified for posting <a href=\"/ledger/editor/main.beancount#39\"> 08 Jan 2022\tAssets:Equity:AAPL\t100.0000 AAPL @ 100.0000 INR</a>"
-    }
-  ]
+  "issues": []
 }

@@ -53,3 +53,7 @@ func (p *PriceProvider) AutoComplete(db *gorm.DB, field string, filter map[strin
 func (p *PriceProvider) ClearCache(db *gorm.DB) {
 	db.Exec("DELETE FROM schemes")
 }
+
+func (p *PriceProvider) GetPrices(code string, commodityName string) ([]*price.Price, error) {
+	return GetNav(code, commodityName)
+}

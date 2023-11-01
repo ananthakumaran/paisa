@@ -15,6 +15,10 @@ type SyncRequest struct {
 }
 
 func Sync(db *gorm.DB, request SyncRequest) gin.H {
+	service.ClearInterestCache()
+	service.ClearPriceCache()
+	prediction.ClearCache()
+
 	if request.Journal {
 		message, err := model.SyncJournal(db)
 		if err != nil {
@@ -23,16 +27,22 @@ func Sync(db *gorm.DB, request SyncRequest) gin.H {
 	}
 
 	if request.Prices {
-		model.SyncCommodities(db)
-		model.SyncCII(db)
+		err := model.SyncCommodities(db)
+		if err != nil {
+			return gin.H{"success": false, "message": err.Error()}
+		}
+		err = model.SyncCII(db)
+		if err != nil {
+			return gin.H{"success": false, "message": err.Error()}
+		}
 	}
 
 	if request.Portfolios {
-		model.SyncPortfolios(db)
+		err := model.SyncPortfolios(db)
+		if err != nil {
+			return gin.H{"success": false, "message": err.Error()}
+		}
 	}
 
-	service.ClearInterestCache()
-	service.ClearPriceCache()
-	prediction.ClearCache()
 	return gin.H{"success": true}
 }

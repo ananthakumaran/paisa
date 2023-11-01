@@ -21,4 +21,5 @@ type PriceProvider interface {
 	AutoCompleteFields() []AutoCompleteField
 	AutoComplete(db *gorm.DB, field string, filter map[string]string) []AutoCompleteItem
 	ClearCache(db *gorm.DB)
+	GetPrices(code string, commodityName string) ([]*Price, error)
 }

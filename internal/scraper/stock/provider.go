@@ -32,3 +32,7 @@ func (p *PriceProvider) AutoComplete(db *gorm.DB, field string, filter map[strin
 
 func (p *PriceProvider) ClearCache(db *gorm.DB) {
 }
+
+func (p *PriceProvider) GetPrices(code string, commodityName string) ([]*price.Price, error) {
+	return GetHistory(code, commodityName)
+}

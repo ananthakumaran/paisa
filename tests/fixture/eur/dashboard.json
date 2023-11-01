@@ -34,6 +34,7 @@
       "withdrawalAmount": 10005.05,
       "gainAmount": 20,
       "balanceAmount": 11020,
+      "balanceUnits": 0,
       "netInvestmentAmount": 11000
     },
     "xirr": 1.76

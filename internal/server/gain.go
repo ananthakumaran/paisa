@@ -3,6 +3,7 @@ package server
 import (
 	"strings"
 
+	"github.com/ananthakumaran/paisa/internal/accounting"
 	"github.com/ananthakumaran/paisa/internal/model/posting"
 	"github.com/ananthakumaran/paisa/internal/query"
 	"github.com/ananthakumaran/paisa/internal/server/assets"
@@ -50,7 +51,7 @@ func GetAccountGain(db *gorm.DB, account string) gin.H {
 	capitalGainsAccount := strings.Replace(account, "Assets", "Income:CapitalGains", 1)
 	postings := query.Init(db).AccountPrefix(account, capitalGainsAccount).All()
 	postings = service.PopulateMarketPrice(db, postings)
-	gain := AccountGain{Account: account, XIRR: service.XIRR(db, postings), NetworthTimeline: computeNetworthTimeline(db, postings), Postings: postings}
+	gain := AccountGain{Account: account, XIRR: service.XIRR(db, postings), NetworthTimeline: computeNetworthTimeline(db, postings, accounting.IsLeafAccount(db, account)), Postings: postings}
 
 	commodities := lo.Uniq(lo.Map(postings, func(p posting.Posting, _ int) string { return p.Commodity }))
 	var portfolio_groups PortfolioAllocationGroups

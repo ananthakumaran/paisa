@@ -18,6 +18,7 @@ type Networth struct {
 	WithdrawalAmount    decimal.Decimal `json:"withdrawalAmount"`
 	GainAmount          decimal.Decimal `json:"gainAmount"`
 	BalanceAmount       decimal.Decimal `json:"balanceAmount"`
+	BalanceUnits        decimal.Decimal `json:"balanceUnits"`
 	NetInvestmentAmount decimal.Decimal `json:"netInvestmentAmount"`
 }
 
@@ -25,7 +26,7 @@ func GetNetworth(db *gorm.DB) gin.H {
 	postings := query.Init(db).Like("Assets:%", "Income:CapitalGains:%", "Liabilities:%").UntilToday().All()
 
 	postings = service.PopulateMarketPrice(db, postings)
-	networthTimeline := computeNetworthTimeline(db, postings)
+	networthTimeline := computeNetworthTimeline(db, postings, false)
 	xirr := service.XIRR(db, postings)
 	return gin.H{"networthTimeline": networthTimeline, "xirr": xirr}
 }
@@ -87,7 +88,7 @@ func computeNetworth(db *gorm.DB, postings []posting.Posting) Networth {
 	return networth
 }
 
-func computeNetworthTimeline(db *gorm.DB, postings []posting.Posting) []Networth {
+func computeNetworthTimeline(db *gorm.DB, postings []posting.Posting, computeBalanceUnits bool) []Networth {
 	var networths []Networth
 
 	var p posting.Posting
@@ -134,6 +135,7 @@ func computeNetworthTimeline(db *gorm.DB, postings []posting.Posting) []Networth
 		var investment decimal.Decimal = decimal.Zero
 		var withdrawal decimal.Decimal = decimal.Zero
 		var balance decimal.Decimal = decimal.Zero
+		var balanceUnits decimal.Decimal = decimal.Zero
 
 		for commodity, rs := range accumulator {
 			investment = investment.Add(rs.investment)
@@ -142,6 +144,9 @@ func computeNetworthTimeline(db *gorm.DB, postings []posting.Posting) []Networth
 			if utils.IsCurrency(commodity) {
 				balance = balance.Add(rs.balance)
 			} else {
+				if computeBalanceUnits {
+					balanceUnits = balanceUnits.Add(rs.balanceUnits)
+				}
 				price := service.GetUnitPrice(db, commodity, start)
 				if !price.Value.Equal(decimal.Zero) {
 					balance = balance.Add(rs.balanceUnits.Mul(price.Value))
@@ -160,6 +165,7 @@ func computeNetworthTimeline(db *gorm.DB, postings []posting.Posting) []Networth
 			WithdrawalAmount:    withdrawal,
 			GainAmount:          gain,
 			BalanceAmount:       balance,
+			BalanceUnits:        balanceUnits,
 			NetInvestmentAmount: netInvestment,
 		})
 

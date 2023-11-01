@@ -96,6 +96,7 @@ export interface Networth {
   withdrawalAmount: number;
   gainAmount: number;
   balanceAmount: number;
+  balanceUnits: number;
   netInvestmentAmount: number;
 }
 

@@ -6,6 +6,7 @@
       "withdrawalAmount": 0,
       "gainAmount": 0,
       "balanceAmount": 100000,
+      "balanceUnits": 0,
       "netInvestmentAmount": 100000
     },
     {
@@ -14,6 +15,7 @@
       "withdrawalAmount": 0,
       "gainAmount": 0,
       "balanceAmount": 100000,
+      "balanceUnits": 0,
       "netInvestmentAmount": 100000
     },
     {
@@ -22,6 +24,7 @@
       "withdrawalAmount": 20000,
       "gainAmount": 0,
       "balanceAmount": 80000,
+      "balanceUnits": 0,
       "netInvestmentAmount": 80000
     },
     {
@@ -30,6 +33,7 @@
       "withdrawalAmount": 20000,
       "gainAmount": 0,
       "balanceAmount": 80000,
+      "balanceUnits": 0,
       "netInvestmentAmount": 80000
     },
     {
@@ -38,6 +42,7 @@
       "withdrawalAmount": 20000,
       "gainAmount": 0,
       "balanceAmount": 80000,
+      "balanceUnits": 0,
       "netInvestmentAmount": 80000
     },
     {
@@ -46,6 +51,7 @@
       "withdrawalAmount": 20000,
       "gainAmount": 0,
       "balanceAmount": 100000,
+      "balanceUnits": 0,
       "netInvestmentAmount": 100000
     },
     {
@@ -54,6 +60,7 @@
       "withdrawalAmount": 100000,
       "gainAmount": 0,
       "balanceAmount": 100000,
+      "balanceUnits": 0,
       "netInvestmentAmount": 100000
     },
     {
@@ -62,6 +69,7 @@
       "withdrawalAmount": 118025.3170071296,
       "gainAmount": 0,
       "balanceAmount": 100000,
+      "balanceUnits": 0,
       "netInvestmentAmount": 100000
     },
     {
@@ -70,6 +78,7 @@
       "withdrawalAmount": 128052.6170071296,
       "gainAmount": 27.3,
       "balanceAmount": 100027.3,
+      "balanceUnits": 0,
       "netInvestmentAmount": 100000
     },
     {
@@ -78,6 +87,7 @@
       "withdrawalAmount": 128052.6170071296,
       "gainAmount": 27.3,
       "balanceAmount": 100027.3,
+      "balanceUnits": 0,
       "netInvestmentAmount": 100000
     },
     {
@@ -86,6 +96,7 @@
       "withdrawalAmount": 128052.6170071296,
       "gainAmount": 27.3,
       "balanceAmount": 100027.3,
+      "balanceUnits": 0,
       "netInvestmentAmount": 100000
     },
     {
@@ -94,6 +105,7 @@
       "withdrawalAmount": 128052.6170071296,
       "gainAmount": 27.3,
       "balanceAmount": 100027.3,
+      "balanceUnits": 0,
       "netInvestmentAmount": 100000
     },
     {
@@ -102,6 +114,7 @@
       "withdrawalAmount": 128052.6170071296,
       "gainAmount": 27.3,
       "balanceAmount": 100027.3,
+      "balanceUnits": 0,
       "netInvestmentAmount": 100000
     },
     {
@@ -110,6 +123,7 @@
       "withdrawalAmount": 128052.6170071296,
       "gainAmount": 27.3,
       "balanceAmount": 100027.3,
+      "balanceUnits": 0,
       "netInvestmentAmount": 100000
     },
     {
@@ -118,6 +132,7 @@
       "withdrawalAmount": 128052.6170071296,
       "gainAmount": 27.3,
       "balanceAmount": 100027.3,
+      "balanceUnits": 0,
       "netInvestmentAmount": 100000
     },
     {
@@ -126,6 +141,7 @@
       "withdrawalAmount": 128052.6170071296,
       "gainAmount": 27.3,
       "balanceAmount": 100027.3,
+      "balanceUnits": 0,
       "netInvestmentAmount": 100000
     },
     {
@@ -134,6 +150,7 @@
       "withdrawalAmount": 128052.6170071296,
       "gainAmount": 27.3,
       "balanceAmount": 100027.3,
+      "balanceUnits": 0,
       "netInvestmentAmount": 100000
     },
     {
@@ -142,6 +159,7 @@
       "withdrawalAmount": 128052.6170071296,
       "gainAmount": 27.3,
       "balanceAmount": 100027.3,
+      "balanceUnits": 0,
       "netInvestmentAmount": 100000
     },
     {
@@ -150,6 +168,7 @@
       "withdrawalAmount": 128052.6170071296,
       "gainAmount": 27.3,
       "balanceAmount": 100027.3,
+      "balanceUnits": 0,
       "netInvestmentAmount": 100000
     },
     {
@@ -158,6 +177,7 @@
       "withdrawalAmount": 128052.6170071296,
       "gainAmount": 27.3,
       "balanceAmount": 100027.3,
+      "balanceUnits": 0,
       "netInvestmentAmount": 100000
     },
     {
@@ -166,6 +186,7 @@
       "withdrawalAmount": 128052.6170071296,
       "gainAmount": 27.3,
       "balanceAmount": 100027.3,
+      "balanceUnits": 0,
       "netInvestmentAmount": 100000
     },
     {
@@ -174,6 +195,7 @@
       "withdrawalAmount": 128052.6170071296,
       "gainAmount": 27.3,
       "balanceAmount": 100027.3,
+      "balanceUnits": 0,
       "netInvestmentAmount": 100000
     },
     {
@@ -182,6 +204,7 @@
       "withdrawalAmount": 128052.6170071296,
       "gainAmount": 27.3,
       "balanceAmount": 100027.3,
+      "balanceUnits": 0,
       "netInvestmentAmount": 100000
     },
     {
@@ -190,6 +213,7 @@
       "withdrawalAmount": 128052.6170071296,
       "gainAmount": 27.3,
       "balanceAmount": 100027.3,
+      "balanceUnits": 0,
       "netInvestmentAmount": 100000
     },
     {
@@ -198,6 +222,7 @@
       "withdrawalAmount": 128052.6170071296,
       "gainAmount": 27.3,
       "balanceAmount": 100027.3,
+      "balanceUnits": 0,
       "netInvestmentAmount": 100000
     },
     {
@@ -206,6 +231,7 @@
       "withdrawalAmount": 128052.6170071296,
       "gainAmount": 27.3,
       "balanceAmount": 100027.3,
+      "balanceUnits": 0,
       "netInvestmentAmount": 100000
     },
     {
@@ -214,6 +240,7 @@
       "withdrawalAmount": 128052.6170071296,
       "gainAmount": 27.3,
       "balanceAmount": 100027.3,
+      "balanceUnits": 0,
       "netInvestmentAmount": 100000
     },
     {
@@ -222,6 +249,7 @@
       "withdrawalAmount": 128052.6170071296,
       "gainAmount": 27.3,
       "balanceAmount": 100027.3,
+      "balanceUnits": 0,
       "netInvestmentAmount": 100000
     },
     {
@@ -230,6 +258,7 @@
       "withdrawalAmount": 128052.6170071296,
       "gainAmount": 27.3,
       "balanceAmount": 100027.3,
+      "balanceUnits": 0,
       "netInvestmentAmount": 100000
     },
     {
@@ -238,6 +267,7 @@
       "withdrawalAmount": 128052.6170071296,
       "gainAmount": 27.3,
       "balanceAmount": 100027.3,
+      "balanceUnits": 0,
       "netInvestmentAmount": 100000
     },
     {
@@ -246,6 +276,7 @@
       "withdrawalAmount": 128052.6170071296,
       "gainAmount": 1027.3,
       "balanceAmount": 101027.3,
+      "balanceUnits": 0,
       "netInvestmentAmount": 100000
     },
     {
@@ -254,6 +285,7 @@
       "withdrawalAmount": 128052.6170071296,
       "gainAmount": 1027.3,
       "balanceAmount": 101027.3,
+      "balanceUnits": 0,
       "netInvestmentAmount": 100000
     },
     {
@@ -262,6 +294,7 @@
       "withdrawalAmount": 128052.6170071296,
       "gainAmount": 1027.3,
       "balanceAmount": 101027.3,
+      "balanceUnits": 0,
       "netInvestmentAmount": 100000
     },
     {
@@ -270,6 +303,7 @@
       "withdrawalAmount": 128052.6170071296,
       "gainAmount": 1027.3,
       "balanceAmount": 101027.3,
+      "balanceUnits": 0,
       "netInvestmentAmount": 100000
     },
     {
@@ -278,6 +312,7 @@
       "withdrawalAmount": 128052.6170071296,
       "gainAmount": 1027.3,
       "balanceAmount": 101027.3,
+      "balanceUnits": 0,
       "netInvestmentAmount": 100000
     },
     {
@@ -286,6 +321,7 @@
       "withdrawalAmount": 128052.6170071296,
       "gainAmount": 1027.3,
       "balanceAmount": 101027.3,
+      "balanceUnits": 0,
       "netInvestmentAmount": 100000
     },
     {
@@ -294,6 +330,7 @@
       "withdrawalAmount": 128052.6170071296,
       "gainAmount": 1027.3,
       "balanceAmount": 101027.3,
+      "balanceUnits": 0,
       "netInvestmentAmount": 100000
     },
     {
@@ -302,6 +339,7 @@
       "withdrawalAmount": 128052.6170071296,
       "gainAmount": 1245.7,
       "balanceAmount": 101245.7,
+      "balanceUnits": 0,
       "netInvestmentAmount": 100000
     }
   ],

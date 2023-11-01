@@ -11,13 +11,15 @@
     type Networth,
     type PortfolioAggregate,
     type AssetBreakdown,
-    formatPercentage
+    formatPercentage,
+    formatFloatUptoPrecision
   } from "$lib/utils";
   import _ from "lodash";
   import { onMount, onDestroy } from "svelte";
   import type { PageData } from "./$types";
   import PostingCard from "$lib/components/PostingCard.svelte";
   import LevelItem from "$lib/components/LevelItem.svelte";
+  import { iconify } from "$lib/icon";
 
   let commodities: string[] = [];
   let selectedCommodities: string[] = [];
@@ -169,6 +171,33 @@
         </div>
       </div>
       <div class="column is-9">
+        {#if overview}
+          <div class="box py-2 mb-4 mt-0">
+            <div class="is-flex mr-2 is-align-items-baseline" style="min-width: fit-content">
+              <div class="ml-3 custom-icon is-size-5">
+                <span>{iconify(data.name)}</span>
+              </div>
+              <div class="ml-3">
+                <span class="mr-1 is-size-7 has-text-grey">Investment</span>
+                <span class="has-text-weight-bold">{formatCurrency(overview.investmentAmount)}</span
+                >
+              </div>
+              <div class="ml-3">
+                <span class="mr-1 is-size-7 has-text-grey">Withdrawal</span>
+                <span class="has-text-weight-bold">{formatCurrency(overview.withdrawalAmount)}</span
+                >
+              </div>
+              {#if overview.balanceUnits > 0}
+                <div class="ml-3">
+                  <span class="mr-1 is-size-7 has-text-grey">Balance Units</span>
+                  <span class="has-text-weight-bold"
+                    >{formatFloatUptoPrecision(overview.balanceUnits, 4)}</span
+                  >
+                </div>
+              {/if}
+            </div>
+          </div>
+        {/if}
         <svg id="d3-gain-legend" width="100%" height="50" />
         <div class="box mb-2">
           <svg id="d3-account-timeline-breakdown" width="100%" height="450" />

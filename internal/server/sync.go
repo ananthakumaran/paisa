@@ -1,6 +1,7 @@
 package server
 
 import (
+	"github.com/ananthakumaran/paisa/internal/accounting"
 	"github.com/ananthakumaran/paisa/internal/model"
 	"github.com/ananthakumaran/paisa/internal/prediction"
 	"github.com/ananthakumaran/paisa/internal/service"
@@ -17,6 +18,7 @@ type SyncRequest struct {
 func Sync(db *gorm.DB, request SyncRequest) gin.H {
 	service.ClearInterestCache()
 	service.ClearPriceCache()
+	accounting.ClearCache()
 	prediction.ClearCache()
 
 	if request.Journal {

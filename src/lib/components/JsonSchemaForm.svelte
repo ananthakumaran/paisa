@@ -96,6 +96,26 @@
       </div>
     </div>
   </div>
+{:else if schema["ui:widget"] == "boolean"}
+  <div class="field is-horizontal">
+    <div class="field-label is-small">
+      <label for="" data-tippy-content={documentation(schema)} class="label">{title}</label>
+    </div>
+    <div class="field-body">
+      <div class="field">
+        <div class="control">
+          <label class="radio">
+            <input value="yes" bind:group={value} type="radio" name="yes" />
+            Yes
+          </label>
+          <label class="radio">
+            <input value="no" bind:group={value} type="radio" name="no" />
+            No
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
 {:else if schema.type === "string" || _.isEqual(schema.type, ["string", "integer"])}
   <div class="field is-horizontal">
     <div class="field-label is-small">

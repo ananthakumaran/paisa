@@ -39,6 +39,13 @@ const (
 	Unknown    CommodityType = "unknown"
 )
 
+type BoolType string
+
+const (
+	Yes BoolType = "yes"
+	No  BoolType = "no"
+)
+
 type ImportTemplate struct {
 	Name    string `json:"name" yaml:"name"`
 	Content string `json:"content" yaml:"content"`
@@ -74,6 +81,10 @@ type ScheduleAL struct {
 	Accounts []string `json:"accounts" yaml:"accounts"`
 }
 
+type Budget struct {
+	Rollover BoolType `json:"rollover" yaml:"rollover"`
+}
+
 type AllocationTarget struct {
 	Name     string   `json:"name" yaml:"name"`
 	Target   float64  `json:"target" yaml:"target"`
@@ -91,6 +102,8 @@ type Config struct {
 	FinancialYearStartingMonth time.Month `json:"financial_year_starting_month" yaml:"financial_year_starting_month"`
 
 	Retirement Retirement `json:"retirement" yaml:"retirement"`
+
+	Budget Budget `json:"budget" yaml:"budget"`
 
 	ScheduleALs []ScheduleAL `json:"schedule_al" yaml:"schedule_al"`
 
@@ -113,6 +126,7 @@ var defaultConfig = Config{
 	DisplayPrecision:           0,
 	Locale:                     "en-IN",
 	Retirement:                 Retirement{SWR: 4, Savings: []string{"Assets:*"}, Expenses: []string{"Expenses:*"}, YearlyExpenses: 0},
+	Budget:                     Budget{Rollover: Yes},
 	FinancialYearStartingMonth: 4,
 	ScheduleALs:                []ScheduleAL{},
 	AllocationTargets:          []AllocationTarget{},

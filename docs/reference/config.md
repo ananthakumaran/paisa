@@ -50,6 +50,12 @@ locale: en-IN
 # OPTIONAL, DEFAULT: 4
 financial_year_starting_month: 4
 
+## Budget
+budget:
+  # Rollover unspent money to next month
+  # OPTIONAL, ENUM: yes, no DEFAULT: yes
+  rollover: "yes"
+
 ## Retirement
 retirement:
   # Safe Withdrawal Rate

@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/ananthakumaran/paisa/internal/accounting"
+	"github.com/ananthakumaran/paisa/internal/config"
 	"github.com/ananthakumaran/paisa/internal/model/posting"
 	"github.com/ananthakumaran/paisa/internal/query"
 	"github.com/ananthakumaran/paisa/internal/utils"
@@ -59,6 +60,8 @@ func computeBudet(db *gorm.DB, forecastPostings, expensesPostings []posting.Post
 	budgetsByMonth := make(map[string]Budget)
 	balance := make(map[string]decimal.Decimal)
 
+	currentMonth := lo.Must(time.Parse("2006-01", utils.Now().Format("2006-01")))
+
 	if len(forecastPostings) > 0 {
 		start := utils.BeginningOfMonth(forecastPostings[0].Date)
 		end := utils.EndOfMonth(forecastPostings[len(forecastPostings)-1].Date)
@@ -84,7 +87,7 @@ func computeBudet(db *gorm.DB, forecastPostings, expensesPostings []posting.Post
 					es = []posting.Posting{}
 				}
 
-				budget := buildBudget(date, account, balance[account], fs, es)
+				budget := buildBudget(date, account, balance[account], fs, es, date.Before(currentMonth))
 				if budget.Available.IsPositive() {
 					balance[account] = budget.Available
 				} else {
@@ -110,8 +113,8 @@ func computeBudet(db *gorm.DB, forecastPostings, expensesPostings []posting.Post
 					return decimal.Zero
 				})
 
-			endOfMonthBalance := checkingBalance.Sub(availableThisMonth)
-			availableForBudgeting = endOfMonthBalance
+			availableForBudgeting = availableForBudgeting.Sub(availableThisMonth)
+			endOfMonthBalance := availableForBudgeting
 
 			budgetsByMonth[month] = Budget{
 				Date:               date,
@@ -130,15 +133,26 @@ func computeBudet(db *gorm.DB, forecastPostings, expensesPostings []posting.Post
 	}
 }
 
-func buildBudget(date time.Time, account string, balance decimal.Decimal, forecasts []posting.Posting, expenses []posting.Posting) AccountBudget {
+func buildBudget(date time.Time, account string, balance decimal.Decimal, forecasts []posting.Posting, expenses []posting.Posting, past bool) AccountBudget {
 	forecast := accounting.CostSum(forecasts)
 	actual := accounting.CostSum(expenses)
+
+	rollover := decimal.Zero
+	available := forecast.Sub(actual)
+	if past {
+		available = decimal.Zero
+	}
+	if config.GetConfig().Budget.Rollover == config.Yes {
+		rollover = balance
+		available = balance.Add(forecast.Sub(actual))
+	}
+
 	return AccountBudget{
 		Account:   account,
 		Forecast:  forecast,
 		Actual:    actual,
-		Rollover:  balance,
-		Available: balance.Add(forecast.Sub(actual)),
+		Rollover:  rollover,
+		Available: available,
 		Date:      date,
 		Expenses:  expenses,
 	}

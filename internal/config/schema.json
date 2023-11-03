@@ -77,6 +77,19 @@
       },
       "additionalProperties": false
     },
+    "budget": {
+      "description": "Budget configuration",
+      "type": "object",
+      "properties": {
+        "rollover": {
+          "ui:widget": "boolean",
+          "type": "string",
+          "description": "Rollover unspent money to next month",
+          "enum": ["", "yes", "no"]
+        }
+      },
+      "additionalProperties": false
+    },
     "schedule_al": {
       "description": "Schedule AL configuration",
       "type": "array",

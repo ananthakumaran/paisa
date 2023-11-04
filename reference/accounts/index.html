@@ -279,6 +279,18 @@
   </li>
 
       
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../../faq/" class="md-tabs__link">
+      FAQs
+    </a>
+  </li>
+
+      
     </ul>
   </div>
 </nav>
@@ -512,12 +524,18 @@
     Assets
   </a>
   
-</li>
-      
-        <li class="md-nav__item">
+    <nav class="md-nav" aria-label="Assets">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
   <a href="#checking" class="md-nav__link">
     Checking
   </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -526,19 +544,25 @@
     Income
   </a>
   
-</li>
-      
-        <li class="md-nav__item">
+    <nav class="md-nav" aria-label="Income">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
   <a href="#interest" class="md-nav__link">
     Interest
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#tax" class="md-nav__link">
-    Tax
+        
+          <li class="md-nav__item">
+  <a href="#capital-gains" class="md-nav__link">
+    Capital Gains
   </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -546,6 +570,19 @@
   <a href="#expenses" class="md-nav__link">
     Expenses
   </a>
+  
+    <nav class="md-nav" aria-label="Expenses">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#tax" class="md-nav__link">
+    Tax
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -838,6 +875,21 @@
   
 
     
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../faq/" class="md-nav__link">
+        FAQs
+      </a>
+    </li>
+  
+
+    
   </ul>
 </nav>
                   </div>
@@ -869,12 +921,18 @@
     Assets
   </a>
   
-</li>
-      
-        <li class="md-nav__item">
+    <nav class="md-nav" aria-label="Assets">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
   <a href="#checking" class="md-nav__link">
     Checking
   </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -883,19 +941,25 @@
     Income
   </a>
   
-</li>
-      
-        <li class="md-nav__item">
+    <nav class="md-nav" aria-label="Income">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
   <a href="#interest" class="md-nav__link">
     Interest
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#tax" class="md-nav__link">
-    Tax
+        
+          <li class="md-nav__item">
+  <a href="#capital-gains" class="md-nav__link">
+    Capital Gains
   </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -903,6 +967,19 @@
   <a href="#expenses" class="md-nav__link">
     Expenses
   </a>
+  
+    <nav class="md-nav" aria-label="Expenses">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#tax" class="md-nav__link">
+    Tax
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -968,7 +1045,7 @@ level. The UI works best when you create less than or equal to 12
 second level accounts under each type. For example, you can have 12
 accounts under <code class="language-ledger highlight"><span class="s">Expenses</span></code>. But if you want more, try to add them under
 3<sup>rd</sup> level, example <code class="language-ledger highlight"><span class="s">Expenses:Food:Subway</span></code>.</p>
-<h3 id="assets">Assets</h3>
+<h2 id="assets">Assets</h2>
 <p>All your assets should go under <code class="language-ledger highlight"><span class="s">Assets:</span></code>. The level of granularity is
 up to you. The recommended convention is to use
 <code class="language-ledger highlight"><span class="s">Assets:{instrument_type}:{instrument_name}</span></code>. The instrument type may
@@ -983,7 +1060,7 @@ accounts, you can use sub accounts as well, for example <code class="language-le
 <p>The distinction is necessary because Checking account is an asset, but
 not an investment. So you ideally you want to disregard them when you
 calculate your absolute returns etc.</p>
-<h3 id="income">Income</h3>
+<h2 id="income">Income</h2>
 <p>All your income should come from <code class="language-ledger highlight"><span class="s">Income:</span></code>. The typical way
 is to treat each employer as a separate account like <code class="language-ledger highlight"><span class="s">Income:Salary:{company}</span></code></p>
 <h3 id="interest">Interest</h3>
@@ -1002,15 +1079,24 @@ explicitly specifying anything else.</p>
 <ul>
 <li><code class="language-ledger highlight"><span class="s">Income:Interest:{name}</span></code> - interest debit account</li>
 </ul>
+<h3 id="capital-gains">Capital Gains</h3>
+<div class="language-ledger highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="na">2018/03/01</span> <span class="gh">Withdrawal</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="s">    Assets:Checking</span><span class="err">                          </span><span class="m">6775.49</span><span class="err"> </span><span class="k">INR</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="s">    Income:CapitalGains:Equity:NIFTY</span><span class="err">          </span><span class="m">-22.68</span><span class="err"> </span><span class="k">INR</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="s">    Assets:Equity:NIFTY</span><span class="err">          </span><span class="m">-100</span><span class="err"> </span><span class="k">NIFTY</span><span class="err"> {</span><span class="m">67.5281</span><span class="err"> </span><span class="k">INR</span><span class="err">} [</span><span class="na">2018/01/01</span><span class="err">] </span><span class="o">@</span><span class="err"> </span><span class="m">67.7549</span><span class="err"> </span><span class="k">INR</span>
+</span></code></pre></div>
+<p>Let's say you have an asset account named <code class="language-ledger highlight"><span class="s">Assets:{name}</span></code> and
+you make some profit when you sell the asset, this profit should come
+from capital gains account named <code class="language-ledger highlight"><span class="s">Income:CapitalGains:{name}</span></code>.</p>
+<h2 id="expenses">Expenses</h2>
+<p>All your expenses should go to <code class="language-ledger highlight"><span class="s">Expenses:{category}</span></code>
+accounts. You can also have more than 2 levels as well. The expense
+page will roll it up to 2 level wherever necessary.</p>
 <h3 id="tax">Tax</h3>
 <p>Income tax paid to government should be credited to <code class="language-ledger highlight"><span class="s">Expenses:Tax</span></code> account. This is used to calculate your Net Income and
 your Savings Rate. If you want to track different types of taxes, you
 can use sub accounts as well, for example <code class="language-ledger highlight"><span class="s">Expenses:Tax:Income</span></code>
 and <code class="language-ledger highlight"><span class="s">Expenses:Tax:GST</span></code>.</p>
-<h3 id="expenses">Expenses</h3>
-<p>All your expenses should go to <code class="language-ledger highlight"><span class="s">Expenses:{category}</span></code>
-accounts. You can also have more than 2 levels as well. The expense
-page will roll it up to 2 level wherever necessary.</p>
 <h2 id="icons">Icons</h2>
 <p>Each account is associated with an icon and is shown along with the
 account name in most places. Paisa assigns icon based on few simple

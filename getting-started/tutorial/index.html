@@ -279,6 +279,18 @@
   </li>
 
       
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../../faq/" class="md-tabs__link">
+      FAQs
+    </a>
+  </li>
+
+      
     </ul>
   </div>
 </nav>
@@ -824,6 +836,21 @@
   
 
     
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../faq/" class="md-nav__link">
+        FAQs
+      </a>
+    </li>
+  
+
+    
   </ul>
 </nav>
                   </div>
@@ -1011,12 +1038,19 @@ month.</p>
 </span><span id="__span-5-8"><a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="s">    Assets:Equity:NIFTY</span><span class="err">        </span><span class="m">140.2870</span><span class="err"> </span><span class="k">NIFTY</span><span class="err"> </span><span class="o">@</span><span class="err"> </span><span class="m">71.2824</span><span class="err"> </span><span class="k">INR</span>
 </span><span id="__span-5-9"><a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="s">    Assets:Equity:NIFTY_JR</span><span class="err">  </span><span class="m">363.2242</span><span class="err"> </span><span class="k">NIFTY_JR</span><span class="err"> </span><span class="o">@</span><span class="err"> </span><span class="m">27.5312</span><span class="err"> </span><span class="k">INR</span>
 </span><span id="__span-5-10"><a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a>
-</span><span id="__span-5-11"><a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a><span class="na">2018/03/01</span> <span class="gh">Investment</span>
-</span><span id="__span-5-12"><a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a><span class="s">    Assets:Checking</span><span class="err">               </span><span class="m">-20,000</span><span class="err"> </span><span class="k">INR</span>
-</span><span id="__span-5-13"><a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a><span class="s">    Assets:Equity:NIFTY</span><span class="err">        </span><span class="m">147.5908</span><span class="err"> </span><span class="k">NIFTY</span><span class="err"> </span><span class="o">@</span><span class="err"> </span><span class="m">67.7549</span><span class="err"> </span><span class="k">INR</span>
-</span><span id="__span-5-14"><a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a><span class="s">    Assets:Equity:NIFTY_JR</span><span class="err">  </span><span class="m">378.4323</span><span class="err"> </span><span class="k">NIFTY_JR</span><span class="err"> </span><span class="o">@</span><span class="err"> </span><span class="m">26.4248</span><span class="err"> </span><span class="k">INR</span>
+</span><span id="__span-5-11"><a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a><span class="na">2018/03/01</span> <span class="gh">Withdrawal</span>
+</span><span id="__span-5-12"><a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a><span class="s">    Assets:Checking</span><span class="err">                          </span><span class="m">6775.49</span><span class="err"> </span><span class="k">INR</span>
+</span><span id="__span-5-13"><a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a><span class="s">    Income:CapitalGains:Equity:NIFTY</span><span class="err">          </span><span class="m">-22.68</span><span class="err"> </span><span class="k">INR</span>
+</span><span id="__span-5-14"><a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a><span class="s">    Assets:Equity:NIFTY</span><span class="err">          </span><span class="m">-100</span><span class="err"> </span><span class="k">NIFTY</span><span class="err"> {</span><span class="m">67.5281</span><span class="err"> </span><span class="k">INR</span><span class="err">} [</span><span class="na">2018/01/01</span><span class="err">] </span><span class="o">@</span><span class="err"> </span><span class="m">67.7549</span><span class="err"> </span><span class="k">INR</span>
 </span></code></pre></div>
 <p>Let's consider <code class="language-ledger highlight"><span class="m">148.0865</span><span class="err"> </span><span class="k">NIFTY</span><span class="err"> </span><span class="o">@</span><span class="err"> </span><span class="m">67.5281</span><span class="err"> </span><span class="k">INR</span></code>. Here <code class="language-ledger highlight"><span class="k">NIFTY</span></code> is the name of the commodity and we have bought <code class="language-ledger highlight"><span class="m">148.0865</span></code> units at <code class="language-ledger highlight"><span class="m">67.5281</span><span class="err"> </span><span class="k">INR</span></code> per unit.</p>
+<p>The withdrawal transaction is bit more involved. When you buy a
+commodity, you buy them at a specific price on a specific date called
+lot. When you sell, you usually need to record which lot you are
+selling for taxation purpose, usually LIFO. <code class="language-ledger highlight"><span class="m">-100</span><span class="err"> </span><span class="k">NIFTY</span><span class="err">{</span><span class="m">67.5281</span><span class="err"> </span><span class="k">INR</span><span class="err">} [</span><span class="na">2018/01/01</span><span class="err">] </span><span class="o">@</span><span class="err"> </span><span class="m">67.7549</span><span class="err"> </span><span class="k">INR</span></code> means you are selling
+<code class="language-ledger highlight"><span class="k">NIFTY</span></code> at price <code class="language-ledger highlight"><span class="m">67.7549</span><span class="err"> </span><span class="k">INR</span></code> that was bought on
+<code class="language-ledger highlight"><span class="na">2018/01/01</span></code> at <code class="language-ledger highlight"><span class="m">67.5281</span><span class="err"> </span><span class="k">INR</span></code>. The gain or loss
+amount comes from the capital gains account <code class="language-ledger highlight"><span class="s">Income:CapitalGains:Equity:NIFTY</span></code></p>
 <p>Paisa has support for fetching commodity price history from few
 <a href="../../reference/commodities/">providers</a>. Go to <code>Configuration</code> page and expand the <code>Commodities</code>
 section. You can click the <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M256 512a256 256 0 1 0 0-512 256 256 0 1 0 0 512zm-24-168v-64h-64c-13.3 0-24-10.7-24-24s10.7-24 24-24h64v-64c0-13.3 10.7-24 24-24s24 10.7 24 24v64h64c13.3 0 24 10.7 24 24s-10.7 24-24 24h-64v64c0 13.3-10.7 24-24 24s-24-10.7-24-24z"/></svg></span> icon to

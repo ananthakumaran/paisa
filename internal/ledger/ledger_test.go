@@ -28,6 +28,9 @@ func TestParseLegerPrices(t *testing.T) {
 	assert.Len(t, parsedPrices, 0)
 	parsedPrices, _ = parseLedgerPrices("P 2023/05/01 00:00:00 USD $0.9\n", "INR")
 	assert.Len(t, parsedPrices, 0)
+
+	parsedPrices, _ = parseLedgerPrices("P 2022/01/29 00:50:00 UAH 0.026 EUR\n", "EUR")
+	assertPriceEqual(t, parsedPrices[0], "2022/01/29", "UAH", 0.026)
 }
 
 func TestParseHLegerPrices(t *testing.T) {

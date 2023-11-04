@@ -1,5 +1,13 @@
 # CHANGELOG
 
+### 0.5.6 (2023-11-04)
+
+* Add support for Income:CapitalGains
+* Add option to control display precision
+* Add new price provider for gold and silver (IBJA India)
+* Add option to disable budget rollover
+* Bug fixes
+
 ### 0.5.5 (2023-10-07)
 
 * Support account icon customization

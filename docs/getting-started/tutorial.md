@@ -144,7 +144,7 @@ The withdrawal transaction is bit more involved. When you buy a
 commodity, you buy them at a specific price on a specific date called
 lot. When you sell, you usually need to record which lot you are
 selling for taxation purpose, usually LIFO. `#!ledger -100 NIFTY
-{67.5281 INR} [2018/01/01] @ 67.7549 INR` means you are selling
+ {67.5281 INR} [2018/01/01] @ 67.7549 INR` means you are selling
 `#!ledger NIFTY` at price `#!ledger 67.7549 INR` that was bought on
 `#!ledger 2018/01/01` at `#!ledger 67.5281 INR`. The gain or loss
 amount comes from the capital gains account `#!ledger

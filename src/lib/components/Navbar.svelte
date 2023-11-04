@@ -119,7 +119,7 @@
       href: "/more",
       children: [
         { label: "Configuration", href: "/config", tag: "alpha" },
-        { label: "Retirement", href: "/retirement/progress", help: "retirement" },
+        { label: "Goals", href: "/goals" },
         { label: "Doctor", href: "/doctor" },
         { label: "Logs", href: "/logs" }
       ]

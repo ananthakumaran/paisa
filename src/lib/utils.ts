@@ -329,12 +329,20 @@ export interface AccountBudget {
   expenses: Posting[];
 }
 
-export interface RetirementProgress {
+export interface RetirementGoalProgress {
   savings_total: number;
   savings_timeline: Point[];
   swr: number;
   yearly_expense: number;
   xirr: number;
+}
+
+export interface SavingsGoalProgress {
+  savings_total: number;
+  savings_timeline: Point[];
+  target: number;
+  xirr: number;
+  postings: Posting[];
 }
 
 export interface LedgerFile {
@@ -414,6 +422,14 @@ export interface Log {
   msg: string;
 }
 
+export interface GoalSummary {
+  type: string;
+  name: string;
+  icon: string;
+  current: number;
+  target: number;
+}
+
 const BACKGROUND = [
   "/api/editor/validate",
   "/api/editor/save",
@@ -431,7 +447,6 @@ const BACKGROUND = [
 export function ajax(
   route: "/api/config"
 ): Promise<{ config: UserConfig; schema: JSONSchema7; now: dayjs.Dayjs }>;
-export function ajax(route: "/api/retirement/progress"): Promise<RetirementProgress>;
 export function ajax(route: "/api/harvest"): Promise<{ harvestables: Record<string, Harvestable> }>;
 export function ajax(
   route: "/api/capital_gains"
@@ -523,6 +538,18 @@ export function ajax(
 export function ajax(route: "/api/liabilities/interest"): Promise<{
   interest_timeline_breakdown: Interest[];
 }>;
+
+export function ajax(route: "/api/goals"): Promise<{ goals: GoalSummary[] }>;
+export function ajax(
+  route: "/api/goals/retirement/:name",
+  options?: RequestInit,
+  params?: Record<string, string>
+): Promise<RetirementGoalProgress>;
+export function ajax(
+  route: "/api/goals/savings/:name",
+  options?: RequestInit,
+  params?: Record<string, string>
+): Promise<SavingsGoalProgress>;
 
 export function ajax(route: "/api/account/tf_idf"): Promise<AccountTfIdf>;
 export function ajax(route: "/api/templates"): Promise<{ templates: ImportTemplate[] }>;

@@ -69,11 +69,25 @@ type Account struct {
 	Icon string `json:"icon" yaml:"icon"`
 }
 
-type Retirement struct {
+type Goals struct {
+	Retirement []RetirementGoal `json:"retirement" yaml:"retirement"`
+	Savings    []SavingsGoal    `json:"savings" yaml:"savings"`
+}
+
+type RetirementGoal struct {
+	Name           string   `json:"name" yaml:"name"`
+	Icon           string   `json:"icon" yaml:"icon"`
 	SWR            float64  `json:"swr" yaml:"swr"`
 	Expenses       []string `json:"expenses" yaml:"expenses"`
 	Savings        []string `json:"savings" yaml:"savings"`
 	YearlyExpenses float64  `json:"yearly_expenses" yaml:"yearly_expenses"`
+}
+
+type SavingsGoal struct {
+	Name     string   `json:"name" yaml:"name"`
+	Icon     string   `json:"icon" yaml:"icon"`
+	Target   float64  `json:"target" yaml:"target"`
+	Accounts []string `json:"accounts" yaml:"accounts"`
 }
 
 type ScheduleAL struct {
@@ -101,8 +115,6 @@ type Config struct {
 	Locale                     string     `json:"locale" yaml:"locale"`
 	FinancialYearStartingMonth time.Month `json:"financial_year_starting_month" yaml:"financial_year_starting_month"`
 
-	Retirement Retirement `json:"retirement" yaml:"retirement"`
-
 	Budget Budget `json:"budget" yaml:"budget"`
 
 	ScheduleALs []ScheduleAL `json:"schedule_al" yaml:"schedule_al"`
@@ -114,6 +126,8 @@ type Config struct {
 	ImportTemplates []ImportTemplate `json:"import_templates" yaml:"import_templates"`
 
 	Accounts []Account `json:"accounts" yaml:"accounts"`
+
+	Goals Goals `json:"goals" yaml:"goals"`
 }
 
 var config Config
@@ -125,7 +139,6 @@ var defaultConfig = Config{
 	DefaultCurrency:            "INR",
 	DisplayPrecision:           0,
 	Locale:                     "en-IN",
-	Retirement:                 Retirement{SWR: 4, Savings: []string{"Assets:*"}, Expenses: []string{"Expenses:*"}, YearlyExpenses: 0},
 	Budget:                     Budget{Rollover: Yes},
 	FinancialYearStartingMonth: 4,
 	ScheduleALs:                []ScheduleAL{},
@@ -133,6 +146,7 @@ var defaultConfig = Config{
 	Commodities:                []Commodity{},
 	ImportTemplates:            []ImportTemplate{},
 	Accounts:                   []Account{},
+	Goals:                      Goals{Retirement: []RetirementGoal{}, Savings: []SavingsGoal{}},
 }
 
 var itemsUniquePropertiesMeta = jsonschema.MustCompileString("itemsUniqueProperties.json", `{

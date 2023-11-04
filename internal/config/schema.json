@@ -45,37 +45,116 @@
       "description": "First month of the financial year. This can be set to 1 to follow January to December."
     },
     "retirement": {
-      "description": "Retirement configuration",
+      "type": "object",
+      "ui:widget": "hidden"
+    },
+    "goals": {
+      "description": "Goals configuration",
       "type": "object",
       "properties": {
-        "swr": {
-          "type": "number",
-          "description": "Safe Withdrawal Rate"
-        },
-        "expenses": {
+        "retirement": {
           "type": "array",
-          "description": "List of expense accounts",
-          "default": ["Expenses:Utilities"],
+          "default": [
+            {
+              "name": "Retirement",
+              "swr": 4,
+              "expenses": ["Expenses:*"],
+              "savings": ["Assets:*"],
+              "yearly_expenses": 0
+            }
+          ],
+          "itemsUniqueProperties": ["name"],
           "items": {
-            "type": "string"
-          },
-          "uniqueItems": true
+            "description": "Retirement Goal configuration",
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "Goal name"
+              },
+              "icon": {
+                "type": "string",
+                "description": "Goal icon name",
+                "ui:widget": "icon"
+              },
+              "swr": {
+                "type": "number",
+                "description": "Safe Withdrawal Rate",
+                "minimum": 1,
+                "maximum": 10
+              },
+
+              "yearly_expenses": {
+                "type": "integer",
+                "description": "By default, average of last 3 year expenses will be used to calculate your yearly expenses. This can be overriden by setting this configuration to positive value"
+              },
+              "expenses": {
+                "type": "array",
+                "description": "List of expense accounts",
+                "default": ["Expenses:Utilities"],
+                "items": {
+                  "type": "string"
+                },
+                "uniqueItems": true
+              },
+              "savings": {
+                "type": "array",
+                "description": "List of accounts where you keep retirement savings",
+                "default": ["Assets:Equity"],
+                "items": {
+                  "type": "string"
+                },
+                "uniqueItems": true
+              }
+            },
+            "ui:header": "name",
+            "required": ["name", "swr", "savings"],
+            "additionalProperties": false
+          }
         },
         "savings": {
           "type": "array",
-          "description": "List of accounts where you keep retirement savings",
-          "default": ["Expenses:Equity"],
+          "default": [
+            {
+              "name": "Emergency Fund",
+              "accounts": ["Assets:*"],
+              "target": 1000000
+            }
+          ],
+          "itemsUniqueProperties": ["name"],
           "items": {
-            "type": "string"
-          },
-          "uniqueItems": true
-        },
-        "yearly_expenses": {
-          "type": "integer",
-          "description": "By default, average of last 3 year expenses will be used to calculate your yearly expenses. This can be overriden by setting this configuration to positive value"
+            "description": "Savings Goal configuration",
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "Goal name"
+              },
+              "icon": {
+                "type": "string",
+                "description": "Goal icon name",
+                "ui:widget": "icon"
+              },
+              "target": {
+                "type": "number",
+                "description": "Savings Target"
+              },
+              "accounts": {
+                "type": "array",
+                "description": "List of savings accounts",
+                "default": ["Assets:Equity"],
+                "items": {
+                  "type": "string"
+                },
+                "uniqueItems": true
+              }
+            },
+            "ui:header": "name",
+            "required": ["name", "target", "accounts"],
+            "additionalProperties": false
+          }
         }
-      },
-      "additionalProperties": false
+      }
     },
     "budget": {
       "description": "Budget configuration",
@@ -263,7 +342,7 @@
           },
           "icon": {
             "type": "string",
-            "description": "account icon in svg format",
+            "description": "Account icon name",
             "ui:widget": "icon"
           }
         },

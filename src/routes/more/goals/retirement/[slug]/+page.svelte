@@ -4,9 +4,11 @@
   import { ajax, formatCurrency, formatFloat, type Point } from "$lib/utils";
   import { onMount, tick, onDestroy } from "svelte";
   import ARIMAPromise from "arima/async";
-  import { forecast, renderProgress, findBreakPoints } from "$lib/retirement";
-  import { isEmpty } from "lodash";
+  import { forecast, renderProgress, findBreakPoints } from "$lib/goals";
   import LevelItem from "$lib/components/LevelItem.svelte";
+  import type { PageData } from "./$types";
+
+  export let data: PageData;
 
   let svg: Element;
   let savingsTotal = 0,
@@ -17,7 +19,6 @@
     progressPercent = 0,
     savingsX = 0,
     targetX = 0,
-    skipProgress = true,
     breakPoints: Point[] = [],
     savingsTimeline: Point[] = [],
     destroyCallback = () => {};
@@ -33,7 +34,7 @@
       yearly_expense: yearlyExpense,
       swr,
       xirr
-    } = await ajax("/api/retirement/progress"));
+    } = await ajax("/api/goals/retirement/:name", null, data));
     targetSavings = yearlyExpense * (100 / swr);
 
     if (yearlyExpense > 0) {
@@ -48,15 +49,10 @@
 
     const ARIMA = await ARIMAPromise;
     const predictionsTimeline = forecast(savingsTimeline, targetSavings, ARIMA);
-    if (isEmpty(predictionsTimeline)) {
-      return;
-    }
-    skipProgress = false;
     await tick();
     breakPoints = findBreakPoints(savingsTimeline.concat(predictionsTimeline), targetSavings);
     destroyCallback = renderProgress(savingsTimeline, predictionsTimeline, breakPoints, svg, {
-      targetSavings,
-      yearlyExpense
+      targetSavings
     });
   });
 </script>
@@ -67,7 +63,7 @@
       <LevelItem
         title="Current Savings"
         value={formatCurrency(savingsTotal)}
-        color={COLORS.primary}
+        color={COLORS.gainText}
         subtitle="{formatFloat(savingsX, 0)}x times Yearly Expenses"
       />
       <LevelItem
@@ -79,7 +75,7 @@
       <LevelItem
         title="Target Savings"
         value={formatCurrency(targetSavings)}
-        color={targetSavings <= savingsTotal ? COLORS.gainText : COLORS.lossText}
+        color={COLORS.secondary}
         subtitle="{formatFloat(targetX, 0)}x times Yearly Expenses"
       />
       <LevelItem title="SWR" value={formatFloat(swr)} />
@@ -89,13 +85,12 @@
 </section>
 
 <section class="section">
-  <Progress {progressPercent} />
+  <div class="container is-fluid">
+    <Progress {progressPercent} />
+  </div>
 </section>
 
-<section
-  class="section tab-retirement-progress"
-  style="visibility: {skipProgress ? 'hidden' : 'visible'};"
->
+<section class="section tab-retirement-progress">
   <div class="container is-fluid">
     <div class="columns">
       <div class="column is-12">

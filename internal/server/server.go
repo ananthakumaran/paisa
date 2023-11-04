@@ -12,8 +12,8 @@ import (
 	"github.com/ananthakumaran/paisa/internal/model/template"
 	"github.com/ananthakumaran/paisa/internal/prediction"
 	"github.com/ananthakumaran/paisa/internal/server/assets"
+	"github.com/ananthakumaran/paisa/internal/server/goal"
 	"github.com/ananthakumaran/paisa/internal/server/liabilities"
-	"github.com/ananthakumaran/paisa/internal/server/retirement"
 	"github.com/ananthakumaran/paisa/internal/utils"
 	"github.com/ananthakumaran/paisa/web"
 	"github.com/gin-contrib/gzip"
@@ -185,10 +185,6 @@ func Build(db *gorm.DB, enableCompression bool) *gin.Engine {
 		c.JSON(200, GetDiagnosis(db))
 	})
 
-	router.GET("/api/retirement/progress", func(c *gin.Context) {
-		c.JSON(200, retirement.GetRetirementProgress(db))
-	})
-
 	router.GET("/api/liabilities/interest", func(c *gin.Context) {
 		c.JSON(200, liabilities.GetInterest(db))
 	})
@@ -286,6 +282,14 @@ func Build(db *gorm.DB, enableCompression bool) *gin.Engine {
 
 		template.Delete(t.Name)
 		c.JSON(200, gin.H{})
+	})
+
+	router.GET("/api/goals", func(c *gin.Context) {
+		c.JSON(200, gin.H{"goals": goal.GetGoalSummaries(db)})
+	})
+
+	router.GET("/api/goals/:type/:name", func(c *gin.Context) {
+		c.JSON(200, goal.GetGoalDetails(db, c.Param("type"), c.Param("name")))
 	})
 
 	router.NoRoute(func(c *gin.Context) {

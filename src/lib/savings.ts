@@ -1,7 +1,6 @@
-import type { Arima } from "arima/async";
 import * as d3 from "d3";
 import { Delaunay } from "d3";
-import _, { first, isEmpty, last, takeRight } from "lodash";
+import _, { first, last, takeRight } from "lodash";
 import tippy, { type Placement } from "tippy.js";
 import COLORS from "./colors";
 import {
@@ -19,10 +18,10 @@ export function renderProgress(
   predictions: Forecast[],
   breakPoints: Point[],
   element: Element,
-  { targetSavings, yearlyExpense }: { targetSavings: number; yearlyExpense: number }
+  { targetSavings }: { targetSavings: number }
 ) {
   const start = first(points).date,
-    end = last(predictions).date;
+    end = (last(predictions) || last(points)).date;
   const positions = _.map(points.concat(predictions), (p) => p.value);
 
   const svg = d3.select(element),
@@ -37,7 +36,7 @@ export function renderProgress(
   const lineScale = d3
     .scaleOrdinal<string>()
     .domain(lineKeys)
-    .range([COLORS.primary, COLORS.secondary]);
+    .range([COLORS.gainText, COLORS.secondary]);
 
   const x = d3.scaleTime().range([0, width]).domain([start, end]),
     y = d3
@@ -139,7 +138,7 @@ export function renderProgress(
           ["Date", d.date.format("DD MMM YYYY")],
           ["Savings", [formatCurrency(d.value), "has-text-weight-bold has-text-right"]],
           [
-            [formatFloat(d.value / yearlyExpense, 0) + "X", "has-text-weight-bold has-text-right"],
+            "",
             [
               formatFloat((d.value / targetSavings) * 100) + "%",
               "has-text-weight-bold has-text-right"
@@ -177,72 +176,4 @@ export function renderProgress(
     t.destroy();
     instances.forEach((i) => i.destroy());
   };
-}
-
-export function forecast(points: Point[], target: number, ARIMA: typeof Arima): Forecast[] {
-  const configs = [
-    { p: 3, d: 0, q: 1, s: 0, verbose: false },
-    { p: 2, d: 0, q: 1, s: 0, verbose: false }
-  ];
-
-  for (const config of configs) {
-    const forecast = doForecast(config, points, target, ARIMA);
-    if (!_.isEmpty(forecast)) {
-      return forecast;
-    }
-  }
-  return [];
-}
-
-function doForecast(
-  config: object,
-  points: Point[],
-  target: number,
-  ARIMA: typeof Arima
-): Forecast[] {
-  const values = points.map((p) => p.value);
-  const arima = new ARIMA(config).train(values);
-
-  const predictYears = 3;
-  let i = 1;
-  while (i < 10) {
-    const [predictions, errors] = arima.predict(predictYears * i * 365);
-    if (isEmpty(predictions)) {
-      return [];
-    }
-    if (last(predictions) > target) {
-      const predictionsTimeline: Forecast[] = [];
-      let start = last(points).date;
-      while (!isEmpty(predictions)) {
-        start = start.add(1, "day");
-        const point = { date: start, value: predictions.shift(), error: Math.sqrt(errors.shift()) };
-        if (
-          point.value > 1e20 ||
-          point.value < -1e20 ||
-          point.error > 1e20 ||
-          point.value < -1e20
-        ) {
-          return [];
-        }
-        predictionsTimeline.push(point);
-      }
-      return predictionsTimeline;
-    }
-    i++;
-  }
-  return [];
-}
-
-export function findBreakPoints(points: Point[], target: number): Point[] {
-  const result: Point[] = [];
-  let i = 1;
-  while (i <= 4 && !isEmpty(points)) {
-    const p = points.shift();
-    if (p.value > target * (i / 4)) {
-      result.push(p);
-      i++;
-    }
-  }
-
-  return result;
 }

@@ -18,7 +18,7 @@
 
           nativeBuildInputs = [ pkgs.nodejs-18_x ];
 
-          vendorSha256 = "sha256-HBV1HBN4nZJ/7ZZJsyCMxwPj/rTdU2ZtsviYZVkF8GY=";
+          vendorSha256 = "sha256-7JK2HwEhnWhLwT3KFcFVurdi9lp3UkyNBP5ESDkBfxE=";
 
           CGO_ENABLED = 1;
 

@@ -15,6 +15,17 @@ configuration file named `paisa/paisa.yaml` inside User Documents folder. The
 default configuration is tuned for Indians, users from other countries
 would have to change the `default_currency` and `locale`.
 
+### Accounts
+
+In many places, paisa expects you to specify a list of accounts. You
+can type the full account name like `#!ledger
+Account:Equity:APPL`. Paisa also supports wildcard `*`, you can use
+`#!ledger Account:Equity:*` to represent all accounts under
+Equity. It's also possible to use negation. `#!ledger !Expenses:Tax`
+will match all accounts except Tax. If you use negation, then all the
+accounts should be negation. Don't mix negation with others, if done
+the behavior will be undefined.
+
 ```yaml
 # Path to your journal file. It can be absolute or relative to the
 # configuration file. The main journal file can refer other files using

@@ -1,7 +1,14 @@
 <script lang="ts">
   import COLORS from "$lib/colors";
   import Progress from "$lib/components/Progress.svelte";
-  import { ajax, formatCurrency, formatFloat, type Point, type Posting } from "$lib/utils";
+  import {
+    ajax,
+    formatCurrency,
+    formatFloat,
+    isMobile,
+    type Point,
+    type Posting
+  } from "$lib/utils";
   import { onMount, tick, onDestroy } from "svelte";
   import ARIMAPromise from "arima/async";
   import { forecast, renderProgress, findBreakPoints } from "$lib/goals";
@@ -10,6 +17,7 @@
   import type { PageData } from "./$types";
   import PostingCard from "$lib/components/PostingCard.svelte";
   import PostingGroup from "$lib/components/PostingGroup.svelte";
+  import { iconGlyph } from "$lib/icon";
 
   export let data: PageData;
 
@@ -17,6 +25,8 @@
   let savingsTotal = 0,
     targetSavings = 0,
     xirr = 0,
+    name = "",
+    icon = "",
     progressPercent = 0,
     breakPoints: Point[] = [],
     savingsTimeline: Point[] = [],
@@ -29,10 +39,12 @@
 
   onMount(async () => {
     ({
-      savings_total: savingsTotal,
-      savings_timeline: savingsTimeline,
+      savingsTotal,
+      savingsTimeline,
       target: targetSavings,
       postings,
+      icon,
+      name,
       xirr
     } = await ajax("/api/goals/savings/:name", null, data));
 
@@ -56,7 +68,8 @@
 
 <section class="section">
   <div class="container is-fluid">
-    <nav class="level">
+    <nav class="level custom-icon {isMobile() && 'grid-2'}">
+      <LevelItem title={name} value={iconGlyph(icon)} />
       <LevelItem
         title="Current Savings"
         value={formatCurrency(savingsTotal)}
@@ -108,9 +121,9 @@
               <svg height="500" bind:this={svg} />
             </div>
           </div>
-          <div class="column is-12 has-text-centered">
+          <div class="column is-12 has-text-centered has-text-grey">
             <div>
-              <p class="heading">Savings Progress</p>
+              <p class="is-size-5 custom-icon">{iconGlyph(icon)} {name} progress</p>
             </div>
           </div>
         </div>

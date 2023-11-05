@@ -330,19 +330,25 @@ export interface AccountBudget {
 }
 
 export interface RetirementGoalProgress {
-  savings_total: number;
-  savings_timeline: Point[];
+  savingsTotal: number;
+  savingsTimeline: Point[];
   swr: number;
-  yearly_expense: number;
+  yearlyExpense: number;
   xirr: number;
+  name: string;
+  type: string;
+  icon: string;
 }
 
 export interface SavingsGoalProgress {
-  savings_total: number;
-  savings_timeline: Point[];
+  savingsTotal: number;
+  savingsTimeline: Point[];
   target: number;
   xirr: number;
   postings: Posting[];
+  name: string;
+  type: string;
+  icon: string;
 }
 
 export interface LedgerFile {

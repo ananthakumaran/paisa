@@ -69,18 +69,27 @@ journal_path: '%s'
 db_path: '%s'
 ledger_cli: ledger
 default_currency: INR
-retirement:
-  swr: 3
+goals:
+  retirement:
+    - name: Early Retirement
+      icon: mdi:palm-tree
+      swr: 3
+      savings:
+        - Assets:Debt:*
+        - Assets:Equity:*
+      expenses:
+        - Expenses:Rent
+        - Expenses:Utilities
+        - Expenses:Shopping
+        - Expenses:Restaurants
+        - Expenses:Food
+        - Expenses:Interest:*
   savings:
-    - Assets:Debt:*
-    - Assets:Equity:*
-  expenses:
-    - Expenses:Rent
-    - Expenses:Utilities
-    - Expenses:Shopping
-    - Expenses:Restaurants
-    - Expenses:Food
-    - Expenses:Interest:*
+    - name: Millionaire
+      icon: mdi:car-sports
+      target: 80000000
+      accounts:
+        - '!Assets:Checking'
 allocation_targets:
   - name: Debt
     target: 40

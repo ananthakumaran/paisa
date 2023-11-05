@@ -83,7 +83,6 @@
                 "minimum": 1,
                 "maximum": 10
               },
-
               "yearly_expenses": {
                 "type": "integer",
                 "description": "By default, average of last 3 year expenses will be used to calculate your yearly expenses. This can be overriden by setting this configuration to positive value"
@@ -108,7 +107,7 @@
               }
             },
             "ui:header": "name",
-            "required": ["name", "swr", "savings"],
+            "required": ["name", "icon", "swr", "savings"],
             "additionalProperties": false
           }
         },
@@ -150,7 +149,7 @@
               }
             },
             "ui:header": "name",
-            "required": ["name", "target", "accounts"],
+            "required": ["name", "icon", "target", "accounts"],
             "additionalProperties": false
           }
         }

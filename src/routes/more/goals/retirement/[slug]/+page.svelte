@@ -1,17 +1,20 @@
 <script lang="ts">
   import COLORS from "$lib/colors";
   import Progress from "$lib/components/Progress.svelte";
-  import { ajax, formatCurrency, formatFloat, type Point } from "$lib/utils";
+  import { ajax, formatCurrency, formatFloat, isMobile, type Point } from "$lib/utils";
   import { onMount, tick, onDestroy } from "svelte";
   import ARIMAPromise from "arima/async";
   import { forecast, renderProgress, findBreakPoints } from "$lib/goals";
   import LevelItem from "$lib/components/LevelItem.svelte";
   import type { PageData } from "./$types";
+  import { iconGlyph } from "$lib/icon";
 
   export let data: PageData;
 
   let svg: Element;
   let savingsTotal = 0,
+    icon = "",
+    name = "",
     targetSavings = 0,
     swr = 0,
     xirr = 0,
@@ -28,13 +31,11 @@
   });
 
   onMount(async () => {
-    ({
-      savings_total: savingsTotal,
-      savings_timeline: savingsTimeline,
-      yearly_expense: yearlyExpense,
-      swr,
-      xirr
-    } = await ajax("/api/goals/retirement/:name", null, data));
+    ({ savingsTotal, savingsTimeline, yearlyExpense, swr, xirr, icon, name } = await ajax(
+      "/api/goals/retirement/:name",
+      null,
+      data
+    ));
     targetSavings = yearlyExpense * (100 / swr);
 
     if (yearlyExpense > 0) {
@@ -59,7 +60,8 @@
 
 <section class="section">
   <div class="container is-fluid">
-    <nav class="level">
+    <nav class="level custom-icon {isMobile() && 'grid-2'}">
+      <LevelItem title={name} value={iconGlyph(icon)} />
       <LevelItem
         title="Current Savings"
         value={formatCurrency(savingsTotal)}
@@ -100,9 +102,9 @@
       </div>
     </div>
     <div class="columns">
-      <div class="column is-12 has-text-centered">
+      <div class="column is-12 has-text-centered has-text-grey">
         <div>
-          <p class="heading">Retirement Progress</p>
+          <p class="is-size-5 custom-icon">{iconGlyph(icon)} {name} progress</p>
         </div>
       </div>
     </div>

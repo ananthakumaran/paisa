@@ -17,9 +17,12 @@ nav:
     - reference/budget.md
     - reference/bulk-edit.md
     - reference/import.md
-    - reference/retirement.md
     - reference/recurring.md
     - reference/config.md
+    - 'Goals':
+        - reference/goals/index.md
+        - reference/goals/retirement.md
+        - reference/goals/savings.md
     - reference/ledger-cli.md
     - reference/analysis.md
     - 'Tax':

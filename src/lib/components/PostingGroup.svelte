@@ -1,5 +1,6 @@
 <script lang="ts">
   import { formatCurrency, type Posting } from "$lib/utils";
+  import _ from "lodash";
 
   export let postings: Posting[];
   export let groupFormat: string;
@@ -12,6 +13,7 @@
 
   let groupedPostings: GroupedPosting[] = [];
   $: groupedPostings = group(postings);
+  $: isGrouped = _.some(groupedPostings, (groupedPosting) => groupedPosting.postings.length > 1);
 
   function group(ps: Posting[]) {
     let groupedPostings: GroupedPosting[] = [];
@@ -45,11 +47,13 @@
 
 <div>
   {#each groupedPostings as groupedPosting}
-    <div class="mb-3">
-      <div class="flex justify-between -mb-1 has-text-weight-bold has-text-grey-light">
-        <div>{groupedPosting.key}</div>
-        <div>{formatCurrency(groupedPosting.total)}</div>
-      </div>
+    <div class={isGrouped && "mb-3"}>
+      {#if isGrouped}
+        <div class="flex justify-between -mb-1 has-text-weight-bold has-text-grey-light">
+          <div>{groupedPosting.key}</div>
+          <div>{formatCurrency(groupedPosting.total)}</div>
+        </div>
+      {/if}
       <slot groupedPostings={groupedPosting.postings} />
     </div>
   {/each}

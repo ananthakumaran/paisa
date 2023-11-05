@@ -58,7 +58,7 @@ async function createFont(font) {
   font-weight: 900;
   src: url("../fonts/${font}.woff2") format("woff2");
   unicode-range: U+${min.toString(16).toUpperCase()}-${max.toString(16).toUpperCase()};
-  font-display: swap;
+  font-display: block;
 }
 `;
 

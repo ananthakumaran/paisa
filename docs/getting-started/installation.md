@@ -136,6 +136,21 @@ Paisa CLI is available on [dockerhub](https://hub.docker.com/r/ananthakumaran/pa
     # docker run -p 7500:7500 -v /Users/john/Documents/paisa/:/root/Documents/paisa/ ananthakumaran/paisa:latest
     ```
 
+## Nix Flake
+
+Paisa CLI is available as a nix flake.
+
+=== "Linux"
+
+    ```console
+    # nix profile install github:ananthakumaran/paisa
+    ```
+
+=== "Mac"
+
+    ```console
+    # nix profile install github:ananthakumaran/paisa
+    ```
 
 [^1]: I offer Paisa as a free app, and I don't generate any revenue
       from it. Code signing would require me to pay $99 for Mac and

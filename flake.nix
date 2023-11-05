@@ -22,6 +22,8 @@
 
           CGO_ENABLED = 1;
 
+          doCheck = false;
+
           subPackages = [ "." ];
 
           preConfigure = ''

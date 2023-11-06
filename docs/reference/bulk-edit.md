@@ -1,3 +1,7 @@
+---
+description: "Documentation on how to search and edit transactions in bulk in Paisa, an open source personal finance manager"
+---
+
 # Bulk Edit
 
 Paisa provides bulk transaction editor to search and modify multiple

@@ -1,3 +1,7 @@
+---
+description: "The journal format used by Paisa to capture transactions, metadata, etc."
+---
+
 # Journal
 
 All your transactions are stored in plain text files called

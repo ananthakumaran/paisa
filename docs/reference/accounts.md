@@ -1,3 +1,7 @@
+---
+description: "Different types of accounts and the naming convention followed by Paisa, an open source personal finance manager"
+---
+
 # Accounts
 
 If you take a typical transaction, money moves between two parties. In

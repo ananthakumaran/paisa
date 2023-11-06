@@ -1,3 +1,7 @@
+---
+description: "How to configure your savings goal in Paisa"
+---
+
 # Savings
 
 Savings represents a general financial objective that you want to

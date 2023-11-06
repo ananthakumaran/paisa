@@ -1,3 +1,7 @@
+---
+description: "Full list of configuration options supported by Paisa along with their description"
+---
+
 # Configuration
 
 All the configuration related to paisa is stored in a yaml file named

@@ -1,3 +1,7 @@
+---
+description: "How to configure recurring transactions in Paisa"
+---
+
 # Recurring
 
 Some of the transactions recur on a regular interval and it might be

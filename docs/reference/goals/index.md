@@ -1,3 +1,7 @@
+---
+description: "How to configure goals in Paisa to track your financial objectives"
+---
+
 # Goals
 
 Goal helps you track your financial objective and progress. You can

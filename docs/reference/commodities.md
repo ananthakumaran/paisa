@@ -1,3 +1,7 @@
+---
+description: "How to configure commodities in Paisa to track mutual funds, stocks, gold, etc."
+---
+
 # Commodities
 
 There are no restrictions on the type of **commodities** that can be
@@ -64,6 +68,28 @@ commodities:
 The example configuration above links nifty commodity with the respective
 mutual fund scheme code.
 
+## Yahoo <sub>:globe_with_meridians:</sub>
+
+To automatically track the latest value of your stock holdings,
+you need to link the commodity and the stock ticker name.
+
+```yaml
+commodities:
+  - name: APPLE # (1)!
+    type: stock # (2)!
+    price:
+        provider: com-yahoo # (3)!
+        code: AAPL # (4)!
+```
+
+1. commodity name
+1. type
+1. price provider name
+1. stock ticker code
+
+Stock prices are fetched from yahoo finance website. The ticker code
+should match the code used in yahoo.
+
 ## Purified Bytes NPS <sub>:flag_in:</sub>
 
 To automatically track the latest value of your nps funds holdings,
@@ -86,27 +112,38 @@ commodities:
 The example configuration above links NPS fund commodity with their
 respective NPS fund scheme code.
 
-## Yahoo <sub>:globe_with_meridians:</sub>
+## Purified Bytes Metals <sub>:flag_in:</sub>
 
-To automatically track the latest value of your stock holdings,
-you need to link the commodity and the stock ticker name.
+To automatically track the latest price of gold or silver in various
+purity you need to link the commodity and the metal code. The price is
+for 1 gram of the metal.
 
 ```yaml
 commodities:
-  - name: APPLE # (1)!
-    type: stock # (2)!
+  - name: GOLD # (1)!
+    type: metal # (2)!
     price:
-        provider: com-yahoo # (3)!
-        code: AAPL # (4)!
+        provider: com-purifiedbytes-metal # (3)!
+        code: gold-999 # (4)!
 ```
 
 1. commodity name
 1. type
 1. price provider name
-1. stock ticker code
+1. metal name along with purity
 
-Stock prices are fetched from yahoo finance website. The ticker code
-should match the code used in yahoo.
+
+The following metals and purity combinations are supported.
+
+| Metal  | Purity | Code       |
+|--------|--------|------------|
+| Gold   | 999    | gold-999   |
+| Gold   | 995    | gold-995   |
+| Gold   | 916    | gold-916   |
+| Gold   | 750    | gold-750   |
+| Gold   | 585    | gold-585   |
+| Silver | 999    | silver-999 |
+
 
 ## RealEstate
 

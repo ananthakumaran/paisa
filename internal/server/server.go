@@ -32,6 +32,10 @@ func Build(db *gorm.DB, enableCompression bool) *gin.Engine {
 
 	router.Use(Logger(log.StandardLogger()), gin.Recovery())
 
+	router.GET("/robots.txt", func(c *gin.Context) {
+		c.Data(http.StatusOK, "text/plain; charset=utf-8", []byte("User-agent: *\nDisallow: /"))
+	})
+
 	router.GET("/_app/*filepath", func(c *gin.Context) {
 		c.FileFromFS("/static"+c.Request.URL.Path, http.FS(web.Static))
 	})

@@ -1,3 +1,8 @@
+---
+description: "How to install Paisa, an open source personal finance manager"
+---
+
+
 # Installation
 
 Paisa is available in two formats: a **Desktop Application** and a **CLI**

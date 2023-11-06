@@ -1,3 +1,8 @@
+---
+description: "How to setup envelope budgeting in Paisa, an open source personal finance manager"
+---
+
+
 # Budget
 
 Paisa supports a simple budgeting system. Let's say you get 50000 INR

@@ -1,3 +1,7 @@
+---
+description: "Tutorial on how to get started with Paisa, an open source personal finance manager"
+---
+
 # Tutorial
 
 This tutorial will introduce all the concepts necessary to get

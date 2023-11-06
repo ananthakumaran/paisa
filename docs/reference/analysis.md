@@ -1,3 +1,7 @@
+---
+description: "The Analysis page shows you what securities you own along with their amount and percentage. It also categorizes the securities by their industry and rating."
+---
+
 # Analysis
 
 Ledger represents everything except currency as commodities. A

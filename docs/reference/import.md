@@ -1,3 +1,7 @@
+---
+description: "How to import CSV, TXT, XLS, XLSX or PDF files into Paisa"
+---
+
 # Import
 
 Paisa provides ability to convert **CSV**, **TXT**, **XLS**, **XLSX**

@@ -1,3 +1,7 @@
+---
+description: "Paisa supports all the top 3 plain text account clients namely ledger, hledger and beancount"
+---
+
 # Ledger CLI
 
 Paisa is compatible with [ledger](https://www.ledger-cli.org), [hledger](https://hledger.org/) and

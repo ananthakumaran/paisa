@@ -1,3 +1,5 @@
+@import "./colors";
+
 $body-size: 14px;
 
 $family-sans-serif: "Roboto Flex Variable", sans-serif;
@@ -15,6 +17,8 @@ $danger-light: hsl(347, 90%, 96%);
 
 $switch-focus: none;
 
+$yellow: $amber-500;
+
 @import "bulma/sass/utilities/_all.sass";
 @import "@fortawesome/fontawesome-free/scss/fontawesome.scss";
 
@@ -27,6 +31,47 @@ $editor-full-height: calc(100vh - 21px - 57.75px - 10.5px);
 @import "bulma/bulma.sass";
 @import "bulma-switch/src/sass/index.sass";
 @import "@cityssm/bulma-sticky-table/sticky-table";
+
+// override message style
+
+.message {
+  @each $name, $components in $message-colors {
+    $color: nth($components, 1);
+    $color-invert: nth($components, 2);
+    $color-light: null;
+    $color-dark: null;
+
+    @if length($components) >= 3 {
+      $color-light: nth($components, 3);
+      @if length($components) >= 4 {
+        $color-dark: nth($components, 4);
+      } @else {
+        $color-luminance: colorLuminance($color);
+        $darken-percentage: $color-luminance * 70%;
+        $desaturate-percentage: $color-luminance * 30%;
+        $color-dark: desaturate(darken($color, $darken-percentage), $desaturate-percentage);
+      }
+    } @else {
+      $color-lightning: max((100% - lightness($color)) - 2%, 0%);
+      $color-light: lighten($color, $color-lightning);
+    }
+
+    &.invertable.is-#{$name} {
+      background-color: transparent;
+      border: 1px solid rgba($color, 0.6);
+
+      .message-header {
+        background-color: rgba($color, 0.15);
+        color: $black-ter;
+      }
+      .message-body {
+        color: $text;
+        background: $white-bis;
+        border: none;
+      }
+    }
+  }
+}
 
 // daisy UI color override
 .du-tabs {

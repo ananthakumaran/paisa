@@ -114,40 +114,6 @@ html[data-theme="dark"] {
       }
     }
 
-    .message {
-      @each $name, $components in $message-colors {
-        $color: nth($components, 1);
-        $color-invert: nth($components, 2);
-        $color-light: null;
-        $color-dark: null;
-
-        @if length($components) >= 3 {
-          $color-light: nth($components, 3);
-          @if length($components) >= 4 {
-            $color-dark: nth($components, 4);
-          } @else {
-            $color-luminance: colorLuminance($color);
-            $darken-percentage: $color-luminance * 70%;
-            $desaturate-percentage: $color-luminance * 30%;
-            $color-dark: desaturate(darken($color, $darken-percentage), $desaturate-percentage);
-          }
-        } @else {
-          $color-lightning: max((100% - lightness($color)) - 2%, 0%);
-          $color-light: lighten($color, $color-lightning);
-        }
-
-        &.invertable.is-#{$name} {
-          .message-header {
-            color: $white-ter;
-          }
-          .message-body {
-            border-color: $white-ter;
-            background-color: $white-ter;
-          }
-        }
-      }
-    }
-
     .button {
       @each $name, $pair in $button-colors {
         $color: nth($pair, 1);

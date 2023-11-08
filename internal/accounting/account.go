@@ -19,13 +19,13 @@ func loadAccountCache(db *gorm.DB) {
 	db.Model(&posting.Posting{}).Distinct().Pluck("Account", &acache.accounts)
 }
 
-func all(db *gorm.DB) []string {
+func AllAccounts(db *gorm.DB) []string {
 	acache.Do(func() { loadAccountCache(db) })
 	return acache.accounts
 }
 
 func IsLeafAccount(db *gorm.DB, account string) bool {
-	return slices.Contains(all(db), account)
+	return slices.Contains(AllAccounts(db), account)
 }
 
 func ClearCache() {

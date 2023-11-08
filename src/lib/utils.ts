@@ -452,7 +452,7 @@ const BACKGROUND = [
 
 export function ajax(
   route: "/api/config"
-): Promise<{ config: UserConfig; schema: JSONSchema7; now: dayjs.Dayjs }>;
+): Promise<{ config: UserConfig; schema: JSONSchema7; now: dayjs.Dayjs; accounts: string[] }>;
 export function ajax(route: "/api/harvest"): Promise<{ harvestables: Record<string, Harvestable> }>;
 export function ajax(
   route: "/api/capital_gains"

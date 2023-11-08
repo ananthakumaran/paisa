@@ -135,7 +135,7 @@ account name in most places. Paisa assigns icon based on few simple
 rules and it usually falls back to a generic icon. To modify the icon,
 go to the configuration page, add a new Account and specify the name
 of your account and then select icon of your choice. Paisa ships with
-about four icon sets.
+four icon sets.
 
 * [Arcticons](https://arcticons.onnno.nl/)
 * [Font Awesome Regular, Solid and Brands](https://fontawesome.com/search?o=r&m=free&s=solid)
@@ -147,6 +147,6 @@ about four icon sets.
     There is a wide range of free icons available, but adding each
     icon set to Paisa would increase the app binary size. So a balance
     has to be struck between the number of icons and the app
-    size. Feel free to start a discussion if you feel strongly any
-    icon set. The current icon sets are not final, they may be
+    size. Feel free to start a discussion if you feel strongly about
+    any icon set. The current icon sets are not final, they may be
     replaced if a better alternative is found.

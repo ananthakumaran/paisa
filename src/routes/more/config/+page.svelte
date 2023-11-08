@@ -14,8 +14,9 @@
   let hasChanges = true;
   let isLoading = false;
   let error: string = null;
+  let accounts: string[] = [];
   onMount(async () => {
-    ({ config, schema } = await ajax("/api/config"));
+    ({ config, schema, accounts } = await ajax("/api/config"));
     lastConfig = _.cloneDeep(config);
   });
 
@@ -102,7 +103,12 @@
                 >
               </div>
             </div>
-            <JsonSchemaForm key="configuration" bind:value={config} {schema} />
+            <JsonSchemaForm
+              allAccounts={accounts}
+              key="configuration"
+              bind:value={config}
+              {schema}
+            />
           </div>
         {/if}
       </div>

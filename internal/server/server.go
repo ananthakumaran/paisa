@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/ananthakumaran/paisa/internal/accounting"
 	"github.com/ananthakumaran/paisa/internal/config"
 	"github.com/ananthakumaran/paisa/internal/generator"
 	"github.com/ananthakumaran/paisa/internal/ledger"
@@ -46,7 +47,7 @@ func Build(db *gorm.DB, enableCompression bool) *gin.Engine {
 			n := utils.Now()
 			now = &n
 		}
-		c.JSON(200, gin.H{"config": config.GetConfig(), "now": now, "schema": config.GetSchema()})
+		c.JSON(200, gin.H{"config": config.GetConfig(), "accounts": accounting.AllAccounts(db), "now": now, "schema": config.GetSchema()})
 	})
 
 	router.POST("/api/config", func(c *gin.Context) {

@@ -647,6 +647,7 @@ nav.level.grid-2 {
   --list-background: #{$white};
   --item-hover-bg: #{$white-bis};
   --item-hover-color: #{$black-bis};
+  --item-color: #{$text};
   --item-is-active-bg: #{$white-ter};
   --item-is-active-color: #{$black-ter};
   --border: 1px solid #{$grey-lighter};
@@ -655,6 +656,10 @@ nav.level.grid-2 {
   --list-shadow: #{$shadow};
   --height: 35px;
   --max-height: 35px;
+  --multi-item-bg: #{$white-ter};
+  --multi-item-outline: none;
+  --multi-item-padding: 0 0.714em;
+  --multi-item-clear-icon-color: #{$grey};
 
   .item.active span.name {
     font-weight: bold;
@@ -666,6 +671,10 @@ nav.level.grid-2 {
       font-weight: normal !important;
     }
   }
+}
+
+.svelte-select.is-expandable {
+  --max-height: 200px;
 }
 
 .sc-carousel-dots__dot-container {

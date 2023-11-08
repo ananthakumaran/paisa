@@ -4,6 +4,7 @@
   import _ from "lodash";
   import PriceCodeSearchModal from "./PriceCodeSearchModal.svelte";
   import { iconGlyph, iconsList } from "$lib/icon";
+  import AccountSelect from "./AccountsSelect.svelte";
 
   interface Schema extends JSONSchema7 {
     "ui:header"?: string;
@@ -19,6 +20,7 @@
   export let required = false;
   export let deletable: () => void = null;
   export let disabled: boolean = false;
+  export let allAccounts: string[];
 
   export let modalOpen = false;
 
@@ -180,6 +182,19 @@
       </div>
     </div>
   </div>
+{:else if schema["ui:widget"] == "accounts"}
+  <div class="field is-horizontal">
+    <div class="field-label is-small">
+      <label for="" data-tippy-content={documentation(schema)} class="label">{title}</label>
+    </div>
+    <div class="field-body">
+      <div class="field">
+        <div class="control pr-5">
+          <AccountSelect {allAccounts} bind:accounts={value} />
+        </div>
+      </div>
+    </div>
+  </div>
 {:else if schema["ui:widget"] == "price"}
   <div class="config-header">
     <a class="is-link" data-tippy-content={documentation(schema)}>
@@ -204,6 +219,7 @@
   <div class="config-body {depth % 2 == 1 ? 'odd' : 'even'}">
     {#each sortedProperties(schema) as [key, subSchema]}
       <svelte:self
+        {allAccounts}
         required={_.includes(schema.required || [], key)}
         depth={depth + 1}
         {key}
@@ -231,6 +247,7 @@
     <div class="config-body {depth % 2 == 1 ? 'odd' : 'even'}">
       {#each sortedProperties(schema) as [key, subSchema]}
         <svelte:self
+          {allAccounts}
           required={_.includes(schema.required || [], key)}
           depth={depth + 1}
           {key}
@@ -265,6 +282,7 @@
     <div class="config-body {depth % 2 == 1 ? 'odd' : 'even'}">
       {#each value as _item, i}
         <svelte:self
+          {allAccounts}
           deletable={() => {
             value.splice(i, 1);
             value = [...value];

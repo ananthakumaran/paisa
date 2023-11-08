@@ -1,0 +1,493 @@
+{
+  "accounts": [
+    "Income:Salary:Acme",
+    "Assets:Checking",
+    "Expenses:Rent",
+    "Assets:Equity:NIFTY",
+    "Assets:Equity:ABNB",
+    "Assets:Equity:AAPL",
+    "Income:CapitalGains:Equity:AAPL",
+    "Income:Interest:Checking"
+  ],
+  "config": {
+    "journal_path": "main.beancount",
+    "db_path": "paisa.db",
+    "readonly": false,
+    "ledger_cli": "beancount",
+    "default_currency": "INR",
+    "display_precision": 0,
+    "locale": "en-IN",
+    "financial_year_starting_month": 4,
+    "budget": {
+      "rollover": "yes"
+    },
+    "schedule_al": [],
+    "allocation_targets": [],
+    "commodities": [],
+    "import_templates": [],
+    "accounts": [],
+    "goals": {
+      "retirement": [],
+      "savings": []
+    }
+  },
+  "now": "2022-02-07T00:00:00Z",
+  "schema": {
+    "$id": "https://paisa.fyi/schema.json",
+    "$schema": "https://json-schema.org/draft-07/schema",
+    "additionalProperties": false,
+    "description": "Paisa configuration",
+    "properties": {
+      "accounts": {
+        "default": [
+          {
+            "icon": "fa6-brands:apple",
+            "name": "Assets:Equity:AAPL"
+          }
+        ],
+        "items": {
+          "additionalProperties": false,
+          "properties": {
+            "icon": {
+              "description": "Account icon name",
+              "type": "string",
+              "ui:widget": "icon"
+            },
+            "name": {
+              "description": "name of the account",
+              "minLength": 1,
+              "type": "string"
+            }
+          },
+          "required": [
+            "name"
+          ],
+          "type": "object",
+          "ui:header": "name"
+        },
+        "itemsUniqueProperties": [
+          "name"
+        ],
+        "type": "array"
+      },
+      "allocation_targets": {
+        "default": [
+          {
+            "accounts": [
+              "Assets:Debt:*"
+            ],
+            "name": "Debt",
+            "target": 20
+          }
+        ],
+        "items": {
+          "additionalProperties": false,
+          "properties": {
+            "accounts": {
+              "default": [
+                "Assets:Debt:*"
+              ],
+              "description": "List of accounts to consider for this target",
+              "items": {
+                "type": "string"
+              },
+              "type": "array",
+              "ui:widget": "accounts"
+            },
+            "name": {
+              "type": "string"
+            },
+            "target": {
+              "description": "Target percentage",
+              "maximum": 100,
+              "minimum": 1,
+              "type": "integer"
+            }
+          },
+          "required": [
+            "name",
+            "target",
+            "accounts"
+          ],
+          "type": "object",
+          "ui:header": "name"
+        },
+        "itemsUniqueProperties": [
+          "name"
+        ],
+        "type": "array"
+      },
+      "budget": {
+        "additionalProperties": false,
+        "description": "Budget configuration",
+        "properties": {
+          "rollover": {
+            "description": "Rollover unspent money to next month",
+            "enum": [
+              "",
+              "yes",
+              "no"
+            ],
+            "type": "string",
+            "ui:widget": "boolean"
+          }
+        },
+        "type": "object"
+      },
+      "commodities": {
+        "default": [
+          {
+            "name": "AAPL",
+            "price": {
+              "code": "AAPL",
+              "provider": "com-yahoo"
+            },
+            "tax_category": "unlisted_equity"
+          }
+        ],
+        "items": {
+          "additionalProperties": false,
+          "properties": {
+            "harvest": {
+              "type": "integer"
+            },
+            "name": {
+              "description": "name of the commodity",
+              "type": "string"
+            },
+            "price": {
+              "properties": {
+                "code": {
+                  "type": [
+                    "string",
+                    "integer"
+                  ]
+                },
+                "provider": {
+                  "enum": [
+                    "in-mfapi",
+                    "com-yahoo",
+                    "com-purifiedbytes-nps",
+                    "com-purifiedbytes-metal"
+                  ],
+                  "type": "string"
+                }
+              },
+              "required": [
+                "provider",
+                "code"
+              ],
+              "type": "object",
+              "ui:widget": "price"
+            },
+            "tax_category": {
+              "enum": [
+                "",
+                "debt",
+                "equity",
+                "equity65",
+                "equity35",
+                "unlisted_equity"
+              ],
+              "type": "string"
+            },
+            "type": {
+              "enum": [
+                "mutualfund",
+                "stock",
+                "nps",
+                "metal",
+                "unknown"
+              ],
+              "type": "string"
+            }
+          },
+          "required": [
+            "name",
+            "type",
+            "price"
+          ],
+          "type": "object",
+          "ui:header": "name"
+        },
+        "itemsUniqueProperties": [
+          "name"
+        ],
+        "type": "array"
+      },
+      "db_path": {
+        "description": "Path to your database file. It can be absolute or relative to the configuration file. The database file will be created if it does not exist.",
+        "type": "string"
+      },
+      "default_currency": {
+        "description": "The default currency to use. NOTE: Paisa tries to convert other currencies to default currency, so make sure it's possible to convert to default currency by specifying the exchange rate.",
+        "type": "string"
+      },
+      "display_precision": {
+        "description": "The precision to show in UI. NOTE: This applies only to the UI, not to the entries in journal.",
+        "maximum": 4,
+        "minimum": 0,
+        "type": "integer"
+      },
+      "financial_year_starting_month": {
+        "description": "First month of the financial year. This can be set to 1 to follow January to December.",
+        "maximum": 12,
+        "minimum": 1,
+        "type": "integer"
+      },
+      "goals": {
+        "description": "Goals configuration",
+        "properties": {
+          "retirement": {
+            "default": [
+              {
+                "expenses": [
+                  "Expenses:*"
+                ],
+                "name": "Retirement",
+                "savings": [
+                  "Assets:*"
+                ],
+                "swr": 4,
+                "yearly_expenses": 0
+              }
+            ],
+            "items": {
+              "additionalProperties": false,
+              "description": "Retirement Goal configuration",
+              "properties": {
+                "expenses": {
+                  "default": [
+                    "Expenses:Utilities"
+                  ],
+                  "description": "List of expense accounts",
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array",
+                  "ui:widget": "accounts",
+                  "uniqueItems": true
+                },
+                "icon": {
+                  "description": "Goal icon name",
+                  "type": "string",
+                  "ui:widget": "icon"
+                },
+                "name": {
+                  "description": "Goal name",
+                  "type": "string"
+                },
+                "savings": {
+                  "default": [
+                    "Assets:Equity"
+                  ],
+                  "description": "List of accounts where you keep retirement savings",
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array",
+                  "ui:widget": "accounts",
+                  "uniqueItems": true
+                },
+                "swr": {
+                  "description": "Safe Withdrawal Rate",
+                  "maximum": 10,
+                  "minimum": 1,
+                  "type": "number"
+                },
+                "yearly_expenses": {
+                  "description": "By default, average of last 3 year expenses will be used to calculate your yearly expenses. This can be overriden by setting this configuration to positive value",
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "name",
+                "icon",
+                "swr",
+                "savings"
+              ],
+              "type": "object",
+              "ui:header": "name"
+            },
+            "itemsUniqueProperties": [
+              "name"
+            ],
+            "type": "array"
+          },
+          "savings": {
+            "default": [
+              {
+                "accounts": [
+                  "Assets:*"
+                ],
+                "name": "Emergency Fund",
+                "target": 1000000
+              }
+            ],
+            "items": {
+              "additionalProperties": false,
+              "description": "Savings Goal configuration",
+              "properties": {
+                "accounts": {
+                  "default": [
+                    "Assets:Equity"
+                  ],
+                  "description": "List of savings accounts",
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array",
+                  "ui:widget": "accounts",
+                  "uniqueItems": true
+                },
+                "icon": {
+                  "description": "Goal icon name",
+                  "type": "string",
+                  "ui:widget": "icon"
+                },
+                "name": {
+                  "description": "Goal name",
+                  "type": "string"
+                },
+                "target": {
+                  "description": "Savings Target",
+                  "type": "number"
+                }
+              },
+              "required": [
+                "name",
+                "icon",
+                "target",
+                "accounts"
+              ],
+              "type": "object",
+              "ui:header": "name"
+            },
+            "itemsUniqueProperties": [
+              "name"
+            ],
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
+      "import_templates": {
+        "default": [
+          {
+            "content": "",
+            "name": "ICICI Bank"
+          }
+        ],
+        "items": {
+          "additionalProperties": false,
+          "properties": {
+            "content": {
+              "type": "string",
+              "ui:widget": "textarea"
+            },
+            "name": {
+              "description": "name of the template",
+              "minLength": 1,
+              "type": "string"
+            }
+          },
+          "required": [
+            "name"
+          ],
+          "type": "object",
+          "ui:header": "name"
+        },
+        "itemsUniqueProperties": [
+          "name"
+        ],
+        "type": "array"
+      },
+      "journal_path": {
+        "description": "Path to your journal file. It can be absolute or relative to the configuration file. The main journal file can refer other files using <code>include</code> as long as all the files are in the same or sub directory",
+        "type": "string"
+      },
+      "ledger_cli": {
+        "description": "The ledger client to use",
+        "enum": [
+          "",
+          "ledger",
+          "hledger",
+          "beancount"
+        ],
+        "type": "string"
+      },
+      "locale": {
+        "description": "The locale used to format numbers. The list of locales supported depends on your browser. It's known to work well with en-US and en-IN.",
+        "pattern": "^[a-z]{2}-[A-Z]{2}$",
+        "type": "string"
+      },
+      "readonly": {
+        "description": "Run in readonly mode.",
+        "type": "boolean",
+        "ui:widget": "hidden"
+      },
+      "retirement": {
+        "type": "object",
+        "ui:widget": "hidden"
+      },
+      "schedule_al": {
+        "default": [
+          {
+            "accounts": [
+              "Assets:Checking"
+            ],
+            "code": "bank"
+          }
+        ],
+        "description": "Schedule AL configuration",
+        "items": {
+          "additionalProperties": false,
+          "properties": {
+            "accounts": {
+              "default": [
+                "Assets:Checking"
+              ],
+              "items": {
+                "type": "string"
+              },
+              "type": "array",
+              "ui:widget": "accounts",
+              "uniqueItems": true
+            },
+            "code": {
+              "enum": [
+                "immovable",
+                "metal",
+                "art",
+                "vehicle",
+                "bank",
+                "share",
+                "insurance",
+                "loan",
+                "cash",
+                "liability"
+              ],
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "accounts"
+          ],
+          "type": "object",
+          "ui:header": "code"
+        },
+        "itemsUniqueProperties": [
+          "code"
+        ],
+        "type": "array"
+      }
+    },
+    "required": [
+      "journal_path",
+      "db_path"
+    ],
+    "title": "Paisa",
+    "type": "object"
+  }
+}

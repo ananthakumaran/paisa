@@ -3,6 +3,7 @@ import _ from "lodash";
 
 const DATE = /^\d{4}[/-]\d{2}[/-]\d{2}/;
 const DATE_TIME = /^\d{4}[/-]\d{2}[/-]\d{2} \d{2}:\d{2}:\d{2}/;
+const LOT_DATE = /^\[\d{4}[/-]\d{2}[/-]\d{2}\]/;
 const AMOUNT = /^[+-]?(?:[0-9,])+(\.(?:[0-9,])+)?/;
 const KEYWORDS = /^(?:commodity)/;
 const COMMODITY = /^([A-Za-z_]+)|("[^"]+")/;
@@ -57,6 +58,10 @@ export const ledger: StreamParser<State> = {
     }
 
     if (stream.match(KEYWORDS)) return "keyword";
+
+    if (stream.match(LOT_DATE)) {
+      return "tagName";
+    }
 
     if (stream.match(DATE_TIME)) {
       state.inTransaction = false;

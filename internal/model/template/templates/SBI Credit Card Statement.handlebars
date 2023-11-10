@@ -1,0 +1,9 @@
+{{#if (isDate ROW.A "DD MMM YY")}}
+  {{date ROW.A "DD MMM YY"}} {{regexpMatch (textRange B J) "(.*) [0-9,]+\.\d+\s*(C|D)\s*" group=1}}
+  {{#if (eq (regexpMatch (textRange B J) "(.*) [0-9,]+\.\d+\s*(C|D)\s*" group=2) "D")}}
+    {{predictAccount prefix="Expenses"}}      {{amount (regexpMatch (textRange B J) "(.*) ([0-9,]+\.\d+\s*(C|D))\s*" group=2)}} INR
+  {{else}}
+    Income:Refund:CreditCard:SBI           -{{amount (regexpMatch (textRange B J) "(.*) ([0-9,]+\.\d+\s*(C|D))\s*" group=2)}} INR
+  {{/if}}
+  Liabilities:CreditCard:SBI
+{{/if}}

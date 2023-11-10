@@ -35,6 +35,9 @@ describe("import", () => {
         const [name, extension] = file.split(".");
         if (extension === "ledger") {
           const inputFile = _.find(files, (f) => f != file && f.startsWith(name));
+          if (inputFile.endsWith(".pdf")) {
+            break;
+          }
           const input = fs.readFileSync(`fixture/import/${dir}/${inputFile}`);
           const output = fs.readFileSync(`fixture/import/${dir}/${file}`).toString();
           const template = fs

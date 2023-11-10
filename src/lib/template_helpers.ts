@@ -19,6 +19,20 @@ function tokenize(s: string) {
   );
 }
 
+function nextChar(key: string): string {
+  if (key === "Z") {
+    return "AA";
+  } else {
+    const last = key.slice(-1);
+    const butlast = key.slice(0, -1);
+    if (last === "Z") {
+      return nextChar(butlast) + "A";
+    } else {
+      return butlast + String.fromCharCode(last.charCodeAt(0) + 1);
+    }
+  }
+}
+
 function tfidf(query: string) {
   if (accountTfIdf === null || get(accountTfIdf) == null) {
     return {};
@@ -154,6 +168,21 @@ export default {
       return;
     }
     return str.replaceAll(search, replace);
+  },
+  textRange(fromColumn: string, toColumn: string, options: any) {
+    const row: Record<string, string> = options.data.root.ROW;
+    const cells = [];
+    let i = 0;
+    let current = fromColumn;
+    while (i < 1000) {
+      cells.push(row[current]);
+      if (current === toColumn) {
+        break;
+      }
+      current = nextChar(current);
+      i++;
+    }
+    return cells.join(options.hash.separator || " ");
   },
   regexpTest(str: string, regexp: string) {
     if (!_.isString(str)) {

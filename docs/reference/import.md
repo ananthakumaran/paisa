@@ -273,3 +273,13 @@ Extract part of a string. Let's say you have `Axis Long Term
   Equity Growth Direct Plan` and you want to extract `Axis Long Term
   Equity`, you can use `#!handlebars {{regexpMatch ROW.C "(.*) Growth Direct Plan" group=1}}` assuming the string is in the column
   `C`. `group` is optional and defaults to `0`.
+
+
+#### `#!typescript textRange(fromColumn: string, toColumn: string, {separator?: number}): string`
+
+Extracts text from the given range of columns. The `separator` is
+optional and defaults to `" "`.
+
+```handlebars
+{{textRange A C separator=" "}}
+```

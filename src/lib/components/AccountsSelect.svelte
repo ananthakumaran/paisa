@@ -6,22 +6,19 @@
   export let allAccounts: string[];
   export let accounts: string[];
 
-  let filterText = "";
-  let allAccountItems: { value: string; label: string; created?: boolean }[] = _.map(
-    allAccounts,
-    (account) => ({
-      value: account,
-      label: account
-    })
-  );
+  let allAccountItems: { value: string; label: string; created?: boolean }[];
+  let accountItems: { value: string; label: string; created?: boolean }[];
 
-  let accountItems: { value: string; label: string; created?: boolean }[] = _.map(
-    accounts,
-    (account) => ({
-      value: account,
-      label: account
-    })
-  );
+  let filterText = "";
+  $: allAccountItems = _.map(allAccounts, (account) => ({
+    value: account,
+    label: account
+  }));
+
+  $: accountItems = _.map(accounts, (account) => ({
+    value: account,
+    label: account
+  }));
 
   function handleFilter(e: any) {
     if (accountItems?.find((i) => i.label === filterText)) return;
@@ -31,11 +28,13 @@
     }
   }
 
-  function handleChange(_e: any) {
-    accountItems = accountItems.map((i) => {
-      delete i.created;
-      return i;
-    });
+  function handleChange(e: any) {
+    if (e.type === "clear") {
+      accountItems = _.without(accountItems, e.detail);
+    } else {
+      accountItems = _.cloneDeep(e.detail);
+    }
+
     accounts = accountItems.map((i) => i.value);
   }
 </script>
@@ -45,7 +44,7 @@
   multiple
   class="is-small is-expandable custom-icon"
   items={allAccountItems}
-  bind:value={accountItems}
+  value={accountItems}
   showChevron={true}
   searchable={true}
   clearable={false}

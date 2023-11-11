@@ -12,7 +12,7 @@
 
         packages.default = pkgs.buildGoModule {
           pname = "paisa-cli";
-          version = "0.5.6";
+          version = "0.5.7";
 
           src = ./.;
 

@@ -1,5 +1,16 @@
 # CHANGELOG
 
+### 0.5.7 (2023-11-11)
+
+* Add [goals](https://paisa.fyi/reference/goals)
+* Remove retirement page (available under goals)
+* Bug fixes
+
+## Breaking Changes :rotating_light:
+
+Retirement page has been moved under goals. If you have used
+retirement, you need to setup a new [retirement goal](https://paisa.fyi/reference/goals)
+
 ### 0.5.6 (2023-11-04)
 
 * Add support for Income:CapitalGains

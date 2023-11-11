@@ -95,6 +95,26 @@ func IsStockSplit(db *gorm.DB, p posting.Posting) bool {
 	return true
 }
 
+func IsSellWithCapitalGains(db *gorm.DB, p posting.Posting) bool {
+	tcache.Do(func() { loadTransactionCache(db) })
+
+	if utils.IsCurrency(p.Commodity) {
+		return false
+	}
+
+	t, found := tcache.transactions[p.TransactionID]
+	if !found {
+		return false
+	}
+
+	for _, tp := range t.Postings {
+		if IsCapitalGains(tp) {
+			return true
+		}
+	}
+	return false
+}
+
 func IsInterestRepayment(db *gorm.DB, p posting.Posting) bool {
 	irepaymentCache.Do(func() { loadInterestRepaymentCache(db) })
 

@@ -146,6 +146,7 @@ func ruleJournalPriceMismatch(db *gorm.DB) []error {
 			diff := externalPrice.Value.Sub(p.Price()).Abs()
 			if externalPrice.CommodityName == p.Commodity &&
 				externalPrice.CommodityType != config.Unknown &&
+				!service.IsSellWithCapitalGains(db, p) &&
 				diff.GreaterThanOrEqual(decimal.NewFromFloat(0.0001)) {
 				errs = append(errs, errors.New(fmt.Sprintf("The price specified in your posting %s doesn't match the price <b>%.4f</b> (%s) fetched from external system", formatPosting(p), externalPrice.Value.InexactFloat64(), externalPrice.Date.Format(DATE_FORMAT))))
 			}

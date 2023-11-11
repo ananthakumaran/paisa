@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Paisa is an open source personal finance manager. It builds on top of the ledger double entry accounting tool.">
+        <meta name="description" content="Frequently asked Questions about Paisa: personal finance manager">
       
       
         <meta name="author" content="Anantha Kumaran">
@@ -18,7 +18,7 @@
         <link rel="prev" href="../reference/tax/schedule-al/">
       
       
-      <link rel="icon" href="../assets/images/favicon.png">
+      <link rel="icon" href="../images/favicon.png">
       <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.1.13">
     
     
@@ -67,6 +67,12 @@
     
     
     
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="/site.webmanifest">
+
   </head>
   
   
@@ -584,20 +590,6 @@
   
   
     <li class="md-nav__item">
-      <a href="../reference/retirement/" class="md-nav__link">
-        Retirement
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
       <a href="../reference/recurring/" class="md-nav__link">
         Recurring
       </a>
@@ -615,6 +607,88 @@
       <a href="../reference/config/" class="md-nav__link">
         Configuration
       </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+        
+      
+      <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3_10" >
+      
+      
+        
+          
+            
+          
+        
+          
+        
+          
+        
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../reference/goals/">Goals</a>
+          
+            <label for="__nav_3_10">
+              <span class="md-nav__icon md-icon"></span>
+            </label>
+          
+        </div>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_10_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_3_10">
+          <span class="md-nav__icon md-icon"></span>
+          Goals
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/goals/retirement/" class="md-nav__link">
+        Retirement
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/goals/savings/" class="md-nav__link">
+        Savings
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
     </li>
   
 
@@ -833,7 +907,7 @@
 <h1 id="faqs">FAQs</h1>
 <p><a href="#existing-user-getting-started"><strong>I already use ledger/hledger/beancount. How do I get started?</strong></a></p>
 <p>Go through the <a href="../getting-started/installation/">installation</a> docs and get the app working. Go to
-<a href="./reference/configuration.md">configuration</a> page and update <code>journal_path</code>, <code>ledger_cli</code>,
+<a href="../reference/config/">configuration</a> page and update <code>journal_path</code>, <code>ledger_cli</code>,
 <code>default_currency</code> and <code>locale</code>. At this point you should be able to
 view your journal data. Read the <a href="../reference/accounts/">accounts</a> docs to understand the
 account naming conventions followed by paisa.</p>
@@ -848,6 +922,20 @@ month. You decide the <strong>granularity</strong> at which you want to record t
 transactions. Just recording a few transactions per month like your
 salary, monthly expense and investments will go a long way and will
 give you pretty good picture of your finances.</p>
+<p><a href="#exec-not-found"><strong>Mac Desktop app fails with executable file not found in $PATH
+error</strong></a></p>
+<p>Mac Desktop apps are usually started with different PATH than what you
+would normally get in a Terminal app. Paisa does a fallback search in
+the following folders before throwing the error. Check if your
+executable binary is in any of the folder listed below, if not, create
+a symbolic link from one of the folders to your executable binary.</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>/bin
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>/usr/bin
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>/usr/local/bin
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>/sbin
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>/usr/sbin
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>/opt/homebrew/bin
+</span></code></pre></div>
 
 
   

@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Paisa is an open source personal finance manager. It builds on top of the ledger double entry accounting tool.">
+        <meta name="description" content="How to install Paisa, an open source personal finance manager">
       
       
         <meta name="author" content="Anantha Kumaran">
@@ -20,7 +20,7 @@
       
         <link rel="next" href="../tutorial/">
       
-      <link rel="icon" href="../../assets/images/favicon.png">
+      <link rel="icon" href="../../images/favicon.png">
       <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.1.13">
     
     
@@ -69,6 +69,12 @@
     
     
     
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="/site.webmanifest">
+
   </head>
   
   
@@ -454,6 +460,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#nix-flake" class="md-nav__link">
+    Nix Flake
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -646,20 +659,6 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/retirement/" class="md-nav__link">
-        Retirement
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
       <a href="../../reference/recurring/" class="md-nav__link">
         Recurring
       </a>
@@ -677,6 +676,88 @@
       <a href="../../reference/config/" class="md-nav__link">
         Configuration
       </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+        
+      
+      <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3_10" >
+      
+      
+        
+          
+            
+          
+        
+          
+        
+          
+        
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../../reference/goals/">Goals</a>
+          
+            <label for="__nav_3_10">
+              <span class="md-nav__icon md-icon"></span>
+            </label>
+          
+        </div>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_10_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_3_10">
+          <span class="md-nav__icon md-icon"></span>
+          Goals
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/goals/retirement/" class="md-nav__link">
+        Retirement
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/goals/savings/" class="md-nav__link">
+        Savings
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
     </li>
   
 
@@ -898,6 +979,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#nix-flake" class="md-nav__link">
+    Nix Flake
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1046,6 +1134,20 @@ more.</p>
 <div class="tabbed-block">
 <div class="language-console highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="gp"># </span>mkdir<span class="w"> </span>-p<span class="w"> </span>/Users/john/Documents/paisa/
 </span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="gp"># </span>docker<span class="w"> </span>run<span class="w"> </span>-p<span class="w"> </span><span class="m">7500</span>:7500<span class="w"> </span>-v<span class="w"> </span>/Users/john/Documents/paisa/:/root/Documents/paisa/<span class="w"> </span>ananthakumaran/paisa:latest
+</span></code></pre></div>
+</div>
+</div>
+</div>
+<h2 id="nix-flake">Nix Flake</h2>
+<p>Paisa CLI is available as a nix flake.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="5:2"><input checked="checked" id="__tabbed_5_1" name="__tabbed_5" type="radio" /><input id="__tabbed_5_2" name="__tabbed_5" type="radio" /><div class="tabbed-labels"><label for="__tabbed_5_1">Linux</label><label for="__tabbed_5_2">Mac</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="language-console highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="gp"># </span>nix<span class="w"> </span>profile<span class="w"> </span>install<span class="w"> </span>github:ananthakumaran/paisa
+</span></code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="language-console highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="gp"># </span>nix<span class="w"> </span>profile<span class="w"> </span>install<span class="w"> </span>github:ananthakumaran/paisa
 </span></code></pre></div>
 </div>
 </div>

@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Paisa is an open source personal finance manager. It builds on top of the ledger double entry accounting tool.">
+        <meta name="description" content="Full list of configuration options supported by Paisa along with their description">
       
       
         <meta name="author" content="Anantha Kumaran">
@@ -18,9 +18,9 @@
         <link rel="prev" href="../recurring/">
       
       
-        <link rel="next" href="../ledger-cli/">
+        <link rel="next" href="../goals/">
       
-      <link rel="icon" href="../../assets/images/favicon.png">
+      <link rel="icon" href="../../images/favicon.png">
       <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.1.13">
     
     
@@ -69,6 +69,12 @@
     
     
     
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="/site.webmanifest">
+
   </head>
   
   
@@ -584,20 +590,6 @@
   
   
     <li class="md-nav__item">
-      <a href="../retirement/" class="md-nav__link">
-        Retirement
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
       <a href="../recurring/" class="md-nav__link">
         Recurring
       </a>
@@ -621,10 +613,123 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Configuration
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         Configuration
       </a>
       
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#accounts" class="md-nav__link">
+    Accounts
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+        
+      
+      <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3_10" >
+      
+      
+        
+          
+            
+          
+        
+          
+        
+          
+        
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../goals/">Goals</a>
+          
+            <label for="__nav_3_10">
+              <span class="md-nav__icon md-icon"></span>
+            </label>
+          
+        </div>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_10_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_3_10">
+          <span class="md-nav__icon md-icon"></span>
+          Goals
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../goals/retirement/" class="md-nav__link">
+        Retirement
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../goals/savings/" class="md-nav__link">
+        Savings
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
     </li>
   
 
@@ -812,6 +917,21 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#accounts" class="md-nav__link">
+    Accounts
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -843,6 +963,14 @@ below</p>
 configuration file named <code>paisa/paisa.yaml</code> inside User Documents folder. The
 default configuration is tuned for Indians, users from other countries
 would have to change the <code>default_currency</code> and <code>locale</code>.</p>
+<h3 id="accounts">Accounts</h3>
+<p>In many places, paisa expects you to specify a list of accounts. You
+can type the full account name like <code class="language-ledger highlight"><span class="s">Account:Equity:APPL</span></code>. Paisa also supports wildcard <code>*</code>, you can use
+<code class="language-ledger highlight"><span class="s">Account:Equity:*</span></code> to represent all accounts under
+Equity. It's also possible to use negation. <code class="language-ledger highlight"><span class="s">!Expenses:Tax</span></code>
+will match all accounts except Tax. If you use negation, then all the
+accounts should be negation. Don't mix negation with others, if done
+the behavior will be undefined.</p>
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># Path to your journal file. It can be absolute or relative to the</span>
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="c1"># configuration file. The main journal file can refer other files using</span>
 </span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="c1"># `include` as long as all the files are in the same or sub directory</span>
@@ -1103,13 +1231,13 @@ would have to change the <code>default_currency</code> and <code>locale</code>.<
         
         
           
-          <a href="../ledger-cli/" class="md-footer__link md-footer__link--next" aria-label="Next: Ledger CLI" rel="next">
+          <a href="../goals/" class="md-footer__link md-footer__link--next" aria-label="Next: Goals" rel="next">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                Ledger CLI
+                Goals
               </div>
             </div>
             <div class="md-footer__button md-icon">

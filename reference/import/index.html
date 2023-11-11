@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Paisa is an open source personal finance manager. It builds on top of the ledger double entry accounting tool.">
+        <meta name="description" content="How to import CSV, TXT, XLS, XLSX or PDF files into Paisa">
       
       
         <meta name="author" content="Anantha Kumaran">
@@ -18,9 +18,9 @@
         <link rel="prev" href="../bulk-edit/">
       
       
-        <link rel="next" href="../retirement/">
+        <link rel="next" href="../recurring/">
       
-      <link rel="icon" href="../../assets/images/favicon.png">
+      <link rel="icon" href="../../images/favicon.png">
       <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.1.13">
     
     
@@ -69,6 +69,12 @@
     
     
     
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="/site.webmanifest">
+
   </head>
   
   
@@ -764,24 +770,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#textrangefromcolumn-string-tocolumn-string-separator-number-string" class="md-nav__link">
+    textRange(fromColumn: string, toColumn: string, {separator?: number}): string
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
       
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../retirement/" class="md-nav__link">
-        Retirement
-      </a>
     </li>
   
 
@@ -810,6 +809,88 @@
       <a href="../config/" class="md-nav__link">
         Configuration
       </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+        
+      
+      <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3_10" >
+      
+      
+        
+          
+            
+          
+        
+          
+        
+          
+        
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../goals/">Goals</a>
+          
+            <label for="__nav_3_10">
+              <span class="md-nav__icon md-icon"></span>
+            </label>
+          
+        </div>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_10_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_3_10">
+          <span class="md-nav__icon md-icon"></span>
+          Goals
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../goals/retirement/" class="md-nav__link">
+        Retirement
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../goals/savings/" class="md-nav__link">
+        Savings
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
     </li>
   
 
@@ -1164,6 +1245,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#textrangefromcolumn-string-tocolumn-string-separator-number-string" class="md-nav__link">
+    textRange(fromColumn: string, toColumn: string, {separator?: number}): string
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1391,6 +1479,11 @@ Direct Plan</code> will be converted to <code>UNNI</code></p>
   Equity Growth Direct Plan</code> and you want to extract <code>Axis Long Term
   Equity</code>, you can use <code class="language-handlebars highlight"><span class="cp">{{</span><span class="nv">regexpMatch</span> <span class="nv">ROW.C</span> <span class="s2">&quot;(.*) Growth Direct Plan&quot;</span> <span class="na">group</span><span class="o">=</span><span class="m">1</span><span class="cp">}}</span></code> assuming the string is in the column
   <code>C</code>. <code>group</code> is optional and defaults to <code>0</code>.</p>
+<h4 id="textrangefromcolumn-string-tocolumn-string-separator-number-string"><code class="language-typescript highlight"><span class="nx">textRange</span><span class="p">(</span><span class="nx">fromColumn</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="nx">toColumn</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="nx">separator?</span><span class="o">:</span><span class="w"> </span><span class="kt">number</span><span class="p">})</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span></code></h4>
+<p>Extracts text from the given range of columns. The <code>separator</code> is
+optional and defaults to <code>" "</code>.</p>
+<div class="language-handlebars highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="cp">{{</span><span class="nv">textRange</span> <span class="nv">A</span> <span class="nv">C</span> <span class="na">separator</span><span class="o">=</span><span class="s2">&quot; &quot;</span><span class="cp">}}</span>
+</span></code></pre></div>
 
 
   
@@ -1477,13 +1570,13 @@ Direct Plan</code> will be converted to <code>UNNI</code></p>
         
         
           
-          <a href="../retirement/" class="md-footer__link md-footer__link--next" aria-label="Next: Retirement" rel="next">
+          <a href="../recurring/" class="md-footer__link md-footer__link--next" aria-label="Next: Recurring" rel="next">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                Retirement
+                Recurring
               </div>
             </div>
             <div class="md-footer__button md-icon">

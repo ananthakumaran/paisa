@@ -76,7 +76,17 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://paisa.fyi/reference/retirement/</loc>
+         <loc>https://paisa.fyi/reference/goals/</loc>
+         <lastmod>1980-01-01</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://paisa.fyi/reference/goals/retirement/</loc>
+         <lastmod>1980-01-01</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://paisa.fyi/reference/goals/savings/</loc>
          <lastmod>1980-01-01</lastmod>
          <changefreq>daily</changefreq>
     </url>

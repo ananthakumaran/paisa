@@ -2,6 +2,7 @@ package main
 
 import (
 	_ "embed"
+	"os"
 
 	"github.com/ananthakumaran/paisa/cmd"
 	"github.com/ananthakumaran/paisa/desktop/logger"
@@ -20,6 +21,20 @@ var icon []byte
 
 func main() {
 	decimal.MarshalJSONWithoutQuotes = true
+	// https://github.com/wailsapp/wails/issues/2977
+	linuxGpuPolicy := linux.WebviewGpuPolicyNever
+
+	if gpuPolicyConfig := os.Getenv("PAISA_GPU_POLICY"); gpuPolicyConfig != "" {
+		if gpuPolicyConfig == "always" {
+			linuxGpuPolicy = linux.WebviewGpuPolicyAlways
+		} else if gpuPolicyConfig == "never" {
+			linuxGpuPolicy = linux.WebviewGpuPolicyNever
+		} else if gpuPolicyConfig == "ondemand" {
+			linuxGpuPolicy = linux.WebviewGpuPolicyOnDemand
+		} else {
+			log.Warnf("Unknown gpuPolicy: %s", gpuPolicyConfig)
+		}
+	}
 
 	app := NewApp()
 
@@ -52,8 +67,9 @@ func main() {
 		},
 
 		Linux: &linux.Options{
-			Icon:        icon,
-			ProgramName: "Paisa",
+			Icon:             icon,
+			ProgramName:      "Paisa",
+			WebviewGpuPolicy: linuxGpuPolicy,
 		},
 	})
 

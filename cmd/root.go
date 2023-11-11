@@ -105,6 +105,17 @@ func InitLogger(desktop bool, hook log.Hook) {
 }
 
 func InitConfig() {
+	lang := os.Getenv("LANG")
+	if lang == "" {
+		lang = "en_US.UTF-8"
+		err := os.Setenv("LANG", lang)
+		if err != nil {
+			log.Warnf("Failed to set LANG: %s", err.Error())
+		} else {
+			log.Infof("Set LANG to %s", lang)
+		}
+	}
+
 	xdgDocumentDir := filepath.Join(xdg.UserDirs.Documents, "paisa")
 	xdgDocumentPath := filepath.Join(xdgDocumentDir, "paisa.yaml")
 	if envConfigFile := os.Getenv("PAISA_CONFIG"); envConfigFile != "" {

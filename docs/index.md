@@ -76,13 +76,13 @@ hide:
 - :simple-git: The journal and configuration information are stored in **plain text** files
   that can be easily version controlled. You can collaborate with
   others by giving access to the files.
-- :octicons-graph-24: Can track the latest market **price** of your Mutual Fund, NPS Fund
+- :octicons-graph-24: Track the latest market **price** of your Mutual Fund, NPS Fund
   and Stock holdings.
-- :fontawesome-regular-credit-card: Can help with **expense** tracking and **budgeting**.
-- :material-microsoft-excel: Can **convert** CSV or Excel sheets to Ledger journal.
-- :material-beach: Can help with **retirement** planning.
-- :fontawesome-solid-building-columns: Can show the Mutual Fund and Stock holdings eligible for LTCG and
-  help you plan Tax Harvesting.
+- :fontawesome-regular-credit-card: Track and **budget** your **Expenses**.
+- :material-microsoft-excel: **Convert** CSV, Excel and PDF files to Ledger journal.
+- :octicons-goal-16: Track your **goals**.
+- :material-timer-sync: View your **recurring** transactions.
+- :material-beach: Plan your **retirement**.
 - :material-chart-bar: And many more **visualizations** to help you make any financial
   decisions.
 </div>

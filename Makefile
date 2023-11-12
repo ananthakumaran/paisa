@@ -17,7 +17,7 @@ serve-now:
 watch:
 	npm run "build:watch"
 docs:
-	mkdocs serve
+	mkdocs serve -a 0.0.0.0:8000
 
 sample:
 	go build && ./paisa init && ./paisa update

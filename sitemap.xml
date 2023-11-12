@@ -46,6 +46,11 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
+         <loc>https://paisa.fyi/reference/changelog/</loc>
+         <lastmod>1980-01-01</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
          <loc>https://paisa.fyi/reference/commodities/</loc>
          <lastmod>1980-01-01</lastmod>
          <changefreq>daily</changefreq>

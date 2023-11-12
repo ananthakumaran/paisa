@@ -6,7 +6,7 @@
 * Remove retirement page (available under goals)
 * Bug fixes
 
-## Breaking Changes :rotating_light:
+#### Breaking Changes :rotating_light:
 
 Retirement page has been moved under goals. If you have used
 retirement, you need to setup a new [retirement goal](https://paisa.fyi/reference/goals)
@@ -38,7 +38,7 @@ retirement, you need to setup a new [retirement goal](https://paisa.fyi/referenc
 * Move import templates to configuration file
 * Bug fixes
 
-## Breaking Changes :rotating_light:
+#### Breaking Changes :rotating_light:
 
 User's custom import templates used to be stored in Database, which is
 a bad idea in hindsight. It's being moved to the configuration
@@ -57,7 +57,7 @@ get the data directly from the db file using the following query
 * Support password protected PDF on import page
 * Bug fixes
 
-## Breaking Changes :rotating_light:
+#### Breaking Changes :rotating_light:
 
 * The structure of price code configuration has been updated to make
   it easier to add more price provider in the future. In addition to

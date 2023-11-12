@@ -30,6 +30,7 @@ nav:
       - reference/tax/tax-harvesting.md
       - reference/tax/capital-gains.md
       - reference/tax/schedule-al.md
+    - reference/changelog.md
   - 'Demo': 'https://demo.paisa.fyi'
   - faq.md
 

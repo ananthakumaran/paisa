@@ -6,25 +6,31 @@
     formatCurrency,
     formatFloat,
     isMobile,
+    type Forecast,
     type Point,
     type Posting
   } from "$lib/utils";
   import { onMount, tick, onDestroy } from "svelte";
   import ARIMAPromise from "arima/async";
-  import { forecast, renderProgress, findBreakPoints } from "$lib/goals";
+  import { forecast, renderProgress, findBreakPoints, project } from "$lib/goals";
   import _ from "lodash";
   import LevelItem from "$lib/components/LevelItem.svelte";
   import type { PageData } from "./$types";
   import PostingCard from "$lib/components/PostingCard.svelte";
   import PostingGroup from "$lib/components/PostingGroup.svelte";
   import { iconGlyph } from "$lib/icon";
+  import dayjs from "dayjs";
 
   export let data: PageData;
 
   let svg: Element;
+  let targetDateObject: dayjs.Dayjs;
   let savingsTotal = 0,
     targetSavings = 0,
+    pmt = 0,
     xirr = 0,
+    rate = 0,
+    targetDate = "",
     name = "",
     icon = "",
     progressPercent = 0,
@@ -42,6 +48,8 @@
       savingsTotal,
       savingsTimeline,
       target: targetSavings,
+      rate,
+      targetDate,
       postings,
       icon,
       name,
@@ -56,8 +64,15 @@
 
     progressPercent = (savingsTotal / targetSavings) * 100;
 
-    const ARIMA = await ARIMAPromise;
-    const predictionsTimeline = forecast(savingsTimeline, targetSavings, ARIMA);
+    let predictionsTimeline: Forecast[] = [];
+    targetDateObject = dayjs(targetDate, "YYYY-MM-DD", true);
+    if (targetDateObject.isValid()) {
+      [predictionsTimeline, pmt] = project(targetSavings, rate, targetDateObject, savingsTotal);
+    } else if (savingsTotal < targetSavings) {
+      const ARIMA = await ARIMAPromise;
+      predictionsTimeline = forecast(savingsTimeline, targetSavings, ARIMA);
+    }
+
     await tick();
     breakPoints = findBreakPoints(savingsTimeline.concat(predictionsTimeline), targetSavings);
     destroyCallback = renderProgress(savingsTimeline, predictionsTimeline, breakPoints, svg, {
@@ -74,15 +89,24 @@
         title="Current Savings"
         value={formatCurrency(savingsTotal)}
         color={COLORS.gainText}
+        subtitle={`<b>${formatFloat(xirr)}</b> XIRR`}
       />
 
       <LevelItem
         title="Target Savings"
         value={formatCurrency(targetSavings)}
         color={COLORS.secondary}
+        subtitle={targetDateObject?.isValid() ? targetDateObject.format("DD MMM YYYY") : null}
       />
 
-      <LevelItem title="XIRR" value={formatFloat(xirr)} />
+      {#if pmt > 0}
+        <LevelItem
+          title="Monthly Investment needed"
+          value={formatCurrency(pmt)}
+          color={COLORS.secondary}
+          subtitle={rate > 0 ? `Expected <b>${formatFloat(rate, 2)}</b> rate of return` : null}
+        />
+      {/if}
     </nav>
   </div>
 </section>
@@ -96,6 +120,20 @@
 <section class="section tab-retirement-progress">
   <div class="container is-fluid">
     <div class="columns">
+      <div class="column is-9">
+        <div class="columns flex-wrap">
+          <div class="column is-12">
+            <div class="box overflow-x-auto">
+              <svg height="500" bind:this={svg} />
+            </div>
+          </div>
+          <div class="column is-12 has-text-centered has-text-grey">
+            <div>
+              <p class="is-size-5 custom-icon">{iconGlyph(icon)} {name} progress</p>
+            </div>
+          </div>
+        </div>
+      </div>
       <div class="column is-3">
         <PostingGroup {postings} groupFormat="MMM YYYY" let:groupedPostings>
           <div>
@@ -113,20 +151,6 @@
             {/each}
           </div>
         </PostingGroup>
-      </div>
-      <div class="column is-9">
-        <div class="columns flex-wrap">
-          <div class="column is-12">
-            <div class="box overflow-x-auto">
-              <svg height="500" bind:this={svg} />
-            </div>
-          </div>
-          <div class="column is-12 has-text-centered has-text-grey">
-            <div>
-              <p class="is-size-5 custom-icon">{iconGlyph(icon)} {name} progress</p>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   </div>

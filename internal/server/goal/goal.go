@@ -9,11 +9,12 @@ import (
 )
 
 type GoalSummary struct {
-	Type    string          `json:"type"`
-	Name    string          `json:"name"`
-	Icon    string          `json:"icon"`
-	Current decimal.Decimal `json:"current"`
-	Target  decimal.Decimal `json:"target"`
+	Type       string          `json:"type"`
+	Name       string          `json:"name"`
+	Icon       string          `json:"icon"`
+	Current    decimal.Decimal `json:"current"`
+	Target     decimal.Decimal `json:"target"`
+	TargetDate string          `json:"targetDate"`
 }
 
 func GetGoalSummaries(db *gorm.DB) []GoalSummary {

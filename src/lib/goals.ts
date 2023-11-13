@@ -5,7 +5,46 @@ import _, { first, isEmpty, last, takeRight } from "lodash";
 import tippy, { type Placement } from "tippy.js";
 import COLORS from "./colors";
 import type { Forecast, Point } from "./utils";
-import { formatCurrency, formatCurrencyCrude, formatFloat, rem, tooltip } from "./utils";
+import { formatCurrency, formatCurrencyCrude, formatFloat, now, rem, tooltip } from "./utils";
+import type dayjs from "dayjs";
+import * as financial from "financial";
+
+const WHEN = financial.PaymentDueTime.Begin;
+
+export function project(
+  fv: number,
+  rate: number,
+  targetDate: dayjs.Dayjs,
+  pv: number
+): [Forecast[], number] {
+  rate = rate / (100 * 12);
+  const today = now().startOf("month");
+
+  if (fv <= pv) {
+    return [[], 0];
+  }
+
+  if (targetDate.isSameOrBefore(today, "day")) {
+    return [[], 0];
+  }
+
+  const nper = targetDate.diff(today, "months");
+  if (nper <= 0) {
+    return [[], 0];
+  }
+
+  const pmt = financial.pmt(rate, nper, pv, -fv, WHEN);
+
+  const points: Forecast[] = [];
+  let current = today.add(1, "month");
+  while (current.isSameOrBefore(targetDate, "day")) {
+    const value = financial.fv(rate, current.diff(today, "months"), -pmt, -pv, WHEN);
+    points.push({ date: current, value, error: 0 });
+    current = current.add(1, "month");
+  }
+
+  return [points, pmt];
+}
 
 export function forecast(points: Point[], target: number, ARIMA: typeof Arima): Forecast[] {
   const configs = [
@@ -66,7 +105,7 @@ export function findBreakPoints(points: Point[], target: number): Point[] {
   let i = 1;
   while (i <= 4 && !isEmpty(points)) {
     const p = points.shift();
-    if (p.value > target * (i / 4)) {
+    if (p.value >= target * (i / 4)) {
       result.push(p);
       i++;
     }

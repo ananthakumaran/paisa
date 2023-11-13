@@ -16,11 +16,12 @@ func getSavingsSummary(db *gorm.DB, conf config.SavingsGoal) GoalSummary {
 	savingsTotal := accounting.CurrentBalance(savings)
 
 	return GoalSummary{
-		Type:    "savings",
-		Name:    conf.Name,
-		Current: savingsTotal,
-		Target:  decimal.NewFromFloat(conf.Target),
-		Icon:    conf.Icon,
+		Type:       "savings",
+		Name:       conf.Name,
+		Current:    savingsTotal,
+		Target:     decimal.NewFromFloat(conf.Target),
+		TargetDate: conf.TargetDate,
+		Icon:       conf.Icon,
 	}
 }
 
@@ -39,6 +40,8 @@ func getSavingsDetail(db *gorm.DB, conf config.SavingsGoal) gin.H {
 		"savingsTimeline": accounting.RunningBalance(db, savings),
 		"savingsTotal":    savingsTotal,
 		"target":          decimal.NewFromFloat(conf.Target),
+		"targetDate":      conf.TargetDate,
+		"rate":            conf.Rate,
 		"xirr":            service.XIRR(db, savingsWithCapitalGains),
 		"postings":        savingsWithCapitalGains,
 	}

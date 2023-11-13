@@ -344,6 +344,8 @@ export interface SavingsGoalProgress {
   savingsTotal: number;
   savingsTimeline: Point[];
   target: number;
+  targetDate: string;
+  rate: number;
   xirr: number;
   postings: Posting[];
   name: string;
@@ -434,6 +436,7 @@ export interface GoalSummary {
   icon: string;
   current: number;
   target: number;
+  targetDate: string;
 }
 
 const BACKGROUND = [
@@ -685,7 +688,7 @@ export function setNow(value: dayjs.Dayjs) {
   }
 }
 
-export function now() {
+export function now(): dayjs.Dayjs {
   if (globalThis.__now) {
     return globalThis.__now;
   }

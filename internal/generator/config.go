@@ -88,6 +88,8 @@ goals:
     - name: Millionaire
       icon: mdi:car-sports
       target: 80000000
+      target_date: "2036-01-01"
+      rate: 10
       accounts:
         - '!Assets:Checking'
 allocation_targets:

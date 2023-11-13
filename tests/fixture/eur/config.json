@@ -29,7 +29,7 @@
   "now": "2022-02-07T00:00:00Z",
   "schema": {
     "$id": "https://paisa.fyi/schema.json",
-    "$schema": "https://json-schema.org/draft-07/schema",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
     "additionalProperties": false,
     "description": "Paisa configuration",
     "properties": {
@@ -321,6 +321,11 @@
             ],
             "items": {
               "additionalProperties": false,
+              "dependentRequired": {
+                "target_date": [
+                  "rate"
+                ]
+              },
               "description": "Savings Goal configuration",
               "properties": {
                 "accounts": {
@@ -344,9 +349,29 @@
                   "description": "Goal name",
                   "type": "string"
                 },
+                "rate": {
+                  "description": "The expected rate of return per year",
+                  "minimum": 0,
+                  "type": "number"
+                },
                 "target": {
                   "description": "Savings Target",
                   "type": "number"
+                },
+                "target_date": {
+                  "description": "Savings Target date",
+                  "oneOf": [
+                    {
+                      "format": "date"
+                    },
+                    {
+                      "enum": [
+                        ""
+                      ],
+                      "type": "string"
+                    }
+                  ],
+                  "type": "string"
                 }
               },
               "required": [

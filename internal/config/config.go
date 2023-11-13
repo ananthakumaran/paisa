@@ -84,10 +84,12 @@ type RetirementGoal struct {
 }
 
 type SavingsGoal struct {
-	Name     string   `json:"name" yaml:"name"`
-	Icon     string   `json:"icon" yaml:"icon"`
-	Target   float64  `json:"target" yaml:"target"`
-	Accounts []string `json:"accounts" yaml:"accounts"`
+	Name       string   `json:"name" yaml:"name"`
+	Icon       string   `json:"icon" yaml:"icon"`
+	Target     float64  `json:"target" yaml:"target"`
+	TargetDate string   `json:"target_date" yaml:"target_date"`
+	Rate       float64  `json:"rate" yaml:"rate"`
+	Accounts   []string `json:"accounts" yaml:"accounts"`
 }
 
 type ScheduleAL struct {
@@ -202,6 +204,8 @@ var schema *jsonschema.Schema
 
 func init() {
 	c := jsonschema.NewCompiler()
+	c.AssertFormat = true
+	c.Draft = jsonschema.Draft2020
 	c.RegisterExtension("itemsUniqueProperties", itemsUniquePropertiesMeta, itemsUniquePropertiessCompiler{})
 	err := c.AddResource("schema.json", strings.NewReader(SchemaJson))
 	if err != nil {

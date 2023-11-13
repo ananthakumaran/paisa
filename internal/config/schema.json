@@ -1,5 +1,5 @@
 {
-  "$schema": "https://json-schema.org/draft-07/schema",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://paisa.fyi/schema.json",
   "title": "Paisa",
   "description": "Paisa configuration",
@@ -140,6 +140,24 @@
                 "type": "number",
                 "description": "Savings Target"
               },
+              "target_date": {
+                "type": "string",
+                "oneOf": [
+                  {
+                    "format": "date"
+                  },
+                  {
+                    "type": "string",
+                    "enum": [""]
+                  }
+                ],
+                "description": "Savings Target date"
+              },
+              "rate": {
+                "type": "number",
+                "minimum": 0,
+                "description": "The expected rate of return per year"
+              },
               "accounts": {
                 "type": "array",
                 "description": "List of savings accounts",
@@ -153,6 +171,9 @@
             },
             "ui:header": "name",
             "required": ["name", "icon", "target", "accounts"],
+            "dependentRequired": {
+              "target_date": ["rate"]
+            },
             "additionalProperties": false
           }
         }

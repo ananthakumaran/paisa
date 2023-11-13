@@ -4,6 +4,7 @@
 
   export let small: boolean = false;
   export let progressPercent: number;
+  export let showPercent: boolean = true;
   $: times = range(0, floor(progressPercent / 100));
   $: remainder = progressPercent % 100;
 
@@ -34,11 +35,11 @@
       value={remainder}
       max="100">{remainder}%</progress
     >
-    {#if small}
+    {#if small && showPercent}
       <span class="has-text-weight-bold">{formatPercentage(progressPercent / 100, 2)}</span>
     {/if}
 
-    {#if !small}
+    {#if !small && showPercent}
       <span
         class="has-text-weight-bold progress-percent {remainder < 10 && 'less-than-10'}"
         style={remainder > 10 ? `right: ${100 - remainder}%;` : `left: ${remainder}%;`}

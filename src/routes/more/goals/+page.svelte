@@ -4,7 +4,8 @@
   import Progress from "$lib/components/Progress.svelte";
   import ZeroState from "$lib/components/ZeroState.svelte";
   import { iconGlyph } from "$lib/icon";
-  import { ajax, formatCurrency, helpUrl, type GoalSummary } from "$lib/utils";
+  import { ajax, formatCurrency, helpUrl, type GoalSummary, formatPercentage } from "$lib/utils";
+  import dayjs from "dayjs";
   import _ from "lodash";
   import { onMount } from "svelte";
 
@@ -17,6 +18,14 @@
       isEmpty = true;
     }
   });
+
+  function formatDate(date: string) {
+    const d = dayjs(date, "YYYY-MM-DD", true);
+    if (d.isValid()) {
+      return d.fromNow();
+    }
+    return "";
+  }
 
   function percentComplete(goal: GoalSummary) {
     return (goal.current / goal.target) * 100;
@@ -34,6 +43,7 @@
       </div>
 
       {#each goals as goal}
+        {@const completed = percentComplete(goal)}
         <div class="column is-6 is-one-third-widescreen">
           <div class="box p-3">
             <div class="flex justify-between mb-4">
@@ -62,7 +72,11 @@
                 value={formatCurrency(goal.target)}
               />
             </nav>
-            <Progress small progressPercent={percentComplete(goal)} />
+            <Progress small showPercent={false} progressPercent={completed} />
+            <div class="flex justify-between has-text-grey">
+              <div>{formatPercentage(completed / 100, 2)}</div>
+              <div>{formatDate(goal.targetDate)}</div>
+            </div>
           </div>
         </div>
       {/each}

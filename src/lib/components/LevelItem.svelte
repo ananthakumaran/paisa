@@ -17,7 +17,7 @@
       <p class="title has-text-grey-dark">{value}</p>
     {/if}
     {#if !_.isEmpty(subtitle)}
-      <div class="sub-title">{subtitle}</div>
+      <div class="sub-title">{@html subtitle}</div>
     {/if}
   </div>
 </div>

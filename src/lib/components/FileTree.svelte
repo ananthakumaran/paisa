@@ -4,6 +4,7 @@
   import { createEventDispatcher } from "svelte";
 
   export let files: Array<LedgerDirectory | LedgerFile>;
+  export let path: string;
   export let selectedFileName: string;
   export let hasUnsavedChanges: boolean;
   export let root: boolean = true;
@@ -12,6 +13,15 @@
 
   function fileName(path: string) {
     return _.last(path.split("/"));
+  }
+
+  function join(paths: string[]) {
+    return _.filter(paths, (p) => !_.isEmpty(p)).join("/");
+  }
+
+  function isOpen(file: LedgerDirectory | LedgerFile) {
+    const fullPath = join([path, file.name]);
+    return selectedFileName?.startsWith(fullPath);
   }
 </script>
 
@@ -34,7 +44,7 @@
       </li>
     {:else}
       <li>
-        <details open>
+        <details open={isOpen(file)}>
           <summary>
             <span class="icon is-small">
               <i class="fa-regular fa-folder" />
@@ -42,6 +52,7 @@
             <span title={file.name} class="truncate">{file.name}</span>
           </summary>
           <svelte:self
+            path={join([path, file.name])}
             on:select={(e) => dispatch("select", e.detail)}
             root={false}
             files={file.children}

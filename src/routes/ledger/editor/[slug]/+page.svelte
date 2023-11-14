@@ -303,6 +303,7 @@
         <div class="box px-2 full-height overflow-y-auto">
           <aside class="menu">
             <FileTree
+              path=""
               on:select={(e) => selectFile(e.detail)}
               files={buildLedgerTree(_.values(filesMap))}
               selectedFileName={selectedFile?.name}

@@ -3,6 +3,8 @@ import { writable, get } from "svelte/store";
 
 export const cashflowType = persisted("cashflowType", "hierarchy");
 
+export const obscure = persisted("obscure", false);
+
 export const cashflowExpenseDepthAllowed = writable({ min: 1, max: 1 });
 export const cashflowExpenseDepth = persisted("cashflowExpenseDepth", 0);
 export const cashflowIncomeDepthAllowed = writable({ min: 1, max: 1 });

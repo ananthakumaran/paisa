@@ -3,6 +3,8 @@ import _ from "lodash";
 import * as d3 from "d3";
 import { loading } from "../store";
 import type { JSONSchema7 } from "json-schema";
+import { get } from "svelte/store";
+import { obscure } from "../persisted_store";
 
 export interface AutoCompleteItem {
   label: string;
@@ -661,12 +663,8 @@ export async function ajax(route: string, options?: RequestInit, params?: Record
   });
 }
 
-function obscure() {
-  return localStorage.getItem("obscure") == "true";
-}
-
 function normalize(value: number) {
-  if (obscure()) {
+  if (get(obscure)) {
     value = 0;
   }
 

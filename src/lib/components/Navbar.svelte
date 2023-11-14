@@ -7,7 +7,8 @@
     cashflowExpenseDepth,
     cashflowExpenseDepthAllowed,
     cashflowIncomeDepth,
-    cashflowIncomeDepthAllowed
+    cashflowIncomeDepthAllowed,
+    obscure
   } from "../../persisted_store";
   import _ from "lodash";
   import { financialYear, forEachFinancialYear, helpUrl, now } from "$lib/utils";
@@ -188,8 +189,16 @@
     <a
       href="/"
       class:is-active={$page.url.pathname == "/"}
-      class="navbar-item is-size-4 has-text-weight-medium"><Logo size={20} /> Paisa</a
+      class="navbar-item is-size-4 has-text-weight-medium"
     >
+      {#if $obscure}
+        <span class="icon is-small is-size-5">
+          <i class="fas fa-user-secret" />
+        </span><span class="ml-2">Paisa</span>
+      {:else}
+        <Logo size={20} /> Paisa
+      {/if}
+    </a>
     <a
       role="button"
       tabindex="-1"

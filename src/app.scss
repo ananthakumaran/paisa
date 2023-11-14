@@ -26,7 +26,7 @@ $menu-item-hover-background-color: $link-light;
 $menu-item-active-color: $link-dark;
 $menu-item-active-background-color: $link-light;
 
-$editor-full-height: calc(100vh - 21px - 57.75px - 10.5px);
+$editor-full-height: calc(100vh - 45.5px - 7px - 15.75px - 21px - 57.75px - 10.5px - 10.5px);
 
 @import "bulma/bulma.sass";
 @import "bulma-switch/src/sass/index.sass";

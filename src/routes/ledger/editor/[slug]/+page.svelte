@@ -300,8 +300,8 @@
     </div>
     <div class="columns">
       <div class="column is-3-widescreen is-2-fullhd is-4">
-        <div class="box px-2">
-          <aside class="menu full-height overflow-y-auto">
+        <div class="box px-2 full-height overflow-y-auto">
+          <aside class="menu">
             <FileTree
               on:select={(e) => selectFile(e.detail)}
               files={buildLedgerTree(_.values(filesMap))}

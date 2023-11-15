@@ -40,14 +40,14 @@ func FilterByGlob(postings []posting.Posting, accounts []string) []posting.Posti
 	negatePresent := lo.SomeBy(accounts, func(accountGlob string) bool {
 		return accountGlob[0] == '!'
 	})
+	var combine func(collection []string, predicate func(item string) bool) bool
+	if negatePresent {
+		combine = lo.EveryBy[string]
+	} else {
+		combine = lo.SomeBy[string]
+	}
 
 	return lo.Filter(postings, func(p posting.Posting, _ int) bool {
-		var combine func(collection []string, predicate func(item string) bool) bool
-		if negatePresent {
-			combine = lo.EveryBy[string]
-		} else {
-			combine = lo.SomeBy[string]
-		}
 		return combine(accounts, func(accountGlob string) bool {
 			negative := false
 
@@ -158,18 +158,29 @@ func RunningBalance(db *gorm.DB, postings []posting.Posting) []Point {
 	}
 
 	var p posting.Posting
-	var pastPostings []posting.Posting
+	accumulator := make(map[string]decimal.Decimal)
 
 	end := utils.EndOfToday()
 	for start := postings[0].Date; start.Before(end); start = start.AddDate(0, 0, 1) {
 		for len(postings) > 0 && (postings[0].Date.Before(start) || postings[0].Date.Equal(start)) {
 			p, postings = postings[0], postings[1:]
-			pastPostings = append(pastPostings, p)
+			accumulator[p.Commodity] = accumulator[p.Commodity].Add(p.Quantity)
 		}
 
-		balance := utils.SumBy(pastPostings, func(p posting.Posting) decimal.Decimal {
-			return service.GetMarketPrice(db, p, start)
-		})
+		balance := decimal.Zero
+
+		for commodity, quantity := range accumulator {
+			if utils.IsCurrency(commodity) {
+				balance = balance.Add(quantity)
+			} else {
+				price := service.GetUnitPrice(db, commodity, start)
+				if !price.Value.Equal(decimal.Zero) {
+					balance = balance.Add(quantity.Mul(price.Value))
+				} else {
+					balance = balance.Add(quantity)
+				}
+			}
+		}
 		series = append(series, Point{Date: start, Value: balance})
 	}
 	return series

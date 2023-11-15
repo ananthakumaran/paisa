@@ -158,6 +158,11 @@
                 "minimum": 0,
                 "description": "The expected rate of return per year"
               },
+              "payment_per_period": {
+                "type": "number",
+                "minimum": 0,
+                "description": "Expected monthly investment amount"
+              },
               "accounts": {
                 "type": "array",
                 "description": "List of savings accounts",

@@ -34,15 +34,16 @@ func getSavingsDetail(db *gorm.DB, conf config.SavingsGoal) gin.H {
 	savingsWithCapitalGains = service.PopulateMarketPrice(db, savingsWithCapitalGains)
 
 	return gin.H{
-		"type":            "savings",
-		"name":            conf.Name,
-		"icon":            conf.Icon,
-		"savingsTimeline": accounting.RunningBalance(db, savings),
-		"savingsTotal":    savingsTotal,
-		"target":          decimal.NewFromFloat(conf.Target),
-		"targetDate":      conf.TargetDate,
-		"rate":            conf.Rate,
-		"xirr":            service.XIRR(db, savingsWithCapitalGains),
-		"postings":        savingsWithCapitalGains,
+		"type":             "savings",
+		"name":             conf.Name,
+		"icon":             conf.Icon,
+		"savingsTimeline":  accounting.RunningBalance(db, savings),
+		"savingsTotal":     savingsTotal,
+		"target":           decimal.NewFromFloat(conf.Target),
+		"targetDate":       conf.TargetDate,
+		"rate":             conf.Rate,
+		"paymentPerPeriod": conf.PaymentPerPeriod,
+		"xirr":             service.XIRR(db, savingsWithCapitalGains),
+		"postings":         savingsWithCapitalGains,
 	}
 }

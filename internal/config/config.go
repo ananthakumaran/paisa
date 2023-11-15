@@ -84,12 +84,13 @@ type RetirementGoal struct {
 }
 
 type SavingsGoal struct {
-	Name       string   `json:"name" yaml:"name"`
-	Icon       string   `json:"icon" yaml:"icon"`
-	Target     float64  `json:"target" yaml:"target"`
-	TargetDate string   `json:"target_date" yaml:"target_date"`
-	Rate       float64  `json:"rate" yaml:"rate"`
-	Accounts   []string `json:"accounts" yaml:"accounts"`
+	Name             string   `json:"name" yaml:"name"`
+	Icon             string   `json:"icon" yaml:"icon"`
+	Target           float64  `json:"target" yaml:"target"`
+	TargetDate       string   `json:"target_date" yaml:"target_date"`
+	Rate             float64  `json:"rate" yaml:"rate"`
+	PaymentPerPeriod float64  `json:"payment_per_period" yaml:"payment_per_period"`
+	Accounts         []string `json:"accounts" yaml:"accounts"`
 }
 
 type ScheduleAL struct {

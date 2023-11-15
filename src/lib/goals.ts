@@ -6,34 +6,61 @@ import tippy, { type Placement } from "tippy.js";
 import COLORS from "./colors";
 import type { Forecast, Point } from "./utils";
 import { formatCurrency, formatCurrencyCrude, formatFloat, now, rem, tooltip } from "./utils";
-import type dayjs from "dayjs";
+import dayjs from "dayjs";
 import * as financial from "financial";
 
 const WHEN = financial.PaymentDueTime.Begin;
+
+export function solvePMTOrNper(
+  fv: number,
+  rate: number,
+  pv: number,
+  pmt: number,
+  targetDate: string
+) {
+  const empty = { pmt: 0, targetDate: "" };
+
+  rate = rate / (100 * 12);
+  const today = now().startOf("month");
+
+  let targetDateObject = dayjs(targetDate, "YYYY-MM-DD", true);
+  if (targetDateObject.isValid()) {
+    const nper = targetDateObject.diff(today, "months");
+    if (nper <= 0) {
+      return empty;
+    }
+    pmt = financial.pmt(rate, nper, pv, -fv, WHEN);
+  } else if (pmt > 0) {
+    const nper = financial.nper(rate, pmt, pv, -fv, WHEN);
+    targetDateObject = today.add(Math.ceil(nper), "months");
+    targetDate = targetDateObject.format("YYYY-MM-DD");
+  }
+
+  return { pmt, targetDate };
+}
 
 export function project(
   fv: number,
   rate: number,
   targetDate: dayjs.Dayjs,
+  pmt: number,
   pv: number
-): [Forecast[], number] {
+): Forecast[] {
   rate = rate / (100 * 12);
   const today = now().startOf("month");
 
   if (fv <= pv) {
-    return [[], 0];
+    return [];
   }
 
   if (targetDate.isSameOrBefore(today, "day")) {
-    return [[], 0];
+    return [];
   }
 
   const nper = targetDate.diff(today, "months");
   if (nper <= 0) {
-    return [[], 0];
+    return [];
   }
-
-  const pmt = financial.pmt(rate, nper, pv, -fv, WHEN);
 
   const points: Forecast[] = [];
   let current = today.add(1, "month");
@@ -43,7 +70,7 @@ export function project(
     current = current.add(1, "month");
   }
 
-  return [points, pmt];
+  return points;
 }
 
 export function forecast(points: Point[], target: number, ARIMA: typeof Arima): Forecast[] {

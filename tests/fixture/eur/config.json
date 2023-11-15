@@ -349,6 +349,11 @@
                   "description": "Goal name",
                   "type": "string"
                 },
+                "payment_per_period": {
+                  "description": "Expected monthly investment amount",
+                  "minimum": 0,
+                  "type": "number"
+                },
                 "rate": {
                   "description": "The expected rate of return per year",
                   "minimum": 0,

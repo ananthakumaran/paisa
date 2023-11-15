@@ -353,6 +353,7 @@ export interface SavingsGoalProgress {
   name: string;
   type: string;
   icon: string;
+  paymentPerPeriod: number;
 }
 
 export interface LedgerFile {

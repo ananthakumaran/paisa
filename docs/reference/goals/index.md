@@ -25,3 +25,10 @@ section. You would see a list of goal types. Expand the type you want
 to add and click on the :fontawesome-solid-circle-plus: icon to add a
 new goal. The configuration details are available in the respective
 goal type pages.
+
+
+!!! example "Under Development"
+
+    Goals is currently under development and you might see changes
+    with every new release. If you want to share feedback, this is a
+    good time to do so.

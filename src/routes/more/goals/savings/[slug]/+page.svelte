@@ -12,7 +12,7 @@
   } from "$lib/utils";
   import { onMount, tick, onDestroy } from "svelte";
   import ARIMAPromise from "arima/async";
-  import { forecast, renderProgress, findBreakPoints, project } from "$lib/goals";
+  import { forecast, renderProgress, findBreakPoints, project, solvePMTOrNper } from "$lib/goals";
   import _ from "lodash";
   import LevelItem from "$lib/components/LevelItem.svelte";
   import type { PageData } from "./$types";
@@ -30,6 +30,7 @@
     pmt = 0,
     xirr = 0,
     rate = 0,
+    paymentPerPeriod = 0,
     targetDate = "",
     name = "",
     icon = "",
@@ -53,7 +54,8 @@
       postings,
       icon,
       name,
-      xirr
+      xirr,
+      paymentPerPeriod
     } = await ajax("/api/goals/savings/:name", null, data));
 
     postings = _.chain(postings)
@@ -64,10 +66,18 @@
 
     progressPercent = (savingsTotal / targetSavings) * 100;
 
+    ({ pmt, targetDate } = solvePMTOrNper(
+      targetSavings,
+      rate,
+      savingsTotal,
+      paymentPerPeriod,
+      targetDate
+    ));
+
     let predictionsTimeline: Forecast[] = [];
     targetDateObject = dayjs(targetDate, "YYYY-MM-DD", true);
     if (targetDateObject.isValid()) {
-      [predictionsTimeline, pmt] = project(targetSavings, rate, targetDateObject, savingsTotal);
+      predictionsTimeline = project(targetSavings, rate, targetDateObject, pmt, savingsTotal);
     } else if (savingsTotal < targetSavings) {
       const ARIMA = await ARIMAPromise;
       predictionsTimeline = forecast(savingsTimeline, targetSavings, ARIMA);

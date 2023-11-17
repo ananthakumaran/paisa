@@ -1,6 +1,5 @@
 <script lang="ts">
   import COLORS from "$lib/colors";
-  import Progress from "$lib/components/Progress.svelte";
   import {
     ajax,
     formatCurrency,
@@ -12,7 +11,14 @@
   } from "$lib/utils";
   import { onMount, tick, onDestroy } from "svelte";
   import ARIMAPromise from "arima/async";
-  import { forecast, renderProgress, findBreakPoints, project, solvePMTOrNper } from "$lib/goals";
+  import {
+    forecast,
+    renderProgress,
+    findBreakPoints,
+    project,
+    solvePMTOrNper,
+    renderInvestmentTimeline
+  } from "$lib/goals";
   import _ from "lodash";
   import LevelItem from "$lib/components/LevelItem.svelte";
   import type { PageData } from "./$types";
@@ -20,10 +26,12 @@
   import PostingGroup from "$lib/components/PostingGroup.svelte";
   import { iconGlyph } from "$lib/icon";
   import dayjs from "dayjs";
+  import ProgressWithBreakpoints from "$lib/components/ProgressWithBreakpoints.svelte";
 
   export let data: PageData;
 
   let svg: Element;
+  let investmentTimelineSvg: Element;
   let targetDateObject: dayjs.Dayjs;
   let savingsTotal = 0,
     targetSavings = 0,
@@ -38,6 +46,7 @@
     breakPoints: Point[] = [],
     savingsTimeline: Point[] = [],
     postings: Posting[] = [],
+    latestPostings: Posting[] = [],
     destroyCallback = () => {};
 
   onDestroy(async () => {
@@ -58,7 +67,7 @@
       paymentPerPeriod
     } = await ajax("/api/goals/savings/:name", null, data));
 
-    postings = _.chain(postings)
+    latestPostings = _.chain(postings)
       .sortBy((p) => p.date)
       .reverse()
       .take(100)
@@ -88,6 +97,8 @@
     destroyCallback = renderProgress(savingsTimeline, predictionsTimeline, breakPoints, svg, {
       targetSavings
     });
+
+    renderInvestmentTimeline(postings, investmentTimelineSvg, pmt);
   });
 </script>
 
@@ -123,7 +134,7 @@
 
 <section class="section">
   <div class="container is-fluid">
-    <Progress {progressPercent} />
+    <ProgressWithBreakpoints {progressPercent} {breakPoints} />
   </div>
 </section>
 
@@ -134,29 +145,39 @@
         <div class="columns flex-wrap">
           <div class="column is-12">
             <div class="box overflow-x-auto">
-              <svg height="500" bind:this={svg} />
+              <svg height="400" bind:this={svg} />
             </div>
           </div>
           <div class="column is-12 has-text-centered has-text-grey">
             <div>
-              <p class="is-size-5 custom-icon">{iconGlyph(icon)} {name} progress</p>
+              <p class="custom-icon">{iconGlyph(icon)} {name} progress</p>
+            </div>
+          </div>
+          <div class="column is-12">
+            <div class="box overflow-x-auto">
+              <svg height="300" width="100%" bind:this={investmentTimelineSvg} />
+            </div>
+          </div>
+          <div class="column is-12 has-text-centered has-text-grey">
+            <div>
+              <p class="custom-icon">Monthly Investment</p>
             </div>
           </div>
         </div>
       </div>
       <div class="column is-3">
-        <PostingGroup {postings} groupFormat="MMM YYYY" let:groupedPostings>
+        <PostingGroup postings={latestPostings} groupFormat="MMM YYYY" let:groupedPostings>
           <div>
             {#each groupedPostings as posting}
               <PostingCard
                 {posting}
                 color={posting.amount >= 0
                   ? posting.account.startsWith("Income:CapitalGains")
-                    ? COLORS.loss
-                    : COLORS.secondary
+                    ? COLORS.lossText
+                    : COLORS.gainText
                   : posting.account.startsWith("Income:CapitalGains")
-                  ? COLORS.gain
-                  : COLORS.tertiary}
+                  ? COLORS.gainText
+                  : COLORS.lossText}
               />
             {/each}
           </div>

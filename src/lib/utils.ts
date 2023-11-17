@@ -340,6 +340,7 @@ export interface RetirementGoalProgress {
   name: string;
   type: string;
   icon: string;
+  postings: Posting[];
 }
 
 export interface SavingsGoalProgress {
@@ -1015,4 +1016,11 @@ export function svgTruncate(width: number) {
       textLength = self.node().getComputedTextLength();
     }
   };
+}
+
+export function sumPostings(postings: Posting[]) {
+  return postings.reduce(
+    (sum, p) => (p.account.startsWith("Income:CapitalGains") ? sum + -p.amount : sum + p.amount),
+    0
+  );
 }

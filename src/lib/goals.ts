@@ -4,10 +4,21 @@ import { Delaunay } from "d3";
 import _, { first, isEmpty, last, takeRight } from "lodash";
 import tippy, { type Placement } from "tippy.js";
 import COLORS from "./colors";
-import type { Forecast, Point } from "./utils";
-import { formatCurrency, formatCurrencyCrude, formatFloat, now, rem, tooltip } from "./utils";
+import type { Forecast, Point, Posting } from "./utils";
+import {
+  formatCurrency,
+  formatCurrencyCrude,
+  formatFloat,
+  isMobile,
+  now,
+  rem,
+  skipTicks,
+  sumPostings,
+  tooltip
+} from "./utils";
 import dayjs from "dayjs";
 import * as financial from "financial";
+import { iconify } from "./icon";
 
 const WHEN = financial.PaymentDueTime.Begin;
 
@@ -231,14 +242,6 @@ export function renderProgress(
     .style("pointer-events", "none")
     .attr("fill", COLORS.tertiary)
     .attr("class", "axis x")
-    .attr("data-tippy-placement", (_d, i) => ["top-end", "top", "bottom", "top-start"][i])
-    .attr("data-tippy-content", (d, i) => {
-      return `
-<div class='has-text-centered'>${formatCurrencyCrude(d.value)} (${
-        (i + 1) * 25
-      }%)<br />${d.date.format("DD MMM YYYY")}</div>
-`;
-    })
     .attr("cx", (p) => x(p.date))
     .attr("cy", (p) => y(p.value));
 
@@ -281,27 +284,153 @@ export function renderProgress(
       hoverCircle.attr("fill", "none");
     });
 
-  const instances = tippy("circle[data-tippy-content]", {
-    onShow: (instance) => {
-      const content = instance.reference.getAttribute("data-tippy-content");
-      if (!_.isEmpty(content)) {
-        instance.setContent(content);
-        instance.setProps({
-          placement: instance.reference.getAttribute("data-tippy-placement") as Placement
-        });
-      } else {
-        return false;
-      }
-    },
-    hideOnClick: false,
-    allowHTML: true,
-    appendTo: element.parentElement
-  });
-
-  instances.forEach((i) => i.show());
-
   return () => {
     t.destroy();
-    instances.forEach((i) => i.destroy());
   };
+}
+
+export function renderInvestmentTimeline(postings: Posting[], element: Element, pmt: number) {
+  const timeFormat = "MMM YYYY";
+  const MAX_BAR_WIDTH = 40;
+  const svg = d3.select(element),
+    margin = { top: 10, right: 50, bottom: 50, left: 40 },
+    width = element.parentElement.clientWidth - margin.left - margin.right,
+    height = +svg.attr("height") - margin.top - margin.bottom,
+    g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+  const groupKeys = _.chain(postings)
+    .map((p) => p.account)
+    .uniq()
+    .sort()
+    .value();
+
+  const defaultValues = _.zipObject(
+    groupKeys,
+    _.map(groupKeys, () => 0)
+  );
+
+  interface Point {
+    date: dayjs.Dayjs;
+    total: number;
+    month: string;
+    postings: Posting[];
+    [key: string]: number | string | dayjs.Dayjs | Posting[];
+  }
+  const points: Point[] = [];
+  const groupedPostings = _.groupBy(postings, (p) => p.date.format(timeFormat));
+  const months = isMobile() ? 12 : 24;
+  let start = now().startOf("month").subtract(months, "months");
+  while (start.isBefore(now())) {
+    const month = start.format(timeFormat);
+    if (!groupedPostings[month]) {
+      groupedPostings[month] = [];
+    }
+
+    const ps = groupedPostings[month];
+
+    const values = _.chain(ps)
+      .groupBy((p) => p.account)
+      .flatMap((postings, key) => [[key, _.sumBy(postings, (p) => p.amount)]])
+      .fromPairs()
+      .value();
+
+    const total = sumPostings(ps);
+
+    const point = _.merge(
+      {
+        month,
+        total,
+        date: dayjs(month, timeFormat),
+        postings: ps
+      },
+      defaultValues,
+      values
+    );
+
+    points.push(point);
+    start = start.add(1, "month");
+  }
+
+  const x = d3.scaleBand().range([0, width]).paddingInner(0.1).paddingOuter(0);
+  const y = d3.scaleLinear().range([height, 0]);
+
+  const sum = (p: Point) => p.total;
+  const max = d3.max(points, sum);
+  const min = d3.min([0, d3.min(points, sum)]);
+  x.domain(points.map((p) => p.month));
+  y.domain([min, max]);
+
+  g.append("g")
+    .attr("class", "axis x")
+    .attr("transform", "translate(0," + height + ")")
+    .call(
+      d3
+        .axisBottom(x)
+        .ticks(5)
+        .tickFormat(skipTicks(30, x, (d) => d.toString()))
+    )
+    .selectAll("text")
+    .attr("y", 10)
+    .attr("x", -8)
+    .attr("dy", ".35em")
+    .attr("transform", "rotate(-45)")
+    .style("text-anchor", "end");
+
+  g.append("g")
+    .attr("class", "axis y")
+    .call(d3.axisLeft(y).tickSize(-width).tickFormat(formatCurrencyCrude));
+
+  if (pmt > 0) {
+    g.append("line")
+      .attr("fill", "none")
+      .attr("stroke", COLORS.secondary)
+      .attr("x1", 0)
+      .attr("x2", width)
+      .attr("y1", y(pmt))
+      .attr("y2", y(pmt))
+      .attr("stroke-width", "2px")
+      .attr("stroke-linecap", "round")
+      .attr("stroke-dasharray", "4 6");
+
+    g.append("text")
+      .style("font-size", "0.714rem")
+      .attr("dx", "3px")
+      .attr("dy", "0.3em")
+      .attr("x", width)
+      .attr("y", y(pmt))
+      .attr("fill", COLORS.secondary)
+      .text(formatCurrencyCrude(pmt));
+  }
+
+  g.append("g")
+    .selectAll("rect")
+    .data(points)
+    .enter()
+    .append("rect")
+    .attr("stroke", (p) => (p.total <= 0 ? COLORS.lossText : COLORS.gainText))
+    .attr("fill", (p) => (p.total <= 0 ? COLORS.lossText : COLORS.gainText))
+    .attr("fill-opacity", 0.6)
+    .attr("data-tippy-content", (p) => {
+      const postings: Posting[] = p.postings;
+      return tooltip(
+        _.sortBy(
+          postings.map((p) => [
+            iconify(p.account),
+            [formatCurrency(p.amount), "has-text-weight-bold has-text-right"]
+          ]),
+          (r) => r[0]
+        ),
+        { total: formatCurrency(p.total) }
+      );
+    })
+    .attr("x", function (p) {
+      return x(p.month) + (x.bandwidth() - Math.min(x.bandwidth(), MAX_BAR_WIDTH)) / 2;
+    })
+    .attr("y", function (p) {
+      return p.total <= 0 ? y(0) : y(p.total);
+    })
+    .attr("height", function (p) {
+      return p.total <= 0 ? y(p.total) - y(0) : y(0) - y(p.total);
+    })
+    .attr("width", Math.min(x.bandwidth(), MAX_BAR_WIDTH));
 }

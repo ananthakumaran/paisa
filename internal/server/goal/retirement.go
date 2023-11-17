@@ -62,5 +62,6 @@ func getRetirementDetail(db *gorm.DB, conf config.RetirementGoal) gin.H {
 		"swr":             conf.SWR,
 		"yearlyExpense":   yearlyExpenses,
 		"xirr":            service.XIRR(db, savingsWithCapitalGains),
+		"postings":        savingsWithCapitalGains,
 	}
 }

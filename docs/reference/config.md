@@ -71,35 +71,65 @@ budget:
   # OPTIONAL, ENUM: yes, no DEFAULT: yes
   rollover: "yes"
 
-## Retirement
-retirement:
-  # Safe Withdrawal Rate
-  # OPTIONAL, DEFAULT: 4
-  swr: 2
-  # List of expense accounts
-  # OPTIONAL, DEFAULT: Expenses:*
-  expenses:
-    - Expenses:Clothing
-    - Expenses:Education
-    - Expenses:Entertainment
-    - Expenses:Food
-    - Expenses:Gift
-    - Expenses:Insurance
-    - Expenses:Misc
-    - Expenses:Restaurant
-    - Expenses:Shopping
-    - Expenses:Utilities
-  # List of accounts where you keep retirement savings
-  # OPTIONAL, DEFAULT: Assets:*
+## Goals
+goals:
+  # Retirement goals
+  retirement:
+      # Goal name
+      # REQUIRED
+    - name: Retirement
+      # Goal icon
+      # REQUIRED
+      icon: mdi:palm-tree
+      # Safe Withdrawal Rate
+      # OPTIONAL, DEFAULT: 4
+      swr: 2
+      # List of expense accounts
+      # OPTIONAL, DEFAULT: Expenses:*
+      expenses:
+        - Expenses:Clothing
+        - Expenses:Education
+        - Expenses:Entertainment
+        - Expenses:Food
+        - Expenses:Gift
+        - Expenses:Insurance
+        - Expenses:Misc
+        - Expenses:Restaurant
+        - Expenses:Shopping
+        - Expenses:Utilities
+      # List of accounts where you keep retirement savings
+      # OPTIONAL, DEFAULT: Assets:*
+      savings:
+        - Assets:Equity:*
+        - Assets:Debt:*
+      # By default, average of last 3 year expenses will be used to
+      # calculate your yearly expenses. This can be overridden by setting
+      # this configuration to positive value
+      # OPTIONAL, DEFAULT: 0
+      yearly_expenses: 0
   savings:
-    - Assets:Equity:*
-    - Assets:Debt:*
-  # By default, average of last 3 year expenses will be used to
-  # calculate your yearly expenses. This can be overridden by setting
-  # this configuration to positive value
-  # OPTIONAL, DEFAULT: 0
-  yearly_expenses: 0
-
+      # Goal name
+      # REQUIRED
+    - name: House
+      # Goal icon
+      # REQUIRED
+      icon: fluent-emoji-high-contrast:house-with-garden
+      # Goal target amount
+      # REQUIRED
+      target: 100000
+      # Goal target date
+      # OPTIONAL (either target_date or payment_per_period can be specified)
+      target_date: "2030-01-01"
+      # Expected rate of returns
+      # OPTIONAL
+      payment_per_period: 0
+      # Expected rate of returns
+      # OPTIONAL, REQUIRED if target_date or payment_per_period is set
+      rate: 5
+      # List of accounts where you keep the goal's savings
+      # REQUIRED
+      accounts:
+        - Assets:Equity:**
 ## Schedule AL
 # OPTIONAL, DEFAULT: []
 schedule_al:

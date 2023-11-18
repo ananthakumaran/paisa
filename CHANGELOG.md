@@ -1,5 +1,12 @@
 # CHANGELOG
 
+### 0.5.8 (2023-11-18)
+
+* Add ability to specify rate, target date or monthly contribution to
+  [savings goal](https://paisa.fyi/reference/goals/savings/)
+* Improve price page
+* Bug fixes
+
 ### 0.5.7 (2023-11-11)
 
 * Add [goals](https://paisa.fyi/reference/goals)

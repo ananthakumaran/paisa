@@ -2677,13 +2677,13 @@ let
         sha512 = "QOSvevhslijgYwRx6Rv7zKdMF8lbRmx+uQGx2+vDc+KI/eBnsy9kit5aj23AgGu3pa4t9AgwbnXWqS+iOY+2aA==";
       };
     };
-    "caniuse-lite-1.0.30001486" = {
+    "caniuse-lite-1.0.30001563" = {
       name = "caniuse-lite";
       packageName = "caniuse-lite";
-      version = "1.0.30001486";
+      version = "1.0.30001563";
       src = fetchurl {
-        url = "https://registry.npmjs.org/caniuse-lite/-/caniuse-lite-1.0.30001486.tgz";
-        sha512 = "uv7/gXuHi10Whlj0pp5q/tsK/32J2QSqVRKQhs2j8VsDCjgyruAh/eEXHF822VqO9yT6iZKw3nRwZRSPBE9OQg==";
+        url = "https://registry.npmjs.org/caniuse-lite/-/caniuse-lite-1.0.30001563.tgz";
+        sha512 = "na2WUmOxnwIZtwnFI2CZ/3er0wdNzU7hN+cPYz/z2ajHThnkWjNBOpEPP4n+4r2WPM847JaMotaJE3bnfzjyKw==";
       };
     };
     "canvas-2.11.2" = {
@@ -3658,6 +3658,15 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/date-fns/-/date-fns-2.29.3.tgz";
         sha512 = "dDCnyH2WnnKusqvZZ6+jA1O51Ibt8ZMRNkDZdyAyK4YfbDwa/cEmuztzG5pk6hqlp9aSBPYcjOlktquahGwGeA==";
+      };
+    };
+    "date-picker-svelte-2.9.0" = {
+      name = "date-picker-svelte";
+      packageName = "date-picker-svelte";
+      version = "2.9.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/date-picker-svelte/-/date-picker-svelte-2.9.0.tgz";
+        sha512 = "aNZYzeJ8TtNxw3pdHHAkmTf1dnbBX6JZTkZY1IP4J7ufJcRKtF40Pga8S3ZD8EWuX2DWRW6kRFqoyXzWyoH81Q==";
       };
     };
     "dayjs-1.11.0" = {
@@ -4675,6 +4684,15 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/fill-range/-/fill-range-7.0.1.tgz";
         sha512 = "qOo9F+dMUmC2Lcb4BbVvnKJxTPjCm+RRpe4gDuGrzkL7mEVl/djYSu2OdQ2Pa302N4oqkSg9ir6jaLWJ2USVpQ==";
+      };
+    };
+    "financial-0.1.3" = {
+      name = "financial";
+      packageName = "financial";
+      version = "0.1.3";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/financial/-/financial-0.1.3.tgz";
+        sha512 = "vdv2nx8x+u1bgfcdt/BsKU4Gpqfu9u2485UJoQAs6GqrASszm6QWY7d8H7x968G5rAdV4SU2Nz4JoLTtHUnlcA==";
       };
     };
     "find-up-5.0.0" = {
@@ -9562,7 +9580,7 @@ let
       sources."cache-base-1.0.1"
       sources."callsites-3.1.0"
       sources."camelcase-css-2.0.1"
-      sources."caniuse-lite-1.0.30001486"
+      sources."caniuse-lite-1.0.30001563"
       sources."canvas-2.11.2"
       (sources."chalk-4.1.2" // {
         dependencies = [
@@ -9734,6 +9752,7 @@ let
       sources."d3-zoom-3.0.0"
       sources."daisyui-3.5.1"
       sources."date-fns-2.29.3"
+      sources."date-picker-svelte-2.9.0"
       sources."dayjs-1.11.0"
       sources."debug-3.2.7"
       sources."decode-uri-component-0.2.2"
@@ -9898,6 +9917,7 @@ let
         ];
       })
       sources."fill-range-7.0.1"
+      sources."financial-0.1.3"
       sources."find-up-5.0.0"
       sources."flat-cache-3.0.4"
       sources."flatted-3.2.5"

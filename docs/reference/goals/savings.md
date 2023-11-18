@@ -9,7 +9,7 @@ achieve, like buying a car, or a house, or a vacation.
 
 ```yaml
 goals:
-  retirement:
+  savings:
     - name: House
       target: 5000000
       icon: fluent-emoji-high-contrast:house-with-garden
@@ -30,7 +30,7 @@ achieve the goal.
 
 ```yaml hl_lines="5-6"
 goals:
-  retirement:
+  savings:
     - name: House
       target: 5000000
       target_date: 2030-05-01
@@ -48,7 +48,7 @@ target date.
 
 ```yaml hl_lines="5-6"
 goals:
-  retirement:
+  savings:
     - name: House
       target: 5000000
       payment_per_period: 50000

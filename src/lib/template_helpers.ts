@@ -111,7 +111,11 @@ export default {
     return Array.prototype.every.call(Array.prototype.slice.call(args, 0, -1), Boolean);
   },
   or(...args: any[]) {
-    return Array.prototype.slice.call(args, 0, -1).some(Boolean);
+    for (const arg of Array.prototype.slice.call(args, 0, -1)) {
+      if (arg) {
+        return arg;
+      }
+    }
   },
   isDate(str: string, format: string) {
     if (!_.isString(str)) {
@@ -203,6 +207,14 @@ export default {
       return match[group];
     }
   },
+  match(str: string, options: any) {
+    for (const [value, regexp] of Object.entries(options.hash as Record<string, string>)) {
+      if (new RegExp(regexp).test(str)) {
+        return value;
+      }
+    }
+    return null;
+  },
   findAbove(column: string, options: any) {
     const regexp = new RegExp(options.hash.regexp || ".+");
     let i: number = options.data.root.ROW.index - 1;
@@ -220,6 +232,23 @@ export default {
     }
     return null;
   },
+  findBelow(column: string, options: any) {
+    const regexp = new RegExp(options.hash.regexp || ".+");
+    let i: number = options.data.root.ROW.index + 1;
+    while (i < options.data.root.SHEET.length) {
+      const row = options.data.root.SHEET[i];
+      const cell = row[column] || "";
+      const match = cell.match(regexp);
+      if (match) {
+        if (options.hash.group) {
+          return match[options.hash.group];
+        }
+        return cell;
+      }
+      i++;
+    }
+    return null;
+  },
   acronym(str: string) {
     return _.chain(str.replaceAll(/[^a-zA-Z ]/g, "").split(" "))
       .filter((s) => !_.includes(STOP_WORDS, s.toLowerCase()))
@@ -228,5 +257,11 @@ export default {
       })
       .value()
       .join("");
+  },
+  toLowerCase(str: string) {
+    return str.toLowerCase();
+  },
+  toUpperCase(str: string) {
+    return str.toUpperCase();
   }
 };

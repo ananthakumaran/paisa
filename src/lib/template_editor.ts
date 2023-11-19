@@ -32,7 +32,7 @@ function lint(editor: EditorView): Diagnostic[] {
   const doc = editor.state.doc;
   try {
     Handlebars.parse(doc.toString());
-    const compiled = Handlebars.compile(doc.toString());
+    const compiled = Handlebars.compile(doc.toString(), { noEscape: true });
     editorState.update((current) => _.assign({}, current, { template: compiled }));
   } catch (e) {
     const lines = e.message.split("\n");

@@ -1,0 +1,12 @@
+{{#if (isDate ROW.A "M/DD/YYYY")}}
+  {{date ROW.A "M/DD/YYYY"}} {{ROW.B}} | {{ROW.C}}
+  {{#if (eq ROW.E "debit")}}
+    Expenses:{{ROW.F}}                    {{amount ROW.D}} INR
+    {{or (match (toLowerCase ROW.G) Liabilities:CreditCard:Chase="chase" Assets:Checking:Citi="citi")
+    	 "Assets:Unknown"}}
+  {{else}}
+    Assets:Checking                       {{amount ROW.D}} INR
+    {{or (match ROW.F Income:Salary:Acme="Income|Paycheck")
+    	 "Income:Unknown"}}
+  {{/if}}
+{{/if}}

@@ -252,6 +252,15 @@ Finds the first cell above the current row in the given column. If
 {{findAbove B regexp="LIMITED"}}
 ```
 
+#### `#!typescript findBelow(column: string, {regexp?: string}): string`
+
+Finds the first cell below the current row in the given column. If
+`regexp` is provided, the search will continue till a match is found
+
+```handlebars
+{{findBelow B regexp="LIMITED"}}
+```
+
 #### `#!typescript acronym(str: string): string`
 
 Returns the acronym of the given string that is suitable to be used as
@@ -282,4 +291,33 @@ optional and defaults to `" "`.
 
 ```handlebars
 {{textRange A C separator=" "}}
+```
+
+#### `#!typescript toLowerCase(str: string): string`
+
+Converts the given string to lower case.
+
+#### `#!typescript toUpperCase(str: string): string`
+
+Converts the given string to upper case.
+
+#### `#!typescript match(str: string, {[string]: string}): string`
+
+Let's say you are trying to import your Credit Card bill and you want
+map the transaction to a specific expense account based on the
+description. You can use the `match` helper to do that. The helper
+takes a string and a map of key value pairs. The key is the account to
+be returned if the string matches the value. The value must be a valid
+regular expression.
+
+```handlebars
+{{match ROW.C Expenses:Shopping="Amazon|Flipkart" Expenses:Groceries="BigBasket"}}
+```
+
+In case of no match `null` will be returned. You can combine this
+with `or` helper to return a default account.
+
+```handlebars
+{{or (match ROW.C Expenses:Shopping="Amazon|Flipkart" Expenses:Groceries="BigBasket")
+     "Expenses:Unknown"}}
 ```

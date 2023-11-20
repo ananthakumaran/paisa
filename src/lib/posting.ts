@@ -34,18 +34,3 @@ export function change(p: Posting): Change {
     days
   };
 }
-
-export function filterPostings(rows: { date: string; posting: Posting }[], filter: string) {
-  let filterRegex = new RegExp(".*", "i");
-  if (filter) {
-    filterRegex = new RegExp(filter, "i");
-  }
-
-  return _.filter(
-    rows,
-    (r) =>
-      filterRegex.test(r.posting.account) ||
-      filterRegex.test(r.posting.payee) ||
-      filterRegex.test(r.date)
-  );
-}

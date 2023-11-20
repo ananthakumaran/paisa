@@ -1,32 +1,52 @@
 <script lang="ts">
   import { accountColorStyle } from "$lib/colors";
+  import SearchQuery from "$lib/components/SearchQuery.svelte";
   import { iconText } from "$lib/icon";
-  import { change, filterPostings } from "$lib/posting";
+  import { change } from "$lib/posting";
+  import { editorState } from "$lib/search_query_editor";
   import {
     ajax,
     postingUrl,
     type Posting,
     formatCurrency,
     formatFloat,
-    firstName
+    firstName,
+    type LedgerFile,
+    type Transaction
   } from "$lib/utils";
   import _ from "lodash";
-  import { onMount } from "svelte";
+  import { onDestroy, onMount } from "svelte";
   import VirtualList from "svelte-tiny-virtual-list";
 
-  let filteredPostings: Posting[] = [];
-  let rows: { date: string; posting: Posting }[];
+  let files: LedgerFile[] = [];
+  let accounts: string[] = [];
+  let commodities: string[] = [];
 
-  const handleInput = _.debounce((event) => {
-    const filter = event.srcElement.value;
-    const filtered = filterPostings(rows, filter);
-    filteredPostings = filtered.map((r) => r.posting);
-  }, 100);
+  let filteredPostings: Posting[] = [];
+  let rows: { posting: Posting; transaction: Transaction }[] = [];
+
+  function handleInputRaw(predicate: (t: Transaction) => boolean) {
+    filteredPostings = rows.filter((r) => predicate(r.transaction)).map((r) => r.posting);
+  }
+
+  const handleInput = _.debounce(handleInputRaw, 100);
+
+  const unsubscribe = editorState.subscribe((state) => {
+    handleInput(state.predicate);
+  });
+
+  onDestroy(async () => {
+    unsubscribe();
+  });
 
   onMount(async () => {
+    ({ files, accounts, commodities } = await ajax("/api/editor/files"));
     const { postings: postings } = await ajax("/api/ledger");
     filteredPostings = postings;
-    rows = _.map(postings, (p) => ({ date: p.date.format("YYYY-MM-DD"), posting: p }));
+    rows = _.map(postings, (p) => ({
+      posting: p,
+      transaction: asTransaction(p)
+    }));
   });
 
   function unlessDefault(p: Posting, text: string) {
@@ -42,6 +62,18 @@
     }
     return "";
   }
+
+  function asTransaction(p: Posting): Transaction {
+    return {
+      id: p.id,
+      date: p.date,
+      payee: p.payee,
+      beginLine: p.transaction_begin_line,
+      endLine: p.transaction_end_line,
+      fileName: p.file_name,
+      postings: [p]
+    };
+  }
 </script>
 
 <section class="section tab-journal">
@@ -52,14 +84,15 @@
           <div class="level-left">
             <div class="level-item">
               <div class="field">
-                <p class="control">
-                  <input
-                    class="d3-posting-filter input"
-                    type="text"
-                    placeholder="filter by account or description or date"
-                    on:input={handleInput}
+                <div class="control">
+                  <SearchQuery
+                    autocomplete={{
+                      account: accounts,
+                      commodity: commodities,
+                      filename: files.map((f) => f.name)
+                    }}
                   />
-                </p>
+                </div>
               </div>
             </div>
           </div>
@@ -141,15 +174,3 @@
     </div>
   </div>
 </section>
-
-<style lang="scss">
-  @import "bulma/sass/utilities/_all.sass";
-
-  input.d3-posting-filter {
-    width: calc(100vw - 35px);
-
-    @include desktop {
-      width: 440px;
-    }
-  }
-</style>

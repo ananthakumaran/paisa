@@ -28,6 +28,16 @@
       delay: 0,
       allowHTML: true,
       followCursor: true,
+      popperOptions: {
+        modifiers: [
+          {
+            name: "flip",
+            options: {
+              fallbackPlacements: ["auto"]
+            }
+          }
+        ]
+      },
       plugins: [followCursor]
     });
   }

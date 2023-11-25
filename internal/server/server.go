@@ -134,6 +134,9 @@ func Build(db *gorm.DB, enableCompression bool) *gin.Engine {
 	router.GET("/api/cash_flow", func(c *gin.Context) {
 		c.JSON(200, GetCashFlow(db))
 	})
+	router.GET("/api/income_statement", func(c *gin.Context) {
+		c.JSON(200, GetIncomeStatement(db))
+	})
 	router.GET("/api/recurring", func(c *gin.Context) {
 		c.JSON(200, GetRecurringTransactions(db))
 	})

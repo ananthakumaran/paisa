@@ -60,7 +60,7 @@
           {schedule.scheduled.format("DD MMM YYYY")}
         </div>
       </div>
-      <hr class="m-1" />
+      <hr class="my-1" />
       <div use:chart={{ ts: ts, next: schedule.scheduled }}>
         <svg height={HEIGHT} width="100%" />
       </div>

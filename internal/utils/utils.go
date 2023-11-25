@@ -62,6 +62,12 @@ func FYHuman(date time.Time) string {
 	}
 }
 
+func ParseFY(fy string) (time.Time, time.Time) {
+	start, _ := time.Parse("2006", strings.Split(fy, " ")[0])
+	start = start.AddDate(0, int(config.GetConfig().FinancialYearStartingMonth-time.January), 0)
+	return BeginningOfFinancialYear(start), EndOfFinancialYear(start)
+}
+
 func BeginningOfFinancialYear(date time.Time) time.Time {
 	beginningOfMonth := BeginningOfMonth(date)
 	if beginningOfMonth.Month() < config.GetConfig().FinancialYearStartingMonth {
@@ -133,6 +139,10 @@ func IsSameOrParent(account string, comparison string) bool {
 	return strings.HasPrefix(account, comparison+":")
 }
 
+func FirstName(account string) string {
+	return strings.Split(account, ":")[0]
+}
+
 func IsParent(account string, comparison string) bool {
 	return strings.HasPrefix(account, comparison+":")
 }
@@ -159,6 +169,21 @@ func MaxTime(a time.Time, b time.Time) time.Time {
 
 type GroupableByDate interface {
 	GroupDate() time.Time
+}
+
+func GroupByDate[G GroupableByDate](groupables []G) map[string][]G {
+	grouped := make(map[string][]G)
+	for _, g := range groupables {
+		key := g.GroupDate().Format("2006-01-02")
+		ps, ok := grouped[key]
+		if ok {
+			grouped[key] = append(ps, g)
+		} else {
+			grouped[key] = []G{g}
+		}
+
+	}
+	return grouped
 }
 
 func GroupByMonth[G GroupableByDate](groupables []G) map[string][]G {

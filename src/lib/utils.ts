@@ -43,6 +43,19 @@ export interface Posting {
   balance: number;
 }
 
+export interface IncomeStatement {
+  startingBalance: number;
+  endingBalance: number;
+  date: dayjs.Dayjs;
+  income: Record<string, number>;
+  interest: Record<string, number>;
+  equity: Record<string, number>;
+  pnl: Record<string, number>;
+  liabilities: Record<string, number>;
+  tax: Record<string, number>;
+  expenses: Record<string, number>;
+}
+
 export interface CashFlow {
   date: dayjs.Dayjs;
   income: number;
@@ -545,6 +558,9 @@ export function ajax(route: "/api/budget"): Promise<{
 }>;
 
 export function ajax(route: "/api/cash_flow"): Promise<{ cash_flows: CashFlow[] }>;
+export function ajax(
+  route: "/api/income_statement"
+): Promise<{ yearly: Record<string, IncomeStatement> }>;
 
 export function ajax(
   route: "/api/recurring"
@@ -800,12 +816,7 @@ export function forEachFinancialYear(
   end: dayjs.Dayjs,
   cb?: (current: dayjs.Dayjs) => any
 ) {
-  let current = start;
-  if (current.month() < 3) {
-    current = current.year(current.year() - 1);
-  }
-  current = current.month(3).date(1);
-
+  let current = begingingOfFinancialYear(start);
   const years: dayjs.Dayjs[] = [];
   while (current.isSameOrBefore(end, "month")) {
     if (cb) {
@@ -815,6 +826,17 @@ export function forEachFinancialYear(
     current = current.add(1, "year");
   }
   return years;
+}
+
+function begingingOfFinancialYear(date: dayjs.Dayjs) {
+  date = date.startOf("month");
+  if (date.month() + 1 < USER_CONFIG.financial_year_starting_month) {
+    return date
+      .add(-1, "year")
+      .add(USER_CONFIG.financial_year_starting_month - date.month() + 1, "month");
+  } else {
+    return date.add(-(date.month() + 1 - USER_CONFIG.financial_year_starting_month), "month");
+  }
 }
 
 export function firstName(account: string) {

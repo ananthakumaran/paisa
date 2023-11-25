@@ -52,7 +52,7 @@
     <div class="columns">
       <div class="column is-12">
         <div class="box overflow-x-auto">
-          <table class="table is-narrow is-fullwidth is-hoverable">
+          <table class="table is-narrow is-fullwidth is-hoverable is-light-border">
             <thead>
               <tr>
                 <th>Account</th>

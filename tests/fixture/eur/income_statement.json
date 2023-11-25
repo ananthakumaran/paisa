@@ -1,0 +1,20 @@
+{
+  "yearly": {
+    "2021 - 22": {
+      "startingBalance": 0,
+      "endingBalance": 11020,
+      "date": "2021-04-01T00:00:00Z",
+      "income": {
+        "Income:Salary:Acme": -11000
+      },
+      "interest": {},
+      "equity": {},
+      "pnl": {
+        "Assets:Equity:AAPL": 20
+      },
+      "liabilities": {},
+      "tax": {},
+      "expenses": {}
+    }
+  }
+}

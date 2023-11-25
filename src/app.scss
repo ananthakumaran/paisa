@@ -140,6 +140,13 @@ body {
   border: 1px solid rgba($grey-lightest, 0.5);
 }
 
+.table.is-light-border tbody {
+  td,
+  th {
+    border-bottom: 1px solid rgba($grey-lightest, 0.5);
+  }
+}
+
 code {
   color: $grey-darker;
 }
@@ -205,6 +212,10 @@ svg text {
   fill: $black-ter;
 }
 
+.svg-text-black-bis {
+  fill: $black-bis;
+}
+
 .svg-text-grey-darker {
   fill: $grey-darker;
 }
@@ -255,6 +266,10 @@ svg text {
   &.dark text {
     fill: $grey;
     font-size: 0.857rem;
+  }
+
+  &.is-large text {
+    font-size: 1.25rem;
   }
 
   &.link text {
@@ -308,6 +323,12 @@ svg text {
 
 .g-arrow path.arrow-head {
   fill: $black !important;
+}
+
+.g-arrow.is-light path {
+  opacity: 1;
+  stroke: $grey-light !important;
+  fill: $grey-light !important;
 }
 
 .legendOrdinal,

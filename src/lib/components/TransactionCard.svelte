@@ -31,7 +31,7 @@
       {posting.date.format("DD MMM YYYY")}
     </div>
   </div>
-  <hr class="m-1" />
+  <hr class="my-1" />
   {#each t.postings as posting}
     <div class="my-1 is-flex is-justify-content-space-between">
       <div class="has-text-grey truncate custom-icon" title={posting.account}>

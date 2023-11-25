@@ -56,6 +56,7 @@
       label: "Cash Flow",
       href: "/cash_flow",
       children: [
+        { label: "Income Statement", href: "/income_statement", financialYearPicker: true },
         { label: "Monthly", href: "/monthly", dateRangeSelector: true },
         {
           label: "Yearly",

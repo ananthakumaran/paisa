@@ -1,5 +1,11 @@
 # CHANGELOG
 
+### 0.5.9 (2023-11-26)
+
+* Improve postings page
+* Add income statement page (Cash Flow > Income Statement)
+* Bug fixes
+
 ### 0.5.8 (2023-11-18)
 
 * Add ability to specify rate, target date or monthly contribution to

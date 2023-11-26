@@ -36,9 +36,30 @@
   color: rgb(161, 161, 161);
 }
 
+.hero {
+  margin-top: 0px;
+  margin-bottom: 30px;
+}
+
+.hero h1 {
+  margin-bottom: 30px;
+  text-align: center;
+  color: inherit;
+  font-weight: 700;
+}
+
+.hero p {
+  text-align: justify;
+  max-width: 640px;
+  margin: auto;
+  line-height: 1.28;
+  color: var(--md-default-fg-color--light);
+  font-size: 0.72rem;
+}
+
 .home .tabbed-set {
   max-width: 510px;
-  margin: -70px auto 30px auto !important;
+  margin: 0px auto 50px auto !important;
 }
 
 .home ul li {

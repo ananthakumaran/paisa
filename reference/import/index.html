@@ -851,6 +851,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#findbelowcolumn-string-regexp-string-string" class="md-nav__link">
+    findBelow(column: string, {regexp?: string}): string
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#acronymstr-string-string" class="md-nav__link">
     acronym(str: string): string
   </a>
@@ -881,6 +888,27 @@
         <li class="md-nav__item">
   <a href="#textrangefromcolumn-string-tocolumn-string-separator-number-string" class="md-nav__link">
     textRange(fromColumn: string, toColumn: string, {separator?: number}): string
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tolowercasestr-string-string" class="md-nav__link">
+    toLowerCase(str: string): string
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#touppercasestr-string-string" class="md-nav__link">
+    toUpperCase(str: string): string
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#matchstr-string-string-string-string" class="md-nav__link">
+    match(str: string, {[string]: string}): string
   </a>
   
 </li>
@@ -1429,6 +1457,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#findbelowcolumn-string-regexp-string-string" class="md-nav__link">
+    findBelow(column: string, {regexp?: string}): string
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#acronymstr-string-string" class="md-nav__link">
     acronym(str: string): string
   </a>
@@ -1459,6 +1494,27 @@
         <li class="md-nav__item">
   <a href="#textrangefromcolumn-string-tocolumn-string-separator-number-string" class="md-nav__link">
     textRange(fromColumn: string, toColumn: string, {separator?: number}): string
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tolowercasestr-string-string" class="md-nav__link">
+    toLowerCase(str: string): string
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#touppercasestr-string-string" class="md-nav__link">
+    toUpperCase(str: string): string
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#matchstr-string-string-string-string" class="md-nav__link">
+    match(str: string, {[string]: string}): string
   </a>
   
 </li>
@@ -1677,6 +1733,11 @@ of supported formats.</p>
 <code>regexp</code> is provided, the search will continue till a match is found</p>
 <div class="language-handlebars highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="cp">{{</span><span class="nv">findAbove</span> <span class="nv">B</span> <span class="na">regexp</span><span class="o">=</span><span class="s2">&quot;LIMITED&quot;</span><span class="cp">}}</span>
 </span></code></pre></div>
+<h4 id="findbelowcolumn-string-regexp-string-string"><code class="language-typescript highlight"><span class="nx">findBelow</span><span class="p">(</span><span class="nx">column</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="nx">regexp?</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">})</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span></code></h4>
+<p>Finds the first cell below the current row in the given column. If
+<code>regexp</code> is provided, the search will continue till a match is found</p>
+<div class="language-handlebars highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="cp">{{</span><span class="nv">findBelow</span> <span class="nv">B</span> <span class="na">regexp</span><span class="o">=</span><span class="s2">&quot;LIMITED&quot;</span><span class="cp">}}</span>
+</span></code></pre></div>
 <h4 id="acronymstr-string-string"><code class="language-typescript highlight"><span class="nx">acronym</span><span class="p">(</span><span class="nx">str</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span></code></h4>
 <p>Returns the acronym of the given string that is suitable to be used as
 a commodity symbol. For example, <code>UTI Nifty Next 50 Index Growth
@@ -1693,7 +1754,25 @@ Direct Plan</code> will be converted to <code>UNNI</code></p>
 <h4 id="textrangefromcolumn-string-tocolumn-string-separator-number-string"><code class="language-typescript highlight"><span class="nx">textRange</span><span class="p">(</span><span class="nx">fromColumn</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="nx">toColumn</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="nx">separator?</span><span class="o">:</span><span class="w"> </span><span class="kt">number</span><span class="p">})</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span></code></h4>
 <p>Extracts text from the given range of columns. The <code>separator</code> is
 optional and defaults to <code>" "</code>.</p>
-<div class="language-handlebars highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="cp">{{</span><span class="nv">textRange</span> <span class="nv">A</span> <span class="nv">C</span> <span class="na">separator</span><span class="o">=</span><span class="s2">&quot; &quot;</span><span class="cp">}}</span>
+<div class="language-handlebars highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="cp">{{</span><span class="nv">textRange</span> <span class="nv">A</span> <span class="nv">C</span> <span class="na">separator</span><span class="o">=</span><span class="s2">&quot; &quot;</span><span class="cp">}}</span>
+</span></code></pre></div>
+<h4 id="tolowercasestr-string-string"><code class="language-typescript highlight"><span class="nx">toLowerCase</span><span class="p">(</span><span class="nx">str</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span></code></h4>
+<p>Converts the given string to lower case.</p>
+<h4 id="touppercasestr-string-string"><code class="language-typescript highlight"><span class="nx">toUpperCase</span><span class="p">(</span><span class="nx">str</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span></code></h4>
+<p>Converts the given string to upper case.</p>
+<h4 id="matchstr-string-string-string-string"><code class="language-typescript highlight"><span class="nx">match</span><span class="p">(</span><span class="nx">str</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="p">{[</span><span class="kt">string</span><span class="p">]</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">})</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span></code></h4>
+<p>Let's say you are trying to import your Credit Card bill and you want
+map the transaction to a specific expense account based on the
+description. You can use the <code>match</code> helper to do that. The helper
+takes a string and a map of key value pairs. The key is the account to
+be returned if the string matches the value. The value must be a valid
+regular expression.</p>
+<div class="language-handlebars highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="cp">{{</span><span class="nv">match</span> <span class="nv">ROW.C</span> <span class="na">Expenses:Shopping</span><span class="o">=</span><span class="s2">&quot;Amazon|Flipkart&quot;</span> <span class="na">Expenses:Groceries</span><span class="o">=</span><span class="s2">&quot;BigBasket&quot;</span><span class="cp">}}</span>
+</span></code></pre></div>
+<p>In case of no match <code>null</code> will be returned. You can combine this
+with <code>or</code> helper to return a default account.</p>
+<div class="language-handlebars highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="cp">{{</span><span class="nv">or</span> <span class="nv">(match</span> <span class="nv">ROW.C</span> <span class="na">Expenses:Shopping</span><span class="o">=</span><span class="s2">&quot;Amazon|Flipkart&quot;</span> <span class="na">Expenses:Groceries</span><span class="o">=</span><span class="s2">&quot;BigBasket&quot;</span><span class="nv">)</span>
+</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>     <span class="s2">&quot;Expenses:Unknown&quot;</span><span class="cp">}}</span>
 </span></code></pre></div>
 
 

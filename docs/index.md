@@ -5,7 +5,9 @@ hide:
   - feedback
 ---
 
-#
+<div class="hero" markdown>
+# Personal Finance Manager
+</div>
 
 <div class="home" markdown>
 === ":material-currency-inr: INR"
@@ -63,8 +65,8 @@ hide:
     ```
 
 
-<p style="text-align: center; margin-bottom: 40px">
-  <a class="md-button md-button--primary" style="margin-right: 20px;" href="/getting-started/installation/">Install</a>
+<p style="text-align: center; margin-bottom: 50px">
+  <a class="md-button md-button--primary" style="margin-right: 50px;" href="/getting-started/installation/">Install</a>
   <a class="md-button md-button--primary" href="https://demo.paisa.fyi">Demo</a>
 </p>
 

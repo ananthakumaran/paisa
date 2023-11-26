@@ -109,6 +109,10 @@ extra:
       link: https://github.com/ananthakumaran/paisa
     - icon: simple/matrix
       link: https://matrix.to/#/#paisa:matrix.org
+    - icon: fontawesome/brands/x-twitter
+      link: https://twitter.com/PaisaFinanceApp
+    - icon: fontawesome/brands/docker
+      link: https://hub.docker.com/r/ananthakumaran/paisa
   consent:
     actions:
       - accept

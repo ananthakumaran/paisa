@@ -10,7 +10,7 @@ export function renderIncomeStatement(element: Element) {
   const BAR_HEIGHT = 100;
 
   const svg = d3.select(element),
-    margin = { top: rem(20), right: rem(20), bottom: rem(10), left: rem(100) },
+    margin = { top: rem(20), right: rem(20), bottom: rem(10), left: rem(110) },
     width = Math.max(element.parentElement.clientWidth, 600) - margin.left - margin.right,
     g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
@@ -169,7 +169,7 @@ export function renderIncomeStatement(element: Element) {
         label: "Expenses",
         value: expensesEnd,
         down: true,
-        anchor: "start",
+        anchor: "end",
         icon: "fa6-solid:caret-up"
       }
     ];
@@ -189,7 +189,7 @@ export function renderIncomeStatement(element: Element) {
     );
 
     xAxis.transition(t).call(d3.axisTop(x).tickSize(height).tickFormat(formatCurrencyCrude));
-    yAxis.transition(t).call(d3.axisLeft(y).tickSize(-width));
+    yAxis.transition(t).call(d3.axisLeft(y).tickSize(-width).tickPadding(10));
 
     garrows.selectAll("g").remove();
     t.on("end", () => {

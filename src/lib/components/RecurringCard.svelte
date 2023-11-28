@@ -83,7 +83,7 @@
         <i class="fa-solid has-text-grey-light fa-angle-left" />
       </div>
       {#each _.reverse(_.take(ts.transactions, 20)) as t}
-        <div class="box px-5 py-3 my-0 has-text-grey">
+        <div class="box px-5 py-3 my-0 has-text-grey" style="box-shadow: none;">
           <Transaction {t} compact={true} />
         </div>
       {/each}

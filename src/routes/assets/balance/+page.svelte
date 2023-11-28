@@ -30,22 +30,22 @@
   });
 </script>
 
-<section class="section tab-holding">
+<section class="section pb-0">
   <div class="container is-fluid">
     <div class="columns">
-      <div class="column is-12">
-        <div class="box overflow-x-auto">
-          <table class="table is-narrow is-fullwidth is-hoverable is-light-border">
+      <div class="column is-12 pb-0">
+        <div class="box overflow-x-auto max-h-screen max-w-fit pt-0">
+          <table class="table is-narrow is-hoverable is-light-border has-sticky-header">
             <thead>
               <tr>
-                <th>Account</th>
-                <th class="has-text-right">Investment Amount</th>
-                <th class="has-text-right">Withdrawal Amount</th>
-                <th class="has-text-right">Balance Units</th>
-                <th class="has-text-right">Market Value</th>
-                <th class="has-text-right">Change</th>
-                <th class="has-text-right">XIRR</th>
-                <th class="has-text-right">Absolute Return</th>
+                <th class="py-2">Account</th>
+                <th class="py-2 has-text-right">Investment Amount</th>
+                <th class="py-2 has-text-right">Withdrawal Amount</th>
+                <th class="py-2 has-text-right">Balance Units</th>
+                <th class="py-2 has-text-right">Market Value</th>
+                <th class="py-2 has-text-right">Change</th>
+                <th class="py-2 has-text-right">XIRR</th>
+                <th class="py-2 has-text-right">Absolute Return</th>
               </tr>
             </thead>
             <tbody class="has-text-grey-dark">

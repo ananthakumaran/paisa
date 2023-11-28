@@ -378,13 +378,13 @@ export function renderYearlyCards(yearlyCards: InvestmentYearlyCard[]) {
     .append("div")
     .attr("class", "column is-4")
     .append("div")
-    .attr("class", "card");
+    .attr("class", "card box py-0");
 
   card
     .append("header")
     .attr("class", "card-header")
     .append("p")
-    .attr("class", "card-header-title")
+    .attr("class", "card-header-title has-text-grey-dark")
     .text((c) => financialYear(c));
 
   card
@@ -394,7 +394,7 @@ export function renderYearlyCards(yearlyCards: InvestmentYearlyCard[]) {
     .attr("class", "content")
     .html((card) => {
       return `
-<table class="table is-narrow is-fullwidth is-size-7 is-hoverable">
+<table class="table is-narrow is-fullwidth is-size-7 is-hoverable has-text-grey">
   <tbody>
     <tr>
       <td>Gross Salary Income</td>

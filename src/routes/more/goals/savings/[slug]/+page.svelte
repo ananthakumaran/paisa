@@ -73,7 +73,9 @@
       .take(100)
       .value();
 
-    progressPercent = (savingsTotal / targetSavings) * 100;
+    if (targetSavings != 0) {
+      progressPercent = (savingsTotal / targetSavings) * 100;
+    }
 
     ({ pmt, targetDate } = solvePMTOrNper(
       targetSavings,

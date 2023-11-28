@@ -12,7 +12,6 @@ $box-shadow: none;
 $box-padding: 1.25rem 0;
 
 $card-shadow: none;
-$card-header-shadow: 0 0.05em 0.1em rgba(10, 10, 10, 0.1);
 $danger-light: hsl(347, 90%, 96%);
 
 $switch-focus: none;
@@ -145,6 +144,14 @@ body {
   th {
     border-bottom: 1px solid rgba($grey-lightest, 0.5);
   }
+}
+
+.table tr.is-sub-header {
+  background-color: $white-ter;
+}
+
+.table.has-sticky-column tbody tr.is-sub-header th:first-child {
+  background-color: $white-ter;
 }
 
 code {
@@ -366,6 +373,10 @@ svg text {
 
 .box.is-selected {
   box-shadow: $shadow;
+}
+
+.box {
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
 }
 
 .node {
@@ -983,9 +994,19 @@ textarea:invalid {
     margin-left: calc(100% - 10px);
 
     .dropdown-content {
-      box-shadow:
-        0 8px 8px rgba(10, 10, 10, 0.1),
-        0 0 0 1px rgba(10, 10, 10, 0.1);
+      box-shadow: $shadow;
+    }
+  }
+
+  @include mobile {
+    .dropdown-menu {
+      position: static;
+      margin-left: 0;
+
+      .dropdown-content {
+        box-shadow: none !important;
+        background-color: transparent;
+      }
     }
   }
 }

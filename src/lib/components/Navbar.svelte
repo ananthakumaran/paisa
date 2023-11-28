@@ -11,7 +11,7 @@
     obscure
   } from "../../persisted_store";
   import _ from "lodash";
-  import { financialYear, forEachFinancialYear, helpUrl, now } from "$lib/utils";
+  import { financialYear, forEachFinancialYear, helpUrl, isMobile, now } from "$lib/utils";
   import { onMount } from "svelte";
   import { get } from "svelte/store";
   import DateRange from "./DateRange.svelte";
@@ -229,10 +229,14 @@
           {/if}
         {:else}
           <div class="navbar-item has-dropdown is-hoverable">
-            <a class="navbar-link" class:is-active={$page.url.pathname.startsWith(link.href)}
+            <a
+              class="navbar-link"
+              class:is-active={$page.url.pathname.startsWith(link.href)}
+              on:click|preventDefault={(e) =>
+                isMobile() && e.currentTarget.parentElement.classList.toggle("is-active")}
               >{link.label}</a
             >
-            <div class="navbar-dropdown is-boxed">
+            <div class="navbar-dropdown {!isMobile() && 'is-boxed'}">
               {#each link.children as sublink}
                 {@const href = link.href + sublink.href}
                 {#if _.isEmpty(sublink.children)}
@@ -249,7 +253,10 @@
                     >
                       <span>{sublink.label}</span>
                       <span class="icon is-small">
-                        <i class="fas fa-angle-right" aria-hidden="true"></i>
+                        <i
+                          class="fas {isMobile() ? 'fa-angle-down' : 'fa-angle-right'}"
+                          aria-hidden="true"
+                        ></i>
                       </span>
                     </a>
 

@@ -28,6 +28,10 @@
   }
 
   function percentComplete(goal: GoalSummary) {
+    if (goal.target === 0) {
+      return 0;
+    }
+
     return (goal.current / goal.target) * 100;
   }
 </script>

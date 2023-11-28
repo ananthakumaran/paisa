@@ -23,8 +23,10 @@ html[data-theme="dark"] {
   $diff-del-bg-dark: rgba(229, 83, 75, 0.4);
 
   $shadow:
-    0 0.5em 1em -0.125em rgba(0, 0, 0, 0.5),
-    0 0px 0 1px rgba(0, 0, 0, 0.5);
+    0 0.5em 1em -0.125em rgba(0, 0, 0, 0.7),
+    0 1px 2px 0 rgba(0, 0, 0, 0.7);
+
+  $card-header-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.7);
 
   &:root {
     color-scheme: dark;
@@ -35,7 +37,17 @@ html[data-theme="dark"] {
 
   background: $white-bis;
 
+  @include mobile {
+    .navbar-menu {
+      box-shadow: $shadow !important;
+    }
+  }
+
   &.paisa {
+    .box {
+      box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.7);
+    }
+
     navbar.is-spaced .navbar-dropdown,
     .navbar-dropdown.is-boxed {
       box-shadow: $shadow;

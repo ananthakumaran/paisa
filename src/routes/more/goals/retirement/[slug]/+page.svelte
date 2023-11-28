@@ -131,14 +131,18 @@
             </div>
           </div>
         </div>
-        <div class="column is-12">
-          <div class="box overflow-x-auto">
-            <svg height="300" width="100%" bind:this={investmentTimelineSvg} />
+        <div class="columns">
+          <div class="column is-12">
+            <div class="box overflow-x-auto">
+              <svg height="300" width="100%" bind:this={investmentTimelineSvg} />
+            </div>
           </div>
         </div>
-        <div class="column is-12 has-text-centered has-text-grey">
-          <div>
-            <p class="custom-icon">Monthly Investment</p>
+        <div class="columns">
+          <div class="column is-12 has-text-centered has-text-grey">
+            <div>
+              <p class="custom-icon">Monthly Investment</p>
+            </div>
           </div>
         </div>
       </div>

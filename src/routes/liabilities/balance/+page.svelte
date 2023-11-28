@@ -47,20 +47,20 @@
   </div>
 </section>
 
-<section class="section" class:is-hidden={isEmpty}>
+<section class="section pb-0" class:is-hidden={isEmpty}>
   <div class="container is-fluid">
     <div class="columns">
-      <div class="column is-12">
-        <div class="box overflow-x-auto">
-          <table class="table is-narrow is-fullwidth is-hoverable is-light-border">
+      <div class="column is-12 pb-0">
+        <div class="box overflow-x-auto max-h-screen max-w-fit pt-0">
+          <table class="table is-narrow is-hoverable has-sticky-header is-light-border">
             <thead>
               <tr>
-                <th>Account</th>
-                <th class="has-text-right">Drawn Amount</th>
-                <th class="has-text-right">Repaid Amount</th>
-                <th class="has-text-right">Balance Amount</th>
-                <th class="has-text-right">Interest</th>
-                <th class="has-text-right">APR</th>
+                <th class="py-2">Account</th>
+                <th class="py-2 has-text-right">Drawn Amount</th>
+                <th class="py-2 has-text-right">Repaid Amount</th>
+                <th class="py-2 has-text-right">Balance Amount</th>
+                <th class="py-2 has-text-right">Interest</th>
+                <th class="py-2 has-text-right">APR</th>
               </tr>
             </thead>
             <tbody class="has-text-grey-dark">

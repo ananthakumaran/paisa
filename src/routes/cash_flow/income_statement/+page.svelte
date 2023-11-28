@@ -191,7 +191,7 @@
   </div>
 </section>
 
-<section class="section pb-0">
+<section class="section py-0">
   <div class="container is-fluid">
     <div class="columns">
       <div class="column is-12 pb-0">
@@ -201,15 +201,15 @@
           >
             <thead>
               <tr>
-                <th class="pt-2">Account</th>
+                <th class="py-2">Account</th>
                 {#each years as y}
-                  <th class="pt-2 has-text-right">{y}</th>
+                  <th class="py-2 has-text-right">{y}</th>
                 {/each}
               </tr>
             </thead>
             <tbody class="has-text-grey-dark">
               {#each accountGroups as group}
-                <tr class="has-text-weight-bold">
+                <tr class="has-text-weight-bold is-sub-header">
                   <th>{group.label}</th>
                   {#each years as y}
                     <td class="has-text-right">

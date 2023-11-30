@@ -2,6 +2,7 @@ import _ from "lodash";
 import {
   now,
   prefixMinutesSeconds,
+  transactionTotal,
   type Transaction,
   type TransactionSchedule,
   type TransactionSequence
@@ -50,7 +51,7 @@ function zip(schedules: dayjs.Dayjs[], transactions: Transaction[], key: string,
     if (t1s1diff > t2s1diff) {
       transactionSchedules.push({
         key,
-        amount,
+        amount: transactionTotal(t1),
         scheduled: t1.date,
         actual: t1.date,
         transaction: t1
@@ -68,7 +69,7 @@ function zip(schedules: dayjs.Dayjs[], transactions: Transaction[], key: string,
     } else {
       transactionSchedules.push({
         key,
-        amount,
+        amount: transactionTotal(t1),
         scheduled: s1,
         actual: t1.date,
         transaction: t1
@@ -217,7 +218,7 @@ function nextDate(ts: TransactionSequence, date: dayjs.Dayjs) {
 
 export function totalRecurring(ts: TransactionSequence) {
   const lastTransaction = ts.transactions[0];
-  return _.sumBy(lastTransaction.postings, (t) => _.max([0, t.amount]));
+  return transactionTotal(lastTransaction);
 }
 
 export function enrichTrantionSequence(transactionSequences: TransactionSequence[]) {

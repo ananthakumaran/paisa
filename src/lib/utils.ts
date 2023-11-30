@@ -1048,3 +1048,7 @@ export function sumPostings(postings: Posting[]) {
     0
   );
 }
+
+export function transactionTotal(transaction: Transaction) {
+  return _.sumBy(transaction.postings, (t) => _.max([0, t.amount]));
+}

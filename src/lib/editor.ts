@@ -1,11 +1,11 @@
 import { ajax } from "$lib/utils";
 import { ledger } from "$lib/parser";
 import { StreamLanguage } from "@codemirror/language";
-import { keymap } from "@codemirror/view";
+import { keymap, type KeyBinding } from "@codemirror/view";
 import { EditorState as State } from "@codemirror/state";
 import { EditorView } from "codemirror";
 import { basicSetup } from "./editor/base";
-import { insertTab, history, undoDepth, redoDepth } from "@codemirror/commands";
+import { history, undoDepth, redoDepth } from "@codemirror/commands";
 import { linter, lintGutter, type Diagnostic } from "@codemirror/lint";
 import _ from "lodash";
 import { editorState, initialEditorState } from "../store";
@@ -61,13 +61,14 @@ export function createEditor(
   opts: {
     autocompletions?: Record<string, string[]>;
     readonly?: boolean;
+    keybindings?: readonly KeyBinding[];
   }
 ) {
   editorState.set(initialEditorState);
 
   return new EditorView({
     extensions: [
-      keymap.of([{ key: "Tab", run: insertTab }]),
+      keymap.of(opts.keybindings || []),
       basicSetup,
       State.readOnly.of(!!opts.readonly),
       EditorView.contentAttributes.of({ "data-enable-grammarly": "false" }),
@@ -122,7 +123,15 @@ export function moveToLine(editor: EditorView, lineNumber: number, cursor = fals
 }
 
 export function updateContent(editor: EditorView, content: string) {
+  const head = editor.state.selection.main.head;
+  const line = editor.state.doc.lineAt(head);
+  const lineNumber = line.number;
+  const column = head - line.from;
   editor.dispatch(
     editor.state.update({ changes: { from: 0, to: editor.state.doc.length, insert: content } })
   );
+
+  const newLine = editor.state.doc.line(lineNumber);
+  const newColumn = Math.min(newLine.from + column, newLine.to);
+  editor.dispatch({ selection: { anchor: newColumn, head: newColumn } });
 }

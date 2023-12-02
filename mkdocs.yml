@@ -24,6 +24,7 @@ nav:
         - reference/goals/retirement.md
         - reference/goals/savings.md
     - reference/ledger-cli.md
+    - reference/editor.md
     - reference/analysis.md
     - 'Tax':
       - reference/tax/index.md
@@ -66,6 +67,7 @@ theme:
     - search.highlight
 
 markdown_extensions:
+  - pymdownx.keys
   - footnotes
   - pymdownx.tabbed:
       alternate_style: true

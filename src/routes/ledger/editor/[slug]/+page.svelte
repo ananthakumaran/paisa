@@ -1,7 +1,9 @@
 <script lang="ts">
   import { createEditor, editorState, moveToEnd, moveToLine, updateContent } from "$lib/editor";
+  import { insertTab } from "@codemirror/commands";
   import { ajax, buildLedgerTree, type LedgerFile } from "$lib/utils";
   import { redo, undo } from "@codemirror/commands";
+  import type { KeyBinding } from "@codemirror/view";
   import * as toast from "bulma-toast";
   import type { EditorView } from "codemirror";
   import { format } from "$lib/journal";
@@ -23,6 +25,27 @@
   let payees: string[] = [];
   let selectedVersion: string = null;
   let lineNumber = 0;
+
+  function command(fn: Function) {
+    return () => {
+      fn();
+      return true;
+    };
+  }
+
+  const keybindings: readonly KeyBinding[] = [
+    { key: "Tab", run: insertTab },
+    {
+      key: "Ctrl-s",
+      run: command(save),
+      preventDefault: true
+    },
+    {
+      key: "Ctrl-I",
+      run: command(pretty),
+      preventDefault: true
+    }
+  ];
 
   let cancelled = false;
   beforeNavigate(async ({ cancel }) => {
@@ -130,6 +153,7 @@
       }
 
       editor = createEditor(selectedFile.content, editorDom, {
+        keybindings,
         autocompletions: {
           string: accounts,
           strong: payees,

@@ -7,6 +7,7 @@
   import { dateRange, setAllowedDateRange } from "../../../store";
   import LevelItem from "$lib/components/LevelItem.svelte";
   import ZeroState from "$lib/components/ZeroState.svelte";
+  import BoxLabel from "$lib/components/BoxLabel.svelte";
 
   let networth = 0;
   let investment = 0;
@@ -80,12 +81,6 @@
         </div>
       </div>
     </div>
-    <div class="columns">
-      <div class="column is-12 has-text-centered">
-        <div>
-          <p class="heading">Networth Timeline</p>
-        </div>
-      </div>
-    </div>
+    <BoxLabel text="Networth Timeline" />
   </div>
 </section>

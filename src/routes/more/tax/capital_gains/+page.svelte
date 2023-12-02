@@ -25,13 +25,6 @@
 
 <section class="section tab-capital-gains">
   <div class="container is-fluid">
-    <div class="columns">
-      <div class="column is-12 has-text-centered">
-        <div>
-          <p class="heading">Capital Gains</p>
-        </div>
-      </div>
-    </div>
     <div class="columns is-flex-wrap-wrap">
       {#each years as year}
         <CapitalGainCard financialYear={year} {capitalGains} />

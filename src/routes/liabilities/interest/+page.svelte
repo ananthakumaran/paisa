@@ -1,4 +1,5 @@
 <script lang="ts">
+  import BoxLabel from "$lib/components/BoxLabel.svelte";
   import {
     renderLegend,
     renderOverview,
@@ -53,13 +54,7 @@
         </div>
       </div>
     </div>
-    <div class="columns">
-      <div class="column is-12 has-text-centered">
-        <div>
-          <p class="heading">Interest Overview</p>
-        </div>
-      </div>
-    </div>
+    <BoxLabel text="Interest Overview" />
   </div>
 </section>
 <section class="section tab-interest">

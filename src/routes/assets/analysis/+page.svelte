@@ -1,5 +1,6 @@
 <script lang="ts">
   import { generateColorScheme, genericBarColor } from "$lib/colors";
+  import BoxLabel from "$lib/components/BoxLabel.svelte";
   import { filterCommodityBreakdowns, renderPortfolioBreakdown } from "$lib/portfolio";
   import { ajax, type PortfolioAggregate } from "$lib/utils";
   import _ from "lodash";
@@ -90,51 +91,46 @@
     </div>
     <div class="columns">
       <div class="column is-12 has-text-centered">
-        <div class="box mb-2 overflow-x-auto">
+        <div class="box overflow-x-auto">
           <div id="d3-portfolio-security-type-treemap" style="width: 100%; position: relative" />
           <svg id="d3-portfolio-security-type" />
         </div>
-        <div class="has-text-centered">
-          <p class="heading">Security Type</p>
-        </div>
       </div>
     </div>
+    <BoxLabel text="Security Type" />
+
     <div class="columns">
       <div class="column is-12 has-text-centered">
-        <div class="box mb-2 overflow-x-auto">
+        <div class="box overflow-x-auto">
           <div id="d3-portfolio-security-rating-treemap" style="width: 100%; position: relative" />
           <svg id="d3-portfolio-security-rating" />
         </div>
-        <div class="has-text-centered">
-          <p class="heading">Security Rating</p>
-        </div>
       </div>
     </div>
+    <BoxLabel text="Security Rating" />
+
     <div class="columns">
       <div class="column is-12 has-text-centered">
-        <div class="box mb-2 overflow-x-auto">
+        <div class="box overflow-x-auto">
           <div
             id="d3-portfolio-security-industry-treemap"
             style="width: 100%; position: relative"
           />
           <svg id="d3-portfolio-security-industry" />
         </div>
-        <div class="has-text-centered">
-          <p class="heading">Industry</p>
-        </div>
       </div>
     </div>
+    <BoxLabel text="Industry" />
+
     <div class="columns">
       <div class="column is-12 has-text-centered">
-        <div class="box mb-2 overflow-x-auto">
+        <div class="box overflow-x-auto">
           <div id="d3-portfolio-treemap" style="width: 100%; position: relative" />
           <svg id="d3-portfolio" />
         </div>
-        <div class="has-text-centered">
-          <p class="heading">Security</p>
-        </div>
       </div>
     </div>
+    <BoxLabel text="Security" />
   </div>
 </section>
 

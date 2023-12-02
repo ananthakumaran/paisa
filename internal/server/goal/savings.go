@@ -4,6 +4,7 @@ import (
 	"github.com/ananthakumaran/paisa/internal/accounting"
 	"github.com/ananthakumaran/paisa/internal/config"
 	"github.com/ananthakumaran/paisa/internal/query"
+	"github.com/ananthakumaran/paisa/internal/server/assets"
 	"github.com/ananthakumaran/paisa/internal/service"
 	"github.com/gin-gonic/gin"
 	"github.com/shopspring/decimal"
@@ -33,6 +34,8 @@ func getSavingsDetail(db *gorm.DB, conf config.SavingsGoal) gin.H {
 	savingsWithCapitalGains := accounting.FilterByGlob(query.Init(db).Like("Assets:%", "Income:CapitalGains:%").All(), conf.Accounts)
 	savingsWithCapitalGains = service.PopulateMarketPrice(db, savingsWithCapitalGains)
 
+	balances := assets.ComputeBreakdowns(db, savingsWithCapitalGains, false)
+
 	return gin.H{
 		"type":             "savings",
 		"name":             conf.Name,
@@ -45,5 +48,6 @@ func getSavingsDetail(db *gorm.DB, conf config.SavingsGoal) gin.H {
 		"paymentPerPeriod": conf.PaymentPerPeriod,
 		"xirr":             service.XIRR(db, savingsWithCapitalGains),
 		"postings":         savingsWithCapitalGains,
+		"balances":         balances,
 	}
 }

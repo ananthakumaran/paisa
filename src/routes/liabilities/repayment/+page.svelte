@@ -1,4 +1,5 @@
 <script lang="ts">
+  import BoxLabel from "$lib/components/BoxLabel.svelte";
   import { renderMonthlyRepaymentTimeline } from "$lib/repayment";
   import { ajax } from "$lib/utils";
   import _ from "lodash";
@@ -37,12 +38,6 @@
         </div>
       </div>
     </div>
-    <div class="columns">
-      <div class="column is-12 has-text-centered">
-        <div>
-          <p class="heading">Monthly Repayment Timeline</p>
-        </div>
-      </div>
-    </div>
+    <BoxLabel text="Monthly Repayment Timeline" />
   </div>
 </section>

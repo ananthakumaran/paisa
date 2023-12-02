@@ -13,6 +13,7 @@
   import LevelItem from "$lib/components/LevelItem.svelte";
   import COLORS from "$lib/colors";
   import ZeroState from "$lib/components/ZeroState.svelte";
+  import BoxLabel from "$lib/components/BoxLabel.svelte";
 
   let groups = writable([]);
   let z: d3.ScaleOrdinal<string, string, never>,
@@ -191,12 +192,8 @@
               <svg id="d3-monthly-expense-timeline" width="100%" height="400" />
             </div>
           </div>
-          <div class="column is-full has-text-centered">
-            <div>
-              <p class="heading">Monthly Expenses</p>
-            </div>
-          </div>
         </div>
+        <BoxLabel text="Monthly Expenses" />
       </div>
     </div>
   </div>

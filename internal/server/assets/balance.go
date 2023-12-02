@@ -30,21 +30,23 @@ type AssetBreakdown struct {
 func GetBalance(db *gorm.DB) gin.H {
 	postings := query.Init(db).Like("Assets:%", "Income:CapitalGains:%").All()
 	postings = service.PopulateMarketPrice(db, postings)
-	breakdowns := computeBreakdowns(db, postings)
+	breakdowns := ComputeBreakdowns(db, postings, true)
 	return gin.H{"asset_breakdowns": breakdowns}
 }
 
-func computeBreakdowns(db *gorm.DB, postings []posting.Posting) map[string]AssetBreakdown {
+func ComputeBreakdowns(db *gorm.DB, postings []posting.Posting, rollup bool) map[string]AssetBreakdown {
 	accounts := make(map[string]bool)
 	for _, p := range postings {
 		if service.IsCapitalGains(p) {
 			continue
 		}
 
-		var parts []string
-		for _, part := range strings.Split(p.Account, ":") {
-			parts = append(parts, part)
-			accounts[strings.Join(parts, ":")] = false
+		if rollup {
+			var parts []string
+			for _, part := range strings.Split(p.Account, ":") {
+				parts = append(parts, part)
+				accounts[strings.Join(parts, ":")] = false
+			}
 		}
 		accounts[p.Account] = true
 

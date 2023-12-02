@@ -7,7 +7,8 @@
     isMobile,
     type Forecast,
     type Point,
-    type Posting
+    type Posting,
+    type AssetBreakdown
   } from "$lib/utils";
   import { onMount, tick, onDestroy } from "svelte";
   import ARIMAPromise from "arima/async";
@@ -27,6 +28,8 @@
   import { iconGlyph } from "$lib/icon";
   import dayjs from "dayjs";
   import ProgressWithBreakpoints from "$lib/components/ProgressWithBreakpoints.svelte";
+  import AssetsBalance from "$lib/components/AssetsBalance.svelte";
+  import BoxLabel from "$lib/components/BoxLabel.svelte";
 
   export let data: PageData;
 
@@ -47,6 +50,7 @@
     savingsTimeline: Point[] = [],
     postings: Posting[] = [],
     latestPostings: Posting[] = [],
+    balances: Record<string, AssetBreakdown> = {},
     destroyCallback = () => {};
 
   onDestroy(async () => {
@@ -64,7 +68,8 @@
       icon,
       name,
       xirr,
-      paymentPerPeriod
+      paymentPerPeriod,
+      balances
     } = await ajax("/api/goals/savings/:name", null, data));
 
     latestPostings = _.chain(postings)
@@ -150,22 +155,22 @@
               <svg height="400" bind:this={svg} />
             </div>
           </div>
-          <div class="column is-12 has-text-centered has-text-grey">
-            <div>
-              <p class="custom-icon">{iconGlyph(icon)} {name} progress</p>
-            </div>
-          </div>
+        </div>
+        <BoxLabel text="{iconGlyph(icon)} {name} progress" />
+        <div class="columns">
           <div class="column is-12">
             <div class="box overflow-x-auto">
               <svg height="300" width="100%" bind:this={investmentTimelineSvg} />
             </div>
           </div>
+        </div>
+        <BoxLabel text="Monthly Investment" />
+        <div class="columns">
           <div class="column is-12 has-text-centered has-text-grey">
-            <div>
-              <p class="custom-icon">Monthly Investment</p>
-            </div>
+            <AssetsBalance breakdowns={balances} indent={false} />
           </div>
         </div>
+        <BoxLabel text="Current Balance" />
       </div>
       <div class="column is-3">
         <PostingGroup postings={latestPostings} groupFormat="MMM YYYY" let:groupedPostings>

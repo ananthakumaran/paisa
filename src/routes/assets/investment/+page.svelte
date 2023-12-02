@@ -1,4 +1,5 @@
 <script lang="ts">
+  import BoxLabel from "$lib/components/BoxLabel.svelte";
   import {
     renderMonthlyInvestmentTimeline,
     renderYearlyCards,
@@ -25,13 +26,7 @@
         </div>
       </div>
     </div>
-    <div class="columns">
-      <div class="column is-12 has-text-centered">
-        <div>
-          <p class="heading">Monthly Investment Timeline</p>
-        </div>
-      </div>
-    </div>
+    <BoxLabel text="Monthly Investment Timeline" />
   </div>
 </section>
 <section class="section tab-investment">
@@ -41,9 +36,7 @@
         <div class="box px-2">
           <svg id="d3-yearly-investment-timeline" width="100%" />
         </div>
-        <div class="py-3 has-text-centered">
-          <p class="heading">Financial Year Investment Timeline</p>
-        </div>
+        <BoxLabel text="Financial Year Investment Timeline" />
       </div>
       <div class="column is-full-tablet is-half-fullhd">
         <div class="columns is-flex-wrap-wrap" id="d3-yearly-investment-cards" />

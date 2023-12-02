@@ -356,6 +356,7 @@ export interface RetirementGoalProgress {
   type: string;
   icon: string;
   postings: Posting[];
+  balances: Record<string, AssetBreakdown>;
 }
 
 export interface SavingsGoalProgress {
@@ -370,6 +371,7 @@ export interface SavingsGoalProgress {
   type: string;
   icon: string;
   paymentPerPeriod: number;
+  balances: Record<string, AssetBreakdown>;
 }
 
 export interface LedgerFile {
@@ -488,7 +490,9 @@ export function ajax(
   route: "/api/investment"
 ): Promise<{ assets: Posting[]; yearly_cards: InvestmentYearlyCard[] }>;
 export function ajax(route: "/api/ledger"): Promise<{ postings: Posting[] }>;
-export function ajax(route: "/api/assets/balance"): Promise<{ asset_breakdowns: AssetBreakdown[] }>;
+export function ajax(
+  route: "/api/assets/balance"
+): Promise<{ asset_breakdowns: Record<string, AssetBreakdown> }>;
 export function ajax(route: "/api/liabilities/repayment"): Promise<{ repayments: Posting[] }>;
 export function ajax(
   route: "/api/liabilities/balance"

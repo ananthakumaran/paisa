@@ -1,5 +1,6 @@
 <script lang="ts">
   import COLORS from "$lib/colors";
+  import BoxLabel from "$lib/components/BoxLabel.svelte";
   import LevelItem from "$lib/components/LevelItem.svelte";
   import {
     renderMonthlyInvestmentTimeline,
@@ -46,13 +47,7 @@
         </div>
       </div>
     </div>
-    <div class="columns">
-      <div class="column is-12 has-text-centered">
-        <div>
-          <p class="heading">Monthly Income Timeline</p>
-        </div>
-      </div>
-    </div>
+    <BoxLabel text="Monthly Income Timeline" />
   </div>
 </section>
 <section class="section">
@@ -74,12 +69,6 @@
         </div>
       </div>
     </div>
-    <div class="columns">
-      <div class="column is-12 has-text-centered">
-        <div>
-          <p class="heading">Financial Year Income Timeline</p>
-        </div>
-      </div>
-    </div>
+    <BoxLabel text="Financial Year Income Timeline" />
   </div>
 </section>

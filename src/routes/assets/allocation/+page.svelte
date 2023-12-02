@@ -5,6 +5,7 @@
     renderAllocationTimeline
   } from "$lib/allocation";
   import { generateColorScheme } from "$lib/colors";
+  import BoxLabel from "$lib/components/BoxLabel.svelte";
   import { ajax } from "$lib/utils";
   import _ from "lodash";
   import { onMount, tick } from "svelte";
@@ -43,13 +44,7 @@
         </div>
       </div>
     </div>
-    <div class="columns">
-      <div class="column is-12 has-text-centered">
-        <div>
-          <p class="heading">Allocation Targets</p>
-        </div>
-      </div>
-    </div>
+    <BoxLabel text="Allocation Targets" />
   </div>
 </section>
 <section class="section tab-allocation">
@@ -59,13 +54,7 @@
         <div id="d3-allocation-category" style="width: 100%; height: {depth * 100}px" />
       </div>
     </div>
-    <div class="columns">
-      <div class="column is-12 has-text-centered">
-        <div>
-          <p class="heading">Allocation by category</p>
-        </div>
-      </div>
-    </div>
+    <BoxLabel text="Allocation by category" />
   </div>
 </section>
 <section class="section tab-allocation">
@@ -75,13 +64,7 @@
         <div id="d3-allocation-value" style="width: 100%; height: 300px" />
       </div>
     </div>
-    <div class="columns">
-      <div class="column is-12 has-text-centered">
-        <div>
-          <p class="heading">Allocation by value</p>
-        </div>
-      </div>
-    </div>
+    <BoxLabel text="Allocation by value" />
   </div>
 </section>
 <section class="section tab-allocation">
@@ -93,12 +76,6 @@
         </div>
       </div>
     </div>
-    <div class="columns">
-      <div class="column is-12 has-text-centered">
-        <div>
-          <p class="heading">Allocation Timeline</p>
-        </div>
-      </div>
-    </div>
+    <BoxLabel text="Allocation Timeline" />
   </div>
 </section>

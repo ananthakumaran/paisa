@@ -11,13 +11,6 @@
 
 <section class="section tab-harvest">
   <div class="container is-fluid">
-    <div class="columns">
-      <div class="column is-12 has-text-centered">
-        <div>
-          <p class="heading">Harvestables</p>
-        </div>
-      </div>
-    </div>
     <div class="columns is-flex-wrap-wrap has-text-grey-dark" id="d3-harvestables" />
   </div>
 </section>

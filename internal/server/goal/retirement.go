@@ -5,6 +5,7 @@ import (
 	"github.com/ananthakumaran/paisa/internal/config"
 	"github.com/ananthakumaran/paisa/internal/model/posting"
 	"github.com/ananthakumaran/paisa/internal/query"
+	"github.com/ananthakumaran/paisa/internal/server/assets"
 	"github.com/ananthakumaran/paisa/internal/service"
 	"github.com/ananthakumaran/paisa/internal/utils"
 	"github.com/gin-gonic/gin"
@@ -53,6 +54,8 @@ func getRetirementDetail(db *gorm.DB, conf config.RetirementGoal) gin.H {
 		yearlyExpenses = calculateAverageExpense(db, conf)
 	}
 
+	balances := assets.ComputeBreakdowns(db, savingsWithCapitalGains, false)
+
 	return gin.H{
 		"type":            "retirement",
 		"name":            conf.Name,
@@ -63,5 +66,6 @@ func getRetirementDetail(db *gorm.DB, conf config.RetirementGoal) gin.H {
 		"yearlyExpense":   yearlyExpenses,
 		"xirr":            service.XIRR(db, savingsWithCapitalGains),
 		"postings":        savingsWithCapitalGains,
+		"balances":        balances,
 	}
 }

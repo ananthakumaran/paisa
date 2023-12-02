@@ -5,6 +5,7 @@
     formatCurrency,
     formatFloat,
     isMobile,
+    type AssetBreakdown,
     type Point,
     type Posting
   } from "$lib/utils";
@@ -18,6 +19,8 @@
   import PostingGroup from "$lib/components/PostingGroup.svelte";
   import PostingCard from "$lib/components/PostingCard.svelte";
   import ProgressWithBreakpoints from "$lib/components/ProgressWithBreakpoints.svelte";
+  import AssetsBalance from "$lib/components/AssetsBalance.svelte";
+  import BoxLabel from "$lib/components/BoxLabel.svelte";
 
   export let data: PageData;
 
@@ -37,6 +40,7 @@
     savingsTimeline: Point[] = [],
     postings: Posting[] = [],
     latestPostings: Posting[] = [],
+    balances: Record<string, AssetBreakdown> = {},
     destroyCallback = () => {};
 
   onDestroy(async () => {
@@ -44,11 +48,8 @@
   });
 
   onMount(async () => {
-    ({ savingsTotal, savingsTimeline, yearlyExpense, swr, xirr, icon, name, postings } = await ajax(
-      "/api/goals/retirement/:name",
-      null,
-      data
-    ));
+    ({ savingsTotal, savingsTimeline, yearlyExpense, swr, xirr, icon, name, postings, balances } =
+      await ajax("/api/goals/retirement/:name", null, data));
     targetSavings = yearlyExpense * (100 / swr);
 
     latestPostings = _.chain(postings)
@@ -124,13 +125,7 @@
             </div>
           </div>
         </div>
-        <div class="columns">
-          <div class="column is-12 has-text-centered has-text-grey">
-            <div>
-              <p class="custom-icon">{iconGlyph(icon)} {name} progress</p>
-            </div>
-          </div>
-        </div>
+        <BoxLabel text="{iconGlyph(icon)} {name} progress" />
         <div class="columns">
           <div class="column is-12">
             <div class="box overflow-x-auto">
@@ -138,13 +133,13 @@
             </div>
           </div>
         </div>
+        <BoxLabel text="Monthly Investment" />
         <div class="columns">
           <div class="column is-12 has-text-centered has-text-grey">
-            <div>
-              <p class="custom-icon">Monthly Investment</p>
-            </div>
+            <AssetsBalance breakdowns={balances} indent={false} />
           </div>
         </div>
+        <BoxLabel text="Current Balance" />
       </div>
       <div class="column is-3">
         <PostingGroup postings={latestPostings} groupFormat="MMM YYYY" let:groupedPostings>

@@ -19,6 +19,8 @@
           "transaction_end_line": 8,
           "file_name": "main.ledger",
           "forecast": false,
+          "note": "",
+          "transaction_note": "",
           "market_amount": 0,
           "balance": 0
         },
@@ -38,6 +40,8 @@
           "transaction_end_line": 16,
           "file_name": "main.ledger",
           "forecast": false,
+          "note": "",
+          "transaction_note": "",
           "market_amount": 0,
           "balance": 0
         },
@@ -57,6 +61,8 @@
           "transaction_end_line": 33,
           "file_name": "main.ledger",
           "forecast": false,
+          "note": "",
+          "transaction_note": "",
           "market_amount": 0,
           "balance": 0
         },
@@ -73,9 +79,11 @@
           "tag_recurring": "",
           "tag_period": "",
           "transaction_begin_line": 37,
-          "transaction_end_line": 39,
+          "transaction_end_line": 41,
           "file_name": "main.ledger",
           "forecast": false,
+          "note": " Posting note",
+          "transaction_note": " Global note\n :interest:",
           "market_amount": 0,
           "balance": 0
         }
@@ -108,6 +116,8 @@
           "transaction_end_line": 8,
           "file_name": "main.ledger",
           "forecast": false,
+          "note": "",
+          "transaction_note": "",
           "market_amount": 0,
           "balance": 0
         },
@@ -127,6 +137,8 @@
           "transaction_end_line": 16,
           "file_name": "main.ledger",
           "forecast": false,
+          "note": "",
+          "transaction_note": "",
           "market_amount": 0,
           "balance": 0
         },
@@ -146,6 +158,8 @@
           "transaction_end_line": 33,
           "file_name": "main.ledger",
           "forecast": false,
+          "note": "",
+          "transaction_note": "",
           "market_amount": 0,
           "balance": 0
         },
@@ -162,9 +176,11 @@
           "tag_recurring": "",
           "tag_period": "",
           "transaction_begin_line": 37,
-          "transaction_end_line": 39,
+          "transaction_end_line": 41,
           "file_name": "main.ledger",
           "forecast": false,
+          "note": " Posting note",
+          "transaction_note": " Global note\n :interest:",
           "market_amount": 0,
           "balance": 0
         }

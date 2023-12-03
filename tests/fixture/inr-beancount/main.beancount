@@ -48,5 +48,7 @@
 2022-01-08 price USD 80.442048 INR
 
 2022-01-31 txn "Interest"
-  Income:Interest:Checking                  -1,000 INR
+  ; Global note
+  ; :interest:
+  Income:Interest:Checking                  -1,000 INR ; Posting note
   Assets:Checking

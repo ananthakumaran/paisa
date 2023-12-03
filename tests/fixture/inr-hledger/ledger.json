@@ -13,9 +13,11 @@
       "tag_recurring": "",
       "tag_period": "",
       "transaction_begin_line": 37,
-      "transaction_end_line": 40,
+      "transaction_end_line": 42,
       "file_name": "main.ledger",
       "forecast": false,
+      "note": "Posting note\n",
+      "transaction_note": "\nGlobal note\n:interest:\n",
       "market_amount": -1000,
       "balance": -1000
     },
@@ -32,9 +34,11 @@
       "tag_recurring": "",
       "tag_period": "",
       "transaction_begin_line": 37,
-      "transaction_end_line": 40,
+      "transaction_end_line": 42,
       "file_name": "main.ledger",
       "forecast": false,
+      "note": "",
+      "transaction_note": "\nGlobal note\n:interest:\n",
       "market_amount": 1000,
       "balance": 20927.5348
     },
@@ -54,6 +58,8 @@
       "transaction_end_line": 34,
       "file_name": "main.ledger",
       "forecast": false,
+      "note": "",
+      "transaction_note": "",
       "market_amount": -10000,
       "balance": 0
     },
@@ -73,6 +79,8 @@
       "transaction_end_line": 34,
       "file_name": "main.ledger",
       "forecast": false,
+      "note": "",
+      "transaction_note": "",
       "market_amount": 10027.3,
       "balance": 19927.5348
     },
@@ -92,6 +100,8 @@
       "transaction_end_line": 34,
       "file_name": "main.ledger",
       "forecast": false,
+      "note": "",
+      "transaction_note": "",
       "market_amount": -27.3,
       "balance": -27.3
     },
@@ -111,6 +121,8 @@
       "transaction_end_line": 29,
       "file_name": "main.ledger",
       "forecast": false,
+      "note": "",
+      "transaction_note": "",
       "market_amount": -10000,
       "balance": 10000
     },
@@ -130,6 +142,8 @@
       "transaction_end_line": 25,
       "file_name": "main.ledger",
       "forecast": false,
+      "note": "",
+      "transaction_note": "",
       "market_amount": -8025.3170071296,
       "balance": 9900.2348
     },
@@ -149,6 +163,8 @@
       "transaction_end_line": 29,
       "file_name": "main.ledger",
       "forecast": false,
+      "note": "",
+      "transaction_note": "",
       "market_amount": 10000,
       "balance": 100
     },
@@ -168,6 +184,8 @@
       "transaction_end_line": 25,
       "file_name": "main.ledger",
       "forecast": false,
+      "note": "",
+      "transaction_note": "",
       "market_amount": 8025.3170071296,
       "balance": 0.76
     },
@@ -187,6 +205,8 @@
       "transaction_end_line": 21,
       "file_name": "main.ledger",
       "forecast": false,
+      "note": "",
+      "transaction_note": "",
       "market_amount": 80218.4,
       "balance": 800
     },
@@ -206,6 +226,8 @@
       "transaction_end_line": 21,
       "file_name": "main.ledger",
       "forecast": false,
+      "note": "",
+      "transaction_note": "",
       "market_amount": -80000,
       "balance": 20000
     },
@@ -225,6 +247,8 @@
       "transaction_end_line": 17,
       "file_name": "main.ledger",
       "forecast": false,
+      "note": "",
+      "transaction_note": "",
       "market_amount": 20000,
       "balance": 100000
     },
@@ -244,6 +268,8 @@
       "transaction_end_line": 17,
       "file_name": "main.ledger",
       "forecast": false,
+      "note": "",
+      "transaction_note": "",
       "market_amount": -20000,
       "balance": -120000
     },
@@ -263,6 +289,8 @@
       "transaction_end_line": 13,
       "file_name": "main.ledger",
       "forecast": false,
+      "note": "",
+      "transaction_note": "",
       "market_amount": 20000,
       "balance": 20000
     },
@@ -282,6 +310,8 @@
       "transaction_end_line": 13,
       "file_name": "main.ledger",
       "forecast": false,
+      "note": "",
+      "transaction_note": "",
       "market_amount": -20000,
       "balance": 80000
     },
@@ -301,6 +331,8 @@
       "transaction_end_line": 9,
       "file_name": "main.ledger",
       "forecast": false,
+      "note": "",
+      "transaction_note": "",
       "market_amount": -100000,
       "balance": -100000
     },
@@ -320,6 +352,8 @@
       "transaction_end_line": 9,
       "file_name": "main.ledger",
       "forecast": false,
+      "note": "",
+      "transaction_note": "",
       "market_amount": 100000,
       "balance": 100000
     }

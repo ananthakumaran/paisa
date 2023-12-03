@@ -40,7 +40,7 @@ can read more about [periodic expressions](https://ledger-cli.org/doc/ledger3.ht
     [bug](https://github.com/ledger/ledger/issues/1625) in the ledger-cli, so you can't use `~ in 2023/08/01`,
     instead you always have to specify some interval like `~ Monthly in 2023/08/01`.
 
-![Initial Budget](/images/budget-1.png)
+[Initial Budget](../images/budget-1.png)
 
 Now you can see that you will have 5k left in your checking account at
 the end of the month, if you spend as per your budget. Before you
@@ -79,7 +79,7 @@ Let's add some real transactions.
     Assets:Checking
 ```
 
-![Month end Budget](/images/budget-2.png)
+![Month end Budget](../images/budget-2.png)
 
 As the month progresses, you can see how much you have spent and how
 much you have left. You notice that you have overspent on transport
@@ -99,7 +99,7 @@ and clothing budget to 0
     Assets:Checking
 ```
 
-![Budget Deficit Fixed](/images/budget-3.png)
+![Budget Deficit Fixed](../images/budget-3.png)
 
 You can go back and adjust your budget anytime. Let's move on to the
 next month, assuming you haven't made any further transaction.
@@ -119,7 +119,7 @@ next month, assuming you haven't made any further transaction.
     Assets:Checking
 ```
 
-![Next month Budget](/images/budget-4.png)
+![Next month Budget](../images/budget-4.png)
 
 You can see a new element in the UI called Rollover[^1]. This is basically
 the amount you have budgeted last month, but haven't spent. This will

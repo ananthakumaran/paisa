@@ -25,6 +25,9 @@ sample:
 publish:
 	nix develop --command bash -c 'mkdocs build'
 
+parser:
+	npm run parser-build-debug
+
 lint:
 	./node_modules/.bin/prettier --check src
 	npm run check

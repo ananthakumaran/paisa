@@ -74,13 +74,15 @@ is the per unit cost and `168.690` is the quantity you have bought.
 ##### Comment
 
 ```ledger
-; This is a comment
 2023/07/01 Rent
+    ; This is a transaction comment
     Expenses:Rent             15,000 INR
-    Assets:Checking
+    Assets:Checking   ; This is a posting comment
 ```
 
-Any text after `;` is treated as a comment
+Any text after `;` is treated as a comment. Comment can be at whole
+transaction level or individual posting level. Comment is also referred
+as **note** in many places, both are same.
 
 ##### Tags
 

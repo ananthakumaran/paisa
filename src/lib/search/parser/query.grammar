@@ -16,7 +16,7 @@ Operator { "=" | "=~" | ">" | ">=" | "<" | "<=" }
 BooleanBinaryOperator { AND | OR }
 BooleanUnaryOperator { NOT }
 
-Property { Account | Commodity | Amount | Total | Filename | Payee | Date }
+Property { Account | Commodity | Amount | Total | Filename | Note | Payee | Date }
 
 DateValue { "[" dateChar+ "]" }
 
@@ -30,6 +30,7 @@ DateValue { "[" dateChar+ "]" }
   Amount { "amount" }
   Total { "total" }
   Filename { "filename" }
+  Note { "note" }
   Payee { "payee" }
   Date { "date" }
 
@@ -55,7 +56,7 @@ DateValue { "[" dateChar+ "]" }
 
   "=" "=~" ">" ">=" "<" "<="
 
-  @precedence { Account, Commodity, Amount, Total, Filename, Payee, Date, NOT, AND, OR, UnQuoted, Number }
+  @precedence { Account, Commodity, Amount, Total, Filename, Note, Payee, Date, NOT, AND, OR, UnQuoted, Number }
 }
 
 @skip { whitespace }

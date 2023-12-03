@@ -35,5 +35,7 @@ P 2022/02/07 00:00:00 NIFTY 100.273 INR
 P 2022/01/08 00:00:00 USD 80.442048 INR
 
 2022/01/31 Interest
-    Income:Interest:Checking                  -1,000 INR
+    ; Global note
+    ; :interest:
+    Income:Interest:Checking                  -1,000 INR ; Posting note
     Assets:Checking

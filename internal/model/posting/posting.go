@@ -39,6 +39,8 @@ type Posting struct {
 	TransactionEndLine   uint64          `json:"transaction_end_line"`
 	FileName             string          `json:"file_name"`
 	Forecast             bool            `json:"forecast"`
+	Note                 string          `json:"note"`
+	TransactionNote      string          `json:"transaction_note"`
 
 	MarketAmount decimal.Decimal `gorm:"-:all" json:"market_amount"`
 	Balance      decimal.Decimal `gorm:"-:all" json:"balance"`

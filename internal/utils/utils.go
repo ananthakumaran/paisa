@@ -255,3 +255,11 @@ func OpenDB() (*gorm.DB, error) {
 func Dos2Unix(str string) string {
 	return strings.ReplaceAll(str, "\r\n", "\n")
 }
+
+func ReplaceLast(haystack, needle, replacement string) string {
+	i := strings.LastIndex(haystack, needle)
+	if i == -1 {
+		return haystack
+	}
+	return haystack[:i] + replacement + haystack[i+len(needle):]
+}

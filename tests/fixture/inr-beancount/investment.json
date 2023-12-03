@@ -16,6 +16,8 @@
       "transaction_end_line": 34,
       "file_name": "main.beancount",
       "forecast": false,
+      "note": "",
+      "transaction_note": "",
       "market_amount": 0,
       "balance": 0
     },
@@ -35,6 +37,8 @@
       "transaction_end_line": 38,
       "file_name": "main.beancount",
       "forecast": false,
+      "note": "",
+      "transaction_note": "",
       "market_amount": 0,
       "balance": 0
     },
@@ -54,6 +58,8 @@
       "transaction_end_line": 42,
       "file_name": "main.beancount",
       "forecast": false,
+      "note": "",
+      "transaction_note": "",
       "market_amount": 0,
       "balance": 0
     },
@@ -73,6 +79,8 @@
       "transaction_end_line": 47,
       "file_name": "main.beancount",
       "forecast": false,
+      "note": "",
+      "transaction_note": "",
       "market_amount": 0,
       "balance": 0
     }
@@ -98,6 +106,8 @@
           "transaction_end_line": 34,
           "file_name": "main.beancount",
           "forecast": false,
+          "note": "",
+          "transaction_note": "",
           "market_amount": 0,
           "balance": 0
         },
@@ -117,6 +127,8 @@
           "transaction_end_line": 38,
           "file_name": "main.beancount",
           "forecast": false,
+          "note": "",
+          "transaction_note": "",
           "market_amount": 0,
           "balance": 0
         },
@@ -136,6 +148,8 @@
           "transaction_end_line": 42,
           "file_name": "main.beancount",
           "forecast": false,
+          "note": "",
+          "transaction_note": "",
           "market_amount": 0,
           "balance": 0
         },
@@ -155,6 +169,8 @@
           "transaction_end_line": 47,
           "file_name": "main.beancount",
           "forecast": false,
+          "note": "",
+          "transaction_note": "",
           "market_amount": 0,
           "balance": 0
         }

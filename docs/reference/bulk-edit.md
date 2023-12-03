@@ -54,7 +54,7 @@ insensitive search by using the modifier `i` like
 #### Property
 
 You can also search based on properties like account, commodity,
-amount, total, filename, payee and date.
+amount, total, filename, note, payee and date.
 
 ```
 account = Expenses:Utilities:Electricity
@@ -69,22 +69,23 @@ filename = creditcard/2023/jan.ledger
 The general format is `property operator value`. The property can be
 any of the following:
 
-- account (posting account)
-- commodity (posting commodity)
-- amount (posting amount)
-- total (transaction total)
-- filename (name of the file the transaction is in)
-- payee (transaction payee)
-- date (transaction date)
+- **account** - posting account
+- **commodity** - posting commodity
+- **amount** - posting amount
+- **total** - transaction total
+- **filename** - name of the file the transaction is in
+- **note** - posting or transaction note (comment)
+- **payee** - transaction payee
+- **date** - transaction date
 
 The operator can be any of the following:
 
-- = (equal)
-- =~ (regular expression match)
-- < (less than)
-- <= (less than or equal)
-- \> (greater than)
-- \>= (greater than or equal)
+- **=** equal
+- **=~** regular expression match
+- **<** less than
+- **<=** less than or equal
+- **\>** greater than
+- **\>=** greater than or equal
 
 Not all the combinations of property, operator and value would work,
 if in doubt, just try it out, the UI will show you an error if the

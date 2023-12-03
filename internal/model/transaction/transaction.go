@@ -17,6 +17,7 @@ type Transaction struct {
 	BeginLine    uint64            `json:"beginLine"`
 	EndLine      uint64            `json:"endLine"`
 	FileName     string            `json:"fileName"`
+	Note         string            `json:"note"`
 }
 
 func Build(postings []posting.Posting) []Transaction {
@@ -43,6 +44,7 @@ func Build(postings []posting.Posting) []Transaction {
 			TagPeriod:    tagPeriod,
 			BeginLine:    sample.TransactionBeginLine,
 			EndLine:      sample.TransactionEndLine,
+			Note:         sample.TransactionNote,
 			FileName:     sample.FileName,
 		}
 	})

@@ -18,9 +18,11 @@
           "tag_recurring": "",
           "tag_period": "",
           "transaction_begin_line": 37,
-          "transaction_end_line": 40,
+          "transaction_end_line": 42,
           "file_name": "main.ledger",
           "forecast": false,
+          "note": "",
+          "transaction_note": "\nGlobal note\n:interest:\n",
           "market_amount": 0,
           "balance": 0
         },
@@ -37,9 +39,11 @@
           "tag_recurring": "",
           "tag_period": "",
           "transaction_begin_line": 37,
-          "transaction_end_line": 40,
+          "transaction_end_line": 42,
           "file_name": "main.ledger",
           "forecast": false,
+          "note": "Posting note\n",
+          "transaction_note": "\nGlobal note\n:interest:\n",
           "market_amount": 0,
           "balance": 0
         }
@@ -47,8 +51,9 @@
       "tag_recurring": "",
       "tag_period": "",
       "beginLine": 37,
-      "endLine": 40,
-      "fileName": "main.ledger"
+      "endLine": 42,
+      "fileName": "main.ledger",
+      "note": "\nGlobal note\n:interest:\n"
     },
     {
       "id": "7",
@@ -71,6 +76,8 @@
           "transaction_end_line": 34,
           "file_name": "main.ledger",
           "forecast": false,
+          "note": "",
+          "transaction_note": "",
           "market_amount": 0,
           "balance": 0
         },
@@ -90,6 +97,8 @@
           "transaction_end_line": 34,
           "file_name": "main.ledger",
           "forecast": false,
+          "note": "",
+          "transaction_note": "",
           "market_amount": 0,
           "balance": 0
         },
@@ -109,6 +118,8 @@
           "transaction_end_line": 34,
           "file_name": "main.ledger",
           "forecast": false,
+          "note": "",
+          "transaction_note": "",
           "market_amount": 0,
           "balance": 0
         }
@@ -117,7 +128,8 @@
       "tag_period": "",
       "beginLine": 30,
       "endLine": 34,
-      "fileName": "main.ledger"
+      "fileName": "main.ledger",
+      "note": ""
     },
     {
       "id": "6",
@@ -140,6 +152,8 @@
           "transaction_end_line": 29,
           "file_name": "main.ledger",
           "forecast": false,
+          "note": "",
+          "transaction_note": "",
           "market_amount": 0,
           "balance": 0
         },
@@ -159,6 +173,8 @@
           "transaction_end_line": 29,
           "file_name": "main.ledger",
           "forecast": false,
+          "note": "",
+          "transaction_note": "",
           "market_amount": 0,
           "balance": 0
         }
@@ -167,7 +183,8 @@
       "tag_period": "",
       "beginLine": 26,
       "endLine": 29,
-      "fileName": "main.ledger"
+      "fileName": "main.ledger",
+      "note": ""
     },
     {
       "id": "5",
@@ -190,6 +207,8 @@
           "transaction_end_line": 25,
           "file_name": "main.ledger",
           "forecast": false,
+          "note": "",
+          "transaction_note": "",
           "market_amount": 0,
           "balance": 0
         },
@@ -209,6 +228,8 @@
           "transaction_end_line": 25,
           "file_name": "main.ledger",
           "forecast": false,
+          "note": "",
+          "transaction_note": "",
           "market_amount": 0,
           "balance": 0
         }
@@ -217,7 +238,8 @@
       "tag_period": "",
       "beginLine": 22,
       "endLine": 25,
-      "fileName": "main.ledger"
+      "fileName": "main.ledger",
+      "note": ""
     },
     {
       "id": "4",
@@ -240,6 +262,8 @@
           "transaction_end_line": 21,
           "file_name": "main.ledger",
           "forecast": false,
+          "note": "",
+          "transaction_note": "",
           "market_amount": 0,
           "balance": 0
         },
@@ -259,6 +283,8 @@
           "transaction_end_line": 21,
           "file_name": "main.ledger",
           "forecast": false,
+          "note": "",
+          "transaction_note": "",
           "market_amount": 0,
           "balance": 0
         }
@@ -267,7 +293,8 @@
       "tag_period": "",
       "beginLine": 18,
       "endLine": 21,
-      "fileName": "main.ledger"
+      "fileName": "main.ledger",
+      "note": ""
     },
     {
       "id": "3",
@@ -290,6 +317,8 @@
           "transaction_end_line": 17,
           "file_name": "main.ledger",
           "forecast": false,
+          "note": "",
+          "transaction_note": "",
           "market_amount": 0,
           "balance": 0
         },
@@ -309,6 +338,8 @@
           "transaction_end_line": 17,
           "file_name": "main.ledger",
           "forecast": false,
+          "note": "",
+          "transaction_note": "",
           "market_amount": 0,
           "balance": 0
         }
@@ -317,7 +348,8 @@
       "tag_period": "",
       "beginLine": 14,
       "endLine": 17,
-      "fileName": "main.ledger"
+      "fileName": "main.ledger",
+      "note": ""
     },
     {
       "id": "2",
@@ -340,6 +372,8 @@
           "transaction_end_line": 13,
           "file_name": "main.ledger",
           "forecast": false,
+          "note": "",
+          "transaction_note": "",
           "market_amount": 0,
           "balance": 0
         },
@@ -359,6 +393,8 @@
           "transaction_end_line": 13,
           "file_name": "main.ledger",
           "forecast": false,
+          "note": "",
+          "transaction_note": "",
           "market_amount": 0,
           "balance": 0
         }
@@ -367,7 +403,8 @@
       "tag_period": "",
       "beginLine": 10,
       "endLine": 13,
-      "fileName": "main.ledger"
+      "fileName": "main.ledger",
+      "note": ""
     },
     {
       "id": "1",
@@ -390,6 +427,8 @@
           "transaction_end_line": 9,
           "file_name": "main.ledger",
           "forecast": false,
+          "note": "",
+          "transaction_note": "",
           "market_amount": 0,
           "balance": 0
         },
@@ -409,6 +448,8 @@
           "transaction_end_line": 9,
           "file_name": "main.ledger",
           "forecast": false,
+          "note": "",
+          "transaction_note": "",
           "market_amount": 0,
           "balance": 0
         }
@@ -417,7 +458,8 @@
       "tag_period": "",
       "beginLine": 6,
       "endLine": 9,
-      "fileName": "main.ledger"
+      "fileName": "main.ledger",
+      "note": ""
     }
   ]
 }

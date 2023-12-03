@@ -16,6 +16,8 @@
       "transaction_end_line": 26,
       "file_name": "main.beancount",
       "forecast": false,
+      "note": "",
+      "transaction_note": "",
       "market_amount": 0,
       "balance": 0
     }
@@ -253,6 +255,8 @@
           "transaction_end_line": 26,
           "file_name": "main.beancount",
           "forecast": false,
+          "note": "",
+          "transaction_note": "",
           "market_amount": 0,
           "balance": 0
         }
@@ -276,6 +280,8 @@
           "transaction_end_line": 22,
           "file_name": "main.beancount",
           "forecast": false,
+          "note": "",
+          "transaction_note": "",
           "market_amount": 0,
           "balance": 0
         },
@@ -295,6 +301,8 @@
           "transaction_end_line": 30,
           "file_name": "main.beancount",
           "forecast": false,
+          "note": "",
+          "transaction_note": "",
           "market_amount": 0,
           "balance": 0
         },
@@ -314,12 +322,14 @@
           "transaction_end_line": 47,
           "file_name": "main.beancount",
           "forecast": false,
+          "note": "",
+          "transaction_note": "",
           "market_amount": 0,
           "balance": 0
         },
         {
           "id": 16,
-          "transaction_id": "31d6ce1218ae117cf19e993e338c0104",
+          "transaction_id": "921d64598f4c56b14b31d38082133a98",
           "date": "2022-01-31T00:00:00Z",
           "payee": "Interest",
           "account": "Income:Interest:Checking",
@@ -329,10 +339,12 @@
           "status": "cleared",
           "tag_recurring": "",
           "tag_period": "",
-          "transaction_begin_line": 50,
-          "transaction_end_line": 53,
+          "transaction_begin_line": 52,
+          "transaction_end_line": 55,
           "file_name": "main.beancount",
           "forecast": false,
+          "note": "",
+          "transaction_note": "",
           "market_amount": 0,
           "balance": 0
         }
@@ -356,6 +368,8 @@
           "transaction_end_line": 34,
           "file_name": "main.beancount",
           "forecast": false,
+          "note": "",
+          "transaction_note": "",
           "market_amount": 0,
           "balance": 0
         },
@@ -375,6 +389,8 @@
           "transaction_end_line": 38,
           "file_name": "main.beancount",
           "forecast": false,
+          "note": "",
+          "transaction_note": "",
           "market_amount": 0,
           "balance": 0
         },
@@ -394,6 +410,8 @@
           "transaction_end_line": 42,
           "file_name": "main.beancount",
           "forecast": false,
+          "note": "",
+          "transaction_note": "",
           "market_amount": 0,
           "balance": 0
         },
@@ -413,6 +431,8 @@
           "transaction_end_line": 47,
           "file_name": "main.beancount",
           "forecast": false,
+          "note": "",
+          "transaction_note": "",
           "market_amount": 0,
           "balance": 0
         }
@@ -439,6 +459,8 @@
           "transaction_end_line": 26,
           "file_name": "main.beancount",
           "forecast": false,
+          "note": "",
+          "transaction_note": "",
           "market_amount": 0,
           "balance": 0
         }
@@ -462,6 +484,8 @@
           "transaction_end_line": 22,
           "file_name": "main.beancount",
           "forecast": false,
+          "note": "",
+          "transaction_note": "",
           "market_amount": 0,
           "balance": 0
         },
@@ -481,6 +505,8 @@
           "transaction_end_line": 30,
           "file_name": "main.beancount",
           "forecast": false,
+          "note": "",
+          "transaction_note": "",
           "market_amount": 0,
           "balance": 0
         },
@@ -500,12 +526,14 @@
           "transaction_end_line": 47,
           "file_name": "main.beancount",
           "forecast": false,
+          "note": "",
+          "transaction_note": "",
           "market_amount": 0,
           "balance": 0
         },
         {
           "id": 16,
-          "transaction_id": "31d6ce1218ae117cf19e993e338c0104",
+          "transaction_id": "921d64598f4c56b14b31d38082133a98",
           "date": "2022-01-31T00:00:00Z",
           "payee": "Interest",
           "account": "Income:Interest:Checking",
@@ -515,10 +543,12 @@
           "status": "cleared",
           "tag_recurring": "",
           "tag_period": "",
-          "transaction_begin_line": 50,
-          "transaction_end_line": 53,
+          "transaction_begin_line": 52,
+          "transaction_end_line": 55,
           "file_name": "main.beancount",
           "forecast": false,
+          "note": "",
+          "transaction_note": "",
           "market_amount": 0,
           "balance": 0
         }
@@ -542,6 +572,8 @@
           "transaction_end_line": 34,
           "file_name": "main.beancount",
           "forecast": false,
+          "note": "",
+          "transaction_note": "",
           "market_amount": 0,
           "balance": 0
         },
@@ -561,6 +593,8 @@
           "transaction_end_line": 38,
           "file_name": "main.beancount",
           "forecast": false,
+          "note": "",
+          "transaction_note": "",
           "market_amount": 0,
           "balance": 0
         },
@@ -580,6 +614,8 @@
           "transaction_end_line": 42,
           "file_name": "main.beancount",
           "forecast": false,
+          "note": "",
+          "transaction_note": "",
           "market_amount": 0,
           "balance": 0
         },
@@ -599,6 +635,8 @@
           "transaction_end_line": 47,
           "file_name": "main.beancount",
           "forecast": false,
+          "note": "",
+          "transaction_note": "",
           "market_amount": 0,
           "balance": 0
         }

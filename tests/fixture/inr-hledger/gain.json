@@ -29,6 +29,8 @@
           "transaction_end_line": 29,
           "file_name": "main.ledger",
           "forecast": false,
+          "note": "",
+          "transaction_note": "",
           "market_amount": 10000,
           "balance": 0
         },
@@ -48,6 +50,8 @@
           "transaction_end_line": 34,
           "file_name": "main.ledger",
           "forecast": false,
+          "note": "",
+          "transaction_note": "",
           "market_amount": -27.3,
           "balance": 0
         },
@@ -67,6 +71,8 @@
           "transaction_end_line": 34,
           "file_name": "main.ledger",
           "forecast": false,
+          "note": "",
+          "transaction_note": "",
           "market_amount": -10000,
           "balance": 0
         }
@@ -101,6 +107,8 @@
           "transaction_end_line": 25,
           "file_name": "main.ledger",
           "forecast": false,
+          "note": "",
+          "transaction_note": "",
           "market_amount": 8025.3170071296,
           "balance": 0
         }
@@ -135,6 +143,8 @@
           "transaction_end_line": 21,
           "file_name": "main.ledger",
           "forecast": false,
+          "note": "",
+          "transaction_note": "",
           "market_amount": 80218.4,
           "balance": 0
         }

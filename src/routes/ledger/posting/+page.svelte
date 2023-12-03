@@ -71,6 +71,7 @@
       beginLine: p.transaction_begin_line,
       endLine: p.transaction_end_line,
       fileName: p.file_name,
+      note: p.transaction_note,
       postings: [p]
     };
   }

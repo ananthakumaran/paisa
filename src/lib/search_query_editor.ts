@@ -160,6 +160,10 @@ const allowedCombinations: Record<string, Record<string, [number]>> = {
   [Terms.Filename]: {
     "=": [Terms.String],
     "=~": [Terms.RegExp]
+  },
+  [Terms.Note]: {
+    "=": [Terms.String],
+    "=~": [Terms.RegExp]
   }
 };
 
@@ -438,6 +442,8 @@ function getProperty(
       ];
     case Terms.Filename:
       return [transaction.fileName];
+    case Terms.Note:
+      return [transaction.note].concat(transaction.postings.map((posting) => posting.note));
   }
 }
 
@@ -657,6 +663,7 @@ export function createEditor(
       "date",
       "payee",
       "filename",
+      "note",
       "total",
       "AND",
       "OR",

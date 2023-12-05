@@ -39,7 +39,11 @@ const COLUMN_REFS = _.chain(_.range(65, 90))
   .fromPairs()
   .value();
 
-export function render(rows: Array<Record<string, any>>, template: Handlebars.TemplateDelegate) {
+export function render(
+  rows: Array<Record<string, any>>,
+  template: Handlebars.TemplateDelegate,
+  options: { reverse?: boolean } = {}
+) {
   const output: string[] = [];
   _.each(rows, (row) => {
     const rendered = _.trim(template(_.assign({ ROW: row, SHEET: rows }, COLUMN_REFS)));
@@ -47,6 +51,9 @@ export function render(rows: Array<Record<string, any>>, template: Handlebars.Te
       output.push(rendered);
     }
   });
+  if (options.reverse) {
+    output.reverse();
+  }
   return format(output.join("\n\n"));
 }
 

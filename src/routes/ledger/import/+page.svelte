@@ -27,6 +27,8 @@
   let columnCount: number;
   let data: any[][] = [];
   let rows: Array<Record<string, any>> = [];
+  let lastOptions: any;
+  let options: { reverse: boolean } = { reverse: false };
 
   let templateEditorDom: Element;
   let templateEditor: EditorView;
@@ -84,12 +86,17 @@
   let input: any;
 
   $: if (!_.isEmpty(data) && $templateEditorState.template) {
-    if (lastTemplate != $templateEditorState.template || lastData != data) {
+    if (
+      lastTemplate != $templateEditorState.template ||
+      lastData != data ||
+      lastOptions != options
+    ) {
       try {
-        preview = renderJournal(rows, $templateEditorState.template);
+        preview = renderJournal(rows, $templateEditorState.template, { reverse: options.reverse });
         updatePreviewContent(previewEditor, preview);
         lastTemplate = $templateEditorState.template;
         lastData = data;
+        lastOptions = _.clone(options);
       } catch (e) {
         console.log(e);
       }
@@ -275,7 +282,7 @@
         </div>
       </div>
       <div class="column is-7 py-0">
-        <div class="box px-3">
+        <div class="box px-3 mb-3">
           <Dropzone
             multiple={false}
             inputElement={input}
@@ -284,6 +291,17 @@
           >
             Drag 'n' drop CSV, TXT, XLS, XLSX, PDF file here or click to select
           </Dropzone>
+        </div>
+        <div class="is-flex justify-end mb-3">
+          <div class="field color-switch">
+            <input
+              id="import-reverse"
+              type="checkbox"
+              bind:checked={options.reverse}
+              class="switch is-rounded is-small"
+            />
+            <label for="import-reverse">Reverse</label>
+          </div>
         </div>
         {#if !_.isEmpty(data)}
           <div class="table-wrapper">
@@ -340,5 +358,12 @@
     overflow-x: auto;
     overflow-y: auto;
     max-height: $import-full-height;
+  }
+
+  .color-switch {
+    .switch[type="checkbox"]:checked + label::before,
+    .switch[type="checkbox"]:checked + label:before {
+      background: $link;
+    }
   }
 </style>

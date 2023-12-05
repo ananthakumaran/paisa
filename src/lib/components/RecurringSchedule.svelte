@@ -3,6 +3,7 @@
   import {
     formatCurrency,
     formatCurrencyCrude,
+    postingUrl,
     tooltip,
     type TransactionSchedule
   } from "$lib/utils";
@@ -32,7 +33,13 @@
       <i class="fas {icon.icon}" />
     </span>
     <span class="ml-1">
-      {schedule.key}
+      {#if schedule.actual}
+        <a class="secondary-link" href={postingUrl(schedule.transaction.postings[0])}
+          >{schedule.key}</a
+        >
+      {:else}
+        {schedule.key}
+      {/if}
     </span>
   </div>
   <div>{formatCurrencyCrude(schedule.amount)}</div>

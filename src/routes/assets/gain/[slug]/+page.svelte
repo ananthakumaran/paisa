@@ -20,6 +20,7 @@
   import PostingCard from "$lib/components/PostingCard.svelte";
   import LevelItem from "$lib/components/LevelItem.svelte";
   import { iconify } from "$lib/icon";
+  import BoxLabel from "$lib/components/BoxLabel.svelte";
 
   let commodities: string[] = [];
   let selectedCommodities: string[] = [];
@@ -199,63 +200,53 @@
           </div>
         {/if}
         <svg id="d3-gain-legend" width="100%" height="50" />
-        <div class="box mb-2">
+        <div class="box">
           <svg id="d3-account-timeline-breakdown" width="100%" height="450" />
         </div>
-        <div class="has-text-centered">
-          <p class="heading">Timeline</p>
-        </div>
+        <BoxLabel text="Timeline" />
 
         <div class="columns">
           <div class="column is-6">
             <div class="mt-5" class:is-hidden={securityTypeEmpty}>
-              <div class="box mb-2 overflow-x-auto">
+              <div class="box overflow-x-auto">
                 <div
                   id="d3-portfolio-security-type-treemap"
                   style="width: 100%; position: relative"
                 />
                 <svg id="d3-portfolio-security-type" width="100%" />
               </div>
-              <div class="has-text-centered">
-                <p class="heading">Security Type</p>
-              </div>
+              <BoxLabel text="Security Type" />
             </div>
 
             <div class="mt-5" class:is-hidden={ratingEmpty}>
-              <div class="box mb-2 overflow-x-auto">
+              <div class="box overflow-x-auto">
                 <div
                   id="d3-portfolio-security-rating-treemap"
                   style="width: 100%; position: relative"
                 />
                 <svg id="d3-portfolio-security-rating" width="100%" />
               </div>
-              <div class="has-text-centered">
-                <p class="heading">Security Rating</p>
-              </div>
+              <BoxLabel text="Security Rating" />
             </div>
 
             <div class="mt-5" class:is-hidden={industryEmpty}>
-              <div class="box mb-2 overflow-x-auto">
+              <div class="box overflow-x-auto">
                 <div
                   id="d3-portfolio-security-industry-treemap"
                   style="width: 100%; position: relative"
                 />
                 <svg id="d3-portfolio-security-industry" width="100%" />
               </div>
-              <div class="has-text-centered">
-                <p class="heading">Industry</p>
-              </div>
+              <BoxLabel text="Industry" />
             </div>
           </div>
           <div class="column is-6 mt-5">
             <div class:is-hidden={nameAndSecurityTypeEmpty}>
-              <div class="box mb-2 overflow-x-auto">
+              <div class="box overflow-x-auto">
                 <div id="d3-portfolio-treemap" style="width: 100%; position: relative" />
                 <svg id="d3-portfolio" width="100%" />
               </div>
-              <div class="has-text-centered">
-                <p class="heading">Security</p>
-              </div>
+              <BoxLabel text="Security" />
             </div>
           </div>
         </div>

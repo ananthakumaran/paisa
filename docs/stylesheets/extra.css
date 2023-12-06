@@ -82,6 +82,9 @@
 
 .thumbnail-container {
   flex-basis: 50%;
+  box-shadow:
+    0 0 10px rgba(0, 0, 0, 0.1),
+    0 0 30px rgb(0, 0, 0, 0.05);
 }
 
 .thumbnail {
@@ -89,10 +92,6 @@
   overflow: hidden;
   width: 100%;
   height: 500px;
-  border-radius: 10px;
-  box-shadow:
-    0 0 10px rgba(0, 0, 0, 0.5),
-    0 0 30px rgb(0, 0, 0, 0.25);
 }
 
 .thumbnail iframe {
@@ -111,4 +110,11 @@
   .thumbnail-container {
     display: none;
   }
+}
+
+.app-frame {
+  --padding-h: 0;
+  --padding-v: 0;
+  --bar-height: 33px;
+  --border-width: 0;
 }

@@ -89,7 +89,7 @@ hide:
   decisions.
 </div>
 
-<div class="thumbnail-container">
+<div class="thumbnail-container app-frame win dark" data-title="Paisa">
   <div class="thumbnail">
     <iframe src="https://demo1.paisa.fyi" frameborder="0" scrolling="no"></iframe>
   </div>

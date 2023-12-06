@@ -101,6 +101,7 @@ markdown_extensions:
 extra_javascript:
   - javascripts/extra.js
 extra_css:
+  - stylesheets/device-frames.min.css
   - stylesheets/extra.css
 
 copyright: |

@@ -423,7 +423,7 @@
       <MonthPicker bind:value={$month} max={$dateMax} min={$dateMin} />
     {/if}
 
-    {#if selectedSubLink?.financialYearPicker || selectedLink?.financialYearPicker}
+    {#if selectedSubSubLink?.financialYearPicker || selectedSubLink?.financialYearPicker || selectedLink?.financialYearPicker}
       <div class="has-text-centered">
         <div class="select is-small">
           <select bind:value={$year}>

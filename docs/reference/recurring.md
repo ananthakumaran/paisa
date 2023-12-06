@@ -72,6 +72,13 @@ Ledger [docs](https://ledger-cli.org/doc/ledger3.html#Complex-expressions)
     ; Recurring: Savings Interest
 ```
 
+!!! tip
+
+    Include the automated transactions at the top of the main ledger
+    file. Ledger will apply the rules only to transactions that
+    follow the automated transactions.
+
+
 ## Period
 
 Paisa will try to infer the recurring period of the transactions
@@ -125,3 +132,12 @@ valid and the next 3 schedules if valid.
 * Every Sunday `#!ledger ; Period: ? * 0`
 * 1<sup>st</sup> of Jan and 7<sup>th</sup> of Feb `#!ledger ; Period 1 JAN ? | 7 FEB ?`
 * Closest business day to the 15<sup>th</sup> day of every month. `#!ledger ; Period 15W * ?`
+
+
+
+!!! tip
+
+    Recurring page will only show a transaction as recurring if there
+    is more than **one transaction** with the same tag name. If you
+    have only one transaction, wait untill the next transaction is added
+    to see it on the recurring page.

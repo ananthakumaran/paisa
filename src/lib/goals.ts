@@ -41,6 +41,10 @@ export function solvePMTOrNper(
       return empty;
     }
     pmt = financial.pmt(rate, nper, pv, -fv, WHEN);
+    if (pmt <= 0) {
+      // target will be achieved without any monthly savings
+      return { pmt: 0.001, targetDate };
+    }
   } else if (pmt > 0) {
     const nper = financial.nper(rate, pmt, pv, -fv, WHEN);
     targetDateObject = today.add(Math.ceil(nper), "months");

@@ -2,6 +2,7 @@
   import Toggleable from "$lib/components/Toggleable.svelte";
   import ValueChange from "$lib/components/ValueChange.svelte";
   import { ajax, formatCurrency, type Price } from "$lib/utils";
+  import { toast } from "bulma-toast";
   import _ from "lodash";
   import { onMount } from "svelte";
   import VirtualList from "svelte-tiny-virtual-list";
@@ -25,15 +26,53 @@
     return null;
   }
 
-  onMount(async () => {
+  async function clearPriceCache() {
+    const { success, message } = await ajax("/api/price/delete", { method: "POST" });
+    if (!success) {
+      toast({
+        message: `Failed to clear price cache. reason: ${message}`,
+        type: "is-danger",
+        duration: 10000
+      });
+    } else {
+      toast({
+        message: "Price cache cleared.",
+        type: "is-success"
+      });
+    }
+    await fetchPrice();
+  }
+
+  async function fetchPrice() {
     ({ prices: prices } = await ajax("/api/price"));
     prices = _.omitBy(prices, (v) => v.length === 0);
+  }
+
+  onMount(async () => {
+    await fetchPrice();
   });
 </script>
 
 <section class="section tab-price">
   <div class="container is-fluid">
-    <div class="columns">
+    <div class="columns flex-wrap">
+      <div class="column is-12">
+        <div class="box p-3">
+          <div class="field has-addons mb-0">
+            <p class="control">
+              <button
+                class="button is-small is-link invertable is-light is-danger"
+                on:click={(_e) => clearPriceCache()}
+              >
+                <span class="icon is-small">
+                  <i class="fas fa-trash" />
+                </span>
+                <span>Clear Price Cache</span>
+              </button>
+            </p>
+          </div>
+        </div>
+      </div>
       <div class="column is-12">
         <div class="box overflow-x-auto">
           <table class="table is-narrow is-fullwidth is-light-border is-hoverable">

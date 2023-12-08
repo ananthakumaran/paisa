@@ -83,7 +83,7 @@ func SyncCommodities(db *gorm.DB) error {
 			return fmt.Errorf("Failed to fetch price for %s: %w", name, err)
 		}
 
-		price.UpsertAllByTypeAndID(db, commodity.Type, code, prices)
+		price.UpsertAllByTypeNameAndID(db, commodity.Type, name, code, prices)
 	}
 	return nil
 }

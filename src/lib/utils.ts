@@ -625,6 +625,11 @@ export function ajax(
 ): Promise<{ file: LedgerFile }>;
 
 export function ajax(
+  route: "/api/price/delete",
+  options?: RequestInit
+): Promise<{ success: boolean; message: string }>;
+
+export function ajax(
   route: "/api/sync",
   options?: RequestInit
 ): Promise<{ success: boolean; message: string }>;

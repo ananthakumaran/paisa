@@ -6,7 +6,9 @@ import (
 	"github.com/samber/lo"
 	log "github.com/sirupsen/logrus"
 
+	"github.com/ananthakumaran/paisa/internal/cache"
 	"github.com/ananthakumaran/paisa/internal/config"
+	"github.com/ananthakumaran/paisa/internal/model"
 	"github.com/ananthakumaran/paisa/internal/model/posting"
 	"github.com/ananthakumaran/paisa/internal/model/price"
 	"github.com/ananthakumaran/paisa/internal/scraper"
@@ -48,6 +50,22 @@ func GetPriceProviders(db *gorm.DB) gin.H {
 		}),
 	}
 
+}
+
+func ClearPriceCache(db *gorm.DB) gin.H {
+	err := price.DeleteAll(db)
+	if err != nil {
+		return gin.H{"success": false, "message": err.Error()}
+	}
+
+	cache.Clear()
+
+	message, err := model.SyncJournal(db)
+	if err != nil {
+		return gin.H{"success": false, "message": message}
+	}
+
+	return gin.H{"success": true}
 }
 
 func ClearPriceProviderCache(db *gorm.DB, code string) gin.H {

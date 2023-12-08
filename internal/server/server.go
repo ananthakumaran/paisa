@@ -149,6 +149,14 @@ func Build(db *gorm.DB, enableCompression bool) *gin.Engine {
 	router.GET("/api/ledger", func(c *gin.Context) {
 		c.JSON(200, GetLedger(db))
 	})
+	router.POST("/api/price/delete", func(c *gin.Context) {
+		if config.GetConfig().Readonly {
+			c.JSON(200, gin.H{"success": true})
+			return
+		}
+
+		c.JSON(200, ClearPriceCache(db))
+	})
 	router.GET("/api/price", func(c *gin.Context) {
 		c.JSON(200, GetPrices(db))
 	})

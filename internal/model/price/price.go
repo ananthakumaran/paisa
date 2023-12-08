@@ -24,12 +24,21 @@ func (p Price) Less(o btree.Item) bool {
 	return p.Date.Before(o.(Price).Date)
 }
 
-func UpsertAllByTypeAndID(db *gorm.DB, commodityType config.CommodityType, commodityID string, prices []*Price) {
+func DeleteAll(db *gorm.DB) error {
+	err := db.Exec("DELETE FROM prices").Error
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func UpsertAllByTypeNameAndID(db *gorm.DB, commodityType config.CommodityType, commodityName string, commodityID string, prices []*Price) {
 	err := db.Transaction(func(tx *gorm.DB) error {
-		err := tx.Delete(&Price{}, "commodity_type = ? and commodity_id = ?", commodityType, commodityID).Error
+		err := tx.Delete(&Price{}, "commodity_type = ? and (commodity_id = ? or commodity_name = ?)", commodityType, commodityID, commodityName).Error
 		if err != nil {
 			return err
 		}
+
 		for _, price := range prices {
 			err := tx.Create(price).Error
 			if err != nil {

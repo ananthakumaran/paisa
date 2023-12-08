@@ -17,12 +17,13 @@ Even though **ledger** doesn't have any strict Account naming
 convention, Paisa expects you to follow the standard naming
 convention.
 
-There are four types of account namely
+There are five types of account namely
 
 1. :fontawesome-solid-sack-dollar: Assets
 1. :fontawesome-solid-credit-card: Liabilities
 1. :fontawesome-solid-building: Income
 1. :fontawesome-solid-wallet: Expenses
+1. :fontawesome-solid-money-check-dollar: Equity
 
 All the accounts you create should be under one of these
 accounts. This naming convention is a necessity, because without
@@ -104,9 +105,9 @@ explicitly specifying anything else.
 
 ```ledger
 2018/03/01 Withdrawal
-    Assets:Checking                          6775.49 INR
-    Income:CapitalGains:Equity:NIFTY          -22.68 INR
-    Assets:Equity:NIFTY          -100 NIFTY {67.5281 INR} [2018/01/01] @ 67.7549 INR
+    Assets:Checking                  6775.49 INR
+    Income:CapitalGains:Equity:NIFTY  -22.68 INR
+    Assets:Equity:NIFTY               -100 NIFTY {67.5281 INR} [2018/01/01] @ 67.7549 INR
 ```
 
 Let's say you have an asset account named `#!ledger Assets:{name}` and
@@ -126,6 +127,20 @@ Expenses:Tax` account. This is used to calculate your Net Income and
 your Savings Rate. If you want to track different types of taxes, you
 can use sub accounts as well, for example `#!ledger Expenses:Tax:Income`
 and `#!ledger Expenses:Tax:GST`.
+
+## Equity
+
+Equity is used in rare cases where you want to balance the
+transaction, but none of the other accounts are suitable for the
+purpose. Let's say you have `#!ledger 1000 INR` in your real bank
+account and you want your checking account in Paisa to have same
+balance, you can use Equity account to balance the transaction.
+
+```ledger
+2022/01/01 Opening Balance
+    Assets:Checking:SBI       1000 INR
+    Equity:OpeningBalance
+```
 
 
 ## Icons

@@ -40,7 +40,7 @@ const ICON_LOOKUP: IconLookup[] = [
   { symbol: "fa6-solid:car", words: ["car", "vehicl"] },
   { symbol: "fa6-solid:piggy-bank", words: ["check", "bank"] },
   { symbol: "fa6-solid:sack-dollar", words: ["asset"] },
-  { symbol: "fa6-solid:chart-line", words: ["equiti"] },
+  { symbol: "fa6-solid:money-check-dollar", words: ["equiti"] },
   { symbol: "fa6-solid:money-check-dollar", words: ["debt"] },
   { symbol: "fa6-solid:ring", words: ["gold"] },
   { symbol: "fa6-solid:house", words: ["realest", "hous", "homeloan"] },

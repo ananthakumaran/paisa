@@ -1,5 +1,14 @@
 # CHANGELOG
 
+### 0.6.0 (2023-12-09)
+
+* Add individual account balance on goals page
+* Add [keyboard shortcuts](https://paisa.fyi/reference/editor/) to format/save file on editor page
+* Add ability to search posting/transaction by note
+* Add option to reverse the order of generated transactions on import page
+* Add option to clear price cache
+* Bug fixes
+
 ### 0.5.9 (2023-11-26)
 
 * Improve postings page

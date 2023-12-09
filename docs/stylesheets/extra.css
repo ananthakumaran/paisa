@@ -117,4 +117,13 @@
   --padding-v: 0;
   --bar-height: 33px;
   --border-width: 0;
+  --bar-inset: 10px;
+}
+
+.app-frame.win {
+  --button-inset: 12px;
+}
+
+.app-frame::after {
+  font-family: inherit;
 }

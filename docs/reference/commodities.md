@@ -88,7 +88,35 @@ commodities:
 1. stock ticker code
 
 Stock prices are fetched from yahoo finance website. The ticker code
-should match the code used in yahoo.
+should match the code used in yahoo. If the fetched price currency is
+not the default currency, it will be converted to default currency
+using the forex rate apis.
+
+## Alpha Vantage <sub>:globe_with_meridians:</sub>
+
+Supports 100,000+ stocks, ETFs, mutual funds etc. It also provides
+exchange rates, so the price can be converted to default currency if
+required.
+
+```yaml
+commodities:
+  - name: RELIANCE # (1)!
+    type: stock # (2)!
+    price:
+        provider: co-alphavantage # (3)!
+        code: 7GAURDT55LU7OQKK:RELIANCE.BSE:INR # (4)!
+```
+
+1. commodity name
+1. type
+1. price provider name
+1. code
+
+Code is made of three parts, `apiKey`, `symbol` and `currency`. For
+example in `7GAURDT55LU7OQKK:RELIANCE.BSE:INR`, `7GAURDT55LU7OQKK` is
+the api key, `RELIANCE.BSE` is the symbol and `INR` is the
+currency. Alpha Vantage provides [free api key](https://www.alphavantage.co/support/#api-key) with 25 requests per day
+limit.
 
 ## Purified Bytes NPS <sub>:flag_in:</sub>
 

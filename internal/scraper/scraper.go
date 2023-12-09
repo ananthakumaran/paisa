@@ -11,8 +11,9 @@ import (
 
 func GetAllProviders() []price.PriceProvider {
 	return []price.PriceProvider{
-		&stock.PriceProvider{},
+		&stock.YahooPriceProvider{},
 		&mutualfund.PriceProvider{},
+		&stock.AlphaVantagePriceProvider{},
 		&nps.PriceProvider{},
 		&metal.PriceProvider{},
 	}
@@ -28,7 +29,9 @@ func GetProviderByCode(code string) price.PriceProvider {
 	case "com-purifiedbytes-metal":
 		return &metal.PriceProvider{}
 	case "com-yahoo":
-		return &stock.PriceProvider{}
+		return &stock.YahooPriceProvider{}
+	case "co-alphavantage":
+		return &stock.AlphaVantagePriceProvider{}
 	}
 	log.Fatal("Unknown price provider: ", code)
 	return nil

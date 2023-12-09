@@ -60,7 +60,7 @@
         }
       }
 
-      const queryFilters = _.mapValues(filters, (v) => v?.id);
+      const queryFilters = _.mapValues(filters, (v) => (_.isString(v) ? v : v?.id));
       queryFilters[field] = filterText;
       const { completions } = await ajax("/api/price/autocomplete", {
         method: "POST",
@@ -94,7 +94,7 @@
               {/each}
             </select>
           </div>
-          <div class="help">{selectedProvider.description}</div>
+          <div class="help">{@html selectedProvider.description}</div>
         </div>
       </div>
       <div class="field">
@@ -103,7 +103,11 @@
             <label class="label" for="">{field.label}</label>
             <div class="control">
               {#if field.inputType == "text"}
-                <input class="input" type="text" bind:value={code} required />
+                {#if i === selectedProvider.fields.length - 1}
+                  <input class="input" type="text" bind:value={code} required />
+                {:else}
+                  <input class="input" type="text" bind:value={filters[field.id]} required />
+                {/if}
               {:else}
                 {#key autocompleteCache[i]}
                   <Select
@@ -113,6 +117,7 @@
                     loadOptions={makeAutoComplete(field.id, filters, i, selectedProvider)}
                     label="label"
                     itemId="id"
+                    debounceWait={500}
                     searchable={true}
                     clearable={false}
                     on:change={() => {
@@ -132,7 +137,7 @@
                   ></Select>
                 {/key}
               {/if}
-              <p class="help">{field.help}</p>
+              <p class="help">{@html field.help}</p>
             </div>
           </div>
         {/each}

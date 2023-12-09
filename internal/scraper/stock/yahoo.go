@@ -7,6 +7,8 @@ import (
 	"net/http"
 	"time"
 
+	"gorm.io/gorm"
+
 	"github.com/google/btree"
 	"github.com/shopspring/decimal"
 	log "github.com/sirupsen/logrus"
@@ -113,4 +115,36 @@ func getTicker(ticker string) (*Response, error) {
 	}
 
 	return &response, nil
+}
+
+type YahooPriceProvider struct {
+}
+
+func (p *YahooPriceProvider) Code() string {
+	return "com-yahoo"
+}
+
+func (p *YahooPriceProvider) Label() string {
+	return "Yahoo Finance"
+}
+
+func (p *YahooPriceProvider) Description() string {
+	return "Supports a large set of stocks, ETFs, mutual funds, currencies, bonds, commodities, and cryptocurrencies. The stock price will be automatically converted to your default currency using the yahoo exchange rate."
+}
+
+func (p *YahooPriceProvider) AutoCompleteFields() []price.AutoCompleteField {
+	return []price.AutoCompleteField{
+		{Label: "Ticker", ID: "ticker", Help: "Stock ticker symbol, can be located on Yahoo's website. For example, AAPL is the ticker symbol for Apple Inc. (AAPL)", InputType: "text"},
+	}
+}
+
+func (p *YahooPriceProvider) AutoComplete(db *gorm.DB, field string, filter map[string]string) []price.AutoCompleteItem {
+	return []price.AutoCompleteItem{}
+}
+
+func (p *YahooPriceProvider) ClearCache(db *gorm.DB) {
+}
+
+func (p *YahooPriceProvider) GetPrices(code string, commodityName string) ([]*price.Price, error) {
+	return GetHistory(code, commodityName)
 }

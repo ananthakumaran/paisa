@@ -168,7 +168,8 @@
                     "in-mfapi",
                     "com-yahoo",
                     "com-purifiedbytes-nps",
-                    "com-purifiedbytes-metal"
+                    "com-purifiedbytes-metal",
+                    "co-alphavantage"
                   ],
                   "type": "string"
                 }

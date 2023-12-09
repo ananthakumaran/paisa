@@ -725,6 +725,10 @@ export function now(): dayjs.Dayjs {
   return dayjs();
 }
 
+function unicodeMinus(value: string) {
+  return value.replace(/^-/, "\u2212");
+}
+
 export function formatCurrency(value: number, precision: number = null) {
   value = normalize(value);
 
@@ -732,10 +736,12 @@ export function formatCurrency(value: number, precision: number = null) {
     precision = USER_CONFIG.display_precision;
   }
 
-  return value.toLocaleString(USER_CONFIG.locale, {
-    minimumFractionDigits: precision,
-    maximumFractionDigits: precision
-  });
+  return unicodeMinus(
+    value.toLocaleString(USER_CONFIG.locale, {
+      minimumFractionDigits: precision,
+      maximumFractionDigits: precision
+    })
+  );
 }
 
 export function formatCurrencyCrude(value: number) {
@@ -756,42 +762,50 @@ export function formatCurrencyCrudeWithPrecision(value: number, precision: numbe
     options.minimumFractionDigits = precision;
   }
 
-  return value.toLocaleString(USER_CONFIG.locale, options);
+  return unicodeMinus(value.toLocaleString(USER_CONFIG.locale, options));
 }
 
 export function formatFloat(value: number, precision = 2) {
   value = normalize(value);
 
-  return value.toLocaleString(USER_CONFIG.locale, {
-    minimumFractionDigits: precision,
-    maximumFractionDigits: precision
-  });
+  return unicodeMinus(
+    value.toLocaleString(USER_CONFIG.locale, {
+      minimumFractionDigits: precision,
+      maximumFractionDigits: precision
+    })
+  );
 }
 
 export function formatFloatUptoPrecision(value: number, precision = 2) {
   value = normalize(value);
 
-  return value.toLocaleString(USER_CONFIG.locale, {
-    maximumFractionDigits: precision
-  });
+  return unicodeMinus(
+    value.toLocaleString(USER_CONFIG.locale, {
+      maximumFractionDigits: precision
+    })
+  );
 }
 
 export function formatPercentage(value: number, precision = 0) {
   value = normalize(value);
 
-  return value.toLocaleString(USER_CONFIG.locale, {
-    style: "percent",
-    minimumFractionDigits: precision
-  });
+  return unicodeMinus(
+    value.toLocaleString(USER_CONFIG.locale, {
+      style: "percent",
+      minimumFractionDigits: precision
+    })
+  );
 }
 
 export function formatFixedWidthFloat(value: number, width: number, precision = 2) {
   value = normalize(value);
 
-  const formatted = value.toLocaleString(USER_CONFIG.locale, {
-    minimumFractionDigits: precision,
-    maximumFractionDigits: precision
-  });
+  const formatted = unicodeMinus(
+    value.toLocaleString(USER_CONFIG.locale, {
+      minimumFractionDigits: precision,
+      maximumFractionDigits: precision
+    })
+  );
 
   if (formatted.length < width) {
     return formatted.padStart(width, " ");

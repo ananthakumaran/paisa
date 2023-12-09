@@ -52,6 +52,8 @@
       
     
     
+      <link rel="stylesheet" href="../../stylesheets/device-frames.min.css">
+    
       <link rel="stylesheet" href="../../stylesheets/extra.css">
     
     <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
@@ -518,6 +520,8 @@
       
         
       
+        
+      
     
     
     <li class="md-nav__item md-nav__item--active md-nav__item--nested">
@@ -916,6 +920,26 @@
   
   
     <li class="md-nav__item">
+      <a href="../editor/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Editor
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../analysis/" class="md-nav__link">
         
   
@@ -958,7 +982,7 @@
         
           
         
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3_13" >
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3_14" >
         
           
           
@@ -973,14 +997,14 @@
 
             </a>
             
-              <label class="md-nav__link " for="__nav_3_13">
+              <label class="md-nav__link " for="__nav_3_14">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
           </div>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_13_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_3_13">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_14_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_14">
             <span class="md-nav__icon md-icon"></span>
             Tax
           </label>
@@ -1240,6 +1264,12 @@ Ledger <a href="https://ledger-cli.org/doc/ledger3.html#Complex-expressions">doc
 </span><span id="__span-3-13"><a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a>= expr payee=~/Savings Interest/
 </span><span id="__span-3-14"><a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="err">    </span><span class="c1">; Recurring: Savings Interest</span>
 </span></code></pre></div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Include the automated transactions at the top of the main ledger
+file. Ledger will apply the rules only to transactions that
+follow the automated transactions.</p>
+</div>
 <h2 id="period">Period</h2>
 <p>Paisa will try to infer the recurring period of the transactions
 automatically, but this might not be perfect. Recurring period can
@@ -1303,6 +1333,13 @@ valid and the next 3 schedules if valid.</p>
 <li>1<sup>st</sup> of Jan and 7<sup>th</sup> of Feb <code class="language-ledger highlight"><span class="c1">; Period 1 JAN ? | 7 FEB ?</span></code></li>
 <li>Closest business day to the 15<sup>th</sup> day of every month. <code class="language-ledger highlight"><span class="c1">; Period 15W * ?</span></code></li>
 </ul>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Recurring page will only show a transaction as recurring if there
+is more than <strong>one transaction</strong> with the same tag name. If you
+have only one transaction, wait untill the next transaction is added
+to see it on the recurring page.</p>
+</div>
 
 
   

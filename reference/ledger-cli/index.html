@@ -18,7 +18,7 @@
         <link rel="prev" href="../goals/savings/">
       
       
-        <link rel="next" href="../analysis/">
+        <link rel="next" href="../editor/">
       
       
       <link rel="icon" href="../../images/favicon.png">
@@ -51,6 +51,8 @@
         <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
       
     
+    
+      <link rel="stylesheet" href="../../stylesheets/device-frames.min.css">
     
       <link rel="stylesheet" href="../../stylesheets/extra.css">
     
@@ -518,6 +520,8 @@
       
         
       
+        
+      
     
     
     <li class="md-nav__item md-nav__item--active md-nav__item--nested">
@@ -845,6 +849,17 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Ledger CLI
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -855,6 +870,72 @@
 
       </a>
       
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#unavailable-features" class="md-nav__link">
+    Unavailable Features
+  </a>
+  
+    <nav class="md-nav" aria-label="Unavailable Features">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#hledger" class="md-nav__link">
+    hledger
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#beancount" class="md-nav__link">
+    beancount
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../editor/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Editor
+  </span>
+  
+
+      </a>
     </li>
   
 
@@ -908,7 +989,7 @@
         
           
         
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3_13" >
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3_14" >
         
           
           
@@ -923,14 +1004,14 @@
 
             </a>
             
-              <label class="md-nav__link " for="__nav_3_13">
+              <label class="md-nav__link " for="__nav_3_14">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
           </div>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_13_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_3_13">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_14_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_14">
             <span class="md-nav__icon md-icon"></span>
             Tax
           </label>
@@ -1091,6 +1172,41 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#unavailable-features" class="md-nav__link">
+    Unavailable Features
+  </a>
+  
+    <nav class="md-nav" aria-label="Unavailable Features">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#hledger" class="md-nav__link">
+    hledger
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#beancount" class="md-nav__link">
+    beancount
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -1117,6 +1233,32 @@ prefer to use <strong>hledger</strong> or <strong>beancount</strong> instead, ch
 </span></code></pre></div>
 <p>Paisa ships with ledger binary. If you use hledger or beancount, make
 sure that the binaries are installed.</p>
+<h2 id="unavailable-features">Unavailable Features</h2>
+<p>Some of the features that are available in Paisa are not supported
+by <strong>hledger</strong> and <strong>beancount</strong></p>
+<h3 id="hledger">hledger</h3>
+<ul>
+<li><a href="../recurring/">Recurring</a> (partial) - hledger supports automated transactions,
+  but it doesn't allow to add <strong>only</strong> metadata to transaction. So
+  some of the examples in the recurring section will not work with
+  hledger. It's possible to add metadata to transactions manually.</li>
+</ul>
+<h3 id="beancount">beancount</h3>
+<ul>
+<li>
+<p><a href="../budget/">Budget</a> - budget is based on periodic transactions that is no
+    supported by beancount.</p>
+</li>
+<li>
+<p><a href="../recurring/">Recurring</a> (partial) - beancount doesn't support automated
+  transactions. It's possible to add metadata to transactions
+  manually. Use lowercase for tag name.</p>
+</li>
+<li>
+<p>Search filter in Transactions and Postings pages doesn't support note
+  <a href="../bulk-edit/#property">property</a>.</p>
+</li>
+</ul>
 
 
   
@@ -1205,13 +1347,13 @@ sure that the binaries are installed.</p>
         
         
           
-          <a href="../analysis/" class="md-footer__link md-footer__link--next" aria-label="Next: Analysis" rel="next">
+          <a href="../editor/" class="md-footer__link md-footer__link--next" aria-label="Next: Editor" rel="next">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                Analysis
+                Editor
               </div>
             </div>
             <div class="md-footer__button md-icon">

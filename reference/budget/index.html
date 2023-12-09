@@ -52,6 +52,8 @@
       
     
     
+      <link rel="stylesheet" href="../../stylesheets/device-frames.min.css">
+    
       <link rel="stylesheet" href="../../stylesheets/extra.css">
     
     <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
@@ -518,6 +520,8 @@
       
         
       
+        
+      
     
     
     <li class="md-nav__item md-nav__item--active md-nav__item--nested">
@@ -866,6 +870,26 @@
   
   
     <li class="md-nav__item">
+      <a href="../editor/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Editor
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../analysis/" class="md-nav__link">
         
   
@@ -908,7 +932,7 @@
         
           
         
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3_13" >
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3_14" >
         
           
           
@@ -923,14 +947,14 @@
 
             </a>
             
-              <label class="md-nav__link " for="__nav_3_13">
+              <label class="md-nav__link " for="__nav_3_14">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
           </div>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_13_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_3_13">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_14_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_14">
             <span class="md-nav__icon md-icon"></span>
             Tax
           </label>
@@ -1135,7 +1159,7 @@ can read more about <a href="https://ledger-cli.org/doc/ledger3.html#Period-Expr
 <a href="https://github.com/ledger/ledger/issues/1625">bug</a> in the ledger-cli, so you can't use <code>~ in 2023/08/01</code>,
 instead you always have to specify some interval like <code>~ Monthly in 2023/08/01</code>.</p>
 </div>
-<p><img alt="Initial Budget" src="/images/budget-1.png" /></p>
+<p><a href="../../images/budget-1.png">Initial Budget</a></p>
 <p>Now you can see that you will have 5k left in your checking account at
 the end of the month, if you spend as per your budget. Before you
 spend, you can check your budget and verify if you have money
@@ -1169,7 +1193,7 @@ available under that category.</p>
 </span><span id="__span-2-26"><a id="__codelineno-2-26" name="__codelineno-2-26" href="#__codelineno-2-26"></a><span class="s">    Expenses:Insurance</span><span class="err">           </span><span class="m">10000</span><span class="err"> </span><span class="k">INR</span>
 </span><span id="__span-2-27"><a id="__codelineno-2-27" name="__codelineno-2-27" href="#__codelineno-2-27"></a><span class="s">    Assets:Checking</span>
 </span></code></pre></div>
-<p><img alt="Month end Budget" src="/images/budget-2.png" /></p>
+<p><img alt="Month end Budget" src="../../images/budget-2.png" /></p>
 <p>As the month progresses, you can see how much you have spent and how
 much you have left. You notice that you have overspent on transport
 and you have missed the insurance payment. You have a budget deficit
@@ -1185,7 +1209,7 @@ and clothing budget to 0</p>
 </span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="s">    Expenses:Personal</span><span class="err">           </span><span class="m">5,000</span><span class="err"> </span><span class="k">INR</span>
 </span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="s">    Assets:Checking</span>
 </span></code></pre></div>
-<p><img alt="Budget Deficit Fixed" src="/images/budget-3.png" /></p>
+<p><img alt="Budget Deficit Fixed" src="../../images/budget-3.png" /></p>
 <p>You can go back and adjust your budget anytime. Let's move on to the
 next month, assuming you haven't made any further transaction.</p>
 <div class="language-ledger highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="na">2023/09/01</span> <span class="gh">Salary</span>
@@ -1201,7 +1225,7 @@ next month, assuming you haven't made any further transaction.</p>
 </span><span id="__span-4-11"><a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="s">    Expenses:Personal</span><span class="err">           </span><span class="m">5,000</span><span class="err"> </span><span class="k">INR</span>
 </span><span id="__span-4-12"><a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="s">    Assets:Checking</span>
 </span></code></pre></div>
-<p><img alt="Next month Budget" src="/images/budget-4.png" /></p>
+<p><img alt="Next month Budget" src="../../images/budget-4.png" /></p>
 <p>You can see a new element in the UI called Rollover<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup>. This is basically
 the amount you have budgeted last month, but haven't spent. This will
 automatically rollover to the next month. That's pretty much it.</p>

@@ -117,6 +117,7 @@ type Config struct {
 	DisplayPrecision           int        `json:"display_precision" yaml:"display_precision"`
 	Locale                     string     `json:"locale" yaml:"locale"`
 	FinancialYearStartingMonth time.Month `json:"financial_year_starting_month" yaml:"financial_year_starting_month"`
+	Strict                     BoolType   `json:"strict" yaml:"strict"`
 
 	Budget Budget `json:"budget" yaml:"budget"`
 
@@ -144,6 +145,7 @@ var defaultConfig = Config{
 	Locale:                     "en-IN",
 	Budget:                     Budget{Rollover: Yes},
 	FinancialYearStartingMonth: 4,
+	Strict:                     No,
 	ScheduleALs:                []ScheduleAL{},
 	AllocationTargets:          []AllocationTarget{},
 	Commodities:                []Commodity{},

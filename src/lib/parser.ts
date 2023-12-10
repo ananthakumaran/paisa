@@ -5,7 +5,8 @@ const DATE = /^\d{4}[/-]\d{2}[/-]\d{2}/;
 const DATE_TIME = /^\d{4}[/-]\d{2}[/-]\d{2} \d{2}:\d{2}:\d{2}/;
 const LOT_DATE = /^\[\d{4}[/-]\d{2}[/-]\d{2}\]/;
 const AMOUNT = /^[+-]?(?:[0-9,])+(\.(?:[0-9,])+)?/;
-const KEYWORDS = /^(?:commodity)/;
+const COMMODITY_DIRECTIVE = /^commodity/;
+const ACCOUNT_DIRECTIVE = /^account/;
 const COMMODITY = /^([A-Za-z_]+)|("[^"]+")/;
 const ACCOUNT = /^[^\][(); \t\n]((?!\s{2})[^\][();\t\n])*/;
 
@@ -15,6 +16,8 @@ interface State {
   inInclude: boolean;
   accountConsumed: boolean;
   inPrice: boolean;
+  inCommodityDirective: boolean;
+  inAccountDirective: boolean;
 }
 
 export const ledger: StreamParser<State> = {
@@ -25,7 +28,9 @@ export const ledger: StreamParser<State> = {
       inTransaction: false,
       inPosting: false,
       inInclude: false,
-      inPrice: false
+      inPrice: false,
+      inCommodityDirective: false,
+      inAccountDirective: false
     };
   },
   token: function (stream: StringStream, state: State) {
@@ -57,7 +62,29 @@ export const ledger: StreamParser<State> = {
       return "unit";
     }
 
-    if (stream.match(KEYWORDS)) return "keyword";
+    if (state.inAccountDirective) {
+      state.inAccountDirective = false;
+      if (stream.match(ACCOUNT)) {
+        return "string";
+      }
+    }
+
+    if (state.inCommodityDirective) {
+      state.inCommodityDirective = false;
+      if (stream.match(COMMODITY)) {
+        return "unit";
+      }
+    }
+
+    if (stream.match(COMMODITY_DIRECTIVE)) {
+      state.inCommodityDirective = true;
+      return "keyword";
+    }
+
+    if (stream.match(ACCOUNT_DIRECTIVE)) {
+      state.inAccountDirective = true;
+      return "keyword";
+    }
 
     if (stream.match(LOT_DATE)) {
       return "tagName";

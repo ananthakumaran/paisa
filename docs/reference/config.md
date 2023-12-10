@@ -65,6 +65,13 @@ locale: en-IN
 # OPTIONAL, DEFAULT: 4
 financial_year_starting_month: 4
 
+# When strict mode is enabled, all the accounts and commodities should
+# be defined before use. This is same as --pedantic flag in ledger and
+# --strict flag in hledger. Doesn't apply to beancount.
+#
+# OPTIONAL, ENUM: yes, no DEFAULT: no
+strict: "no"
+
 ## Budget
 budget:
   # Rollover unspent money to next month

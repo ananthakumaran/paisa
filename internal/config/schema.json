@@ -44,6 +44,12 @@
       "maximum": 12,
       "description": "First month of the financial year. This can be set to 1 to follow January to December."
     },
+    "strict": {
+      "ui:widget": "boolean",
+      "type": "string",
+      "description": "When strict mode is enabled, all the accounts and commodities should be defined before use.",
+      "enum": ["", "yes", "no"]
+    },
     "retirement": {
       "type": "object",
       "ui:widget": "hidden"

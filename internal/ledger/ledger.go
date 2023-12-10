@@ -64,7 +64,12 @@ func (LedgerCLI) ValidateFile(journalPath string) ([]LedgerFileError, string, er
 	}
 
 	var output, error bytes.Buffer
-	err = utils.Exec(ledgerPath, &output, &error, "--args-only", "-f", journalPath, "balance")
+	args := []string{"--args-only"}
+	if config.GetConfig().Strict == config.Yes {
+		args = append(args, "--pedantic")
+	}
+	args = append(args, "-f", journalPath, "balance")
+	err = utils.Exec(ledgerPath, &output, &error, args...)
 	if err == nil {
 		return errors, utils.Dos2Unix(output.String()), nil
 	}
@@ -127,7 +132,12 @@ func (HLedgerCLI) ValidateFile(journalPath string) ([]LedgerFileError, string, e
 	}
 
 	var output, error bytes.Buffer
-	err = utils.Exec(path, &output, &error, "-f", journalPath, "--auto", "balance")
+	args := []string{"-f", journalPath, "--auto"}
+	if config.GetConfig().Strict == config.Yes {
+		args = append(args, "--strict")
+	}
+	args = append(args, "balance")
+	err = utils.Exec(path, &output, &error, args...)
 	if err == nil {
 		return errors, utils.Dos2Unix(output.String()), nil
 	}

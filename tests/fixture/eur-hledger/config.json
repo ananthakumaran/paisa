@@ -13,6 +13,7 @@
     "display_precision": 0,
     "locale": "es-EU",
     "financial_year_starting_month": 4,
+    "strict": "no",
     "budget": {
       "rollover": "yes"
     },
@@ -507,6 +508,16 @@
           "code"
         ],
         "type": "array"
+      },
+      "strict": {
+        "description": "When strict mode is enabled, all the accounts and commodities should be defined before use.",
+        "enum": [
+          "",
+          "yes",
+          "no"
+        ],
+        "type": "string",
+        "ui:widget": "boolean"
       }
     },
     "required": [

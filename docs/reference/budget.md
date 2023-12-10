@@ -40,7 +40,7 @@ can read more about [periodic expressions](https://ledger-cli.org/doc/ledger3.ht
     [bug](https://github.com/ledger/ledger/issues/1625) in the ledger-cli, so you can't use `~ in 2023/08/01`,
     instead you always have to specify some interval like `~ Monthly in 2023/08/01`.
 
-[Initial Budget](../images/budget-1.png)
+![Initial Budget](../images/budget-1.png)
 
 Now you can see that you will have 5k left in your checking account at
 the end of the month, if you spend as per your budget. Before you

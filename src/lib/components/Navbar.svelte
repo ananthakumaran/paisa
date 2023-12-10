@@ -110,7 +110,7 @@
       href: "/ledger",
       children: [
         { label: "Import", href: "/import", help: "import" },
-        { label: "Editor", href: "/editor" },
+        { label: "Editor", href: "/editor", help: "editor" },
         { label: "Transactions", href: "/transaction", help: "bulk-edit" },
         { label: "Postings", href: "/posting" },
         { label: "Price", href: "/price" }

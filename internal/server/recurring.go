@@ -50,7 +50,12 @@ func ComputeRecurringTransactions(postings []posting.Posting) []TransactionSeque
 		}
 
 		if len(ts) > 1 {
-			interval = int(ts[0].Date.Sub(ts[1].Date).Hours() / 24)
+			for l := 0; l < len(ts)-1; l++ {
+				interval = int(ts[l].Date.Sub(ts[l+1].Date).Hours() / 24)
+				if interval > 0 {
+					break
+				}
+			}
 		}
 
 		return TransactionSequence{Transactions: ts, Key: key, Interval: interval, Period: period}
@@ -61,6 +66,6 @@ func ComputeRecurringTransactions(postings []posting.Posting) []TransactionSeque
 	})
 
 	return lo.Filter(transaction_sequences, func(ts TransactionSequence, _ int) bool {
-		return len(ts.Transactions) > 1
+		return len(ts.Transactions) > 1 && ts.Interval > 0
 	})
 }

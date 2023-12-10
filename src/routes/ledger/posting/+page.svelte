@@ -1,5 +1,7 @@
 <script lang="ts">
   import { accountColorStyle } from "$lib/colors";
+  import PostingNote from "$lib/components/PostingNote.svelte";
+  import PostingStatus from "$lib/components/PostingStatus.svelte";
   import SearchQuery from "$lib/components/SearchQuery.svelte";
   import { iconText } from "$lib/icon";
   import { change } from "$lib/posting";
@@ -134,15 +136,9 @@
                 {@const c = change(p)}
                 <div>{p.date.format("DD MMM YYYY")}</div>
                 <div class="is-size-7 truncate" title={p.payee}>
-                  {#if p.status == "cleared"}
-                    <span class="icon is-small">
-                      <i class="fas fa-check"></i>
-                    </span>
-                  {:else if p.status == "pending"}
-                    <span class="icon is-small">
-                      <i class="fas fa-exclamation"></i>
-                    </span>
-                  {/if}<a class="secondary-link" href={postingUrl(p)}>{p.payee}</a>
+                  <PostingStatus posting={p} />
+                  <PostingNote posting={p} />
+                  <a class="secondary-link" href={postingUrl(p)}>{p.payee}</a>
                 </div>
                 <div class="custom-icon truncate" title={p.account}>
                   <div class="flex">

@@ -3,6 +3,7 @@
   import Postings from "$lib/components/Postings.svelte";
   import _ from "lodash";
   import PostingStatus from "$lib/components/PostingStatus.svelte";
+  import TransactionNote from "./TransactionNote.svelte";
 
   export let compact: boolean = false;
   export let t: Transaction;
@@ -21,8 +22,9 @@
       <div class="column is-12 py-0 truncate">
         <div class="description is-size-7">
           <b>{t.date.format("DD MMM YYYY")}</b>
-          <span title={t.payee}
-            ><PostingStatus posting={t.postings[0]} />
+          <span title={t.payee}>
+            <PostingStatus posting={t.postings[0]} />
+            <TransactionNote transaction={t} />
             <a class="secondary-link" href={postingUrl(t.postings[0])}>{t.payee}</a></span
           >
         </div>
@@ -41,6 +43,7 @@
           <b>{t.date.format("DD MMM YYYY")}</b>
           <span title={t.payee}
             ><PostingStatus posting={t.postings[0]} />
+            <TransactionNote transaction={t} />
             <a class="secondary-link" href={postingUrl(t.postings[0])}>{t.payee}</a></span
           >
         </div>

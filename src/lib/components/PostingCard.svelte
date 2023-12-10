@@ -8,6 +8,7 @@
     firstName,
     restName
   } from "$lib/utils";
+  import PostingNote from "./PostingNote.svelte";
   import PostingStatus from "./PostingStatus.svelte";
 
   export let posting: Posting;
@@ -19,6 +20,7 @@
   <div class="is-flex is-justify-content-space-between">
     <div class="has-text-grey is-size-7 truncate">
       <PostingStatus {posting} />
+      <PostingNote {posting} />
       <a class="secondary-link" href={postingUrl(posting)}>{posting.payee}</a>
     </div>
     <div class="has-text-grey min-w-[110px] has-text-right">

@@ -15,7 +15,7 @@ COPY --from=web /usr/src/paisa/web/static ./web/static
 RUN CGO_ENABLED=1 go build
 
 FROM alpine:3.18
-RUN apk --no-cache add ca-certificates ledger
+RUN apk --no-cache add ca-certificates ledger hledger
 WORKDIR /root/
 COPY --from=go /usr/src/paisa/paisa ./
 EXPOSE 7500

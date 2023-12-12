@@ -34,6 +34,10 @@ import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone"; // dependent on utc plugin
 dayjs.extend(utc);
 dayjs.extend(timezone);
+import localeData from "dayjs/plugin/localeData";
+dayjs.extend(localeData);
+import updateLocale from "dayjs/plugin/updateLocale";
+dayjs.extend(updateLocale);
 
 import * as pdfjs from "pdfjs-dist";
 import pdfjsWorkerUrl from "pdfjs-dist/build/pdf.worker.js?url";
@@ -46,7 +50,7 @@ import Handlebars from "handlebars";
 import helpers from "$lib/template_helpers";
 import * as toast from "bulma-toast";
 import _ from "lodash";
-import { ajax, setNow } from "$lib/utils";
+import { ajax, configUpdated, setNow } from "$lib/utils";
 
 import "@formatjs/intl-numberformat/polyfill";
 import "@formatjs/intl-numberformat/locale-data/en";
@@ -76,5 +80,6 @@ export const load = (async () => {
     setNow(now);
   }
   globalThis.USER_CONFIG = config;
+  configUpdated();
   return {};
 }) satisfies LayoutLoad;

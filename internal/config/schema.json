@@ -44,6 +44,12 @@
       "maximum": 12,
       "description": "First month of the financial year. This can be set to 1 to follow January to December."
     },
+    "week_starting_day": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 6,
+      "description": "First day of the week. 0 represents Sunday, 1 represents Monday and so on."
+    },
     "strict": {
       "ui:widget": "boolean",
       "type": "string",

@@ -14,6 +14,10 @@ import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone"; // dependent on utc plugin
 dayjs.extend(utc);
 dayjs.extend(timezone);
+import localeData from "dayjs/plugin/localeData";
+dayjs.extend(localeData);
+import updateLocale from "dayjs/plugin/updateLocale";
+dayjs.extend(updateLocale);
 
 Handlebars.registerHelper(
   _.mapValues(helpers, (helper, name) => {

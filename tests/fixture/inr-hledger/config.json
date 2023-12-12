@@ -18,6 +18,7 @@
     "display_precision": 0,
     "locale": "en-IN",
     "financial_year_starting_month": 4,
+    "week_starting_day": 0,
     "strict": "no",
     "budget": {
       "rollover": "yes"
@@ -523,6 +524,12 @@
         ],
         "type": "string",
         "ui:widget": "boolean"
+      },
+      "week_starting_day": {
+        "description": "First day of the week. 0 represents Sunday, 1 represents Monday and so on.",
+        "maximum": 6,
+        "minimum": 0,
+        "type": "integer"
       }
     },
     "required": [

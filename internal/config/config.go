@@ -109,15 +109,16 @@ type AllocationTarget struct {
 }
 
 type Config struct {
-	JournalPath                string     `json:"journal_path" yaml:"journal_path"`
-	DBPath                     string     `json:"db_path" yaml:"db_path"`
-	Readonly                   bool       `json:"readonly" yaml:"readonly"`
-	LedgerCli                  string     `json:"ledger_cli" yaml:"ledger_cli"`
-	DefaultCurrency            string     `json:"default_currency" yaml:"default_currency"`
-	DisplayPrecision           int        `json:"display_precision" yaml:"display_precision"`
-	Locale                     string     `json:"locale" yaml:"locale"`
-	FinancialYearStartingMonth time.Month `json:"financial_year_starting_month" yaml:"financial_year_starting_month"`
-	Strict                     BoolType   `json:"strict" yaml:"strict"`
+	JournalPath                string       `json:"journal_path" yaml:"journal_path"`
+	DBPath                     string       `json:"db_path" yaml:"db_path"`
+	Readonly                   bool         `json:"readonly" yaml:"readonly"`
+	LedgerCli                  string       `json:"ledger_cli" yaml:"ledger_cli"`
+	DefaultCurrency            string       `json:"default_currency" yaml:"default_currency"`
+	DisplayPrecision           int          `json:"display_precision" yaml:"display_precision"`
+	Locale                     string       `json:"locale" yaml:"locale"`
+	FinancialYearStartingMonth time.Month   `json:"financial_year_starting_month" yaml:"financial_year_starting_month"`
+	WeekStartingDay            time.Weekday `json:"week_starting_day" yaml:"week_starting_day"`
+	Strict                     BoolType     `json:"strict" yaml:"strict"`
 
 	Budget Budget `json:"budget" yaml:"budget"`
 
@@ -146,6 +147,7 @@ var defaultConfig = Config{
 	Budget:                     Budget{Rollover: Yes},
 	FinancialYearStartingMonth: 4,
 	Strict:                     No,
+	WeekStartingDay:            0,
 	ScheduleALs:                []ScheduleAL{},
 	AllocationTargets:          []AllocationTarget{},
 	Commodities:                []Commodity{},

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { ajax } from "$lib/utils";
+  import { ajax, configUpdated } from "$lib/utils";
   import { onMount } from "svelte";
   import type { JSONSchema7 } from "json-schema";
   import JsonSchemaForm from "$lib/components/JsonSchemaForm.svelte";
@@ -46,6 +46,7 @@
         lastConfig = _.cloneDeep(newConfig);
         config = _.cloneDeep(newConfig);
         globalThis.USER_CONFIG = _.cloneDeep(newConfig);
+        configUpdated();
         refresh();
         toast.toast({
           message: `Saved config`,

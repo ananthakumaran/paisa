@@ -65,6 +65,12 @@ locale: en-IN
 # OPTIONAL, DEFAULT: 4
 financial_year_starting_month: 4
 
+# First day of the week. This can be set to 1 to follow Monday to
+# Sunday. 0 represents Sunday, 1 represents Monday and so on.
+#
+# OPTIONAL, DEFAULT: 0
+week_starting_day: 0
+
 # When strict mode is enabled, all the accounts and commodities should
 # be defined before use. This is same as --pedantic flag in ledger and
 # --strict flag in hledger. Doesn't apply to beancount.

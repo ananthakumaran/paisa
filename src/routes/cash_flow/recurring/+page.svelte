@@ -19,6 +19,7 @@
   import { month, setAllowedDateRange } from "../../../store";
   import type { Dayjs } from "dayjs";
   import RecurringDay from "$lib/components/RecurringDay.svelte";
+  import dayjs from "dayjs";
 
   let isEmpty = false;
   let transactionSequences: TransactionSequence[] = [];
@@ -61,13 +62,9 @@
         <div
           class="has-text-centered grid grid-cols-7 auto-cols-[1fr] auto-rows-[1fr] weekdays-grid uppercase mb-3 is-hidden-mobile"
         >
-          <div>Sun</div>
-          <div>Mon</div>
-          <div>Tue</div>
-          <div>Wed</div>
-          <div>Thu</div>
-          <div>Fri</div>
-          <div>Sat</div>
+          {#each dayjs.weekdaysShort(true) as day}
+            <div>{day}</div>
+          {/each}
         </div>
         <div
           class="grid grid-cols-1 md:grid-cols-7 gap-2 auto-cols-[1fr] auto-rows-[1fr] overflow-y-auto pb-1"

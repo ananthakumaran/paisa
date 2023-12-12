@@ -14,6 +14,7 @@
   import COLORS from "$lib/colors";
   import ZeroState from "$lib/components/ZeroState.svelte";
   import BoxLabel from "$lib/components/BoxLabel.svelte";
+  import dayjs from "dayjs";
 
   let groups = writable([]);
   let z: d3.ScaleOrdinal<string, string, never>,
@@ -164,13 +165,9 @@
             <div class="p-3 box">
               <div id="d3-current-month-expense-calendar" class="d3-calendar">
                 <div class="weekdays">
-                  <div>Sun</div>
-                  <div>Mon</div>
-                  <div>Tue</div>
-                  <div>Wed</div>
-                  <div>Thu</div>
-                  <div>Fri</div>
-                  <div>Sat</div>
+                  {#each dayjs.weekdaysShort(true) as day}
+                    <div>{day}</div>
+                  {/each}
                 </div>
                 <div class="days" />
               </div>

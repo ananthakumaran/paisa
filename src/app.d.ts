@@ -13,6 +13,7 @@ interface UserConfig {
   display_precision: number;
   db_path: string;
   financial_year_starting_month: number;
+  week_starting_day: number;
   accounts: {
     name: string;
     icon: string;

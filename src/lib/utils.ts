@@ -712,6 +712,13 @@ function normalize(value: number) {
   return value;
 }
 
+export function configUpdated() {
+  dayjs.locale("en");
+  dayjs.updateLocale("en", {
+    weekStart: USER_CONFIG.week_starting_day
+  });
+}
+
 export function setNow(value: dayjs.Dayjs) {
   if (value) {
     globalThis.__now = value;

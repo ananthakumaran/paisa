@@ -1,3 +1,4 @@
+import sha256 from "crypto-js/sha256";
 import dayjs from "dayjs";
 import _ from "lodash";
 import * as d3 from "d3";
@@ -5,6 +6,8 @@ import { loading } from "../store";
 import type { JSONSchema7 } from "json-schema";
 import { get } from "svelte/store";
 import { obscure } from "../persisted_store";
+import { error, redirect } from "@sveltejs/kit";
+import { goto } from "$app/navigation";
 
 export interface AutoCompleteItem {
   label: string;
@@ -463,6 +466,8 @@ export interface GoalSummary {
   targetDate: string;
 }
 
+const tokenKey = "token";
+
 const BACKGROUND = [
   "/api/editor/validate",
   "/api/editor/save",
@@ -659,6 +664,8 @@ export function ajax(
   options?: RequestInit
 ): Promise<{ success: boolean; error?: string }>;
 
+export function ajax(route: "/api/ping"): Promise<{ success: boolean; error?: string }>;
+
 export async function ajax(route: string, options?: RequestInit, params?: Record<string, string>) {
   if (!_.includes(BACKGROUND, route)) {
     loading.set(true);
@@ -676,11 +683,23 @@ export async function ajax(route: string, options?: RequestInit, params?: Record
     "Content-Type": "application/json"
   };
 
+  const token = localStorage.getItem(tokenKey);
+  if (!_.isEmpty(token)) {
+    options.headers["X-Auth"] = token;
+  }
+
   const response = await fetch(route, options);
   const body = await response.text();
   if (!_.includes(BACKGROUND, route)) {
     loading.set(false);
   }
+
+  if (response.status == 401 && route != "/api/ping") {
+    logout();
+    await goto("/login");
+    throw error(401, "Unauthorized");
+  }
+
   return JSON.parse(body, (key, value) => {
     if (
       _.isString(value) &&
@@ -693,6 +712,19 @@ export async function ajax(route: string, options?: RequestInit, params?: Record
     }
     return value;
   });
+}
+
+export async function login(username: string, password: string) {
+  localStorage.setItem(tokenKey, `${username}:${sha256(password)}`);
+  return await ajax("/api/ping");
+}
+
+export function isLoggedIn() {
+  return !_.isEmpty(localStorage.getItem(tokenKey));
+}
+
+export function logout() {
+  localStorage.removeItem(tokenKey);
 }
 
 function normalize(value: number) {

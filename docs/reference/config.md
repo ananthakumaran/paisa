@@ -247,4 +247,15 @@ accounts:
     # Required, name of the account
     icon: arcticons:idfc-first-bank
     # Optional, use the UI to select the icon.
+
+## List of user accounts.
+# If the list is empty, then no authentication will be performed
+#
+# OPTIONAL, DEFAULT: []
+user_accounts:
+  - username: john.doe
+    # Required
+    password: sha256:a96dc73edd639b1c711b006e714bd2ff5bf5c1aecd77d0b3c3370403c66d58e5
+    # Required, password hashed twice with sha256, then prefixed sha256:
+    # echo -n 'secret' | sha256sum | head -c 64 | sha256sum | head -c 64
 ```

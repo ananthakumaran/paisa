@@ -1,4 +1,5 @@
 <script lang="ts">
+  import sha256 from "crypto-js/sha256";
   import type { JSONSchema7 } from "json-schema";
   import Select from "svelte-select";
   import _ from "lodash";
@@ -9,12 +10,14 @@
   interface Schema extends JSONSchema7 {
     "ui:header"?: string;
     "ui:widget"?: string;
+    "ui:order"?: number;
   }
 
   const ICON_MAX_RESULTS = 200;
 
   export let key: string;
   export let value: any;
+  export let rawValue: string = "";
   export let schema: Schema;
   export let depth: number = 0;
   export let required = false;
@@ -34,6 +37,7 @@
   function sortedProperties(schema: Schema) {
     return _.sortBy(Object.entries(schema.properties), ([key, subSchema]: [string, Schema]) => {
       return [
+        subSchema["ui:order"] || 999,
         _.includes(schema.required || [], key) ? 0 : 1,
         subSchema.type == "object" ? 2 : subSchema.type == "array" ? 3 : 1,
         key
@@ -70,6 +74,31 @@
 
 {#if schema["ui:widget"] == "hidden"}
   <div></div>
+{:else if schema["ui:widget"] == "password"}
+  <div class="field is-horizontal">
+    <div class="field-label is-small">
+      <label data-tippy-content={documentation(schema)} for="" class="label">{title}</label>
+    </div>
+    <div class="field-body">
+      <div class="field">
+        <div class="control">
+          <input
+            {disabled}
+            {required}
+            class="input is-small"
+            style="max-width: 350px;"
+            type="password"
+            bind:value={rawValue}
+            on:change={() => {
+              if (!_.isEmpty(rawValue)) {
+                value = "sha256:" + sha256(sha256(rawValue).toString()).toString();
+              }
+            }}
+          />
+        </div>
+      </div>
+    </div>
+  </div>
 {:else if schema["ui:widget"] == "icon"}
   <div class="field is-horizontal">
     <div class="field-label is-small">

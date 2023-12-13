@@ -1,6 +1,8 @@
 package utils
 
 import (
+	"crypto/sha256"
+	"encoding/hex"
 	"fmt"
 	"os"
 	"sort"
@@ -262,4 +264,10 @@ func ReplaceLast(haystack, needle, replacement string) string {
 		return haystack
 	}
 	return haystack[:i] + replacement + haystack[i+len(needle):]
+}
+
+func Sha256(str string) string {
+	h := sha256.New()
+	h.Write([]byte(str))
+	return hex.EncodeToString(h.Sum(nil))
 }

@@ -1,8 +1,9 @@
 <script lang="ts">
   import { sync } from "$lib/sync";
-  import { isMobile } from "$lib/utils";
+  import { isLoggedIn, isMobile, logout } from "$lib/utils";
   import { refresh } from "../../store";
   import { obscure } from "../../persisted_store";
+  import { goto } from "$app/navigation";
 
   let isLoading = false;
 
@@ -23,6 +24,13 @@
 
     refresh();
   });
+
+  function doLogout() {
+    logout();
+    goto("/login");
+  }
+
+  let showLogout = isLoggedIn();
 </script>
 
 <div class="dropdown {isMobile() ? 'is-left' : 'is-right'}" class:is-hoverable={!isLoading}>
@@ -63,6 +71,15 @@
           <span>Hide numbers</span>
         </label>
       </a>
+      {#if showLogout}
+        <hr class="dropdown-divider" />
+        <a on:click={(_e) => doLogout()} class="dropdown-item icon-text">
+          <span class="icon is-small">
+            <i class="fas fa-arrow-right-from-bracket" />
+          </span>
+          <span>Logout</span>
+        </a>
+      {/if}
     </div>
   </div>
 </div>

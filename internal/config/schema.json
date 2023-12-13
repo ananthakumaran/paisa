@@ -60,6 +60,40 @@
       "type": "object",
       "ui:widget": "hidden"
     },
+    "user_accounts": {
+      "description": "List of user accounts",
+      "type": "array",
+      "default": [
+        {
+          "username": "john.doe",
+          "password": ""
+        }
+      ],
+      "itemsUniqueProperties": ["username"],
+      "items": {
+        "type": "object",
+        "description": "User account configuration",
+        "properties": {
+          "username": {
+            "type": "string",
+            "description": "Username for the account",
+            "minLength": 1,
+            "ui:order": 1,
+            "pattern": "^[A-Za-z0-9.-_]+$"
+          },
+          "password": {
+            "type": "string",
+            "ui:widget": "password",
+            "ui:order": 2,
+            "description": "Password for the account",
+            "pattern": "^sha256:[A-Fa-f0-9]{64}$"
+          }
+        },
+        "ui:header": "username",
+        "required": ["username", "password"],
+        "additionalProperties": false
+      }
+    },
     "goals": {
       "description": "Goals configuration",
       "type": "object",

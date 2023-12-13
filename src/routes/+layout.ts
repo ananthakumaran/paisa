@@ -1,8 +1,6 @@
 export const prerender = false;
 export const ssr = false;
 
-import type { LayoutLoad } from "./$types";
-
 import "../common.scss";
 import "../light.scss";
 import "../dark.scss";
@@ -50,7 +48,6 @@ import Handlebars from "handlebars";
 import helpers from "$lib/template_helpers";
 import * as toast from "bulma-toast";
 import _ from "lodash";
-import { ajax, configUpdated, setNow } from "$lib/utils";
 
 import "@formatjs/intl-numberformat/polyfill";
 import "@formatjs/intl-numberformat/locale-data/en";
@@ -73,13 +70,3 @@ toast.setDefaults({
   pauseOnHover: true,
   extraClasses: "is-light invertable"
 });
-
-export const load = (async () => {
-  const { config, now } = await ajax("/api/config");
-  if (now) {
-    setNow(now);
-  }
-  globalThis.USER_CONFIG = config;
-  configUpdated();
-  return {};
-}) satisfies LayoutLoad;

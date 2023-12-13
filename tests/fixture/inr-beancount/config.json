@@ -31,7 +31,8 @@
     "goals": {
       "retirement": [],
       "savings": []
-    }
+    },
+    "user_accounts": []
   },
   "now": "2022-02-07T00:00:00Z",
   "schema": {
@@ -524,6 +525,45 @@
         ],
         "type": "string",
         "ui:widget": "boolean"
+      },
+      "user_accounts": {
+        "default": [
+          {
+            "password": "",
+            "username": "john.doe"
+          }
+        ],
+        "description": "List of user accounts",
+        "items": {
+          "additionalProperties": false,
+          "description": "User account configuration",
+          "properties": {
+            "password": {
+              "description": "Password for the account",
+              "pattern": "^sha256:[A-Fa-f0-9]{64}$",
+              "type": "string",
+              "ui:order": 2,
+              "ui:widget": "password"
+            },
+            "username": {
+              "description": "Username for the account",
+              "minLength": 1,
+              "pattern": "^[A-Za-z0-9.-_]+$",
+              "type": "string",
+              "ui:order": 1
+            }
+          },
+          "required": [
+            "username",
+            "password"
+          ],
+          "type": "object",
+          "ui:header": "username"
+        },
+        "itemsUniqueProperties": [
+          "username"
+        ],
+        "type": "array"
       },
       "week_starting_day": {
         "description": "First day of the week. 0 represents Sunday, 1 represents Monday and so on.",

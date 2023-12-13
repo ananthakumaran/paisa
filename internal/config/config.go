@@ -69,6 +69,11 @@ type Account struct {
 	Icon string `json:"icon" yaml:"icon"`
 }
 
+type UserAccount struct {
+	Username string `json:"username" yaml:"username"`
+	Password string `json:"password" yaml:"password"`
+}
+
 type Goals struct {
 	Retirement []RetirementGoal `json:"retirement" yaml:"retirement"`
 	Savings    []SavingsGoal    `json:"savings" yaml:"savings"`
@@ -133,6 +138,8 @@ type Config struct {
 	Accounts []Account `json:"accounts" yaml:"accounts"`
 
 	Goals Goals `json:"goals" yaml:"goals"`
+
+	UserAccounts []UserAccount `json:"user_accounts" yaml:"user_accounts"`
 }
 
 var config Config
@@ -154,6 +161,7 @@ var defaultConfig = Config{
 	ImportTemplates:            []ImportTemplate{},
 	Accounts:                   []Account{},
 	Goals:                      Goals{Retirement: []RetirementGoal{}, Savings: []SavingsGoal{}},
+	UserAccounts:               []UserAccount{},
 }
 
 var itemsUniquePropertiesMeta = jsonschema.MustCompileString("itemsUniqueProperties.json", `{

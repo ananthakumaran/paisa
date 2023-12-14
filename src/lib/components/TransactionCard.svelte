@@ -9,8 +9,8 @@
     type Transaction,
     firstName
   } from "$lib/utils";
-  import PostingNote from "./PostingNote.svelte";
   import PostingStatus from "./PostingStatus.svelte";
+  import TransactionNote from "./TransactionNote.svelte";
 
   export let t: Transaction;
   let posting: Posting;
@@ -23,7 +23,7 @@
   <div class="is-flex is-justify-content-space-between is-align-items-baseline">
     <div class="has-text-grey is-size-7 truncate">
       <PostingStatus {posting} />
-      <PostingNote {posting} />
+      <TransactionNote transaction={t} />
       <a class="secondary-link" href={postingUrl(posting)}>{posting.payee}</a>
     </div>
     <div class="has-text-grey min-w-[110px] has-text-right">

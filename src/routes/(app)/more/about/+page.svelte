@@ -40,8 +40,8 @@
     <div class="columns">
       <div class="column is-12">
         <div class="box has-text-centered px-3 mx-auto" style="max-width: 400px;">
-          <div><Logo size={64} /></div>
-          <div class="is-size-3">Paisa</div>
+          <div><Logo size={128} /></div>
+          <div class="is-size-3 is-primary-color">Paisa</div>
           <div>
             Version: <b>0.6.1</b>
           </div>

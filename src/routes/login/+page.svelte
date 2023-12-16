@@ -31,9 +31,9 @@
         <div class="flex justify-center items-center h-screen">
           <div class="box px-5 w-80">
             <div class="flex justify-center items-center mb-2">
-              <div class="mt-1"><Logo size={20} /></div>
-              <div class="is-size-4">
-                <a href="https://paisa.fyi" class="secondary-link">Paisa</a>
+              <div class="mt-1 mr-1"><Logo size={32} /></div>
+              <div class="is-size-3">
+                <a href="https://paisa.fyi" class="is-primary-color">Paisa</a>
               </div>
             </div>
             <form on:submit|preventDefault={tryLogin}>

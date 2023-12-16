@@ -25,6 +25,7 @@ nav:
         - reference/goals/savings.md
     - reference/ledger-cli.md
     - reference/editor.md
+    - reference/user-authentication.md
     - reference/analysis.md
     - 'Tax':
       - reference/tax/index.md
@@ -114,6 +115,8 @@ extra:
       link: https://matrix.to/#/#paisa:matrix.org
     - icon: fontawesome/brands/x-twitter
       link: https://twitter.com/PaisaFinanceApp
+    - icon: fontawesome/brands/mastodon
+      link: https://mastodon.social/@PaisaFinanceApp
     - icon: fontawesome/brands/docker
       link: https://hub.docker.com/r/ananthakumaran/paisa
   consent:

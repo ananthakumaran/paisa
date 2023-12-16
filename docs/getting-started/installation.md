@@ -46,6 +46,16 @@ the primary difference being how the user interface is launched.
     related files in a folder named `paisa` which will be located in your
     `Documents` folder.
 
+## Third Party Hosted Options [^2]
+
+=== "PikaPods"
+
+    <a href="https://www.pikapods.com/pods?run=paisa" target="_blank"
+    rel="noopener" markdown>![Run on PikaPods](../images/pika-pods.svg)</a><br />
+    PikaPods lets you run Paisa on a server with a few clicks. It handles app upgrades,
+    backup and hosting for you. Make sure to setup a [user
+    account](../reference/user-authentication.md) post installation.
+
 ## CLI
 
 === "Linux"
@@ -163,3 +173,7 @@ Paisa CLI is available as a nix flake.
       necessary certificates. I can't justify spending that much for
       an app that doesn't generate any income. Unfortunately, as a
       result, you would have to jump through hoops to get it working.
+
+[^2]: As the name implies, these are 3rd party hosting solutions
+    operated by independent companies. I may receive affiliate
+    compensation for linking to their websites.

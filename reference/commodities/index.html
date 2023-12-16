@@ -636,6 +636,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#alpha-vantage" class="md-nav__link">
+    Alpha Vantage 
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#purified-bytes-nps" class="md-nav__link">
     Purified Bytes NPS 
   </a>
@@ -1215,6 +1222,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#alpha-vantage" class="md-nav__link">
+    Alpha Vantage 
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#purified-bytes-nps" class="md-nav__link">
     Purified Bytes NPS 
   </a>
@@ -1341,16 +1355,40 @@ you need to link the commodity and the stock ticker name.</p>
 <li>stock ticker code</li>
 </ol>
 <p>Stock prices are fetched from yahoo finance website. The ticker code
-should match the code used in yahoo.</p>
+should match the code used in yahoo. If the fetched price currency is
+not the default currency, it will be converted to default currency
+using the forex rate apis.</p>
+<h2 id="alpha-vantage">Alpha Vantage <sub><img alt="🌐" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@14.1.2/assets/svg/1f310.svg" title=":globe_with_meridians:" /></sub></h2>
+<p>Supports 100,000+ stocks, ETFs, mutual funds etc. It also provides
+exchange rates, so the price can be converted to default currency if
+required.</p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nt">commodities</span><span class="p">:</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">RELIANCE</span><span class="w"> </span><span class="c1"># (1)!</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">stock</span><span class="w"> </span><span class="c1"># (2)!</span>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">    </span><span class="nt">price</span><span class="p">:</span>
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">        </span><span class="nt">provider</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">co-alphavantage</span><span class="w"> </span><span class="c1"># (3)!</span>
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">        </span><span class="nt">code</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">7GAURDT55LU7OQKK:RELIANCE.BSE:INR</span><span class="w"> </span><span class="c1"># (4)!</span>
+</span></code></pre></div>
+<ol>
+<li>commodity name</li>
+<li>type</li>
+<li>price provider name</li>
+<li>code</li>
+</ol>
+<p>Code is made of three parts, <code>apiKey</code>, <code>symbol</code> and <code>currency</code>. For
+example in <code>7GAURDT55LU7OQKK:RELIANCE.BSE:INR</code>, <code>7GAURDT55LU7OQKK</code> is
+the api key, <code>RELIANCE.BSE</code> is the symbol and <code>INR</code> is the
+currency. Alpha Vantage provides <a href="https://www.alphavantage.co/support/#api-key">free api key</a> with 25 requests per day
+limit.</p>
 <h2 id="purified-bytes-nps">Purified Bytes NPS <sub><img alt="🇮🇳" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@14.1.2/assets/svg/1f1ee-1f1f3.svg" title=":flag_in:" /></sub></h2>
 <p>To automatically track the latest value of your nps funds holdings,
 you need to link the commodity and the fund scheme code.</p>
-<div class="language-yaml highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nt">commodities</span><span class="p">:</span>
-</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">NPS_HDFC_E</span><span class="w"> </span><span class="c1"># (1)!</span>
-</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nps</span><span class="w"> </span><span class="c1"># (2)!</span>
-</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">    </span><span class="nt">price</span><span class="p">:</span>
-</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">        </span><span class="nt">provider</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">com-purifiedbytes-nps</span><span class="w"> </span><span class="c1"># (3)!</span>
-</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">        </span><span class="nt">code</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SM008002</span><span class="w"> </span><span class="c1"># (4)!</span>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="nt">commodities</span><span class="p">:</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">NPS_HDFC_E</span><span class="w"> </span><span class="c1"># (1)!</span>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nps</span><span class="w"> </span><span class="c1"># (2)!</span>
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">    </span><span class="nt">price</span><span class="p">:</span>
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">        </span><span class="nt">provider</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">com-purifiedbytes-nps</span><span class="w"> </span><span class="c1"># (3)!</span>
+</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">        </span><span class="nt">code</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SM008002</span><span class="w"> </span><span class="c1"># (4)!</span>
 </span></code></pre></div>
 <ol>
 <li>commodity name</li>
@@ -1364,12 +1402,12 @@ respective NPS fund scheme code.</p>
 <p>To automatically track the latest price of gold or silver in various
 purity you need to link the commodity and the metal code. The price is
 for 1 gram of the metal.</p>
-<div class="language-yaml highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="nt">commodities</span><span class="p">:</span>
-</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">GOLD</span><span class="w"> </span><span class="c1"># (1)!</span>
-</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">metal</span><span class="w"> </span><span class="c1"># (2)!</span>
-</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">    </span><span class="nt">price</span><span class="p">:</span>
-</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">        </span><span class="nt">provider</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">com-purifiedbytes-metal</span><span class="w"> </span><span class="c1"># (3)!</span>
-</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">        </span><span class="nt">code</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gold-999</span><span class="w"> </span><span class="c1"># (4)!</span>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="nt">commodities</span><span class="p">:</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">GOLD</span><span class="w"> </span><span class="c1"># (1)!</span>
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">metal</span><span class="w"> </span><span class="c1"># (2)!</span>
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">    </span><span class="nt">price</span><span class="p">:</span>
+</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="w">        </span><span class="nt">provider</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">com-purifiedbytes-metal</span><span class="w"> </span><span class="c1"># (3)!</span>
+</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="w">        </span><span class="nt">code</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gold-999</span><span class="w"> </span><span class="c1"># (4)!</span>
 </span></code></pre></div>
 <ol>
 <li>commodity name</li>
@@ -1422,15 +1460,15 @@ for 1 gram of the metal.</p>
 <h2 id="realestate">RealEstate</h2>
 <p>Some commodities like real estate are bought once and the price
 changes over time. Ledger allows you to set the price as on date.</p>
-<div class="language-ledger highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="na">2014/01/01</span> <span class="gh">Home purchase</span>
-</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="s">    Assets:House</span><span class="err">                                </span><span class="m">1</span><span class="err"> </span><span class="k">APT</span><span class="err"> </span><span class="o">@</span><span class="err"> </span><span class="m">4000000</span><span class="err"> </span><span class="k">INR</span>
-</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="s">    Liabilities:Homeloan</span>
-</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>
-</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="k">P</span><span class="err"> </span><span class="na">2016/01/01 00:00:00</span><span class="err"> </span><span class="k">APT</span><span class="err"> </span><span class="m">5000000</span><span class="err"> </span><span class="k">INR</span>
-</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="k">P</span><span class="err"> </span><span class="na">2018/01/01 00:00:00</span><span class="err"> </span><span class="k">APT</span><span class="err"> </span><span class="m">6500000</span><span class="err"> </span><span class="k">INR</span>
-</span><span id="__span-5-7"><a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="k">P</span><span class="err"> </span><span class="na">2020/01/01 00:00:00</span><span class="err"> </span><span class="k">APT</span><span class="err"> </span><span class="m">6700000</span><span class="err"> </span><span class="k">INR</span>
-</span><span id="__span-5-8"><a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="k">P</span><span class="err"> </span><span class="na">2021/01/01 00:00:00</span><span class="err"> </span><span class="k">APT</span><span class="err"> </span><span class="m">6300000</span><span class="err"> </span><span class="k">INR</span>
-</span><span id="__span-5-9"><a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="k">P</span><span class="err"> </span><span class="na">2022/01/01 00:00:00</span><span class="err"> </span><span class="k">APT</span><span class="err"> </span><span class="m">8000000</span><span class="err"> </span><span class="k">INR</span>
+<div class="language-ledger highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="na">2014/01/01</span> <span class="gh">Home purchase</span>
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="s">    Assets:House</span><span class="err">                                </span><span class="m">1</span><span class="err"> </span><span class="k">APT</span><span class="err"> </span><span class="o">@</span><span class="err"> </span><span class="m">4000000</span><span class="err"> </span><span class="k">INR</span>
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="s">    Liabilities:Homeloan</span>
+</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>
+</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="k">P</span><span class="err"> </span><span class="na">2016/01/01 00:00:00</span><span class="err"> </span><span class="k">APT</span><span class="err"> </span><span class="m">5000000</span><span class="err"> </span><span class="k">INR</span>
+</span><span id="__span-6-6"><a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="k">P</span><span class="err"> </span><span class="na">2018/01/01 00:00:00</span><span class="err"> </span><span class="k">APT</span><span class="err"> </span><span class="m">6500000</span><span class="err"> </span><span class="k">INR</span>
+</span><span id="__span-6-7"><a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="k">P</span><span class="err"> </span><span class="na">2020/01/01 00:00:00</span><span class="err"> </span><span class="k">APT</span><span class="err"> </span><span class="m">6700000</span><span class="err"> </span><span class="k">INR</span>
+</span><span id="__span-6-8"><a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="k">P</span><span class="err"> </span><span class="na">2021/01/01 00:00:00</span><span class="err"> </span><span class="k">APT</span><span class="err"> </span><span class="m">6300000</span><span class="err"> </span><span class="k">INR</span>
+</span><span id="__span-6-9"><a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="k">P</span><span class="err"> </span><span class="na">2022/01/01 00:00:00</span><span class="err"> </span><span class="k">APT</span><span class="err"> </span><span class="m">8000000</span><span class="err"> </span><span class="k">INR</span>
 </span></code></pre></div>
 <h2 id="currencies">Currencies</h2>
 <p>If you need to deal with multiple currencies, just treat them as you
@@ -1438,24 +1476,24 @@ would treat any commodity. Since paisa is a reporting tool, it will
 always try to convert other currencies to the
 <a href="../config/">default_currency</a>. As long as the exchange rate from a currency to
 default_currency is available, paisa would work without issue</p>
-<div class="language-ledger highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="k">P</span><span class="err"> </span><span class="na">2023/05/01 00:00:00</span><span class="err"> </span><span class="k">USD</span><span class="err"> </span><span class="m">81.75</span><span class="err"> </span><span class="k">INR</span>
-</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>
-</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="na">2023/05/01</span> <span class="gh">Freelance Income</span>
-</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="err">    </span><span class="c1">;; conversion rate will be picked up</span>
-</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="err">    </span><span class="c1">;; from the price directive above</span>
-</span><span id="__span-6-6"><a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="s">    Income:Freelance</span><span class="err">      </span><span class="m">-100</span><span class="err"> </span><span class="k">USD</span>
-</span><span id="__span-6-7"><a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="s">    Assets:Checking</span>
-</span><span id="__span-6-8"><a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a>
-</span><span id="__span-6-9"><a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="na">2023/06/01</span> <span class="gh">Freelance Income</span>
-</span><span id="__span-6-10"><a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a><span class="err">    </span><span class="c1">;; conversion rate is specified inline</span>
-</span><span id="__span-6-11"><a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a><span class="s">    Income:Freelance</span><span class="err">      </span><span class="m">-200</span><span class="err"> </span><span class="k">USD</span><span class="err"> </span><span class="o">@</span><span class="err"> </span><span class="m">82.75</span><span class="err"> </span><span class="k">INR</span>
-</span><span id="__span-6-12"><a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a><span class="s">    Assets:Checking</span>
-</span><span id="__span-6-13"><a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a>
-</span><span id="__span-6-14"><a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a><span class="na">2023/07/01</span> <span class="gh">Netflix</span>
-</span><span id="__span-6-15"><a id="__codelineno-6-15" name="__codelineno-6-15" href="#__codelineno-6-15"></a><span class="err">    </span><span class="c1">;; if not available for a date,</span>
-</span><span id="__span-6-16"><a id="__codelineno-6-16" name="__codelineno-6-16" href="#__codelineno-6-16"></a><span class="err">    </span><span class="c1">;; will use previous known conversion rate (82.75)</span>
-</span><span id="__span-6-17"><a id="__codelineno-6-17" name="__codelineno-6-17" href="#__codelineno-6-17"></a><span class="s">    Expenses:Entertainment</span><span class="err">  </span><span class="m">10</span><span class="err"> </span><span class="k">USD</span>
-</span><span id="__span-6-18"><a id="__codelineno-6-18" name="__codelineno-6-18" href="#__codelineno-6-18"></a><span class="s">    Assets:Checking</span>
+<div class="language-ledger highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="k">P</span><span class="err"> </span><span class="na">2023/05/01 00:00:00</span><span class="err"> </span><span class="k">USD</span><span class="err"> </span><span class="m">81.75</span><span class="err"> </span><span class="k">INR</span>
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="na">2023/05/01</span> <span class="gh">Freelance Income</span>
+</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="err">    </span><span class="c1">;; conversion rate will be picked up</span>
+</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="err">    </span><span class="c1">;; from the price directive above</span>
+</span><span id="__span-7-6"><a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="s">    Income:Freelance</span><span class="err">      </span><span class="m">-100</span><span class="err"> </span><span class="k">USD</span>
+</span><span id="__span-7-7"><a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="s">    Assets:Checking</span>
+</span><span id="__span-7-8"><a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>
+</span><span id="__span-7-9"><a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a><span class="na">2023/06/01</span> <span class="gh">Freelance Income</span>
+</span><span id="__span-7-10"><a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a><span class="err">    </span><span class="c1">;; conversion rate is specified inline</span>
+</span><span id="__span-7-11"><a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a><span class="s">    Income:Freelance</span><span class="err">      </span><span class="m">-200</span><span class="err"> </span><span class="k">USD</span><span class="err"> </span><span class="o">@</span><span class="err"> </span><span class="m">82.75</span><span class="err"> </span><span class="k">INR</span>
+</span><span id="__span-7-12"><a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a><span class="s">    Assets:Checking</span>
+</span><span id="__span-7-13"><a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a>
+</span><span id="__span-7-14"><a id="__codelineno-7-14" name="__codelineno-7-14" href="#__codelineno-7-14"></a><span class="na">2023/07/01</span> <span class="gh">Netflix</span>
+</span><span id="__span-7-15"><a id="__codelineno-7-15" name="__codelineno-7-15" href="#__codelineno-7-15"></a><span class="err">    </span><span class="c1">;; if not available for a date,</span>
+</span><span id="__span-7-16"><a id="__codelineno-7-16" name="__codelineno-7-16" href="#__codelineno-7-16"></a><span class="err">    </span><span class="c1">;; will use previous known conversion rate (82.75)</span>
+</span><span id="__span-7-17"><a id="__codelineno-7-17" name="__codelineno-7-17" href="#__codelineno-7-17"></a><span class="s">    Expenses:Entertainment</span><span class="err">  </span><span class="m">10</span><span class="err"> </span><span class="k">USD</span>
+</span><span id="__span-7-18"><a id="__codelineno-7-18" name="__codelineno-7-18" href="#__codelineno-7-18"></a><span class="s">    Assets:Checking</span>
 </span></code></pre></div>
 <h2 id="update">Update</h2>
 <p>Paisa fetches the latest price of the commodities only when you

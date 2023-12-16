@@ -127,6 +127,15 @@ body {
   background: $white-bis;
 }
 
+.is-primary-color {
+  color: #b388ff;
+  font-weight: bold;
+
+  &:hover {
+    color: #b388ff;
+  }
+}
+
 .secondary-link {
   color: $grey-dark;
   &:hover {
@@ -835,23 +844,6 @@ span.progress-percent.less-than-10 {
 
 .progress {
   background: $white-ter;
-}
-
-.circle-container {
-  margin: auto;
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  height: 48px;
-  width: 48px;
-
-  svg {
-    path {
-      fill: $black;
-    }
-  }
 }
 
 .transaction.bordered {

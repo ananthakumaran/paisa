@@ -45,12 +45,14 @@ theme:
     repo: fontawesome/brands/github
   palette:
     - scheme: default
-      primary: hsl(229deg, 53%, 53%)
+      primary: indigo
+      accent: indigo
       toggle:
         icon: material/brightness-7
         name: Switch to dark mode
     - scheme: slate
-      primary: hsl(229deg, 53%, 53%)
+      primary: indigo
+      accent: indigo
       toggle:
         icon: material/brightness-4
         name: Switch to light mode

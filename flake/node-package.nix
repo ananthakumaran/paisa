@@ -1525,6 +1525,15 @@ let
         sha512 = "COUnqfB2+ckwXXSFInsFdOAWQzCCx+a5hq2ruyj+Vjund94RJQd4LG2u9hnvJrTgunKAaax7ancBYlDrNYxA0g==";
       };
     };
+    "@types/crypto-js-4.2.1" = {
+      name = "_at_types_slash_crypto-js";
+      packageName = "@types/crypto-js";
+      version = "4.2.1";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/@types/crypto-js/-/crypto-js-4.2.1.tgz";
+        sha512 = "FSPGd9+OcSok3RsM0UZ/9fcvMOXJ1ENE/ZbLfOPlBWj7BgXtEAM8VYfTtT760GiLbQIMoVozwVuisjvsVwqYWw==";
+      };
+    };
     "@types/d3-7.4.0" = {
       name = "_at_types_slash_d3";
       packageName = "@types/d3";
@@ -3080,6 +3089,15 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/cross-spawn/-/cross-spawn-7.0.3.tgz";
         sha512 = "iRDPJKUPVEND7dHPO8rkbOnPpyDygcDFtWjpeWNCgy8WP2rXcxXL8TskReQl6OrB2G7+UJrags1q15Fudc7G6w==";
+      };
+    };
+    "crypto-js-4.2.0" = {
+      name = "crypto-js";
+      packageName = "crypto-js";
+      version = "4.2.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/crypto-js/-/crypto-js-4.2.0.tgz";
+        sha512 = "KALDyEYgpY+Rlob/iriUtjV6d5Eq+Y191A5g4UqLAi8CyGP9N1+FdVbkc1SxKc2r4YAYqG8JzO2KGL+AizD70Q==";
       };
     };
     "css-select-5.1.0" = {
@@ -9391,6 +9409,7 @@ let
       sources."@types/cheerio-0.22.32"
       sources."@types/chroma-js-2.1.4"
       sources."@types/cookie-0.5.1"
+      sources."@types/crypto-js-4.2.1"
       sources."@types/d3-7.4.0"
       sources."@types/d3-array-3.0.2"
       sources."@types/d3-axis-3.0.1"
@@ -9655,6 +9674,7 @@ let
       sources."create-require-1.1.1"
       sources."crelt-1.0.5"
       sources."cross-spawn-7.0.3"
+      sources."crypto-js-4.2.0"
       sources."css-select-5.1.0"
       sources."css-selector-tokenizer-0.8.0"
       sources."css-tree-2.3.1"

@@ -1,5 +1,14 @@
 # CHANGELOG
 
+### 0.6.1 (2023-12-16)
+
+* Add new price provider: [Alpha Vantage](https://paisa.fyi/reference/commodities/#alpha-vantage)
+* Make first day of the week configurable
+* Support ledger strict mode
+* Add user login support, go to `User Accounts` section in configuration page to enable it
+* Show notes associated with a transaction/posting
+* Bug fixes
+
 ### 0.6.0 (2023-12-09)
 
 * Add individual account balance on goals page

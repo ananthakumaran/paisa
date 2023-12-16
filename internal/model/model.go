@@ -16,6 +16,7 @@ import (
 	"github.com/ananthakumaran/paisa/internal/scraper"
 	"github.com/ananthakumaran/paisa/internal/scraper/india"
 	"github.com/ananthakumaran/paisa/internal/scraper/mutualfund"
+	"github.com/samber/lo"
 	log "github.com/sirupsen/logrus"
 	"gorm.io/gorm"
 )
@@ -67,7 +68,9 @@ func SyncJournal(db *gorm.DB) (string, error) {
 func SyncCommodities(db *gorm.DB) error {
 	AutoMigrate(db)
 	log.Info("Fetching commodities price history")
-	commodities := commodity.All()
+	commodities := lo.Shuffle(commodity.All())
+
+	var errors []error
 	for _, commodity := range commodities {
 		name := commodity.Name
 		log.Info("Fetching commodity ", name)
@@ -80,10 +83,19 @@ func SyncCommodities(db *gorm.DB) error {
 
 		if err != nil {
 			log.Error(err)
-			return fmt.Errorf("Failed to fetch price for %s: %w", name, err)
+			errors = append(errors, fmt.Errorf("Failed to fetch price for %s: %w", name, err))
+			continue
 		}
 
 		price.UpsertAllByTypeNameAndID(db, commodity.Type, name, code, prices)
+	}
+
+	if len(errors) > 0 {
+		var message string
+		for _, error := range errors {
+			message += error.Error() + "\n"
+		}
+		return fmt.Errorf(strings.Trim(message, "\n"))
 	}
 	return nil
 }

@@ -6,19 +6,19 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="How to install Paisa, an open source personal finance manager">
+        <meta name="description" content="How to secure Paisa by adding user account">
       
       
         <meta name="author" content="Anantha Kumaran">
       
       
-        <link rel="canonical" href="https://paisa.fyi/getting-started/installation/">
+        <link rel="canonical" href="https://paisa.fyi/reference/user-authentication/">
       
       
-        <link rel="prev" href="../..">
+        <link rel="prev" href="../editor/">
       
       
-        <link rel="next" href="../tutorial/">
+        <link rel="next" href="../analysis/">
       
       
       <link rel="icon" href="../../images/favicon.png">
@@ -26,7 +26,7 @@
     
     
       
-        <title>Installation - Paisa</title>
+        <title>User Authentication - Paisa</title>
       
     
     
@@ -101,7 +101,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#installation" class="md-skip">
+        <a href="#user-authentication" class="md-skip">
           Skip to content
         </a>
       
@@ -135,7 +135,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Installation
+              User Authentication
             
           </span>
         </div>
@@ -256,13 +256,11 @@
         
   
   
-    
-  
   
     
     
-      <li class="md-tabs__item md-tabs__item--active">
-        <a href="./" class="md-tabs__link">
+      <li class="md-tabs__item">
+        <a href="../../getting-started/installation/" class="md-tabs__link">
           
   
     
@@ -278,11 +276,13 @@
         
   
   
+    
+  
   
     
     
-      <li class="md-tabs__item">
-        <a href="../../reference/accounts/" class="md-tabs__link">
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../accounts/" class="md-tabs__link">
           
   
     
@@ -397,8 +397,6 @@
       
   
   
-    
-  
   
     
     
@@ -409,13 +407,15 @@
       
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
         
           <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
             
@@ -428,7 +428,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_2">
             <span class="md-nav__icon md-icon"></span>
             Getting Started
@@ -439,29 +439,9 @@
                 
   
   
-    
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  <span class="md-ellipsis">
-    Installation
-  </span>
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../../getting-started/installation/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -470,68 +450,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#desktop-application" class="md-nav__link">
-    Desktop Application
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#third-party-hosted-options-2" class="md-nav__link">
-    Third Party Hosted Options 2
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#cli" class="md-nav__link">
-    CLI
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#cli-quick-start" class="md-nav__link">
-    CLI Quick Start
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#docker" class="md-nav__link">
-    Docker
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#nix-flake" class="md-nav__link">
-    Nix Flake
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -543,7 +461,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../tutorial/" class="md-nav__link">
+      <a href="../../getting-started/tutorial/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -568,6 +486,8 @@
       
   
   
+    
+  
   
     
     
@@ -606,15 +526,13 @@
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
         
         
         
         
-          
-        
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
         
           <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
             
@@ -627,7 +545,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_3">
             <span class="md-nav__icon md-icon"></span>
             Reference
@@ -640,7 +558,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/accounts/" class="md-nav__link">
+      <a href="../accounts/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -660,7 +578,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/commodities/" class="md-nav__link">
+      <a href="../commodities/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -680,7 +598,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/journal/" class="md-nav__link">
+      <a href="../journal/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -700,7 +618,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/allocation-targets/" class="md-nav__link">
+      <a href="../allocation-targets/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -720,7 +638,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/budget/" class="md-nav__link">
+      <a href="../budget/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -740,7 +658,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/bulk-edit/" class="md-nav__link">
+      <a href="../bulk-edit/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -760,7 +678,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/import/" class="md-nav__link">
+      <a href="../import/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -780,7 +698,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/recurring/" class="md-nav__link">
+      <a href="../recurring/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -800,7 +718,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/config/" class="md-nav__link">
+      <a href="../config/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -845,7 +763,7 @@
           
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../reference/goals/" class="md-nav__link ">
+            <a href="../goals/" class="md-nav__link ">
               
   
   <span class="md-ellipsis">
@@ -876,7 +794,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/goals/retirement/" class="md-nav__link">
+      <a href="../goals/retirement/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -896,7 +814,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/goals/savings/" class="md-nav__link">
+      <a href="../goals/savings/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -924,7 +842,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/ledger-cli/" class="md-nav__link">
+      <a href="../ledger-cli/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -944,7 +862,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/editor/" class="md-nav__link">
+      <a href="../editor/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -962,9 +880,29 @@
                 
   
   
+    
   
-    <li class="md-nav__item">
-      <a href="../../reference/user-authentication/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    User Authentication
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   <span class="md-ellipsis">
@@ -973,6 +911,33 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#implementation-details" class="md-nav__link">
+    Implementation details
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -984,7 +949,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/analysis/" class="md-nav__link">
+      <a href="../analysis/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1031,7 +996,7 @@
           
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../reference/tax/" class="md-nav__link ">
+            <a href="../tax/" class="md-nav__link ">
               
   
   <span class="md-ellipsis">
@@ -1062,7 +1027,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/tax/tax-harvesting/" class="md-nav__link">
+      <a href="../tax/tax-harvesting/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1082,7 +1047,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/tax/capital-gains/" class="md-nav__link">
+      <a href="../tax/capital-gains/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1102,7 +1067,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/tax/schedule-al/" class="md-nav__link">
+      <a href="../tax/schedule-al/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1130,7 +1095,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/changelog/" class="md-nav__link">
+      <a href="../changelog/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1216,43 +1181,8 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#desktop-application" class="md-nav__link">
-    Desktop Application
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#third-party-hosted-options-2" class="md-nav__link">
-    Third Party Hosted Options 2
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#cli" class="md-nav__link">
-    CLI
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#cli-quick-start" class="md-nav__link">
-    CLI Quick Start
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#docker" class="md-nav__link">
-    Docker
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#nix-flake" class="md-nav__link">
-    Nix Flake
+  <a href="#implementation-details" class="md-nav__link">
+    Implementation details
   </a>
   
 </li>
@@ -1275,183 +1205,31 @@
   
 
 
-<h1 id="installation">Installation</h1>
-<p>Paisa is available in two formats: a <strong>Desktop Application</strong> and a <strong>CLI</strong>
-(Command Line Interface). Both provide the same list of features, with
-the primary difference being how the user interface is launched.</p>
-<h2 id="desktop-application">Desktop Application</h2>
-<div class="tabbed-set tabbed-alternate" data-tabs="1:3"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Linux</label><label for="__tabbed_1_2">Mac</label><label for="__tabbed_1_3">Windows</label></div>
-<div class="tabbed-content">
-<div class="tabbed-block">
-<ul>
-<li>Download the prebuilt <a href="https://github.com/ananthakumaran/paisa/releases/latest">binary</a> named <code>paisa-app-linux-amd64.deb</code></li>
-<li>You can install it either by double clicking the deb file or run the following commands in a Terminal</li>
-</ul>
-<div class="language-console highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="gp"># </span><span class="nb">cd</span><span class="w"> </span>~/Downloads
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="gp"># </span>sudo<span class="w"> </span>dpkg<span class="w"> </span>-i<span class="w"> </span>paisa-app-linux-amd64.deb
-</span></code></pre></div>
-</div>
-<div class="tabbed-block">
-<ul>
-<li>Download the prebuilt <a href="https://github.com/ananthakumaran/paisa/releases/latest">binary</a> named <code>paisa-app-macos-amd64.dmg</code></li>
-<li>Open the dmg file and drag the Paisa app into Application folder</li>
-<li>Since the app is not signed<sup id="fnref3:1"><a class="footnote-ref" href="#fn:1">1</a></sup>, Mac will show a warning when
-you try to open the app. You can check the
-<a href="https://support.apple.com/en-us/HT202491">support</a> page for more
-details. If you don't get any option to open the app, go to the
-Application folder, right click on the icon and select
-open. Usually, this should present you with an option to open.</li>
-<li>Paisa will store all your journals, configuration files, and other
-related files in a folder named <code>paisa</code> which will be located in your
-<code>Documents</code> folder. When you open the app on your Mac for the
-first time, a permission dialog will appear. Click Allow, then close and reopen the app.</li>
-</ul>
-</div>
-<div class="tabbed-block">
-<ul>
-<li>Download the prebuilt <a href="https://github.com/ananthakumaran/paisa/releases/latest">binary</a> named <code>paisa-app-windows-amd64.exe</code></li>
-<li>Since the app is not signed<sup id="fnref2:1"><a class="footnote-ref" href="#fn:1">1</a></sup>, Windows will show multiple
-warnings, You might have to click <code>Keep anyway</code>, <code>More info</code>, <code>Run
-anyway</code> etc.</li>
-<li>Paisa will store all your journals, configuration files, and other
-related files in a folder named <code>paisa</code> which will be located in your
-<code>Documents</code> folder.</li>
-</ul>
-</div>
-</div>
-</div>
-<h2 id="third-party-hosted-options-2">Third Party Hosted Options <sup id="fnref:2"><a class="footnote-ref" href="#fn:2">2</a></sup></h2>
-<div class="tabbed-set tabbed-alternate" data-tabs="2:1"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">PikaPods</label></div>
-<div class="tabbed-content">
-<div class="tabbed-block">
-<p><a href="https://www.pikapods.com/pods?run=paisa" target="_blank"
-rel="noopener" markdown><img alt="Run on PikaPods" src="../../images/pika-pods.svg" /></a><br />
-PikaPods lets you run Paisa on a server with a few clicks. It handles app upgrades,
-backup and hosting for you. Make sure to setup a <a href="../../reference/user-authentication/">user
-account</a> post installation.</p>
-</div>
-</div>
-</div>
-<h2 id="cli">CLI</h2>
-<div class="tabbed-set tabbed-alternate" data-tabs="3:3"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><input id="__tabbed_3_3" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">Linux</label><label for="__tabbed_3_2">Mac</label><label for="__tabbed_3_3">Windows</label></div>
-<div class="tabbed-content">
-<div class="tabbed-block">
-<ul>
-<li>Download the prebuilt <a href="https://github.com/ananthakumaran/paisa/releases/latest">binary</a> named <code>paisa-cli-linux-amd64</code></li>
-<li>Run the following commands in a Terminal</li>
-</ul>
-<div class="language-console highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="gp"># </span><span class="nb">cd</span><span class="w"> </span>~/Downloads
-</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="gp"># </span>mv<span class="w"> </span>paisa-cli-linux-amd64<span class="w"> </span>paisa
-</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="gp"># </span>chmod<span class="w"> </span>u+x<span class="w"> </span>paisa
-</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="gp"># </span>mv<span class="w"> </span>paisa<span class="w"> </span>/usr/local/bin
-</span></code></pre></div>
-</div>
-<div class="tabbed-block">
-<ul>
-<li>Download the prebuilt <a href="https://github.com/ananthakumaran/paisa/releases/latest">binary</a> named <code>paisa-cli-macos-amd64</code></li>
-<li>Run the following commands in a Terminal</li>
-</ul>
-<div class="language-console highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="gp"># </span><span class="nb">cd</span><span class="w"> </span>~/Downloads
-</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="gp"># </span>mv<span class="w"> </span>paisa-cli-macos-amd64<span class="w"> </span>paisa
-</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="gp"># </span>chmod<span class="w"> </span>u+x<span class="w"> </span>paisa
-</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="gp"># </span>xattr<span class="w"> </span>-dr<span class="w"> </span>com.apple.quarantine<span class="w"> </span>paisa
-</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="gp"># </span>mv<span class="w"> </span>paisa<span class="w"> </span>/usr/local/bin
-</span></code></pre></div>
-</div>
-<div class="tabbed-block">
-<ul>
-<li>Download the prebuilt <a href="https://github.com/ananthakumaran/paisa/releases/latest">binary</a> named <code>paisa-cli-windows-amd64.exe</code></li>
-<li>Since the binary is not signed<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup> with a certificate, you might get
-a warning from Windows. You would have to click <code>keep anyway</code>.</li>
-<li>Run the following command in a Windows PowerShell. Make sure
-you are in the correct folder. You should see something like <code>PS C:\Users\yourname&gt;</code></li>
-</ul>
-<div class="language-pwsh-session highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="gp">PS C:\Users\john&gt; </span><span class="nb">mv </span><span class="p">.\</span><span class="n">Downloads</span><span class="p">\</span><span class="n">paisa-cli-windows-amd64</span><span class="p">.</span><span class="n">exe</span> <span class="p">.\</span><span class="n">paisa</span><span class="p">.</span><span class="n">exe</span>
-</span></code></pre></div>
-<ul>
-<li>The <code>paisa.exe</code> binary will be placed in the user's home directory. You
-can access it via PowerShell. Just open a new PowerShell window,
-which will start in the home directory. Then, you can run <code>.\paisa.exe serve</code></li>
-</ul>
-</div>
-</div>
-</div>
-<div class="admonition tip">
-<p class="admonition-title">Tip</p>
-<p>Paisa depends on the <strong><a href="https://www.ledger-cli.org/download.html">ledger</a></strong> binary. The prebuilt
-paisa binaries come with an embedded ledger binary and will use it if
-it's not already installed on your system. If you prefer to install the
-ledger yourself, follow the installation instructions on <a href="https://www.ledger-cli.org/download.html">ledger</a> site.</p>
-</div>
-<h2 id="cli-quick-start">CLI Quick Start</h2>
-<p>Paisa will store all your journals, configuration files, and other
-related files in a folder named <code>paisa</code> which will be located in your
-<code>Documents</code> folder.</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="4:3"><input checked="checked" id="__tabbed_4_1" name="__tabbed_4" type="radio" /><input id="__tabbed_4_2" name="__tabbed_4" type="radio" /><input id="__tabbed_4_3" name="__tabbed_4" type="radio" /><div class="tabbed-labels"><label for="__tabbed_4_1">Linux</label><label for="__tabbed_4_2">Mac</label><label for="__tabbed_4_3">Windows</label></div>
-<div class="tabbed-content">
-<div class="tabbed-block">
-<div class="language-console highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="gp"># </span>paisa<span class="w"> </span>serve
-</span></code></pre></div>
-</div>
-<div class="tabbed-block">
-<div class="language-console highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="gp"># </span>paisa<span class="w"> </span>serve
-</span></code></pre></div>
-</div>
-<div class="tabbed-block">
-<div class="language-pwsh-session highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="gp">PS C:\Users\john&gt; </span><span class="p">.\</span><span class="n">paisa</span><span class="p">.</span><span class="n">exe</span> <span class="n">serve</span>
-</span></code></pre></div>
-</div>
-</div>
-</div>
-<p>Go to <a href="http://localhost:7500">http://localhost:7500</a>. Read the <a href="../tutorial/">tutorial</a> to learn
-more.</p>
-<h2 id="docker">Docker</h2>
-<p>Paisa CLI is available on <a href="https://hub.docker.com/r/ananthakumaran/paisa">dockerhub</a>.</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="5:2"><input checked="checked" id="__tabbed_5_1" name="__tabbed_5" type="radio" /><input id="__tabbed_5_2" name="__tabbed_5" type="radio" /><div class="tabbed-labels"><label for="__tabbed_5_1">Linux</label><label for="__tabbed_5_2">Mac</label></div>
-<div class="tabbed-content">
-<div class="tabbed-block">
-<div class="language-console highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="gp"># </span>mkdir<span class="w"> </span>-p<span class="w"> </span>/home/john/Documents/paisa/
-</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="gp"># </span>docker<span class="w"> </span>run<span class="w"> </span>-p<span class="w"> </span><span class="m">7500</span>:7500<span class="w"> </span>-v<span class="w"> </span>/home/john/Documents/paisa/:/root/Documents/paisa/<span class="w"> </span>ananthakumaran/paisa:latest
-</span></code></pre></div>
-</div>
-<div class="tabbed-block">
-<div class="language-console highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="gp"># </span>mkdir<span class="w"> </span>-p<span class="w"> </span>/Users/john/Documents/paisa/
-</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="gp"># </span>docker<span class="w"> </span>run<span class="w"> </span>-p<span class="w"> </span><span class="m">7500</span>:7500<span class="w"> </span>-v<span class="w"> </span>/Users/john/Documents/paisa/:/root/Documents/paisa/<span class="w"> </span>ananthakumaran/paisa:latest
-</span></code></pre></div>
-</div>
-</div>
-</div>
-<h2 id="nix-flake">Nix Flake</h2>
-<p>Paisa CLI is available as a nix flake.</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="6:2"><input checked="checked" id="__tabbed_6_1" name="__tabbed_6" type="radio" /><input id="__tabbed_6_2" name="__tabbed_6" type="radio" /><div class="tabbed-labels"><label for="__tabbed_6_1">Linux</label><label for="__tabbed_6_2">Mac</label></div>
-<div class="tabbed-content">
-<div class="tabbed-block">
-<div class="language-console highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="gp"># </span>nix<span class="w"> </span>profile<span class="w"> </span>install<span class="w"> </span>github:ananthakumaran/paisa
-</span></code></pre></div>
-</div>
-<div class="tabbed-block">
-<div class="language-console highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="gp"># </span>nix<span class="w"> </span>profile<span class="w"> </span>install<span class="w"> </span>github:ananthakumaran/paisa
-</span></code></pre></div>
-</div>
-</div>
-</div>
-<div class="footnote">
-<hr />
-<ol>
-<li id="fn:1">
-<p>I offer Paisa as a free app, and I don't generate any revenue
-  from it. Code signing would require me to pay $99 for Mac and
-  approximately $300 for Windows each and every year to get the
-  necessary certificates. I can't justify spending that much for
-  an app that doesn't generate any income. Unfortunately, as a
-  result, you would have to jump through hoops to get it working.&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref2:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref3:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
-</li>
-<li id="fn:2">
-<p>As the name implies, these are 3rd party hosting solutions
-operated by independent companies. I may receive affiliate
-compensation for linking to their websites.&#160;<a class="footnote-backref" href="#fnref:2" title="Jump back to footnote 2 in the text">&#8617;</a></p>
-</li>
-</ol>
+<h1 id="user-authentication">User Authentication</h1>
+<p>You can setup username and password to make sure only you can access
+the application. Go to <code>Configuration</code> page and expand the <code>User
+Accounts</code> section. You can click the <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M256 512a256 256 0 1 0 0-512 256 256 0 1 0 0 512zm-24-168v-64h-64c-13.3 0-24-10.7-24-24s10.7-24 24-24h64v-64c0-13.3 10.7-24 24-24s24 10.7 24 24v64h64c13.3 0 24 10.7 24 24s-10.7 24-24 24h-64v64c0 13.3-10.7 24-24 24s-24-10.7-24-24z"/></svg></span>
+icon to add a new username and password. Once you save the
+configuration, you will get logged out if you had not logged in
+earlier via another account.</p>
+<p>It is important to understand that authentication only protects the
+application user interface. If someone can access your computer and
+they can access the folder where Paisa stores the ledger and database
+files, they will be able to view your data.</p>
+<h2 id="implementation-details">Implementation details</h2>
+<p>Paisa uses <a href="https://en.wikipedia.org/wiki/Cryptographic_hash_function">cryptographic hash function</a> sha-256 to convert your
+password to digest before storing it in the configuration file. This
+has few implications. No one can look at the configuration file and
+get the password, this includes you as well. If you forget the
+password, you can remove the user accounts from <a href="../config/">configuration</a>
+file to get back access.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>If you run paisa on a server and access it over public internet,
+make sure to use it over <strong>https</strong> and use a <strong>strong password</strong>. If you
+run it over plain http, <a href="https://en.wikipedia.org/wiki/Man-in-the-middle_attack">man in the
+middle</a>
+attack can be performed to obtain the data including your password.</p>
 </div>
 
 
@@ -1491,7 +1269,7 @@ compensation for linking to their websites.&#160;<a class="footnote-backref" hre
               
                 
               
-              Thanks for your feedback! Help us improve this page by using our <a href="https://docs.google.com/forms/d/e/1FAIpQLSejpTiljuhsviEvXFBN-Z5rJZ_dkXHV5RaZzqpyCAZF1nIFiQ/viewform?usp=pp_url&entry.1125403938=/getting-started/installation/" target="_blank" rel="noopener">feedback form</a>.
+              Thanks for your feedback! Help us improve this page by using our <a href="https://docs.google.com/forms/d/e/1FAIpQLSejpTiljuhsviEvXFBN-Z5rJZ_dkXHV5RaZzqpyCAZF1nIFiQ/viewform?usp=pp_url&entry.1125403938=/reference/user-authentication/" target="_blank" rel="noopener">feedback form</a>.
             </div>
           
         </div>
@@ -1524,7 +1302,7 @@ compensation for linking to their websites.&#160;<a class="footnote-backref" hre
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../.." class="md-footer__link md-footer__link--prev" aria-label="Previous: Home" rel="prev">
+          <a href="../editor/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Editor" rel="prev">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
@@ -1534,20 +1312,20 @@ compensation for linking to their websites.&#160;<a class="footnote-backref" hre
                 Previous
               </span>
               <div class="md-ellipsis">
-                Home
+                Editor
               </div>
             </div>
           </a>
         
         
           
-          <a href="../tutorial/" class="md-footer__link md-footer__link--next" aria-label="Next: Tutorial" rel="next">
+          <a href="../analysis/" class="md-footer__link md-footer__link--next" aria-label="Next: Analysis" rel="next">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                Tutorial
+                Analysis
               </div>
             </div>
             <div class="md-footer__button md-icon">

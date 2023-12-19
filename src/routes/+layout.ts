@@ -70,3 +70,5 @@ toast.setDefaults({
   pauseOnHover: true,
   extraClasses: "is-light invertable"
 });
+
+globalThis.USER_CONFIG = {} as any;

@@ -1,6 +1,14 @@
 <script lang="ts">
   import BudgetCard from "$lib/components/BudgetCard.svelte";
-  import { ajax, formatCurrency, type AccountBudget, type Budget, helpUrl, now } from "$lib/utils";
+  import {
+    ajax,
+    formatCurrency,
+    type AccountBudget,
+    type Budget,
+    helpUrl,
+    now,
+    isMobile
+  } from "$lib/utils";
   import _ from "lodash";
   import { onMount } from "svelte";
   import { month, setAllowedDateRange } from "../../../../store";
@@ -41,7 +49,7 @@
     <div class="columns is-flex-wrap-wrap is-centered">
       {#if currentMonthBudget}
         <div class="column is-12">
-          <nav class="level">
+          <nav class="level {isMobile() && 'grid-2'}">
             <LevelItem title="Checking Current Balance" value={formatCurrency(checkingBalance)} />
             <LevelItem
               title={availableForBudgeting >= 0 ? "Available for Budgeting" : "Budget Deficit"}

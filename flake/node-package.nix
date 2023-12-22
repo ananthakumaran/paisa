@@ -8124,6 +8124,15 @@ let
         sha512 = "OBlY8866Zh1zHQTkBMPS6psPi7o2umTUyj6JWm4SacnIHXpWFm658pG32m3dKvKFL49V4ntAkfFHKo4ztH07og==";
       };
     };
+    "svelte-dnd-action-0.9.37" = {
+      name = "svelte-dnd-action";
+      packageName = "svelte-dnd-action";
+      version = "0.9.37";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/svelte-dnd-action/-/svelte-dnd-action-0.9.37.tgz";
+        sha512 = "XvhJZsXzGWjZebUPExOas/xdAfM0bUPEDfguHoEbJ7gVLz3EwgOEwufmXivGkvW3I/gH/3pSos64PpRB8TLC4w==";
+      };
+    };
     "svelte-eslint-parser-0.32.2" = {
       name = "svelte-eslint-parser";
       packageName = "svelte-eslint-parser";
@@ -10429,6 +10438,7 @@ let
       })
       sources."svelte-carousel-1.0.25"
       sources."svelte-check-3.4.6"
+      sources."svelte-dnd-action-0.9.37"
       (sources."svelte-eslint-parser-0.32.2" // {
         dependencies = [
           sources."eslint-scope-7.2.2"

@@ -86,6 +86,7 @@ type RetirementGoal struct {
 	Expenses       []string `json:"expenses" yaml:"expenses"`
 	Savings        []string `json:"savings" yaml:"savings"`
 	YearlyExpenses float64  `json:"yearly_expenses" yaml:"yearly_expenses"`
+	Priority       int      `json:"priority" yaml:"priority"`
 }
 
 type SavingsGoal struct {
@@ -96,6 +97,7 @@ type SavingsGoal struct {
 	Rate             float64  `json:"rate" yaml:"rate"`
 	PaymentPerPeriod float64  `json:"payment_per_period" yaml:"payment_per_period"`
 	Accounts         []string `json:"accounts" yaml:"accounts"`
+	Priority         int      `json:"priority" yaml:"priority"`
 }
 
 type ScheduleAL struct {

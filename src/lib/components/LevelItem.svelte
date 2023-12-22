@@ -3,12 +3,13 @@
 
   export let title: string;
   export let value: string;
+  export let small: boolean = false;
   export let narrow: boolean = false;
   export let color: string = null;
   export let subtitle: string = null;
 </script>
 
-<div class="level-item {narrow && 'is-narrow'} has-text-left">
+<div class="level-item {narrow && 'is-narrow'} has-text-left" class:small>
   <div>
     <p class="heading">{title}</p>
     {#if color}
@@ -24,6 +25,13 @@
 
 <style lang="scss">
   @import "bulma/sass/utilities/_all.sass";
+
+  .level-item.small {
+    .title {
+      font-size: 1.25rem !important;
+      line-height: 1.5rem !important;
+    }
+  }
 
   .heading {
     font-weight: 400 !important;
@@ -46,6 +54,13 @@
     .title {
       font-size: 2.25rem !important;
       line-height: 2.5rem !important;
+    }
+
+    .level-item.small {
+      .title {
+        font-size: 1.5rem !important;
+        line-height: 1.75rem !important;
+      }
     }
   }
 

@@ -2,6 +2,8 @@ package goal
 
 import (
 	"github.com/ananthakumaran/paisa/internal/config"
+	"github.com/ananthakumaran/paisa/internal/query"
+	"github.com/ananthakumaran/paisa/internal/service"
 	"github.com/gin-gonic/gin"
 	"github.com/samber/lo"
 	"github.com/shopspring/decimal"
@@ -11,21 +13,25 @@ import (
 type GoalSummary struct {
 	Type       string          `json:"type"`
 	Name       string          `json:"name"`
+	Id         string          `json:"id"`
 	Icon       string          `json:"icon"`
 	Current    decimal.Decimal `json:"current"`
 	Target     decimal.Decimal `json:"target"`
 	TargetDate string          `json:"targetDate"`
+	Priority   int             `json:"priority"`
 }
 
 func GetGoalSummaries(db *gorm.DB) []GoalSummary {
 	summaries := []GoalSummary{}
+	assetPostings := query.Init(db).Like("Assets:%").All()
+	assetPostings = service.PopulateMarketPrice(db, assetPostings)
 
 	for _, goal := range config.GetConfig().Goals.Retirement {
-		summaries = append(summaries, getRetirementSummary(db, goal))
+		summaries = append(summaries, getRetirementSummary(db, assetPostings, goal))
 	}
 
 	for _, goal := range config.GetConfig().Goals.Savings {
-		summaries = append(summaries, getSavingsSummary(db, goal))
+		summaries = append(summaries, getSavingsSummary(db, assetPostings, goal))
 	}
 
 	return summaries

@@ -5,6 +5,26 @@
 /// <reference lib="esnext" />
 /// <reference lib="webworker" />
 
+declare type Item = import("svelte-dnd-action").Item;
+declare type DndEvent<ItemType = Item> = import("svelte-dnd-action").DndEvent<ItemType>;
+declare namespace svelteHTML {
+  interface HTMLAttributes<T> {
+    "on:consider"?: (event: CustomEvent<DndEvent<ItemType>> & { target: EventTarget & T }) => void;
+    "on:finalize"?: (event: CustomEvent<DndEvent<ItemType>> & { target: EventTarget & T }) => void;
+  }
+}
+
+interface GoalSummary {
+  type: string;
+  name: string;
+  id: string;
+  icon: string;
+  current: number;
+  target: number;
+  targetDate: string;
+  priority: number;
+}
+
 interface UserConfig {
   default_currency: string;
   readonly: boolean;
@@ -14,6 +34,7 @@ interface UserConfig {
   db_path: string;
   financial_year_starting_month: number;
   week_starting_day: number;
+  goals: Record<string, Array<GoalSummary>>;
   accounts: {
     name: string;
     icon: string;

@@ -13,9 +13,8 @@ import (
 	"gorm.io/gorm"
 )
 
-func getRetirementSummary(db *gorm.DB, conf config.RetirementGoal) GoalSummary {
-	savings := accounting.FilterByGlob(query.Init(db).Like("Assets:%").All(), conf.Savings)
-	savings = service.PopulateMarketPrice(db, savings)
+func getRetirementSummary(db *gorm.DB, ps []posting.Posting, conf config.RetirementGoal) GoalSummary {
+	savings := accounting.FilterByGlob(ps, conf.Savings)
 	savingsTotal := accounting.CurrentBalance(savings)
 
 	yearlyExpenses := decimal.NewFromFloat(conf.YearlyExpenses)
@@ -26,11 +25,13 @@ func getRetirementSummary(db *gorm.DB, conf config.RetirementGoal) GoalSummary {
 	target := yearlyExpenses.Div(decimal.NewFromFloat(conf.SWR)).Mul(decimal.NewFromFloat(100))
 
 	return GoalSummary{
-		Type:    "retirement",
-		Name:    conf.Name,
-		Current: savingsTotal,
-		Target:  target,
-		Icon:    conf.Icon,
+		Type:     "retirement",
+		Id:       "retirement-" + conf.Name,
+		Name:     conf.Name,
+		Current:  savingsTotal,
+		Target:   target,
+		Icon:     conf.Icon,
+		Priority: conf.Priority,
 	}
 }
 

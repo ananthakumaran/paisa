@@ -15,7 +15,8 @@
     type Posting,
     type Transaction,
     type TransactionSequence,
-    now
+    now,
+    type GoalSummary
   } from "$lib/utils";
   import _ from "lodash";
   import { onMount } from "svelte";
@@ -26,10 +27,12 @@
   import { MasonryGrid } from "@egjs/svelte-grid";
   import { refresh } from "../../store";
   import UpcomingCard from "$lib/components/UpcomingCard.svelte";
+  import GoalSummaryCard from "$lib/components/GoalSummaryCard.svelte";
 
   let UntypedMasonryGrid = MasonryGrid as any;
 
   let month = now().format("YYYY-MM");
+  let goalSummaries: GoalSummary[] = [];
   let transactionSequences: TransactionSequence[] = [];
   let cashFlows: CashFlow[] = [];
   let expenses: { [key: string]: Posting[] } = {};
@@ -58,11 +61,14 @@
     ({
       expenses,
       cashFlows,
+      goalSummaries,
       budget: { budgetsByMonth },
       transactionSequences,
       networth: { networth, xirr },
       transactions
     } = await ajax("/api/dashboard"));
+
+    goalSummaries = _.sortBy(goalSummaries, (g) => -g.priority);
 
     if (_.isEmpty(transactions)) {
       isEmpty = true;
@@ -212,6 +218,24 @@
                     </div>
                   </div>
                 </div>
+              </div>
+            </div>
+          {/if}
+          {#if !_.isEmpty(goalSummaries)}
+            <div class="tile">
+              <div class="tile is-parent is-12">
+                <article class="tile is-child">
+                  <div class="content">
+                    <p class="subtitle">
+                      <a class="secondary-link" href="/more/goals">Goals</a>
+                    </p>
+                    <div class="content">
+                      {#each goalSummaries as goal}
+                        <GoalSummaryCard {goal} small />
+                      {/each}
+                    </div>
+                  </div>
+                </article>
               </div>
             </div>
           {/if}

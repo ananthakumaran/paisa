@@ -281,6 +281,10 @@
                   "description": "Goal name",
                   "type": "string"
                 },
+                "priority": {
+                  "description": "Priority of the goal. Goals with higher priority will be shown first",
+                  "type": "integer"
+                },
                 "savings": {
                   "default": [
                     "Assets:Equity"
@@ -362,6 +366,10 @@
                   "description": "Expected monthly investment amount",
                   "minimum": 0,
                   "type": "number"
+                },
+                "priority": {
+                  "description": "Priority of the goal. Goals with higher priority will be shown first",
+                  "type": "integer"
                 },
                 "rate": {
                   "description": "The expected rate of return per year",

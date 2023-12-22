@@ -1,39 +1,63 @@
 <script lang="ts">
-  import COLORS from "$lib/colors";
-  import LevelItem from "$lib/components/LevelItem.svelte";
-  import Progress from "$lib/components/Progress.svelte";
+  import { dndzone } from "svelte-dnd-action";
+  import { flip } from "svelte/animate";
+  import GoalSummaryCard from "$lib/components/GoalSummaryCard.svelte";
   import ZeroState from "$lib/components/ZeroState.svelte";
-  import { iconGlyph } from "$lib/icon";
-  import { ajax, formatCurrency, helpUrl, type GoalSummary, formatPercentage } from "$lib/utils";
-  import dayjs from "dayjs";
+  import { ajax, helpUrl, type GoalSummary } from "$lib/utils";
   import _ from "lodash";
   import { onMount } from "svelte";
+  import * as toast from "bulma-toast";
 
   let isEmpty = false;
+  let config: UserConfig;
   let goals: GoalSummary[] = [];
 
+  function handleConsider(event: CustomEvent<DndEvent<GoalSummary>>) {
+    goals = event.detail.items;
+  }
+
+  async function handleFinalize(event: CustomEvent<DndEvent<GoalSummary>>) {
+    goals = event.detail.items;
+    for (let i = 0; i < goals.length; i++) {
+      const g = goals[i];
+      g.priority = goals.length - i;
+      const goalConfig = _.find(config.goals[g.type] || [], { name: g.name });
+      if (goalConfig) {
+        goalConfig.priority = g.priority;
+      }
+    }
+    await save(config);
+  }
+
+  async function save(newConfig: UserConfig) {
+    const { success, error } = await ajax("/api/config", {
+      method: "POST",
+      body: JSON.stringify(newConfig)
+    });
+
+    if (success) {
+      globalThis.USER_CONFIG = _.cloneDeep(newConfig);
+      toast.toast({
+        message: `Updated goal config`,
+        type: "is-success"
+      });
+    } else {
+      toast.toast({
+        message: `Failed to save config: ${error}`,
+        type: "is-danger",
+        duration: 10000
+      });
+    }
+  }
+
   onMount(async () => {
+    ({ config } = await ajax("/api/config"));
     ({ goals } = await ajax("/api/goals"));
+    goals = _.sortBy(goals, (g) => -g.priority);
     if (_.isEmpty(goals)) {
       isEmpty = true;
     }
   });
-
-  function formatDate(date: string) {
-    const d = dayjs(date, "YYYY-MM-DD", true);
-    if (d.isValid()) {
-      return d.fromNow();
-    }
-    return "";
-  }
-
-  function percentComplete(goal: GoalSummary) {
-    if (goal.target === 0) {
-      return 0;
-    }
-
-    return (goal.current / goal.target) * 100;
-  }
 </script>
 
 <section class="section">
@@ -45,43 +69,16 @@
           <a href={helpUrl("goals")}>docs</a> page to get started.
         </ZeroState>
       </div>
-
-      {#each goals as goal}
-        {@const completed = percentComplete(goal)}
-        <div class="column is-6 is-one-third-widescreen">
-          <div class="box p-3">
-            <div class="flex justify-between mb-4">
-              <a
-                class="secondary-link"
-                href="/more/goals/{goal.type}/{encodeURIComponent(goal.name)}"
-              >
-                <h4 class="is-size-4">{goal.name}</h4>
-              </a>
-              {#if !_.isEmpty(goal.icon)}
-                <span class="is-size-2 custom-icon">{iconGlyph(goal.icon)}</span>
-              {/if}
-            </div>
-            <nav class="level grid-2">
-              <LevelItem
-                narrow
-                title="Current"
-                color={COLORS.gainText}
-                value={formatCurrency(goal.current)}
-              />
-
-              <LevelItem
-                narrow
-                title="Target"
-                color={COLORS.secondary}
-                value={formatCurrency(goal.target)}
-              />
-            </nav>
-            <Progress small showPercent={false} progressPercent={completed} />
-            <div class="flex justify-between has-text-grey">
-              <div>{formatPercentage(completed / 100, 2)}</div>
-              <div>{formatDate(goal.targetDate)}</div>
-            </div>
-          </div>
+    </div>
+    <div
+      class="columns flex-wrap"
+      use:dndzone={{ items: goals, dropTargetStyle: {}, flipDurationMs: 300 }}
+      on:consider={handleConsider}
+      on:finalize={handleFinalize}
+    >
+      {#each goals as goal (goal.id)}
+        <div animate:flip={{ duration: 300 }} class="column is-6 is-one-third-widescreen">
+          <GoalSummaryCard {goal} />
         </div>
       {/each}
     </div>

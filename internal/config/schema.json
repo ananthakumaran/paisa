@@ -152,6 +152,10 @@
                 },
                 "ui:widget": "accounts",
                 "uniqueItems": true
+              },
+              "priority": {
+                "type": "integer",
+                "description": "Priority of the goal. Goals with higher priority will be shown first"
               }
             },
             "ui:header": "name",
@@ -218,6 +222,10 @@
                 },
                 "ui:widget": "accounts",
                 "uniqueItems": true
+              },
+              "priority": {
+                "type": "integer",
+                "description": "Priority of the goal. Goals with higher priority will be shown first"
               }
             },
             "ui:header": "name",

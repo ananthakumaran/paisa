@@ -3,6 +3,7 @@ package goal
 import (
 	"github.com/ananthakumaran/paisa/internal/accounting"
 	"github.com/ananthakumaran/paisa/internal/config"
+	"github.com/ananthakumaran/paisa/internal/model/posting"
 	"github.com/ananthakumaran/paisa/internal/query"
 	"github.com/ananthakumaran/paisa/internal/server/assets"
 	"github.com/ananthakumaran/paisa/internal/service"
@@ -11,18 +12,19 @@ import (
 	"gorm.io/gorm"
 )
 
-func getSavingsSummary(db *gorm.DB, conf config.SavingsGoal) GoalSummary {
-	savings := accounting.FilterByGlob(query.Init(db).Like("Assets:%").All(), conf.Accounts)
-	savings = service.PopulateMarketPrice(db, savings)
+func getSavingsSummary(db *gorm.DB, ps []posting.Posting, conf config.SavingsGoal) GoalSummary {
+	savings := accounting.FilterByGlob(ps, conf.Accounts)
 	savingsTotal := accounting.CurrentBalance(savings)
 
 	return GoalSummary{
 		Type:       "savings",
+		Id:         "savings-" + conf.Name,
 		Name:       conf.Name,
 		Current:    savingsTotal,
 		Target:     decimal.NewFromFloat(conf.Target),
 		TargetDate: conf.TargetDate,
 		Icon:       conf.Icon,
+		Priority:   conf.Priority,
 	}
 }
 

@@ -6,7 +6,7 @@ import { loading } from "../store";
 import type { JSONSchema7 } from "json-schema";
 import { get } from "svelte/store";
 import { obscure } from "../persisted_store";
-import { error, redirect } from "@sveltejs/kit";
+import { error } from "@sveltejs/kit";
 import { goto } from "$app/navigation";
 
 export interface AutoCompleteItem {
@@ -460,10 +460,12 @@ export interface Log {
 export interface GoalSummary {
   type: string;
   name: string;
+  id: string;
   icon: string;
   current: number;
   target: number;
   targetDate: string;
+  priority: number;
 }
 
 const tokenKey = "token";
@@ -479,7 +481,8 @@ const BACKGROUND = [
   "/api/templates/delete",
   "/api/price/autocomplete",
   "/api/price/providers/delete/:provider",
-  "/api/price/providers"
+  "/api/price/providers",
+  "/api/config"
 ];
 
 export function ajax(
@@ -523,6 +526,7 @@ export function ajax(route: "/api/dashboard"): Promise<{
   budget: {
     budgetsByMonth: { [key: string]: Budget };
   };
+  goalSummaries: GoalSummary[];
 }>;
 
 export function ajax(

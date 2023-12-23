@@ -1,5 +1,12 @@
 # CHANGELOG
 
+### 0.6.2 (2023-12-23)
+
+* New logo
+* Allow goals to be reordered
+* Show goals on the dashboard page
+* Bug fixes
+
 ### 0.6.1 (2023-12-16)
 
 * Add new price provider: [Alpha Vantage](https://paisa.fyi/reference/commodities/#alpha-vantage)

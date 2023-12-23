@@ -15,3 +15,6 @@ images:
 	rm ../docs/favicon-48x48.png
 	rm ../docs/favicon-64x64.png
 	rm ../docs/favicon-256x256.png
+
+social-images:
+	steam-run svgexport social.svg social-1500x500.png 100% 1500:500

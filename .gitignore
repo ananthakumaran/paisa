@@ -24,3 +24,4 @@ fonts/*
 !fonts/*.json
 !fonts/*.scss
 /result
+brand/*.png

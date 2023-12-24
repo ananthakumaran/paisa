@@ -2,7 +2,7 @@
   import { onMount } from "svelte";
   import _ from "lodash";
   import { renderFlow } from "$lib/cash_flow";
-  import { ajax, depth, firstName, type Graph, type Posting } from "$lib/utils";
+  import { ajax, depth, firstName, type Graph, type Legend, type Posting } from "$lib/utils";
   import { dateMin, year } from "../../../../store";
   import {
     setCashflowDepthAllowed,
@@ -10,7 +10,9 @@
     cashflowIncomeDepth
   } from "../../../../persisted_store";
   import ZeroState from "$lib/components/ZeroState.svelte";
+  import LegendCard from "$lib/components/LegendCard.svelte";
 
+  let legends: Legend[] = [];
   let graph: Record<string, Graph>, expenses: Posting[];
   let isEmpty = false;
 
@@ -49,7 +51,9 @@
     if (graph[$year] == null) {
       isEmpty = true;
     } else {
-      renderFlow(filter(_.cloneDeep(graph[$year]), $cashflowIncomeDepth, $cashflowExpenseDepth));
+      legends = renderFlow(
+        filter(_.cloneDeep(graph[$year]), $cashflowIncomeDepth, $cashflowExpenseDepth)
+      );
       isEmpty = false;
     }
   }
@@ -73,6 +77,8 @@
           <ZeroState item={!isEmpty}
             ><strong>Oops!</strong> You have not made any transactions for the selected year.</ZeroState
           >
+
+          <LegendCard {legends} clazz="ml-5 mb-2" />
           <svg
             class:is-not-visible={isEmpty}
             id="d3-expense-flow"

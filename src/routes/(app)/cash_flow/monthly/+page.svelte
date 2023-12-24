@@ -1,11 +1,13 @@
 <script lang="ts">
   import _ from "lodash";
   import { renderMonthlyFlow } from "$lib/cash_flow";
-  import { ajax, type CashFlow } from "$lib/utils";
+  import { ajax, type CashFlow, type Legend } from "$lib/utils";
   import { onMount } from "svelte";
   import { dateRange, setAllowedDateRange } from "../../../../store";
   import ZeroState from "$lib/components/ZeroState.svelte";
+  import LegendCard from "$lib/components/LegendCard.svelte";
 
+  let legends: Legend[] = [];
   let cashFlows: CashFlow[] = [];
   let renderer: (cashflows: CashFlow[]) => void;
 
@@ -21,10 +23,10 @@
   onMount(async () => {
     ({ cash_flows: cashFlows } = await ajax("/api/cash_flow"));
     setAllowedDateRange(_.map(cashFlows, (c) => c.date));
-    renderer = renderMonthlyFlow("#d3-monthly-cash-flow", {
+    ({ renderer, legends } = renderMonthlyFlow("#d3-monthly-cash-flow", {
       rotate: true,
       balance: _.last(cashFlows)?.balance || 0
-    });
+    }));
   });
 </script>
 
@@ -37,6 +39,7 @@
             <strong>Oops!</strong> You have not made any transactions.
           </ZeroState>
 
+          <LegendCard {legends} clazz="ml-5 mb-2" />
           <svg
             class:is-not-visible={_.isEmpty(cashFlows)}
             id="d3-monthly-cash-flow"

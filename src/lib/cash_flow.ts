@@ -7,9 +7,9 @@ import {
   skipTicks,
   lastName,
   parentName,
-  rem
+  rem,
+  type Legend
 } from "$lib/utils";
-import legend from "d3-svg-legend";
 import * as d3 from "d3";
 import { sankeyCircular, sankeyJustify } from "d3-sankey-circular";
 import { pathArrows } from "d3-path-arrows";
@@ -33,7 +33,7 @@ export function renderMonthlyFlow(
   const MAX_BAR_WIDTH = rem(20);
   const svg = d3.select(id),
     margin = {
-      top: rem(50),
+      top: rem(15),
       right: rem(30),
       bottom: options.rotate ? rem(50) : rem(20),
       left: rem(40)
@@ -62,12 +62,8 @@ export function renderMonthlyFlow(
     COLORS.expenses,
     COLORS.assets
   ];
-  const areaScale = d3.scaleOrdinal().domain(areaKeys).range(colors);
 
   const lineKeys = ["balance"];
-  const lineLabels = [
-    "Checking Balance" + (options.balance > 0 ? " " + formatCurrency(options.balance) : "")
-  ];
   const lineScale = d3.scaleOrdinal<string>().domain(lineKeys).range([COLORS.primary]);
 
   const x = d3.scaleBand().range([0, width]).paddingInner(0.1),
@@ -93,45 +89,9 @@ export function renderMonthlyFlow(
 
   const tooltipRects = g.append("g");
 
-  svg.append("g").attr("class", `legendOrdinal is-small`).attr("transform", "translate(140,3)");
-
-  const legendOrdinal = legend
-    .legendColor()
-    .shape("rect")
-    .orient("horizontal")
-    .shapePadding(40)
-    .labels(areaKeys)
-    .scale(areaScale);
-
-  svg.select(".legendOrdinal").call(legendOrdinal as any);
-
-  svg.selectAll(".legendOrdinal .cell .swatch").style("fill", (d: string) => {
-    if (d == "tax") {
-      return texture.url();
-    }
-    return z(d);
-  });
-
-  svg.append("g").attr("class", `legendLine is-small`).attr("transform", "translate(60,3)");
-
-  const legendLine = legend
-    .legendColor()
-    .shape("rect")
-    .orient("horizontal")
-    .labelOffset(22)
-    .shapeHeight(3)
-    .shapeWidth(25)
-    .labelOffset(10)
-    .labels(lineLabels)
-    .scale(lineScale);
-
-  (legendLine as any).labelWrap(100); // type missing
-
-  svg.select(".legendLine").call(legendLine as any);
-
   let firstRender = true;
 
-  return function (cashFlows: CashFlow[]) {
+  const renderer = function (cashFlows: CashFlow[]) {
     const positions = _.flatMap(cashFlows, (c) => [
       c.income,
       c.liabilities,
@@ -240,6 +200,7 @@ export function renderMonthlyFlow(
               }
               return z(d.key);
             })
+
             .attr("x", (d: any) =>
               d[0].data.i === "0"
                 ? x1(d[0].data.i) + x1.bandwidth() - Math.min(x1.bandwidth(), MAX_BAR_WIDTH)
@@ -284,6 +245,28 @@ export function renderMonthlyFlow(
       .attr("height", height)
       .attr("width", x.bandwidth());
   };
+
+  const legends: Legend[] = _.map(_.without(areaKeys, "tax"), (k) => ({
+    label: k,
+    color: z(k),
+    shape: "square"
+  }));
+
+  legends.push({
+    label: "tax",
+    color: z("tax"),
+    shape: "square",
+    texture: texture
+  });
+
+  legends.unshift({
+    label:
+      "Checking Balance\n" + (options.balance > 0 ? " " + formatCurrency(options.balance) : ""),
+    color: lineScale("balance"),
+    shape: "line"
+  });
+
+  return { renderer, legends };
 }
 
 export function renderFlow(graph: Graph) {
@@ -309,18 +292,6 @@ export function renderFlow(graph: Graph) {
     .sort()
     .value();
   const color = generateColorScheme(accounts);
-
-  svg.append("g").attr("class", "legendOrdinal").attr("transform", "translate(50,0)");
-
-  const legendOrdinal = legend
-    .legendColor()
-    .shape("rect")
-    .orient("horizontal")
-    .shapePadding(rem(50))
-    .labels(accounts)
-    .scale(color);
-
-  svg.select(".legendOrdinal").call(legendOrdinal as any);
 
   const g = svg
     .attr("width", width + margin.left + margin.right)
@@ -427,6 +398,13 @@ export function renderFlow(graph: Graph) {
     .path((link: any) => link.path);
 
   linkG.data(sankeyLinks).enter().append("g").attr("class", "g-arrow").call(arrows);
+
+  const legends: Legend[] = _.map(accounts, (k) => ({
+    label: k,
+    color: color(k),
+    shape: "square"
+  }));
+  return legends;
 }
 
 function name(node: Node) {

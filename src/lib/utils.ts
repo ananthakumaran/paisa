@@ -380,6 +380,13 @@ export interface SavingsGoalProgress {
   balances: Record<string, AssetBreakdown>;
 }
 
+export interface Legend {
+  shape: "line" | "square" | "texture";
+  color: string;
+  label: string;
+  texture?: any;
+}
+
 export interface LedgerFile {
   type: "file";
   name: string;

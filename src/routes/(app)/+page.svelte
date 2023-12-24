@@ -15,6 +15,7 @@
     type Posting,
     type Transaction,
     type TransactionSequence,
+    type Legend,
     now,
     type GoalSummary
   } from "$lib/utils";
@@ -28,9 +29,11 @@
   import { refresh } from "../../store";
   import UpcomingCard from "$lib/components/UpcomingCard.svelte";
   import GoalSummaryCard from "$lib/components/GoalSummaryCard.svelte";
+  import LegendCard from "$lib/components/LegendCard.svelte";
 
   let UntypedMasonryGrid = MasonryGrid as any;
 
+  let cashflowLegends: Legend[] = [];
   let month = now().format("YYYY-MM");
   let goalSummaries: GoalSummary[] = [];
   let transactionSequences: TransactionSequence[] = [];
@@ -81,10 +84,15 @@
     renderer = expense.renderCurrentExpensesBreakdown(z);
     currentBudget = budgetsByMonth[month];
 
-    cashFlow.renderMonthlyFlow("#d3-current-cash-flow", {
-      rotate: false,
-      balance: _.last(cashFlows)?.balance || 0
-    })(cashFlows);
+    const { renderer: cashflowRenderer, legends } = cashFlow.renderMonthlyFlow(
+      "#d3-current-cash-flow",
+      {
+        rotate: false,
+        balance: _.last(cashFlows)?.balance || 0
+      }
+    );
+    cashflowRenderer(cashFlows);
+    cashflowLegends = legends;
     transactionSequences = _.take(
       sortTrantionSequence(enrichTrantionSequence(transactionSequences)),
       16
@@ -193,6 +201,8 @@
                 <ZeroState item={cashFlows}>
                   <strong>Oops!</strong> You have not made any transactions in the last 3 months.
                 </ZeroState>
+
+                <LegendCard legends={cashflowLegends} clazz="mb-2" />
 
                 <svg
                   class:is-not-visible={_.isEmpty(cashFlows)}

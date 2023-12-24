@@ -89,7 +89,7 @@
     "eslint-config-prettier": "^8.0",
     "eslint-plugin-svelte": "^2.32.4",
     "json-diff": "^1.0.6",
-    "nodemon": "^2.0.15",
+    "nodemon": "^3.0",
     "oslllo-svg-fixer": "^3.0.0",
     "postcss": "^8.4.27",
     "prettier": "^3.0",

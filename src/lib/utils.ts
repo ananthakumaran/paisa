@@ -390,21 +390,27 @@ export interface Legend {
   selected?: boolean;
 }
 
-export interface LedgerFile {
+interface File {
   type: "file";
   name: string;
   content: string;
   versions: string[];
 }
 
-export interface LedgerDirectory {
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface LedgerFile extends File {}
+
+export interface Directory {
   type: "directory";
   name: string;
-  children: Array<LedgerDirectory | LedgerFile>;
+  children: Array<Directory | LedgerFile | SheetFile>;
 }
 
-export function buildLedgerTree(files: LedgerFile[]) {
-  const root: LedgerDirectory = {
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface SheetFile extends File {}
+
+export function buildDirectoryTree<T extends File>(files: T[]) {
+  const root: Directory = {
     type: "directory",
     name: "",
     children: []
@@ -423,7 +429,7 @@ export function buildLedgerTree(files: LedgerFile[]) {
         };
         current.children.push(found);
       }
-      current = found as LedgerDirectory;
+      current = found as Directory;
     }
     current.children.push(file);
   }
@@ -432,6 +438,13 @@ export function buildLedgerTree(files: LedgerFile[]) {
 }
 
 export interface LedgerFileError {
+  line_from: number;
+  line_to: number;
+  error: string;
+  message: string;
+}
+
+export interface SheetFileError {
   line_from: number;
   line_to: number;
   error: string;
@@ -478,6 +491,15 @@ export interface GoalSummary {
   priority: number;
 }
 
+export interface SheetLineResult {
+  line: number;
+  result: string;
+  error: boolean;
+  underline?: boolean;
+  bold?: boolean;
+  align?: "left" | "right";
+}
+
 const tokenKey = "token";
 
 const BACKGROUND = [
@@ -486,6 +508,10 @@ const BACKGROUND = [
   "/api/editor/file",
   "/api/editor/files",
   "/api/editor/file/delete_backups",
+  "/api/sheets/save",
+  "/api/sheets/file",
+  "/api/sheets/files",
+  "/api/sheets/file/delete_backups",
   "/api/templates",
   "/api/templates/upsert",
   "/api/templates/delete",
@@ -642,6 +668,25 @@ export function ajax(
   route: "/api/editor/file/delete_backups",
   options?: RequestInit
 ): Promise<{ file: LedgerFile }>;
+
+export function ajax(route: "/api/sheets/files"): Promise<{
+  files: SheetFile[];
+}>;
+
+export function ajax(
+  route: "/api/sheets/save",
+  options?: RequestInit
+): Promise<{ saved: boolean; file: SheetFile; message: string }>;
+
+export function ajax(
+  route: "/api/sheets/file",
+  options?: RequestInit
+): Promise<{ file: SheetFile }>;
+
+export function ajax(
+  route: "/api/sheets/file/delete_backups",
+  options?: RequestInit
+): Promise<{ file: SheetFile }>;
 
 export function ajax(
   route: "/api/price/delete",

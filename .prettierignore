@@ -13,3 +13,5 @@ package-lock.json
 yarn.lock
 src/lib/search/parser/parser.terms.js
 src/lib/search/parser/parser.js
+src/lib/sheet/parser.terms.js
+src/lib/sheet/parser.js

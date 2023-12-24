@@ -2,7 +2,7 @@ import { writable, derived, get } from "svelte/store";
 import * as d3 from "d3";
 
 import dayjs from "dayjs";
-import type { AccountTfIdf, LedgerFileError } from "$lib/utils";
+import type { AccountTfIdf, LedgerFileError, SheetFileError, SheetLineResult } from "$lib/utils";
 import _ from "lodash";
 
 export function now() {
@@ -28,7 +28,28 @@ export const initialEditorState: EditorState = {
   output: ""
 };
 
+interface SheetEditorState {
+  hasUnsavedChanges: boolean;
+  undoDepth: number;
+  redoDepth: number;
+  doc: string;
+  currentLine: number;
+  errors: SheetFileError[];
+  results: SheetLineResult[];
+}
+
+export const initialSheetEditorState: SheetEditorState = {
+  hasUnsavedChanges: false,
+  undoDepth: 0,
+  redoDepth: 0,
+  currentLine: 0,
+  doc: "",
+  errors: [],
+  results: []
+};
+
 export const editorState = writable(initialEditorState);
+export const sheetEditorState = writable(initialSheetEditorState);
 
 export const month = writable(now().format("YYYY-MM"));
 export const year = writable<string>("");

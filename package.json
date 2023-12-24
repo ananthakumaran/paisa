@@ -3,8 +3,8 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "parser-build": "lezer-generator src/lib/search/parser/query.grammar -o src/lib/search/parser/parser",
-    "parser-build-debug": "lezer-generator src/lib/search/parser/query.grammar --names -o src/lib/search/parser/parser",
+    "parser-build": "lezer-generator src/lib/sheet/language.grammar -o src/lib/sheet/parser && lezer-generator src/lib/search/parser/query.grammar -o src/lib/search/parser/parser",
+    "parser-build-debug": "lezer-generator src/lib/sheet/language.grammar --names -o src/lib/sheet/parser && lezer-generator src/lib/search/parser/query.grammar --names -o src/lib/search/parser/parser",
     "dev": "vite dev --host 0.0.0.0",
     "build": "vite build",
     "build:watch": "vite build --watch",
@@ -28,6 +28,7 @@
     "@lezer/lr": "^1.3.10",
     "@types/json-schema": "^7.0.12",
     "arima": "^0.2.5",
+    "bignumber.js": "^9.1.2",
     "bulma": "^0.9.4",
     "bulma-switch": "^2.0.4",
     "bulma-toast": "^2.4.2",

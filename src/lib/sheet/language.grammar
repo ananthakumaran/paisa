@@ -1,0 +1,72 @@
+@top Sheet { newline* lines? }
+
+@precedence {
+  call,
+  unary @right,
+  factor @left,
+  term @left,
+  comparison @left
+  equality @left
+}
+
+lines { Line (newline+ Line)* newline* }
+
+Line { Expression | Assignment | FunctionDefinition | Header }
+
+Expression { Literal | UnaryExpression | BinaryExpression | Grouping | Identifier | FunctionCall | SearchQueryString }
+
+Literal { Number }
+Grouping { "(" Expression ")" }
+UnaryExpression { !unary UnaryOperator ~unary Expression }
+BinaryExpression {
+  Expression !factor BinaryOperator<"*" | "/"> Expression |
+  Expression !term BinaryOperator<"+" | "-"> ~unary Expression |
+  Expression !comparison BinaryOperator<"<" | "<=" | ">" | ">="> Expression
+  Expression !equality BinaryOperator<"==" | "!="> Expression
+}
+Assignment { Identifier AssignmentOperator Expression }
+FunctionCall { Identifier !call "(" Arguments? ")" }
+Arguments { Expression ~call ("," Expression)* }
+
+FunctionDefinition { Identifier !call "(" Parameters? ")" "=" Expression }
+Parameters { Identifier ~call ("," Identifier)* }
+
+UnaryOperator { "+" | "-" | "!" }
+AssignmentOperator { "=" }
+
+BinaryOperator<expr> { expr }
+
+@tokens {
+  Number { int frac? exp?  }
+  int  { '0' | $[1-9] @digit* }
+  frac { '.' @digit+ }
+  exp  { $[eE] $[+\-]? @digit+ }
+
+  Identifier { $[a-zA-Z_] unquotedchar* }
+  unquotedchar { $[0-9a-zA-Z:./_] }
+
+  whitespace { $[ \t] }
+
+  newline { $[\n\r] }
+
+  Header { "#" ![\n]* }
+}
+
+@local tokens {
+  stringEnd { '`' }
+  stringEscape { "\\" _ }
+  @else stringContent
+}
+
+@skip {} {
+  SearchQueryString { '`' SearchQuery stringEnd }
+  SearchQuery { (stringContent | stringEscape)* }
+}
+
+@skip {
+  whitespace
+}
+
+@external propSource sheetHighlighting from "./highlight"
+
+@detectDelim

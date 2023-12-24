@@ -320,6 +320,10 @@ func GetJournalPath() string {
 	return config.JournalPath
 }
 
+func GetSheetDir() string {
+	return filepath.Dir(GetJournalPath())
+}
+
 func GetDBPath() string {
 	if !filepath.IsAbs(config.DBPath) {
 		return filepath.Join(GetConfigDir(), config.DBPath)

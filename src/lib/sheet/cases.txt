@@ -1,0 +1,81 @@
+# Number
+
+10000
+
+==>
+
+Sheet(Line(Expression(Literal(Number))))
+
+# Assignment
+
+salary = 3000000
+
+==>
+
+Sheet(Line(Assignment(Identifier,AssignmentOperator,Expression(Literal(Number)))))
+
+# Sum
+
+income = salary + fd
+
+==>
+
+Sheet(Line(Assignment(Identifier,AssignmentOperator,Expression(BinaryExpression(Expression(Identifier),BinaryOperator,Expression(Identifier))))))
+
+# Grouping
+
+edu_cess = (tax + surcharge) * 0.04
+
+==>
+
+Sheet(Line(Assignment(Identifier,AssignmentOperator,Expression(BinaryExpression(Expression(Grouping(Expression(BinaryExpression(Expression(Identifier),BinaryOperator,Expression(Identifier))))),BinaryOperator,Expression(Literal(Number)))))))
+
+# Precedence
+
+-1 + 2 * 3
+
+===>
+
+Sheet(Line(Expression(BinaryExpression(Expression(UnaryExpression(UnaryOperator,Expression(Literal(Number)))),BinaryOperator,Expression(BinaryExpression(Expression(Literal(Number)),BinaryOperator,Expression(Literal(Number))))))))
+
+# Call
+
+sqrt(5.2)
+
+===>
+
+Sheet(Line(Expression(FunctionCall(Identifier,Arguments(Expression(Literal(Number)))))))
+
+
+# Mutiple Args
+
+pow(5, 2)
+
+===>
+
+Sheet(Line(Expression(FunctionCall(Identifier,Arguments(Expression(Literal(Number)),Expression(Literal(Number)))))))
+
+
+# No Args
+
+pi()
+
+===>
+
+Sheet(Line(Expression(FunctionCall(Identifier))))
+
+# Search Query
+
+posting(`amount > 0`)
+
+===>
+
+Sheet(Line(Expression(FunctionCall(Identifier,Arguments(Expression(SearchQueryString(Query(Clause(Condition(Property(Amount),Operator(">"),Value(Number)))))))))))
+
+# Function Definition
+
+square(x) = x * 2
+
+===>
+
+Sheet(Line(FunctionDefinition(Identifier,Parameters(Identifier),Expression(BinaryExpression(Expression(Identifier),BinaryOperator,Expression(Literal(Number)))))))

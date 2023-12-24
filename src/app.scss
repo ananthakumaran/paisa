@@ -208,6 +208,10 @@ svg text {
   fill: $grey-lighter;
 }
 
+.has-background-grey-lightest {
+  background-color: $grey-lightest;
+}
+
 .svg-text-grey-light {
   fill: $grey-light;
 }
@@ -374,6 +378,16 @@ svg text {
   box-shadow: $shadow;
 }
 
+.box.box-r-none {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.box.box-l-none {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
 .box {
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
 }
@@ -522,7 +536,7 @@ nav.level.grid-2 {
   }
 
   .cm-activeLineGutter {
-    background-color: $grey-light !important;
+    background-color: $grey-lightest !important;
     color: $grey-dark;
     font-weight: bold;
   }
@@ -677,6 +691,14 @@ nav.level.grid-2 {
 
 .template-editor .cm-editor {
   height: 200px;
+}
+
+.sheet-result {
+  background-color: $white-ter;
+  color: $grey;
+}
+
+.sheet-editor .cm-editor {
 }
 
 .search-query-editor {

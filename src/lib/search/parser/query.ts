@@ -1,7 +1,7 @@
 import { parser } from "./parser";
 import { LRLanguage, LanguageSupport } from "@codemirror/language";
 
-export const jsonLanguage = LRLanguage.define({
+export const queryLanguage = LRLanguage.define({
   name: "query",
   parser: parser.configure({}),
   languageData: {
@@ -10,5 +10,5 @@ export const jsonLanguage = LRLanguage.define({
 });
 
 export function queryExtension() {
-  return new LanguageSupport(jsonLanguage);
+  return new LanguageSupport(queryLanguage);
 }

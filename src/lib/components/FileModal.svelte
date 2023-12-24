@@ -5,6 +5,7 @@
 
   export let label = "Save As";
   export let help = "Create or overwrite existing file";
+  export let placeholder = "expense.ledger";
   export let open = false;
   let destinationFile = "";
 
@@ -19,7 +20,7 @@
   <div class="field" slot="body">
     <label class="label" for="save-filename">File Name</label>
     <div class="control" id="save-filename">
-      <input class="input" type="text" placeholder="expense.ledger" bind:value={destinationFile} />
+      <input class="input" type="text" {placeholder} bind:value={destinationFile} />
       <p class="help">{help}</p>
     </div>
   </div>

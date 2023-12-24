@@ -1,9 +1,9 @@
 <script lang="ts">
-  import type { LedgerDirectory, LedgerFile } from "$lib/utils";
+  import type { Directory, LedgerFile } from "$lib/utils";
   import _ from "lodash";
   import { createEventDispatcher } from "svelte";
 
-  export let files: Array<LedgerDirectory | LedgerFile>;
+  export let files: Array<Directory | LedgerFile>;
   export let path: string;
   export let selectedFileName: string;
   export let hasUnsavedChanges: boolean;
@@ -19,7 +19,7 @@
     return _.filter(paths, (p) => !_.isEmpty(p)).join("/");
   }
 
-  function isOpen(file: LedgerDirectory | LedgerFile) {
+  function isOpen(file: Directory | LedgerFile) {
     const fullPath = join([path, file.name]);
     return selectedFileName?.startsWith(fullPath);
   }

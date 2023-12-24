@@ -61,6 +61,6 @@ DateValue { "[" dateChar+ "]" }
 
 @skip { whitespace }
 
-@external propSource jsonHighlighting from "./highlight"
+@external propSource queryHighlighting from "./highlight"
 
 @detectDelim

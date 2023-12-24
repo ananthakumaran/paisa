@@ -1,12 +1,11 @@
 <script lang="ts">
-  import { createEditor, editorState, moveToEnd, moveToLine, updateContent } from "$lib/editor";
-  import { insertTab } from "@codemirror/commands";
-  import { ajax, buildDirectoryTree, type LedgerFile } from "$lib/utils";
+  import { createEditor, sheetEditorState } from "$lib/sheet";
+  import { moveToEnd, moveToLine, updateContent } from "$lib/editor";
+  import { ajax, buildDirectoryTree, type SheetFile } from "$lib/utils";
   import { redo, undo } from "@codemirror/commands";
   import type { KeyBinding } from "@codemirror/view";
   import * as toast from "bulma-toast";
   import type { EditorView } from "codemirror";
-  import { format } from "$lib/journal";
   import _ from "lodash";
   import { onMount } from "svelte";
   import { beforeNavigate, goto } from "$app/navigation";
@@ -18,11 +17,8 @@
   export let data: PageData;
   let editorDom: Element;
   let editor: EditorView;
-  let filesMap: Record<string, LedgerFile> = {};
-  let selectedFile: LedgerFile = null;
-  let accounts: string[] = [];
-  let commodities: string[] = [];
-  let payees: string[] = [];
+  let filesMap: Record<string, SheetFile> = {};
+  let selectedFile: SheetFile = null;
   let selectedVersion: string = null;
   let lineNumber = 0;
 
@@ -34,28 +30,22 @@
   }
 
   const keybindings: readonly KeyBinding[] = [
-    { key: "Tab", run: insertTab },
     {
       key: "Ctrl-s",
       run: command(save),
-      preventDefault: true
-    },
-    {
-      key: "Ctrl-I",
-      run: command(pretty),
       preventDefault: true
     }
   ];
 
   let cancelled = false;
   beforeNavigate(async ({ cancel }) => {
-    if ($editorState.hasUnsavedChanges) {
+    if ($sheetEditorState.hasUnsavedChanges) {
       const confirmed = confirm("You have unsaved changes. Are you sure you want to leave?");
       if (!confirmed) {
         cancel();
         cancelled = true;
       } else {
-        $editorState = _.assign({}, $editorState, { hasUnsavedChanges: false });
+        $sheetEditorState = _.assign({}, $sheetEditorState, { hasUnsavedChanges: false });
       }
     }
   });
@@ -79,22 +69,22 @@
 
   async function loadFiles(selectedFileName: string) {
     let files;
-    ({ files, accounts, commodities, payees } = await ajax("/api/editor/files"));
+    ({ files } = await ajax("/api/sheets/files"));
     filesMap = _.fromPairs(_.map(files, (f) => [f.name, f]));
     if (!_.isEmpty(files)) {
       selectedFile = _.find(files, (f) => f.name == selectedFileName) || files[0];
     }
   }
 
-  async function selectFile(file: LedgerFile) {
-    const success = await navigate(`/ledger/editor/${encodeURIComponent(file.name)}`);
+  async function selectFile(file: SheetFile) {
+    const success = await navigate(`/more/sheets/${encodeURIComponent(file.name)}`);
     if (success) {
       selectedFile = file;
     }
   }
 
   async function revert(version: string) {
-    const { file } = await ajax("/api/editor/file", {
+    const { file } = await ajax("/api/sheets/file", {
       method: "POST",
       body: JSON.stringify({ name: version })
     });
@@ -102,15 +92,8 @@
     updateContent(editor, file.content);
   }
 
-  async function pretty() {
-    const formatted = format(editor.state.doc.toString());
-    if (formatted != editor.state.doc.toString()) {
-      updateContent(editor, formatted);
-    }
-  }
-
   async function deleteBackups() {
-    const { file } = await ajax("/api/editor/file/delete_backups", {
+    const { file } = await ajax("/api/sheets/file/delete_backups", {
       method: "POST",
       body: JSON.stringify({ name: selectedFile.name })
     });
@@ -120,7 +103,7 @@
 
   async function save() {
     const doc = editor.state.doc;
-    const { errors, saved, file, message } = await ajax("/api/editor/save", {
+    const { saved, file, message } = await ajax("/api/sheets/save", {
       method: "POST",
       body: JSON.stringify({ name: selectedFile.name, content: doc.toString() })
     });
@@ -131,9 +114,6 @@
         type: "is-danger",
         duration: 10000
       });
-      if (!_.isEmpty(errors)) {
-        moveToLine(editor, errors[0].line_from);
-      }
     } else {
       toast.toast({
         message: `Saved ${selectedFile.name}`,
@@ -142,7 +122,7 @@
       filesMap[file.name] = file;
       selectedFile = file;
       selectedVersion = null;
-      $editorState = _.assign({}, $editorState, { hasUnsavedChanges: false });
+      $sheetEditorState = _.assign({}, $sheetEditorState, { hasUnsavedChanges: false });
     }
   }
 
@@ -152,14 +132,7 @@
         editor.destroy();
       }
 
-      editor = createEditor(selectedFile.content, editorDom, {
-        keybindings,
-        autocompletions: {
-          string: accounts,
-          strong: payees,
-          unit: commodities
-        }
-      });
+      editor = createEditor(selectedFile.content, editorDom, { keybindings });
       if (lineNumber > 0) {
         if (!editor.hasFocus) {
           editor.focus();
@@ -178,21 +151,22 @@
   }
 
   async function createFile(destinationFile: string) {
-    const { saved, message } = await ajax("/api/editor/save", {
+    destinationFile = destinationFile.trim() + ".paisa";
+    const { saved, message } = await ajax("/api/sheets/save", {
       method: "POST",
       body: JSON.stringify({ name: destinationFile, content: "", operation: "create" })
     });
 
     if (saved) {
       toast.toast({
-        message: `Created <b><a href="/ledger/editor/${encodeURIComponent(
+        message: `Created <b><a href="/more/sheets/${encodeURIComponent(
           destinationFile
         )}">${destinationFile}</a></b>`,
         type: "is-success",
         duration: 5000
       });
 
-      const success = await navigate(`/ledger/editor/${encodeURIComponent(destinationFile)}`);
+      const success = await navigate(`/more/sheets/${encodeURIComponent(destinationFile)}`);
       if (success) {
         await loadFiles(destinationFile);
       }
@@ -206,7 +180,13 @@
   }
 </script>
 
-<FileModal bind:open={modalOpen} on:save={(e) => createFile(e.detail)} label="Create" help="" />
+<FileModal
+  bind:open={modalOpen}
+  on:save={(e) => createFile(e.detail)}
+  label="Create"
+  placeholder="scratch"
+  help="Filename without any extension"
+/>
 
 <section class="section tab-editor max-h-screen" style="padding-bottom: 0 !important">
   <div class="container is-fluid">
@@ -217,7 +197,7 @@
             <p class="control">
               <button
                 class="button is-small is-link invertable is-light"
-                disabled={$editorState.hasUnsavedChanges}
+                disabled={$sheetEditorState.hasUnsavedChanges}
                 on:click={(_e) => openCreateModal()}
               >
                 <span class="icon is-small">
@@ -232,7 +212,7 @@
             <p class="control">
               <button
                 class="button is-small"
-                disabled={$editorState.hasUnsavedChanges == false}
+                disabled={$sheetEditorState.hasUnsavedChanges == false}
                 on:click={(_e) => save()}
               >
                 <span class="icon is-small">
@@ -244,7 +224,7 @@
             <p class="control">
               <button
                 class="button is-small"
-                disabled={$editorState.undoDepth == 0}
+                disabled={$sheetEditorState.undoDepth == 0}
                 on:click={(_e) => undo(editor)}
               >
                 <span class="icon is-small">
@@ -256,21 +236,13 @@
             <p class="control">
               <button
                 class="button is-small"
-                disabled={$editorState.redoDepth == 0}
+                disabled={$sheetEditorState.redoDepth == 0}
                 on:click={(_e) => redo(editor)}
               >
                 <span>Redo</span>
                 <span class="icon is-small">
                   <i class="fas fa-arrow-right" />
                 </span>
-              </button>
-            </p>
-            <p class="control">
-              <button class="button is-small" on:click={(_e) => pretty()}>
-                <span class="icon is-small">
-                  <i class="fas fa-code" />
-                </span>
-                <span>Prettify</span>
               </button>
             </p>
           </div>
@@ -310,11 +282,11 @@
             </div>
           {/if}
 
-          {#if $editorState.errors.length > 0}
+          {#if $sheetEditorState.errors.length > 0}
             <div class="control ml-5">
-              <a on:click={(_e) => moveToLine(editor, $editorState.errors[0].line_from)}
+              <a on:click={(_e) => moveToLine(editor, $sheetEditorState.errors[0].line_from)}
                 ><span class="ml-1 tag invertable is-danger is-light"
-                  >{$editorState.errors.length} error(s) found</span
+                  >{$sheetEditorState.errors.length} error(s) found</span
                 ></a
               >
             </div>
@@ -331,20 +303,41 @@
               on:select={(e) => selectFile(e.detail)}
               files={buildDirectoryTree(_.values(filesMap))}
               selectedFileName={selectedFile?.name}
-              hasUnsavedChanges={$editorState.hasUnsavedChanges}
+              hasUnsavedChanges={$sheetEditorState.hasUnsavedChanges}
             />
           </aside>
         </div>
       </div>
-      <div class="column is-6-widescreen is-6-fullhd is-8">
-        <div class="box py-0">
-          <div class="editor" bind:this={editorDom} />
+      <div class="column is-9-widescreen is-10-fullhd is-8">
+        <div class="flex">
+          <div class="box box-r-none py-0 pr-1 mb-0 basis-[36rem]">
+            <div class="sheet-editor" bind:this={editorDom} />
+          </div>
+          <div
+            class="box box-l-none has-text-right sheet-result"
+            style="padding: 4px 0; width: 200px;"
+          >
+            {#each $sheetEditorState.results as result, i}
+              <div
+                class={i + 1 === $sheetEditorState.currentLine
+                  ? "has-background-grey-lightest has-text-grey-dark has-text-weight-bold"
+                  : ""}
+                style="padding: 0 0.5rem"
+              >
+                <div
+                  title={result.result}
+                  class:underline={result.underline}
+                  class:font-bold={result.bold}
+                  class:text-left={result.align === "left"}
+                  class="m-0 p-0 truncate {result.error ? 'has-text-danger' : ''}"
+                  style="font-size: 0.928rem; line-height: 1.4"
+                >
+                  &nbsp;{result.result}
+                </div>
+              </div>
+            {/each}
+          </div>
         </div>
-      </div>
-      <div class="column is-3-widescreen is-4-fullhd is-hidden-touch is-hidden-desktop-only">
-        {#if !_.isEmpty($editorState.output)}
-          <pre class="box px-3 full-height">{$editorState.output}</pre>
-        {/if}
       </div>
     </div>
   </div>

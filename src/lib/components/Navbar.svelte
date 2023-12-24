@@ -117,6 +117,7 @@
       href: "/more",
       children: [
         { label: "Configuration", href: "/config", tag: "alpha", help: "config" },
+        { label: "Sheets", href: "/sheets" },
         { label: "Goals", href: "/goals", help: "goals" },
         { label: "Doctor", href: "/doctor" },
         { label: "Logs", href: "/logs" }

@@ -277,6 +277,45 @@ func Build(db *gorm.DB, enableCompression bool) *gin.Engine {
 		c.JSON(200, SaveFile(db, ledgerFile))
 	})
 
+	router.GET("/api/sheets/files", func(c *gin.Context) {
+		c.JSON(200, GetSheets(db))
+	})
+
+	router.POST("/api/sheets/file", func(c *gin.Context) {
+		var sheetFile SheetFile
+		if err := c.ShouldBindJSON(&sheetFile); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+
+		c.JSON(200, GetSheet(sheetFile))
+	})
+
+	router.POST("/api/sheets/file/delete_backups", func(c *gin.Context) {
+		var sheetFile SheetFile
+		if err := c.ShouldBindJSON(&sheetFile); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+
+		c.JSON(200, DeleteSheetBackups(sheetFile))
+	})
+
+	router.POST("/api/sheets/save", func(c *gin.Context) {
+		if config.GetConfig().Readonly {
+			c.JSON(200, gin.H{"saved": false, "message": "Readonly mode"})
+			return
+		}
+
+		var sheetFile SheetFile
+		if err := c.ShouldBindJSON(&sheetFile); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+
+		c.JSON(200, SaveSheetFile(db, sheetFile))
+	})
+
 	router.GET("/api/account/tf_idf", func(c *gin.Context) {
 		c.JSON(200, prediction.GetTfIdf(db))
 	})

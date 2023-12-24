@@ -1,108 +1,97 @@
-import Papa from "papaparse";
-import * as XLSX from "xlsx";
+import { closeBrackets } from "@codemirror/autocomplete";
+import { keymap, type KeyBinding } from "@codemirror/view";
+import { history, redoDepth, undoDepth } from "@codemirror/commands";
+import {
+  HighlightStyle,
+  bracketMatching,
+  syntaxHighlighting,
+  defaultHighlightStyle,
+  syntaxTree
+} from "@codemirror/language";
+import { lintGutter, linter, type Diagnostic } from "@codemirror/lint";
+import { tags } from "@lezer/highlight";
+import { EditorView } from "codemirror";
 import _ from "lodash";
-import { format } from "./journal";
-import { pdf2array } from "./pdf";
+export { sheetEditorState } from "../store";
+import { sheetEditorState } from "../store";
+import { basicSetup } from "./editor/base";
+import { sheetExtension } from "./sheet/language";
+import { schedulePlugin } from "./transaction_tag";
 
-interface Result {
-  data: string[][];
-  error?: string;
-}
+import { buildAST } from "./sheet/interpreter";
 
-export function parse(file: File): Promise<Result> {
-  let extension = file.name.split(".").pop();
-  extension = extension?.toLowerCase();
-  if (extension === "csv" || extension === "txt") {
-    return parseCSV(file);
-  } else if (extension === "xlsx" || extension === "xls") {
-    return parseXLSX(file);
-  } else if (extension === "pdf") {
-    return parsePDF(file);
-  }
-  throw new Error(`Unsupported file type ${extension}`);
-}
+function lint(editor: EditorView): Diagnostic[] {
+  const diagnostics: Diagnostic[] = [];
+  const tree = syntaxTree(editor.state);
 
-export function asRows(result: Result): Array<Record<string, any>> {
-  return _.map(result.data, (row, i) => {
-    return _.chain(row)
-      .map((cell, j) => {
-        return [String.fromCharCode(65 + j), cell];
-      })
-      .concat([["index", i as any]])
-      .fromPairs()
-      .value();
-  });
-}
-
-const COLUMN_REFS = _.chain(_.range(65, 90))
-  .map((i) => String.fromCharCode(i))
-  .map((a) => [a, a])
-  .fromPairs()
-  .value();
-
-export function render(
-  rows: Array<Record<string, any>>,
-  template: Handlebars.TemplateDelegate,
-  options: { reverse?: boolean } = {}
-) {
-  const output: string[] = [];
-  _.each(rows, (row) => {
-    const rendered = _.trim(template(_.assign({ ROW: row, SHEET: rows }, COLUMN_REFS)));
-    if (!_.isEmpty(rendered)) {
-      output.push(rendered);
+  tree.cursor().iterate((node) => {
+    if (node.type.isError) {
+      diagnostics.push({
+        from: node.from,
+        to: node.to,
+        severity: "error",
+        message: "Invalid syntax"
+      });
     }
   });
-  if (options.reverse) {
-    output.reverse();
+
+  return diagnostics;
+}
+
+export function createEditor(
+  content: string,
+  dom: Element,
+  opts: {
+    keybindings?: readonly KeyBinding[];
   }
-  return format(output.join("\n\n"));
-}
+) {
+  const highlightStyle = HighlightStyle.define(
+    defaultHighlightStyle.specs.concat([
+      { tag: tags.function(tags.variableName), color: "hsl(229, 53%, 53%)" },
+      { tag: tags.number, color: "hsl(229, 53%, 53%)", fontWeight: "bold" }
+    ])
+  );
 
-function parseCSV(file: File): Promise<Result> {
-  return new Promise((resolve, reject) => {
-    Papa.parse<string[]>(file, {
-      skipEmptyLines: true,
-      complete: function (results) {
-        resolve(results);
-      },
-      error: function (error) {
-        reject(error);
-      },
-      delimitersToGuess: [",", "\t", "|", ";", Papa.RECORD_SEP, Papa.UNIT_SEP, "^"]
-    });
-  });
-}
+  return new EditorView({
+    extensions: [
+      keymap.of(opts.keybindings || []),
+      basicSetup,
+      syntaxHighlighting(highlightStyle),
+      bracketMatching(),
+      closeBrackets(),
+      EditorView.contentAttributes.of({ "data-enable-grammarly": "false" }),
+      sheetExtension(),
+      linter(lint),
+      lintGutter(),
+      history(),
+      EditorView.updateListener.of((viewUpdate) => {
+        const doc = viewUpdate.state.doc.toString();
+        const currentLine = viewUpdate.state.doc.lineAt(viewUpdate.state.selection.main.head);
+        sheetEditorState.update((current) => {
+          let results = current.results;
+          if (current.doc !== doc) {
+            const tree = syntaxTree(viewUpdate.state);
+            try {
+              const ast = buildAST(tree.topNode, viewUpdate.state);
+              results = ast.evaluate();
+            } catch (e) {
+              // ignore
+            }
+          }
 
-async function parseXLSX(file: File): Promise<Result> {
-  const buffer = await readFile(file);
-  const sheet = XLSX.read(buffer, { type: "binary" });
-  const json = XLSX.utils.sheet_to_json<string[]>(sheet.Sheets[sheet.SheetNames[0]], {
-    header: 1,
-    blankrows: false,
-    rawNumbers: false
-  });
-  return { data: json };
-}
-
-async function parsePDF(file: File): Promise<Result> {
-  try {
-    const buffer = await readFile(file);
-    const array = await pdf2array(buffer);
-    return { data: array };
-  } catch (e) {
-    return { data: [], error: e.message };
-  }
-}
-
-function readFile(file: File): Promise<ArrayBuffer> {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      resolve(event.target.result as ArrayBuffer);
-    };
-    reader.onerror = (event) => {
-      reject(event);
-    };
-    reader.readAsArrayBuffer(file);
+          return _.assign({}, current, {
+            results: results,
+            doc: doc,
+            currentLine: currentLine.number,
+            hasUnsavedChanges: current.hasUnsavedChanges || viewUpdate.docChanged,
+            undoDepth: undoDepth(viewUpdate.state),
+            redoDepth: redoDepth(viewUpdate.state)
+          });
+        });
+      }),
+      schedulePlugin
+    ],
+    doc: content,
+    parent: dom
   });
 }

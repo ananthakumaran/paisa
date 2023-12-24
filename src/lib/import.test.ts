@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
 
-import { parse, render, asRows } from "./sheet";
+import { parse, render, asRows } from "./spreadsheet";
 import fs from "fs";
 import helpers from "./template_helpers";
 import _ from "lodash";

@@ -1,6 +1,6 @@
 import { styleTags, tags as t } from "@lezer/highlight";
 
-export const jsonHighlighting = styleTags({
+export const queryHighlighting = styleTags({
   Quoted: t.string,
   UnQuoted: t.string,
   Number: t.number,

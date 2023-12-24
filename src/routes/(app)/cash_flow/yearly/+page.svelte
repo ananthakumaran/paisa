@@ -5,20 +5,18 @@
   import { ajax, depth, firstName, type Graph, type Posting } from "$lib/utils";
   import { dateMin, year } from "../../../../store";
   import {
-    cashflowType,
     setCashflowDepthAllowed,
     cashflowExpenseDepth,
     cashflowIncomeDepth
   } from "../../../../persisted_store";
   import ZeroState from "$lib/components/ZeroState.svelte";
 
-  let graph: Record<string, Record<string, Graph>>, expenses: Posting[];
+  let graph: Record<string, Graph>, expenses: Posting[];
   let isEmpty = false;
 
   function maxDepth(prefix: string) {
     if (!graph) return 1;
     const max = _.chain(graph)
-      .flatMap((g) => g["hierarchy"])
       .flatMap((g) => g.nodes)
       .filter((n) => n.name.startsWith(prefix))
       .map((n) => depth(n.name))
@@ -28,8 +26,8 @@
     return max || 1;
   }
 
-  function filter(graph: Graph, incomeDepth: number, expenseDepth: number, flowType: string) {
-    if (!graph || flowType != "hierarchy") return graph;
+  function filter(graph: Graph, incomeDepth: number, expenseDepth: number) {
+    if (!graph) return graph;
 
     const [removed, allowed] = _.partition(graph.nodes, (n) => {
       const account = firstName(n.name);
@@ -51,15 +49,7 @@
     if (graph[$year] == null) {
       isEmpty = true;
     } else {
-      renderFlow(
-        filter(
-          _.cloneDeep(graph[$year][$cashflowType]),
-          $cashflowIncomeDepth,
-          $cashflowExpenseDepth,
-          $cashflowType
-        ),
-        $cashflowType
-      );
+      renderFlow(filter(_.cloneDeep(graph[$year]), $cashflowIncomeDepth, $cashflowExpenseDepth));
       isEmpty = false;
     }
   }

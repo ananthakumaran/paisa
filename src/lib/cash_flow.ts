@@ -286,7 +286,7 @@ export function renderMonthlyFlow(
   };
 }
 
-export function renderFlow(graph: Graph, cashflowType: string) {
+export function renderFlow(graph: Graph) {
   const id = "#d3-expense-flow";
   const svg = d3.select(id);
   const margin = { top: rem(60), right: rem(20), bottom: rem(40), left: rem(20) },
@@ -401,7 +401,7 @@ export function renderFlow(graph: Graph, cashflowType: string) {
       return "middle";
     })
     .classed("svg-text-grey-dark", true)
-    .text((d: any) => `${name(d, cashflowType)} ${formatCurrencyCrude(d.value)}`);
+    .text((d: any) => `${name(d)} ${formatCurrencyCrude(d.value)}`);
 
   const link = linkG.data(sankeyLinks).enter().append("g");
 
@@ -429,12 +429,9 @@ export function renderFlow(graph: Graph, cashflowType: string) {
   linkG.data(sankeyLinks).enter().append("g").attr("class", "g-arrow").call(arrows);
 }
 
-function name(node: Node, cashflowType: string) {
+function name(node: Node) {
   let name: string, group: string;
-  if (
-    cashflowType === "hierarchy" &&
-    (node.name.startsWith("Income") || node.name.startsWith("Expenses"))
-  ) {
+  if (node.name.startsWith("Income") || node.name.startsWith("Expenses")) {
     name = lastName(node.name);
     group = parentName(node.name);
   } else {

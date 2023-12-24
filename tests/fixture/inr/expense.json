@@ -24,216 +24,136 @@
   ],
   "graph": {
     "2021 - 22": {
-      "flat": {
-        "nodes": [
-          {
-            "id": 1,
-            "name": "Assets:Checking"
-          },
-          {
-            "id": 6,
-            "name": "Assets:Equity:AAPL"
-          },
-          {
-            "id": 5,
-            "name": "Assets:Equity:ABNB"
-          },
-          {
-            "id": 4,
-            "name": "Assets:Equity:NIFTY"
-          },
-          {
-            "id": 3,
-            "name": "Expenses:Rent"
-          },
-          {
-            "id": 7,
-            "name": "Income:CapitalGains:Equity:AAPL"
-          },
-          {
-            "id": 8,
-            "name": "Income:Interest:Checking"
-          },
-          {
-            "id": 2,
-            "name": "Income:Salary:Acme"
-          }
-        ],
-        "links": [
-          {
-            "source": 1,
-            "target": 3,
-            "value": 20000
-          },
-          {
-            "source": 1,
-            "target": 4,
-            "value": 80000
-          },
-          {
-            "source": 1,
-            "target": 5,
-            "value": 8025.3170071296
-          },
-          {
-            "source": 1,
-            "target": 6,
-            "value": 10000
-          },
-          {
-            "source": 2,
-            "target": 1,
-            "value": 120000
-          },
-          {
-            "source": 6,
-            "target": 1,
-            "value": 10000
-          },
-          {
-            "source": 7,
-            "target": 1,
-            "value": 27.3
-          },
-          {
-            "source": 8,
-            "target": 1,
-            "value": 1000
-          }
-        ]
-      },
-      "hierarchy": {
-        "nodes": [
-          {
-            "id": 1,
-            "name": "Assets:Checking"
-          },
-          {
-            "id": 9,
-            "name": "Assets:Equity:AAPL"
-          },
-          {
-            "id": 8,
-            "name": "Assets:Equity:ABNB"
-          },
-          {
-            "id": 7,
-            "name": "Assets:Equity:NIFTY"
-          },
-          {
-            "id": 5,
-            "name": "Expenses"
-          },
-          {
-            "id": 6,
-            "name": "Expenses:Rent"
-          },
-          {
-            "id": 2,
-            "name": "Income"
-          },
-          {
-            "id": 10,
-            "name": "Income:CapitalGains"
-          },
-          {
-            "id": 11,
-            "name": "Income:CapitalGains:Equity"
-          },
-          {
-            "id": 12,
-            "name": "Income:CapitalGains:Equity:AAPL"
-          },
-          {
-            "id": 13,
-            "name": "Income:Interest"
-          },
-          {
-            "id": 14,
-            "name": "Income:Interest:Checking"
-          },
-          {
-            "id": 3,
-            "name": "Income:Salary"
-          },
-          {
-            "id": 4,
-            "name": "Income:Salary:Acme"
-          }
-        ],
-        "links": [
-          {
-            "source": 1,
-            "target": 5,
-            "value": 20000
-          },
-          {
-            "source": 1,
-            "target": 7,
-            "value": 80000
-          },
-          {
-            "source": 1,
-            "target": 8,
-            "value": 8025.3170071296
-          },
-          {
-            "source": 1,
-            "target": 9,
-            "value": 10000
-          },
-          {
-            "source": 2,
-            "target": 1,
-            "value": 121027.3
-          },
-          {
-            "source": 3,
-            "target": 2,
-            "value": 120000
-          },
-          {
-            "source": 4,
-            "target": 3,
-            "value": 120000
-          },
-          {
-            "source": 5,
-            "target": 6,
-            "value": 20000
-          },
-          {
-            "source": 9,
-            "target": 1,
-            "value": 10000
-          },
-          {
-            "source": 10,
-            "target": 2,
-            "value": 27.3
-          },
-          {
-            "source": 11,
-            "target": 10,
-            "value": 27.3
-          },
-          {
-            "source": 12,
-            "target": 11,
-            "value": 27.3
-          },
-          {
-            "source": 13,
-            "target": 2,
-            "value": 1000
-          },
-          {
-            "source": 14,
-            "target": 13,
-            "value": 1000
-          }
-        ]
-      }
+      "nodes": [
+        {
+          "id": 1,
+          "name": "Assets:Checking"
+        },
+        {
+          "id": 9,
+          "name": "Assets:Equity:AAPL"
+        },
+        {
+          "id": 8,
+          "name": "Assets:Equity:ABNB"
+        },
+        {
+          "id": 7,
+          "name": "Assets:Equity:NIFTY"
+        },
+        {
+          "id": 5,
+          "name": "Expenses"
+        },
+        {
+          "id": 6,
+          "name": "Expenses:Rent"
+        },
+        {
+          "id": 2,
+          "name": "Income"
+        },
+        {
+          "id": 10,
+          "name": "Income:CapitalGains"
+        },
+        {
+          "id": 11,
+          "name": "Income:CapitalGains:Equity"
+        },
+        {
+          "id": 12,
+          "name": "Income:CapitalGains:Equity:AAPL"
+        },
+        {
+          "id": 13,
+          "name": "Income:Interest"
+        },
+        {
+          "id": 14,
+          "name": "Income:Interest:Checking"
+        },
+        {
+          "id": 3,
+          "name": "Income:Salary"
+        },
+        {
+          "id": 4,
+          "name": "Income:Salary:Acme"
+        }
+      ],
+      "links": [
+        {
+          "source": 1,
+          "target": 5,
+          "value": 20000
+        },
+        {
+          "source": 1,
+          "target": 7,
+          "value": 80000
+        },
+        {
+          "source": 1,
+          "target": 8,
+          "value": 8025.3170071296
+        },
+        {
+          "source": 1,
+          "target": 9,
+          "value": 10000
+        },
+        {
+          "source": 2,
+          "target": 1,
+          "value": 121027.3
+        },
+        {
+          "source": 3,
+          "target": 2,
+          "value": 120000
+        },
+        {
+          "source": 4,
+          "target": 3,
+          "value": 120000
+        },
+        {
+          "source": 5,
+          "target": 6,
+          "value": 20000
+        },
+        {
+          "source": 9,
+          "target": 1,
+          "value": 10000
+        },
+        {
+          "source": 10,
+          "target": 2,
+          "value": 27.3
+        },
+        {
+          "source": 11,
+          "target": 10,
+          "value": 27.3
+        },
+        {
+          "source": 12,
+          "target": 11,
+          "value": 27.3
+        },
+        {
+          "source": 13,
+          "target": 2,
+          "value": 1000
+        },
+        {
+          "source": 14,
+          "target": 13,
+          "value": 1000
+        }
+      ]
     }
   },
   "month_wise": {

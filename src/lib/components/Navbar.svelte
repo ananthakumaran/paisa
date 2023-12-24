@@ -3,7 +3,6 @@
   import Actions from "$lib/components/Actions.svelte";
   import { month, year, dateMax, dateMin, dateRangeOption } from "../../store";
   import {
-    cashflowType,
     cashflowExpenseDepth,
     cashflowExpenseDepthAllowed,
     cashflowIncomeDepth,
@@ -16,7 +15,6 @@
   import { get } from "svelte/store";
   import DateRange from "./DateRange.svelte";
   import ThemeSwitcher from "./ThemeSwitcher.svelte";
-  import BoxedTabs from "./BoxedTabs.svelte";
   import MonthPicker from "./MonthPicker.svelte";
   import Logo from "./Logo.svelte";
   import InputRange from "./InputRange.svelte";
@@ -44,7 +42,6 @@
     hide?: boolean;
     dateRangeSelector?: boolean;
     monthPicker?: boolean;
-    cashflowTypePicker?: boolean;
     financialYearPicker?: boolean;
     maxDepthSelector?: boolean;
     recurringIcons?: boolean;
@@ -61,7 +58,6 @@
         {
           label: "Yearly",
           href: "/yearly",
-          cashflowTypePicker: true,
           financialYearPicker: true,
           maxDepthSelector: true
         },
@@ -377,17 +373,7 @@
       </div>
     {/if}
 
-    {#if selectedSubLink?.cashflowTypePicker}
-      <BoxedTabs
-        options={[
-          { label: "Flat", value: "flat" },
-          { label: "Hierarchy", value: "hierarchy" }
-        ]}
-        bind:value={$cashflowType}
-      />
-    {/if}
-
-    {#if selectedSubLink?.maxDepthSelector && ($cashflowExpenseDepthAllowed.max > 1 || $cashflowIncomeDepthAllowed.max > 1) && $cashflowType == "hierarchy"}
+    {#if selectedSubLink?.maxDepthSelector && ($cashflowExpenseDepthAllowed.max > 1 || $cashflowIncomeDepthAllowed.max > 1)}
       <div class="dropdown is-right is-hoverable">
         <div class="dropdown-trigger">
           <button class="button is-small" aria-haspopup="true">

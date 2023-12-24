@@ -2,80 +2,50 @@
   "expenses": [],
   "graph": {
     "2021 - 22": {
-      "flat": {
-        "nodes": [
-          {
-            "id": 1,
-            "name": "Assets:Checking"
-          },
-          {
-            "id": 3,
-            "name": "Assets:Equity:AAPL"
-          },
-          {
-            "id": 2,
-            "name": "Income:Salary:Acme"
-          }
-        ],
-        "links": [
-          {
-            "source": 1,
-            "target": 3,
-            "value": 10005.05
-          },
-          {
-            "source": 2,
-            "target": 1,
-            "value": 11000
-          }
-        ]
-      },
-      "hierarchy": {
-        "nodes": [
-          {
-            "id": 1,
-            "name": "Assets:Checking"
-          },
-          {
-            "id": 5,
-            "name": "Assets:Equity:AAPL"
-          },
-          {
-            "id": 2,
-            "name": "Income"
-          },
-          {
-            "id": 3,
-            "name": "Income:Salary"
-          },
-          {
-            "id": 4,
-            "name": "Income:Salary:Acme"
-          }
-        ],
-        "links": [
-          {
-            "source": 1,
-            "target": 5,
-            "value": 10005.05
-          },
-          {
-            "source": 2,
-            "target": 1,
-            "value": 11000
-          },
-          {
-            "source": 3,
-            "target": 2,
-            "value": 11000
-          },
-          {
-            "source": 4,
-            "target": 3,
-            "value": 11000
-          }
-        ]
-      }
+      "nodes": [
+        {
+          "id": 1,
+          "name": "Assets:Checking"
+        },
+        {
+          "id": 5,
+          "name": "Assets:Equity:AAPL"
+        },
+        {
+          "id": 2,
+          "name": "Income"
+        },
+        {
+          "id": 3,
+          "name": "Income:Salary"
+        },
+        {
+          "id": 4,
+          "name": "Income:Salary:Acme"
+        }
+      ],
+      "links": [
+        {
+          "source": 1,
+          "target": 5,
+          "value": 10005.05
+        },
+        {
+          "source": 2,
+          "target": 1,
+          "value": 11000
+        },
+        {
+          "source": 3,
+          "target": 2,
+          "value": 11000
+        },
+        {
+          "source": 4,
+          "target": 3,
+          "value": 11000
+        }
+      ]
     }
   },
   "month_wise": {

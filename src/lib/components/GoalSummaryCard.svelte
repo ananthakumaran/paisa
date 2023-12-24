@@ -6,7 +6,6 @@
   import Progress from "$lib/components/Progress.svelte";
   import COLORS from "$lib/colors";
   import dayjs from "dayjs";
-  import { createEventDispatcher } from "svelte";
 
   export let goal: GoalSummary;
   export let small = false;
@@ -32,8 +31,11 @@
 
 <div class="box p-3 goal-summary-card">
   <div class="flex justify-between mb-4">
-    <a class="secondary-link" href="/more/goals/{goal.type}/{encodeURIComponent(goal.name)}">
-      <h4 class="is-size-4">{goal.name}</h4>
+    <a
+      class="secondary-link has-text-grey"
+      href="/more/goals/{goal.type}/{encodeURIComponent(goal.name)}"
+    >
+      <h4 class="is-size-4 has-text-grey">{goal.name}</h4>
     </a>
     {#if !_.isEmpty(goal.icon)}
       <span class="{small ? 'is-size-3' : 'is-size-2'} custom-icon">{iconGlyph(goal.icon)}</span>

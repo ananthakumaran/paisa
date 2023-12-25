@@ -130,8 +130,8 @@ valid and the next 3 schedules if valid.
 * Last day of every month `#!ledger ; Period: L * ?`
 * 5<sup>th</sup> every month `#!ledger ; Period: 5 * ?`
 * Every Sunday `#!ledger ; Period: ? * 0`
-* 1<sup>st</sup> of Jan and 7<sup>th</sup> of Feb `#!ledger ; Period 1 JAN ? | 7 FEB ?`
-* Closest business day to the 15<sup>th</sup> day of every month. `#!ledger ; Period 15W * ?`
+* 1<sup>st</sup> of Jan and 7<sup>th</sup> of Feb `#!ledger ; Period: 1 JAN ? | 7 FEB ?`
+* Closest business day to the 15<sup>th</sup> day of every month. `#!ledger ; Period: 15W * ?`
 
 
 

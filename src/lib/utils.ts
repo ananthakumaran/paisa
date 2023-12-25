@@ -1132,3 +1132,10 @@ export function transactionTotal(transaction: Transaction) {
 export function formatTextAsHtml(text: string) {
   return `<p>${_.trim(text).replaceAll("\n", "<br />")}</p>`;
 }
+
+export function groupSumBy(postings: Posting[], groupBy: _.ValueIteratee<Posting>) {
+  return _.chain(postings)
+    .groupBy(groupBy)
+    .mapValues((ps) => _.sumBy(ps, (p) => p.amount))
+    .value();
+}

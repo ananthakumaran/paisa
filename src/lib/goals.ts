@@ -2,13 +2,14 @@ import type { Arima } from "arima/async";
 import * as d3 from "d3";
 import { Delaunay } from "d3";
 import _, { first, isEmpty, last, takeRight } from "lodash";
-import tippy, { type Placement } from "tippy.js";
+import tippy from "tippy.js";
 import COLORS from "./colors";
 import type { Forecast, Point, Posting } from "./utils";
 import {
   formatCurrency,
   formatCurrencyCrude,
   formatFloat,
+  groupSumBy,
   isMobile,
   now,
   rem,
@@ -415,12 +416,12 @@ export function renderInvestmentTimeline(postings: Posting[], element: Element, 
     .attr("fill", (p) => (p.total <= 0 ? COLORS.lossText : COLORS.gainText))
     .attr("fill-opacity", 0.6)
     .attr("data-tippy-content", (p) => {
-      const postings: Posting[] = p.postings;
+      const group = groupSumBy(p.postings, (p) => p.account);
       return tooltip(
         _.sortBy(
-          postings.map((p) => [
-            iconify(p.account),
-            [formatCurrency(p.amount), "has-text-weight-bold has-text-right"]
+          _.map(group, (amount, account) => [
+            iconify(account),
+            [formatCurrency(amount), "has-text-weight-bold has-text-right"]
           ]),
           (r) => r[0]
         ),

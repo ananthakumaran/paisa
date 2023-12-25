@@ -175,7 +175,7 @@
           </div>
           <div class="column is-8">
             <div class="px-3 box" style="height: 100%">
-              <ZeroState item={current_month_expenses}>
+              <ZeroState item={grouped_expenses?.[$month]}>
                 <strong>Hurray!</strong> You have no expenses this month.
               </ZeroState>
               <svg id="d3-current-month-breakdown" width="100%" />

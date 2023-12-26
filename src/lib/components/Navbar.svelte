@@ -151,29 +151,33 @@
   let selectedSubLink: Link = null;
   let selectedSubSubLink: Link = null;
 
-  $: if ($page.url.pathname) {
+  $: normalizedPath = $page.url.pathname?.replace(/\/$/, "");
+
+  $: if (normalizedPath) {
     selectedSubLink = null;
     selectedSubSubLink = null;
-    selectedLink = _.find(links, (l) => $page.url.pathname == l.href);
+    selectedLink = _.find(links, (l) => normalizedPath == l.href);
     if (!selectedLink) {
       selectedLink = _.find(
         links,
-        (l) => !_.isEmpty(l.children) && $page.url.pathname.startsWith(l.href)
+        (l) => !_.isEmpty(l.children) && normalizedPath.startsWith(l.href)
       );
+
+      console.log(normalizedPath);
 
       selectedSubLink = _.find(
         selectedLink.children,
-        (l) => $page.url.pathname == selectedLink.href + l.href
+        (l) => normalizedPath == selectedLink.href + l.href
       );
 
       if (!selectedSubLink) {
         selectedSubLink = _.find(selectedLink.children, (l) =>
-          $page.url.pathname.startsWith(selectedLink.href + l.href)
+          normalizedPath.startsWith(selectedLink.href + l.href)
         );
 
         if (!_.isEmpty(selectedSubLink.children)) {
           selectedSubSubLink = _.find(selectedSubLink.children, (l) =>
-            $page.url.pathname.startsWith(selectedLink.href + selectedSubLink.href + l.href)
+            normalizedPath.startsWith(selectedLink.href + selectedSubLink.href + l.href)
           );
         }
       }
@@ -185,7 +189,7 @@
   <div class="navbar-brand">
     <a
       href="/"
-      class:is-active={$page.url.pathname == "/"}
+      class:is-active={normalizedPath == "/"}
       class="navbar-item is-size-4 has-text-weight-medium"
     >
       {#if $obscure}
@@ -217,17 +221,15 @@
       {#each links as link}
         {#if _.isEmpty(link.children)}
           {#if !link.hide}
-            <a
-              class="navbar-item"
-              href={link.href}
-              class:is-active={$page.url.pathname == link.href}>{link.label}</a
+            <a class="navbar-item" href={link.href} class:is-active={normalizedPath == link.href}
+              >{link.label}</a
             >
           {/if}
         {:else}
           <div class="navbar-item has-dropdown is-hoverable">
             <a
               class="navbar-link"
-              class:is-active={$page.url.pathname.startsWith(link.href)}
+              class:is-active={normalizedPath.startsWith(link.href)}
               on:click|preventDefault={(e) =>
                 isMobile() && e.currentTarget.parentElement.classList.toggle("is-active")}
               >{link.label}</a
@@ -236,16 +238,14 @@
               {#each link.children as sublink}
                 {@const href = link.href + sublink.href}
                 {#if _.isEmpty(sublink.children)}
-                  <a
-                    class="navbar-item"
-                    {href}
-                    class:is-active={$page.url.pathname.startsWith(href)}>{sublink.label}</a
+                  <a class="navbar-item" {href} class:is-active={normalizedPath.startsWith(href)}
+                    >{sublink.label}</a
                   >
                 {:else}
                   <div class="nested has-dropdown navbar-item">
                     <a
                       class="navbar-link is-arrowless is-flex is-justify-content-space-between is-active"
-                      class:is-active={$page.url.pathname.startsWith(href)}
+                      class:is-active={normalizedPath.startsWith(href)}
                     >
                       <span>{sublink.label}</span>
                       <span class="icon is-small">
@@ -262,7 +262,7 @@
                           <a
                             href={href + subsublink.href}
                             class="navbar-item"
-                            class:is-active={$page.url.pathname == href + subsublink.href}
+                            class:is-active={normalizedPath == href + subsublink.href}
                             >{subsublink.label}</a
                           >
                         {/each}
@@ -349,9 +349,9 @@
             <li>
               <a class="is-inactive">{selectedSubSubLink.label}</a>
             </li>
-          {:else if selectedLink.href + selectedSubLink.href != $page.url.pathname}
+          {:else if selectedLink.href + selectedSubLink.href != normalizedPath}
             <li>
-              <a class="is-inactive">{decodeURIComponent(_.last($page.url.pathname.split("/")))}</a>
+              <a class="is-inactive">{decodeURIComponent(_.last(normalizedPath.split("/")))}</a>
             </li>
           {/if}
         {/if}

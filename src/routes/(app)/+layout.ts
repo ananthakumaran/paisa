@@ -1,3 +1,5 @@
+export const trailingSlash = "never";
+
 import type { LayoutLoad } from "./$types";
 import { ajax, configUpdated, setNow } from "$lib/utils";
 

@@ -56,10 +56,21 @@ function makeRow(cells: TextItemWithPosition[]): string[] {
  *
  * @param data
  */
+const MAX_PASSWORD_ATTEMPTS = 3;
 export async function pdf2array(data: ArrayBuffer): Promise<string[][]> {
-  const loader = await pdfjs.getDocument(data);
+  const loader = pdfjs.getDocument(data);
+  let passwordAttemptCount = 0;
   loader.onPassword = (cb: any) => {
-    const password = prompt("Please enter the password to open this PDF file.");
+    passwordAttemptCount++;
+    const remainingAttempts = MAX_PASSWORD_ATTEMPTS - passwordAttemptCount;
+    const message =
+      passwordAttemptCount > 1
+        ? `Invalid password. Please try again. ${remainingAttempts} attempts remaining`
+        : "Please enter the password to open this PDF file.";
+    const password = prompt(message);
+    if (remainingAttempts <= 0) {
+      throw new Error("Too many failed password attempts.");
+    }
     cb(password);
   };
   const doc = await loader.promise;

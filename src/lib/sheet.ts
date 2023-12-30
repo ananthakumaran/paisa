@@ -6,6 +6,7 @@ import { pdf2array } from "./pdf";
 
 interface Result {
   data: string[][];
+  error?: string;
 }
 
 export function parse(file: File): Promise<Result> {
@@ -84,9 +85,13 @@ async function parseXLSX(file: File): Promise<Result> {
 }
 
 async function parsePDF(file: File): Promise<Result> {
-  const buffer = await readFile(file);
-  const array = await pdf2array(buffer);
-  return { data: array };
+  try {
+    const buffer = await readFile(file);
+    const array = await pdf2array(buffer);
+    return { data: array };
+  } catch (e) {
+    return { data: [], error: e.message };
+  }
 }
 
 function readFile(file: File): Promise<ArrayBuffer> {

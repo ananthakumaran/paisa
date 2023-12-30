@@ -24,6 +24,7 @@
   let lastTemplate: any;
   let lastData: any;
   let preview = "";
+  let parseErrorMessage: string = null;
   let columnCount: number;
   let data: any[][] = [];
   let rows: Array<Record<string, any>> = [];
@@ -114,13 +115,18 @@
     const { acceptedFiles } = e.detail;
 
     const results = await parse(acceptedFiles[0]);
-    data = results.data;
-    rows = asRows(results);
+    if (results.error) {
+      parseErrorMessage = results.error;
+    } else {
+      parseErrorMessage = null;
+      data = results.data;
+      rows = asRows(results);
 
-    columnCount = _.maxBy(data, (row) => row.length).length;
-    _.each(data, (row) => {
-      row.length = columnCount;
-    });
+      columnCount = _.maxBy(data, (row) => row.length).length;
+      _.each(data, (row) => {
+        row.length = columnCount;
+      });
+    }
   }
 
   async function copyToClipboard() {
@@ -303,6 +309,12 @@
             <label for="import-reverse">Reverse</label>
           </div>
         </div>
+        {#if parseErrorMessage}
+          <div class="message invertable is-danger">
+            <div class="message-header">Failed to parse document</div>
+            <div class="message-body">{parseErrorMessage}</div>
+          </div>
+        {/if}
         {#if !_.isEmpty(data)}
           <div class="table-wrapper">
             <table

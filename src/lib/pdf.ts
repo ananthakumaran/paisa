@@ -57,9 +57,14 @@ function makeRow(cells: TextItemWithPosition[]): string[] {
  * @param data
  */
 export async function pdf2array(data: ArrayBuffer): Promise<string[][]> {
-  const loader = await pdfjs.getDocument(data);
+  const loader = pdfjs.getDocument(data);
   loader.onPassword = (cb: any) => {
-    const password = prompt("Please enter the password to open this PDF file.");
+    const password = prompt(
+      "Please enter the password to open this PDF file. Press cancel to exit."
+    );
+    if (!password) {
+      throw new Error("Password required.");
+    }
     cb(password);
   };
   const doc = await loader.promise;

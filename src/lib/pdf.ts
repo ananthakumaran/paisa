@@ -62,7 +62,7 @@ export async function pdf2array(data: ArrayBuffer): Promise<string[][]> {
     const password = prompt(
       "Please enter the password to open this PDF file. Press cancel to exit."
     );
-    if (!password) {
+    if (password === null) {
       throw new Error("Password required.");
     }
     cb(password);

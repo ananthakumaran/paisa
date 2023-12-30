@@ -1,6 +1,6 @@
 <script lang="ts">
   import COLORS, { generateColorScheme, genericBarColor } from "$lib/colors";
-  import { renderAccountOverview } from "$lib/gain";
+  import { renderAccountOverview, buildLegends } from "$lib/gain";
   import { filterCommodityBreakdowns, renderPortfolioBreakdown } from "$lib/portfolio";
   import {
     ajax,
@@ -21,6 +21,7 @@
   import LevelItem from "$lib/components/LevelItem.svelte";
   import { iconify } from "$lib/icon";
   import BoxLabel from "$lib/components/BoxLabel.svelte";
+  import LegendCard from "$lib/components/LegendCard.svelte";
 
   let commodities: string[] = [];
   let selectedCommodities: string[] = [];
@@ -39,6 +40,7 @@
   let gain: AccountGain;
   let overview: Networth;
   let assetBreakdown: AssetBreakdown;
+  let legends = buildLegends();
 
   let destroyCallback = () => {};
   let postings: Posting[] = [];
@@ -72,19 +74,27 @@
     );
 
     selectedCommodities = [...commodities];
-    securityTypeR = renderPortfolioBreakdown("#d3-portfolio-security-type", security_type, {
+    ({ renderer: securityTypeR } = renderPortfolioBreakdown(
+      "#d3-portfolio-security-type",
+      security_type,
+      {
+        small: true
+      }
+    ));
+    ({ renderer: ratingR } = renderPortfolioBreakdown("#d3-portfolio-security-rating", rating, {
       small: true
-    });
-    ratingR = renderPortfolioBreakdown("#d3-portfolio-security-rating", rating, {
+    }));
+    ({ renderer: industryR } = renderPortfolioBreakdown(
+      "#d3-portfolio-security-industry",
+      industry,
+      {
+        small: true,
+        z: [genericBarColor()]
+      }
+    ));
+    ({ renderer: portfolioR } = renderPortfolioBreakdown("#d3-portfolio", name_and_security_type, {
       small: true
-    });
-    industryR = renderPortfolioBreakdown("#d3-portfolio-security-industry", industry, {
-      small: true,
-      z: [genericBarColor()]
-    });
-    portfolioR = renderPortfolioBreakdown("#d3-portfolio", name_and_security_type, {
-      small: true
-    });
+    }));
 
     if (commodities.length !== 0) {
       color = generateColorScheme(commodities);
@@ -194,7 +204,7 @@
             </div>
           </div>
         {/if}
-        <svg id="d3-gain-legend" width="100%" height="50" />
+        <LegendCard {legends} clazz="mb-2" />
         <div class="box">
           <svg id="d3-account-timeline-breakdown" width="100%" height="450" />
         </div>

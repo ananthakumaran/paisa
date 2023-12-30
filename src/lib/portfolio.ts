@@ -125,7 +125,7 @@ export function renderPortfolioBreakdown(
     legends: groups.map((g) => {
       return {
         label: g,
-        color: z(g),
+        color: z ? z(g) : "",
         shape: "square"
       };
     }),

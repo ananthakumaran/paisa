@@ -1,5 +1,4 @@
 import * as d3 from "d3";
-import legend from "d3-svg-legend";
 import _ from "lodash";
 import {
   forEachMonth,
@@ -10,18 +9,19 @@ import {
   skipTicks,
   tooltip,
   rem,
-  now
+  now,
+  type Legend
 } from "./utils";
 import { generateColorScheme } from "./colors";
 import { iconify } from "./icon";
 import type dayjs from "dayjs";
 
-export function renderMonthlyRepaymentTimeline(postings: Posting[]) {
+export function renderMonthlyRepaymentTimeline(postings: Posting[]): Legend[] {
   const id = "#d3-repayment-timeline";
   const timeFormat = "MMM-YYYY";
   const MAX_BAR_WIDTH = rem(40);
   const svg = d3.select(id),
-    margin = { top: rem(50), right: rem(30), bottom: rem(60), left: rem(40) },
+    margin = { top: rem(20), right: rem(30), bottom: rem(60), left: rem(40) },
     width =
       document.getElementById(id.substring(1)).parentElement.clientWidth -
       margin.left -
@@ -141,17 +141,9 @@ export function renderMonthlyRepaymentTimeline(postings: Posting[]) {
     })
     .attr("width", Math.min(x.bandwidth(), MAX_BAR_WIDTH));
 
-  svg.append("g").attr("class", "legendOrdinal").attr("transform", `translate(${margin.top},0)`);
-
-  const legendOrdinal = legend
-    .legendColor()
-    .shape("rect")
-    .orient("horizontal")
-    .shapePadding(rem(100))
-    .labels(({ i, generatedLabels }: { i: number; generatedLabels: string[] }) => {
-      return iconify(generatedLabels[i], { group: "Liabilities" });
-    })
-    .scale(z);
-
-  svg.select(".legendOrdinal").call(legendOrdinal as any);
+  return _.map(groups, (group) => ({
+    label: iconify(group, { group: "Liabilities" }),
+    color: z(group),
+    shape: "square"
+  }));
 }

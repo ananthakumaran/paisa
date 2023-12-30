@@ -1,6 +1,5 @@
 import * as d3 from "d3";
 import _ from "lodash";
-import legend from "d3-svg-legend";
 import {
   formatCurrency,
   formatFloat,
@@ -11,7 +10,8 @@ import {
   type CommodityBreakdown,
   getColorPreference,
   rem,
-  svgTruncate
+  svgTruncate,
+  type Legend
 } from "./utils";
 
 export function filterCommodityBreakdowns(
@@ -44,16 +44,18 @@ export function filterCommodityBreakdowns(
 export function renderPortfolioBreakdown(
   id: string,
   portfolioAggregates: PortfolioAggregate[],
-  options: { showLegend?: boolean; small?: boolean; z?: any } = {
-    showLegend: false,
+  options: { small?: boolean; z?: any } = {
     small: false,
     z: null
   }
-) {
-  const { showLegend, small } = options;
+): {
+  legends: Legend[];
+  renderer: (portfolioAggregates: PortfolioAggregate[], color: any) => void;
+} {
+  const { small } = options;
   const BAR_HEIGHT = rem(25);
   const svg = d3.select(id),
-    margin = { top: showLegend ? rem(60) : rem(20), right: 0, bottom: rem(10), left: rem(20) },
+    margin = { top: rem(20), right: 0, bottom: rem(10), left: rem(20) },
     fullWidth =
       Math.max(
         document.getElementById(id.substring(1)).parentElement.clientWidth,
@@ -81,7 +83,6 @@ export function renderPortfolioBreakdown(
     .sort()
     .value();
 
-  const legendg = svg.append("g");
   const aggregatesg = svg.append("g");
   const labelGroupg = svg
     .append("g")
@@ -120,168 +121,166 @@ export function renderPortfolioBreakdown(
     z = d3.scaleOrdinal<string>().domain(groups).range(range);
   }
 
-  return (portfolioAggregates: PortfolioAggregate[], color: d3.ScaleOrdinal<string, string>) => {
-    if (_.isEmpty(portfolioAggregates)) {
-      treemap.style("display", "none");
-      svg.style("display", "none");
-      return;
-    }
+  return {
+    legends: groups.map((g) => {
+      return {
+        label: g,
+        color: z(g),
+        shape: "square"
+      };
+    }),
+    renderer: (
+      portfolioAggregates: PortfolioAggregate[],
+      color: d3.ScaleOrdinal<string, string>
+    ) => {
+      if (_.isEmpty(portfolioAggregates)) {
+        treemap.style("display", "none");
+        svg.style("display", "none");
+        return;
+      }
 
-    treemap.style("display", null);
-    svg.style("display", null);
+      treemap.style("display", null);
+      svg.style("display", null);
 
-    const t = svg.transition().duration(rendered ? 750 : 0);
-    rendered = true;
-    const height = portfolioAggregates.length * BAR_HEIGHT;
-    const maxX = _.chain(portfolioAggregates)
-      .flatMap((t) => [t.percentage])
-      .max()
-      .value();
-    x.domain([0, maxX]);
-    x1.domain([0, maxX]);
+      const t = svg.transition().duration(rendered ? 750 : 0);
+      rendered = true;
+      const height = portfolioAggregates.length * BAR_HEIGHT;
+      const maxX = _.chain(portfolioAggregates)
+        .flatMap((t) => [t.percentage])
+        .max()
+        .value();
+      x.domain([0, maxX]);
+      x1.domain([0, maxX]);
 
-    y.domain(portfolioAggregates.map((t) => t.id));
-    y.range([0, height]);
-    svg.transition(t).attr("height", height + margin.top + margin.bottom);
+      y.domain(portfolioAggregates.map((t) => t.id));
+      y.range([0, height]);
+      svg.transition(t).attr("height", height + margin.top + margin.bottom);
 
-    const paddingTop = (BAR_HEIGHT - y.bandwidth()) / 2;
+      const paddingTop = (BAR_HEIGHT - y.bandwidth()) / 2;
 
-    if (showLegend) {
-      legendg.attr("class", "legendOrdinal").attr("transform", `translate(${margin.left},3)`);
-
-      const legendOrdinal = legend
-        .legendColor()
-        .shape("rect")
-        .orient("horizontal")
-        .shapePadding(70)
-        .labels(groups)
-        .scale(z);
-
-      svg.select(".legendOrdinal").call(legendOrdinal as any);
-    }
-
-    const aggregates = aggregatesg
-      .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
-      .selectAll("rect")
-      .data(portfolioAggregates, (d: any) => d.id);
-
-    aggregates.join(
-      (enter) =>
-        enter
-          .append("rect")
-          .attr("fill", (d) => z(d.sub_group))
-          .attr("data-tippy-content", "")
-          .attr("x", x1(0))
-          .attr("y", function (d) {
-            return y(d.id) + paddingTop;
-          })
-          .attr("width", function (d) {
-            return x1(d.percentage);
-          })
-          .attr("height", y.bandwidth()),
-      (update) =>
-        update
-          .transition(t)
-          .attr("y", function (d) {
-            return y(d.id) + paddingTop;
-          })
-          .attr("width", function (d) {
-            return x1(d.percentage);
-          }),
-      (exit) => exit.transition(t).attr("width", 0).remove()
-    );
-
-    lineg
-      .attr("x1", 0)
-      .attr("y1", height + 2 * paddingTop)
-      .attr("x2", width - textGroupMargin)
-      .attr("y2", height + 2 * paddingTop);
-
-    axisxg
-      .transition(t)
-      .attr("class", "axis y")
-      .attr("transform", "translate(0," + height + ")")
-      .call(
-        d3
-          .axisTop(x1)
-          .tickSize(height)
-          .tickFormat(skipTicks(40, x1, (n: number) => formatFloat(n, 1)))
-      );
-
-    const labelGroup = labelGroupg
-      .selectAll("g")
-      .data(portfolioAggregates, (d: any) => d.percentage.toString());
-
-    const labelGroupEnter = labelGroup.enter().append("g").attr("class", "inline-text");
-
-    labelGroupEnter
-      .append("text")
-      .text((t) => formatName(t.group))
-      .attr("dominant-baseline", "middle")
-      .classed("svg-text-black svg-text-shadow", true)
-      .attr("x", 5)
-      .attr("y", (t) => y(t.id) + BAR_HEIGHT / 2)
-      .each(svgTruncate(targetWidth));
-
-    labelGroup.exit().remove();
-
-    const textGroup = textGroupg
-      .selectAll("g")
-      .data(portfolioAggregates, (d: any) => d.percentage.toString());
-
-    const textGroupEnter = textGroup.enter().append("g").attr("class", "inline-text");
-
-    textGroupEnter
-      .append("line")
-      .classed("svg-grey-lightest", true)
-      .attr("x1", 0)
-      .attr("y1", (t) => y(t.id))
-      .attr("x2", width - textGroupMargin)
-      .attr("y2", (t) => y(t.id));
-
-    textGroupEnter
-      .append("text")
-      .text((t) => formatFloat(t.percentage))
-      .attr("text-anchor", "end")
-      .attr("dominant-baseline", "middle")
-      .classed("svg-text-grey-dark", true)
-      .attr("x", textGroupZero + textGroupWidth / 2)
-      .attr("y", (t) => y(t.id) + BAR_HEIGHT / 2);
-
-    textGroupEnter
-      .append("text")
-      .text((t) => formatCurrency(t.amount))
-      .attr("text-anchor", "end")
-      .attr("dominant-baseline", "middle")
-      .classed("svg-text-grey-dark", true)
-      .attr("x", textGroupZero + textGroupWidth)
-      .attr("y", (t) => y(t.id) + BAR_HEIGHT / 2);
-
-    textGroup.exit().remove();
-
-    if (!small) {
-      const tree = treemapg
-        .style("height", height + margin.top + margin.bottom + "px")
-        .style("position", "absolute")
-        .style("width", "100%")
-        .selectAll("div")
+      const aggregates = aggregatesg
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+        .selectAll("rect")
         .data(portfolioAggregates, (d: any) => d.id);
 
-      const partitionWidth = x.range()[1] - x.range()[0];
+      aggregates.join(
+        (enter) =>
+          enter
+            .append("rect")
+            .attr("fill", (d) => z(d.sub_group))
+            .attr("data-tippy-content", "")
+            .attr("x", x1(0))
+            .attr("y", function (d) {
+              return y(d.id) + paddingTop;
+            })
+            .attr("width", function (d) {
+              return x1(d.percentage);
+            })
+            .attr("height", y.bandwidth()),
+        (update) =>
+          update
+            .transition(t)
+            .attr("y", function (d) {
+              return y(d.id) + paddingTop;
+            })
+            .attr("width", function (d) {
+              return x1(d.percentage);
+            }),
+        (exit) => exit.transition(t).attr("width", 0).remove()
+      );
 
-      tree
-        .join("div")
-        .style("position", "absolute")
-        .style("left", margin.left + x(0) + "px")
-        .style("top", (t) => margin.top + y(t.id) + paddingTop + "px")
-        .style("height", y.bandwidth() + "px")
-        .style("width", x.range()[1] - x.range()[0] + "px")
-        .append("div")
-        .style("position", "relative")
-        .style("height", y.bandwidth() + "px")
-        .each(function (pa) {
-          renderPartition(this, pa, d3.treemap(), color, partitionWidth);
-        });
+      lineg
+        .attr("x1", 0)
+        .attr("y1", height + 2 * paddingTop)
+        .attr("x2", width - textGroupMargin)
+        .attr("y2", height + 2 * paddingTop);
+
+      axisxg
+        .transition(t)
+        .attr("class", "axis y")
+        .attr("transform", "translate(0," + height + ")")
+        .call(
+          d3
+            .axisTop(x1)
+            .tickSize(height)
+            .tickFormat(skipTicks(40, x1, (n: number) => formatFloat(n, 1)))
+        );
+
+      const labelGroup = labelGroupg
+        .selectAll("g")
+        .data(portfolioAggregates, (d: any) => d.percentage.toString());
+
+      const labelGroupEnter = labelGroup.enter().append("g").attr("class", "inline-text");
+
+      labelGroupEnter
+        .append("text")
+        .text((t) => formatName(t.group))
+        .attr("dominant-baseline", "middle")
+        .classed("svg-text-black svg-text-shadow", true)
+        .attr("x", 5)
+        .attr("y", (t) => y(t.id) + BAR_HEIGHT / 2)
+        .each(svgTruncate(targetWidth));
+
+      labelGroup.exit().remove();
+
+      const textGroup = textGroupg
+        .selectAll("g")
+        .data(portfolioAggregates, (d: any) => d.percentage.toString());
+
+      const textGroupEnter = textGroup.enter().append("g").attr("class", "inline-text");
+
+      textGroupEnter
+        .append("line")
+        .classed("svg-grey-lightest", true)
+        .attr("x1", 0)
+        .attr("y1", (t) => y(t.id))
+        .attr("x2", width - textGroupMargin)
+        .attr("y2", (t) => y(t.id));
+
+      textGroupEnter
+        .append("text")
+        .text((t) => formatFloat(t.percentage))
+        .attr("text-anchor", "end")
+        .attr("dominant-baseline", "middle")
+        .classed("svg-text-grey-dark", true)
+        .attr("x", textGroupZero + textGroupWidth / 2)
+        .attr("y", (t) => y(t.id) + BAR_HEIGHT / 2);
+
+      textGroupEnter
+        .append("text")
+        .text((t) => formatCurrency(t.amount))
+        .attr("text-anchor", "end")
+        .attr("dominant-baseline", "middle")
+        .classed("svg-text-grey-dark", true)
+        .attr("x", textGroupZero + textGroupWidth)
+        .attr("y", (t) => y(t.id) + BAR_HEIGHT / 2);
+
+      textGroup.exit().remove();
+
+      if (!small) {
+        const tree = treemapg
+          .style("height", height + margin.top + margin.bottom + "px")
+          .style("position", "absolute")
+          .style("width", "100%")
+          .selectAll("div")
+          .data(portfolioAggregates, (d: any) => d.id);
+
+        const partitionWidth = x.range()[1] - x.range()[0];
+
+        tree
+          .join("div")
+          .style("position", "absolute")
+          .style("left", margin.left + x(0) + "px")
+          .style("top", (t) => margin.top + y(t.id) + paddingTop + "px")
+          .style("height", y.bandwidth() + "px")
+          .style("width", x.range()[1] - x.range()[0] + "px")
+          .append("div")
+          .style("position", "relative")
+          .style("height", y.bandwidth() + "px")
+          .each(function (pa) {
+            renderPartition(this, pa, d3.treemap(), color, partitionWidth);
+          });
+      }
     }
   };
 }

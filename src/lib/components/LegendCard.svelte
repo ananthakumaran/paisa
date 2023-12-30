@@ -44,7 +44,7 @@
           style="border-top: 3px solid {legend.color}; height: 0.1rem; width: 2rem;"
         ></div>
       {/if}
-      <div class="legend-label whitespace-pre is-size-6-5 has-text-grey">
+      <div class="legend-label whitespace-pre is-size-6-5 has-text-grey custom-icon">
         {legend.label}
       </div>
     </div>

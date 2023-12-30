@@ -1,6 +1,5 @@
 import chroma from "chroma-js";
 import * as d3 from "d3";
-import legend from "d3-svg-legend";
 import type dayjs from "dayjs";
 import _ from "lodash";
 import COLORS from "$lib/colors";
@@ -13,7 +12,8 @@ import {
   tooltip,
   skipTicks,
   restName,
-  rem
+  rem,
+  type Legend
 } from "$lib/utils";
 
 const areaKeys = ["gain", "loss"];
@@ -522,29 +522,24 @@ function renderOverviewSmall(
     );
 }
 
-export function renderLegend() {
-  const svg = d3.select("#d3-interest-legend");
-  svg.append("g").attr("class", "legendOrdinal").attr("transform", "translate(280,3)");
-
-  const legendOrdinal = legend
-    .legendColor()
-    .shape("rect")
-    .orient("horizontal")
-    .shapePadding(70)
-    .labels(areaKeys)
-    .scale(areaScale);
-
-  svg.select(".legendOrdinal").call(legendOrdinal as any);
-
-  svg.append("g").attr("class", "legendLine").attr("transform", "translate(30,3)");
-
-  const legendLine = legend
-    .legendColor()
-    .shape("rect")
-    .orient("horizontal")
-    .shapePadding(70)
-    .labels(lineKeys)
-    .scale(lineScale);
-
-  svg.select(".legendLine").call(legendLine as any);
+export function buildLegends(): Legend[] {
+  return areaKeys
+    .map(
+      (key) =>
+        ({
+          label: key,
+          color: areaScale(key),
+          shape: "square"
+        }) as Legend
+    )
+    .concat(
+      lineKeys.map(
+        (key) =>
+          ({
+            label: key,
+            color: lineScale(key),
+            shape: "square"
+          }) as Legend
+      )
+    );
 }

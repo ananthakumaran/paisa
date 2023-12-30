@@ -6,12 +6,14 @@
   } from "$lib/allocation";
   import { generateColorScheme } from "$lib/colors";
   import BoxLabel from "$lib/components/BoxLabel.svelte";
-  import { ajax } from "$lib/utils";
+  import LegendCard from "$lib/components/LegendCard.svelte";
+  import { ajax, type Legend } from "$lib/utils";
   import _ from "lodash";
   import { onMount, tick } from "svelte";
 
   let showAllocation = false;
   let depth = 2;
+  let allocationTimelineLegends: Legend[] = [];
 
   onMount(async () => {
     const {
@@ -30,7 +32,7 @@
 
     renderAllocationTarget(allocationTargets, color);
     renderAllocation(aggregates, color);
-    renderAllocationTimeline(aggregatesTimeline);
+    allocationTimelineLegends = renderAllocationTimeline(aggregatesTimeline);
   });
 </script>
 
@@ -72,6 +74,7 @@
     <div class="columns">
       <div class="column is-12">
         <div class="box">
+          <LegendCard legends={allocationTimelineLegends} clazz="ml-4" />
           <svg id="d3-allocation-timeline" width="100%" height="300" />
         </div>
       </div>

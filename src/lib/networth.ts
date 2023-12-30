@@ -1,10 +1,9 @@
 import * as d3 from "d3";
 import { Delaunay } from "d3";
-import legend from "d3-svg-legend";
 import _ from "lodash";
 import tippy from "tippy.js";
 import COLORS from "./colors";
-import { formatCurrency, isMobile, now } from "./utils";
+import { formatCurrency, isMobile, now, type Legend } from "./utils";
 import { formatCurrencyCrude, tooltip, type Networth } from "./utils";
 
 function networth(d: Networth) {
@@ -15,7 +14,10 @@ function investment(d: Networth) {
   return d.investmentAmount - d.withdrawalAmount;
 }
 
-export function renderNetworth(points: Networth[], element: Element): () => void {
+export function renderNetworth(
+  points: Networth[],
+  element: Element
+): { destroy: () => void; legends: Legend[] } {
   const start = _.min(_.map(points, (p) => p.date)),
     end = now();
 
@@ -24,7 +26,7 @@ export function renderNetworth(points: Networth[], element: Element): () => void
   svg.selectAll("*").remove();
 
   const right = isMobile() ? 10 : 80,
-    margin = { top: 40, right: right, bottom: 20, left: 40 },
+    margin = { top: 15, right: right, bottom: 20, left: 40 },
     width = Math.max(element.parentElement.clientWidth, 800) - margin.left - margin.right,
     height = +svg.attr("height") - margin.top - margin.bottom,
     g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
@@ -33,10 +35,9 @@ export function renderNetworth(points: Networth[], element: Element): () => void
 
   const areaKeys = ["gain", "loss"];
   const colors = [COLORS.gain, COLORS.loss];
-  const areaScale = d3.scaleOrdinal().domain(areaKeys).range(colors);
+  const areaScale = d3.scaleOrdinal<string>().domain(areaKeys).range(colors);
 
   const lineKeys = ["networth", "investment"];
-  const labels = ["Net Worth", "Net Investment"];
   const lineScale = d3
     .scaleOrdinal<string>()
     .domain(lineKeys)
@@ -205,34 +206,32 @@ export function renderNetworth(points: Networth[], element: Element): () => void
       hoverCircle.attr("fill", "none");
     });
 
-  svg.append("g").attr("class", "legendOrdinal").attr("transform", "translate(265,3)");
+  const legends: Legend[] = [
+    {
+      label: "Net Worth",
+      color: lineScale("networth"),
+      shape: "line"
+    },
+    {
+      label: "Net Investment",
+      color: lineScale("investment"),
+      shape: "line"
+    },
+    {
+      label: "Gain",
+      color: areaScale("gain"),
+      shape: "square"
+    },
+    {
+      label: "Loss",
+      color: areaScale("loss"),
+      shape: "square"
+    }
+  ];
 
-  const legendOrdinal = legend
-    .legendColor()
-    .shape("rect")
-    .orient("horizontal")
-    .shapePadding(50)
-    .labels(areaKeys)
-    .scale(areaScale);
-
-  svg.select(".legendOrdinal").call(legendOrdinal as any);
-
-  svg.append("g").attr("class", "legendLine").attr("transform", "translate(80,3)");
-
-  const legendLine = legend
-    .legendColor()
-    .shape("rect")
-    .orient("horizontal")
-    .shapePadding(70)
-    .labelOffset(22)
-    .shapeHeight(3)
-    .shapeWidth(25)
-    .labels(labels)
-    .scale(lineScale);
-
-  svg.select(".legendLine").call(legendLine as any);
-
-  return () => {
+  const destroy = () => {
     t.destroy();
   };
+
+  return { destroy, legends };
 }

@@ -1,5 +1,4 @@
 import * as d3 from "d3";
-import legend from "d3-svg-legend";
 import type dayjs from "dayjs";
 import _ from "lodash";
 import {
@@ -14,7 +13,8 @@ import {
   tooltip,
   skipTicks,
   rem,
-  now
+  now,
+  type Legend
 } from "./utils";
 import COLORS, { generateColorScheme } from "./colors";
 import chroma from "chroma-js";
@@ -303,7 +303,9 @@ function renderPartition(
     .text(percent);
 }
 
-export function renderAllocationTimeline(aggregatesTimeline: { [key: string]: Aggregate }[]) {
+export function renderAllocationTimeline(
+  aggregatesTimeline: { [key: string]: Aggregate }[]
+): Legend[] {
   const timeline = _.map(aggregatesTimeline, (aggregates) => {
     return _.chain(aggregates)
       .values()
@@ -406,15 +408,11 @@ export function renderAllocationTimeline(aggregatesTimeline: { [key: string]: Ag
     .attr("stroke-width", "2")
     .attr("d", (group) => line(group)(points));
 
-  svg.append("g").attr("class", "legendOrdinal").attr("transform", "translate(40,0)");
-
-  const legendOrdinal = legend
-    .legendColor()
-    .shape("rect")
-    .orient("horizontal")
-    .shapePadding(100)
-    .labels(assets)
-    .scale(z);
-
-  svg.select(".legendOrdinal").call(legendOrdinal as any);
+  return assets.map((a) => {
+    return {
+      label: a,
+      color: z(a),
+      shape: "square"
+    };
+  });
 }

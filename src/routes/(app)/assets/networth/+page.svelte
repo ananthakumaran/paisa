@@ -1,5 +1,12 @@
 <script lang="ts">
-  import { ajax, formatCurrency, formatFloat, isMobile, type Networth } from "$lib/utils";
+  import {
+    ajax,
+    formatCurrency,
+    formatFloat,
+    isMobile,
+    type Legend,
+    type Networth
+  } from "$lib/utils";
   import COLORS from "$lib/colors";
   import { renderNetworth } from "$lib/networth";
   import _ from "lodash";
@@ -8,31 +15,33 @@
   import LevelItem from "$lib/components/LevelItem.svelte";
   import ZeroState from "$lib/components/ZeroState.svelte";
   import BoxLabel from "$lib/components/BoxLabel.svelte";
+  import LegendCard from "$lib/components/LegendCard.svelte";
 
   let networth = 0;
   let investment = 0;
   let gain = 0;
   let xirr = 0;
   let svg: Element;
-  let destroyCallback: () => void;
+  let destroy: () => void;
   let points: Networth[] = [];
+  let legends: Legend[] = [];
 
   $: if (!_.isEmpty(points)) {
-    if (destroyCallback) {
-      destroyCallback();
+    if (destroy) {
+      destroy();
     }
 
-    destroyCallback = renderNetworth(
+    ({ destroy, legends } = renderNetworth(
       _.filter(
         points,
         (p) => p.date.isSameOrBefore($dateRange.to) && p.date.isSameOrAfter($dateRange.from)
       ),
       svg
-    );
+    ));
   }
 
   onDestroy(async () => {
-    destroyCallback();
+    destroy();
   });
 
   onMount(async () => {
@@ -77,6 +86,8 @@
           <ZeroState item={points}>
             <strong>Oops!</strong> You have no transactions.
           </ZeroState>
+
+          <LegendCard {legends} clazz="ml-4" />
           <svg id="d3-networth-timeline" height="500" bind:this={svg} />
         </div>
       </div>

@@ -1,14 +1,16 @@
 <script lang="ts">
   import BoxLabel from "$lib/components/BoxLabel.svelte";
+  import LegendCard from "$lib/components/LegendCard.svelte";
   import {
-    renderLegend,
+    buildLegends,
     renderOverview,
     renderPerAccountOverview
   } from "$lib/liabilities/interest";
-  import { ajax } from "$lib/utils";
+  import { ajax, type Legend } from "$lib/utils";
   import _ from "lodash";
   import { onMount } from "svelte";
   let isEmpty = false;
+  let legends: Legend[] = [];
 
   onMount(async () => {
     const { interest_timeline_breakdown: interests } = await ajax("/api/liabilities/interest");
@@ -18,7 +20,7 @@
       return;
     }
 
-    renderLegend();
+    legends = buildLegends();
     renderOverview(interests);
     renderPerAccountOverview(interests);
   });
@@ -42,7 +44,7 @@
   <div class="container is-fluid">
     <div class="columns">
       <div class="column is-12">
-        <svg id="d3-interest-legend" width="100%" height="50" />
+        <LegendCard {legends} />
       </div>
     </div>
   </div>

@@ -1,6 +1,7 @@
 <script lang="ts">
   import { generateColorScheme, genericBarColor } from "$lib/colors";
   import BoxLabel from "$lib/components/BoxLabel.svelte";
+  import LegendCard from "$lib/components/LegendCard.svelte";
   import { filterCommodityBreakdowns, renderPortfolioBreakdown } from "$lib/portfolio";
   import { ajax, type PortfolioAggregate } from "$lib/utils";
   import _ from "lodash";
@@ -38,17 +39,18 @@
     industryR = renderPortfolioBreakdown("#d3-portfolio-security-industry", industry, {
       z: [genericBarColor()]
     });
-    portfolioR = renderPortfolioBreakdown("#d3-portfolio", name_and_security_type, {
-      showLegend: true
-    });
+    portfolioR = renderPortfolioBreakdown("#d3-portfolio", name_and_security_type);
     color = generateColorScheme(commodities);
   });
 
   $: if (securityTypeR) {
-    securityTypeR(filterCommodityBreakdowns(security_type, selectedCommodities), color);
-    ratingR(filterCommodityBreakdowns(rating, selectedCommodities), color);
-    industryR(filterCommodityBreakdowns(industry, selectedCommodities), color);
-    portfolioR(filterCommodityBreakdowns(name_and_security_type, selectedCommodities), color);
+    securityTypeR.renderer(filterCommodityBreakdowns(security_type, selectedCommodities), color);
+    ratingR.renderer(filterCommodityBreakdowns(rating, selectedCommodities), color);
+    industryR.renderer(filterCommodityBreakdowns(industry, selectedCommodities), color);
+    portfolioR.renderer(
+      filterCommodityBreakdowns(name_and_security_type, selectedCommodities),
+      color
+    );
   }
 </script>
 
@@ -125,6 +127,9 @@
     <div class="columns">
       <div class="column is-12 has-text-centered">
         <div class="box overflow-x-auto">
+          {#if portfolioR}
+            <LegendCard legends={portfolioR.legends} clazz="ml-4" />
+          {/if}
           <div id="d3-portfolio-treemap" style="width: 100%; position: relative" />
           <svg id="d3-portfolio" />
         </div>

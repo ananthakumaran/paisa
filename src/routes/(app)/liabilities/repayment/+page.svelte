@@ -1,18 +1,20 @@
 <script lang="ts">
   import BoxLabel from "$lib/components/BoxLabel.svelte";
+  import LegendCard from "$lib/components/LegendCard.svelte";
   import { renderMonthlyRepaymentTimeline } from "$lib/repayment";
-  import { ajax } from "$lib/utils";
+  import { ajax, type Legend } from "$lib/utils";
   import _ from "lodash";
   import { onMount } from "svelte";
 
   let isEmpty = false;
+  let legends: Legend[] = [];
 
   onMount(async () => {
     const { repayments: repayments } = await ajax("/api/liabilities/repayment");
     if (_.isEmpty(repayments)) {
       isEmpty = true;
     } else {
-      renderMonthlyRepaymentTimeline(repayments);
+      legends = renderMonthlyRepaymentTimeline(repayments);
     }
   });
 </script>
@@ -34,6 +36,7 @@
     <div class="columns">
       <div class="column is-12">
         <div class="box">
+          <LegendCard {legends} clazz="ml-4" />
           <svg id="d3-repayment-timeline" width="100%" height="500" />
         </div>
       </div>

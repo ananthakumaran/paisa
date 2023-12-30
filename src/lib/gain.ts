@@ -1,7 +1,6 @@
 import chroma from "chroma-js";
 import * as d3 from "d3";
 import { Delaunay } from "d3";
-import legend from "d3-svg-legend";
 import _ from "lodash";
 import COLORS from "./colors";
 import tippy from "tippy.js";
@@ -16,7 +15,8 @@ import {
   restName,
   type Posting,
   rem,
-  now
+  now,
+  type Legend
 } from "./utils";
 import { goto } from "$app/navigation";
 
@@ -34,7 +34,7 @@ export function renderOverview(gains: Gain[]) {
   const BAR_HEIGHT = rem(15);
   const id = "#d3-gain-overview";
   const svg = d3.select(id),
-    margin = { top: rem(20), right: rem(20), bottom: rem(10), left: rem(150) },
+    margin = { top: rem(25), right: rem(20), bottom: rem(10), left: rem(150) },
     width =
       Math.max(document.getElementById(id.substring(1)).parentElement.clientWidth, 1000) -
       margin.left -
@@ -112,7 +112,7 @@ export function renderOverview(gains: Gain[]) {
     .text("XIRR")
     .attr("text-anchor", "middle")
     .attr("x", margin.left + xirrWidth / 2)
-    .attr("y", 10);
+    .attr("y", 15);
 
   g.append("g")
     .attr("class", "axis y")
@@ -517,29 +517,22 @@ export function renderAccountOverview(points: Networth[], postings: Posting[], i
   };
 }
 
-export function renderLegend() {
-  const svg = d3.select("#d3-gain-legend");
-  svg.append("g").attr("class", "legendOrdinal").attr("transform", "translate(280,3)");
-
-  const legendOrdinal = legend
-    .legendColor()
-    .shape("rect")
-    .orient("horizontal")
-    .shapePadding(70)
-    .labels(areaKeys)
-    .scale(areaScale);
-
-  svg.select(".legendOrdinal").call(legendOrdinal as any);
-
-  svg.append("g").attr("class", "legendLine").attr("transform", "translate(30,3)");
-
-  const legendLine = legend
-    .legendColor()
-    .shape("rect")
-    .orient("horizontal")
-    .shapePadding(70)
-    .labels(lineKeys)
-    .scale(typeScale);
-
-  svg.select(".legendLine").call(legendLine as any);
+export function buildLegends(): Legend[] {
+  return lineKeys
+    .map((key) => {
+      return {
+        label: key,
+        color: typeScale(key),
+        shape: "square"
+      } as Legend;
+    })
+    .concat(
+      areaKeys.map((key) => {
+        return {
+          label: key,
+          color: areaScale(key),
+          shape: "square"
+        } as Legend;
+      })
+    );
 }

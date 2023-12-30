@@ -1,5 +1,4 @@
 import * as d3 from "d3";
-import legend from "d3-svg-legend";
 import type dayjs from "dayjs";
 import _ from "lodash";
 import {
@@ -11,20 +10,19 @@ import {
   secondName,
   skipTicks,
   tooltip,
-  type IncomeYearlyCard
+  type IncomeYearlyCard,
+  type Legend
 } from "./utils";
 import { generateColorScheme } from "./colors";
 
-const LEGEND_PADDING = 70;
-
-export function renderMonthlyInvestmentTimeline(incomes: Income[]) {
-  renderIncomeTimeline(incomes, "#d3-income-timeline", "MMM-YYYY");
+export function renderMonthlyInvestmentTimeline(incomes: Income[]): Legend[] {
+  return renderIncomeTimeline(incomes, "#d3-income-timeline", "MMM-YYYY");
 }
 
-function renderIncomeTimeline(incomes: Income[], id: string, timeFormat: string) {
+function renderIncomeTimeline(incomes: Income[], id: string, timeFormat: string): Legend[] {
   const MAX_BAR_WIDTH = 40;
   const svg = d3.select(id),
-    margin = { top: 60, right: 30, bottom: 80, left: 40 },
+    margin = { top: 20, right: 30, bottom: 80, left: 40 },
     width =
       document.getElementById(id.substring(1)).parentElement.clientWidth -
       margin.left -
@@ -43,7 +41,7 @@ function renderIncomeTimeline(incomes: Income[], id: string, timeFormat: string)
     .groupBy((p) => incomeGroup(p))
     .map((postings, key) => {
       const total = _.sumBy(postings, (p) => -p.amount);
-      return [key, `${key} ${formatCurrency(total)}`];
+      return [key, `${key}\n${formatCurrency(total)}`];
     })
     .fromPairs()
     .value();
@@ -167,35 +165,24 @@ function renderIncomeTimeline(incomes: Income[], id: string, timeFormat: string)
     })
     .attr("width", Math.min(x.bandwidth(), MAX_BAR_WIDTH));
 
-  svg
-    .append("g")
-    .attr("class", "legendOrdinal")
-    .attr("transform", `translate(${LEGEND_PADDING / 2},0)`);
-
-  const legendOrdinal = legend
-    .legendColor()
-    .shape("rect")
-    .orient("horizontal")
-    .shapePadding(LEGEND_PADDING)
-    .labels(({ i }: { i: number }) => {
-      return groupTotal[groupKeys[i]];
-    })
-    .scale(z);
-
-  (legendOrdinal as any).labelWrap(75); // type missing
-
-  svg.select(".legendOrdinal").call(legendOrdinal as any);
+  return _.map(groupKeys, (k) => {
+    return {
+      label: groupTotal[k],
+      color: z(k),
+      shape: "square"
+    };
+  });
 }
 
 function financialYear(card: IncomeYearlyCard) {
   return `${card.start_date.format("YYYY")} - ${card.end_date.format("YY")}`;
 }
 
-export function renderYearlyIncomeTimeline(yearlyCards: IncomeYearlyCard[]) {
+export function renderYearlyIncomeTimeline(yearlyCards: IncomeYearlyCard[]): Legend[] {
   const id = "#d3-yearly-income-timeline";
   const BAR_HEIGHT = 20;
   const svg = d3.select(id),
-    margin = { top: 40, right: 20, bottom: 20, left: 70 },
+    margin = { top: 15, right: 20, bottom: 20, left: 70 },
     width =
       document.getElementById(id.substring(1)).parentElement.clientWidth -
       margin.left -
@@ -305,17 +292,11 @@ export function renderYearlyIncomeTimeline(yearlyCards: IncomeYearlyCard[]) {
     })
     .attr("height", y.bandwidth());
 
-  svg.append("g").attr("class", "legendOrdinal").attr("transform", "translate(40,0)");
-
-  const legendOrdinal = legend
-    .legendColor()
-    .shape("rect")
-    .orient("horizontal")
-    .shapePadding(LEGEND_PADDING)
-    .labels(groups)
-    .scale(z);
-
-  svg.select(".legendOrdinal").call(legendOrdinal as any);
+  return _.map(groups, (k) => ({
+    label: k,
+    color: z(k),
+    shape: "square"
+  }));
 }
 
 export function renderYearlyTimelineOf(
@@ -323,11 +304,11 @@ export function renderYearlyTimelineOf(
   key: "net_tax" | "net_income",
   color: string,
   yearlyCards: IncomeYearlyCard[]
-) {
+): Legend[] {
   const id = `#d3-yearly-${key}-timeline`;
   const BAR_HEIGHT = 20;
   const svg = d3.select(id),
-    margin = { top: 40, right: 20, bottom: 20, left: 70 },
+    margin = { top: 15, right: 20, bottom: 20, left: 70 },
     width =
       document.getElementById(id.substring(1)).parentElement.clientWidth -
       margin.left -
@@ -385,17 +366,11 @@ export function renderYearlyTimelineOf(
     })
     .attr("height", y.bandwidth());
 
-  svg.append("g").attr("class", "legendOrdinal").attr("transform", "translate(40,0)");
-
-  const legendOrdinal = legend
-    .legendColor()
-    .shape("rect")
-    .orient("horizontal")
-    .shapePadding(LEGEND_PADDING)
-    .labels(colorKeys)
-    .scale(colorScale);
-
-  svg.select(".legendOrdinal").call(legendOrdinal as any);
+  return _.map(colorKeys, (k) => ({
+    label: k,
+    color: colorScale(k),
+    shape: "square"
+  }));
 }
 
 export function incomeGroup(posting: Posting) {

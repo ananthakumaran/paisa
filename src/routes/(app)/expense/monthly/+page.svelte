@@ -1,7 +1,14 @@
 <script lang="ts">
   import { onDestroy, onMount } from "svelte";
   import _ from "lodash";
-  import { ajax, secondName, type Posting, formatCurrency, formatPercentage } from "$lib/utils";
+  import {
+    ajax,
+    secondName,
+    type Posting,
+    formatCurrency,
+    formatPercentage,
+    type Legend
+  } from "$lib/utils";
   import {
     renderMonthlyExpensesTimeline,
     renderCurrentExpensesBreakdown,
@@ -15,6 +22,7 @@
   import ZeroState from "$lib/components/ZeroState.svelte";
   import BoxLabel from "$lib/components/BoxLabel.svelte";
   import dayjs from "dayjs";
+  import LegendCard from "$lib/components/LegendCard.svelte";
 
   let groups = writable([]);
   let z: d3.ScaleOrdinal<string, string, never>,
@@ -25,6 +33,8 @@
     grouped_investments: Record<string, Posting[]>,
     grouped_taxes: Record<string, Posting[]>,
     destroy: () => void;
+
+  let legends: Legend[] = [];
 
   let taxRate = "",
     netIncome = "",
@@ -93,7 +103,7 @@
     } = await ajax("/api/expense"));
 
     setAllowedDateRange(_.map(expenses, (e) => e.date));
-    ({ z, destroy } = renderMonthlyExpensesTimeline(expenses, groups, month, dateRange));
+    ({ z, destroy, legends } = renderMonthlyExpensesTimeline(expenses, groups, month, dateRange));
     renderer = renderCurrentExpensesBreakdown(z);
   });
 
@@ -186,6 +196,7 @@
               <ZeroState item={expenses}>
                 <strong>Oops!</strong> You have no expenses.
               </ZeroState>
+              <LegendCard {legends} clazz="ml-4" />
               <svg id="d3-monthly-expense-timeline" width="100%" height="400" />
             </div>
           </div>

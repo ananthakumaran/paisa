@@ -20,11 +20,34 @@
 
     return {};
   };
+
+  let selectedLegend: Legend;
+
+  function onClick(legend: Legend) {
+    if (!legend.onClick) {
+      return;
+    }
+
+    legend.onClick(legend);
+    if (selectedLegend == legend) {
+      // toggle
+      legend.selected = false;
+      selectedLegend = null;
+    } else {
+      selectedLegend && (selectedLegend.selected = false);
+      legend.selected = true;
+      selectedLegend = legend;
+    }
+  }
 </script>
 
-<div class="flex justify-start gap-2 {clazz}">
+<div class="flex justify-start gap-0 {clazz}">
   {#each legends as legend}
-    <div class="flex flex-col gap-2">
+    <div
+      class="flex flex-col p-1.5 gap-2 legend-box {legend.onClick && 'cursor-pointer'}"
+      on:click={(_e) => onClick(legend)}
+      class:selected={selectedLegend == legend}
+    >
       {#if legend.texture}
         <svg
           use:texture={{ texture: legend.texture }}
@@ -50,11 +73,3 @@
     </div>
   {/each}
 </div>
-
-<style lang="scss">
-  .legend-label {
-    text-transform: capitalize;
-    text-align: center;
-    line-height: 1rem;
-  }
-</style>

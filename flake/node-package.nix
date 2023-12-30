@@ -1759,15 +1759,6 @@ let
         sha512 = "dsoJGEIShosKVRBZB0Vo3C8nqSDqVGujJU6tPznsBJxNJNwMF8utmS83nvCBKQYPpjCzaaHcrf66iTRpZosLPw==";
       };
     };
-    "@types/d3-selection-1.0.10" = {
-      name = "_at_types_slash_d3-selection";
-      packageName = "@types/d3-selection";
-      version = "1.0.10";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/@types/d3-selection/-/d3-selection-1.0.10.tgz";
-        sha1 = "dcfb0ddfcdfb1ad26aea4351323771e1aea96e84";
-      };
-    };
     "@types/d3-selection-3.0.2" = {
       name = "_at_types_slash_d3-selection";
       packageName = "@types/d3-selection";
@@ -3190,15 +3181,6 @@ let
         sha512 = "/xKyIYpKzd+I2DhiS2ANYJtEfHkE9lHKBFwqsplKsazPcXy2N1KIJSMTJsRk42jHbHCH0KPJGd0RnBt6NBJ1MA==";
       };
     };
-    "d3-array-1.0.1" = {
-      name = "d3-array";
-      packageName = "d3-array";
-      version = "1.0.1";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/d3-array/-/d3-array-1.0.1.tgz";
-        sha1 = "375c02874fcd96c16ed9f1bcf5b4a7be53f358e7";
-      };
-    };
     "d3-array-1.2.4" = {
       name = "d3-array";
       packageName = "d3-array";
@@ -3253,15 +3235,6 @@ let
         sha512 = "ii0/r5f4sjKNTfh84Di+DpztYwqKhEyUlKoPrzUFfeSkWxjW49xU2QzO9qrPrNkpdI0XJkfzvmTu8V2Zylln6A==";
       };
     };
-    "d3-color-1.4.1" = {
-      name = "d3-color";
-      packageName = "d3-color";
-      version = "1.4.1";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/d3-color/-/d3-color-1.4.1.tgz";
-        sha512 = "p2sTHSLCJI2QKunbGb7ocOh7DgTAn8IrLx21QRc/BSnodXM4sv6aLQlnfpvehFMLZEfBc6g9pH9SWQccFYfJ9Q==";
-      };
-    };
     "d3-color-3.1.0" = {
       name = "d3-color";
       packageName = "d3-color";
@@ -3287,15 +3260,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/d3-delaunay/-/d3-delaunay-6.0.2.tgz";
         sha512 = "IMLNldruDQScrcfT+MWnazhHbDJhcRJyOEBAJfwQnHle1RPh6WDuLvxNArUju2VSMSUuKlY5BGHRJ2cYyoFLQQ==";
-      };
-    };
-    "d3-dispatch-1.0.1" = {
-      name = "d3-dispatch";
-      packageName = "d3-dispatch";
-      version = "1.0.1";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/d3-dispatch/-/d3-dispatch-1.0.1.tgz";
-        sha1 = "4bd65a43cecff4318deb9df24552aa8bf281a840";
       };
     };
     "d3-dispatch-3.0.1" = {
@@ -3325,15 +3289,6 @@ let
         sha512 = "UG6OvdI5afDIFP9w4G0mNq50dSOsXHJaRE8arAS5o9ApWnIElp8GZw1Dun8vP8OyHOZ/QJUKUJwxiiCCnUwm+Q==";
       };
     };
-    "d3-ease-1.0.7" = {
-      name = "d3-ease";
-      packageName = "d3-ease";
-      version = "1.0.7";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/d3-ease/-/d3-ease-1.0.7.tgz";
-        sha512 = "lx14ZPYkhNx0s/2HX5sLFUI3mbasHjSSpwO/KaaNACweVwxUruKyWVcb293wMv1RqTPZyZ8kSZ2NogUZNcLOFQ==";
-      };
-    };
     "d3-ease-3.0.1" = {
       name = "d3-ease";
       packageName = "d3-ease";
@@ -3361,15 +3316,6 @@ let
         sha512 = "zxV/SsA+U4yte8051P4ECydjD/S+qeYtnaIyAs9tgHCqfguma/aAQDjo85A9Z6EKhBirHRJHXIgJUlffT4wdLg==";
       };
     };
-    "d3-format-1.0.2" = {
-      name = "d3-format";
-      packageName = "d3-format";
-      version = "1.0.2";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/d3-format/-/d3-format-1.0.2.tgz";
-        sha1 = "138618320b4bbeb43b5c0ff30519079fbbd7375e";
-      };
-    };
     "d3-format-3.1.0" = {
       name = "d3-format";
       packageName = "d3-format";
@@ -3395,15 +3341,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/d3-hierarchy/-/d3-hierarchy-3.1.1.tgz";
         sha512 = "LtAIu54UctRmhGKllleflmHalttH3zkfSi4NlKrTAoFKjC+AFBJohsCAdgCBYQwH0F8hIOGY89X1pPqAchlMkA==";
-      };
-    };
-    "d3-interpolate-1.4.0" = {
-      name = "d3-interpolate";
-      packageName = "d3-interpolate";
-      version = "1.4.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/d3-interpolate/-/d3-interpolate-1.4.0.tgz";
-        sha512 = "V9znK0zc3jOPV4VD2zZn0sDhZU3WAE2bmlxdIwwQPPzPjvyLkd8B3JUVdS1IDUFDkWZ72c9qnv1GK2ZagTZ8EA==";
       };
     };
     "d3-interpolate-3.0.1" = {
@@ -3480,15 +3417,6 @@ let
         sha512 = "DCK8du5EKEUFmGqQTaI04iplUZFvnNA3Wu+ti442lJ0F1SVJ3pvveV7Al3H+h1b5j5ygftzMR9doJfeSTw2lHg==";
       };
     };
-    "d3-scale-1.0.3" = {
-      name = "d3-scale";
-      packageName = "d3-scale";
-      version = "1.0.3";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/d3-scale/-/d3-scale-1.0.3.tgz";
-        sha512 = "ah2Xqywu96gau2iET3T0ZTsu0/X0gfoB8vDTuZ1OaG5F0SgGJLXreBVBknSZf2HKnxjenRvFok3qY2FgY4RpFg==";
-      };
-    };
     "d3-scale-4.0.2" = {
       name = "d3-scale";
       packageName = "d3-scale";
@@ -3505,15 +3433,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/d3-scale-chromatic/-/d3-scale-chromatic-3.0.0.tgz";
         sha512 = "Lx9thtxAKrO2Pq6OO2Ua474opeziKr279P/TKZsMAhYyNDD3EnCffdbgeSYN5O7m2ByQsxtuP2CSDczNUIZ22g==";
-      };
-    };
-    "d3-selection-1.0.2" = {
-      name = "d3-selection";
-      packageName = "d3-selection";
-      version = "1.0.2";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/d3-selection/-/d3-selection-1.0.2.tgz";
-        sha1 = "ae662afd4702ac9c5da039b2107a1764fa1c9070";
       };
     };
     "d3-selection-1.4.2" = {
@@ -3552,24 +3471,6 @@ let
         sha512 = "tGDh1Muf8kWjEDT/LswZJ8WF85yDZLvVJpYU9Nq+8+yW1Z5enxrmXOhTArlkaElU+CTn0OTVNli+/i+HP45QEQ==";
       };
     };
-    "d3-svg-legend-2.25.6" = {
-      name = "d3-svg-legend";
-      packageName = "d3-svg-legend";
-      version = "2.25.6";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/d3-svg-legend/-/d3-svg-legend-2.25.6.tgz";
-        sha512 = "6dueSjQr3+g9SlQ1SOzc4V58cCjjBeyo4WEcY8PW80i9XD/s562W/4xk05bpky0vzQx+i2XmXj3CYT+9KIRlnw==";
-      };
-    };
-    "d3-time-1.1.0" = {
-      name = "d3-time";
-      packageName = "d3-time";
-      version = "1.1.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/d3-time/-/d3-time-1.1.0.tgz";
-        sha512 = "Xh0isrZ5rPYYdqhAVk8VLnMEidhz5aP7htAADH6MfzgmmicPkTo8LhkLxci61/lCB7n7UmE3bN0leRt+qvkLxA==";
-      };
-    };
     "d3-time-3.0.0" = {
       name = "d3-time";
       packageName = "d3-time";
@@ -3577,15 +3478,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/d3-time/-/d3-time-3.0.0.tgz";
         sha512 = "zmV3lRnlaLI08y9IMRXSDshQb5Nj77smnfpnd2LrBa/2K281Jijactokeak14QacHs/kKq0AQ121nidNYlarbQ==";
-      };
-    };
-    "d3-time-format-2.3.0" = {
-      name = "d3-time-format";
-      packageName = "d3-time-format";
-      version = "2.3.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/d3-time-format/-/d3-time-format-2.3.0.tgz";
-        sha512 = "guv6b2H37s2Uq/GefleCDtbe0XZAuy7Wa49VGkPVPMfLL9qObgBST3lEHJBMUp8S7NdLQAGIvr2KXk8Hc98iKQ==";
       };
     };
     "d3-time-format-4.1.0" = {
@@ -3597,15 +3489,6 @@ let
         sha512 = "dJxPBlzC7NugB2PDLwo9Q8JiTR3M3e4/XANkreKSUxF8vvXKqm1Yfq4Q5dl8budlunRVlUUaDUgFt7eA8D6NLg==";
       };
     };
-    "d3-timer-1.0.10" = {
-      name = "d3-timer";
-      packageName = "d3-timer";
-      version = "1.0.10";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/d3-timer/-/d3-timer-1.0.10.tgz";
-        sha512 = "B1JDm0XDaQC+uvo4DT79H0XmBskgS3l6Ve+1SBCfxgmtIb1AVrPIoqd+nPSv+loMX8szQ0sVUhGngL7D5QPiXw==";
-      };
-    };
     "d3-timer-3.0.1" = {
       name = "d3-timer";
       packageName = "d3-timer";
@@ -3613,15 +3496,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/d3-timer/-/d3-timer-3.0.1.tgz";
         sha512 = "ndfJ/JxxMd3nw31uyKoY2naivF+r29V+Lc0svZxe1JvvIRmi8hUsrMvdOwgS1o6uBHmiz91geQ0ylPP0aj1VUA==";
-      };
-    };
-    "d3-transition-1.0.3" = {
-      name = "d3-transition";
-      packageName = "d3-transition";
-      version = "1.0.3";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/d3-transition/-/d3-transition-1.0.3.tgz";
-        sha512 = "Facxcbma0nA2GVrx7B/Mgnn5ju6SwUMzGa9YcYmQjpqmaIq1Zbp5vVJLjtH6b08Lu0vcX7O6a4z+AlLmdCxrCQ==";
       };
     };
     "d3-transition-3.0.1" = {
@@ -9666,23 +9540,6 @@ let
       sources."d3-scale-chromatic-3.0.0"
       sources."d3-selection-3.0.0"
       sources."d3-shape-3.1.0"
-      (sources."d3-svg-legend-2.25.6" // {
-        dependencies = [
-          sources."@types/d3-selection-1.0.10"
-          sources."d3-array-1.0.1"
-          sources."d3-color-1.4.1"
-          sources."d3-dispatch-1.0.1"
-          sources."d3-ease-1.0.7"
-          sources."d3-format-1.0.2"
-          sources."d3-interpolate-1.4.0"
-          sources."d3-scale-1.0.3"
-          sources."d3-selection-1.0.2"
-          sources."d3-time-1.1.0"
-          sources."d3-time-format-2.3.0"
-          sources."d3-timer-1.0.10"
-          sources."d3-transition-1.0.3"
-        ];
-      })
       sources."d3-time-3.0.0"
       sources."d3-time-format-4.1.0"
       sources."d3-timer-3.0.1"

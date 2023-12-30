@@ -163,8 +163,6 @@
         (l) => !_.isEmpty(l.children) && normalizedPath.startsWith(l.href)
       );
 
-      console.log(normalizedPath);
-
       selectedSubLink = _.find(
         selectedLink.children,
         (l) => normalizedPath == selectedLink.href + l.href

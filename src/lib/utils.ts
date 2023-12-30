@@ -385,6 +385,9 @@ export interface Legend {
   color: string;
   label: string;
   texture?: any;
+  onClick?: (legend: Legend) => void;
+
+  selected?: boolean;
 }
 
 export interface LedgerFile {

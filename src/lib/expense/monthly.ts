@@ -1,5 +1,4 @@
 import * as d3 from "d3";
-import legend from "d3-svg-legend";
 import type { Dayjs } from "dayjs";
 import chroma from "chroma-js";
 import _ from "lodash";
@@ -14,7 +13,8 @@ import {
   restName,
   firstName,
   monthDays,
-  rem
+  rem,
+  type Legend
 } from "$lib/utils";
 import COLORS, { generateColorScheme, white } from "$lib/colors";
 import { get, type Readable, type Writable } from "svelte/store";
@@ -138,7 +138,7 @@ export function renderMonthlyExpensesTimeline(
   const timeFormat = "MMM-YYYY";
   const MAX_BAR_WIDTH = rem(40);
   const svg = d3.select(id),
-    margin = { top: rem(60), right: rem(30), bottom: rem(60), left: rem(40) },
+    margin = { top: rem(15), right: rem(30), bottom: rem(60), left: rem(40) },
     width =
       document.getElementById(id.substring(1)).parentElement.clientWidth -
       margin.left -
@@ -383,33 +383,25 @@ export function renderMonthlyExpensesTimeline(
 
   const destroy = dateRangeStore.subscribe((dateRange) => render(get(groupsStore), dateRange));
 
-  svg.append("g").attr("class", "legendOrdinal").attr("transform", `translate(${margin.top},0)`);
+  const legends = groups.map(
+    (group) =>
+      ({
+        label: iconify(group, { group: "Expenses" }),
+        color: z(group),
+        shape: "square",
+        onClick: () => {
+          if (selectedGroups.length == 1 && selectedGroups[0] == group) {
+            selectedGroups = groups;
+          } else {
+            selectedGroups = [group];
+          }
 
-  const legendOrdinal = legend
-    .legendColor()
-    .shape("rect")
-    .orient("horizontal")
-    .shapePadding(100)
-    .labels(({ i, generatedLabels }: { i: number; generatedLabels: string[] }) => {
-      return iconify(generatedLabels[i], { group: "Expenses" });
-    })
-    .on("cellclick", function () {
-      const group = this.__data__;
-      if (selectedGroups.length == 1 && selectedGroups[0] == group) {
-        selectedGroups = groups;
-        svg.selectAll(".legendOrdinal .cell .label").classed("selected", false);
-      } else {
-        selectedGroups = [group];
-        svg.selectAll(".legendOrdinal .cell .label").classed("selected", false);
-        d3.select(this).selectAll(".label").classed("selected", true);
-      }
+          render(selectedGroups, get(dateRangeStore));
+        }
+      }) as Legend
+  );
 
-      render(selectedGroups, get(dateRangeStore));
-    })
-    .scale(z);
-
-  svg.select(".legendOrdinal").call(legendOrdinal as any);
-  return { z: z, destroy: destroy };
+  return { z: z, destroy: destroy, legends };
 }
 
 export function renderCurrentExpensesBreakdown(z: d3.ScaleOrdinal<string, string, never>) {

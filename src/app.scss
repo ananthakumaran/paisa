@@ -351,29 +351,15 @@ svg text {
   fill: $grey-light !important;
 }
 
-.legendOrdinal,
-.legendLine {
-  .label {
-    display: block;
-    font-size: 0.785rem;
-    text-transform: capitalize;
-    font-weight: normal;
-    color: $grey;
-    fill: $grey;
-
-    &.selected {
-      fill: $grey-darker;
-      font-weight: bold;
-    }
-  }
+.legend-label {
+  text-transform: capitalize;
+  text-align: center;
+  line-height: 1rem;
 }
 
-#d3-investment-timeline .legendOrdinal .label,
-#d3-yearly-investment-timeline .legendOrdinal .label,
-#d3-income-timeline .legendOrdinal .label,
-#d3-repayment-timeline .legendOrdinal .label,
-#d3-breakdown .legendOrdinal .label {
-  font-size: 0.857rem;
+.legend-box.selected {
+  background-color: $grey-lightest;
+  border-radius: $radius;
 }
 
 #d3-salary-timeline .x.axis > g.tick {

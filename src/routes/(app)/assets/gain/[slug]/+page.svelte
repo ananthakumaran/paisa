@@ -1,6 +1,6 @@
 <script lang="ts">
   import COLORS, { generateColorScheme, genericBarColor } from "$lib/colors";
-  import { renderAccountOverview, renderLegend } from "$lib/gain";
+  import { renderAccountOverview } from "$lib/gain";
   import { filterCommodityBreakdowns, renderPortfolioBreakdown } from "$lib/portfolio";
   import {
     ajax,
@@ -70,24 +70,19 @@
       gain.postings,
       "d3-account-timeline-breakdown"
     );
-    renderLegend();
 
     selectedCommodities = [...commodities];
     securityTypeR = renderPortfolioBreakdown("#d3-portfolio-security-type", security_type, {
-      showLegend: false,
       small: true
     });
     ratingR = renderPortfolioBreakdown("#d3-portfolio-security-rating", rating, {
-      showLegend: false,
       small: true
     });
     industryR = renderPortfolioBreakdown("#d3-portfolio-security-industry", industry, {
-      showLegend: false,
       small: true,
       z: [genericBarColor()]
     });
     portfolioR = renderPortfolioBreakdown("#d3-portfolio", name_and_security_type, {
-      showLegend: true,
       small: true
     });
 

@@ -13,7 +13,8 @@ import {
   financialYear,
   forEachFinancialYear,
   formatCurrencyCrudeWithPrecision,
-  now
+  now,
+  type Legend
 } from "$lib/utils";
 import COLORS, { generateColorScheme } from "$lib/colors";
 import type { Writable } from "svelte/store";
@@ -332,20 +333,23 @@ export function renderYearlyExpensesTimeline(
   let selectedGroups = groups;
   render(selectedGroups);
 
-  const legends = groups.map((group) => ({
-    label: iconify(group, { group: "Expenses" }),
-    color: z(group),
-    shape: "square",
-    onClick: () => {
-      if (selectedGroups.length == 1 && selectedGroups[0] == group) {
-        selectedGroups = groups;
-      } else {
-        selectedGroups = [group];
-      }
+  const legends = groups.map(
+    (group) =>
+      ({
+        label: iconify(group, { group: "Expenses" }),
+        color: z(group),
+        shape: "square",
+        onClick: () => {
+          if (selectedGroups.length == 1 && selectedGroups[0] == group) {
+            selectedGroups = groups;
+          } else {
+            selectedGroups = [group];
+          }
 
-      render(selectedGroups);
-    }
-  }));
+          render(selectedGroups);
+        }
+      }) as Legend
+  );
 
   return { z, legends };
 }

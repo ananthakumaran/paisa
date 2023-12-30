@@ -711,7 +711,7 @@ export async function ajax(route: string, options?: RequestInit, params?: Record
   if (response.status == 401 && route != "/api/ping") {
     logout();
     await goto("/login");
-    throw error(401, "Unauthorized");
+    error(401, "Unauthorized");
   }
 
   return JSON.parse(body, (key, value) => {

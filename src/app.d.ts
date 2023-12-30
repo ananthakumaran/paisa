@@ -55,7 +55,11 @@ declare var USER_CONFIG: UserConfig;
 declare var __now: any;
 
 declare namespace App {
-  // interface Error {}
+  interface Error {
+    message: string;
+    status?: number;
+    stack?: string;
+  }
   // interface Locals {}
   // interface PageData {}
   // interface Platform {}

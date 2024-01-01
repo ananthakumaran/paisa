@@ -9,9 +9,15 @@ import { history, undoDepth, redoDepth } from "@codemirror/commands";
 import { linter, lintGutter, type Diagnostic } from "@codemirror/lint";
 import _ from "lodash";
 import { editorState, initialEditorState } from "../store";
-import { autocompletion, completeFromList, ifIn } from "@codemirror/autocomplete";
+import {
+  CompletionContext,
+  autocompletion,
+  completeFromList,
+  ifIn
+} from "@codemirror/autocomplete";
 import { MergeView } from "@codemirror/merge";
 import { schedulePlugin } from "./transaction_tag";
+import dayjs from "dayjs";
 
 export { editorState } from "../store";
 
@@ -77,9 +83,17 @@ export function createEditor(
       linter(lint),
       history(),
       autocompletion({
-        override: _.map(opts.autocompletions || [], (options: string[], node) =>
-          ifIn([node], completeFromList(options))
-        )
+        override: [
+          (context: CompletionContext) => {
+            if (context.matchBefore(/^20$/)) {
+              return completeFromList([dayjs().format("YYYY/MM/DD") + " "])(context);
+            }
+            return null;
+          },
+          ..._.map(opts.autocompletions || [], (options: string[], node) =>
+            ifIn([node], completeFromList(options))
+          )
+        ]
       }),
       EditorView.updateListener.of((viewUpdate) => {
         editorState.update((current) =>

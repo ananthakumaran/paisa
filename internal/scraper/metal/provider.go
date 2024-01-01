@@ -26,7 +26,7 @@ func (p *PriceProvider) Label() string {
 }
 
 func (p *PriceProvider) Description() string {
-	return "Supports IBJA (India) gold and silver prices in various level of purity."
+	return "Supports IBJA (India) gold and silver prices at various level of purity."
 }
 
 func (p *PriceProvider) AutoCompleteFields() []price.AutoCompleteField {

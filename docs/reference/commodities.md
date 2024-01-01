@@ -142,9 +142,9 @@ respective NPS fund scheme code.
 
 ## Purified Bytes Metals <sub>:flag_in:</sub>
 
-To automatically track the latest price of gold or silver in various
-purity you need to link the commodity and the metal code. The price is
-for 1 gram of the metal.
+To automatically track the latest price of gold or silver at various
+level of purity, you need to link the commodity and the metal
+code. The price is for 1 gram of the metal.
 
 ```yaml
 commodities:

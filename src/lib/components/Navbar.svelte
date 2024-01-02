@@ -151,7 +151,7 @@
   let selectedSubLink: Link = null;
   let selectedSubSubLink: Link = null;
 
-  $: normalizedPath = $page.url.pathname?.replace(/\/$/, "");
+  $: normalizedPath = $page.url.pathname?.replace(/(.+)\/$/, "");
 
   $: if (normalizedPath) {
     selectedSubLink = null;

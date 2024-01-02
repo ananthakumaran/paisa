@@ -323,6 +323,6 @@
 
 <style lang="scss">
   p.subtitle {
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.5rem !important;
   }
 </style>

@@ -783,6 +783,10 @@ func execHLedgerCommand(journalPath string, prices []price.Price, flags []string
 		}
 
 		for _, p := range t.Postings {
+			// ignore balance assertions
+			if len(p.Amount) == 0 {
+				continue
+			}
 			amount := p.Amount[0]
 			totalAmount := decimal.NewFromFloat(amount.Quantity.Value)
 			totalAmountSet := false

@@ -39,3 +39,6 @@ P 2022/01/08 00:00:00 USD 80.442048 INR
     ; :interest:
     Income:Interest:Checking                  -1,000 INR ; Posting note
     Assets:Checking
+
+2022/01/31 * Asset balance
+  Assets:Equity:NIFTY  =800 NIFTY

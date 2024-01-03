@@ -127,3 +127,23 @@
 .app-frame::after {
   font-family: inherit;
 }
+
+.assets-color {
+  color: #00b0ff;
+}
+
+.expenses-color {
+  color: #ff1744;
+}
+
+.liabilities-color {
+  color: #ffab00;
+}
+
+.equity-color {
+  color: #d500f9;
+}
+
+.income-color {
+  color: #aeea00;
+}

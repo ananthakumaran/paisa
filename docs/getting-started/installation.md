@@ -174,6 +174,6 @@ Paisa CLI is available as a nix flake.
       an app that doesn't generate any income. Unfortunately, as a
       result, you would have to jump through hoops to get it working.
 
-[^2]: As the name implies, these are 3rd party hosting solutions
+[^2]: As the name implies, these are third party hosting solutions
     operated by independent companies. I may receive affiliate
     compensation for linking to their websites.

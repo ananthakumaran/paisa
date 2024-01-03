@@ -17,13 +17,29 @@
         "type": "indirect"
       }
     },
-    "nixpkgs": {
+    "mkdocs-pkgs": {
       "locked": {
-        "lastModified": 1701693815,
-        "narHash": "sha256-7BkrXykVWfkn6+c1EhFA3ko4MLi3gVG0p9G96PNnKTM=",
+        "lastModified": 1704196875,
+        "narHash": "sha256-AhEXx3uu32cnIOjIR3B2NMzqzwXfJYNPgVNfHQGYKzs=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "09ec6a0881e1a36c29d67497693a67a16f4da573",
+        "rev": "0c6502e9830a7bf25258731316dd3c72fb08f94c",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "staging-next",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nixpkgs": {
+      "locked": {
+        "lastModified": 1704008649,
+        "narHash": "sha256-rGPSWjXTXTurQN9beuHdyJhB8O761w1Zc5BqSSmHvoM=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "d44d59d2b5bd694cd9d996fd8c51d03e3e9ba7f7",
         "type": "github"
       },
       "original": {
@@ -34,6 +50,7 @@
     "root": {
       "inputs": {
         "flake-utils": "flake-utils",
+        "mkdocs-pkgs": "mkdocs-pkgs",
         "nixpkgs": "nixpkgs"
       }
     },

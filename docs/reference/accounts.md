@@ -19,11 +19,11 @@ convention.
 
 There are five types of account namely
 
-1. :fontawesome-solid-sack-dollar: Assets
-1. :fontawesome-solid-credit-card: Liabilities
-1. :fontawesome-solid-building: Income
-1. :fontawesome-solid-wallet: Expenses
-1. :fontawesome-solid-money-check-dollar: Equity
+1. :fontawesome-solid-sack-dollar:{ .assets-color } Assets
+1. :fontawesome-solid-credit-card:{ .liabilities-color } Liabilities
+1. :fontawesome-solid-building:{ .income-color } Income
+1. :fontawesome-solid-wallet:{ .expenses-color } Expenses
+1. :fontawesome-solid-money-check-dollar:{ .equity-color } Equity
 
 All the accounts you create should be under one of these
 accounts. This naming convention is a necessity, because without

@@ -1,14 +1,20 @@
 {
   description = "paisa";
-  outputs = { self, nixpkgs, flake-utils }:
+  inputs.mkdocs-pkgs.url = "github:NixOS/nixpkgs/staging-next";
+
+  outputs = { self, nixpkgs, flake-utils, mkdocs-pkgs }:
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = nixpkgs.legacyPackages.${system};
+        mkdocs = mkdocs-pkgs.legacyPackages.${system};
         nodeDependencies = (pkgs.callPackage ./flake/override.nix {
           nodejs = pkgs.nodejs-18_x;
         }).nodeDependencies;
       in {
-        devShells.default = import ./shell.nix { inherit pkgs; };
+        devShells.default = import ./shell.nix {
+          inherit pkgs;
+          inherit mkdocs;
+        };
 
         packages.default = pkgs.buildGoModule {
           pname = "paisa-cli";

@@ -98,7 +98,7 @@ right next to period metadata.
 
 ```
 ┌─────────── day of the month 1-31
-│  ┌─────────── month 1-12
+│  ┌─────────── month 1-12 or JAN-DEC
 │  │  ┌─────────── day of the week 0-6 (Sunday to Saturday)
 │  │  │
 1  *  ?
@@ -135,9 +135,9 @@ valid and the next 3 schedules if valid.
 
 
 
-!!! tip
+!!! warning
 
-    Recurring page will only show a transaction as recurring if there
+    Recurring page will only display a transaction as recurring if there
     is more than **one transaction** with the same tag name. If you
     have only one transaction, wait untill the next transaction is added
     to see it on the recurring page.

@@ -35,7 +35,8 @@ nav:
     - reference/changelog.md
   - 'Demo': 'https://demo.paisa.fyi'
   - faq.md
-
+  - Blog:
+    - blog/index.md
 theme:
   custom_dir: overrides
   name: material
@@ -45,16 +46,18 @@ theme:
     repo: fontawesome/brands/github
   palette:
     - scheme: default
-      primary: indigo
+      media: "(prefers-color-scheme: light)"
+      primary: white
       accent: indigo
       toggle:
-        icon: material/brightness-7
+        icon: material/white-balance-sunny
         name: Switch to dark mode
     - scheme: slate
-      primary: indigo
+      media: "(prefers-color-scheme: dark)"
+      primary: black
       accent: indigo
       toggle:
-        icon: material/brightness-4
+        icon: material/moon-waning-crescent
         name: Switch to light mode
   features:
     - content.tabs.link
@@ -70,6 +73,8 @@ theme:
     - search.highlight
 
 markdown_extensions:
+  - toc:
+      permalink: true
   - pymdownx.keys
   - footnotes
   - pymdownx.tabbed:
@@ -90,8 +95,8 @@ markdown_extensions:
   - pymdownx.tasklist:
       custom_checkbox: true
   - pymdownx.emoji:
-      emoji_index: !!python/name:materialx.emoji.twemoji
-      emoji_generator: !!python/name:materialx.emoji.to_svg
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
       options:
         custom_icons:
           - overrides/.icons
@@ -152,6 +157,6 @@ extra:
 
 plugins:
   - search
-
+  - blog
 hooks:
   - docs/lexer/hook.py

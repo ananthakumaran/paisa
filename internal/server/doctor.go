@@ -4,6 +4,8 @@ import (
 	"errors"
 	"fmt"
 	"net/url"
+	"path/filepath"
+	"strings"
 
 	"github.com/ananthakumaran/paisa/internal/accounting"
 	"github.com/ananthakumaran/paisa/internal/config"
@@ -71,7 +73,13 @@ func init() {
 				Level:       WARN,
 				Summary:     "Unit Price Mismatch",
 				Description: "Unit price used in the journal doesn't match the price fetched from external system."},
-			Predicate: ruleJournalPriceMismatch}}
+			Predicate: ruleJournalPriceMismatch},
+		{
+			Issue: Issue{
+				Level:       WARN,
+				Summary:     "Asset Accounts missing from Allocation Target",
+				Description: "Asset accounts are not part of any allocation target."},
+			Predicate: ruleAllocationTargetMissingAssetAccounts}}
 }
 
 func GetDiagnosis(db *gorm.DB) gin.H {
@@ -165,4 +173,43 @@ func formatPosting(p posting.Posting) string {
 
 	postingUrl := fmt.Sprintf("/ledger/editor/%s#%d", url.PathEscape(p.FileName), p.TransactionBeginLine)
 	return fmt.Sprintf("<a href=\"%s\"> %s\t%s\t%s</a>", postingUrl, p.Date.Format(DATE_FORMAT), p.Account, price)
+}
+
+func ruleAllocationTargetMissingAssetAccounts(db *gorm.DB) []error {
+	errs := make([]error, 0)
+
+	if len(config.GetConfig().AllocationTargets) == 0 {
+		return errs
+	}
+
+	var accounts []string
+	db.Model(&posting.Posting{}).Where("account like ?", "Assets:%").Distinct().Pluck("Account", &accounts)
+
+	ignoredAccounts := make([]string, 0)
+	for _, account := range accounts {
+		found := false
+		for _, target := range config.GetConfig().AllocationTargets {
+			for _, targetAccount := range target.Accounts {
+				match, _ := filepath.Match(targetAccount, account)
+				if match {
+					found = true
+					break
+				}
+			}
+
+			if found {
+				break
+			}
+		}
+
+		if !found {
+			ignoredAccounts = append(ignoredAccounts, account)
+		}
+	}
+
+	if len(ignoredAccounts) > 0 {
+		errs = append(errs, errors.New(fmt.Sprintf("The following asset accounts are not part of any asset allocation target: <b>%s</b>", strings.Join(ignoredAccounts, ", "))))
+	}
+
+	return errs
 }

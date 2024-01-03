@@ -152,8 +152,8 @@
                     ? COLORS.lossText
                     : COLORS.gainText
                   : posting.account.startsWith("Income:CapitalGains")
-                  ? COLORS.gainText
-                  : COLORS.lossText}
+                    ? COLORS.gainText
+                    : COLORS.lossText}
               />
             {/each}
           </div>

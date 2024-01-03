@@ -156,8 +156,11 @@ export function renderNetworth(
   const hoverCircle = layer.append("circle").attr("r", "3").attr("fill", "none");
   const t = tippy(hoverCircle.node(), { theme: "light", delay: 0, allowHTML: true });
 
-  const networthVoronoiPoints = _.map(points, (d) => [x(d.date), y(networth(d))]);
-  const investmentVoronoiPoints = _.map(points, (d) => [x(d.date), y(investment(d))]);
+  const networthVoronoiPoints: Delaunay.Point[] = _.map(points, (d) => [x(d.date), y(networth(d))]);
+  const investmentVoronoiPoints: Delaunay.Point[] = _.map(points, (d) => [
+    x(d.date),
+    y(investment(d))
+  ]);
   const voronoi = Delaunay.from(networthVoronoiPoints.concat(investmentVoronoiPoints)).voronoi([
     0,
     0,

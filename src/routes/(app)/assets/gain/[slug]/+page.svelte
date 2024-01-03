@@ -169,8 +169,8 @@
                     ? COLORS.loss
                     : COLORS.secondary
                   : posting.account.startsWith("Income:CapitalGains")
-                  ? COLORS.gain
-                  : COLORS.tertiary}
+                    ? COLORS.gain
+                    : COLORS.tertiary}
               />
             {/each}
           </div>

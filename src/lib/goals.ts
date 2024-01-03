@@ -250,7 +250,10 @@ export function renderProgress(
     .attr("cx", (p) => x(p.date))
     .attr("cy", (p) => y(p.value));
 
-  const voronoiPoints = _.map(points.concat(predictions), (p) => [x(p.date), y(p.value)]);
+  const voronoiPoints: Delaunay.Point[] = _.map(points.concat(predictions), (p) => [
+    x(p.date),
+    y(p.value)
+  ]);
   const voronoi = Delaunay.from(voronoiPoints).voronoi([0, 0, width, height]);
   const hoverCircle = g.append("circle").attr("r", "3").attr("fill", "none");
   const t = tippy(hoverCircle.node(), { theme: "light", delay: 0, allowHTML: true });

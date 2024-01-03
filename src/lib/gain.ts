@@ -462,8 +462,14 @@ export function renderAccountOverview(points: Networth[], postings: Posting[], i
   const hoverCircle = layer.append("circle").attr("r", "3").attr("fill", "none");
   const t = tippy(hoverCircle.node(), { theme: "light", delay: 0, allowHTML: true });
 
-  const balanceVoronoiPoints = _.map(points, (d) => [x(d.date), y(d.balanceAmount)]);
-  const investmentVoronoiPoints = _.map(points, (d) => [x(d.date), y(d.netInvestmentAmount)]);
+  const balanceVoronoiPoints: Delaunay.Point[] = _.map(points, (d) => [
+    x(d.date),
+    y(d.balanceAmount)
+  ]);
+  const investmentVoronoiPoints: Delaunay.Point[] = _.map(points, (d) => [
+    x(d.date),
+    y(d.netInvestmentAmount)
+  ]);
   const voronoi = Delaunay.from(balanceVoronoiPoints.concat(investmentVoronoiPoints)).voronoi([
     0,
     0,

@@ -1,7 +1,7 @@
 <script lang="ts">
   import { createEditor, sheetEditorState } from "$lib/sheet";
   import { moveToEnd, moveToLine, updateContent } from "$lib/editor";
-  import { ajax, buildDirectoryTree, type SheetFile } from "$lib/utils";
+  import { ajax, buildDirectoryTree, type Posting, type SheetFile } from "$lib/utils";
   import { redo, undo } from "@codemirror/commands";
   import type { KeyBinding } from "@codemirror/view";
   import * as toast from "bulma-toast";
@@ -18,6 +18,7 @@
   let editorDom: Element;
   let editor: EditorView;
   let filesMap: Record<string, SheetFile> = {};
+  let postings: Posting[] = [];
   let selectedFile: SheetFile = null;
   let selectedVersion: string = null;
   let lineNumber = 0;
@@ -69,7 +70,7 @@
 
   async function loadFiles(selectedFileName: string) {
     let files;
-    ({ files } = await ajax("/api/sheets/files"));
+    ({ files, postings } = await ajax("/api/sheets/files"));
     filesMap = _.fromPairs(_.map(files, (f) => [f.name, f]));
     if (!_.isEmpty(files)) {
       selectedFile = _.find(files, (f) => f.name == selectedFileName) || files[0];
@@ -132,7 +133,7 @@
         editor.destroy();
       }
 
-      editor = createEditor(selectedFile.content, editorDom, { keybindings });
+      editor = createEditor(selectedFile.content, editorDom, postings, { keybindings });
       if (lineNumber > 0) {
         if (!editor.hasFocus) {
           editor.focus();
@@ -310,7 +311,7 @@
       </div>
       <div class="column is-9-widescreen is-10-fullhd is-8">
         <div class="flex">
-          <div class="box box-r-none py-0 pr-1 mb-0 basis-[36rem]">
+          <div class="box box-r-none py-0 pr-1 mb-0 basis-[36rem] max-w-[36rem]">
             <div class="sheet-editor" bind:this={editorDom} />
           </div>
           <div
@@ -330,7 +331,7 @@
                   class:font-bold={result.bold}
                   class:text-left={result.align === "left"}
                   class="m-0 p-0 truncate {result.error ? 'has-text-danger' : ''}"
-                  style="font-size: 0.928rem; line-height: 1.4"
+                  style="font-size: 0.9285714285714286rem; line-height: 1.4"
                 >
                   &nbsp;{result.result}
                 </div>

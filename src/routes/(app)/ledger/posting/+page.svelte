@@ -14,7 +14,8 @@
     formatFloat,
     firstName,
     type LedgerFile,
-    type Transaction
+    type Transaction,
+    asTransaction
   } from "$lib/utils";
   import _ from "lodash";
   import { onDestroy, onMount } from "svelte";
@@ -63,19 +64,6 @@
       return text;
     }
     return "";
-  }
-
-  function asTransaction(p: Posting): Transaction {
-    return {
-      id: p.id,
-      date: p.date,
-      payee: p.payee,
-      beginLine: p.transaction_begin_line,
-      endLine: p.transaction_end_line,
-      fileName: p.file_name,
-      note: p.transaction_note,
-      postings: [p]
-    };
   }
 </script>
 

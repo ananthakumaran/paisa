@@ -13,7 +13,7 @@ lines { Line (newline+ Line)* newline* }
 
 Line { Expression | Assignment | FunctionDefinition | Header }
 
-Expression { Literal | UnaryExpression | BinaryExpression | Grouping | Identifier | FunctionCall | SearchQueryString }
+Expression { Literal | UnaryExpression | BinaryExpression | Grouping | Identifier | FunctionCall | Postings }
 
 Literal { Number }
 Grouping { "(" Expression ")" }
@@ -28,12 +28,13 @@ Assignment { Identifier AssignmentOperator Expression }
 FunctionCall { Identifier !call "(" Arguments? ")" }
 Arguments { Expression ~call ("," Expression)* }
 
+Postings { @specialize<Identifier, "postings"> "(" SearchQueryString ")" }
+
 FunctionDefinition { Identifier !call "(" Parameters? ")" "=" Expression }
 Parameters { Identifier ~call ("," Identifier)* }
 
 UnaryOperator { "+" | "-" | "!" }
 AssignmentOperator { "=" }
-
 BinaryOperator<expr> { expr }
 
 @tokens {
@@ -53,13 +54,14 @@ BinaryOperator<expr> { expr }
 }
 
 @local tokens {
-  stringEnd { '`' }
+  stringEnd[@name='`'] { '`' }
   stringEscape { "\\" _ }
   @else stringContent
 }
 
 @skip {} {
-  SearchQueryString { '`' SearchQuery stringEnd }
+  stringStart[@name='`'] { '`' }
+  SearchQueryString { stringStart SearchQuery stringEnd }
   SearchQuery { (stringContent | stringEscape)* }
 }
 

@@ -1,6 +1,7 @@
 import { autocompletion, completionKeymap } from "@codemirror/autocomplete";
 import { defaultKeymap, history, historyKeymap } from "@codemirror/commands";
-import { defaultHighlightStyle, syntaxHighlighting } from "@codemirror/language";
+import { syntaxHighlighting } from "@codemirror/language";
+import { classHighlighter } from "@lezer/highlight";
 import { lintKeymap } from "@codemirror/lint";
 import { search, searchKeymap } from "@codemirror/search";
 import type { Extension } from "@codemirror/state";
@@ -21,7 +22,7 @@ export const basicSetup: Extension = [
   history(),
   drawSelection(),
   dropCursor(),
-  syntaxHighlighting(defaultHighlightStyle, { fallback: true }),
+  syntaxHighlighting(classHighlighter),
   autocompletion(),
   highlightActiveLine(),
   search({ top: true }),

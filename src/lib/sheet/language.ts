@@ -13,7 +13,9 @@ export const sheetLanguage = LRLanguage.define({
       return null;
     })
   }),
-  languageData: {}
+  languageData: {
+    closeBrackets: { brackets: ["[", "(", "/", '"', "`"] }
+  }
 });
 
 export function sheetExtension() {

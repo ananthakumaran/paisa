@@ -671,6 +671,7 @@ export function ajax(
 
 export function ajax(route: "/api/sheets/files"): Promise<{
   files: SheetFile[];
+  postings: Posting[];
 }>;
 
 export function ajax(
@@ -1186,4 +1187,17 @@ export function groupSumBy(postings: Posting[], groupBy: _.ValueIteratee<Posting
     .groupBy(groupBy)
     .mapValues((ps) => _.sumBy(ps, (p) => p.amount))
     .value();
+}
+
+export function asTransaction(p: Posting): Transaction {
+  return {
+    id: p.id,
+    date: p.date,
+    payee: p.payee,
+    beginLine: p.transaction_begin_line,
+    endLine: p.transaction_end_line,
+    fileName: p.file_name,
+    note: p.transaction_note,
+    postings: [p]
+  };
 }

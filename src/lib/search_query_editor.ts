@@ -186,7 +186,7 @@ function lint(editor: EditorView): Diagnostic[] {
     });
 
   if (!hasErrors) {
-    const ast = buildAST(editor);
+    const ast = buildAST(editor.state, syntaxTree(editor.state).topNode);
 
     const conditions = ast.clauses.flatMap(collectConditionASTs);
     for (const condition of conditions) {
@@ -254,13 +254,13 @@ function collectDateValueASTs(ast: ClauseAST): DateValueAST[] {
   return [];
 }
 
-function buildAST(editor: EditorView): QueryAST {
-  return constructQueryAST(editor.state, syntaxTree(editor.state).topNode);
+export function buildAST(state: EditorState, node: SyntaxNode): QueryAST {
+  return constructQueryAST(state, node);
 }
 
-type TransactionPredicate = (transaction: Transaction) => boolean;
+export type TransactionPredicate = (transaction: Transaction) => boolean;
 
-function buildFilter(ast: QueryAST): TransactionPredicate {
+export function buildFilter(ast: QueryAST): TransactionPredicate {
   return andFilter(...ast.clauses.map((clause) => buildFilterFromClauseAST(clause)));
 }
 

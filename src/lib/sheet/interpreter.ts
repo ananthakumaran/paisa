@@ -2,13 +2,19 @@ import type { SyntaxNode } from "@lezer/common";
 import * as Terms from "./parser.terms";
 import type { EditorState } from "@codemirror/state";
 import { BigNumber } from "bignumber.js";
-import type { SheetLineResult } from "$lib/utils";
+import { asTransaction, type Posting, type SheetLineResult } from "$lib/utils";
+import {
+  buildFilter,
+  buildAST as buildSearchAST,
+  type TransactionPredicate
+} from "$lib/search_query_editor";
 
 const STACK_LIMIT = 1000;
 
-class Environment {
+export class Environment {
   scope: Record<string, any>;
   depth: number;
+  postings: Posting[];
 
   constructor() {
     this.scope = {};
@@ -17,6 +23,7 @@ class Environment {
 
   extend(scope: Record<string, any>): Environment {
     const env = new Environment();
+    env.postings = this.postings;
     env.depth = this.depth + 1;
     if (this.depth > STACK_LIMIT) {
       throw new Error("Call stack overflow");
@@ -133,15 +140,18 @@ class FunctionCallAST extends AST {
   }
 }
 
-class SearchQueryAST extends AST {
-  readonly value: string;
+class PostingsAST extends AST {
+  readonly predicate: TransactionPredicate;
   constructor(node: SyntaxNode, state: EditorState) {
     super(node);
-    this.value = state.sliceDoc(node.firstChild.from, node.firstChild.to);
+    this.predicate = buildFilter(buildSearchAST(state, node.lastChild.firstChild.nextSibling));
   }
 
-  evaluate(): any {
-    return null;
+  evaluate(env: Environment): any {
+    return env.postings
+      .map(asTransaction)
+      .filter(this.predicate)
+      .map((t) => t.postings[0]);
   }
 }
 
@@ -153,7 +163,7 @@ class ExpressionAST extends AST {
     | BinaryExpressionAST
     | ExpressionAST
     | FunctionCallAST
-    | SearchQueryAST;
+    | PostingsAST;
   constructor(node: SyntaxNode, state: EditorState) {
     super(node);
     switch (node.firstChild.type.id) {
@@ -185,8 +195,8 @@ class ExpressionAST extends AST {
         this.value = new FunctionCallAST(node.firstChild, state);
         break;
 
-      case Terms.SearchQueryString:
-        this.value = new SearchQueryAST(node.firstChild, state);
+      case Terms.Postings:
+        this.value = new PostingsAST(node.firstChild, state);
         break;
 
       default:
@@ -279,7 +289,10 @@ class LineAST extends AST {
   }
 
   evaluate(env: Environment): Record<string, any> {
-    const value = this.value.evaluate(env);
+    let value = this.value.evaluate(env);
+    if (value instanceof BigNumber) {
+      value = value.toFixed(2);
+    }
     switch (this.valueId) {
       case Terms.Assignment:
       case Terms.Expression:
@@ -304,12 +317,13 @@ class SheetAST extends AST {
       try {
         this.lines.push(new LineAST(node, state));
       } catch (e) {
+        console.log(e);
         break;
       }
     }
   }
 
-  evaluate(env: Environment = new Environment()): SheetLineResult[] {
+  evaluate(env: Environment): SheetLineResult[] {
     const results: SheetLineResult[] = [];
     let lastLineNumber = 0;
     for (const line of this.lines) {
@@ -322,6 +336,7 @@ class SheetAST extends AST {
         results.push({ line: line.lineNumber, error: false, ...resultObject } as SheetLineResult);
         lastLineNumber++;
       } catch (e) {
+        console.log(e);
         results.push({ line: line.lineNumber, error: true, result: e.message });
         break;
       }

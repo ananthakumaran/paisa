@@ -549,6 +549,66 @@ nav.level.grid-2 {
     background-color: $grey-lightest !important;
   }
 
+  // hightlight
+  .cm-line {
+    $hl-yellow: #c99e00;
+    $hl-orange: #f5871f;
+    $hl-red: #c82829;
+    $hl-purple: #8959a8;
+    $hl-violet: #6c71c4;
+    $hl-blue: #4271ae;
+    $hl-cyan: #3e999f;
+    $hl-green: #718c00;
+
+    .tok-heading {
+      font-weight: bold;
+      color: $black-ter;
+    }
+
+    .tok-link {
+      text-decoration: underline;
+    }
+
+    .tok-number {
+      color: $hl-violet;
+      font-weight: bold;
+    }
+
+    .tok-string,
+    .tok-string2 {
+      color: $hl-red;
+    }
+
+    .tok-keyword {
+      color: $hl-purple;
+    }
+
+    .tok-comment {
+      color: $grey;
+    }
+
+    .tok-strong {
+      font-weight: bold;
+    }
+
+    .tok-typeName {
+      color: $hl-green;
+    }
+
+    .tok-variableName {
+      color: $hl-blue;
+    }
+
+    .tok-variableName2 {
+      color: $hl-cyan;
+      font-weight: bold;
+    }
+
+    .tok-operator {
+      color: $hl-orange;
+    }
+  }
+
   .cm-line .ͼd {
     color: $link;
     font-weight: bold;
@@ -723,7 +783,7 @@ nav.level.grid-2 {
 .cm-scroller {
   overflow: auto;
   font-family: $family-monospace !important;
-  font-size: 0.928rem;
+  font-size: 0.9285714285714286rem;
 }
 
 .cm-focused {

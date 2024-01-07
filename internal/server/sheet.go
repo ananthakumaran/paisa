@@ -8,6 +8,8 @@ import (
 	"os"
 
 	"github.com/ananthakumaran/paisa/internal/config"
+	"github.com/ananthakumaran/paisa/internal/query"
+	"github.com/ananthakumaran/paisa/internal/service"
 	"github.com/bmatcuk/doublestar/v4"
 	"github.com/gin-gonic/gin"
 	"github.com/samber/lo"
@@ -33,7 +35,10 @@ func GetSheets(db *gorm.DB) gin.H {
 		files = append(files, readSheetFileWithVersions(dir, path))
 	}
 
-	return gin.H{"files": files}
+	postings := query.Init(db).All()
+	postings = service.PopulateMarketPrice(db, postings)
+
+	return gin.H{"files": files, "postings": postings}
 }
 
 func GetSheet(file SheetFile) gin.H {

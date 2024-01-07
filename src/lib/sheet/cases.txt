@@ -64,13 +64,13 @@ pi()
 
 Sheet(Line(Expression(FunctionCall(Identifier))))
 
-# Search Query
+# Postings Search Query
 
-posting(`amount > 0`)
+postings(`amount > 0`)
 
 ===>
 
-Sheet(Line(Expression(FunctionCall(Identifier,Arguments(Expression(SearchQueryString(Query(Clause(Condition(Property(Amount),Operator(">"),Value(Number)))))))))))
+Sheet(Line(Expression(Postings(SearchQueryString(Query(Clause(Condition(Property(Amount),Operator(">"),Value(Number)))))))))
 
 # Function Definition
 
@@ -79,3 +79,12 @@ square(x) = x * 2
 ===>
 
 Sheet(Line(FunctionDefinition(Identifier,Parameters(Identifier),Expression(BinaryExpression(Expression(Identifier),BinaryOperator,Expression(Literal(Number)))))))
+
+
+# Empty Postings Search Query
+
+postings(``)
+
+===>
+
+Sheet(Line(Expression(Postings(SearchQueryString(Query)))))

@@ -2,7 +2,7 @@ import type { SyntaxNode } from "@lezer/common";
 import * as Terms from "./parser.terms";
 import type { EditorState } from "@codemirror/state";
 import { BigNumber } from "bignumber.js";
-import { asTransaction, type Posting, type SheetLineResult } from "$lib/utils";
+import { asTransaction, formatCurrency, type Posting, type SheetLineResult } from "$lib/utils";
 import {
   buildFilter,
   buildAST as buildSearchAST,
@@ -30,6 +30,38 @@ export class Environment {
     }
     env.scope = { ...this.scope, ...scope };
     return env;
+  }
+}
+
+export class Query {
+  predicate: TransactionPredicate;
+  result: Posting[] | null;
+
+  constructor(predicate: TransactionPredicate) {
+    this.predicate = predicate;
+    this.result = null;
+  }
+
+  resolve(env: Environment): Posting[] {
+    if (this.result === null) {
+      this.result = env.postings
+        .map(asTransaction)
+        .filter(this.predicate)
+        .map((t) => t.postings[0]);
+    }
+    return this.result;
+  }
+
+  and(query: Query): Query {
+    return new Query((t) => this.predicate(t) && query.predicate(t));
+  }
+
+  or(query: Query): Query {
+    return new Query((t) => this.predicate(t) || query.predicate(t));
+  }
+
+  toString(): string {
+    return "";
   }
 }
 
@@ -82,6 +114,8 @@ class UnaryExpressionAST extends AST {
     switch (this.operator) {
       case "-":
         return (this.value.evaluate(env) as BigNumber).negated();
+      case "+":
+        return this.value.evaluate(env);
       default:
         throw new Error("Unexpected operator");
     }
@@ -114,6 +148,10 @@ class BinaryExpressionAST extends AST {
         return (this.left.evaluate(env) as BigNumber).div(this.right.evaluate(env));
       case "^":
         return (this.left.evaluate(env) as BigNumber).exponentiatedBy(this.right.evaluate(env));
+      case "AND":
+        return this.left.evaluate(env).and(this.right.evaluate(env));
+      case "OR":
+        return this.left.evaluate(env).or(this.right.evaluate(env));
       default:
         throw new Error("Unexpected operator");
     }
@@ -147,11 +185,8 @@ class PostingsAST extends AST {
     this.predicate = buildFilter(buildSearchAST(state, node.lastChild.firstChild.nextSibling));
   }
 
-  evaluate(env: Environment): any {
-    return env.postings
-      .map(asTransaction)
-      .filter(this.predicate)
-      .map((t) => t.postings[0]);
+  evaluate(): Query {
+    return new Query(this.predicate);
   }
 }
 
@@ -291,7 +326,7 @@ class LineAST extends AST {
   evaluate(env: Environment): Record<string, any> {
     let value = this.value.evaluate(env);
     if (value instanceof BigNumber) {
-      value = value.toFixed(2);
+      value = formatCurrency(value.toNumber());
     }
     switch (this.valueId) {
       case Terms.Assignment:
@@ -300,7 +335,7 @@ class LineAST extends AST {
       case Terms.FunctionDefinition:
         return { result: "" };
       case Terms.Header:
-        return { result: value?.toString() || "", align: "left", bold: true, underline: true };
+        return { result: value?.toString() || "", align: "left", bold: true };
       default:
         throw new Error("Unexpected node type");
     }

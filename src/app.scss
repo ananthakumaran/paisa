@@ -754,8 +754,7 @@ nav.level.grid-2 {
 }
 
 .sheet-result {
-  background-color: $white-ter;
-  color: $grey;
+  border-left: 1px solid $grey-lighter;
 }
 
 .sheet-editor .cm-editor {

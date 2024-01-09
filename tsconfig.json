@@ -3,7 +3,7 @@
   "compilerOptions": {
     "types": ["bun-types"],
     "allowJs": true,
-    "checkJs": true,
+    "checkJs": false,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,

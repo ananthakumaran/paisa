@@ -15,22 +15,47 @@ import { functions } from "./sheet/functions";
 import { Environment, buildAST } from "./sheet/interpreter";
 import type { Posting } from "./utils";
 
-function lint(editor: EditorView): Diagnostic[] {
-  const diagnostics: Diagnostic[] = [];
-  const tree = syntaxTree(editor.state);
+function lint(env: Environment) {
+  return function (editor: EditorView): Diagnostic[] {
+    const diagnostics: Diagnostic[] = [];
+    const tree = syntaxTree(editor.state);
 
-  tree.cursor().iterate((node) => {
-    if (node.type.isError) {
-      diagnostics.push({
-        from: node.from,
-        to: node.to,
-        severity: "error",
-        message: "Invalid syntax"
+    tree.cursor().iterate((node) => {
+      if (node.type.isError) {
+        diagnostics.push({
+          from: node.from,
+          to: node.to,
+          severity: "error",
+          message: "Invalid syntax"
+        });
+      }
+    });
+
+    sheetEditorState.update((current) => {
+      if (!current.pendingEval) {
+        return current;
+      }
+
+      const startTime = performance.now();
+      let results = current.results;
+      try {
+        const ast = buildAST(tree.topNode, editor.state);
+        results = ast.evaluate(env);
+      } catch (e) {
+        console.log(e);
+        // ignore
+      }
+      const endTime = performance.now();
+
+      return _.assign({}, current, {
+        pendingEval: false,
+        evalDuration: endTime - startTime,
+        results
       });
-    }
-  });
+    });
 
-  return diagnostics;
+    return diagnostics;
+  };
 }
 
 export function createEditor(
@@ -45,6 +70,8 @@ export function createEditor(
   env.scope = functions;
   env.postings = postings;
 
+  let firstLoad = true;
+
   return new EditorView({
     extensions: [
       keymap.of(opts.keybindings || []),
@@ -53,28 +80,31 @@ export function createEditor(
       closeBrackets(),
       EditorView.contentAttributes.of({ "data-enable-grammarly": "false" }),
       sheetExtension(),
-      linter(lint),
+      linter(lint(env), {
+        delay: 300,
+        needsRefresh: () => {
+          if (firstLoad) {
+            firstLoad = false;
+            return true;
+          }
+
+          return false;
+        }
+      }),
       lintGutter(),
       history(),
       EditorView.updateListener.of((viewUpdate) => {
         const doc = viewUpdate.state.doc.toString();
         const currentLine = viewUpdate.state.doc.lineAt(viewUpdate.state.selection.main.head);
         sheetEditorState.update((current) => {
-          let results = current.results;
+          let pendingEval = current.pendingEval;
           if (current.doc !== doc) {
-            const tree = syntaxTree(viewUpdate.state);
-            try {
-              const ast = buildAST(tree.topNode, viewUpdate.state);
-              results = ast.evaluate(env);
-            } catch (e) {
-              console.log(e);
-              // ignore
-            }
+            pendingEval = true;
           }
 
           return _.assign({}, current, {
-            results: results,
-            doc: doc,
+            pendingEval,
+            doc,
             currentLine: currentLine.number,
             hasUnsavedChanges: current.hasUnsavedChanges || viewUpdate.docChanged,
             undoDepth: undoDepth(viewUpdate.state),

@@ -5,8 +5,10 @@
   unary @right,
   factor @left,
   term @left,
-  comparison @left
-  equality @left
+  comparison @left,
+  equality @left,
+  and @left,
+  or @left
 }
 
 lines { Line (newline+ Line)* newline* }
@@ -21,14 +23,16 @@ UnaryExpression { !unary UnaryOperator ~unary Expression }
 BinaryExpression {
   Expression !factor BinaryOperator<"*" | "/"> Expression |
   Expression !term BinaryOperator<"+" | "-"> ~unary Expression |
-  Expression !comparison BinaryOperator<"<" | "<=" | ">" | ">="> Expression
-  Expression !equality BinaryOperator<"==" | "!="> Expression
+  Expression !comparison BinaryOperator<"<" | "<=" | ">" | ">="> Expression |
+  Expression !equality BinaryOperator<"==" | "!="> Expression |
+  Expression !and  BinaryOperator<@specialize<Identifier, "AND">> Expression |
+  Expression !or BinaryOperator<@specialize<Identifier, "OR">> Expression
 }
 Assignment { Identifier AssignmentOperator Expression }
 FunctionCall { Identifier !call "(" Arguments? ")" }
 Arguments { Expression ~call ("," Expression)* }
 
-Postings { @specialize<Identifier, "postings"> "(" SearchQueryString ")" }
+Postings { SearchQueryString }
 
 FunctionDefinition { Identifier !call "(" Parameters? ")" "=" Expression }
 Parameters { Identifier ~call ("," Identifier)* }
@@ -54,13 +58,13 @@ BinaryOperator<expr> { expr }
 }
 
 @local tokens {
-  stringEnd[@name='`'] { '`' }
+  stringEnd[@name='}'] { '}' }
   stringEscape { "\\" _ }
   @else stringContent
 }
 
 @skip {} {
-  stringStart[@name='`'] { '`' }
+  stringStart[@name='{'] { '{' }
   SearchQueryString { stringStart SearchQuery stringEnd }
   SearchQuery { (stringContent | stringEscape)* }
 }

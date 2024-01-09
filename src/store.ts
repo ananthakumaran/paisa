@@ -33,6 +33,8 @@ interface SheetEditorState {
   undoDepth: number;
   redoDepth: number;
   doc: string;
+  pendingEval: boolean;
+  evalDuration: number;
   currentLine: number;
   errors: SheetFileError[];
   results: SheetLineResult[];
@@ -44,6 +46,8 @@ export const initialSheetEditorState: SheetEditorState = {
   redoDepth: 0,
   currentLine: 0,
   doc: "",
+  pendingEval: false,
+  evalDuration: 0,
   errors: [],
   results: []
 };

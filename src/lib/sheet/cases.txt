@@ -66,7 +66,7 @@ Sheet(Line(Expression(FunctionCall(Identifier))))
 
 # Postings Search Query
 
-postings(`amount > 0`)
+{amount > 0}
 
 ===>
 
@@ -83,8 +83,24 @@ Sheet(Line(FunctionDefinition(Identifier,Parameters(Identifier),Expression(Binar
 
 # Empty Postings Search Query
 
-postings(``)
+{}
 
 ===>
 
 Sheet(Line(Expression(Postings(SearchQueryString(Query)))))
+
+# Query composition AND
+
+{amount > 0} AND {date > [2024]}
+
+===>
+
+Sheet(Line(Expression(BinaryExpression(Expression(Postings(SearchQueryString("{",Query(Clause(Condition(Property(Amount),Operator(">"),Value(Number)))),"}"))),BinaryOperator,Expression(Postings(SearchQueryString("{",Query(Clause(Condition(Property(Date),Operator(">"),Value(DateValue)))),"}")))))))
+
+# Query composition OR
+
+{amount > 0} OR {date > [2024]}
+
+===>
+
+Sheet(Line(Expression(BinaryExpression(Expression(Postings(SearchQueryString("{",Query(Clause(Condition(Property(Amount),Operator(">"),Value(Number)))),"}"))),BinaryOperator,Expression(Postings(SearchQueryString("{",Query(Clause(Condition(Property(Date),Operator(">"),Value(DateValue)))),"}")))))))

@@ -7,7 +7,7 @@ export const sheetHighlighting = styleTags({
   "FunctionDefinition/Identifier": t.function(t.variableName),
   "FunctionCall/Identifier": t.function(t.variableName),
   Postings: t.special(t.variableName),
-  "`": t.heading,
+  "{ }": t.operator,
   UnaryOperator: t.operator,
   BinaryOperator: t.operator,
   AssignmentOperator: t.operator

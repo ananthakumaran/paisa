@@ -1,7 +1,13 @@
 <script lang="ts">
   import { createEditor, sheetEditorState } from "$lib/sheet";
-  import { moveToEnd, moveToLine, updateContent } from "$lib/editor";
-  import { ajax, buildDirectoryTree, type Posting, type SheetFile } from "$lib/utils";
+  import { moveToLine, updateContent } from "$lib/editor";
+  import {
+    ajax,
+    buildDirectoryTree,
+    formatFloatUptoPrecision,
+    type Posting,
+    type SheetFile
+  } from "$lib/utils";
   import { redo, undo } from "@codemirror/commands";
   import type { KeyBinding } from "@codemirror/view";
   import * as toast from "bulma-toast";
@@ -140,8 +146,6 @@
         }
         moveToLine(editor, lineNumber, true);
         lineNumber = 0;
-      } else {
-        moveToEnd(editor);
       }
     }
   }
@@ -292,6 +296,16 @@
               >
             </div>
           {/if}
+
+          <div class="control ml-5">
+            <button
+              class:is-loading={$sheetEditorState.pendingEval}
+              class="is-loading button is-small pointer-events-none px-0"
+              style="border: none"
+            >
+              {formatFloatUptoPrecision($sheetEditorState.evalDuration, 2)}ms
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -311,7 +325,7 @@
       </div>
       <div class="column is-9-widescreen is-10-fullhd is-8">
         <div class="flex">
-          <div class="box box-r-none py-0 pr-1 mb-0 basis-[36rem] max-w-[36rem]">
+          <div class="box box-r-none py-0 pr-1 mb-0 basis-[36rem] max-w-[48rem]">
             <div class="sheet-editor" bind:this={editorDom} />
           </div>
           <div

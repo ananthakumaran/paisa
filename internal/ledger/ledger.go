@@ -793,6 +793,12 @@ func execHLedgerCommand(journalPath string, prices []price.Price, flags []string
 
 			if amount.Commodity != config.DefaultCurrency() {
 				if amount.Price.Contents.Quantity.Value != 0 {
+					var totalAmountConverted decimal.Decimal
+					if amount.Price.Tag == "TotalPrice" {
+						totalAmountConverted = decimal.NewFromFloat(amount.Price.Contents.Quantity.Value)
+					} else {
+						totalAmountConverted = decimal.NewFromFloat(amount.Price.Contents.Quantity.Value).Mul(decimal.NewFromFloat(amount.Quantity.Value))
+					}
 					if amount.Price.Contents.Commodity != config.DefaultCurrency() {
 						pr := lookupPrice(pricesTree, amount.Commodity, date)
 						if !pr.Equal(decimal.Zero) {
@@ -802,16 +808,11 @@ func execHLedgerCommand(journalPath string, prices []price.Price, flags []string
 						if !totalAmountSet {
 							pr = lookupPrice(pricesTree, amount.Price.Contents.Commodity, date)
 							if !pr.Equal(decimal.Zero) {
-								totalAmount = decimal.NewFromFloat(amount.Quantity.Value).Mul(decimal.NewFromFloat(amount.Price.Contents.Quantity.Value).Mul(pr))
+								totalAmount = totalAmountConverted.Mul(pr)
 							}
-
 						}
 					} else {
-						if amount.Price.Tag == "TotalPrice" {
-							totalAmount = decimal.NewFromFloat(amount.Price.Contents.Quantity.Value)
-						} else {
-							totalAmount = decimal.NewFromFloat(amount.Price.Contents.Quantity.Value).Mul(decimal.NewFromFloat(amount.Quantity.Value))
-						}
+						totalAmount = totalAmountConverted
 					}
 				} else {
 					pr := lookupPrice(pricesTree, amount.Commodity, date)

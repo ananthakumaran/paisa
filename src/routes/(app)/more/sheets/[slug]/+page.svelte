@@ -5,6 +5,7 @@
     ajax,
     buildDirectoryTree,
     formatFloatUptoPrecision,
+    type LedgerFile,
     type Posting,
     type SheetFile
   } from "$lib/utils";
@@ -19,6 +20,10 @@
   import FileTree from "$lib/components/FileTree.svelte";
   import FileModal from "$lib/components/FileModal.svelte";
   import { page } from "$app/stores";
+
+  let ledgerFiles: LedgerFile[] = [];
+  let accounts: string[] = [];
+  let commodities: string[] = [];
 
   export let data: PageData;
   let editorDom: Element;
@@ -76,6 +81,7 @@
 
   async function loadFiles(selectedFileName: string) {
     let files;
+    ({ files: ledgerFiles, accounts, commodities } = await ajax("/api/editor/files"));
     ({ files, postings } = await ajax("/api/sheets/files"));
     filesMap = _.fromPairs(_.map(files, (f) => [f.name, f]));
     if (!_.isEmpty(files)) {
@@ -139,7 +145,14 @@
         editor.destroy();
       }
 
-      editor = createEditor(selectedFile.content, editorDom, postings, { keybindings });
+      editor = createEditor(selectedFile.content, editorDom, postings, {
+        keybindings,
+        autocomplete: {
+          account: accounts,
+          commodity: commodities,
+          filename: ledgerFiles.map((f) => f.name)
+        }
+      });
       if (lineNumber > 0) {
         if (!editor.hasFocus) {
           editor.focus();

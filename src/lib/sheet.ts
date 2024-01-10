@@ -1,11 +1,17 @@
-import { closeBrackets } from "@codemirror/autocomplete";
+import {
+  CompletionContext,
+  autocompletion,
+  closeBrackets,
+  completeFromList,
+  ifIn
+} from "@codemirror/autocomplete";
 import { history, redoDepth, undoDepth } from "@codemirror/commands";
 import { bracketMatching, syntaxTree } from "@codemirror/language";
 import { lintGutter, linter, type Diagnostic } from "@codemirror/lint";
 import { keymap, type KeyBinding } from "@codemirror/view";
 import { EditorView } from "codemirror";
 import _ from "lodash";
-import { sheetEditorState } from "../store";
+import { initialSheetEditorState, sheetEditorState } from "../store";
 import { basicSetup } from "./editor/base";
 import { sheetExtension } from "./sheet/language";
 import { schedulePlugin } from "./transaction_tag";
@@ -15,7 +21,15 @@ import { functions } from "./sheet/functions";
 import { Environment, buildAST } from "./sheet/interpreter";
 import type { Posting } from "./utils";
 
+let latestIdentifiers: string[] = [];
+
+function completeIdentifier(context: CompletionContext) {
+  return ifIn(["Identifier"], completeFromList(latestIdentifiers))(context);
+}
+
 function lint(env: Environment) {
+  latestIdentifiers = [];
+
   return function (editor: EditorView): Diagnostic[] {
     const diagnostics: Diagnostic[] = [];
     const tree = syntaxTree(editor.state);
@@ -40,9 +54,10 @@ function lint(env: Environment) {
       let results = current.results;
       try {
         const ast = buildAST(tree.topNode, editor.state);
-        results = ast.evaluate(env);
+        const envCopy = env.clone();
+        results = ast.evaluate(envCopy);
+        latestIdentifiers = Object.keys(envCopy.scope);
       } catch (e) {
-        console.log(e);
         // ignore
       }
       const endTime = performance.now();
@@ -64,13 +79,36 @@ export function createEditor(
   postings: Posting[],
   opts: {
     keybindings?: readonly KeyBinding[];
+    autocomplete?: Record<string, string[]>;
   }
 ) {
   const env = new Environment();
   env.scope = functions;
   env.postings = postings;
 
+  sheetEditorState.set(initialSheetEditorState);
+
   let firstLoad = true;
+
+  const autocompletions: Record<string, string[]> = {
+    UnQuoted: [
+      "account",
+      "commodity",
+      "amount",
+      "date",
+      "payee",
+      "filename",
+      "note",
+      "total",
+      "AND",
+      "OR",
+      "NOT"
+    ]
+  };
+
+  const completions = _.chain(opts.autocomplete || {})
+    .mapValues((values) => completeFromList(values))
+    .value();
 
   return new EditorView({
     extensions: [
@@ -93,6 +131,21 @@ export function createEditor(
       }),
       lintGutter(),
       history(),
+      autocompletion({
+        override: [
+          completeIdentifier,
+          (context: CompletionContext) => {
+            for (const [key, completionSource] of Object.entries(completions)) {
+              if (context.matchBefore(new RegExp(`${key}\\s*=[~]?\\s*[^ ]*$`))) {
+                return completionSource(context);
+              }
+            }
+
+            return null;
+          },
+          ..._.map(autocompletions, (options, node) => ifIn([node], completeFromList(options)))
+        ]
+      }),
       EditorView.updateListener.of((viewUpdate) => {
         const doc = viewUpdate.state.doc.toString();
         const currentLine = viewUpdate.state.doc.lineAt(viewUpdate.state.selection.main.head);

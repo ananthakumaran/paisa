@@ -25,8 +25,8 @@ BinaryExpression {
   Expression !term BinaryOperator<"+" | "-"> ~unary Expression |
   Expression !comparison BinaryOperator<"<" | "<=" | ">" | ">="> Expression |
   Expression !equality BinaryOperator<"==" | "!="> Expression |
-  Expression !and  BinaryOperator<@specialize<Identifier, "AND">> Expression |
-  Expression !or BinaryOperator<@specialize<Identifier, "OR">> Expression
+  Expression !and  BinaryOperator<@specialize[@name='AND']<Identifier, "AND">> Expression |
+  Expression !or BinaryOperator<@specialize[@name='OR']<Identifier, "OR">> Expression
 }
 Assignment { Identifier AssignmentOperator Expression }
 FunctionCall { Identifier !call "(" Arguments? ")" }

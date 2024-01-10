@@ -95,7 +95,7 @@ Sheet(Line(Expression(Postings(SearchQueryString(Query)))))
 
 ===>
 
-Sheet(Line(Expression(BinaryExpression(Expression(Postings(SearchQueryString("{",Query(Clause(Condition(Property(Amount),Operator(">"),Value(Number)))),"}"))),BinaryOperator,Expression(Postings(SearchQueryString("{",Query(Clause(Condition(Property(Date),Operator(">"),Value(DateValue)))),"}")))))))
+Sheet(Line(Expression(BinaryExpression(Expression(Postings(SearchQueryString("{",Query(Clause(Condition(Property(Amount),Operator(">"),Value(Number)))),"}"))),BinaryOperator(AND),Expression(Postings(SearchQueryString("{",Query(Clause(Condition(Property(Date),Operator(">"),Value(DateValue)))),"}")))))))
 
 # Query composition OR
 
@@ -103,4 +103,4 @@ Sheet(Line(Expression(BinaryExpression(Expression(Postings(SearchQueryString("{"
 
 ===>
 
-Sheet(Line(Expression(BinaryExpression(Expression(Postings(SearchQueryString("{",Query(Clause(Condition(Property(Amount),Operator(">"),Value(Number)))),"}"))),BinaryOperator,Expression(Postings(SearchQueryString("{",Query(Clause(Condition(Property(Date),Operator(">"),Value(DateValue)))),"}")))))))
+Sheet(Line(Expression(BinaryExpression(Expression(Postings(SearchQueryString("{",Query(Clause(Condition(Property(Amount),Operator(">"),Value(Number)))),"}"))),BinaryOperator(OR),Expression(Postings(SearchQueryString("{",Query(Clause(Condition(Property(Date),Operator(">"),Value(DateValue)))),"}")))))))

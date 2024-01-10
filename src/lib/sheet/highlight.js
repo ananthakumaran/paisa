@@ -10,5 +10,7 @@ export const sheetHighlighting = styleTags({
   "{ }": t.operator,
   UnaryOperator: t.operator,
   BinaryOperator: t.operator,
+  "BinaryOperator/AND": t.keyword,
+  "BinaryOperator/OR": t.keyword,
   AssignmentOperator: t.operator
 });

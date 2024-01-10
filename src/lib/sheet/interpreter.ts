@@ -21,6 +21,14 @@ export class Environment {
     this.depth = 0;
   }
 
+  clone(): Environment {
+    const env = new Environment();
+    env.postings = this.postings;
+    env.depth = this.depth;
+    env.scope = { ...this.scope };
+    return env;
+  }
+
   extend(scope: Record<string, any>): Environment {
     const env = new Environment();
     env.postings = this.postings;
@@ -111,11 +119,16 @@ class UnaryExpressionAST extends AST {
   }
 
   evaluate(env: Environment): any {
+    let value: any;
     switch (this.operator) {
       case "-":
-        return (this.value.evaluate(env) as BigNumber).negated();
+        value = this.value.evaluate(env);
+        assertType("Number", value);
+        return (value as BigNumber).negated();
       case "+":
-        return this.value.evaluate(env);
+        value = this.value.evaluate(env);
+        assertType("Number", value);
+        return value;
       default:
         throw new Error("Unexpected operator");
     }
@@ -137,21 +150,37 @@ class BinaryExpressionAST extends AST {
   }
 
   evaluate(env: Environment): any {
+    const left = this.left.evaluate(env);
+    const right = this.right.evaluate(env);
     switch (this.operator) {
       case "+":
-        return (this.left.evaluate(env) as BigNumber).plus(this.right.evaluate(env));
+        assertType("Number", left);
+        assertType("Number", right);
+        return (left as BigNumber).plus(right);
       case "-":
-        return (this.left.evaluate(env) as BigNumber).minus(this.right.evaluate(env));
+        assertType("Number", left);
+        assertType("Number", right);
+        return (left as BigNumber).minus(right);
       case "*":
-        return (this.left.evaluate(env) as BigNumber).times(this.right.evaluate(env));
+        assertType("Number", left);
+        assertType("Number", right);
+        return (left as BigNumber).times(right);
       case "/":
-        return (this.left.evaluate(env) as BigNumber).div(this.right.evaluate(env));
+        assertType("Number", left);
+        assertType("Number", right);
+        return (left as BigNumber).dividedBy(right);
       case "^":
-        return (this.left.evaluate(env) as BigNumber).exponentiatedBy(this.right.evaluate(env));
+        assertType("Number", left);
+        assertType("Number", right);
+        return (left as BigNumber).exponentiatedBy(right);
       case "AND":
-        return this.left.evaluate(env).and(this.right.evaluate(env));
+        assertType("Query", left);
+        assertType("Query", right);
+        return (left as Query).and(right);
       case "OR":
-        return this.left.evaluate(env).or(this.right.evaluate(env));
+        assertType("Query", left);
+        assertType("Query", right);
+        return (left as Query).or(right);
       default:
         throw new Error("Unexpected operator");
     }
@@ -352,7 +381,6 @@ class SheetAST extends AST {
       try {
         this.lines.push(new LineAST(node, state));
       } catch (e) {
-        console.log(e);
         break;
       }
     }
@@ -371,7 +399,6 @@ class SheetAST extends AST {
         results.push({ line: line.lineNumber, error: false, ...resultObject } as SheetLineResult);
         lastLineNumber++;
       } catch (e) {
-        console.log(e);
         results.push({ line: line.lineNumber, error: true, result: e.message });
         break;
       }
@@ -399,4 +426,26 @@ function childrens(node: SyntaxNode): SyntaxNode[] {
 
 export function buildAST(node: SyntaxNode, state: EditorState): SheetAST {
   return new SheetAST(node, state);
+}
+
+export function assertType(type: "Number" | "Query" | "Postings", value: any) {
+  let valueType = "Unknown";
+  if (value instanceof BigNumber) {
+    valueType = "Number";
+  } else if (value instanceof Query) {
+    valueType = "Query";
+  } else if (value instanceof Array) {
+    valueType = "Array";
+  }
+
+  if (type === "Postings") {
+    if (valueType === "Query" || valueType === "Array") {
+      return;
+    }
+    throw new Error(`Expected ${type}, got ${valueType}`);
+  }
+
+  if (type !== valueType) {
+    throw new Error(`Expected ${type}, got ${valueType}`);
+  }
 }

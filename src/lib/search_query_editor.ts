@@ -19,98 +19,342 @@ import type { EditorState } from "@codemirror/state";
 import dayjs from "dayjs";
 import * as chrono from "chrono-node";
 
-type StringAST = {
-  type: "string";
-  node: SyntaxNode;
-  quoted?: boolean;
-  value: string;
-  id: number;
-};
+abstract class AST {
+  readonly id: number;
+  constructor(readonly node: SyntaxNode) {
+    this.id = node.type.id;
+  }
 
-type NumberAST = {
-  type: "number";
-  node: SyntaxNode;
-  value: number;
-  id: number;
-};
+  abstract validate(): Diagnostic[];
 
-type RegExpAST = {
-  type: "regexp";
-  node: SyntaxNode;
-  value: RegExp;
-  id: number;
-};
+  abstract evaluate(): TransactionPredicate;
+
+  get type(): string {
+    return this.node.type.name;
+  }
+}
+
+class StringAST extends AST {
+  readonly quoted: boolean;
+  readonly value: string;
+  constructor(node: SyntaxNode, state: EditorState) {
+    super(node);
+    this.quoted = node.firstChild.type.is(Terms.Quoted);
+    if (node.firstChild.type.is(Terms.Quoted)) {
+      this.value = state.sliceDoc(node.from + 1, node.to - 1);
+    } else {
+      this.value = state.sliceDoc(node.from, node.to);
+    }
+  }
+
+  validate(): Diagnostic[] {
+    return [];
+  }
+
+  evaluate(): TransactionPredicate {
+    return conditionFilter(Terms.Account, "=", this.value);
+  }
+}
+
+class NumberAST extends AST {
+  readonly value: number;
+  constructor(node: SyntaxNode, state: EditorState) {
+    super(node);
+    this.value = Number(state.sliceDoc(node.from, node.to));
+  }
+
+  validate(): Diagnostic[] {
+    return [];
+  }
+
+  evaluate(): TransactionPredicate {
+    return conditionFilter(Terms.Amount, "=", this.value);
+  }
+}
+
+class RegExpAST extends AST {
+  readonly value: RegExp;
+  constructor(node: SyntaxNode, state: EditorState) {
+    super(node);
+    const all = state.sliceDoc(node.from, node.to);
+    const result = all.match(/\/(.*)\/(.*)/);
+    this.value = new RegExp(result[1], result[2]);
+  }
+
+  validate(): Diagnostic[] {
+    return [];
+  }
+
+  evaluate(): TransactionPredicate {
+    return conditionFilter(Terms.Account, "=~", this.value);
+  }
+}
 
 type DateRange = {
   start: dayjs.Dayjs;
   end: dayjs.Dayjs;
 };
 
-type DateValueAST = {
-  type: "date";
-  node: SyntaxNode;
-  value: DateRange;
-  id: number;
-};
+class DateValueAST extends AST {
+  readonly value: DateRange;
+  constructor(node: SyntaxNode, state: EditorState) {
+    super(node);
+    const value = state.sliceDoc(node.from + 1, node.to - 1);
+    this.value = parseDate(value);
+  }
 
-type PropertyAST = {
-  type: "property";
-  node: SyntaxNode;
-  value: string;
-  id: number;
-};
+  validate(): Diagnostic[] {
+    if (!this.value) {
+      return [
+        {
+          from: this.node.from,
+          to: this.node.to,
+          severity: "error",
+          message: `Invalid date`
+        }
+      ];
+    }
+    return [];
+  }
 
-type OperatorAST = {
-  type: "operator";
-  node: SyntaxNode;
-  value: string;
-  id: number;
-};
-
-type ConditionAST = {
-  type: "condition";
-  node: SyntaxNode;
-  property: PropertyAST;
-  operator: OperatorAST;
-  value: ValueAST;
-  id: number;
-};
-
-type BooleanBinaryAST = {
-  type: "booleanBinary";
-  node: SyntaxNode;
-  left: ClauseAST;
-  operator: "AND" | "OR";
-  right: ClauseAST;
-  id: number;
-};
-
-type BooleanUnaryAST = {
-  type: "booleanUnary";
-  node: SyntaxNode;
-  operator: "NOT";
-  right: ClauseAST;
-  id: number;
-};
-
-interface ExpressionAST {
-  type: "expression";
-  node: SyntaxNode;
-  clauses: ClauseAST[];
-  id: number;
+  evaluate(): TransactionPredicate {
+    return conditionFilter(Terms.Date, "=", this.value);
+  }
 }
 
-type BooleanConditionAST = BooleanBinaryAST | BooleanUnaryAST;
+class PropertyAST extends AST {
+  readonly value: string;
+  readonly childId: number;
+  constructor(node: SyntaxNode, state: EditorState) {
+    super(node);
+    const child = node.firstChild;
+    this.childId = child.type.id;
+    this.value = state.sliceDoc(node.from, node.to);
+  }
 
-type ValueAST = StringAST | NumberAST | RegExpAST | DateValueAST;
+  validate(): Diagnostic[] {
+    return [];
+  }
 
-type ClauseAST = ValueAST | ConditionAST | BooleanConditionAST | ExpressionAST;
+  evaluate(): TransactionPredicate {
+    throw new Error("PropertyAST.evaluate() should never be called");
+  }
+}
 
-interface QueryAST {
-  type: "query";
-  node: SyntaxNode;
-  clauses: ClauseAST[];
-  id: number;
+class OperatorAST extends AST {
+  readonly value: string;
+  constructor(node: SyntaxNode, state: EditorState) {
+    super(node);
+    this.value = state.sliceDoc(node.from, node.to);
+  }
+
+  validate(): Diagnostic[] {
+    return [];
+  }
+
+  evaluate(): TransactionPredicate {
+    throw new Error("OperatorAST.evaluate() should never be called");
+  }
+}
+
+class ConditionAST extends AST {
+  readonly property: PropertyAST;
+  readonly operator: OperatorAST;
+  readonly value: ValueAST;
+  constructor(node: SyntaxNode, state: EditorState) {
+    super(node);
+    const [property, operator, value] = childrens(node);
+    this.property = new PropertyAST(property, state);
+    this.operator = new OperatorAST(operator, state);
+    this.value = new ValueAST(value, state);
+  }
+
+  validate(): Diagnostic[] {
+    const allowed: number[] =
+      allowedCombinations[this.property.childId.toString()][this.operator.value] || [];
+    if (!allowed.includes(this.value.value.id)) {
+      return [
+        {
+          from: this.node.from,
+          to: this.node.to,
+          severity: "error",
+          message: `${this.property.value} cannot be used with ${this.operator.value} and ${this.value.value.type}`
+        }
+      ];
+    }
+
+    return [];
+  }
+
+  evaluate(): TransactionPredicate {
+    return conditionFilter(this.property.childId, this.operator.value, this.value.value.value);
+  }
+}
+
+class ValueAST extends AST {
+  readonly value: StringAST | NumberAST | RegExpAST | DateValueAST;
+  constructor(node: SyntaxNode, state: EditorState) {
+    super(node);
+
+    const child = node.firstChild;
+    switch (child.type.id) {
+      case Terms.String:
+        this.value = new StringAST(child, state);
+        break;
+      case Terms.Number:
+        this.value = new NumberAST(child, state);
+        break;
+      case Terms.RegExp:
+        this.value = new RegExpAST(child, state);
+        break;
+      case Terms.DateValue:
+        this.value = new DateValueAST(child, state);
+        break;
+    }
+  }
+
+  validate(): Diagnostic[] {
+    return this.value.validate();
+  }
+
+  evaluate(): TransactionPredicate {
+    return this.value.evaluate();
+  }
+}
+
+class BooleanBinaryAST extends AST {
+  readonly left: AST;
+  readonly operator: "AND" | "OR";
+  readonly right: AST;
+  constructor(node: SyntaxNode, state: EditorState) {
+    super(node);
+    const [left, operator, right] = childrens(node);
+    this.left = new ClauseAST(left, state);
+    this.operator = state.sliceDoc(operator.from, operator.to) as "AND" | "OR";
+    this.right = new ClauseAST(right, state);
+  }
+
+  validate(): Diagnostic[] {
+    return this.left.validate().concat(this.right.validate());
+  }
+
+  evaluate(): TransactionPredicate {
+    switch (this.operator) {
+      case "AND":
+        return andFilter(this.left.evaluate(), this.right.evaluate());
+      case "OR":
+        return orFilter(this.left.evaluate(), this.right.evaluate());
+    }
+  }
+}
+
+class BooleanUnaryAST extends AST {
+  readonly operator: "NOT";
+  readonly right: AST;
+  constructor(node: SyntaxNode, state: EditorState) {
+    super(node);
+    const [operator, right] = childrens(node);
+    this.operator = state.sliceDoc(operator.from, operator.to) as "NOT";
+    this.right = new ClauseAST(right, state);
+  }
+
+  validate(): Diagnostic[] {
+    return this.right.validate();
+  }
+
+  evaluate(): TransactionPredicate {
+    switch (this.operator) {
+      case "NOT":
+        return notFilter(this.right.evaluate());
+    }
+  }
+}
+
+class BooleanConditionAST extends AST {
+  readonly value: BooleanBinaryAST | BooleanUnaryAST;
+  constructor(node: SyntaxNode, state: EditorState) {
+    super(node);
+
+    const cs = childrens(node);
+    if (cs.length === 3) {
+      this.value = new BooleanBinaryAST(node, state);
+    }
+
+    if (cs.length === 2) {
+      this.value = new BooleanUnaryAST(node, state);
+    }
+  }
+
+  validate(): Diagnostic[] {
+    return this.value.validate();
+  }
+
+  evaluate(): TransactionPredicate {
+    return this.value.evaluate();
+  }
+}
+
+class ClauseAST extends AST {
+  readonly value: ValueAST | ConditionAST | BooleanConditionAST | ExpressionAST;
+  constructor(node: SyntaxNode, state: EditorState) {
+    super(node);
+
+    const child = node.firstChild;
+    switch (child.type.id) {
+      case Terms.Expression:
+        this.value = new ExpressionAST(child, state);
+        break;
+      case Terms.Condition:
+        this.value = new ConditionAST(child, state);
+        break;
+      case Terms.BooleanCondition:
+        this.value = new BooleanConditionAST(child, state);
+        break;
+      case Terms.Value:
+        this.value = new ValueAST(child, state);
+        break;
+    }
+  }
+
+  validate(): Diagnostic[] {
+    return this.value.validate();
+  }
+
+  evaluate(): TransactionPredicate {
+    return this.value.evaluate();
+  }
+}
+
+class ExpressionAST extends AST {
+  readonly clauses: AST[];
+  constructor(node: SyntaxNode, state: EditorState) {
+    super(node);
+    this.clauses = childrens(node).map((child) => new ClauseAST(child, state));
+  }
+
+  validate(): Diagnostic[] {
+    return this.clauses.flatMap((clause) => clause.validate());
+  }
+
+  evaluate(): TransactionPredicate {
+    return andFilter(...this.clauses.map((clause) => clause.evaluate()));
+  }
+}
+
+class QueryAST extends AST {
+  readonly clauses: AST[];
+  constructor(node: SyntaxNode, state: EditorState) {
+    super(node);
+    this.clauses = childrens(node).map((child) => new ClauseAST(child, state));
+  }
+
+  validate(): Diagnostic[] {
+    return this.clauses.flatMap((clause) => clause.validate());
+  }
+
+  evaluate(): TransactionPredicate {
+    return andFilter(...this.clauses.map((clause) => clause.evaluate()));
+  }
 }
 
 interface QueryEditorEditorState {
@@ -169,174 +413,37 @@ const allowedCombinations: Record<string, Record<string, [number]>> = {
 
 function lint(editor: EditorView): Diagnostic[] {
   const diagnostics: Diagnostic[] = [];
-  let hasErrors = false;
 
-  syntaxTree(editor.state)
-    .cursor()
-    .iterate((node) => {
-      if (node.type.isError) {
-        hasErrors = true;
-        diagnostics.push({
-          from: node.from,
-          to: node.to,
-          severity: "error",
-          message: "Invalid syntax"
-        });
-      }
-    });
+  const tree = syntaxTree(editor.state);
 
-  if (!hasErrors) {
-    const ast = buildAST(editor.state, syntaxTree(editor.state).topNode);
-
-    const conditions = ast.clauses.flatMap(collectConditionASTs);
-    for (const condition of conditions) {
-      const allowed: number[] =
-        allowedCombinations[condition.property.id.toString()][condition.operator.value] || [];
-      if (!allowed.includes(condition.value.id)) {
-        hasErrors = true;
-        diagnostics.push({
-          from: condition.node.from,
-          to: condition.node.to,
-          severity: "error",
-          message: `${condition.property.value} cannot be used with ${condition.operator.value} and ${condition.value.type}`
-        });
-      }
+  tree.cursor().iterate((node) => {
+    if (node.type.isError) {
+      diagnostics.push({
+        from: node.from,
+        to: node.to,
+        severity: "error",
+        message: "Invalid syntax"
+      });
     }
+  });
 
-    const dateValues = ast.clauses.flatMap(collectDateValueASTs);
-    for (const dateValue of dateValues) {
-      if (!dateValue.value) {
-        hasErrors = true;
-        diagnostics.push({
-          from: dateValue.node.from,
-          to: dateValue.node.to,
-          severity: "error",
-          message: `Invalid date`
-        });
-      }
-    }
+  if (diagnostics.length === 0) {
+    const ast = buildAST(editor.state, tree.topNode);
+    diagnostics.push(...ast.validate());
 
-    if (!hasErrors) {
-      editorState.update((current) => _.assign({}, current, { predicate: buildFilter(ast) }));
+    if (diagnostics.length === 0) {
+      editorState.update((current) => _.assign({}, current, { predicate: ast.evaluate() }));
     }
   }
 
   return diagnostics;
 }
 
-function collectConditionASTs(ast: ClauseAST): ConditionAST[] {
-  switch (ast.type) {
-    case "condition":
-      return [ast];
-    case "expression":
-      return ast.clauses.flatMap(collectConditionASTs);
-    case "booleanBinary":
-      return [...collectConditionASTs(ast.left), ...collectConditionASTs(ast.right)];
-    case "booleanUnary":
-      return collectConditionASTs(ast.right);
-  }
-  return [];
-}
-
-function collectDateValueASTs(ast: ClauseAST): DateValueAST[] {
-  switch (ast.type) {
-    case "date":
-      return [ast];
-    case "expression":
-      return ast.clauses.flatMap(collectDateValueASTs);
-    case "condition":
-      return collectDateValueASTs(ast.value);
-    case "booleanBinary":
-      return [...collectDateValueASTs(ast.left), ...collectDateValueASTs(ast.right)];
-    case "booleanUnary":
-      return collectDateValueASTs(ast.right);
-  }
-  return [];
-}
-
 export function buildAST(state: EditorState, node: SyntaxNode): QueryAST {
-  return constructQueryAST(state, node);
+  return new QueryAST(node, state);
 }
 
 export type TransactionPredicate = (transaction: Transaction) => boolean;
-
-export function buildFilter(ast: QueryAST): TransactionPredicate {
-  return andFilter(...ast.clauses.map((clause) => buildFilterFromClauseAST(clause)));
-}
-
-function buildFilterFromConditionAST(ast: ConditionAST): TransactionPredicate {
-  return conditionFilter(ast.property.id, ast.operator.value, ast.value.value);
-}
-
-function buildFilterFromBooleanConditionAST(ast: BooleanConditionAST): TransactionPredicate {
-  switch (ast.type) {
-    case "booleanBinary":
-      return buildFilterFromBooleanBinaryAST(ast);
-    case "booleanUnary":
-      return buildFilterFromBooleanUnaryAST(ast);
-  }
-
-  return assertUnreachable(ast);
-}
-
-function buildFilterFromBooleanBinaryAST(ast: BooleanBinaryAST): TransactionPredicate {
-  switch (ast.operator) {
-    case "AND":
-      return andFilter(buildFilterFromClauseAST(ast.left), buildFilterFromClauseAST(ast.right));
-    case "OR":
-      return orFilter(buildFilterFromClauseAST(ast.left), buildFilterFromClauseAST(ast.right));
-  }
-
-  return assertUnreachable(ast.operator);
-}
-
-function buildFilterFromBooleanUnaryAST(ast: BooleanUnaryAST): TransactionPredicate {
-  switch (ast.operator) {
-    case "NOT":
-      return notFilter(buildFilterFromClauseAST(ast.right));
-  }
-
-  return assertUnreachable(ast.operator);
-}
-
-function buildFilterFromClauseAST(ast: ClauseAST): TransactionPredicate {
-  switch (ast.type) {
-    case "string":
-    case "number":
-    case "regexp":
-    case "date":
-      return buildFilterFromValueAST(ast);
-
-    case "expression":
-      return buildFilterFromExpressionAST(ast);
-    case "condition":
-      return buildFilterFromConditionAST(ast);
-    case "booleanBinary":
-    case "booleanUnary":
-      return buildFilterFromBooleanConditionAST(ast);
-  }
-
-  return assertUnreachable(ast);
-}
-
-function buildFilterFromExpressionAST(ast: ExpressionAST): TransactionPredicate {
-  return andFilter(...ast.clauses.map((clause) => buildFilterFromClauseAST(clause)));
-}
-
-function buildFilterFromValueAST(ast: ValueAST): TransactionPredicate {
-  switch (ast.type) {
-    case "string":
-      return conditionFilter(Terms.Account, "=", ast.value);
-    case "number":
-      return conditionFilter(Terms.Amount, "=", ast.value);
-    case "regexp":
-      return conditionFilter(Terms.Account, "=~", ast.value);
-    case "date":
-      return conditionFilter(Terms.Date, "=", ast.value);
-  }
-
-  return assertUnreachable(ast);
-}
 
 function andFilter(...filters: TransactionPredicate[]): TransactionPredicate {
   return (transaction: Transaction) => {
@@ -444,133 +551,6 @@ function getProperty(
       return [transaction.fileName];
     case Terms.Note:
       return [transaction.note].concat(transaction.postings.map((posting) => posting.note));
-  }
-}
-
-function constructQueryAST(state: EditorState, node: SyntaxNode): QueryAST {
-  return {
-    type: "query",
-    node,
-    clauses: childrens(node).map((child) => constructClauseAST(state, child)),
-    id: node.type.id
-  };
-}
-
-function constructClauseAST(state: EditorState, node: SyntaxNode): ClauseAST {
-  let cs: SyntaxNode[];
-  switch (node.type.id) {
-    case Terms.Value:
-      return constructValueAST(state, node.firstChild);
-    case Terms.Clause:
-      return constructClauseAST(state, node.firstChild);
-
-    case Terms.Expression:
-      return {
-        type: "expression",
-        node,
-        clauses: childrens(node).map((child) => constructClauseAST(state, child)),
-        id: node.type.id
-      };
-    case Terms.Condition:
-      return {
-        type: "condition",
-        node,
-        property: constructPropertyAST(state, node.getChild(Terms.Property).firstChild),
-        operator: constructOperatorAST(state, node.getChild(Terms.Operator).firstChild),
-        value: constructValueAST(state, node.getChild(Terms.Value).firstChild),
-        id: node.type.id
-      };
-
-    case Terms.BooleanCondition:
-      cs = childrens(node);
-      if (cs.length === 3) {
-        return {
-          type: "booleanBinary",
-          node,
-          left: constructClauseAST(state, cs[0]),
-          operator: state.sliceDoc(cs[1].from, cs[1].to) as "AND" | "OR",
-          right: constructClauseAST(state, cs[2]),
-          id: node.type.id
-        };
-      }
-
-      if (cs.length === 2) {
-        return {
-          type: "booleanUnary",
-          node,
-          operator: state.sliceDoc(cs[0].from, cs[0].to) as "NOT",
-          right: constructClauseAST(state, cs[1]),
-          id: node.type.id
-        };
-      }
-  }
-}
-
-function constructPropertyAST(state: EditorState, node: SyntaxNode): PropertyAST {
-  return {
-    type: "property",
-    node,
-    value: state.sliceDoc(node.from, node.to),
-    id: node.type.id
-  };
-}
-
-function constructOperatorAST(state: EditorState, node: SyntaxNode): OperatorAST {
-  return {
-    type: "operator",
-    node,
-    value: state.sliceDoc(node.from, node.to),
-    id: node.type.id
-  };
-}
-
-function constructValueAST(state: EditorState, node: SyntaxNode): ValueAST {
-  if (node.type.is(Terms.String)) {
-    const quoted = node.firstChild.type.is(Terms.Quoted);
-    let value: string;
-    if (node.firstChild.type.is(Terms.Quoted)) {
-      value = state.sliceDoc(node.from + 1, node.to - 1);
-    } else {
-      value = state.sliceDoc(node.from, node.to);
-    }
-
-    return {
-      type: "string",
-      node,
-      quoted,
-      value,
-      id: node.type.id
-    };
-  }
-
-  if (node.type.is(Terms.Number)) {
-    return {
-      type: "number",
-      node,
-      value: Number(state.sliceDoc(node.from, node.to)),
-      id: node.type.id
-    };
-  }
-
-  if (node.type.is(Terms.RegExp)) {
-    const all = state.sliceDoc(node.from, node.to);
-    const result = all.match(/\/(.*)\/(.*)/);
-    return {
-      type: "regexp",
-      node,
-      value: new RegExp(result[1], result[2]),
-      id: node.type.id
-    };
-  }
-
-  if (node.type.is(Terms.DateValue)) {
-    const value = state.sliceDoc(node.from + 1, node.to - 1);
-    return {
-      type: "date",
-      node,
-      value: parseDate(value),
-      id: node.type.id
-    };
   }
 }
 

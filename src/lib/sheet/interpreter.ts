@@ -3,11 +3,7 @@ import * as Terms from "./parser.terms";
 import type { EditorState } from "@codemirror/state";
 import { BigNumber } from "bignumber.js";
 import { asTransaction, formatCurrency, type Posting, type SheetLineResult } from "$lib/utils";
-import {
-  buildFilter,
-  buildAST as buildSearchAST,
-  type TransactionPredicate
-} from "$lib/search_query_editor";
+import { buildAST as buildSearchAST, type TransactionPredicate } from "$lib/search_query_editor";
 
 const STACK_LIMIT = 1000;
 
@@ -211,7 +207,7 @@ class PostingsAST extends AST {
   readonly predicate: TransactionPredicate;
   constructor(node: SyntaxNode, state: EditorState) {
     super(node);
-    this.predicate = buildFilter(buildSearchAST(state, node.lastChild.firstChild.nextSibling));
+    this.predicate = buildSearchAST(state, node.lastChild.firstChild.nextSibling).evaluate();
   }
 
   evaluate(): Query {

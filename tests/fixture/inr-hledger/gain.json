@@ -82,12 +82,12 @@
       "account": "Assets:Equity:ABNB",
       "networth": {
         "date": "2022-02-07T23:59:59.999999999Z",
-        "investmentAmount": 16050.633952,
+        "investmentAmount": 16050.6340142592,
         "withdrawalAmount": 0,
         "gainAmount": 0,
-        "balanceAmount": 16050.633952,
+        "balanceAmount": 16050.6340142592,
         "balanceUnits": 0,
-        "netInvestmentAmount": 16050.633952
+        "netInvestmentAmount": 16050.6340142592
       },
       "xirr": 0,
       "postings": [
@@ -99,7 +99,7 @@
           "account": "Assets:Equity:ABNB",
           "commodity": "ABNB",
           "quantity": 0.76,
-          "amount": 8025.316976,
+          "amount": 8025.3170071296,
           "status": "unmarked",
           "tag_recurring": "",
           "tag_period": "",
@@ -109,7 +109,7 @@
           "forecast": false,
           "note": "",
           "transaction_note": "",
-          "market_amount": 8025.316976,
+          "market_amount": 8025.3170071296,
           "balance": 0
         },
         {
@@ -120,7 +120,7 @@
           "account": "Assets:Equity:ABNB",
           "commodity": "ABNB",
           "quantity": 0.76,
-          "amount": 8025.316976,
+          "amount": 8025.3170071296,
           "status": "unmarked",
           "tag_recurring": "",
           "tag_period": "",
@@ -130,7 +130,7 @@
           "forecast": false,
           "note": "",
           "transaction_note": "",
-          "market_amount": 8025.316976,
+          "market_amount": 8025.3170071296,
           "balance": 0
         }
       ]

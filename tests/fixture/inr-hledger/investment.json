@@ -29,7 +29,7 @@
       "account": "Assets:Equity:ABNB",
       "commodity": "ABNB",
       "quantity": 0.76,
-      "amount": 8025.316976,
+      "amount": 8025.3170071296,
       "status": "unmarked",
       "tag_recurring": "",
       "tag_period": "",
@@ -113,7 +113,7 @@
       "account": "Assets:Equity:ABNB",
       "commodity": "ABNB",
       "quantity": 0.76,
-      "amount": 8025.316976,
+      "amount": 8025.3170071296,
       "status": "unmarked",
       "tag_recurring": "",
       "tag_period": "",
@@ -182,7 +182,7 @@
           "account": "Assets:Equity:ABNB",
           "commodity": "ABNB",
           "quantity": 0.76,
-          "amount": 8025.316976,
+          "amount": 8025.3170071296,
           "status": "unmarked",
           "tag_recurring": "",
           "tag_period": "",
@@ -266,7 +266,7 @@
           "account": "Assets:Equity:ABNB",
           "commodity": "ABNB",
           "quantity": 0.76,
-          "amount": 8025.316976,
+          "amount": 8025.3170071296,
           "status": "unmarked",
           "tag_recurring": "",
           "tag_period": "",
@@ -305,9 +305,9 @@
       "gross_other_income": 1027.3,
       "net_tax": 0,
       "net_income": 121027.3,
-      "net_investment": 96050.633952,
+      "net_investment": 96050.6340142592,
       "net_expense": 20000,
-      "savings_rate": 79.36278339845639
+      "savings_rate": 79.36278344989866
     }
   ]
 }

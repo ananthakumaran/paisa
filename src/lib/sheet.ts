@@ -45,29 +45,39 @@ function lint(env: Environment) {
       }
     });
 
-    sheetEditorState.update((current) => {
-      if (!current.pendingEval) {
-        return current;
-      }
+    if (diagnostics.length == 0) {
+      sheetEditorState.update((current) => {
+        if (!current.pendingEval) {
+          return current;
+        }
 
-      const startTime = performance.now();
-      let results = current.results;
-      try {
-        const ast = buildAST(tree.topNode, editor.state);
-        const envCopy = env.clone();
-        results = ast.evaluate(envCopy);
-        latestIdentifiers = Object.keys(envCopy.scope);
-      } catch (e) {
-        // ignore
-      }
-      const endTime = performance.now();
+        const startTime = performance.now();
+        let results = current.results;
+        try {
+          const ast = buildAST(tree.topNode, editor.state);
+          diagnostics.push(...ast.validate());
+          if (diagnostics.length > 0) {
+            const endTime = performance.now();
+            return _.assign({}, current, {
+              pendingEval: false,
+              evalDuration: endTime - startTime
+            });
+          }
+          const envCopy = env.clone();
+          results = ast.evaluate(envCopy);
+          latestIdentifiers = Object.keys(envCopy.scope);
+        } catch (e) {
+          // ignore
+        }
+        const endTime = performance.now();
 
-      return _.assign({}, current, {
-        pendingEval: false,
-        evalDuration: endTime - startTime,
-        results
+        return _.assign({}, current, {
+          pendingEval: false,
+          evalDuration: endTime - startTime,
+          results
+        });
       });
-    });
+    }
 
     return diagnostics;
   };

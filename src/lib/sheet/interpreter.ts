@@ -3,7 +3,12 @@ import * as Terms from "./parser.terms";
 import type { EditorState } from "@codemirror/state";
 import { BigNumber } from "bignumber.js";
 import { asTransaction, formatCurrency, type Posting, type SheetLineResult } from "$lib/utils";
-import { buildAST as buildSearchAST, type TransactionPredicate } from "$lib/search_query_editor";
+import {
+  buildAST as buildSearchAST,
+  QueryAST,
+  type TransactionPredicate
+} from "$lib/search_query_editor";
+import { type Diagnostic } from "@codemirror/lint";
 
 const STACK_LIMIT = 1000;
 
@@ -75,6 +80,8 @@ abstract class AST {
     this.id = node.type.id;
   }
 
+  abstract validate(): Diagnostic[];
+
   abstract evaluate(env: Environment): any;
 }
 
@@ -87,6 +94,10 @@ class NumberAST extends AST {
 
   evaluate(): any {
     return this.value;
+  }
+
+  validate(): Diagnostic[] {
+    return [];
   }
 }
 
@@ -102,6 +113,10 @@ class IdentifierAST extends AST {
       throw new Error(`Undefined variable ${this.name}`);
     }
     return env.scope[this.name];
+  }
+
+  validate(): Diagnostic[] {
+    return [];
   }
 }
 
@@ -128,6 +143,10 @@ class UnaryExpressionAST extends AST {
       default:
         throw new Error("Unexpected operator");
     }
+  }
+
+  validate(): Diagnostic[] {
+    return this.value.validate();
   }
 }
 
@@ -181,6 +200,10 @@ class BinaryExpressionAST extends AST {
         throw new Error("Unexpected operator");
     }
   }
+
+  validate(): Diagnostic[] {
+    return [...this.left.validate(), ...this.right.validate()];
+  }
 }
 
 class FunctionCallAST extends AST {
@@ -201,17 +224,26 @@ class FunctionCallAST extends AST {
     }
     return fun(env, ...this.arguments.map((arg) => arg.evaluate(env)));
   }
+
+  validate(): Diagnostic[] {
+    return this.arguments.flatMap((arg) => arg.validate());
+  }
 }
 
 class PostingsAST extends AST {
   readonly predicate: TransactionPredicate;
+  readonly value: QueryAST;
   constructor(node: SyntaxNode, state: EditorState) {
     super(node);
-    this.predicate = buildSearchAST(state, node.lastChild.firstChild.nextSibling).evaluate();
+    this.value = buildSearchAST(state, node.lastChild.firstChild.nextSibling);
   }
 
   evaluate(): Query {
-    return new Query(this.predicate);
+    return new Query(this.value.evaluate());
+  }
+
+  validate(): Diagnostic[] {
+    return this.value.validate();
   }
 }
 
@@ -267,6 +299,10 @@ class ExpressionAST extends AST {
   evaluate(env: Environment): any {
     return this.value.evaluate(env);
   }
+
+  validate(): Diagnostic[] {
+    return this.value.validate();
+  }
 }
 
 class AssignmentAST extends AST {
@@ -282,6 +318,10 @@ class AssignmentAST extends AST {
     env.scope[this.identifier] = this.value.evaluate(env);
     return env.scope[this.identifier];
   }
+
+  validate(): Diagnostic[] {
+    return this.value.validate();
+  }
 }
 
 class HeaderAST extends AST {
@@ -293,6 +333,10 @@ class HeaderAST extends AST {
 
   evaluate(): any {
     return this.text;
+  }
+
+  validate(): Diagnostic[] {
+    return [];
   }
 }
 
@@ -318,6 +362,10 @@ class FunctionDefinitionAST extends AST {
       return this.body.evaluate(newEnv);
     };
     return null;
+  }
+
+  validate(): Diagnostic[] {
+    return this.body.validate();
   }
 }
 
@@ -365,6 +413,10 @@ class LineAST extends AST {
         throw new Error("Unexpected node type");
     }
   }
+
+  validate(): Diagnostic[] {
+    return this.value.validate();
+  }
 }
 
 class SheetAST extends AST {
@@ -400,6 +452,10 @@ class SheetAST extends AST {
       }
     }
     return results;
+  }
+
+  validate(): Diagnostic[] {
+    return this.lines.flatMap((line) => line.validate());
   }
 }
 

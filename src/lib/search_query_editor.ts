@@ -170,20 +170,20 @@ class ConditionAST extends AST {
   }
 
   validate(): Diagnostic[] {
+    const diagnostics: Diagnostic[] = [];
+
     const allowed: number[] =
       allowedCombinations[this.property.childId.toString()][this.operator.value] || [];
     if (!allowed.includes(this.value.value.id)) {
-      return [
-        {
-          from: this.node.from,
-          to: this.node.to,
-          severity: "error",
-          message: `${this.property.value} cannot be used with ${this.operator.value} and ${this.value.value.type}`
-        }
-      ];
+      diagnostics.push({
+        from: this.node.from,
+        to: this.node.to,
+        severity: "error",
+        message: `${this.property.value} cannot be used with ${this.operator.value} and ${this.value.value.type}`
+      });
     }
 
-    return [];
+    return diagnostics.concat(this.value.validate());
   }
 
   evaluate(): TransactionPredicate {
@@ -341,7 +341,7 @@ class ExpressionAST extends AST {
   }
 }
 
-class QueryAST extends AST {
+export class QueryAST extends AST {
   readonly clauses: AST[];
   constructor(node: SyntaxNode, state: EditorState) {
     super(node);

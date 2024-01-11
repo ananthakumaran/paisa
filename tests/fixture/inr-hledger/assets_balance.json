@@ -2,36 +2,36 @@
   "asset_breakdowns": {
     "Assets": {
       "group": "Assets",
-      "investmentAmount": 98025.3170071296,
+      "investmentAmount": 106050.633952,
       "withdrawalAmount": 10027.3,
-      "marketAmount": 101245.7,
+      "marketAmount": 101245.6999377408,
       "balanceUnits": 0,
       "latestPrice": 0,
       "xirr": 12.84,
-      "gainAmount": 13247.6829928704,
-      "absoluteReturn": 0.1351455256391251
+      "gainAmount": 5222.3659857408,
+      "absoluteReturn": 0.0492440807860188
     },
     "Assets:Checking": {
       "group": "Assets:Checking",
       "investmentAmount": 0,
       "withdrawalAmount": 0,
-      "marketAmount": 13001.9829928704,
+      "marketAmount": 4976.6659857408,
       "balanceUnits": 0,
       "latestPrice": 0,
-      "xirr": 46.91,
-      "gainAmount": 13001.9829928704,
+      "xirr": 62.47,
+      "gainAmount": 4976.6659857408,
       "absoluteReturn": 0
     },
     "Assets:Equity": {
       "group": "Assets:Equity",
-      "investmentAmount": 98025.3170071296,
+      "investmentAmount": 106050.633952,
       "withdrawalAmount": 10027.3,
-      "marketAmount": 88243.7170071296,
+      "marketAmount": 96269.033952,
       "balanceUnits": 0,
       "latestPrice": 0,
-      "xirr": 3.23,
+      "xirr": 3.01,
       "gainAmount": 245.7,
-      "absoluteReturn": 0.0025064953371396
+      "absoluteReturn": 0.0023168178335568
     },
     "Assets:Equity:AAPL": {
       "group": "Assets:Equity:AAPL",
@@ -46,10 +46,10 @@
     },
     "Assets:Equity:ABNB": {
       "group": "Assets:Equity:ABNB",
-      "investmentAmount": 8025.3170071296,
+      "investmentAmount": 16050.633952,
       "withdrawalAmount": 0,
-      "marketAmount": 8025.3170071296,
-      "balanceUnits": 0.76,
+      "marketAmount": 16050.633952,
+      "balanceUnits": 1.52,
       "latestPrice": 0,
       "xirr": 0,
       "gainAmount": 0,
@@ -62,7 +62,7 @@
       "marketAmount": 80218.4,
       "balanceUnits": 800,
       "latestPrice": 0,
-      "xirr": 3.16,
+      "xirr": 3.21,
       "gainAmount": 218.4,
       "absoluteReturn": 0.00273
     }

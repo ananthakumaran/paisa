@@ -2,7 +2,7 @@
   "yearly": {
     "2021 - 22": {
       "startingBalance": 0,
-      "endingBalance": 93221.1429928704,
+      "endingBalance": 101245.7,
       "date": "2021-04-01T00:00:00Z",
       "income": {
         "Income:Salary:Acme": -120000
@@ -13,7 +13,6 @@
       "equity": {},
       "pnl": {
         "Assets:Equity:AAPL": 27.3,
-        "Assets:Equity:ABNB": -8024.5570071296,
         "Assets:Equity:NIFTY": 218.4
       },
       "liabilities": {},

@@ -16,11 +16,23 @@ P 2022/02/07 00:00:00 NIFTY 100.273 INR
     Assets:Checking                           20,000 INR
 
 2022/01/07 Investment
-    Assets:Checking                          -80,000 INR
-    Assets:Equity:NIFTY                          800 NIFTY @ 100 INR
+    Assets:Checking                          -40,000 INR
+    Assets:Equity:NIFTY                          400 NIFTY @ 100 INR
+
+2022/01/08 Investment 2
+    Assets:Checking                          -30,000 INR
+    Assets:Equity:NIFTY                          300 NIFTY @@ 30,000 INR
+
+2022/01/08 Investment 3
+    Assets:Checking                          -10,000 INR
+    Assets:Equity:NIFTY                          100 NIFTY
 
 2022/01/08 Buy ABNB
     Assets:Equity:ABNB                          0.76 ABNB @ 131.27 USD
+    Assets:Checking
+
+2022/01/09 Buy ABNB total price
+    Assets:Equity:ABNB                          0.76 ABNB @@ 99.7652 USD
     Assets:Checking
 
 2022/01/08 Buy Apple
@@ -33,6 +45,7 @@ P 2022/02/07 00:00:00 NIFTY 100.273 INR
     Assets:Checking                          10027.3 INR
 
 P 2022/01/08 00:00:00 USD 80.442048 INR
+P 2022/01/08 00:00:00 ABNB 10,559.6276 INR
 
 2022/01/31 Interest
     ; Global note

@@ -60,6 +60,7 @@ db_path: '%s'
 func Demo(cwd string) {
 	generateConfigFile(cwd)
 	generateJournalFile(cwd)
+	generateSheetFile(cwd)
 }
 
 func generateConfigFile(cwd string) {
@@ -112,6 +113,9 @@ schedule_al:
   - code: liability
     accounts:
       - Liabilities:Homeloan
+  - code: immovable
+    accounts:
+      - Assets:House
 commodities:
   - name: NIFTY
     type: mutualfund
@@ -456,4 +460,38 @@ func generateJournalFile(cwd string) {
 	}
 
 	emitChitFund(&state)
+}
+
+func generateSheetFile(cwd string) {
+	sheetFilePath := filepath.Join(cwd, "Schedule AL.paisa")
+	sheet := `
+date_query = {date <= [2023-03-31]}
+cost_basis(x) = cost(fifo(x AND date_query))
+cost_basis_negative(x) = cost(fifo(negate(x AND date_query)))
+
+# Immovable
+immovable = cost_basis({account = Assets:House})
+
+# Movable
+metal = 0
+art = 0
+vehicle = 0
+bank = cost_basis({account =~ /^Assets:Checking/})
+share = cost_basis({account =~ /^Assets:Equity:.*/ OR
+                    account =~ /^Assets:Debt:.*/})
+insurance = 0
+loan = 0
+cash = 0
+
+# Liability
+liability = cost_basis_negative({account =~ /^Liabilities:Homeloan/})
+
+# Total
+total = immovable + metal + art + vehicle + bank + share + insurance + loan + cash - liability
+`
+	log.Info("Generating sheet file: ", sheetFilePath)
+	err := os.WriteFile(sheetFilePath, []byte(sheet), 0644)
+	if err != nil {
+		log.Fatal(err)
+	}
 }

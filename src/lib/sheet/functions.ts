@@ -12,6 +12,19 @@ function cost(env: Environment, q: PostingsOrQuery): BigNumber {
   return ps.reduce((acc, p) => acc.plus(new BigNumber(p.amount)), new BigNumber(0));
 }
 
+function negate(env: Environment, q: PostingsOrQuery): Posting[] {
+  assertType("Postings", q);
+
+  const ps = toPostings(env, q);
+  return ps.map((p) => {
+    p = { ...p };
+    p.quantity = -p.quantity;
+    p.amount = -p.amount;
+    p.market_amount = -p.market_amount;
+    return p;
+  });
+}
+
 function fifo(env: Environment, q: PostingsOrQuery): Posting[] {
   assertType("Postings", q);
 
@@ -32,7 +45,13 @@ function fifo(env: Environment, q: PostingsOrQuery): Posting[] {
             if (a.quantity > quantity) {
               const diff = a.quantity - quantity;
               const price = a.amount / a.quantity;
-              available.unshift({ ...a, quantity: diff, amount: diff * price });
+              const marketPrice = a.market_amount / a.quantity;
+              available.unshift({
+                ...a,
+                quantity: diff,
+                amount: diff * price,
+                market_amount: diff * marketPrice
+              });
               quantity = 0;
             } else {
               quantity -= a.quantity;
@@ -53,4 +72,4 @@ function toPostings(env: Environment, q: PostingsOrQuery) {
   return q.resolve(env);
 }
 
-export const functions = { cost, fifo };
+export const functions = { cost, fifo, negate };

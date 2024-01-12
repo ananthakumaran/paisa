@@ -1,10 +1,4 @@
 import type { Transaction } from "$lib/utils";
-import { queryExtension } from "./search/parser/query";
-import { EditorView, minimalSetup } from "codemirror";
-import { linter, type Diagnostic } from "@codemirror/lint";
-import { placeholder } from "@codemirror/view";
-import _ from "lodash";
-import { writable } from "svelte/store";
 import {
   CompletionContext,
   autocompletion,
@@ -12,12 +6,19 @@ import {
   completeFromList,
   ifIn
 } from "@codemirror/autocomplete";
-import { syntaxTree, bracketMatching } from "@codemirror/language";
-import type { SyntaxNode } from "@lezer/common";
-import * as Terms from "./search/parser/parser.terms";
+import { bracketMatching, syntaxHighlighting, syntaxTree } from "@codemirror/language";
+import { linter, type Diagnostic } from "@codemirror/lint";
 import type { EditorState } from "@codemirror/state";
-import dayjs from "dayjs";
+import { placeholder } from "@codemirror/view";
+import type { SyntaxNode } from "@lezer/common";
+import { classHighlighter } from "@lezer/highlight";
 import * as chrono from "chrono-node";
+import { EditorView, minimalSetup } from "codemirror";
+import dayjs from "dayjs";
+import _ from "lodash";
+import { writable } from "svelte/store";
+import * as Terms from "./search/parser/parser.terms";
+import { queryExtension } from "./search/parser/query";
 
 abstract class AST {
   readonly id: number;
@@ -660,6 +661,7 @@ export function createEditor(
   return new EditorView({
     extensions: [
       minimalSetup,
+      syntaxHighlighting(classHighlighter),
       bracketMatching(),
       closeBrackets(),
       EditorView.theme({

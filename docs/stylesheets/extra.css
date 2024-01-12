@@ -1,17 +1,17 @@
 :root > * {
-  --md-code-hl-keyword-color: #708;
-  --md-code-hl-number-color: hsl(229deg, 53%, 53%);
-  /* --md-code-hl-special-color */
-  /* --md-code-hl-function-color */
+  --md-code-hl-keyword-color: #8959a8;
+  --md-code-hl-number-color: #6c71c4;
+  /* --md-code-hl-special-color: #3e999f; */
+  --md-code-hl-function-color: #4271ae;
   /* --md-code-hl-constant-color */
   /* --md-code-hl-keyword-color */
-  --md-code-hl-string-color: #a11;
-  /* --md-code-hl-name-color */
-  /* --md-code-hl-operator-color */
+  --md-code-hl-string-color: #c82829;
+  --md-code-hl-name-color: #3e999f;
+  --md-code-hl-operator-color: #f5871f;
   /* --md-code-hl-punctuation-color */
   --md-code-hl-comment-color: #7a7a7a;
   /* --md-code-hl-generic-color */
-  --md-code-hl-variable-color: #085;
+  --md-code-hl-variable-color: #718c00;
 }
 
 .highlight .m {

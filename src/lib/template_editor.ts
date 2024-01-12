@@ -1,6 +1,6 @@
 import type { LedgerFileError } from "$lib/utils";
 import { handlebars } from "$lib/handlebars_parser";
-import { StreamLanguage } from "@codemirror/language";
+import { StreamLanguage, syntaxHighlighting } from "@codemirror/language";
 import { keymap } from "@codemirror/view";
 import { basicSetup, EditorView } from "codemirror";
 import { insertTab, history, undoDepth, redoDepth } from "@codemirror/commands";
@@ -9,6 +9,7 @@ import _ from "lodash";
 import { writable } from "svelte/store";
 import { autocompletion, completeFromList, ifIn } from "@codemirror/autocomplete";
 import Handlebars from "handlebars";
+import { classHighlighter } from "@lezer/highlight";
 
 interface EditorState {
   hasUnsavedChanges: boolean;
@@ -61,6 +62,7 @@ export function createEditor(content: string, dom: Element) {
     extensions: [
       keymap.of([{ key: "Tab", run: insertTab }]),
       basicSetup,
+      syntaxHighlighting(classHighlighter),
       EditorView.contentAttributes.of({ "data-enable-grammarly": "false" }),
       StreamLanguage.define(handlebars),
       lintGutter(),

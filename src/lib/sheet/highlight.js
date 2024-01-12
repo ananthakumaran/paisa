@@ -7,7 +7,6 @@ export const sheetHighlighting = styleTags({
   Comment: t.comment,
   "FunctionDefinition/Identifier": t.function(t.variableName),
   "FunctionCall/Identifier": t.function(t.variableName),
-  Postings: t.special(t.variableName),
   "{ }": t.operator,
   UnaryOperator: t.operator,
   BinaryOperator: t.operator,

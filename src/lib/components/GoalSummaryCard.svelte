@@ -29,7 +29,7 @@
   $: completed = percentComplete(goal);
 </script>
 
-<div class="box p-3 goal-summary-card">
+<div class="box p-3 goal-summary-card" class:mb-3={small}>
   <div class="flex justify-between mb-4">
     <a
       class="secondary-link has-text-grey"

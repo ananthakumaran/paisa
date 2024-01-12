@@ -39,7 +39,7 @@
 </script>
 
 <div
-  class="budget-card box px-2 pt-2 pb-2 my-2 has-background-white"
+  class="budget-card box px-2 pt-2 pb-2 my-3 has-background-white"
   data-tippy-content={_.isEmpty(accountBudget.expenses) ? null : tooltipContent}
 >
   <div class="md:flex is-justify-content-space-between">

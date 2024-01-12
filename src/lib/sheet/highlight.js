@@ -4,6 +4,7 @@ export const sheetHighlighting = styleTags({
   String: t.string,
   Number: t.number,
   Header: t.heading,
+  Comment: t.comment,
   "FunctionDefinition/Identifier": t.function(t.variableName),
   "FunctionCall/Identifier": t.function(t.variableName),
   Postings: t.special(t.variableName),

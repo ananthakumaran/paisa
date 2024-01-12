@@ -11,7 +11,8 @@ export const sheetLanguage = LRLanguage.define({
         return { parser: searchQueryParser };
       }
       return null;
-    })
+    }),
+    dialect: "comment"
   }),
   languageData: {
     closeBrackets: { brackets: ["[", "(", '"', "`", "{"] }

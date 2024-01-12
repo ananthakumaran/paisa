@@ -8,7 +8,8 @@ import { fileURLToPath } from "url";
 const caseDir = path.dirname(fileURLToPath(import.meta.url));
 
 const parser = sheetLanguage.parser.configure({
-  strict: false
+  strict: false,
+  dialect: "comment"
 });
 
 for (const file of fs.readdirSync(caseDir)) {

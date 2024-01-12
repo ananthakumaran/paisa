@@ -104,3 +104,38 @@ Sheet(Line(Expression(BinaryExpression(Expression(Postings(SearchQueryString("{"
 ===>
 
 Sheet(Line(Expression(BinaryExpression(Expression(Postings(SearchQueryString("{",Query(Clause(Condition(Property(Amount),Operator(">"),Value(Number)))),"}"))),BinaryOperator(OR),Expression(Postings(SearchQueryString("{",Query(Clause(Condition(Property(Date),Operator(">"),Value(DateValue)))),"}")))))))
+
+# Comment
+
+; This is a comment
+
+===>
+
+Sheet(Comment)
+
+
+# Comment Partial line
+
+1 + 2 ; This is a comment
+
+===>
+
+Sheet(Line(Expression(BinaryExpression(Expression(Literal(Number)),BinaryOperator,Expression(Literal(Number))))),Comment)
+
+
+# Slash Comment
+
+// This is a comment
+
+===>
+
+Sheet(Comment)
+
+
+# Slash Comment Partial line
+
+1 + 2 // This is a comment
+
+===>
+
+Sheet(Line(Expression(BinaryExpression(Expression(Literal(Number)),BinaryOperator,Expression(Literal(Number))))),Comment)

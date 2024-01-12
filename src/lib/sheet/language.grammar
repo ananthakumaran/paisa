@@ -1,3 +1,5 @@
+@dialects { comment skip_comment }
+
 @top Sheet { newline* lines? }
 
 @precedence {
@@ -55,6 +57,12 @@ BinaryOperator<expr> { expr }
   newline { $[\n\r] }
 
   Header { "#" ![\n]* }
+
+  Comment[@dialect=comment] { ";" ![\n]* | "//" ![\n]* }
+
+  comment[@dialect=skip_comment] { ";" ![\n]* | "//" ![\n]* }
+
+  @precedence { comment, Comment, "/" }
 }
 
 @local tokens {
@@ -70,7 +78,7 @@ BinaryOperator<expr> { expr }
 }
 
 @skip {
-  whitespace
+  whitespace | Comment | comment
 }
 
 @external propSource sheetHighlighting from "./highlight"

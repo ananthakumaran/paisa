@@ -13,7 +13,7 @@ import { EditorView } from "codemirror";
 import _ from "lodash";
 import { initialSheetEditorState, sheetEditorState } from "../store";
 import { basicSetup } from "./editor/base";
-import { sheetExtension } from "./sheet/language";
+import { sheetExtension, sheetLanguage } from "./sheet/language";
 import { schedulePlugin } from "./transaction_tag";
 export { sheetEditorState } from "../store";
 import { functions } from "./sheet/functions";
@@ -26,6 +26,8 @@ let latestIdentifiers: string[] = [];
 function completeIdentifier(context: CompletionContext) {
   return ifIn(["Identifier"], completeFromList(latestIdentifiers))(context);
 }
+
+const skipCommentParser = sheetLanguage.parser.configure({ dialect: "skip_comment" });
 
 function lint(env: Environment) {
   latestIdentifiers = [];
@@ -54,6 +56,7 @@ function lint(env: Environment) {
         const startTime = performance.now();
         let results = current.results;
         try {
+          const tree = skipCommentParser.parse(editor.state.doc.toString());
           const ast = buildAST(tree.topNode, editor.state);
           diagnostics.push(...ast.validate());
           if (diagnostics.length > 0) {

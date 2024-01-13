@@ -337,8 +337,11 @@
         </div>
       </div>
       <div class="column is-9-widescreen is-10-fullhd is-8">
-        <div class="flex">
-          <div class="box box-r-none py-0 pr-1 mb-0" style="max-width: min(75%,48rem);">
+        <div class="flex overflow-x-auto">
+          <div
+            class="box box-r-none py-0 pr-1 mb-0"
+            style="min-width: min(75%,24rem); max-width: min(75%,48rem);"
+          >
             <div class="sheet-editor" bind:this={editorDom} />
           </div>
           <div

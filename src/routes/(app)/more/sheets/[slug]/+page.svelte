@@ -338,12 +338,12 @@
       </div>
       <div class="column is-9-widescreen is-10-fullhd is-8">
         <div class="flex">
-          <div class="box box-r-none py-0 pr-1 mb-0 basis-[36rem] max-w-[48rem]">
+          <div class="box box-r-none py-0 pr-1 mb-0" style="max-width: min(75%,48rem);">
             <div class="sheet-editor" bind:this={editorDom} />
           </div>
           <div
             class="box box-l-none has-text-right sheet-result"
-            style="padding: 4px 0; width: 200px;"
+            style="padding: 4px 0; width: min(25%,200px);"
           >
             {#each $sheetEditorState.results as result, i}
               <div

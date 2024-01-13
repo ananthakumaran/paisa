@@ -6,6 +6,22 @@
 
 Sheet(Line(Expression(Literal(Number))))
 
+# Number with comma
+
+100,00 + 1,00,00 + 10.0,00
+
+==>
+
+Sheet(Line(Expression(BinaryExpression(Expression(BinaryExpression(Expression(Literal(Number)),BinaryOperator,Expression(Literal(Number)))),BinaryOperator,Expression(Literal(Number))))))
+
+# Percent
+
+10% + 12.35%
+
+==>
+
+Sheet(Line(Expression(BinaryExpression(Expression(Literal(Percent)),BinaryOperator,Expression(Literal(Percent))))))
+
 # Assignment
 
 salary = 3000000
@@ -29,6 +45,14 @@ edu_cess = (tax + surcharge) * 0.04
 ==>
 
 Sheet(Line(Assignment(Identifier,AssignmentOperator,Expression(BinaryExpression(Expression(Grouping(Expression(BinaryExpression(Expression(Identifier),BinaryOperator,Expression(Identifier))))),BinaryOperator,Expression(Literal(Number)))))))
+
+# Exp
+
+monthly_payment = r/(1 - (1 + r)^(-n)) * finance_amount
+
+==>
+
+Sheet(Line(Assignment(Identifier,AssignmentOperator,Expression(BinaryExpression(Expression(BinaryExpression(Expression(Identifier),BinaryOperator,Expression(Grouping(Expression(BinaryExpression(Expression(Literal(Number)),BinaryOperator,Expression(BinaryExpression(Expression(Grouping(Expression(BinaryExpression(Expression(Literal(Number)),BinaryOperator,Expression(Identifier))))),BinaryOperator,Expression(Grouping(Expression(UnaryExpression(UnaryOperator,Expression(Identifier))))))))))))),BinaryOperator,Expression(Identifier))))))
 
 # Precedence
 

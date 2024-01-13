@@ -1,16 +1,27 @@
 from pygments.lexer import RegexLexer, bygroups
 from pygments.token import *
 
-__all__ = ['QueryLexer']
+__all__ = ['SheetLexer']
 
-class QueryLexer(RegexLexer):
-     name = "query"
-     aliases = ["query"]
+class SheetLexer(RegexLexer):
+     name = "sheet"
+     aliases = ["sheet"]
      filenames = []
-     mimetypes = ['text/x-query']
+     mimetypes = ['text/x-sheet']
 
      tokens = {
           'root': [
+               (r';(.*?)$', Comment.Single),
+               (r'//(.*?)$', Comment.Single),
+               (r'([a-z_]+)(\()', bygroups(Name.Function, Text)),
+               (r'AND|OR', Keyword),
+               (r'#.+', Generic.Heading),
+               (r'[*+/^=-]', Operator),
+               (r'{', Operator, 'query'),
+               (r'[+-]?(?:[0-9,])+(\.(?:[0-9,])+)?(%)?', Number),
+          ],
+          'query': [
+               (r'}', Operator, '#pop'),
                (r'(amount|account|total|payee|commodity|date|filename|note)', Keyword.Constant),
                (r'AND|OR|NOT', Keyword),
                (r'\[[^\]]+\]', Name.Attribute),

@@ -89,7 +89,25 @@ class NumberAST extends AST {
   readonly value: BigNumber;
   constructor(node: SyntaxNode, state: EditorState) {
     super(node);
-    this.value = new BigNumber(state.sliceDoc(node.from, node.to));
+    this.value = new BigNumber(state.sliceDoc(node.from, node.to).replaceAll(",", ""));
+  }
+
+  evaluate(): any {
+    return this.value;
+  }
+
+  validate(): Diagnostic[] {
+    return [];
+  }
+}
+
+class PercentAST extends AST {
+  readonly value: BigNumber;
+  constructor(node: SyntaxNode, state: EditorState) {
+    super(node);
+    this.value = new BigNumber(
+      state.sliceDoc(node.from, node.to).replaceAll(/[%,]/g, "")
+    ).dividedBy(new BigNumber(100));
   }
 
   evaluate(): any {
@@ -263,6 +281,9 @@ class ExpressionAST extends AST {
         switch (node.firstChild.firstChild.type.id) {
           case Terms.Number:
             this.value = new NumberAST(node.firstChild, state);
+            break;
+          case Terms.Percent:
+            this.value = new PercentAST(node.firstChild, state);
             break;
           default:
             throw new Error("Unexpected node type");

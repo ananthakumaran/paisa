@@ -18,6 +18,7 @@ nav:
     - reference/bulk-edit.md
     - reference/import.md
     - reference/recurring.md
+    - reference/sheets.md
     - reference/config.md
     - 'Goals':
         - reference/goals/index.md
@@ -126,6 +127,8 @@ extra:
       link: https://mastodon.social/@PaisaFinanceApp
     - icon: fontawesome/brands/docker
       link: https://hub.docker.com/r/ananthakumaran/paisa
+  status:
+    new: Recently added
   consent:
     actions:
       - accept

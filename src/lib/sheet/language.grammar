@@ -5,6 +5,7 @@
 @precedence {
   call,
   unary @right,
+  exp @left,
   factor @left,
   term @left,
   comparison @left,
@@ -19,10 +20,11 @@ Line { Expression | Assignment | FunctionDefinition | Header }
 
 Expression { Literal | UnaryExpression | BinaryExpression | Grouping | Identifier | FunctionCall | Postings }
 
-Literal { Number }
+Literal { Number | Percent }
 Grouping { "(" Expression ")" }
 UnaryExpression { !unary UnaryOperator ~unary Expression }
 BinaryExpression {
+  Expression !exp BinaryOperator<"^"> Expression |
   Expression !factor BinaryOperator<"*" | "/"> Expression |
   Expression !term BinaryOperator<"+" | "-"> ~unary Expression |
   Expression !comparison BinaryOperator<"<" | "<=" | ">" | ">="> Expression |
@@ -45,12 +47,14 @@ BinaryOperator<expr> { expr }
 
 @tokens {
   Number { int frac? exp?  }
-  int  { '0' | $[1-9] @digit* }
-  frac { '.' @digit+ }
-  exp  { $[eE] $[+\-]? @digit+ }
+  int  { '0' | $[1-9] commadigit* }
+  frac { '.' commadigit+ }
+  exp  { $[eE] $[+\-]? $[0-9]+ }
+  commadigit { ','? $[0-9]+ }
 
-  Identifier { $[a-zA-Z_] unquotedchar* }
-  unquotedchar { $[0-9a-zA-Z:./_] }
+  Percent { int frac? exp? '%' }
+
+  Identifier { $[a-zA-Z_] $[0-9a-zA-Z_]* }
 
   whitespace { $[ \t] }
 
@@ -62,7 +66,7 @@ BinaryOperator<expr> { expr }
 
   comment[@dialect=skip_comment] { ";" ![\n]* | "//" ![\n]* }
 
-  @precedence { comment, Comment, "/" }
+  @precedence { comment, Comment, "/", Percent, Number }
 }
 
 @local tokens {

@@ -24,7 +24,7 @@ calculate the monthly EMI for a home loan.
 
 <div class="split-codeview">
 <div class="sheet" markdown>
-```{ .sheet .no-copy }
+```sheet
 # Home Loan
 price = 40,00,000
 down_payment = 20% * price
@@ -39,7 +39,7 @@ monthly_payment = r / (1 - (1 + r) ^ (-n)) * finance_amount
 ```
 </div>
 <div class="sheet-result sheet-result-1" markdown>
-```{ .text .no-copy }
+```text
 # Home Loan
 40,00,000
 8,00,000
@@ -63,7 +63,7 @@ your own functions. The example below shows how to define a function
 <div class="split-codeview">
 <div class="sheet" markdown>
 
-```{ .sheet .no-copy }
+```sheet
 # Years to Double
 years_to_double(rate) = 72 / rate
 
@@ -77,7 +77,7 @@ years_to_double(14)
 ```
 </div>
 <div class="sheet-result sheet-result-2" markdown>
-```{ .text .no-copy }
+```text
 # Years to Double
 
 
@@ -102,7 +102,7 @@ Income Tax department.
 <div class="split-codeview">
 <div class="sheet" markdown>
 
-```{ .sheet .no-copy }
+```sheet
 # Schedule AL
 date_query = {date <= [2023-03-31]}
 cost_basis(x) = cost(fifo(x AND date_query))
@@ -130,7 +130,7 @@ total = immovable + metal + art + vehicle + bank + share + insurance + loan + ca
 ```
 </div>
 <div class="sheet-result sheet-result-3" markdown>
-```{ .text .no-copy }
+```text
 # Schedule AL
 
 

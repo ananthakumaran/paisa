@@ -35,6 +35,7 @@ nav:
       - reference/tax/schedule-al.md
     - reference/changelog.md
   - 'Demo': 'https://demo.paisa.fyi'
+  - manifesto.md
   - faq.md
   - Blog:
     - blog/index.md

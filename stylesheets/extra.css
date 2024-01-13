@@ -1,17 +1,17 @@
 :root > * {
-  --md-code-hl-keyword-color: #708;
-  --md-code-hl-number-color: hsl(229deg, 53%, 53%);
-  /* --md-code-hl-special-color */
-  /* --md-code-hl-function-color */
+  --md-code-hl-keyword-color: #8959a8;
+  --md-code-hl-number-color: #6c71c4;
+  /* --md-code-hl-special-color: #3e999f; */
+  --md-code-hl-function-color: #4271ae;
   /* --md-code-hl-constant-color */
   /* --md-code-hl-keyword-color */
-  --md-code-hl-string-color: #a11;
-  /* --md-code-hl-name-color */
-  /* --md-code-hl-operator-color */
+  --md-code-hl-string-color: #c82829;
+  --md-code-hl-name-color: #3e999f;
+  --md-code-hl-operator-color: #f5871f;
   /* --md-code-hl-punctuation-color */
   --md-code-hl-comment-color: #7a7a7a;
   /* --md-code-hl-generic-color */
-  --md-code-hl-variable-color: #085;
+  --md-code-hl-variable-color: #718c00;
 }
 
 .highlight .m {
@@ -87,6 +87,53 @@
     0 0 30px rgb(0, 0, 0, 0.05);
 }
 
+.split-codeview {
+  display: flex;
+  border-right-style: none;
+  overflow-x: scroll;
+}
+
+.split-codeview .sheet {
+  width: 75%;
+}
+
+.split-codeview .sheet-result {
+  width: 25%;
+}
+
+.split-codeview .sheet code {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.split-codeview .sheet-result code {
+  font-family: var(--md-text-font-family);
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  text-align: right;
+  border-left: 1px solid hsl(0, 0%, 86%);
+}
+
+.split-codeview .sheet-result-1 code span:nth-child(1),
+.split-codeview .sheet-result-1 code span:nth-child(10),
+.split-codeview .sheet-result-2 code span:nth-child(1),
+.split-codeview .sheet-result-3 code span:nth-child(1),
+.split-codeview .sheet-result-3 code span:nth-child(6),
+.split-codeview .sheet-result-3 code span:nth-child(9),
+.split-codeview .sheet-result-3 code span:nth-child(20),
+.split-codeview .sheet-result-3 code span:nth-child(23) {
+  display: block;
+  text-align: left;
+  font-weight: bold;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+[data-md-color-scheme="slate"] .split-codeview .sheet-result code {
+  border-left: 1px solid hsl(215, 18%, 27%);
+}
+
 .thumbnail {
   --scale-factor: 0.45;
   overflow: hidden;
@@ -126,4 +173,24 @@
 
 .app-frame::after {
   font-family: inherit;
+}
+
+.assets-color {
+  color: #00b0ff;
+}
+
+.expenses-color {
+  color: #ff1744;
+}
+
+.liabilities-color {
+  color: #ffab00;
+}
+
+.equity-color {
+  color: #d500f9;
+}
+
+.income-color {
+  color: #aeea00;
 }

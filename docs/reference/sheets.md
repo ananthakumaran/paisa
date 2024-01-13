@@ -270,6 +270,10 @@ functions to be added here.
 
 Returns the sum of the cost of all the postings.
 
+#### `#!typescript balance(q: Posting[] | Query): number`
+
+Returns the sum of the current market value of all the postings.
+
 #### `#!typescript fifo(q: Posting[] | Query): Posting[]`
 
 Returns the list of postings after performing a FIFO adjustment. For

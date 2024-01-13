@@ -2398,6 +2398,15 @@ let
         sha512 = "AKpaYlHn8t4SVbOHCy+b5+KKgvR4vrsD8vbvrbiQJps7fKDTkjkDry6ji0rUJjC0kzbNePLwzxq8iypo41qeWA==";
       };
     };
+    "bignumber.js-9.1.2" = {
+      name = "bignumber.js";
+      packageName = "bignumber.js";
+      version = "9.1.2";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/bignumber.js/-/bignumber.js-9.1.2.tgz";
+        sha512 = "2/mKyZH9K85bzOEfhXDBFZTGd1CTs+5IHpeFQo9luiBG7hghdC851Pj2WAhb6E3R6b9tZj/XKhbg4fum+Kepug==";
+      };
+    };
     "binary-extensions-2.2.0" = {
       name = "binary-extensions";
       packageName = "binary-extensions";
@@ -8976,6 +8985,7 @@ let
         ];
       })
       sources."base64-js-1.5.1"
+      sources."bignumber.js-9.1.2"
       sources."binary-extensions-2.2.0"
       sources."bindings-1.5.0"
       sources."bmp-js-0.1.0"

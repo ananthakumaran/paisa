@@ -1,5 +1,17 @@
 # CHANGELOG
 
+
+### 0.6.3 (2024-01-13)
+
+* Introduce [Sheets](https://paisa.fyi/reference/sheets/): A notepad calculator with access to your ledger
+* Remove flat option from cashflow > yearly page
+* Dockerimage now installs paisa to /usr/bin
+* Improve legends rendering on all pages
+* Allow user to cancel pdf password prompt
+* Add new warning for missing assets accounts from allocation target
+* Support hledger's balance assertion
+* Bug fixes
+
 ### 0.6.2 (2023-12-23)
 
 * New logo

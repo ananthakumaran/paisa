@@ -114,7 +114,7 @@ extra_css:
   - stylesheets/extra.css
 
 copyright: |
-  Copyright © 2022 - 2023 Anantha Kumaran <br \> <a href="#__consent">Change cookie settings</a>
+  Copyright © 2022 - 2024 Anantha Kumaran <br \> <a href="#__consent">Change cookie settings</a>
 extra:
   social:
     - icon: fontawesome/brands/github

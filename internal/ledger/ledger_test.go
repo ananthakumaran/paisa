@@ -101,4 +101,12 @@ func TestParseAmount(t *testing.T) {
 	commodity, amount, _ = parseAmount("INR 70.0099")
 	assert.Equal(t, "INR", commodity)
 	assert.Equal(t, 70.0099, amount.InexactFloat64())
+
+	commodity, amount, _ = parseAmount("1E-8 BTC")
+	assert.Equal(t, "BTC", commodity)
+	assert.Equal(t, 1e-08, amount.InexactFloat64())
+
+	commodity, amount, _ = parseAmount("100E-8    BTC")
+	assert.Equal(t, "BTC", commodity)
+	assert.Equal(t, 1e-06, amount.InexactFloat64())
 }

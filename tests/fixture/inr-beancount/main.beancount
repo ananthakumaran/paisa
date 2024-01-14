@@ -6,12 +6,14 @@
 1970-01-01 open Income:CapitalGains:Equity:AAPL
 1970-01-01 open Income:Interest:Checking
 1970-01-01 open Income:Salary:Acme
+1970-01-01 open Assets:Coinbase:BTC
 
 1970-01-01 commodity AAPL
 1970-01-01 commodity ABNB
 1970-01-01 commodity INR
 1970-01-01 commodity NIFTY
 1970-01-01 commodity USD
+1970-01-01 commodity BTC
 
 2022-01-07 price NIFTY 100 INR
 2022-02-07 price NIFTY 100.273 INR
@@ -39,6 +41,10 @@
 2022-01-08 txn "Buy Apple"
   Assets:Equity:AAPL                           100 AAPL {100 INR}
   Assets:Checking
+
+2022-01-08 txn "Purchased 0.00000001 BTC"
+  Assets:Coinbase:BTC                    0.00000001 BTC {42772 USD}
+  Assets:Checking                       -0.00042772 USD
 
 2022-01-09 txn "Sell"
   Assets:Equity:AAPL                          -100 AAPL {100 INR} @ 100.273 INR

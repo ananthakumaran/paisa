@@ -536,7 +536,7 @@ func parseBeancountPrices(output string, defaultCurrency string) ([]price.Price,
 }
 
 func parseAmount(amount string) (string, decimal.Decimal, error) {
-	match := regexp.MustCompile(`^(-?[0-9.,]+)([^\d,.-]+|\s*"[^"]+")$|([^\d,.-]+|\s*"[^"]+"\s*)(-?[0-9.,]+)$`).FindStringSubmatch(amount)
+	match := regexp.MustCompile(`^(-?[0-9.,]+(?:[Ee]-?[0-9]+)?)([^\d,.-]+|\s*"[^"]+")$|([^\d,.-]+|\s*"[^"]+"\s*)(-?[0-9.,]+(?:[Ee]-?[0-9]+)?)$`).FindStringSubmatch(amount)
 	if len(match) == 0 {
 		log.Errorf("Could not parse amount: <%s>", amount)
 		return "", decimal.Zero, fmt.Errorf("Could not parse amount: <%s>", amount)

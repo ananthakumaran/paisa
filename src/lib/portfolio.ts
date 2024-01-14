@@ -3,7 +3,6 @@ import _ from "lodash";
 import {
   formatCurrency,
   formatFloat,
-  textColor,
   tooltip,
   skipTicks,
   type PortfolioAggregate,
@@ -11,7 +10,8 @@ import {
   getColorPreference,
   rem,
   svgTruncate,
-  type Legend
+  type Legend,
+  darkenOrLighten
 } from "./utils";
 
 export function filterCommodityBreakdowns(
@@ -355,7 +355,7 @@ function renderPartition(
     .style("width", (d: any) => d.x1 - d.x0 + "px")
     .style("height", (d: any) => d.y1 - d.y0 + "px")
     .style("background", (d) => color(d.id))
-    .style("color", (d) => textColor(color(d.id)))
+    .style("color", (d) => darkenOrLighten(color(d.id)))
     .selectAll("p")
     .data(
       (d) => d,

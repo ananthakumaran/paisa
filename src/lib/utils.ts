@@ -8,6 +8,7 @@ import { get } from "svelte/store";
 import { obscure } from "../persisted_store";
 import { error } from "@sveltejs/kit";
 import { goto } from "$app/navigation";
+import chroma from "chroma-js";
 
 export interface AutoCompleteItem {
   label: string;
@@ -1012,14 +1013,14 @@ export function rainbowScale(keys: string[]) {
   return d3.scaleOrdinal(_.map(keys, (_value, i) => d3.interpolateRainbow(x(i)))).domain(keys);
 }
 
-export function textColor(backgroundColor: string) {
+export function darkenOrLighten(backgroundColor: string, intensity = 2) {
   const color = d3.rgb(backgroundColor);
   // http://www.w3.org/TR/AERT#color-contrast
   const brightness = (color.r * 299 + color.g * 587 + color.b) / 1000;
   if (brightness > 125) {
-    return "black";
+    return chroma(backgroundColor).darken(intensity).hex();
   }
-  return "white";
+  return chroma(backgroundColor).brighten(intensity).hex();
 }
 
 export function tooltip(

@@ -9,12 +9,12 @@ import {
   lastName,
   parentName,
   secondName,
-  textColor,
   tooltip,
   skipTicks,
   rem,
   now,
-  type Legend
+  type Legend,
+  darkenOrLighten
 } from "./utils";
 import COLORS, { generateColorScheme } from "./colors";
 import chroma from "chroma-js";
@@ -289,7 +289,7 @@ function renderPartition(
     .style("width", (d: any) => d.x1 - d.x0 + "px")
     .style("height", (d: any) => d.y1 - d.y0 + "px")
     .style("background", (d) => color(d.id))
-    .style("color", (d) => textColor(color(d.id)));
+    .style("color", (d) => darkenOrLighten(color(d.id)));
 
   cell
     .append("p")

@@ -3,8 +3,16 @@ import { Delaunay } from "d3";
 import _ from "lodash";
 import tippy from "tippy.js";
 import COLORS from "./colors";
-import { formatCurrency, isMobile, now, type Legend } from "./utils";
-import { formatCurrencyCrude, tooltip, type Networth } from "./utils";
+import {
+  formatCurrency,
+  formatCurrencyCrude,
+  isMobile,
+  now,
+  svgUrl,
+  tooltip,
+  type Legend,
+  type Networth
+} from "./utils";
 
 function networth(d: Networth) {
   return d.investmentAmount + d.gainAmount - d.withdrawalAmount;
@@ -105,9 +113,9 @@ export function renderNetworth(
 
   layer
     .append("path")
-    .attr("clip-path", `url(${new URL("#" + clipAboveID, window.location.toString())})`)
     .style("fill", z("gain"))
-    .style("fill-opacity", "0.4")
+    .style("opacity", "0.2")
+    .attr("clip-path", svgUrl(clipAboveID))
     .attr(
       "d",
       area(0, (d) => {
@@ -117,9 +125,9 @@ export function renderNetworth(
 
   layer
     .append("path")
-    .attr("clip-path", `url(${new URL("#" + clipBelowID, window.location.toString())})`)
+    .attr("clip-path", svgUrl(clipBelowID))
     .style("fill", z("loss"))
-    .style("fill-opacity", "0.4")
+    .style("opacity", "0.2")
     .attr(
       "d",
       area(height, (d) => {
@@ -130,6 +138,7 @@ export function renderNetworth(
   layer
     .append("path")
     .style("stroke", lineScale("investment"))
+    .style("stroke-width", "1.5")
     .style("fill", "none")
     .attr(
       "d",
@@ -143,6 +152,7 @@ export function renderNetworth(
   layer
     .append("path")
     .style("stroke", lineScale("networth"))
+    .style("stroke-width", "1.5")
     .style("fill", "none")
     .attr(
       "d",

@@ -287,9 +287,8 @@ export function renderIncomeStatement(element: Element) {
       .data(bars)
       .join("text")
       .attr("dy", "0.3rem")
-      .attr("font-size", "0.8rem")
       .attr("text-anchor", "middle")
-      .attr("class", "svg-text-black-bis")
+      .attr("class", "svg-text-black-ter has-text-weight-bold")
       .transition(t)
       .attr("x", function (d) {
         return (x(d.start) + x(d.end)) / 2;

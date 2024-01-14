@@ -1,24 +1,25 @@
+import { goto } from "$app/navigation";
 import chroma from "chroma-js";
 import * as d3 from "d3";
 import { Delaunay } from "d3";
 import _ from "lodash";
-import COLORS from "./colors";
 import tippy from "tippy.js";
+import COLORS from "./colors";
 import {
   formatCurrency,
   formatCurrencyCrude,
   formatFloat,
-  type Gain,
-  type Networth,
-  tooltip,
-  skipTicks,
-  restName,
-  type Posting,
-  rem,
   now,
-  type Legend
+  rem,
+  restName,
+  skipTicks,
+  svgUrl,
+  tooltip,
+  type Gain,
+  type Legend,
+  type Networth,
+  type Posting
 } from "./utils";
-import { goto } from "$app/navigation";
 
 const areaKeys = ["gain", "loss"];
 const colors = [COLORS.gain, COLORS.loss];
@@ -411,9 +412,9 @@ export function renderAccountOverview(points: Networth[], postings: Posting[], i
 
   layer
     .append("path")
-    .attr("clip-path", `url(${new URL("#" + clipAboveID, window.location.toString())})`)
+    .attr("clip-path", svgUrl(clipAboveID))
     .style("fill", z("gain"))
-    .style("opacity", "0.8")
+    .style("opacity", "0.2")
     .attr(
       "d",
       area(0, (d) => {
@@ -423,9 +424,9 @@ export function renderAccountOverview(points: Networth[], postings: Posting[], i
 
   layer
     .append("path")
-    .attr("clip-path", `url(${new URL("#" + clipBelowID, window.location.toString())})`)
+    .attr("clip-path", svgUrl(clipBelowID))
     .style("fill", z("loss"))
-    .style("opacity", "0.8")
+    .style("opacity", "0.2")
     .attr(
       "d",
       area(height, (d) => {
@@ -436,6 +437,7 @@ export function renderAccountOverview(points: Networth[], postings: Posting[], i
   layer
     .append("path")
     .style("stroke", lineScale("investment"))
+    .style("stroke-width", "1.5")
     .style("fill", "none")
     .attr(
       "d",
@@ -449,6 +451,7 @@ export function renderAccountOverview(points: Networth[], postings: Posting[], i
   layer
     .append("path")
     .style("stroke", lineScale("balance"))
+    .style("stroke-width", "1.5")
     .style("fill", "none")
     .attr(
       "d",

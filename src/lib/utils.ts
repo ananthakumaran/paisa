@@ -1200,3 +1200,7 @@ export function asTransaction(p: Posting): Transaction {
     postings: [p]
   };
 }
+
+export function svgUrl(identifier: string) {
+  return `url(${new URL("#" + identifier, window.location.toString())})`;
+}

@@ -41,7 +41,9 @@
   }
 
   onDestroy(async () => {
-    destroy();
+    if (destroy) {
+      destroy();
+    }
   });
 
   onMount(async () => {

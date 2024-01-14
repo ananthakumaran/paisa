@@ -38,18 +38,24 @@
 
 .hero {
   margin-top: 0px;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
 }
 
 .hero h1 {
-  margin-bottom: 30px;
   text-align: center;
   color: inherit;
   font-weight: 700;
+  color: #b388ff;
+  margin-bottom: 0;
+  margin-top: -30px;
+}
+
+.md-header__topic:first-child {
+  color: #b388ff;
 }
 
 .hero p {
-  text-align: justify;
+  text-align: center;
   max-width: 640px;
   margin: auto;
   line-height: 1.28;

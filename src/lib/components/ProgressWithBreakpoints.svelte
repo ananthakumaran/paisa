@@ -4,6 +4,8 @@
   import _ from "lodash";
   export let progressPercent: number;
   export let breakPoints: Point[];
+
+  $: spacers = _.range(breakPoints.length, 4);
 </script>
 
 <div>
@@ -31,6 +33,9 @@
             </div>
           </div>
         </div>
+      {/each}
+      {#each spacers as _s}
+        <div></div>
       {/each}
     </div>
   {/if}

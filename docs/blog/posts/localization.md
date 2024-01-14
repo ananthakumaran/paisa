@@ -4,6 +4,8 @@ comments: true
 categories:
   - configuration
   - locale
+hide:
+  - feedback
 ---
 
 # Localization

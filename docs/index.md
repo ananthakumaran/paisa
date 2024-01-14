@@ -6,7 +6,8 @@ hide:
 ---
 
 <div class="hero" markdown>
-# Personal Finance Manager
+# Paisa
+<p>Personal Finance Manager</p>
 </div>
 
 <div class="home" markdown>

@@ -116,14 +116,8 @@
       "Assets:Checking": {
         "date": "2022-01-08T00:00:00Z",
         "account": "Assets:Checking",
-        "amount": 1974.6485861976294,
-        "market_amount": 1974.6485861976294
-      },
-      "Assets:Coinbase:BTC": {
-        "date": "2022-01-08T00:00:00Z",
-        "account": "Assets:Coinbase:BTC",
-        "amount": 0.03440667277056,
-        "market_amount": 0.03440667277056
+        "amount": 1974.6829928704,
+        "market_amount": 1974.6829928704
       },
       "Assets:Equity:AAPL": {
         "date": "2022-01-08T00:00:00Z",
@@ -148,14 +142,8 @@
       "Assets:Checking": {
         "date": "2022-01-09T00:00:00Z",
         "account": "Assets:Checking",
-        "amount": 12001.94858619763,
-        "market_amount": 12001.94858619763
-      },
-      "Assets:Coinbase:BTC": {
-        "date": "2022-01-09T00:00:00Z",
-        "account": "Assets:Coinbase:BTC",
-        "amount": 0.03440667277056,
-        "market_amount": 0.03440667277056
+        "amount": 12001.9829928704,
+        "market_amount": 12001.9829928704
       },
       "Assets:Equity:AAPL": {
         "date": "2022-01-09T00:00:00Z",

@@ -46,8 +46,8 @@
           "balance": 0
         },
         {
-          "id": 16,
-          "transaction_id": "cf0433d80755efdea68d26506e86dc65",
+          "id": 14,
+          "transaction_id": "f94666a5e00e6fb7fde74aa1c3990f7f",
           "date": "2022-01-09T00:00:00Z",
           "payee": "Sell",
           "account": "Income:CapitalGains:Equity:AAPL",
@@ -57,8 +57,8 @@
           "status": "cleared",
           "tag_recurring": "",
           "tag_period": "",
-          "transaction_begin_line": 49,
-          "transaction_end_line": 53,
+          "transaction_begin_line": 45,
+          "transaction_end_line": 49,
           "file_name": "main.beancount",
           "forecast": false,
           "note": "",
@@ -143,8 +143,8 @@
           "balance": 0
         },
         {
-          "id": 16,
-          "transaction_id": "cf0433d80755efdea68d26506e86dc65",
+          "id": 14,
+          "transaction_id": "f94666a5e00e6fb7fde74aa1c3990f7f",
           "date": "2022-01-09T00:00:00Z",
           "payee": "Sell",
           "account": "Income:CapitalGains:Equity:AAPL",
@@ -154,8 +154,8 @@
           "status": "cleared",
           "tag_recurring": "",
           "tag_period": "",
-          "transaction_begin_line": 49,
-          "transaction_end_line": 53,
+          "transaction_begin_line": 45,
+          "transaction_end_line": 49,
           "file_name": "main.beancount",
           "forecast": false,
           "note": "",

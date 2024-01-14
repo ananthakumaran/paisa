@@ -6,8 +6,8 @@
     "Assets:Equity:NIFTY",
     "Assets:Equity:ABNB",
     "Assets:Equity:AAPL",
-    "Assets:Coinbase:BTC",
     "Income:CapitalGains:Equity:AAPL",
+    "Assets:Coinbase:BTC",
     "Income:Interest:Checking"
   ],
   "commodities": [
@@ -21,7 +21,7 @@
   "files": [
     {
       "name": "main.beancount",
-      "content": "1970-01-01 open Assets:Checking\n1970-01-01 open Assets:Equity:AAPL\n1970-01-01 open Assets:Equity:ABNB\n1970-01-01 open Assets:Equity:NIFTY\n1970-01-01 open Expenses:Rent\n1970-01-01 open Income:CapitalGains:Equity:AAPL\n1970-01-01 open Income:Interest:Checking\n1970-01-01 open Income:Salary:Acme\n1970-01-01 open Assets:Coinbase:BTC\n\n1970-01-01 commodity AAPL\n1970-01-01 commodity ABNB\n1970-01-01 commodity INR\n1970-01-01 commodity NIFTY\n1970-01-01 commodity USD\n1970-01-01 commodity BTC\n\n2022-01-07 price NIFTY 100 INR\n2022-02-07 price NIFTY 100.273 INR\n\n2022-01-01 txn \"Salary\"\n  Income:Salary:Acme                      -100,000 INR\n  Assets:Checking                          100,000 INR\n\n2022-01-03 txn \"Rent\"\n  Assets:Checking                          -20,000 INR\n  Expenses:Rent\n\n2022-01-06 txn \"Bonus\"\n  Income:Salary:Acme                       -20,000 INR\n  Assets:Checking                           20,000 INR\n\n2022-01-07 txn \"Investment\"\n  Assets:Checking                          -80,000 INR\n  Assets:Equity:NIFTY                          800 NIFTY {100 INR}\n\n2022-01-08 txn \"Buy ABNB\"\n  Assets:Equity:ABNB                          0.76 ABNB {131.27 USD}\n  Assets:Checking\n\n2022-01-08 txn \"Buy Apple\"\n  Assets:Equity:AAPL                           100 AAPL {100 INR}\n  Assets:Checking\n\n2022-01-08 txn \"Purchased 0.00000001 BTC\"\n  Assets:Coinbase:BTC                    0.00000001 BTC {42772 USD}\n  Assets:Checking                       -0.00042772 USD\n\n2022-01-09 txn \"Sell\"\n  Assets:Equity:AAPL                          -100 AAPL {100 INR} @ 100.273 INR\n  Income:CapitalGains:Equity:AAPL            -27.3 INR\n  Assets:Checking                          10027.3 INR\n\n2022-01-08 price USD 80.442048 INR\n\n2022-01-31 txn \"Interest\"\n  ; Global note\n  ; :interest:\n  Income:Interest:Checking                  -1,000 INR ; Posting note\n  Assets:Checking\n\n2022/01/31 balance Assets:Equity:NIFTY  800 NIFTY\n",
+      "content": "1970-01-01 open Assets:Checking\n1970-01-01 open Assets:Equity:AAPL\n1970-01-01 open Assets:Equity:ABNB\n1970-01-01 open Assets:Equity:NIFTY\n1970-01-01 open Expenses:Rent\n1970-01-01 open Income:CapitalGains:Equity:AAPL\n1970-01-01 open Income:Interest:Checking\n1970-01-01 open Income:Salary:Acme\n1970-01-01 open Assets:Coinbase:BTC\n\n1970-01-01 commodity AAPL\n1970-01-01 commodity ABNB\n1970-01-01 commodity INR\n1970-01-01 commodity NIFTY\n1970-01-01 commodity USD\n1970-01-01 commodity BTC\n\n2022-01-07 price NIFTY 100 INR\n2022-02-07 price NIFTY 100.273 INR\n\n2022-01-01 txn \"Salary\"\n  Income:Salary:Acme                      -100,000 INR\n  Assets:Checking                          100,000 INR\n\n2022-01-03 txn \"Rent\"\n  Assets:Checking                          -20,000 INR\n  Expenses:Rent\n\n2022-01-06 txn \"Bonus\"\n  Income:Salary:Acme                       -20,000 INR\n  Assets:Checking                           20,000 INR\n\n2022-01-07 txn \"Investment\"\n  Assets:Checking                          -80,000 INR\n  Assets:Equity:NIFTY                          800 NIFTY {100 INR}\n\n2022-01-08 txn \"Buy ABNB\"\n  Assets:Equity:ABNB                          0.76 ABNB {131.27 USD}\n  Assets:Checking\n\n2022-01-08 txn \"Buy Apple\"\n  Assets:Equity:AAPL                           100 AAPL {100 INR}\n  Assets:Checking\n\n2022-01-09 txn \"Sell\"\n  Assets:Equity:AAPL                          -100 AAPL {100 INR} @ 100.273 INR\n  Income:CapitalGains:Equity:AAPL            -27.3 INR\n  Assets:Checking                          10027.3 INR\n\n2022-01-08 price USD 80.442048 INR\n\n2022-01-10 txn \"Purchased 0.00000001 BTC\"\n  Assets:Coinbase:BTC                    0.00000001 BTC {42772 USD}\n  Assets:Checking                       -0.00042772 USD\n\n2022-01-31 txn \"Interest\"\n  ; Global note\n  ; :interest:\n  Income:Interest:Checking                  -1,000 INR ; Posting note\n  Assets:Checking\n\n2022/01/31 balance Assets:Equity:NIFTY  800 NIFTY\n",
       "versions": [],
       "operation": ""
     }
@@ -33,8 +33,8 @@
     "Investment",
     "Buy ABNB",
     "Buy Apple",
-    "Purchased 0.00000001 BTC",
     "Sell",
+    "Purchased 0.00000001 BTC",
     "Interest"
   ]
 }

@@ -42,16 +42,16 @@
   Assets:Equity:AAPL                           100 AAPL {100 INR}
   Assets:Checking
 
-2022-01-08 txn "Purchased 0.00000001 BTC"
-  Assets:Coinbase:BTC                    0.00000001 BTC {42772 USD}
-  Assets:Checking                       -0.00042772 USD
-
 2022-01-09 txn "Sell"
   Assets:Equity:AAPL                          -100 AAPL {100 INR} @ 100.273 INR
   Income:CapitalGains:Equity:AAPL            -27.3 INR
   Assets:Checking                          10027.3 INR
 
 2022-01-08 price USD 80.442048 INR
+
+2022-01-10 txn "Purchased 0.00000001 BTC"
+  Assets:Coinbase:BTC                    0.00000001 BTC {42772 USD}
+  Assets:Checking                       -0.00042772 USD
 
 2022-01-31 txn "Interest"
   ; Global note

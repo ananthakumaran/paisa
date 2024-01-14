@@ -6,8 +6,8 @@
     "Assets:Equity:NIFTY",
     "Assets:Equity:ABNB",
     "Assets:Equity:AAPL",
-    "Assets:Coinbase:BTC",
     "Income:CapitalGains:Equity:AAPL",
+    "Assets:Coinbase:BTC",
     "Income:Interest:Checking"
   ],
   "config": {

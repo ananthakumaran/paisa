@@ -65,8 +65,8 @@
     },
     {
       "date": "2022-01-08T00:00:00Z",
-      "investmentAmount": 218025.35141380236,
-      "withdrawalAmount": 118025.35141380237,
+      "investmentAmount": 218025.3170071296,
+      "withdrawalAmount": 118025.3170071296,
       "gainAmount": 0,
       "balanceAmount": 100000,
       "balanceUnits": 0,
@@ -74,8 +74,8 @@
     },
     {
       "date": "2022-01-09T00:00:00Z",
-      "investmentAmount": 228052.65141380238,
-      "withdrawalAmount": 128052.65141380238,
+      "investmentAmount": 228052.6170071296,
+      "withdrawalAmount": 128052.6170071296,
       "gainAmount": 27.3,
       "balanceAmount": 100027.3,
       "balanceUnits": 0,

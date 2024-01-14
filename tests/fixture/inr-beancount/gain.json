@@ -1,6 +1,42 @@
 {
   "gain_breakdown": [
     {
+      "account": "Assets:Coinbase:BTC",
+      "networth": {
+        "date": "2022-02-07T23:59:59.999999999Z",
+        "investmentAmount": 0.03440667277056,
+        "withdrawalAmount": 0,
+        "gainAmount": 0,
+        "balanceAmount": 0.03440667277056,
+        "balanceUnits": 0,
+        "netInvestmentAmount": 0.03440667277056
+      },
+      "xirr": 0,
+      "postings": [
+        {
+          "id": 13,
+          "transaction_id": "e0d3d39f83b50668b92ad25aac88582c",
+          "date": "2022-01-08T00:00:00Z",
+          "payee": "Purchased 0.00000001 BTC",
+          "account": "Assets:Coinbase:BTC",
+          "commodity": "BTC",
+          "quantity": 1e-8,
+          "amount": 0.03440667277056,
+          "status": "cleared",
+          "tag_recurring": "",
+          "tag_period": "",
+          "transaction_begin_line": 45,
+          "transaction_end_line": 48,
+          "file_name": "main.beancount",
+          "forecast": false,
+          "note": "",
+          "transaction_note": "",
+          "market_amount": 0.03440667277056,
+          "balance": 0
+        }
+      ]
+    },
+    {
       "account": "Assets:Equity:AAPL",
       "networth": {
         "date": "2022-02-07T23:59:59.999999999Z",
@@ -15,7 +51,7 @@
       "postings": [
         {
           "id": 11,
-          "transaction_id": "caadd198feb7df74977c601338dda836",
+          "transaction_id": "266960fc42ae079e572bd565bddc39b6",
           "date": "2022-01-08T00:00:00Z",
           "payee": "Buy Apple",
           "account": "Assets:Equity:AAPL",
@@ -25,8 +61,8 @@
           "status": "cleared",
           "tag_recurring": "",
           "tag_period": "",
-          "transaction_begin_line": 39,
-          "transaction_end_line": 42,
+          "transaction_begin_line": 41,
+          "transaction_end_line": 44,
           "file_name": "main.beancount",
           "forecast": false,
           "note": "",
@@ -35,8 +71,8 @@
           "balance": 0
         },
         {
-          "id": 14,
-          "transaction_id": "5791326dad5ac24abe481334280732b6",
+          "id": 16,
+          "transaction_id": "cf0433d80755efdea68d26506e86dc65",
           "date": "2022-01-09T00:00:00Z",
           "payee": "Sell",
           "account": "Income:CapitalGains:Equity:AAPL",
@@ -46,8 +82,8 @@
           "status": "cleared",
           "tag_recurring": "",
           "tag_period": "",
-          "transaction_begin_line": 43,
-          "transaction_end_line": 47,
+          "transaction_begin_line": 49,
+          "transaction_end_line": 53,
           "file_name": "main.beancount",
           "forecast": false,
           "note": "",
@@ -56,8 +92,8 @@
           "balance": 0
         },
         {
-          "id": 13,
-          "transaction_id": "5791326dad5ac24abe481334280732b6",
+          "id": 15,
+          "transaction_id": "cf0433d80755efdea68d26506e86dc65",
           "date": "2022-01-09T00:00:00Z",
           "payee": "Sell",
           "account": "Assets:Equity:AAPL",
@@ -67,8 +103,8 @@
           "status": "cleared",
           "tag_recurring": "",
           "tag_period": "",
-          "transaction_begin_line": 43,
-          "transaction_end_line": 47,
+          "transaction_begin_line": 49,
+          "transaction_end_line": 53,
           "file_name": "main.beancount",
           "forecast": false,
           "note": "",
@@ -82,34 +118,34 @@
       "account": "Assets:Equity:ABNB",
       "networth": {
         "date": "2022-02-07T23:59:59.999999999Z",
-        "investmentAmount": 8024.89870848,
+        "investmentAmount": 8025.3170071296,
         "withdrawalAmount": 0,
         "gainAmount": 0,
-        "balanceAmount": 8024.89870848,
+        "balanceAmount": 8025.3170071296,
         "balanceUnits": 0,
-        "netInvestmentAmount": 8024.89870848
+        "netInvestmentAmount": 8025.3170071296
       },
       "xirr": 0,
       "postings": [
         {
           "id": 9,
-          "transaction_id": "893e3f4e15df851b08a93a83a38a5117",
+          "transaction_id": "c1b0e83e369be2f6b1ad089b3b62f337",
           "date": "2022-01-08T00:00:00Z",
           "payee": "Buy ABNB",
           "account": "Assets:Equity:ABNB",
           "commodity": "ABNB",
           "quantity": 0.76,
-          "amount": 8024.89870848,
+          "amount": 8025.3170071296,
           "status": "cleared",
           "tag_recurring": "",
           "tag_period": "",
-          "transaction_begin_line": 35,
-          "transaction_end_line": 38,
+          "transaction_begin_line": 37,
+          "transaction_end_line": 40,
           "file_name": "main.beancount",
           "forecast": false,
           "note": "",
           "transaction_note": "",
-          "market_amount": 8024.89870848,
+          "market_amount": 8025.3170071296,
           "balance": 0
         }
       ]
@@ -129,7 +165,7 @@
       "postings": [
         {
           "id": 8,
-          "transaction_id": "3968afa503cf4faabd0e5088e2f66e0a",
+          "transaction_id": "c737b07df53db0880eed87b1cbb8c28c",
           "date": "2022-01-07T00:00:00Z",
           "payee": "Investment",
           "account": "Assets:Equity:NIFTY",
@@ -139,8 +175,8 @@
           "status": "cleared",
           "tag_recurring": "",
           "tag_period": "",
-          "transaction_begin_line": 31,
-          "transaction_end_line": 34,
+          "transaction_begin_line": 33,
+          "transaction_end_line": 36,
           "file_name": "main.beancount",
           "forecast": false,
           "note": "",

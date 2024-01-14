@@ -5,10 +5,10 @@
       "income": 121027.3,
       "expenses": 20000,
       "liabilities": 0,
-      "investment": 88024.89870848,
+      "investment": 88025.35141380237,
       "tax": 0,
-      "checking": 13002.40129152,
-      "balance": 13002.40129152
+      "checking": 13001.94858619763,
+      "balance": 13001.94858619763
     },
     {
       "date": "2022-02-01T00:00:00Z",
@@ -18,7 +18,7 @@
       "investment": 0,
       "tax": 0,
       "checking": 0,
-      "balance": 13002.40129152
+      "balance": 13001.94858619763
     }
   ]
 }

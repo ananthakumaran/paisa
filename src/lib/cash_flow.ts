@@ -93,9 +93,11 @@ export function renderMonthlyFlow(
 
   const renderer = function (cashFlows: CashFlow[]) {
     const positions = _.flatMap(cashFlows, (c) => [
-      c.income,
-      c.liabilities,
-      c.expenses + c.tax + c.investment,
+      c.income + (c.investment < 0 ? -c.investment : 0) + (c.liabilities > 0 ? c.liabilities : 0),
+      c.expenses +
+        c.tax +
+        (c.investment > 0 ? c.investment : 0) +
+        (c.liabilities < 0 ? -c.liabilities : 0),
       c.balance
     ]);
     positions.push(0);

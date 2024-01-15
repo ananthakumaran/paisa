@@ -129,6 +129,10 @@
     0 30px 60px -30px rgba(0, 0, 0, 0.3);
 }
 
+[data-md-color-scheme="slate"] .thumbnail-container {
+  box-shadow: none;
+}
+
 .split-codeview {
   display: flex;
   border-right-style: none;
@@ -239,22 +243,32 @@
 
 .feature-card {
   display: flex;
-  margin: 7rem 0;
+  margin: 3.5rem 0;
+}
+
+.feature-card-container {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 3.5rem;
+}
+
+.feature-card {
+  flex-basis: 50%;
+}
+
+@media screen and (max-width: 1275px) {
+  .feature-card {
+    flex-basis: 100%;
+  }
+}
+
+.feature-card-left {
+  min-width: 5.5rem;
 }
 
 .feature-card p {
   max-width: 22rem;
   text-align: left;
-}
-
-.feature-card-left,
-.feature-card-right {
-  width: 70%;
-}
-
-.feature-card-left.feature-card-icon,
-.feature-card-right.feature-card-icon {
-  width: 30%;
 }
 
 .feature-card-icon {
@@ -285,17 +299,9 @@
   color: var(--logo-color);
 }
 
-.feature-card-icon-logo {
-  border-left: 1px dashed var(--logo-color);
-}
-
 .feature-card-icon-asset .twemoji {
   background-color: var(--account-color-asset-background);
   color: var(--account-color-asset);
-}
-
-.feature-card-icon-asset {
-  border-left: 1px dashed var(--account-color-asset);
 }
 
 .feature-card-icon-expense .twemoji {
@@ -303,17 +309,9 @@
   color: var(--account-color-expense);
 }
 
-.feature-card-icon-expense {
-  border-left: 1px dashed var(--account-color-expense);
-}
-
 .feature-card-icon-liability .twemoji {
   background-color: var(--account-color-liability-background);
   color: var(--account-color-liability);
-}
-
-.feature-card-icon-liability {
-  border-left: 1px dashed var(--account-color-liability);
 }
 
 .feature-card-icon-equity .twemoji {
@@ -321,15 +319,7 @@
   color: var(--account-color-equity);
 }
 
-.feature-card-icon-equity {
-  border-left: 1px dashed var(--account-color-equity);
-}
-
 .feature-card-icon-income .twemoji {
   background-color: var(--account-color-income-background);
   color: var(--account-color-income);
-}
-
-.feature-card-icon-income {
-  border-left: 1px dashed var(--account-color-income);
 }

@@ -1,0 +1,10 @@
+{{#if (isDate (regexpMatch ROW.A "(\d{1,2}/\d{1,2}/\d{4}).*" group=1) "D/M/YYYY")}}
+  {{date (regexpMatch ROW.A "(\d{1,2}/\d{1,2}/\d{4}).*" group=1) "D/M/YYYY"}} {{ROW.B}}
+  {{#if (isBlank ROW.G)}}
+    {{predictAccount ROW.B prefix="Expenses"}}     {{amount ROW.F}} INR
+    Assets:Checking:Paytm
+  {{else}}
+    Assets:Checking:Paytm                          {{amount ROW.G}} INR
+    {{predictAccount ROW.B prefix="Assets:Checking"}}
+  {{/if}}
+{{/if}}

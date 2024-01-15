@@ -14,7 +14,7 @@ possible by choosing open standards and formats.
 
 > [Ledger](https://ledger-cli.org/) text format is used to store all the transaction data.
 
-## 2. Privacy :simple-gnuprivacyguard:
+## 2. Privacy :octicons-shield-lock-16:
 
 User's data is private. Paisa will not collect or send any data to any
 server[^1]. Paisa will not use any third party analytics or tracking on

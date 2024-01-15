@@ -14,6 +14,23 @@
   --md-code-hl-variable-color: #718c00;
 }
 
+:root {
+  --logo-color-background: rgb(179, 136, 255, 0.1);
+  --logo-color: #b388ff;
+  --logo-color-dark: #9971e5;
+  --logo-color-darker: #351982;
+  --account-color-asset-background: rgb(0, 176, 255, 0.1);
+  --account-color-asset: #00b0ff;
+  --account-color-expense-background: rgb(255, 23, 68, 0.1);
+  --account-color-expense: #ff1744;
+  --account-color-liability-background: rgb(255, 171, 0, 0.1);
+  --account-color-liability: #ffab00;
+  --account-color-equity-background: rgb(213, 0, 249, 0.1);
+  --account-color-equity: #d500f9;
+  --account-color-income-background: rgb(174, 234, 0, 0.1);
+  --account-color-income: #aeea00;
+}
+
 .highlight .m {
   font-weight: bold;
 }
@@ -37,21 +54,26 @@
 }
 
 .hero {
-  margin-top: 0px;
-  margin-bottom: 20px;
+  margin-top: 2rem;
+  margin-bottom: 3rem;
 }
 
 .hero h1 {
   text-align: center;
   color: inherit;
   font-weight: 700;
-  color: #b388ff;
+  color: var(--logo-color);
   margin-bottom: 0;
   margin-top: -30px;
+  font-size: 3rem;
+}
+
+.hero h1 a {
+  display: none !important;
 }
 
 .md-header__topic:first-child {
-  color: #b388ff;
+  color: var(--logo-color);
 }
 
 .hero p {
@@ -65,7 +87,7 @@
 
 .home .tabbed-set {
   max-width: 510px;
-  margin: 0px auto 50px auto !important;
+  margin: 0px auto 3rem auto !important;
 }
 
 .home ul li {
@@ -75,6 +97,20 @@
 
 .home ul {
   margin-left: 0 !important;
+}
+
+.home .md-button--primary {
+  background-color: var(--logo-color);
+  border-color: var(--logo-color);
+  color: var(--logo-color-darker);
+  border-radius: 30px;
+  padding: 0.325em 1.5em;
+}
+
+.home .md-button--primary:hover {
+  background-color: var(--logo-color-dark);
+  border-color: var(--logo-color-dark);
+  color: var(--logo-color-darker);
 }
 
 .features-container {
@@ -89,8 +125,8 @@
 .thumbnail-container {
   flex-basis: 50%;
   box-shadow:
-    0 0 10px rgba(0, 0, 0, 0.1),
-    0 0 30px rgb(0, 0, 0, 0.05);
+    0 50px 100px -20px rgba(50, 50, 93, 0.25),
+    0 30px 60px -30px rgba(0, 0, 0, 0.3);
 }
 
 .split-codeview {
@@ -182,21 +218,101 @@
 }
 
 .assets-color {
-  color: #00b0ff;
+  color: var(--account-color-asset);
 }
 
 .expenses-color {
-  color: #ff1744;
+  color: var(--account-color-expense);
 }
 
 .liabilities-color {
-  color: #ffab00;
+  color: var(--account-color-liability);
 }
 
 .equity-color {
-  color: #d500f9;
+  color: var(--account-color-equity);
 }
 
 .income-color {
-  color: #aeea00;
+  color: var(--account-color-income);
+}
+
+.feature-card {
+  display: flex;
+  margin: 7rem 0;
+}
+
+.feature-card p {
+  max-width: 22rem;
+  text-align: justify;
+}
+
+.feature-card-left {
+  width: 50%;
+}
+
+.feature-card-right {
+  width: 50%;
+}
+
+@media screen and (max-width: 1275px) {
+  .feature-card-left,
+  .feature-card-right {
+    width: 70%;
+  }
+
+  .feature-card-left.feature-card-icon,
+  .feature-card-right.feature-card-icon {
+    width: 30%;
+  }
+}
+
+.feature-card-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1.5rem;
+}
+
+.feature-card-icon .twemoji {
+  height: 100%;
+  border-radius: 50%;
+  padding: 0.75rem;
+}
+
+.feature-card-icon svg {
+  --card-icon-size: 2rem;
+  width: var(--card-icon-size) !important;
+  height: var(--card-icon-size) !important;
+  max-height: var(--card-icon-size) !important;
+}
+
+.feature-card-icon-logo .twemoji {
+  background-color: var(--logo-color-background);
+  color: var(--logo-color);
+}
+
+.feature-card-icon-asset .twemoji {
+  background-color: var(--account-color-asset-background);
+  color: var(--account-color-asset);
+}
+
+.feature-card-icon-expense .twemoji {
+  background-color: var(--account-color-expense-background);
+  color: var(--account-color-expense);
+}
+
+.feature-card-icon-liability .twemoji {
+  background-color: var(--account-color-liability-background);
+  color: var(--account-color-liability);
+}
+
+.feature-card-icon-equity .twemoji {
+  background-color: var(--account-color-equity-background);
+  color: var(--account-color-equity);
+}
+
+.feature-card-icon-income .twemoji {
+  background-color: var(--account-color-income-background);
+  color: var(--account-color-income);
 }

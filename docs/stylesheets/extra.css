@@ -129,6 +129,10 @@
     0 30px 60px -30px rgba(0, 0, 0, 0.3);
 }
 
+[data-md-color-scheme="slate"] .thumbnail-container {
+  box-shadow: none;
+}
+
 .split-codeview {
   display: flex;
   border-right-style: none;
@@ -239,39 +243,42 @@
 
 .feature-card {
   display: flex;
-  margin: 7rem 0;
+  margin: 3.5rem 0;
+}
+
+.feature-card-container {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 3.5rem;
+}
+
+.feature-card {
+  flex-basis: 50%;
+}
+
+@media screen and (max-width: 1275px) {
+  .feature-card {
+    flex-basis: 100%;
+  }
+}
+
+.feature-card-left {
+  min-width: 5.5rem;
 }
 
 .feature-card p {
   max-width: 22rem;
-  text-align: justify;
-}
-
-.feature-card-left {
-  width: 50%;
-}
-
-.feature-card-right {
-  width: 50%;
-}
-
-@media screen and (max-width: 1275px) {
-  .feature-card-left,
-  .feature-card-right {
-    width: 70%;
-  }
-
-  .feature-card-left.feature-card-icon,
-  .feature-card-right.feature-card-icon {
-    width: 30%;
-  }
+  text-align: left;
 }
 
 .feature-card-icon {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-top: 1.5rem;
+  align-items: start;
+  justify-content: end;
+}
+
+.feature-card-icon p {
+  margin: 0 2rem 0 0;
 }
 
 .feature-card-icon .twemoji {

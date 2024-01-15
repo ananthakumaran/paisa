@@ -99,9 +99,12 @@ hide:
 </div>
 
 
-
+<div class="feature-card-container" markdown>
 <div class="feature-card" markdown>
-<div class="feature-card-left" markdown>
+<div class="feature-card-left feature-card-icon feature-card-icon-logo" markdown>
+:fontawesome-regular-file-lines:{ .feature-card-icon }
+</div>
+<div class="feature-card-right" markdown>
 # Plain Text
 
 All your financial data is stored in plain text files. Of course, we
@@ -109,10 +112,6 @@ will not ask you to draw a picture on blank canvas. We provide
 enough guard rails to make data entry easy and error free. The editor
 comes with syntax highlighting, auto completion, error checking and
 auto formatting.
-</div>
-
-<div class="feature-card-right feature-card-icon feature-card-icon-logo" markdown>
-:fontawesome-regular-file-lines:{ .feature-card-icon }
 </div>
 </div>
 
@@ -132,17 +131,16 @@ in your system. Checkout the [manifesto](./manifesto.md) for more.
 </div>
 
 <div class="feature-card" markdown>
-<div class="feature-card-left" markdown>
+<div class="feature-card-left feature-card-icon feature-card-icon-asset" markdown>
+:octicons-graph-24:{ .feature-card-icon }
+</div>
+<div class="feature-card-right" markdown>
 # Price Tracking
 
 Paisa supports various [price](./reference/commodities.md) data providers, so it can keep track of
 the latest price of all your assets. It also allows the user to enter
 the price manually, so you can use it to revalue your assets like
 house, car, land, etc.
-</div>
-
-<div class="feature-card-right feature-card-icon feature-card-icon-asset" markdown>
-:octicons-graph-24:{ .feature-card-icon }
 </div>
 </div>
 
@@ -165,7 +163,10 @@ category and make sure you don't overspend.
 </div>
 
 <div class="feature-card" markdown>
-<div class="feature-card-left" markdown>
+<div class="feature-card-left feature-card-icon feature-card-icon-income" markdown>
+:material-microsoft-excel:{ .feature-card-icon }
+</div>
+<div class="feature-card-right" markdown>
 # Data Import
 
 You don't have to sit and manually enter all your transactions. You
@@ -176,9 +177,6 @@ setup the import template, it will hardly take 5 minutes to import and
 categorize all your transactions each month.
 </div>
 
-<div class="feature-card-right feature-card-icon feature-card-icon-income" markdown>
-:material-microsoft-excel:{ .feature-card-icon }
-</div>
 </div>
 
 
@@ -199,7 +197,10 @@ and will update automatically when you change the data in your ledger.
 </div>
 
 <div class="feature-card" markdown>
-<div class="feature-card-left" markdown>
+<div class="feature-card-left feature-card-icon feature-card-icon-logo" markdown>
+:octicons-goal-16:{ .feature-card-icon }
+</div>
+<div class="feature-card-right" markdown>
 # Goals
 
 Want to know how much you need to save for your next vacation? or how
@@ -210,9 +211,6 @@ the other hand, if you have a deadline, paisa can tell you how much
 you need to save each month to achieve your goal.
 </div>
 
-<div class="feature-card-right feature-card-icon feature-card-icon-logo" markdown>
-:octicons-goal-16:{ .feature-card-icon }
-</div>
 </div>
 
 <div class="feature-card" markdown>
@@ -231,4 +229,7 @@ schedule like weekly, monthly, quarterly, last day of the month, last
 day of the quarter, etc.
 
 </div>
+</div>
+
+<p></p>
 </div>

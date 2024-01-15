@@ -244,34 +244,27 @@
 
 .feature-card p {
   max-width: 22rem;
-  text-align: justify;
+  text-align: left;
 }
 
-.feature-card-left {
-  width: 50%;
-}
-
+.feature-card-left,
 .feature-card-right {
-  width: 50%;
+  width: 70%;
 }
 
-@media screen and (max-width: 1275px) {
-  .feature-card-left,
-  .feature-card-right {
-    width: 70%;
-  }
-
-  .feature-card-left.feature-card-icon,
-  .feature-card-right.feature-card-icon {
-    width: 30%;
-  }
+.feature-card-left.feature-card-icon,
+.feature-card-right.feature-card-icon {
+  width: 30%;
 }
 
 .feature-card-icon {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-top: 1.5rem;
+  align-items: start;
+  justify-content: end;
+}
+
+.feature-card-icon p {
+  margin: 0 2rem 0 0;
 }
 
 .feature-card-icon .twemoji {
@@ -292,9 +285,17 @@
   color: var(--logo-color);
 }
 
+.feature-card-icon-logo {
+  border-left: 1px dashed var(--logo-color);
+}
+
 .feature-card-icon-asset .twemoji {
   background-color: var(--account-color-asset-background);
   color: var(--account-color-asset);
+}
+
+.feature-card-icon-asset {
+  border-left: 1px dashed var(--account-color-asset);
 }
 
 .feature-card-icon-expense .twemoji {
@@ -302,9 +303,17 @@
   color: var(--account-color-expense);
 }
 
+.feature-card-icon-expense {
+  border-left: 1px dashed var(--account-color-expense);
+}
+
 .feature-card-icon-liability .twemoji {
   background-color: var(--account-color-liability-background);
   color: var(--account-color-liability);
+}
+
+.feature-card-icon-liability {
+  border-left: 1px dashed var(--account-color-liability);
 }
 
 .feature-card-icon-equity .twemoji {
@@ -312,7 +321,15 @@
   color: var(--account-color-equity);
 }
 
+.feature-card-icon-equity {
+  border-left: 1px dashed var(--account-color-equity);
+}
+
 .feature-card-icon-income .twemoji {
   background-color: var(--account-color-income-background);
   color: var(--account-color-income);
+}
+
+.feature-card-icon-income {
+  border-left: 1px dashed var(--account-color-income);
 }

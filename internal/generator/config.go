@@ -92,7 +92,7 @@ goals:
       target_date: "2036-01-01"
       rate: 10
       accounts:
-        - '!Assets:Checking'
+        - '!Assets:Checking:SBI'
 allocation_targets:
   - name: Debt
     target: 40
@@ -105,7 +105,7 @@ allocation_targets:
 schedule_al:
   - code: bank
     accounts:
-      - Assets:Checking
+      - Assets:Checking:SBI
   - code: share
     accounts:
       - Assets:Equity:*
@@ -275,16 +275,16 @@ func emitChitFund(state *GeneratorState) {
 		amount := fmt.Sprintf("1 CHIT @ %d", price)
 
 		if start.Month() >= time.June {
-			emitTransaction(state.Ledger, start, "Chit installment", "Assets:Checking", "Liabilities:Chit", amount)
+			emitTransaction(state.Ledger, start, "Chit installment", "Assets:Checking:SBI", "Liabilities:Chit", amount)
 		} else {
-			emitTransaction(state.Ledger, start, "Chit installment", "Assets:Checking", "Assets:Debt:Chit", amount)
+			emitTransaction(state.Ledger, start, "Chit installment", "Assets:Checking:SBI", "Assets:Debt:Chit", amount)
 		}
 
 		if start.Month() == time.June {
 			amount = fmt.Sprintf("-5 CHIT @ %d", price)
-			emitTransaction(state.Ledger, start, "Chit withdraw", "Assets:Checking", "Assets:Debt:Chit", amount)
+			emitTransaction(state.Ledger, start, "Chit withdraw", "Assets:Checking:SBI", "Assets:Debt:Chit", amount)
 			amount = fmt.Sprintf("-5 CHIT @ %d", price)
-			emitTransaction(state.Ledger, start, "Chit withdraw", "Assets:Checking", "Liabilities:Chit", amount)
+			emitTransaction(state.Ledger, start, "Chit withdraw", "Assets:Checking:SBI", "Liabilities:Chit", amount)
 		}
 
 	}
@@ -311,7 +311,7 @@ func emitSalary(state *GeneratorState, start time.Time) {
 	state.Balance += netSalary
 
 	salaryAccount := fmt.Sprintf("Income:Salary:%s", company)
-	emitTransaction(state.Ledger, start, "Salary", salaryAccount, "Assets:Checking", netSalary)
+	emitTransaction(state.Ledger, start, "Salary", salaryAccount, "Assets:Checking:SBI", netSalary)
 	emitTransaction(state.Ledger, start, "Salary EPF", salaryAccount, "Assets:Debt:EPF", epf)
 	emitTransaction(state.Ledger, start, "Salary Tax", salaryAccount, "Expenses:Tax", tax)
 	emitCommodityBuy(state.Ledger, start, "NPS_HDFC_E", salaryAccount, "Assets:Debt:NPS:HDFC:E", nps*0.75)
@@ -328,7 +328,7 @@ func emitExpense(state *GeneratorState, start time.Time) {
 	emit := func(payee string, account string, amount float64, fuzz float64) {
 		actualAmount := roundToK(percentRange(int(fuzz*100), 100) * amount)
 		start = start.AddDate(0, 0, 1)
-		emitTransaction(state.Ledger, start, payee, "Assets:Checking", account, actualAmount)
+		emitTransaction(state.Ledger, start, payee, "Assets:Checking:SBI", account, actualAmount)
 		state.Balance -= actualAmount
 	}
 
@@ -372,16 +372,16 @@ func emitInvestment(state *GeneratorState, start time.Time) {
 	debt := roundToK(state.Balance * 0.3)
 
 	state.Balance -= equity1
-	state.NiftyBalance += emitCommodityBuy(state.Ledger, start, "NIFTY", "Assets:Checking", "Assets:Equity:NIFTY", equity1)
+	state.NiftyBalance += emitCommodityBuy(state.Ledger, start, "NIFTY", "Assets:Checking:SBI", "Assets:Equity:NIFTY", equity1)
 
 	state.Balance -= equity2
-	emitCommodityBuy(state.Ledger, start, "PPFAS", "Assets:Checking", "Assets:Equity:PPFAS", equity2)
+	emitCommodityBuy(state.Ledger, start, "PPFAS", "Assets:Checking:SBI", "Assets:Equity:PPFAS", equity2)
 
 	state.Balance -= debt
-	emitCommodityBuy(state.Ledger, start, "ABCBF", "Assets:Checking", "Assets:Debt:ABCBF", debt)
+	emitCommodityBuy(state.Ledger, start, "ABCBF", "Assets:Checking:SBI", "Assets:Debt:ABCBF", debt)
 
 	if start.Month() == time.March {
-		units, amount := emitCommoditySell(state.Ledger, start.AddDate(0, 0, 15), "NIFTY", "Assets:Checking", "Assets:Equity:NIFTY", 75000, state.NiftyBalance)
+		units, amount := emitCommoditySell(state.Ledger, start.AddDate(0, 0, 15), "NIFTY", "Assets:Checking:SBI", "Assets:Equity:NIFTY", 75000, state.NiftyBalance)
 		state.NiftyBalance += units
 		state.Balance += amount
 	}
@@ -428,7 +428,7 @@ func generateJournalFile(cwd string) {
     Expenses:Utilities                          2000 INR
     Expenses:Shopping                           3000 INR
     Expenses:Clothing                           1000 INR
-    Assets:Checking
+    Assets:Checking:SBI
 
 `)
 	if err != nil {
@@ -476,7 +476,7 @@ immovable = cost_basis({account = Assets:House})
 metal = 0
 art = 0
 vehicle = 0
-bank = cost_basis({account =~ /^Assets:Checking/})
+bank = cost_basis({account =~ /^Assets:Checking:SBI/})
 share = cost_basis({account =~ /^Assets:Equity:.*/ OR
                     account =~ /^Assets:Debt:.*/})
 insurance = 0

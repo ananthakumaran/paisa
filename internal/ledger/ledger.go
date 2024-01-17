@@ -236,7 +236,7 @@ func (Beancount) ValidateFile(journalPath string) ([]LedgerFileError, string, er
 
 		err = utils.Exec(path, &output, &error, journalPath, "bal")
 		if err != nil {
-			log.Error(error)
+			log.Error(error.String())
 			return nil, "", err
 		}
 		return errors, utils.Dos2Unix(output.String()), nil
@@ -295,7 +295,7 @@ func (Beancount) Parse(journalPath string, prices []price.Price) ([]*posting.Pos
 	var output, error bytes.Buffer
 	err = utils.Exec(path, &output, &error, args...)
 	if err != nil {
-		log.Error(error)
+		log.Error(error.String())
 		return nil, err
 	}
 
@@ -584,7 +584,7 @@ func execLedgerCommand(journalPath string, flags []string) ([]*posting.Posting, 
 	var output, error bytes.Buffer
 	err = utils.Exec(ledgerPath, &output, &error, args...)
 	if err != nil {
-		log.Error(error)
+		log.Error(error.String())
 		return nil, err
 	}
 
@@ -728,7 +728,7 @@ func execHLedgerCommand(journalPath string, prices []price.Price, flags []string
 	var output, error bytes.Buffer
 	err = utils.Exec(path, &output, &error, args...)
 	if err != nil {
-		log.Error(error)
+		log.Error(error.String())
 		return nil, err
 	}
 

@@ -27,10 +27,18 @@ type AssetBreakdown struct {
 	AbsoluteReturn   decimal.Decimal `json:"absoluteReturn"`
 }
 
+func GetCheckingBalance(db *gorm.DB) gin.H {
+	return doGetBalance(db, "Assets:Checking:%", false)
+}
+
 func GetBalance(db *gorm.DB) gin.H {
-	postings := query.Init(db).Like("Assets:%", "Income:CapitalGains:%").All()
+	return doGetBalance(db, "Assets:%", true)
+}
+
+func doGetBalance(db *gorm.DB, pattern string, rollup bool) gin.H {
+	postings := query.Init(db).Like(pattern, "Income:CapitalGains:%").All()
 	postings = service.PopulateMarketPrice(db, postings)
-	breakdowns := ComputeBreakdowns(db, postings, true)
+	breakdowns := ComputeBreakdowns(db, postings, rollup)
 	return gin.H{"asset_breakdowns": breakdowns}
 }
 

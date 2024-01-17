@@ -17,7 +17,8 @@
     type TransactionSequence,
     type Legend,
     now,
-    type GoalSummary
+    type GoalSummary,
+    type AssetBreakdown
   } from "$lib/utils";
   import _ from "lodash";
   import { onMount } from "svelte";
@@ -30,6 +31,7 @@
   import UpcomingCard from "$lib/components/UpcomingCard.svelte";
   import GoalSummaryCard from "$lib/components/GoalSummaryCard.svelte";
   import LegendCard from "$lib/components/LegendCard.svelte";
+  import BalanceCard from "$lib/components/BalanceCard.svelte";
 
   let UntypedMasonryGrid = MasonryGrid as any;
 
@@ -48,6 +50,7 @@
   let currentBudget: Budget;
   let selectedExpenses: Posting[] = [];
   let isEmpty = false;
+  let checkingBalances: Record<string, AssetBreakdown> = {};
 
   $: if (renderer) {
     selectedExpenses = expenses[month] || [];
@@ -68,6 +71,7 @@
       budget: { budgetsByMonth },
       transactionSequences,
       networth: { networth, xirr },
+      checkingBalances: { asset_breakdowns: checkingBalances },
       transactions
     } = await ajax("/api/dashboard"));
 
@@ -192,6 +196,28 @@
               </div>
             </div>
           </div>
+
+          {#if !_.isEmpty(checkingBalances)}
+            <div class="tile is-parent">
+              <article class="tile is-child">
+                <div class="content">
+                  <p class="subtitle">
+                    <a class="secondary-link" href="/assets/balance">Checking Balance</a>
+                  </p>
+                  <div class="content">
+                    <UntypedMasonryGrid gap={10} maxStretchColumnSize={400} align="stretch">
+                      {#each _.values(checkingBalances) as assetBreakdown}
+                        <div class="is-flex-grow-1">
+                          <BalanceCard {assetBreakdown} />
+                        </div>
+                      {/each}
+                    </UntypedMasonryGrid>
+                  </div>
+                </div>
+              </article>
+            </div>
+          {/if}
+
           <div class="tile is-parent">
             <article class="tile is-child">
               <p class="subtitle">

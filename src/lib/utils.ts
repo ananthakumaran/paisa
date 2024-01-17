@@ -553,6 +553,7 @@ export function ajax(route: "/api/gain"): Promise<{
   gain_breakdown: Gain[];
 }>;
 export function ajax(route: "/api/dashboard"): Promise<{
+  checkingBalances: { asset_breakdowns: Record<string, AssetBreakdown> };
   expenses: { [key: string]: Posting[] };
   cashFlows: CashFlow[];
   transactionSequences: TransactionSequence[];

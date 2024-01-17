@@ -26,6 +26,9 @@
       "balance": 994.95
     }
   ],
+  "checkingBalances": {
+    "asset_breakdowns": {}
+  },
   "expenses": {},
   "goalSummaries": [],
   "networth": {

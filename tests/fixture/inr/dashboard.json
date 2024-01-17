@@ -26,6 +26,9 @@
       "balance": 13001.9829928704
     }
   ],
+  "checkingBalances": {
+    "asset_breakdowns": {}
+  },
   "expenses": {
     "2022-01": [
       {

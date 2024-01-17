@@ -176,7 +176,7 @@ func (HLedgerCLI) Parse(journalPath string, prices []price.Price) ([]*posting.Po
 	}
 
 	timeRange := fmt.Sprintf("%d..%d", utils.Now().Year()-3, utils.Now().Year()+3)
-	budgetPostings, err := execHLedgerCommand(journalPath, prices, []string{"--forecast=" + timeRange, "tag:_generated-transaction"})
+	budgetPostings, err := execHLedgerCommand(journalPath, prices, []string{"--ignore-assertions", "--forecast=" + timeRange, "tag:_generated-transaction"})
 
 	if err != nil {
 		return nil, err

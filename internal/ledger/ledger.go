@@ -787,41 +787,6 @@ func execHLedgerCommand(journalPath string, prices []price.Price, flags []string
 			if len(p.Amount) == 0 {
 				continue
 			}
-			amount := p.Amount[0]
-			totalAmount := decimal.NewFromFloat(amount.Quantity.Value)
-			totalAmountSet := false
-
-			if amount.Commodity != config.DefaultCurrency() {
-				if amount.Price.Contents.Quantity.Value != 0 {
-					var unconvertedTotal decimal.Decimal
-					if amount.Price.Tag == "TotalPrice" {
-						unconvertedTotal = decimal.NewFromFloat(amount.Price.Contents.Quantity.Value)
-					} else {
-						unconvertedTotal = decimal.NewFromFloat(amount.Price.Contents.Quantity.Value).Mul(decimal.NewFromFloat(amount.Quantity.Value))
-					}
-
-					if amount.Price.Contents.Commodity != config.DefaultCurrency() {
-						pr := lookupPrice(pricesTree, amount.Commodity, date)
-						if !pr.Equal(decimal.Zero) {
-							totalAmount = decimal.NewFromFloat(amount.Quantity.Value).Mul(pr)
-							totalAmountSet = true
-						}
-						if !totalAmountSet {
-							pr = lookupPrice(pricesTree, amount.Price.Contents.Commodity, date)
-							if !pr.Equal(decimal.Zero) {
-								totalAmount = unconvertedTotal.Mul(pr)
-							}
-						}
-					} else {
-						totalAmount = unconvertedTotal
-					}
-				} else {
-					pr := lookupPrice(pricesTree, amount.Commodity, date)
-					if !pr.Equal(decimal.Zero) {
-						totalAmount = decimal.NewFromFloat(amount.Quantity.Value).Mul(pr)
-					}
-				}
-			}
 
 			var tagRecurring, tagPeriod string
 
@@ -859,30 +824,64 @@ func execHLedgerCommand(journalPath string, prices []price.Price, flags []string
 				if err != nil {
 					return nil, err
 				}
-
 			}
 
-			posting := posting.Posting{
-				Date:                 date,
-				Payee:                t.Description,
-				Account:              p.Account,
-				Commodity:            amount.Commodity,
-				Quantity:             decimal.NewFromFloat(amount.Quantity.Value),
-				Amount:               totalAmount,
-				TransactionID:        strconv.FormatInt(t.ID, 10),
-				Status:               strings.ToLower(t.Status),
-				TagRecurring:         tagRecurring,
-				TagPeriod:            tagPeriod,
-				TransactionBeginLine: t.TSourcePos[0].SourceLine,
-				TransactionEndLine:   t.TSourcePos[1].SourceLine,
-				Forecast:             forecast,
-				FileName:             fileName,
-				Note:                 p.Comment,
-				TransactionNote:      t.Comment}
-			postings = append(postings, &posting)
+			for _, amount := range p.Amount {
+				totalAmount := decimal.NewFromFloat(amount.Quantity.Value)
+				totalAmountSet := false
 
+				if amount.Commodity != config.DefaultCurrency() {
+					if amount.Price.Contents.Quantity.Value != 0 {
+						var unconvertedTotal decimal.Decimal
+						if amount.Price.Tag == "TotalPrice" {
+							unconvertedTotal = decimal.NewFromFloat(amount.Price.Contents.Quantity.Value)
+						} else {
+							unconvertedTotal = decimal.NewFromFloat(amount.Price.Contents.Quantity.Value).Mul(decimal.NewFromFloat(amount.Quantity.Value))
+						}
+
+						if amount.Price.Contents.Commodity != config.DefaultCurrency() {
+							pr := lookupPrice(pricesTree, amount.Commodity, date)
+							if !pr.Equal(decimal.Zero) {
+								totalAmount = decimal.NewFromFloat(amount.Quantity.Value).Mul(pr)
+								totalAmountSet = true
+							}
+							if !totalAmountSet {
+								pr = lookupPrice(pricesTree, amount.Price.Contents.Commodity, date)
+								if !pr.Equal(decimal.Zero) {
+									totalAmount = unconvertedTotal.Mul(pr)
+								}
+							}
+						} else {
+							totalAmount = unconvertedTotal
+						}
+					} else {
+						pr := lookupPrice(pricesTree, amount.Commodity, date)
+						if !pr.Equal(decimal.Zero) {
+							totalAmount = decimal.NewFromFloat(amount.Quantity.Value).Mul(pr)
+						}
+					}
+				}
+
+				posting := posting.Posting{
+					Date:                 date,
+					Payee:                t.Description,
+					Account:              p.Account,
+					Commodity:            amount.Commodity,
+					Quantity:             decimal.NewFromFloat(amount.Quantity.Value),
+					Amount:               totalAmount,
+					TransactionID:        strconv.FormatInt(t.ID, 10),
+					Status:               strings.ToLower(t.Status),
+					TagRecurring:         tagRecurring,
+					TagPeriod:            tagPeriod,
+					TransactionBeginLine: t.TSourcePos[0].SourceLine,
+					TransactionEndLine:   t.TSourcePos[1].SourceLine,
+					Forecast:             forecast,
+					FileName:             fileName,
+					Note:                 p.Comment,
+					TransactionNote:      t.Comment}
+				postings = append(postings, &posting)
+			}
 		}
-
 	}
 
 	return postings, nil

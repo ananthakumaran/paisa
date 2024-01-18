@@ -38,10 +38,10 @@
   let previewEditor: EditorView;
 
   onMount(async () => {
+    accountTfIdf.set(await ajax("/api/account/tf_idf"));
     ({ templates } = await ajax("/api/templates"));
     selectedTemplate = templates[0];
     saveAsName = selectedTemplate.name;
-    accountTfIdf.set(await ajax("/api/account/tf_idf"));
     templateEditor = createTemplateEditor(selectedTemplate.content, templateEditorDom);
     previewEditor = createPreviewEditor(preview, previewEditorDom, { readonly: true });
   });
@@ -52,9 +52,10 @@
       body: JSON.stringify({
         name: saveAsName,
         content: templateEditor.state.doc.toString()
-      })
+      }),
+      background: true
     });
-    ({ templates } = await ajax("/api/templates"));
+    ({ templates } = await ajax("/api/templates", { background: true }));
     selectedTemplate = _.find(templates, { id });
     saveAsName = selectedTemplate.name;
     toast.toast({
@@ -71,9 +72,10 @@
       method: "POST",
       body: JSON.stringify({
         name: selectedTemplate.name
-      })
+      }),
+      background: true
     });
-    ({ templates } = await ajax("/api/templates"));
+    ({ templates } = await ajax("/api/templates", { background: true }));
     selectedTemplate = templates[0];
     saveAsName = selectedTemplate.name;
     toast.toast({
@@ -153,7 +155,8 @@
   async function saveToFile(destinationFile: string) {
     const { saved, message } = await ajax("/api/editor/save", {
       method: "POST",
-      body: JSON.stringify({ name: destinationFile, content: preview, operation: "overwrite" })
+      body: JSON.stringify({ name: destinationFile, content: preview, operation: "overwrite" }),
+      background: true
     });
 
     if (saved) {

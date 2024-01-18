@@ -80,20 +80,45 @@ export const theme = writable("light");
 
 export const loading = writable(false);
 
-let timeoutId: NodeJS.Timeout;
-export const delayedLoading = derived([loading], ([$l], set) => {
-  if (timeoutId) {
-    clearTimeout(timeoutId);
-  }
+const DELAY = 200;
+const DEBOUNCE_DELAY = 150;
 
-  if (!$l) {
-    set($l);
-  } else {
-    timeoutId = setTimeout(() => {
-      return set($l);
-    }, 200);
-  }
-});
+let timeoutId: NodeJS.Timeout;
+export const delayedLoading = derived(
+  [loading],
+  ([$l], set) => {
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+    }
+
+    timeoutId = setTimeout(
+      () => {
+        return set($l);
+      },
+      $l ? DELAY : DEBOUNCE_DELAY
+    );
+  },
+  false
+);
+
+let swithcTimeoutId: NodeJS.Timeout;
+export const delayedUnLoading = derived(
+  [loading],
+  ([$l], set) => {
+    if (swithcTimeoutId) {
+      clearTimeout(swithcTimeoutId);
+    }
+
+    if ($l) {
+      set($l);
+    } else {
+      swithcTimeoutId = setTimeout(() => {
+        return set($l);
+      }, DEBOUNCE_DELAY);
+    }
+  },
+  false
+);
 
 export const willClearTippy = writable(0);
 

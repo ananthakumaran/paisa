@@ -39,7 +39,8 @@
       let success = false;
       ({ success, error } = await ajax("/api/config", {
         method: "POST",
-        body: JSON.stringify(newConfig)
+        body: JSON.stringify(newConfig),
+        background: true
       }));
 
       if (success) {

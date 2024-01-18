@@ -15,7 +15,7 @@
   let filters: Record<string, AutoCompleteItem> = {};
 
   onMount(async () => {
-    ({ providers } = await ajax("/api/price/providers"));
+    ({ providers } = await ajax("/api/price/providers", { background: true }));
     selectedProvider = providers[0];
   });
 
@@ -25,7 +25,7 @@
     try {
       await ajax(
         "/api/price/providers/delete/:provider",
-        { method: "POST" },
+        { method: "POST", background: true },
         { provider: selectedProvider.code }
       );
     } finally {
@@ -68,7 +68,8 @@
           field,
           provider: selectedProvider.code,
           filters: queryFilters
-        })
+        }),
+        background: true
       });
       return completions;
     };

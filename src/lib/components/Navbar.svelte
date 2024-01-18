@@ -46,6 +46,7 @@
     maxDepthSelector?: boolean;
     recurringIcons?: boolean;
     children?: Link[];
+    disablePreload?: boolean;
   }
   const links: Link[] = [
     { label: "Dashboard", href: "/", hide: true },
@@ -106,7 +107,7 @@
       href: "/ledger",
       children: [
         { label: "Import", href: "/import", help: "import" },
-        { label: "Editor", href: "/editor", help: "editor" },
+        { label: "Editor", href: "/editor", help: "editor", disablePreload: true },
         { label: "Transactions", href: "/transaction", help: "bulk-edit" },
         { label: "Postings", href: "/posting" },
         { label: "Price", href: "/price" }
@@ -117,7 +118,7 @@
       href: "/more",
       children: [
         { label: "Configuration", href: "/config", tag: "alpha", help: "config" },
-        { label: "Sheets", href: "/sheets", help: "sheets" },
+        { label: "Sheets", href: "/sheets", help: "sheets", disablePreload: true },
         { label: "Goals", href: "/goals", help: "goals" },
         { label: "Doctor", href: "/doctor" },
         { label: "Logs", href: "/logs" }
@@ -220,8 +221,11 @@
       {#each links as link}
         {#if _.isEmpty(link.children)}
           {#if !link.hide}
-            <a class="navbar-item" href={link.href} class:is-active={normalizedPath == link.href}
-              >{link.label}</a
+            <a
+              class="navbar-item"
+              href={link.href}
+              data-sveltekit-preload-data={link.disablePreload ? "tap" : "hover"}
+              class:is-active={normalizedPath == link.href}>{link.label}</a
             >
           {/if}
         {:else}
@@ -237,8 +241,11 @@
               {#each link.children as sublink}
                 {@const href = link.href + sublink.href}
                 {#if _.isEmpty(sublink.children)}
-                  <a class="navbar-item" {href} class:is-active={normalizedPath.startsWith(href)}
-                    >{sublink.label}</a
+                  <a
+                    class="navbar-item"
+                    {href}
+                    data-sveltekit-preload-data={sublink.disablePreload ? "tap" : "hover"}
+                    class:is-active={normalizedPath.startsWith(href)}>{sublink.label}</a
                   >
                 {:else}
                   <div class="nested has-dropdown navbar-item">
@@ -261,6 +268,9 @@
                           <a
                             href={href + subsublink.href}
                             class="navbar-item"
+                            data-sveltekit-preload-data={subsublink.disablePreload
+                              ? "tap"
+                              : "hover"}
                             class:is-active={normalizedPath == href + subsublink.href}
                             >{subsublink.label}</a
                           >

@@ -25,7 +25,8 @@ async function lint(editor: EditorView): Promise<Diagnostic[]> {
   const doc = editor.state.doc;
   const response = await ajax("/api/editor/validate", {
     method: "POST",
-    body: JSON.stringify({ name: "", content: editor.state.doc.toString() })
+    body: JSON.stringify({ name: "", content: editor.state.doc.toString() }),
+    background: true
   });
 
   editorState.update((current) =>

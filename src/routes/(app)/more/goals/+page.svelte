@@ -32,7 +32,8 @@
   async function save(newConfig: UserConfig) {
     const { success, error } = await ajax("/api/config", {
       method: "POST",
-      body: JSON.stringify(newConfig)
+      body: JSON.stringify(newConfig),
+      background: true
     });
 
     if (success) {

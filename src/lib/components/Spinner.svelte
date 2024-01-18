@@ -1,18 +1,19 @@
 <script lang="ts">
-  import { delayedLoading, loading } from "../../store";
+  import { fade } from "svelte/transition";
+  import { delayedLoading, delayedUnLoading } from "../../store";
   import Logo from "./Logo.svelte";
   let size = 90;
 </script>
 
 <div>
+  <div style={$delayedUnLoading || $delayedLoading ? "visibility: hidden" : ""}>
+    <slot />
+  </div>
   {#if $delayedLoading}
-    <div class="circle-container">
+    <div class="circle-container" transition:fade={{ duration: 400 }}>
       <Logo {size} animation />
     </div>
   {/if}
-  <div style={$loading ? "display: none" : ""}>
-    <slot />
-  </div>
 </div>
 
 <style lang="scss">

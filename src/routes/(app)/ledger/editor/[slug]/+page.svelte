@@ -96,7 +96,8 @@
   async function revert(version: string) {
     const { file } = await ajax("/api/editor/file", {
       method: "POST",
-      body: JSON.stringify({ name: version })
+      body: JSON.stringify({ name: version }),
+      background: true
     });
 
     updateContent(editor, file.content);
@@ -112,7 +113,8 @@
   async function deleteBackups() {
     const { file } = await ajax("/api/editor/file/delete_backups", {
       method: "POST",
-      body: JSON.stringify({ name: selectedFile.name })
+      body: JSON.stringify({ name: selectedFile.name }),
+      background: true
     });
 
     selectedFile.versions = file.versions;
@@ -122,7 +124,8 @@
     const doc = editor.state.doc;
     const { errors, saved, file, message } = await ajax("/api/editor/save", {
       method: "POST",
-      body: JSON.stringify({ name: selectedFile.name, content: doc.toString() })
+      body: JSON.stringify({ name: selectedFile.name, content: doc.toString() }),
+      background: true
     });
 
     if (!saved) {
@@ -180,7 +183,8 @@
   async function createFile(destinationFile: string) {
     const { saved, message } = await ajax("/api/editor/save", {
       method: "POST",
-      body: JSON.stringify({ name: destinationFile, content: "", operation: "create" })
+      body: JSON.stringify({ name: destinationFile, content: "", operation: "create" }),
+      background: true
     });
 
     if (saved) {

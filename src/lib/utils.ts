@@ -503,22 +503,9 @@ export interface SheetLineResult {
 
 const tokenKey = "token";
 
-const BACKGROUND = [
-  "/api/editor/validate",
-  "/api/editor/save",
-  "/api/editor/file",
-  "/api/editor/file/delete_backups",
-  "/api/sheets/save",
-  "/api/sheets/file",
-  "/api/sheets/file/delete_backups",
-  "/api/templates",
-  "/api/templates/upsert",
-  "/api/templates/delete",
-  "/api/price/autocomplete",
-  "/api/price/providers/delete/:provider",
-  "/api/price/providers",
-  "/api/config"
-];
+type RequestOptions = RequestInit & {
+  background?: boolean;
+};
 
 export function ajax(
   route: "/api/config"
@@ -567,7 +554,7 @@ export function ajax(route: "/api/dashboard"): Promise<{
 
 export function ajax(
   route: "/api/gain/:name",
-  options?: RequestInit,
+  options?: RequestOptions,
   params?: Record<string, string>
 ): Promise<{
   gain_timeline_breakdown: AccountGain;
@@ -625,24 +612,30 @@ export function ajax(route: "/api/liabilities/interest"): Promise<{
 export function ajax(route: "/api/goals"): Promise<{ goals: GoalSummary[] }>;
 export function ajax(
   route: "/api/goals/retirement/:name",
-  options?: RequestInit,
+  options?: RequestOptions,
   params?: Record<string, string>
 ): Promise<RetirementGoalProgress>;
 export function ajax(
   route: "/api/goals/savings/:name",
-  options?: RequestInit,
+  options?: RequestOptions,
   params?: Record<string, string>
 ): Promise<SavingsGoalProgress>;
 
 export function ajax(route: "/api/account/tf_idf"): Promise<AccountTfIdf>;
-export function ajax(route: "/api/templates"): Promise<{ templates: ImportTemplate[] }>;
+export function ajax(
+  route: "/api/templates",
+  options?: RequestOptions
+): Promise<{ templates: ImportTemplate[] }>;
 export function ajax(
   route: "/api/templates/upsert",
-  options?: RequestInit
+  options?: RequestOptions
 ): Promise<ImportTemplate>;
-export function ajax(route: "/api/templates/delete", options?: RequestInit): Promise<void>;
+export function ajax(route: "/api/templates/delete", options?: RequestOptions): Promise<void>;
 
-export function ajax(route: "/api/editor/files"): Promise<{
+export function ajax(
+  route: "/api/editor/files",
+  options?: RequestOptions
+): Promise<{
   files: LedgerFile[];
   accounts: string[];
   commodities: string[];
@@ -651,22 +644,22 @@ export function ajax(route: "/api/editor/files"): Promise<{
 
 export function ajax(
   route: "/api/editor/validate",
-  options?: RequestInit
+  options?: RequestOptions
 ): Promise<{ errors: LedgerFileError[]; output: string }>;
 
 export function ajax(
   route: "/api/editor/save",
-  options?: RequestInit
+  options?: RequestOptions
 ): Promise<{ errors: LedgerFileError[]; saved: boolean; file: LedgerFile; message: string }>;
 
 export function ajax(
   route: "/api/editor/file",
-  options?: RequestInit
+  options?: RequestOptions
 ): Promise<{ file: LedgerFile }>;
 
 export function ajax(
   route: "/api/editor/file/delete_backups",
-  options?: RequestInit
+  options?: RequestOptions
 ): Promise<{ file: LedgerFile }>;
 
 export function ajax(route: "/api/sheets/files"): Promise<{
@@ -676,36 +669,36 @@ export function ajax(route: "/api/sheets/files"): Promise<{
 
 export function ajax(
   route: "/api/sheets/save",
-  options?: RequestInit
+  options?: RequestOptions
 ): Promise<{ saved: boolean; file: SheetFile; message: string }>;
 
 export function ajax(
   route: "/api/sheets/file",
-  options?: RequestInit
+  options?: RequestOptions
 ): Promise<{ file: SheetFile }>;
 
 export function ajax(
   route: "/api/sheets/file/delete_backups",
-  options?: RequestInit
+  options?: RequestOptions
 ): Promise<{ file: SheetFile }>;
 
 export function ajax(
   route: "/api/price/delete",
-  options?: RequestInit
+  options?: RequestOptions
 ): Promise<{ success: boolean; message: string }>;
 
 export function ajax(
   route: "/api/sync",
-  options?: RequestInit
+  options?: RequestOptions
 ): Promise<{ success: boolean; message: string }>;
 export function ajax(
   route: "/api/price/providers",
-  options?: RequestInit
+  options?: RequestOptions
 ): Promise<{ providers: PriceProvider[] }>;
 
 export function ajax(
   route: "/api/price/providers/delete/:provider",
-  options?: RequestInit,
+  options?: RequestOptions,
   params?: Record<string, string>
 ): Promise<{
   gain_timeline_breakdown: AccountGain;
@@ -715,19 +708,24 @@ export function ajax(
 
 export function ajax(
   route: "/api/price/autocomplete",
-  options?: RequestInit
+  options?: RequestOptions
 ): Promise<{ completions: AutoCompleteItem[] }>;
-export function ajax(route: "/api/init", options?: RequestInit): Promise<any>;
+export function ajax(route: "/api/init", options?: RequestOptions): Promise<any>;
 
 export function ajax(
   route: "/api/config",
-  options?: RequestInit
+  options?: RequestOptions
 ): Promise<{ success: boolean; error?: string }>;
 
 export function ajax(route: "/api/ping"): Promise<{ success: boolean; error?: string }>;
 
-export async function ajax(route: string, options?: RequestInit, params?: Record<string, string>) {
-  if (!_.includes(BACKGROUND, route)) {
+export async function ajax(
+  route: string,
+  options?: RequestOptions,
+  params?: Record<string, string>
+) {
+  const background = options?.background;
+  if (!background) {
     loading.set(true);
   }
 
@@ -750,7 +748,7 @@ export async function ajax(route: string, options?: RequestInit, params?: Record
 
   const response = await fetch(route, options);
   const body = await response.text();
-  if (!_.includes(BACKGROUND, route)) {
+  if (!background) {
     loading.set(false);
   }
 

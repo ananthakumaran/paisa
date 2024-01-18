@@ -75,7 +75,8 @@
     for (const newFile of newFiles) {
       const { saved, message } = await ajax("/api/editor/save", {
         method: "POST",
-        body: JSON.stringify({ name: newFile.name, content: newFile.content })
+        body: JSON.stringify({ name: newFile.name, content: newFile.content }),
+        background: true
       });
 
       if (!saved) {

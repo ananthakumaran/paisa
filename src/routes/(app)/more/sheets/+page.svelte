@@ -13,7 +13,8 @@
     destinationFile = destinationFile.trim() + ".paisa";
     const { saved, message } = await ajax("/api/sheets/save", {
       method: "POST",
-      body: JSON.stringify({ name: destinationFile, content: "", operation: "create" })
+      body: JSON.stringify({ name: destinationFile, content: "", operation: "create" }),
+      background: true
     });
 
     if (saved) {

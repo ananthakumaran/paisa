@@ -3,10 +3,12 @@
 1970-01-01 open Assets:Equity:ABNB
 1970-01-01 open Assets:Equity:NIFTY
 1970-01-01 open Expenses:Rent
+1970-01-01 open Expenses:Charges
 1970-01-01 open Income:CapitalGains:Equity:AAPL
 1970-01-01 open Income:Interest:Checking
 1970-01-01 open Income:Salary:Acme
 1970-01-01 open Assets:Coinbase:BTC
+1970-01-01 open Assets:Dollar
 
 1970-01-01 commodity AAPL
 1970-01-01 commodity ABNB
@@ -48,6 +50,11 @@
   Assets:Checking                          10027.3 INR
 
 2022-01-08 price USD 80.442048 INR
+
+2022-01-09 txn "Multi Currency Debit"
+    Expenses:Charges                             100 INR
+    Assets:Dollar                                 10 USD
+    Assets:Checking
 
 2022-01-10 txn "Purchased 0.00000001 BTC"
   Assets:Coinbase:BTC                    0.00000001 BTC {42772 USD}

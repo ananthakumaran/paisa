@@ -44,6 +44,11 @@ P 2022/02/07 00:00:00 NIFTY 100.273 INR
     Income:CapitalGains:Equity:AAPL            -27.3 INR
     Assets:Checking                          10027.3 INR
 
+2022/01/09 Multi Currency Debit
+    Expenses:Charges                             100 INR
+    Assets:Dollar                                 10 USD
+    Assets:Checking
+
 P 2022/01/08 00:00:00 USD 80.442048 INR
 
 2022/01/31 Interest

@@ -297,7 +297,7 @@
               <p class="control">
                 <button class="button is-small" on:click={(_e) => deleteBackups()}>
                   <span class="icon is-small">
-                    <i class="fas fa-trash" />
+                    <i class="fas fa-trash-can" />
                   </span>
                 </button>
               </p>

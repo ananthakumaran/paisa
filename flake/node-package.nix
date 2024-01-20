@@ -2785,15 +2785,6 @@ let
         sha512 = "qiBjkpbMLO/HL68y+lh4q0/O1MZFj2RX6X/KmMa3+gJD3z+WwI1ZzDHysvqHGS3mP6mznPckpXmw1nI9cJjyRg==";
       };
     };
-    "colord-2.9.3" = {
-      name = "colord";
-      packageName = "colord";
-      version = "2.9.3";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/colord/-/colord-2.9.3.tgz";
-        sha512 = "jeC1axXpnb0/2nn/Y1LPuLdgXBLH7aDcHu4KEKfqw3CUhX7ZpfBSlPKyqXE6btIgEzfWtrX3/tyBCaCvXvMkOw==";
-      };
-    };
     "colors-1.4.0" = {
       name = "colors";
       packageName = "colors";
@@ -3053,6 +3044,15 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/cubic2quad/-/cubic2quad-1.2.1.tgz";
         sha512 = "wT5Y7mO8abrV16gnssKdmIhIbA9wSkeMzhh27jAguKrV82i24wER0vL5TGhUJ9dbJNDcigoRZ0IAHFEEEI4THQ==";
+      };
+    };
+    "culori-3.3.0" = {
+      name = "culori";
+      packageName = "culori";
+      version = "3.3.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/culori/-/culori-3.3.0.tgz";
+        sha512 = "pHJg+jbuFsCjz9iclQBqyL3B2HLCBF71BwVNujUYEvCeQMvV97R59MNK3R2+jgJ3a1fcZgI9B3vYgz8lzr/BFQ==";
       };
     };
     "d3-7.8.5" = {
@@ -3399,13 +3399,13 @@ let
         sha512 = "b8AmV3kfQaqWAuacbPuNbL6vahnOJflOhexLzMMNLga62+/nh0JzvJ0aO/5a5MVgUFGS7Hu1P9P03o3fJkDCyw==";
       };
     };
-    "daisyui-3.9.4" = {
+    "daisyui-4.6.0" = {
       name = "daisyui";
       packageName = "daisyui";
-      version = "3.9.4";
+      version = "4.6.0";
       src = fetchurl {
-        url = "https://registry.npmjs.org/daisyui/-/daisyui-3.9.4.tgz";
-        sha512 = "fvi2RGH4YV617/6DntOVGcOugOPym9jTGWW2XySb5ZpvdWO4L7bEG77VHirrnbRUEWvIEVXkBpxUz2KFj0rVnA==";
+        url = "https://registry.npmjs.org/daisyui/-/daisyui-4.6.0.tgz";
+        sha512 = "B5ZB/sczXpp4LMdo/SZrtYY/U2hq+Vr9I15QawuWZ0VwgtSAbuZpAZUftKVryEsPuv3BM0yVlBED0nAmtis/dw==";
       };
     };
     "date-fns-2.30.0" = {
@@ -9047,7 +9047,6 @@ let
       sources."color-convert-2.0.1"
       sources."color-name-1.1.4"
       sources."color-support-1.1.3"
-      sources."colord-2.9.3"
       sources."colors-1.4.0"
       sources."colors-cli-1.0.33"
       sources."combined-stream-1.0.8"
@@ -9104,6 +9103,7 @@ let
         ];
       })
       sources."cubic2quad-1.2.1"
+      sources."culori-3.3.0"
       sources."d3-7.8.5"
       sources."d3-array-3.2.4"
       sources."d3-axis-3.0.0"
@@ -9149,7 +9149,7 @@ let
       sources."d3-timer-3.0.1"
       sources."d3-transition-3.0.1"
       sources."d3-zoom-3.0.0"
-      sources."daisyui-3.9.4"
+      sources."daisyui-4.6.0"
       sources."date-fns-2.30.0"
       sources."date-picker-svelte-2.10.1"
       sources."dayjs-1.11.10"

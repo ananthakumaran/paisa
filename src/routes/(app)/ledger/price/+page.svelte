@@ -65,7 +65,7 @@
                 on:click={(_e) => clearPriceCache()}
               >
                 <span class="icon is-small">
-                  <i class="fas fa-trash" />
+                  <i class="fas fa-trash-can" />
                 </span>
                 <span>Clear Price Cache</span>
               </button>

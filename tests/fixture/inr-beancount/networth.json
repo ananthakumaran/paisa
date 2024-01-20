@@ -65,283 +65,283 @@
     },
     {
       "date": "2022-01-08T00:00:00Z",
-      "investmentAmount": 218025.3170071296,
-      "withdrawalAmount": 118025.3170071296,
-      "gainAmount": 0,
-      "balanceAmount": 100000,
+      "investmentAmount": 217963.762752,
+      "withdrawalAmount": 117963.762752,
+      "gainAmount": -61.5542551296,
+      "balanceAmount": 99938.4457448704,
       "balanceUnits": 0,
       "netInvestmentAmount": 100000
     },
     {
       "date": "2022-01-09T00:00:00Z",
-      "investmentAmount": 228052.6170071296,
-      "withdrawalAmount": 128052.6170071296,
-      "gainAmount": 27.3,
-      "balanceAmount": 100027.3,
+      "investmentAmount": 228795.183232,
+      "withdrawalAmount": 128895.183232,
+      "gainAmount": -34.5542551296,
+      "balanceAmount": 99865.4457448704,
       "balanceUnits": 0,
-      "netInvestmentAmount": 100000
+      "netInvestmentAmount": 99900
     },
     {
       "date": "2022-01-10T00:00:00Z",
-      "investmentAmount": 228052.65141380238,
-      "withdrawalAmount": 128052.65141380238,
-      "gainAmount": 27.3,
-      "balanceAmount": 100027.3,
+      "investmentAmount": 228795.183232,
+      "withdrawalAmount": 128895.183232,
+      "gainAmount": -34.58866180237056,
+      "balanceAmount": 99865.41133819763,
       "balanceUnits": 0,
-      "netInvestmentAmount": 100000
+      "netInvestmentAmount": 99900
     },
     {
       "date": "2022-01-11T00:00:00Z",
-      "investmentAmount": 228052.65141380238,
-      "withdrawalAmount": 128052.65141380238,
-      "gainAmount": 27.3,
-      "balanceAmount": 100027.3,
+      "investmentAmount": 228795.183232,
+      "withdrawalAmount": 128895.183232,
+      "gainAmount": -34.58866180237056,
+      "balanceAmount": 99865.41133819763,
       "balanceUnits": 0,
-      "netInvestmentAmount": 100000
+      "netInvestmentAmount": 99900
     },
     {
       "date": "2022-01-12T00:00:00Z",
-      "investmentAmount": 228052.65141380238,
-      "withdrawalAmount": 128052.65141380238,
-      "gainAmount": 27.3,
-      "balanceAmount": 100027.3,
+      "investmentAmount": 228795.183232,
+      "withdrawalAmount": 128895.183232,
+      "gainAmount": -34.58866180237056,
+      "balanceAmount": 99865.41133819763,
       "balanceUnits": 0,
-      "netInvestmentAmount": 100000
+      "netInvestmentAmount": 99900
     },
     {
       "date": "2022-01-13T00:00:00Z",
-      "investmentAmount": 228052.65141380238,
-      "withdrawalAmount": 128052.65141380238,
-      "gainAmount": 27.3,
-      "balanceAmount": 100027.3,
+      "investmentAmount": 228795.183232,
+      "withdrawalAmount": 128895.183232,
+      "gainAmount": -34.58866180237056,
+      "balanceAmount": 99865.41133819763,
       "balanceUnits": 0,
-      "netInvestmentAmount": 100000
+      "netInvestmentAmount": 99900
     },
     {
       "date": "2022-01-14T00:00:00Z",
-      "investmentAmount": 228052.65141380238,
-      "withdrawalAmount": 128052.65141380238,
-      "gainAmount": 27.3,
-      "balanceAmount": 100027.3,
+      "investmentAmount": 228795.183232,
+      "withdrawalAmount": 128895.183232,
+      "gainAmount": -34.58866180237056,
+      "balanceAmount": 99865.41133819763,
       "balanceUnits": 0,
-      "netInvestmentAmount": 100000
+      "netInvestmentAmount": 99900
     },
     {
       "date": "2022-01-15T00:00:00Z",
-      "investmentAmount": 228052.65141380238,
-      "withdrawalAmount": 128052.65141380238,
-      "gainAmount": 27.3,
-      "balanceAmount": 100027.3,
+      "investmentAmount": 228795.183232,
+      "withdrawalAmount": 128895.183232,
+      "gainAmount": -34.58866180237056,
+      "balanceAmount": 99865.41133819763,
       "balanceUnits": 0,
-      "netInvestmentAmount": 100000
+      "netInvestmentAmount": 99900
     },
     {
       "date": "2022-01-16T00:00:00Z",
-      "investmentAmount": 228052.65141380238,
-      "withdrawalAmount": 128052.65141380238,
-      "gainAmount": 27.3,
-      "balanceAmount": 100027.3,
+      "investmentAmount": 228795.183232,
+      "withdrawalAmount": 128895.183232,
+      "gainAmount": -34.58866180237056,
+      "balanceAmount": 99865.41133819763,
       "balanceUnits": 0,
-      "netInvestmentAmount": 100000
+      "netInvestmentAmount": 99900
     },
     {
       "date": "2022-01-17T00:00:00Z",
-      "investmentAmount": 228052.65141380238,
-      "withdrawalAmount": 128052.65141380238,
-      "gainAmount": 27.3,
-      "balanceAmount": 100027.3,
+      "investmentAmount": 228795.183232,
+      "withdrawalAmount": 128895.183232,
+      "gainAmount": -34.58866180237056,
+      "balanceAmount": 99865.41133819763,
       "balanceUnits": 0,
-      "netInvestmentAmount": 100000
+      "netInvestmentAmount": 99900
     },
     {
       "date": "2022-01-18T00:00:00Z",
-      "investmentAmount": 228052.65141380238,
-      "withdrawalAmount": 128052.65141380238,
-      "gainAmount": 27.3,
-      "balanceAmount": 100027.3,
+      "investmentAmount": 228795.183232,
+      "withdrawalAmount": 128895.183232,
+      "gainAmount": -34.58866180237056,
+      "balanceAmount": 99865.41133819763,
       "balanceUnits": 0,
-      "netInvestmentAmount": 100000
+      "netInvestmentAmount": 99900
     },
     {
       "date": "2022-01-19T00:00:00Z",
-      "investmentAmount": 228052.65141380238,
-      "withdrawalAmount": 128052.65141380238,
-      "gainAmount": 27.3,
-      "balanceAmount": 100027.3,
+      "investmentAmount": 228795.183232,
+      "withdrawalAmount": 128895.183232,
+      "gainAmount": -34.58866180237056,
+      "balanceAmount": 99865.41133819763,
       "balanceUnits": 0,
-      "netInvestmentAmount": 100000
+      "netInvestmentAmount": 99900
     },
     {
       "date": "2022-01-20T00:00:00Z",
-      "investmentAmount": 228052.65141380238,
-      "withdrawalAmount": 128052.65141380238,
-      "gainAmount": 27.3,
-      "balanceAmount": 100027.3,
+      "investmentAmount": 228795.183232,
+      "withdrawalAmount": 128895.183232,
+      "gainAmount": -34.58866180237056,
+      "balanceAmount": 99865.41133819763,
       "balanceUnits": 0,
-      "netInvestmentAmount": 100000
+      "netInvestmentAmount": 99900
     },
     {
       "date": "2022-01-21T00:00:00Z",
-      "investmentAmount": 228052.65141380238,
-      "withdrawalAmount": 128052.65141380238,
-      "gainAmount": 27.3,
-      "balanceAmount": 100027.3,
+      "investmentAmount": 228795.183232,
+      "withdrawalAmount": 128895.183232,
+      "gainAmount": -34.58866180237056,
+      "balanceAmount": 99865.41133819763,
       "balanceUnits": 0,
-      "netInvestmentAmount": 100000
+      "netInvestmentAmount": 99900
     },
     {
       "date": "2022-01-22T00:00:00Z",
-      "investmentAmount": 228052.65141380238,
-      "withdrawalAmount": 128052.65141380238,
-      "gainAmount": 27.3,
-      "balanceAmount": 100027.3,
+      "investmentAmount": 228795.183232,
+      "withdrawalAmount": 128895.183232,
+      "gainAmount": -34.58866180237056,
+      "balanceAmount": 99865.41133819763,
       "balanceUnits": 0,
-      "netInvestmentAmount": 100000
+      "netInvestmentAmount": 99900
     },
     {
       "date": "2022-01-23T00:00:00Z",
-      "investmentAmount": 228052.65141380238,
-      "withdrawalAmount": 128052.65141380238,
-      "gainAmount": 27.3,
-      "balanceAmount": 100027.3,
+      "investmentAmount": 228795.183232,
+      "withdrawalAmount": 128895.183232,
+      "gainAmount": -34.58866180237056,
+      "balanceAmount": 99865.41133819763,
       "balanceUnits": 0,
-      "netInvestmentAmount": 100000
+      "netInvestmentAmount": 99900
     },
     {
       "date": "2022-01-24T00:00:00Z",
-      "investmentAmount": 228052.65141380238,
-      "withdrawalAmount": 128052.65141380238,
-      "gainAmount": 27.3,
-      "balanceAmount": 100027.3,
+      "investmentAmount": 228795.183232,
+      "withdrawalAmount": 128895.183232,
+      "gainAmount": -34.58866180237056,
+      "balanceAmount": 99865.41133819763,
       "balanceUnits": 0,
-      "netInvestmentAmount": 100000
+      "netInvestmentAmount": 99900
     },
     {
       "date": "2022-01-25T00:00:00Z",
-      "investmentAmount": 228052.65141380238,
-      "withdrawalAmount": 128052.65141380238,
-      "gainAmount": 27.3,
-      "balanceAmount": 100027.3,
+      "investmentAmount": 228795.183232,
+      "withdrawalAmount": 128895.183232,
+      "gainAmount": -34.58866180237056,
+      "balanceAmount": 99865.41133819763,
       "balanceUnits": 0,
-      "netInvestmentAmount": 100000
+      "netInvestmentAmount": 99900
     },
     {
       "date": "2022-01-26T00:00:00Z",
-      "investmentAmount": 228052.65141380238,
-      "withdrawalAmount": 128052.65141380238,
-      "gainAmount": 27.3,
-      "balanceAmount": 100027.3,
+      "investmentAmount": 228795.183232,
+      "withdrawalAmount": 128895.183232,
+      "gainAmount": -34.58866180237056,
+      "balanceAmount": 99865.41133819763,
       "balanceUnits": 0,
-      "netInvestmentAmount": 100000
+      "netInvestmentAmount": 99900
     },
     {
       "date": "2022-01-27T00:00:00Z",
-      "investmentAmount": 228052.65141380238,
-      "withdrawalAmount": 128052.65141380238,
-      "gainAmount": 27.3,
-      "balanceAmount": 100027.3,
+      "investmentAmount": 228795.183232,
+      "withdrawalAmount": 128895.183232,
+      "gainAmount": -34.58866180237056,
+      "balanceAmount": 99865.41133819763,
       "balanceUnits": 0,
-      "netInvestmentAmount": 100000
+      "netInvestmentAmount": 99900
     },
     {
       "date": "2022-01-28T00:00:00Z",
-      "investmentAmount": 228052.65141380238,
-      "withdrawalAmount": 128052.65141380238,
-      "gainAmount": 27.3,
-      "balanceAmount": 100027.3,
+      "investmentAmount": 228795.183232,
+      "withdrawalAmount": 128895.183232,
+      "gainAmount": -34.58866180237056,
+      "balanceAmount": 99865.41133819763,
       "balanceUnits": 0,
-      "netInvestmentAmount": 100000
+      "netInvestmentAmount": 99900
     },
     {
       "date": "2022-01-29T00:00:00Z",
-      "investmentAmount": 228052.65141380238,
-      "withdrawalAmount": 128052.65141380238,
-      "gainAmount": 27.3,
-      "balanceAmount": 100027.3,
+      "investmentAmount": 228795.183232,
+      "withdrawalAmount": 128895.183232,
+      "gainAmount": -34.58866180237056,
+      "balanceAmount": 99865.41133819763,
       "balanceUnits": 0,
-      "netInvestmentAmount": 100000
+      "netInvestmentAmount": 99900
     },
     {
       "date": "2022-01-30T00:00:00Z",
-      "investmentAmount": 228052.65141380238,
-      "withdrawalAmount": 128052.65141380238,
-      "gainAmount": 27.3,
-      "balanceAmount": 100027.3,
+      "investmentAmount": 228795.183232,
+      "withdrawalAmount": 128895.183232,
+      "gainAmount": -34.58866180237056,
+      "balanceAmount": 99865.41133819763,
       "balanceUnits": 0,
-      "netInvestmentAmount": 100000
+      "netInvestmentAmount": 99900
     },
     {
       "date": "2022-01-31T00:00:00Z",
-      "investmentAmount": 228052.65141380238,
-      "withdrawalAmount": 128052.65141380238,
-      "gainAmount": 1027.3,
-      "balanceAmount": 101027.3,
+      "investmentAmount": 228795.183232,
+      "withdrawalAmount": 128895.183232,
+      "gainAmount": 965.4113381976294,
+      "balanceAmount": 100865.41133819763,
       "balanceUnits": 0,
-      "netInvestmentAmount": 100000
+      "netInvestmentAmount": 99900
     },
     {
       "date": "2022-02-01T00:00:00Z",
-      "investmentAmount": 228052.65141380238,
-      "withdrawalAmount": 128052.65141380238,
-      "gainAmount": 1027.3,
-      "balanceAmount": 101027.3,
+      "investmentAmount": 228795.183232,
+      "withdrawalAmount": 128895.183232,
+      "gainAmount": 965.4113381976294,
+      "balanceAmount": 100865.41133819763,
       "balanceUnits": 0,
-      "netInvestmentAmount": 100000
+      "netInvestmentAmount": 99900
     },
     {
       "date": "2022-02-02T00:00:00Z",
-      "investmentAmount": 228052.65141380238,
-      "withdrawalAmount": 128052.65141380238,
-      "gainAmount": 1027.3,
-      "balanceAmount": 101027.3,
+      "investmentAmount": 228795.183232,
+      "withdrawalAmount": 128895.183232,
+      "gainAmount": 965.4113381976294,
+      "balanceAmount": 100865.41133819763,
       "balanceUnits": 0,
-      "netInvestmentAmount": 100000
+      "netInvestmentAmount": 99900
     },
     {
       "date": "2022-02-03T00:00:00Z",
-      "investmentAmount": 228052.65141380238,
-      "withdrawalAmount": 128052.65141380238,
-      "gainAmount": 1027.3,
-      "balanceAmount": 101027.3,
+      "investmentAmount": 228795.183232,
+      "withdrawalAmount": 128895.183232,
+      "gainAmount": 965.4113381976294,
+      "balanceAmount": 100865.41133819763,
       "balanceUnits": 0,
-      "netInvestmentAmount": 100000
+      "netInvestmentAmount": 99900
     },
     {
       "date": "2022-02-04T00:00:00Z",
-      "investmentAmount": 228052.65141380238,
-      "withdrawalAmount": 128052.65141380238,
-      "gainAmount": 1027.3,
-      "balanceAmount": 101027.3,
+      "investmentAmount": 228795.183232,
+      "withdrawalAmount": 128895.183232,
+      "gainAmount": 965.4113381976294,
+      "balanceAmount": 100865.41133819763,
       "balanceUnits": 0,
-      "netInvestmentAmount": 100000
+      "netInvestmentAmount": 99900
     },
     {
       "date": "2022-02-05T00:00:00Z",
-      "investmentAmount": 228052.65141380238,
-      "withdrawalAmount": 128052.65141380238,
-      "gainAmount": 1027.3,
-      "balanceAmount": 101027.3,
+      "investmentAmount": 228795.183232,
+      "withdrawalAmount": 128895.183232,
+      "gainAmount": 965.4113381976294,
+      "balanceAmount": 100865.41133819763,
       "balanceUnits": 0,
-      "netInvestmentAmount": 100000
+      "netInvestmentAmount": 99900
     },
     {
       "date": "2022-02-06T00:00:00Z",
-      "investmentAmount": 228052.65141380238,
-      "withdrawalAmount": 128052.65141380238,
-      "gainAmount": 1027.3,
-      "balanceAmount": 101027.3,
+      "investmentAmount": 228795.183232,
+      "withdrawalAmount": 128895.183232,
+      "gainAmount": 965.4113381976294,
+      "balanceAmount": 100865.41133819763,
       "balanceUnits": 0,
-      "netInvestmentAmount": 100000
+      "netInvestmentAmount": 99900
     },
     {
       "date": "2022-02-07T00:00:00Z",
-      "investmentAmount": 228052.65141380238,
-      "withdrawalAmount": 128052.65141380238,
-      "gainAmount": 1245.7,
-      "balanceAmount": 101245.7,
+      "investmentAmount": 228795.183232,
+      "withdrawalAmount": 128895.183232,
+      "gainAmount": 1183.8113381976295,
+      "balanceAmount": 101083.81133819763,
       "balanceUnits": 0,
-      "netInvestmentAmount": 100000
+      "netInvestmentAmount": 99900
     }
   ],
-  "xirr": 12.84
+  "xirr": 12.18
 }

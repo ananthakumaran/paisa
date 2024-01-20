@@ -2,7 +2,7 @@
   "yearly": {
     "2021 - 22": {
       "startingBalance": 0,
-      "endingBalance": 93221.1429928704,
+      "endingBalance": 93121.1429928704,
       "date": "2021-04-01T00:00:00Z",
       "income": {
         "Income:Salary:Acme": -120000
@@ -19,6 +19,7 @@
       "liabilities": {},
       "tax": {},
       "expenses": {
+        "Expenses:Charges": 100,
         "Expenses:Rent": 20000
       }
     }

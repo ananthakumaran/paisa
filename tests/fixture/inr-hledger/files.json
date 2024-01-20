@@ -7,6 +7,8 @@
     "Assets:Equity:ABNB",
     "Assets:Equity:AAPL",
     "Income:CapitalGains:Equity:AAPL",
+    "Expenses:Charges",
+    "Assets:Dollar",
     "Income:Interest:Checking"
   ],
   "commodities": [
@@ -19,7 +21,7 @@
   "files": [
     {
       "name": "main.ledger",
-      "content": "commodity INR 9,99,99,999.00\n\nP 2022/01/07 00:00:00 NIFTY 100 INR\nP 2022/02/07 00:00:00 NIFTY 100.273 INR\n\n2022/01/01 Salary\n    Income:Salary:Acme                      -100,000 INR\n    Assets:Checking                          100,000 INR\n\n2022/01/03 Rent\n    Assets:Checking                          -20,000 INR\n    Expenses:Rent\n\n2022/01/06 Bonus\n    Income:Salary:Acme                       -20,000 INR\n    Assets:Checking                           20,000 INR\n\n2022/01/07 Investment\n    Assets:Checking                          -40,000 INR\n    Assets:Equity:NIFTY                          400 NIFTY @ 100 INR\n\n2022/01/08 Investment 2\n    Assets:Checking                          -30,000 INR\n    Assets:Equity:NIFTY                          300 NIFTY @@ 30,000 INR\n\n2022/01/08 Investment 3\n    Assets:Checking                          -10,000 INR\n    Assets:Equity:NIFTY                          100 NIFTY\n\n2022/01/08 Buy ABNB\n    Assets:Equity:ABNB                          0.76 ABNB @ 131.27 USD\n    Assets:Checking\n\n2022/01/09 Buy ABNB total price\n    Assets:Equity:ABNB                          0.76 ABNB @@ 99.7652 USD\n    Assets:Checking\n\n2022/01/08 Buy Apple\n    Assets:Equity:AAPL                           100 AAPL @ 100 INR\n    Assets:Checking\n\n2022/01/09 Sell\n    Assets:Equity:AAPL                          -100 AAPL @ 100 INR\n    Income:CapitalGains:Equity:AAPL            -27.3 INR\n    Assets:Checking                          10027.3 INR\n\nP 2022/01/08 00:00:00 USD 80.442048 INR\n\n2022/01/31 Interest\n    ; Global note\n    ; :interest:\n    Income:Interest:Checking                  -1,000 INR ; Posting note\n    Assets:Checking\n\n2022/01/31 * Asset balance\n  Assets:Equity:NIFTY  =800 NIFTY\n",
+      "content": "commodity INR 9,99,99,999.00\n\nP 2022/01/07 00:00:00 NIFTY 100 INR\nP 2022/02/07 00:00:00 NIFTY 100.273 INR\n\n2022/01/01 Salary\n    Income:Salary:Acme                      -100,000 INR\n    Assets:Checking                          100,000 INR\n\n2022/01/03 Rent\n    Assets:Checking                          -20,000 INR\n    Expenses:Rent\n\n2022/01/06 Bonus\n    Income:Salary:Acme                       -20,000 INR\n    Assets:Checking                           20,000 INR\n\n2022/01/07 Investment\n    Assets:Checking                          -40,000 INR\n    Assets:Equity:NIFTY                          400 NIFTY @ 100 INR\n\n2022/01/08 Investment 2\n    Assets:Checking                          -30,000 INR\n    Assets:Equity:NIFTY                          300 NIFTY @@ 30,000 INR\n\n2022/01/08 Investment 3\n    Assets:Checking                          -10,000 INR\n    Assets:Equity:NIFTY                          100 NIFTY\n\n2022/01/08 Buy ABNB\n    Assets:Equity:ABNB                          0.76 ABNB @ 131.27 USD\n    Assets:Checking\n\n2022/01/09 Buy ABNB total price\n    Assets:Equity:ABNB                          0.76 ABNB @@ 99.7652 USD\n    Assets:Checking\n\n2022/01/08 Buy Apple\n    Assets:Equity:AAPL                           100 AAPL @ 100 INR\n    Assets:Checking\n\n2022/01/09 Sell\n    Assets:Equity:AAPL                          -100 AAPL @ 100 INR\n    Income:CapitalGains:Equity:AAPL            -27.3 INR\n    Assets:Checking                          10027.3 INR\n\n2022/01/09 Multi Currency Debit\n    Expenses:Charges                             100 INR\n    Assets:Dollar                                 10 USD\n    Assets:Checking\n\nP 2022/01/08 00:00:00 USD 80.442048 INR\n\n2022/01/31 Interest\n    ; Global note\n    ; :interest:\n    Income:Interest:Checking                  -1,000 INR ; Posting note\n    Assets:Checking\n\n2022/01/31 * Asset balance\n  Assets:Equity:NIFTY  =800 NIFTY\n",
       "versions": [],
       "operation": ""
     }
@@ -35,6 +37,7 @@
     "Buy Apple",
     "Buy ABNB total price",
     "Sell",
+    "Multi Currency Debit",
     "Interest"
   ]
 }

@@ -7,6 +7,8 @@
     "Assets:Equity:ABNB",
     "Assets:Equity:AAPL",
     "Income:CapitalGains:Equity:AAPL",
+    "Expenses:Charges",
+    "Assets:Dollar",
     "Income:Interest:Checking"
   ],
   "config": {

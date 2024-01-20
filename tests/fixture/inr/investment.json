@@ -64,6 +64,27 @@
       "balance": 0
     },
     {
+      "id": 17,
+      "transaction_id": "13751d3a-ebfe-5de8-aca5-8870bc86ff9d",
+      "date": "2022-01-09T00:00:00Z",
+      "payee": "Multi Currency Debit",
+      "account": "Assets:Dollar",
+      "commodity": "USD",
+      "quantity": 10,
+      "amount": 804.42048,
+      "status": "unmarked",
+      "tag_recurring": "",
+      "tag_period": "",
+      "transaction_begin_line": 35,
+      "transaction_end_line": 38,
+      "file_name": "main.ledger",
+      "forecast": false,
+      "note": "",
+      "transaction_note": "",
+      "market_amount": 0,
+      "balance": 0
+    },
+    {
       "id": 13,
       "transaction_id": "b2e50492-9dc7-5845-8ed9-9f4590b301a8",
       "date": "2022-01-09T00:00:00Z",
@@ -154,6 +175,27 @@
           "balance": 0
         },
         {
+          "id": 17,
+          "transaction_id": "13751d3a-ebfe-5de8-aca5-8870bc86ff9d",
+          "date": "2022-01-09T00:00:00Z",
+          "payee": "Multi Currency Debit",
+          "account": "Assets:Dollar",
+          "commodity": "USD",
+          "quantity": 10,
+          "amount": 804.42048,
+          "status": "unmarked",
+          "tag_recurring": "",
+          "tag_period": "",
+          "transaction_begin_line": 35,
+          "transaction_end_line": 38,
+          "file_name": "main.ledger",
+          "forecast": false,
+          "note": "",
+          "transaction_note": "",
+          "market_amount": 0,
+          "balance": 0
+        },
+        {
           "id": 13,
           "transaction_id": "b2e50492-9dc7-5845-8ed9-9f4590b301a8",
           "date": "2022-01-09T00:00:00Z",
@@ -179,9 +221,9 @@
       "gross_other_income": 1027.3,
       "net_tax": 0,
       "net_income": 121027.3,
-      "net_investment": 88025.3170071296,
-      "net_expense": 20000,
-      "savings_rate": 72.73178614009367
+      "net_investment": 88829.7374871296,
+      "net_expense": 20100,
+      "savings_rate": 73.39644649358416
     }
   ]
 }

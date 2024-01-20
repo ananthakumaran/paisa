@@ -2,24 +2,35 @@
   "asset_breakdowns": {
     "Assets": {
       "group": "Assets",
-      "investmentAmount": 98025.3170071296,
+      "investmentAmount": 98829.7374871296,
       "withdrawalAmount": 10027.3,
-      "marketAmount": 101245.7,
+      "marketAmount": 101145.7,
       "balanceUnits": 0,
       "latestPrice": 0,
-      "xirr": 12.84,
-      "gainAmount": 13247.6829928704,
-      "absoluteReturn": 0.1351455256391251
+      "xirr": 12.85,
+      "gainAmount": 12343.2625128704,
+      "absoluteReturn": 0.124894215311235
     },
     "Assets:Checking": {
       "group": "Assets:Checking",
       "investmentAmount": 0,
       "withdrawalAmount": 0,
-      "marketAmount": 13001.9829928704,
+      "marketAmount": 12097.5625128704,
       "balanceUnits": 0,
       "latestPrice": 0,
-      "xirr": 46.91,
-      "gainAmount": 13001.9829928704,
+      "xirr": 48.56,
+      "gainAmount": 12097.5625128704,
+      "absoluteReturn": 0
+    },
+    "Assets:Dollar": {
+      "group": "Assets:Dollar",
+      "investmentAmount": 804.42048,
+      "withdrawalAmount": 0,
+      "marketAmount": 804.42048,
+      "balanceUnits": 10,
+      "latestPrice": 0,
+      "xirr": 0,
+      "gainAmount": 0,
       "absoluteReturn": 0
     },
     "Assets:Equity": {

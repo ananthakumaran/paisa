@@ -67,8 +67,8 @@
           "balance": 0
         },
         {
-          "id": 22,
-          "transaction_id": "11",
+          "id": 26,
+          "transaction_id": "12",
           "date": "2022-01-31T00:00:00Z",
           "payee": "Interest",
           "account": "Income:Interest:Checking",
@@ -78,8 +78,8 @@
           "status": "unmarked",
           "tag_recurring": "",
           "tag_period": "",
-          "transaction_begin_line": 49,
-          "transaction_end_line": 54,
+          "transaction_begin_line": 54,
+          "transaction_end_line": 59,
           "file_name": "main.ledger",
           "forecast": false,
           "note": "Posting note\n",
@@ -164,8 +164,8 @@
           "balance": 0
         },
         {
-          "id": 22,
-          "transaction_id": "11",
+          "id": 26,
+          "transaction_id": "12",
           "date": "2022-01-31T00:00:00Z",
           "payee": "Interest",
           "account": "Income:Interest:Checking",
@@ -175,8 +175,8 @@
           "status": "unmarked",
           "tag_recurring": "",
           "tag_period": "",
-          "transaction_begin_line": 49,
-          "transaction_end_line": 54,
+          "transaction_begin_line": 54,
+          "transaction_end_line": 59,
           "file_name": "main.ledger",
           "forecast": false,
           "note": "Posting note\n",

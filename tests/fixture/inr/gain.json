@@ -1,6 +1,42 @@
 {
   "gain_breakdown": [
     {
+      "account": "Assets:Dollar",
+      "networth": {
+        "date": "2022-02-07T23:59:59.999999999Z",
+        "investmentAmount": 804.42048,
+        "withdrawalAmount": 0,
+        "gainAmount": 0,
+        "balanceAmount": 804.42048,
+        "balanceUnits": 0,
+        "netInvestmentAmount": 804.42048
+      },
+      "xirr": 0,
+      "postings": [
+        {
+          "id": 17,
+          "transaction_id": "13751d3a-ebfe-5de8-aca5-8870bc86ff9d",
+          "date": "2022-01-09T00:00:00Z",
+          "payee": "Multi Currency Debit",
+          "account": "Assets:Dollar",
+          "commodity": "USD",
+          "quantity": 10,
+          "amount": 804.42048,
+          "status": "unmarked",
+          "tag_recurring": "",
+          "tag_period": "",
+          "transaction_begin_line": 35,
+          "transaction_end_line": 38,
+          "file_name": "main.ledger",
+          "forecast": false,
+          "note": "",
+          "transaction_note": "",
+          "market_amount": 804.42048,
+          "balance": 0
+        }
+      ]
+    },
+    {
       "account": "Assets:Equity:AAPL",
       "networth": {
         "date": "2022-02-07T23:59:59.999999999Z",

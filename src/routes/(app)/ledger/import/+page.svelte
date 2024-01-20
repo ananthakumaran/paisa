@@ -50,7 +50,7 @@
   $: saveAsNameDuplicate = !!_.find(templates, { name: saveAsName, template_type: "custom" });
 
   async function save() {
-    const { id } = await ajax("/api/templates/upsert", {
+    const { template, saved, message } = await ajax("/api/templates/upsert", {
       method: "POST",
       body: JSON.stringify({
         name: saveAsName,
@@ -58,8 +58,18 @@
       }),
       background: true
     });
+
+    if (!saved) {
+      toast.toast({
+        message: `Failed to save ${saveAsName}. reason: ${message}`,
+        type: "is-danger",
+        duration: 10000
+      });
+      return;
+    }
+
     ({ templates } = await ajax("/api/templates", { background: true }));
-    selectedTemplate = _.find(templates, { id });
+    selectedTemplate = _.find(templates, { id: template.id });
     saveAsName = selectedTemplate.name;
     toast.toast({
       message: `Saved ${saveAsName}`,
@@ -75,13 +85,23 @@
     if (!confirmed) {
       return;
     }
-    await ajax("/api/templates/delete", {
+    const { success, message } = await ajax("/api/templates/delete", {
       method: "POST",
       body: JSON.stringify({
         name: selectedTemplate.name
       }),
       background: true
     });
+
+    if (!success) {
+      toast.toast({
+        message: `Failed to remove ${oldName}. reason: ${message}`,
+        type: "is-danger",
+        duration: 10000
+      });
+      return;
+    }
+
     ({ templates } = await ajax("/api/templates", { background: true }));
     selectedTemplate = templates[0];
     saveAsName = selectedTemplate.name;

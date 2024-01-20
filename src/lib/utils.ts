@@ -629,8 +629,11 @@ export function ajax(
 export function ajax(
   route: "/api/templates/upsert",
   options?: RequestOptions
-): Promise<ImportTemplate>;
-export function ajax(route: "/api/templates/delete", options?: RequestOptions): Promise<void>;
+): Promise<{ saved: boolean; message?: string; template: ImportTemplate }>;
+export function ajax(
+  route: "/api/templates/delete",
+  options?: RequestOptions
+): Promise<{ success: boolean; message?: string }>;
 
 export function ajax(
   route: "/api/editor/files",

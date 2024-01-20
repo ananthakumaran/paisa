@@ -325,18 +325,23 @@ func Build(db *gorm.DB, enableCompression bool) *gin.Engine {
 	})
 
 	router.POST("/api/templates/upsert", func(c *gin.Context) {
+		if config.GetConfig().Readonly {
+			c.JSON(200, gin.H{"saved": false, "message": "Readonly mode"})
+			return
+		}
+
 		var t template.Template
 		if err := c.ShouldBindJSON(&t); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
 
-		c.JSON(200, template.Upsert(t.Name, t.Content))
+		c.JSON(200, gin.H{"template": template.Upsert(t.Name, t.Content), "saved": true})
 	})
 
 	router.POST("/api/templates/delete", func(c *gin.Context) {
 		if config.GetConfig().Readonly {
-			c.JSON(200, gin.H{})
+			c.JSON(200, gin.H{"success": false, "message": "Readonly mode"})
 			return
 		}
 
@@ -347,7 +352,7 @@ func Build(db *gorm.DB, enableCompression bool) *gin.Engine {
 		}
 
 		template.Delete(t.Name)
-		c.JSON(200, gin.H{})
+		c.JSON(200, gin.H{"success": true})
 	})
 
 	router.GET("/api/goals", func(c *gin.Context) {

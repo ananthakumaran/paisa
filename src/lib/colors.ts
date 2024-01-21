@@ -313,6 +313,7 @@ const COLORS = {
   primary: MaterialUI.deeppurple.a100,
   secondary: MaterialUI.lightblue.a400,
   tertiary: MaterialUI.amber.a400,
+  neutral: "hsl(0, 0%, 48%)",
   assets: MaterialUI.lightblue.a400,
   expenses: MaterialUI.red.a400,
   income: MaterialUI.lime.a700,

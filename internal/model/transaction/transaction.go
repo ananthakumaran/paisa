@@ -1,10 +1,13 @@
 package transaction
 
 import (
+	"sync"
 	"time"
 
 	"github.com/ananthakumaran/paisa/internal/model/posting"
+	"github.com/ananthakumaran/paisa/internal/query"
 	"github.com/samber/lo"
+	"gorm.io/gorm"
 )
 
 type Transaction struct {
@@ -18,6 +21,32 @@ type Transaction struct {
 	EndLine      uint64            `json:"endLine"`
 	FileName     string            `json:"fileName"`
 	Note         string            `json:"note"`
+}
+
+type transactionCache struct {
+	sync.Once
+	transactions map[string]Transaction
+}
+
+var tcache transactionCache
+
+func loadTransactionCache(db *gorm.DB) {
+	postings := query.Init(db).All()
+	tcache.transactions = make(map[string]Transaction)
+
+	for _, t := range Build(postings) {
+		tcache.transactions[t.ID] = t
+	}
+}
+
+func GetById(db *gorm.DB, id string) (Transaction, bool) {
+	tcache.Do(func() { loadTransactionCache(db) })
+	t, found := tcache.transactions[id]
+	return t, found
+}
+
+func ClearCache() {
+	tcache = transactionCache{}
 }
 
 func Build(postings []posting.Posting) []Transaction {

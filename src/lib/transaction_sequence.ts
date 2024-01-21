@@ -5,7 +5,8 @@ import {
   transactionTotal,
   type Transaction,
   type TransactionSchedule,
-  type TransactionSequence
+  type TransactionSequence,
+  dueDateIcon
 } from "./utils";
 import dayjs from "dayjs";
 import { parse, type CronExprs } from "@datasert/cronjs-parser";
@@ -148,32 +149,7 @@ export function nextUnpaidSchedule(ts: TransactionSequence) {
 }
 
 export function scheduleIcon(schedule: TransactionSchedule) {
-  let icon = "fa-circle-check";
-  let glyph = iconGlyph("fa6-solid:circle-check");
-  let color = "has-text-success";
-  let svgColor = "svg-text-success";
-
-  if (!schedule.actual) {
-    if (schedule.scheduled.isBefore(now(), "day")) {
-      color = "has-text-danger";
-      icon = "fa-exclamation-triangle";
-      glyph = iconGlyph("fa6-solid:triangle-exclamation");
-      svgColor = "svg-text-danger";
-    } else {
-      color = "has-text-grey";
-      svgColor = "svg-text-grey";
-    }
-  } else {
-    if (schedule.actual.isSameOrBefore(schedule.scheduled, "day")) {
-      color = "has-text-success";
-      svgColor = "svg-text-success";
-    } else {
-      color = "has-text-warning-dark";
-      svgColor = "svg-text-warning-dark";
-    }
-  }
-
-  return { icon, color, svgColor, glyph };
+  return dueDateIcon(schedule.scheduled, schedule.actual);
 }
 
 export function intervalText(ts: TransactionSequence) {

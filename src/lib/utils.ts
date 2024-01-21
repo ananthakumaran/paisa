@@ -9,6 +9,7 @@ import { obscure } from "../persisted_store";
 import { error } from "@sveltejs/kit";
 import { goto } from "$app/navigation";
 import chroma from "chroma-js";
+import { iconGlyph } from "./icon";
 
 export interface AutoCompleteItem {
   label: string;
@@ -481,6 +482,28 @@ export interface Log {
   msg: string;
 }
 
+export interface CreditCardBill {
+  openingBalance: number;
+  closingBalance: number;
+  debits: number;
+  credits: number;
+  statementStartDate: dayjs.Dayjs;
+  statementEndDate: dayjs.Dayjs;
+  dueDate: dayjs.Dayjs;
+  paidDate: dayjs.Dayjs;
+  postings: Posting[];
+  transactions: Transaction[];
+}
+
+export interface CreditCardSummary {
+  account: string;
+  network: string;
+  number: string;
+  balance: number;
+  bills: CreditCardBill[];
+  creditLimit: number;
+}
+
 export interface GoalSummary {
   type: string;
   name: string;
@@ -608,6 +631,14 @@ export function ajax(
 export function ajax(route: "/api/liabilities/interest"): Promise<{
   interest_timeline_breakdown: Interest[];
 }>;
+
+export function ajax(route: "/api/credit_cards"): Promise<{ creditCards: CreditCardSummary[] }>;
+
+export function ajax(
+  route: "/api/credit_cards/:account",
+  options?: RequestOptions,
+  params?: Record<string, string>
+): Promise<{ creditCard: CreditCardSummary; found: boolean }>;
 
 export function ajax(route: "/api/goals"): Promise<{ goals: GoalSummary[] }>;
 export function ajax(
@@ -764,7 +795,7 @@ export async function ajax(
   return JSON.parse(body, (key, value) => {
     if (
       _.isString(value) &&
-      /date|time|now/.test(key) &&
+      /Date|date|time|now/.test(key) &&
       /^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(.[0-9]+)?(Z|[+-][0-9]{2}:[0-9]{2})$/.test(
         value
       )
@@ -1205,4 +1236,33 @@ export function asTransaction(p: Posting): Transaction {
 
 export function svgUrl(identifier: string) {
   return `url(${new URL("#" + identifier, window.location.toString())})`;
+}
+
+export function dueDateIcon(dueDate: dayjs.Dayjs, clearedDate: dayjs.Dayjs) {
+  let icon = "fa-circle-check";
+  let glyph = iconGlyph("fa6-solid:circle-check");
+  let color = "has-text-success";
+  let svgColor = "svg-text-success";
+
+  if (!clearedDate) {
+    if (dueDate.isBefore(now(), "day")) {
+      color = "has-text-danger";
+      icon = "fa-exclamation-triangle";
+      glyph = iconGlyph("fa6-solid:triangle-exclamation");
+      svgColor = "svg-text-danger";
+    } else {
+      color = "has-text-grey";
+      svgColor = "svg-text-grey";
+    }
+  } else {
+    if (clearedDate.isSameOrBefore(dueDate, "day")) {
+      color = "has-text-success";
+      svgColor = "svg-text-success";
+    } else {
+      color = "has-text-warning-dark";
+      svgColor = "svg-text-warning-dark";
+    }
+  }
+
+  return { icon, color, svgColor, glyph };
 }

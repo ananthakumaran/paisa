@@ -12,22 +12,6 @@ import (
 	"gorm.io/gorm"
 )
 
-type transactionCache struct {
-	sync.Once
-	transactions map[string]transaction.Transaction
-}
-
-var tcache transactionCache
-
-func loadTransactionCache(db *gorm.DB) {
-	postings := query.Init(db).All()
-	tcache.transactions = make(map[string]transaction.Transaction)
-
-	for _, t := range transaction.Build(postings) {
-		tcache.transactions[t.ID] = t
-	}
-}
-
 type interestCache struct {
 	sync.Once
 	postings map[int64][]posting.Posting
@@ -76,13 +60,11 @@ func IsCapitalGains(p posting.Posting) bool {
 }
 
 func IsStockSplit(db *gorm.DB, p posting.Posting) bool {
-	tcache.Do(func() { loadTransactionCache(db) })
-
 	if utils.IsCurrency(p.Commodity) {
 		return false
 	}
 
-	t, found := tcache.transactions[p.TransactionID]
+	t, found := transaction.GetById(db, p.TransactionID)
 	if !found {
 		return false
 	}
@@ -96,13 +78,11 @@ func IsStockSplit(db *gorm.DB, p posting.Posting) bool {
 }
 
 func IsSellWithCapitalGains(db *gorm.DB, p posting.Posting) bool {
-	tcache.Do(func() { loadTransactionCache(db) })
-
 	if utils.IsCurrency(p.Commodity) {
 		return false
 	}
 
-	t, found := tcache.transactions[p.TransactionID]
+	t, found := transaction.GetById(db, p.TransactionID)
 	if !found {
 		return false
 	}

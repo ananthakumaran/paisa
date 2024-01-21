@@ -7,6 +7,7 @@ import (
 	"path/filepath"
 
 	"github.com/ananthakumaran/paisa/internal/model/posting"
+	"github.com/ananthakumaran/paisa/internal/model/transaction"
 	"github.com/ananthakumaran/paisa/internal/service"
 	"github.com/ananthakumaran/paisa/internal/utils"
 	"github.com/samber/lo"
@@ -186,6 +187,11 @@ func RunningBalance(db *gorm.DB, postings []posting.Posting) []Point {
 	return series
 }
 
+func SortTransactionAsc(transactions []transaction.Transaction) []transaction.Transaction {
+	sort.Slice(transactions, func(i, j int) bool { return transactions[i].Date.Before(transactions[j].Date) })
+	return transactions
+}
+
 func SortAsc(postings []posting.Posting) []posting.Posting {
 	sort.Slice(postings, func(i, j int) bool { return postings[i].Date.Before(postings[j].Date) })
 	return postings
@@ -210,5 +216,15 @@ func PopulateBalance(postings []posting.Posting) []posting.Posting {
 func GroupByAccount(posts []posting.Posting) map[string][]posting.Posting {
 	return lo.GroupBy(posts, func(post posting.Posting) string {
 		return post.Account
+	})
+}
+
+func GroupByMonthlyBillingCycle(postsings []posting.Posting, billDate int) map[string][]posting.Posting {
+	return lo.GroupBy(postsings, func(p posting.Posting) string {
+		if p.Date.Day() > billDate {
+			return utils.BeginningOfMonth(p.Date).AddDate(0, 1, 0).Format("2006-01")
+		} else {
+			return p.Date.Format("2006-01")
+		}
 	})
 }

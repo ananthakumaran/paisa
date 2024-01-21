@@ -36,7 +36,8 @@
       "retirement": [],
       "savings": []
     },
-    "user_accounts": []
+    "user_accounts": [],
+    "credit_cards": []
   },
   "now": "2022-02-07T00:00:00Z",
   "schema": {
@@ -61,7 +62,7 @@
               "ui:widget": "icon"
             },
             "name": {
-              "description": "name of the account",
+              "description": "Name of the account",
               "minLength": 1,
               "type": "string"
             }
@@ -165,7 +166,7 @@
               "type": "integer"
             },
             "name": {
-              "description": "name of the commodity",
+              "description": "Name of the commodity",
               "type": "string"
             },
             "price": {
@@ -226,6 +227,76 @@
         },
         "itemsUniqueProperties": [
           "name"
+        ],
+        "type": "array"
+      },
+      "credit_cards": {
+        "default": [
+          {
+            "account": "Liabilities:CreditCard:Chase",
+            "credit_limit": 100000,
+            "due_day": 15,
+            "statement_end_day": 28
+          }
+        ],
+        "items": {
+          "additionalProperties": false,
+          "properties": {
+            "account": {
+              "description": "Name of the credit card account",
+              "type": "string"
+            },
+            "credit_limit": {
+              "description": "Credit limit of the card",
+              "minimum": 1,
+              "type": "number"
+            },
+            "due_day": {
+              "description": "Due day of the card",
+              "maximum": 31,
+              "minimum": 1,
+              "type": "integer"
+            },
+            "network": {
+              "description": "Network of the card",
+              "enum": [
+                "visa",
+                "mastercard",
+                "dinersclub",
+                "amex",
+                "rupay",
+                "jcb",
+                "discover"
+              ],
+              "type": "string"
+            },
+            "number": {
+              "description": "Last 4 digits of the card number",
+              "maxLength": 4,
+              "minLength": 4,
+              "pattern": "^[0-9]{4}$",
+              "type": "string"
+            },
+            "statement_end_day": {
+              "description": "Statement end day of the card",
+              "maximum": 31,
+              "minimum": 1,
+              "type": "integer"
+            }
+          },
+          "required": [
+            "account",
+            "credit_limit",
+            "statement_end_day",
+            "due_day",
+            "network",
+            "number"
+          ],
+          "type": "object",
+          "ui:header": "account"
+        },
+        "itemsUniqueProperties": [
+          "account"
         ],
         "type": "array"
       },
@@ -438,7 +509,7 @@
               "ui:widget": "textarea"
             },
             "name": {
-              "description": "name of the template",
+              "description": "Name of the template",
               "minLength": 1,
               "type": "string"
             }

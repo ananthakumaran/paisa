@@ -212,3 +212,13 @@ func GroupByAccount(posts []posting.Posting) map[string][]posting.Posting {
 		return post.Account
 	})
 }
+
+func GroupByMonthlyBillingCycle(postsings []posting.Posting, billDate int) map[string][]posting.Posting {
+	return lo.GroupBy(postsings, func(p posting.Posting) string {
+		if p.Date.Day() >= billDate {
+			return utils.BeginningOfMonth(p.Date).AddDate(0, 1, 0).Format("2006-01")
+		} else {
+			return p.Date.Format("2006-01")
+		}
+	})
+}

@@ -347,7 +347,7 @@
         "properties": {
           "name": {
             "type": "string",
-            "description": "name of the commodity"
+            "description": "Name of the commodity"
           },
           "type": {
             "type": "string",
@@ -401,7 +401,7 @@
         "properties": {
           "name": {
             "type": "string",
-            "description": "name of the template",
+            "description": "Name of the template",
             "minLength": 1
           },
           "content": {
@@ -428,7 +428,7 @@
         "properties": {
           "name": {
             "type": "string",
-            "description": "name of the account",
+            "description": "Name of the account",
             "minLength": 1
           },
           "icon": {
@@ -438,6 +438,66 @@
           }
         },
         "required": ["name"],
+        "additionalProperties": false
+      }
+    },
+    "credit_cards": {
+      "type": "array",
+      "itemsUniqueProperties": ["account"],
+      "default": [
+        {
+          "account": "Liabilities:CreditCard:Chase",
+          "credit_limit": 100000,
+          "statement_end_day": 28,
+          "due_day": 15
+        }
+      ],
+      "items": {
+        "type": "object",
+        "ui:header": "account",
+        "properties": {
+          "account": {
+            "type": "string",
+            "description": "Name of the credit card account"
+          },
+          "credit_limit": {
+            "type": "number",
+            "description": "Credit limit of the card",
+            "minimum": 1
+          },
+          "statement_end_day": {
+            "type": "integer",
+            "description": "Statement end day of the card",
+            "minimum": 1,
+            "maximum": 31
+          },
+          "due_day": {
+            "type": "integer",
+            "description": "Due day of the card",
+            "minimum": 1,
+            "maximum": 31
+          },
+          "network": {
+            "type": "string",
+            "description": "Network of the card",
+            "enum": ["visa", "mastercard", "dinersclub", "amex", "rupay", "jcb", "discover"]
+          },
+          "number": {
+            "type": "string",
+            "description": "Last 4 digits of the card number",
+            "maxLength": 4,
+            "minLength": 4,
+            "pattern": "^[0-9]{4}$"
+          }
+        },
+        "required": [
+          "account",
+          "credit_limit",
+          "statement_end_day",
+          "due_day",
+          "network",
+          "number"
+        ],
         "additionalProperties": false
       }
     }

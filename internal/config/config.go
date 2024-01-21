@@ -115,6 +115,15 @@ type AllocationTarget struct {
 	Accounts []string `json:"accounts" yaml:"accounts"`
 }
 
+type CreditCard struct {
+	Account         string `json:"account" yaml:"account"`
+	CreditLimit     int    `json:"credit_limit" yaml:"credit_limit"`
+	StatementEndDay int    `json:"statement_end_day" yaml:"statement_end_day"`
+	DueDay          int    `json:"due_day" yaml:"due_day"`
+	Network         string `json:"network" yaml:"network"`
+	Number          string `json:"number" yaml:"number"`
+}
+
 type Config struct {
 	JournalPath                string       `json:"journal_path" yaml:"journal_path"`
 	DBPath                     string       `json:"db_path" yaml:"db_path"`
@@ -143,6 +152,8 @@ type Config struct {
 	Goals Goals `json:"goals" yaml:"goals"`
 
 	UserAccounts []UserAccount `json:"user_accounts" yaml:"user_accounts"`
+
+	CreditCards []CreditCard `json:"credit_cards" yaml:"credit_cards"`
 }
 
 var config Config
@@ -166,6 +177,7 @@ var defaultConfig = Config{
 	Accounts:                   []Account{},
 	Goals:                      Goals{Retirement: []RetirementGoal{}, Savings: []SavingsGoal{}},
 	UserAccounts:               []UserAccount{},
+	CreditCards:                []CreditCard{},
 }
 
 var itemsUniquePropertiesMeta = jsonschema.MustCompileString("itemsUniqueProperties.json", `{

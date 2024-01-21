@@ -1088,3 +1088,33 @@ textarea:invalid {
 div.is-hoverable:hover {
   background-color: $white-bis;
 }
+
+// credit card
+
+.credit-card-container {
+  display: grid;
+  gap: 18px;
+  grid-template-columns: repeat(auto-fill, minmax(19rem, 25rem));
+}
+
+.credit-card {
+  aspect-ratio: 3.375/2.125;
+  border-radius: 0.7rem;
+  display: flex;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.3) !important;
+  background: linear-gradient(
+    345deg,
+    $grey-lightest 0%,
+    $grey-lightest 60%,
+    $grey-lighter 60%,
+    $grey-lighter 85%,
+    $grey-light 85%,
+    $grey-light 95%,
+    $grey 95%,
+    $grey 100%
+  );
+
+  .chip {
+    color: $amber-700;
+  }
+}

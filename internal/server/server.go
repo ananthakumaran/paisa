@@ -363,6 +363,10 @@ func Build(db *gorm.DB, enableCompression bool) *gin.Engine {
 		c.JSON(200, goal.GetGoalDetails(db, c.Param("type"), c.Param("name")))
 	})
 
+	router.GET("/api/credit_cards", func(c *gin.Context) {
+		c.JSON(200, GetCreditCards(db))
+	})
+
 	router.NoRoute(func(c *gin.Context) {
 		c.Data(http.StatusOK, "text/html; charset=utf-8", []byte(web.Index))
 	})

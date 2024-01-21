@@ -179,4 +179,19 @@ html[data-theme="dark"] {
       }
     }
   }
+
+  .credit-card {
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 1) !important;
+    background: linear-gradient(
+      345deg,
+      $white 0%,
+      $white 60%,
+      $white-bis 60%,
+      $white-bis 85%,
+      $white-ter 85%,
+      $white-ter 95%,
+      $grey-lightest 95%,
+      $grey-lightest 100%
+    );
+  }
 }

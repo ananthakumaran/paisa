@@ -81,7 +81,7 @@ export const theme = writable("light");
 export const loading = writable(false);
 
 const DELAY = 200;
-const DEBOUNCE_DELAY = 150;
+const DEBOUNCE_DELAY = 200;
 
 let timeoutId: NodeJS.Timeout;
 export const delayedLoading = derived(

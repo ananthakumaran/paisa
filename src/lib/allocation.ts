@@ -332,8 +332,12 @@ export function renderAllocationTimeline(
     assets,
     _.map(assets, () => 0)
   );
-  const start = timeline[0][0].timestamp,
+  const start = timeline[0]?.[0]?.timestamp,
     end = now();
+
+  if (!start) {
+    return [];
+  }
 
   interface Point {
     date: dayjs.Dayjs;

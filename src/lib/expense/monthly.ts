@@ -17,7 +17,7 @@ import {
   type Legend
 } from "$lib/utils";
 import COLORS, { generateColorScheme, white } from "$lib/colors";
-import { get, type Readable, type Writable } from "svelte/store";
+import { get, type Readable, type Unsubscriber, type Writable } from "svelte/store";
 import { iconify } from "$lib/icon";
 import { byExpenseGroup, expenseGroup, pieData } from "$lib/expense";
 
@@ -133,7 +133,11 @@ export function renderMonthlyExpensesTimeline(
   groupsStore: Writable<string[]>,
   monthStore: Writable<string>,
   dateRangeStore: Readable<{ from: Dayjs; to: Dayjs }>
-) {
+): {
+  z: d3.ScaleOrdinal<string, string, never>;
+  destroy: Unsubscriber;
+  legends: Legend[];
+} {
   const id = "#d3-monthly-expense-timeline";
   const timeFormat = "MMM-YYYY";
   const MAX_BAR_WIDTH = rem(40);
@@ -158,7 +162,13 @@ export function renderMonthlyExpensesTimeline(
   const [start, end] = d3.extent(_.map(postings, (p) => p.date));
 
   if (!start) {
-    return { z: z };
+    return {
+      z: z,
+      destroy: () => {
+        // void
+      },
+      legends: []
+    };
   }
 
   const ms = _.groupBy(postings, (p) => p.date.format(timeFormat));

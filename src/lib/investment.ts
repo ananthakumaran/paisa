@@ -50,6 +50,10 @@ export function renderMonthlyInvestmentTimeline(postings: Posting[]): Legend[] {
     end = now().startOf("month");
   const ts = _.groupBy(postings, (p) => p.date.format(timeFormat));
 
+  if (!start) {
+    return [];
+  }
+
   interface Point {
     month: string;
     [key: string]: number | string | dayjs.Dayjs;
@@ -217,6 +221,10 @@ export function renderYearlyInvestmentTimeline(yearlyCards: InvestmentYearlyCard
 
   const start = _.min(_.map(yearlyCards, (c) => c.start_date)),
     end = _.max(_.map(yearlyCards, (c) => c.end_date));
+
+  if (!start || !end) {
+    return [];
+  }
 
   const height = BAR_HEIGHT * (end.year() - start.year());
   svg.attr("height", height + margin.top + margin.bottom);

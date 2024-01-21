@@ -204,6 +204,10 @@ export function renderYearlyIncomeTimeline(yearlyCards: IncomeYearlyCard[]): Leg
   const start = _.min(_.map(yearlyCards, (c) => c.start_date)),
     end = _.max(_.map(yearlyCards, (c) => c.end_date));
 
+  if (!start || !end) {
+    return [];
+  }
+
   const height = BAR_HEIGHT * (end.year() - start.year());
   svg.attr("height", height + margin.top + margin.bottom);
 
@@ -320,6 +324,10 @@ export function renderYearlyTimelineOf(
 
   const start = _.min(_.map(yearlyCards, (c) => c.start_date)),
     end = _.max(_.map(yearlyCards, (c) => c.end_date));
+
+  if (!start || !end) {
+    return [];
+  }
 
   const height = BAR_HEIGHT * (end.year() - start.year());
   svg.attr("height", height + margin.top + margin.bottom);

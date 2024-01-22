@@ -1,6 +1,13 @@
 # CHANGELOG
 
 
+### 0.6.4 (2024-01-22)
+
+* Add checking accounts balance to dashboard
+* Improve template management UI
+* Improve spinner and page transition
+* Bug fixes
+
 ### 0.6.3 (2024-01-13)
 
 * Introduce [Sheets](https://paisa.fyi/reference/sheets/): A notepad calculator with access to your ledger

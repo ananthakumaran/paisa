@@ -36,7 +36,6 @@ func LookPath(name string) (string, error) {
 			}
 		}
 
-		log.Error(err)
 		return "", err
 	}
 

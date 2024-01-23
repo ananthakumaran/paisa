@@ -154,128 +154,126 @@
 <section class="section tab-networth" class:is-hidden={isEmpty}>
   <div class="container is-fluid">
     <div class="tile is-ancestor is-align-items-start">
-      <div class="tile is-4">
-        <div class="tile is-vertical">
+      <div class="tile is-4 is-vertical">
+        <div class="tile is-parent">
+          <div class="tile is-child">
+            <div class="content">
+              <p class="subtitle">
+                <a class="secondary-link" href="/assets/networth">Assets</a>
+              </p>
+              <div class="content">
+                <div>
+                  {#if networth}
+                    <nav class="level grid-2">
+                      <LevelItem
+                        narrow
+                        title="Net worth"
+                        color={COLORS.primary}
+                        value={formatCurrency(networth.balanceAmount)}
+                      />
+
+                      <LevelItem
+                        narrow
+                        title="Net Investment"
+                        color={COLORS.secondary}
+                        value={formatCurrency(networth.netInvestmentAmount)}
+                      />
+                    </nav>
+                    <nav class="level grid-2">
+                      <LevelItem
+                        narrow
+                        title="Gain / Loss"
+                        color={networth.gainAmount >= 0 ? COLORS.gainText : COLORS.lossText}
+                        value={formatCurrency(networth.gainAmount)}
+                      />
+
+                      <LevelItem narrow title="XIRR" value={formatFloat(xirr)} />
+                    </nav>
+                  {/if}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {#if !_.isEmpty(checkingBalances)}
+          <div class="tile is-parent">
+            <article class="tile is-child">
+              <div class="content">
+                <p class="subtitle">
+                  <a class="secondary-link" href="/assets/balance">Checking Balance</a>
+                </p>
+                <div class="content">
+                  <UntypedMasonryGrid gap={10} maxStretchColumnSize={400} align="stretch">
+                    {#each _.values(checkingBalances) as assetBreakdown}
+                      <div class="is-flex-grow-1">
+                        <BalanceCard {assetBreakdown} />
+                      </div>
+                    {/each}
+                  </UntypedMasonryGrid>
+                </div>
+              </div>
+            </article>
+          </div>
+        {/if}
+
+        <div class="tile is-parent">
+          <article class="tile is-child min-w-0">
+            <p class="subtitle">
+              <a class="secondary-link" href="/cash_flow/monthly">Cash Flow</a>
+            </p>
+            <div class="content box px-2 pb-0">
+              <ZeroState item={cashFlows}>
+                <strong>Oops!</strong> You have not made any transactions in the last 3 months.
+              </ZeroState>
+
+              <LegendCard legends={cashflowLegends} clazz="mb-2 overflow-x-scroll" />
+
+              <svg
+                class:is-not-visible={_.isEmpty(cashFlows)}
+                id="d3-current-cash-flow"
+                height="250"
+                width="100%"
+              />
+            </div>
+          </article>
+        </div>
+        {#if currentBudget}
           <div class="tile is-parent">
             <div class="tile is-child">
               <div class="content">
                 <p class="subtitle">
-                  <a class="secondary-link" href="/assets/networth">Assets</a>
+                  <a class="secondary-link" href="/expense/budget">Budget</a>
                 </p>
                 <div class="content">
                   <div>
-                    {#if networth}
-                      <nav class="level grid-2">
-                        <LevelItem
-                          narrow
-                          title="Net worth"
-                          color={COLORS.primary}
-                          value={formatCurrency(networth.balanceAmount)}
-                        />
-
-                        <LevelItem
-                          narrow
-                          title="Net Investment"
-                          color={COLORS.secondary}
-                          value={formatCurrency(networth.netInvestmentAmount)}
-                        />
-                      </nav>
-                      <nav class="level grid-2">
-                        <LevelItem
-                          narrow
-                          title="Gain / Loss"
-                          color={networth.gainAmount >= 0 ? COLORS.gainText : COLORS.lossText}
-                          value={formatCurrency(networth.gainAmount)}
-                        />
-
-                        <LevelItem narrow title="XIRR" value={formatFloat(xirr)} />
-                      </nav>
-                    {/if}
+                    {#each currentBudget.accounts as accountBudget (accountBudget)}
+                      <BudgetCard compact {accountBudget} />
+                    {/each}
                   </div>
                 </div>
               </div>
             </div>
           </div>
-
-          {#if !_.isEmpty(checkingBalances)}
-            <div class="tile is-parent">
+        {/if}
+        {#if !_.isEmpty(goalSummaries)}
+          <div class="tile">
+            <div class="tile is-parent is-12">
               <article class="tile is-child">
                 <div class="content">
                   <p class="subtitle">
-                    <a class="secondary-link" href="/assets/balance">Checking Balance</a>
+                    <a class="secondary-link" href="/more/goals">Goals</a>
                   </p>
                   <div class="content">
-                    <UntypedMasonryGrid gap={10} maxStretchColumnSize={400} align="stretch">
-                      {#each _.values(checkingBalances) as assetBreakdown}
-                        <div class="is-flex-grow-1">
-                          <BalanceCard {assetBreakdown} />
-                        </div>
-                      {/each}
-                    </UntypedMasonryGrid>
+                    {#each goalSummaries as goal}
+                      <GoalSummaryCard {goal} small />
+                    {/each}
                   </div>
                 </div>
               </article>
             </div>
-          {/if}
-
-          <div class="tile is-parent">
-            <article class="tile is-child">
-              <p class="subtitle">
-                <a class="secondary-link" href="/cash_flow/monthly">Cash Flow</a>
-              </p>
-              <div class="content box px-2 pb-0">
-                <ZeroState item={cashFlows}>
-                  <strong>Oops!</strong> You have not made any transactions in the last 3 months.
-                </ZeroState>
-
-                <LegendCard legends={cashflowLegends} clazz="mb-2" />
-
-                <svg
-                  class:is-not-visible={_.isEmpty(cashFlows)}
-                  id="d3-current-cash-flow"
-                  height="250"
-                  width="100%"
-                />
-              </div>
-            </article>
           </div>
-          {#if currentBudget}
-            <div class="tile is-parent">
-              <div class="tile is-child">
-                <div class="content">
-                  <p class="subtitle">
-                    <a class="secondary-link" href="/expense/budget">Budget</a>
-                  </p>
-                  <div class="content">
-                    <div>
-                      {#each currentBudget.accounts as accountBudget (accountBudget)}
-                        <BudgetCard compact {accountBudget} />
-                      {/each}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          {/if}
-          {#if !_.isEmpty(goalSummaries)}
-            <div class="tile">
-              <div class="tile is-parent is-12">
-                <article class="tile is-child">
-                  <div class="content">
-                    <p class="subtitle">
-                      <a class="secondary-link" href="/more/goals">Goals</a>
-                    </p>
-                    <div class="content">
-                      {#each goalSummaries as goal}
-                        <GoalSummaryCard {goal} small />
-                      {/each}
-                    </div>
-                  </div>
-                </article>
-              </div>
-            </div>
-          {/if}
-        </div>
+        {/if}
       </div>
       <div class="tile is-vertical">
         <div class="tile is-parent is-12">

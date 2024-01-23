@@ -50,7 +50,7 @@
     margin-bottom: 0 !important;
   }
 
-  @include desktop {
+  @include widescreen {
     .title {
       font-size: 2.25rem !important;
       line-height: 2.5rem !important;

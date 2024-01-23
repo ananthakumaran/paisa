@@ -11,6 +11,7 @@
     "ledger_cli": "ledger",
     "default_currency": "EUR",
     "display_precision": 0,
+    "amount_alignment_column": 52,
     "locale": "es-EU",
     "financial_year_starting_month": 4,
     "week_starting_day": 0,
@@ -114,6 +115,12 @@
           "name"
         ],
         "type": "array"
+      },
+      "amount_alignment_column": {
+        "description": "The column to align the amount in the editor.",
+        "maximum": 100,
+        "minimum": 40,
+        "type": "integer"
       },
       "budget": {
         "additionalProperties": false,

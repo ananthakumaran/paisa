@@ -24,6 +24,10 @@ const DATE = /^\d{4}[/-]\d{2}[/-]\d{2}/;
 
 // https://ledger-cli.org/doc/ledger3.html#Journal-Format
 function formatLine(line: string, state: State) {
+  let amountAlignmentColumn = 52;
+  if (typeof USER_CONFIG !== "undefined") {
+    amountAlignmentColumn = USER_CONFIG.amount_alignment_column;
+  }
   if (line.match(DATE) || line.match(/^[~=]/)) {
     state.inTransaction = true;
     return line;
@@ -42,11 +46,11 @@ function formatLine(line: string, state: State) {
   );
   if (fullMatch) {
     const { account, prefix, amount, suffix } = fullMatch.groups;
-    if (account.length + prefix.length + amount.length <= 46) {
+    if (account.length + prefix.length + amount.length <= amountAlignmentColumn - 6) {
       return (
         space(4) +
         account +
-        space(48 - account.length - prefix.length - amount.length) +
+        space(amountAlignmentColumn - 4 - account.length - prefix.length - amount.length) +
         prefix +
         amount +
         suffix

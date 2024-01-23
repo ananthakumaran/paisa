@@ -122,6 +122,7 @@ type Config struct {
 	LedgerCli                  string       `json:"ledger_cli" yaml:"ledger_cli"`
 	DefaultCurrency            string       `json:"default_currency" yaml:"default_currency"`
 	DisplayPrecision           int          `json:"display_precision" yaml:"display_precision"`
+	AmountAlignmentColumn      int          `json:"amount_alignment_column" yaml:"amount_alignment_column"`
 	Locale                     string       `json:"locale" yaml:"locale"`
 	FinancialYearStartingMonth time.Month   `json:"financial_year_starting_month" yaml:"financial_year_starting_month"`
 	WeekStartingDay            time.Weekday `json:"week_starting_day" yaml:"week_starting_day"`
@@ -152,6 +153,7 @@ var defaultConfig = Config{
 	LedgerCli:                  "ledger",
 	DefaultCurrency:            "INR",
 	DisplayPrecision:           0,
+	AmountAlignmentColumn:      52,
 	Locale:                     "en-IN",
 	Budget:                     Budget{Rollover: Yes},
 	FinancialYearStartingMonth: 4,

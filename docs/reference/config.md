@@ -53,6 +53,17 @@ ledger_cli: ledger
 # OPTIONAL, DEFAULT: INR
 default_currency: INR
 
+# The precision to show in UI. NOTE: This applies only to the UI, not
+# to the entries in journal.
+#
+# OPTIONAL, DEFAULT: 0
+display_precision: 0
+
+# The column to align the amount in the editor.
+#
+# OPTIONAL, DEFAULT: 52
+amount_alignment_column: 52
+
 # The locale used to format numbers. The list of locales supported
 # depends on your browser. It's known to work well with en-US and en-IN.
 #

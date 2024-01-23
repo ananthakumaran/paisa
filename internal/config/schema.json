@@ -33,6 +33,12 @@
       "maximum": 4,
       "description": "The precision to show in UI. NOTE: This applies only to the UI, not to the entries in journal."
     },
+    "amount_alignment_column": {
+      "type": "integer",
+      "minimum": 40,
+      "maximum": 100,
+      "description": "The column to align the amount in the editor."
+    },
     "locale": {
       "type": "string",
       "pattern": "^[a-z]{2}-[A-Z]{2}$",

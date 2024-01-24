@@ -3,6 +3,7 @@ import * as XLSX from "xlsx";
 import _ from "lodash";
 import { format } from "./journal";
 import { pdf2array } from "./pdf";
+import * as XlsxPopulate from "xlsx-populate";
 
 interface Result {
   data: string[][];
@@ -75,13 +76,47 @@ function parseCSV(file: File): Promise<Result> {
 
 async function parseXLSX(file: File): Promise<Result> {
   const buffer = await readFile(file);
-  const sheet = XLSX.read(buffer, { type: "binary" });
-  const json = XLSX.utils.sheet_to_json<string[]>(sheet.Sheets[sheet.SheetNames[0]], {
-    header: 1,
-    blankrows: false,
-    rawNumbers: false
-  });
-  return { data: json };
+  try {
+    const sheet = XLSX.read(buffer, { type: "binary" });
+    const json = XLSX.utils.sheet_to_json<string[]>(sheet.Sheets[sheet.SheetNames[0]], {
+      header: 1,
+      blankrows: false,
+      rawNumbers: false
+    });
+    return { data: json };
+  } catch (e) {
+    if (/password-protected/.test(e.message)) {
+      const password = prompt(
+        "Please enter the password to open this XLSX file. Press cancel to exit."
+      );
+      if (password === null) {
+        return { data: [], error: "Password required." };
+      }
+
+      try {
+        const workbook = await XlsxPopulate.fromDataAsync(buffer, { password });
+        const sheet = workbook.sheet(0);
+        if (sheet) {
+          let json = sheet.usedRange().value();
+          json = _.map(json, (row) => {
+            return _.map(row, (cell) => {
+              if (cell) {
+                return cell.toString();
+              }
+              return "";
+            });
+          });
+
+          return { data: json };
+        }
+      } catch (e) {
+        // follow through to the error below
+      }
+
+      return { data: [], error: "Unable to parse Password protected XLSX" };
+    }
+    throw e;
+  }
 }
 
 async function parsePDF(file: File): Promise<Result> {

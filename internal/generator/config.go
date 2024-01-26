@@ -25,13 +25,14 @@ import (
 const START_YEAR = 2014
 
 type GeneratorState struct {
-	Balance      float64
-	EPFBalance   float64
-	Ledger       *os.File
-	YearlySalary float64
-	Rent         float64
-	LoanBalance  float64
-	NiftyBalance float64
+	Balance       float64
+	CreditBalance float64
+	EPFBalance    float64
+	Ledger        *os.File
+	YearlySalary  float64
+	Rent          float64
+	LoanBalance   float64
+	NiftyBalance  float64
 }
 
 var pricesTree map[string]*btree.BTree
@@ -102,6 +103,9 @@ allocation_targets:
     target: 60
     accounts:
       - Assets:Equity:*
+accounts:
+  - name: Liabilities:CreditCard:Freedom
+    icon: arcticons:chase
 schedule_al:
   - code: bank
     accounts:
@@ -153,6 +157,13 @@ commodities:
     price:
       provider: com-purifiedbytes-nps
       code: SM008003
+credit_cards:
+    - account: Liabilities:CreditCard:Freedom
+      credit_limit: 150000
+      statement_end_day: 8
+      due_day: 20
+      network: visa
+      number: "0007"
 `
 	log.Info("Generating config file: ", configFilePath)
 	journalFilePath := filepath.Join(cwd, "main.ledger")
@@ -326,18 +337,30 @@ func emitExpense(state *GeneratorState, start time.Time) {
 	}
 
 	emit := func(payee string, account string, amount float64, fuzz float64) {
-		actualAmount := roundToK(percentRange(int(fuzz*100), 100) * amount)
+		var actualAmount float64
+		if fuzz == 1 {
+			actualAmount = amount
+		} else {
+			actualAmount = roundToK(percentRange(int(fuzz*100), 100) * amount)
+		}
 		start = start.AddDate(0, 0, 1)
 		emitTransaction(state.Ledger, start, payee, "Assets:Checking:SBI", account, actualAmount)
 		state.Balance -= actualAmount
 	}
 
-	emit("Rent", "Expenses:Rent", state.Rent, 1.0)
-	emit("Internet", "Expenses:Utilities", 1500, 1.0)
-	emit("Mobile", "Expenses:Utilities", 430, 1.0)
-	emit("Shopping", "Expenses:Shopping", 3000, 0.5)
-	emit("Eat out", "Expenses:Restaurants", 2500, 0.5)
-	emit("Groceries", "Expenses:Food", 5000, 0.9)
+	emitExpense := func(payee string, account string, amount float64, fuzz float64) {
+		actualAmount := roundToK(percentRange(int(fuzz*100), 100) * amount)
+		start = start.AddDate(0, 0, 1)
+		emitTransaction(state.Ledger, start, payee, "Liabilities:CreditCard:Freedom", account, actualAmount)
+		state.CreditBalance -= actualAmount
+	}
+
+	emitExpense("Rent", "Expenses:Rent", state.Rent, 1.0)
+	emitExpense("Internet", "Expenses:Utilities", 1500, 1.0)
+	emitExpense("Mobile", "Expenses:Utilities", 430, 1.0)
+	emitExpense("Shopping", "Expenses:Shopping", 3000, 0.5)
+	emitExpense("Eat out", "Expenses:Restaurants", 2500, 0.5)
+	emitExpense("Groceries", "Expenses:Food", 5000, 0.9)
 
 	if state.LoanBalance > 0 {
 		emi := math.Min(state.Balance-10000, 30000.0)
@@ -349,12 +372,17 @@ func emitExpense(state *GeneratorState, start time.Time) {
 	}
 
 	if state.Balance < 10000 {
+		emit("Pay Credit Card Bill", "Liabilities:CreditCard:Freedom", -state.CreditBalance, 1.0)
+		state.CreditBalance = 0
 		return
 	}
 
 	if lo.Contains([]time.Month{time.January, time.April, time.November, time.December}, start.Month()) {
 		emit("Dress", "Expenses:Clothing", 5000, 0.5)
 	}
+
+	emit("Pay Credit Card Bill", "Liabilities:CreditCard:Freedom", -state.CreditBalance, 1.0)
+	state.CreditBalance = 0
 }
 func emitInvestment(state *GeneratorState, start time.Time) {
 	if start.Month() == time.April {
@@ -385,7 +413,6 @@ func emitInvestment(state *GeneratorState, start time.Time) {
 		state.NiftyBalance += units
 		state.Balance += amount
 	}
-
 }
 
 func generateJournalFile(cwd string) {

@@ -24,7 +24,7 @@
 </script>
 
 <div class="credit-card box p-3 m-0 flex-col justify-between">
-  <div class="is-flex justify-between uppercase has-text-weight-bold is-size-5">
+  <div class="is-flex justify-between has-text-weight-bold is-size-5">
     <div style="margin: 35px 0 0 15px;" class="opacity-20 chip">
       <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24"
         ><path

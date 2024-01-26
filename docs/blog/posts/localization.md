@@ -6,6 +6,7 @@ categories:
   - locale
 hide:
   - feedback
+description: "How to setup Paisa for your country."
 ---
 
 # Localization

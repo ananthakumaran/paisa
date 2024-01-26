@@ -323,3 +323,7 @@
   background-color: var(--account-color-income-background);
   color: var(--account-color-income);
 }
+
+.language-ledger pre code {
+  max-height: 500px;
+}

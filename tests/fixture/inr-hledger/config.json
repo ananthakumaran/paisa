@@ -256,6 +256,11 @@
               "minimum": 1,
               "type": "integer"
             },
+            "expiration_date": {
+              "description": "Expiration date of the card",
+              "format": "date",
+              "type": "string"
+            },
             "network": {
               "description": "Network of the card",
               "enum": [
@@ -289,7 +294,8 @@
             "statement_end_day",
             "due_day",
             "network",
-            "number"
+            "number",
+            "expiration_date"
           ],
           "type": "object",
           "ui:header": "account"

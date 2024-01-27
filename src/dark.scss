@@ -181,16 +181,21 @@ html[data-theme="dark"] {
   }
 
   .credit-card {
-    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 1) !important;
+    border: none;
+    box-shadow:
+      3px 3px 3px 0 rgba(0, 0, 0, 0.7),
+      10px 10px 10px 0 rgba(0, 0, 0, 0.5),
+      20px 20px 20px 0 rgba(0, 0, 0, 0.4),
+      -1px -1px 1px 0 rgba(255, 255, 255, 0.2) !important;
     background: linear-gradient(
       345deg,
       $white 0%,
       $white 60%,
-      $white-bis 60%,
+      $white-bis calc(60% + 1px),
       $white-bis 85%,
-      $white-ter 85%,
+      $white-ter calc(85% + 1px),
       $white-ter 95%,
-      $grey-lightest 95%,
+      $grey-lightest calc(95% + 1px),
       $grey-lightest 100%
     );
   }

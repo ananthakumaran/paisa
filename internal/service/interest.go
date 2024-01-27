@@ -59,6 +59,14 @@ func IsCapitalGains(p posting.Posting) bool {
 	return false
 }
 
+func IsRefund(p posting.Posting) bool {
+	if utils.IsParent(p.Account, "Income:Refund") {
+		return true
+	}
+
+	return false
+}
+
 func IsStockSplit(db *gorm.DB, p posting.Posting) bool {
 	if utils.IsCurrency(p.Commodity) {
 		return false
@@ -89,6 +97,20 @@ func IsSellWithCapitalGains(db *gorm.DB, p posting.Posting) bool {
 
 	for _, tp := range t.Postings {
 		if IsCapitalGains(tp) {
+			return true
+		}
+	}
+	return false
+}
+
+func IsContraPostingRefund(db *gorm.DB, p posting.Posting) bool {
+	t, found := transaction.GetById(db, p.TransactionID)
+	if !found {
+		return false
+	}
+
+	for _, tp := range t.Postings {
+		if IsRefund(tp) {
 			return true
 		}
 	}

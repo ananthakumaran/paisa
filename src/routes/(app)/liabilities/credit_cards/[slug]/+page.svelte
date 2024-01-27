@@ -1,30 +1,34 @@
 <script lang="ts">
+  import { goto } from "$app/navigation";
+  import COLORS from "$lib/colors";
+  import BoxLabel from "$lib/components/BoxLabel.svelte";
   import CreditCardCard from "$lib/components/CreditCardCard.svelte";
+  import DueDate from "$lib/components/DueDate.svelte";
+  import LevelItem from "$lib/components/LevelItem.svelte";
+  import TransactionCard from "$lib/components/TransactionCard.svelte";
+  import { renderYearlySpends } from "$lib/credit_cards";
+  import { iconify } from "$lib/icon";
   import {
     ajax,
     formatCurrency,
+    formatPercentage,
     type CreditCardBill,
-    type CreditCardSummary,
-    formatPercentage
+    type CreditCardSummary
   } from "$lib/utils";
+  import { MasonryGrid } from "@egjs/svelte-grid";
   import _, { now } from "lodash";
   import { onMount } from "svelte";
   import type { PageData } from "./$types";
-  import { redirect } from "@sveltejs/kit";
-  import { MasonryGrid } from "@egjs/svelte-grid";
-  import TransactionCard from "$lib/components/TransactionCard.svelte";
-  import LevelItem from "$lib/components/LevelItem.svelte";
-  import COLORS from "$lib/colors";
-  import { iconify } from "$lib/icon";
-  import DueDate from "$lib/components/DueDate.svelte";
   let UntypedMasonryGrid = MasonryGrid as any;
 
   export let data: PageData;
+  let svg: SVGElement;
 
   let creditCard: CreditCardSummary;
   let currentBill: CreditCardBill;
   let found = false;
   let small = true;
+  let rendered = false;
 
   function lastBill(creditCard: CreditCardSummary): CreditCardBill {
     return _.find(_.reverse(_.clone(creditCard.bills)), (b) => {
@@ -32,12 +36,18 @@
     });
   }
 
+  $: if (creditCard && svg && !rendered) {
+    renderYearlySpends(svg, creditCard.yearlySpends);
+    rendered = true;
+  }
+
   onMount(async () => {
     ({ creditCard, found } = await ajax("/api/credit_cards/:account", null, data));
-    currentBill = lastBill(creditCard);
     if (!found) {
-      redirect(307, `/liabilities/credit_cards`);
+      return goto("/liabilities/credit_cards");
     }
+
+    currentBill = lastBill(creditCard);
   });
 </script>
 
@@ -46,7 +56,7 @@
     <div class="columns flex-wrap">
       <div class="column is-3-widescreen is-4">
         {#if creditCard}
-          <div class="flex mb-4">
+          <div class="flex mb-12">
             <CreditCardCard {creditCard} />
           </div>
 
@@ -84,6 +94,11 @@
               value={_.sumBy(creditCard.bills, (b) => b.transactions.length).toString()}
             />
           </nav>
+
+          <div class="box px-3 py-0">
+            <svg bind:this={svg} width="100%" />
+          </div>
+          <BoxLabel text="Year wise spends" />
         {/if}
       </div>
       <div class="column is-9-widescreen is-8">

@@ -164,6 +164,7 @@ credit_cards:
       due_day: 20
       network: visa
       number: "0007"
+      expiration_date: "2029-05-01"
 `
 	log.Info("Generating config file: ", configFilePath)
 	journalFilePath := filepath.Join(cwd, "main.ledger")

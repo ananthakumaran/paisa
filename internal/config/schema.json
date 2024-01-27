@@ -488,6 +488,11 @@
             "maxLength": 4,
             "minLength": 4,
             "pattern": "^[0-9]{4}$"
+          },
+          "expiration_date": {
+            "type": "string",
+            "description": "Expiration date of the card",
+            "format": "date"
           }
         },
         "required": [
@@ -496,7 +501,8 @@
           "statement_end_day",
           "due_day",
           "network",
-          "number"
+          "number",
+          "expiration_date"
         ],
         "additionalProperties": false
       }

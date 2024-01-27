@@ -17,6 +17,7 @@ credit_cards:
       due_day: 20 #(4)!
       network: visa #(5)!
       number: "0007" #(6)!
+      expiration_date: "2029-05-01" #(7)!
 ```
 
 1. Account name
@@ -25,6 +26,7 @@ credit_cards:
 4. The day of the month when the payment is due
 5. The network of the card
 6. The last 4 digits of the card number
+7. The expiration date of the card
 
 The above configuration can be done from the `More > Configuration`
 page. Expand the `Credit Cards` section and click

@@ -1093,7 +1093,7 @@ div.is-hoverable:hover {
 
 .credit-card-container {
   display: grid;
-  gap: 18px;
+  gap: 36px;
   grid-template-columns: repeat(auto-fill, minmax(19rem, 25rem));
 }
 
@@ -1104,20 +1104,28 @@ div.is-hoverable:hover {
   flex: 1;
   border-radius: 0.7rem;
   display: flex;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.3) !important;
+  border: 1px solid $grey-lightest;
+  box-shadow:
+    3px 3px 3px 0 rgba(0, 0, 0, 0.05),
+    10px 10px 10px 0 rgba(0, 0, 0, 0.15),
+    20px 20px 20px 0 rgba(0, 0, 0, 0.15) !important;
   background: linear-gradient(
     345deg,
     $grey-lightest 0%,
     $grey-lightest 60%,
-    $grey-lighter 60%,
+    $grey-lighter calc(60% + 1px),
     $grey-lighter 85%,
-    $grey-light 85%,
+    $grey-light calc(85% + 1px),
     $grey-light 95%,
-    $grey 95%,
+    $grey calc(95% + 1px),
     $grey 100%
   );
 
   .chip {
     color: $amber-700;
+  }
+
+  .nfc {
+    color: $black;
   }
 }

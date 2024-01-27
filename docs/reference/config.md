@@ -285,4 +285,6 @@ credit_cards:
     # Required, the network of the card
     number: "0007"
     # Required, the last 4 digits of the card number
+    expiration_date: "2029-05-01"
+    # Required, the expiration date of the card
 ```

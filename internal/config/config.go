@@ -122,6 +122,7 @@ type CreditCard struct {
 	DueDay          int    `json:"due_day" yaml:"due_day"`
 	Network         string `json:"network" yaml:"network"`
 	Number          string `json:"number" yaml:"number"`
+	ExpirationDate  string `json:"expiration_date" yaml:"expiration_date"`
 }
 
 type Config struct {

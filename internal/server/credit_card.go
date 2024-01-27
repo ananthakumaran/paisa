@@ -8,6 +8,7 @@ import (
 	"github.com/ananthakumaran/paisa/internal/model/posting"
 	"github.com/ananthakumaran/paisa/internal/model/transaction"
 	"github.com/ananthakumaran/paisa/internal/query"
+	"github.com/ananthakumaran/paisa/internal/service"
 	"github.com/ananthakumaran/paisa/internal/utils"
 	"github.com/gin-gonic/gin"
 	"github.com/samber/lo"
@@ -17,12 +18,14 @@ import (
 )
 
 type CreditCardSummary struct {
-	Account     string           `json:"account"`
-	Network     string           `json:"network"`
-	Number      string           `json:"number"`
-	Balance     decimal.Decimal  `json:"balance"`
-	Bills       []CreditCardBill `json:"bills"`
-	CreditLimit decimal.Decimal  `json:"creditLimit"`
+	Account        string                                `json:"account"`
+	Network        string                                `json:"network"`
+	Number         string                                `json:"number"`
+	Balance        decimal.Decimal                       `json:"balance"`
+	Bills          []CreditCardBill                      `json:"bills"`
+	CreditLimit    decimal.Decimal                       `json:"creditLimit"`
+	YearlySpends   map[string]map[string]decimal.Decimal `json:"yearlySpends"`
+	ExpirationDate time.Time                             `json:"expirationDate"`
 }
 
 type CreditCardBill struct {
@@ -62,19 +65,46 @@ func GetCreditCard(db *gorm.DB, account string) gin.H {
 	return gin.H{"found": false}
 }
 
+func yearlySpends(db *gorm.DB, date time.Time, postings []posting.Posting) map[string]map[string]decimal.Decimal {
+	yearlySpends := make(map[string]map[string]decimal.Decimal)
+	for year, ps := range utils.GroupByYearCutoffAt(postings, date) {
+		spends := lo.Filter(ps, func(p posting.Posting, _ int) bool {
+			return p.Amount.IsNegative() || service.IsContraPostingRefund(db, p)
+		})
+
+		yearlySpends[year] = make(map[string]decimal.Decimal)
+		for month, ps := range utils.GroupByMonth(spends) {
+			yearlySpends[year][month] = accounting.CostSum(ps).Neg()
+		}
+	}
+	return yearlySpends
+}
+
 func buildCreditCard(db *gorm.DB, creditCardConfig config.CreditCard, ps []posting.Posting, includePostings bool) CreditCardSummary {
 	bills := computeBills(db, creditCardConfig, ps, includePostings)
 	balance := decimal.Zero
 	if len(bills) > 0 {
 		balance = bills[len(bills)-1].ClosingBalance
 	}
+
+	expirationDate, err := time.ParseInLocation("2006-01-02", creditCardConfig.ExpirationDate, time.Local)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	ys := make(map[string]map[string]decimal.Decimal)
+	if includePostings {
+		ys = yearlySpends(db, expirationDate, ps)
+	}
 	return CreditCardSummary{
-		Account:     creditCardConfig.Account,
-		Network:     creditCardConfig.Network,
-		Number:      creditCardConfig.Number,
-		Balance:     balance,
-		Bills:       bills,
-		CreditLimit: decimal.NewFromInt(int64(creditCardConfig.CreditLimit)),
+		Account:        creditCardConfig.Account,
+		Network:        creditCardConfig.Network,
+		Number:         creditCardConfig.Number,
+		Balance:        balance,
+		Bills:          bills,
+		CreditLimit:    decimal.NewFromInt(int64(creditCardConfig.CreditLimit)),
+		YearlySpends:   ys,
+		ExpirationDate: expirationDate,
 	}
 }
 

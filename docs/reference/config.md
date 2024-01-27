@@ -269,4 +269,20 @@ user_accounts:
     password: sha256:a96dc73edd639b1c711b006e714bd2ff5bf5c1aecd77d0b3c3370403c66d58e5
     # Required, password hashed twice with sha256, then prefixed sha256:
     # echo -n 'secret' | sha256sum | head -c 64 | sha256sum | head -c 64
+
+## List of credit cards
+# OPTIONAL, DEFAULT: []
+credit_cards:
+  - account: Liabilities:CreditCard:Freedom
+    # Required, account name
+    credit_limit: 150000
+    # Required, credit limit of the card
+    statement_end_day: 8
+    # Required, the day of the month when the statement is generated
+    due_day: 20
+    # Required, the day of the month when the payment is due
+    network: visa
+    # Required, the network of the card
+    number: "0007"
+    # Required, the last 4 digits of the card number
 ```

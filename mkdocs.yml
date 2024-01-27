@@ -27,6 +27,7 @@ nav:
     - reference/ledger-cli.md
     - reference/editor.md
     - reference/user-authentication.md
+    - reference/credit-cards.md
     - reference/analysis.md
     - 'Tax':
       - reference/tax/index.md

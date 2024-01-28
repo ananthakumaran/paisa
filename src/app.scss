@@ -759,6 +759,10 @@ nav.level.grid-2 {
 .sheet-editor .cm-editor {
 }
 
+.preview-editor {
+  min-height: 35px;
+}
+
 .search-query-editor {
   border: 1px solid $grey-lighter;
   border-radius: $radius;

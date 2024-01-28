@@ -251,14 +251,14 @@
             <p class="control">
               <span data-tippy-content="Create" data-tippy-followCursor="false">
                 <button class="button" on:click={(_e) => openTemplateCreateModal()}>
-                  <span class="icon is-small">
+                  <span class="icon">
                     <i class="fas fa-file-circle-plus" />
                   </span>
                 </button>
               </span>
 
               <span
-                class="du-tooltip ml-4"
+                class="ml-4"
                 data-tippy-followCursor="false"
                 data-tippy-content={$templateEditorState.hasUnsavedChanges == false
                   ? "No Unsaved Chagnes"
@@ -270,7 +270,7 @@
                   disabled={$templateEditorState.hasUnsavedChanges == false ||
                     selectedTemplate?.template_type == "builtin"}
                 >
-                  <span class="icon is-small">
+                  <span class="icon">
                     <i class="fas fa-floppy-disk" />
                   </span>
                 </button>
@@ -285,7 +285,7 @@
                   on:click={(_e) => remove()}
                   disabled={selectedTemplate?.template_type == "builtin"}
                 >
-                  <span class="icon is-small">
+                  <span class="icon">
                     <i class="fas fa-trash-can" />
                   </span>
                 </button>
@@ -331,22 +331,24 @@
           <div class="field">
             <div class="control">
               <button
-                title="copy to clipboard"
-                class="button is-small clipboard"
+                data-tippy-followCursor="false"
+                data-tippy-content="Copy to Clipboard"
+                class="button clipboard"
                 disabled={_.isEmpty(preview)}
                 on:click={copyToClipboard}
               >
-                <span class="icon is-small">
-                  <i class="fas fa-clipboard" />
+                <span class="icon">
+                  <i class="fas fa-copy" />
                 </span>
               </button>
               <button
-                title="save"
-                class="button is-small save"
+                data-tippy-followCursor="false"
+                data-tippy-content="Save"
+                class="button save"
                 disabled={_.isEmpty(preview)}
                 on:click={openSaveModal}
               >
-                <span class="icon is-small">
+                <span class="icon">
                   <i class="fas fa-floppy-disk" />
                 </span>
               </button>

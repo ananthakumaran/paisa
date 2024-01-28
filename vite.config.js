@@ -3,6 +3,9 @@ import { nodePolyfills } from "vite-plugin-node-polyfills";
 
 /** @type {import('vite').UserConfig} */
 const config = {
+  build: {
+    target: 'es2021'
+  },
   plugins: [
     sveltekit(),
     nodePolyfills({

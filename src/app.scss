@@ -1106,9 +1106,12 @@ div.is-hoverable:hover {
   display: flex;
   border: 1px solid $grey-lightest;
   box-shadow:
-    3px 3px 3px 0 rgba(0, 0, 0, 0.05),
-    10px 10px 10px 0 rgba(0, 0, 0, 0.15),
-    20px 20px 20px 0 rgba(0, 0, 0, 0.15) !important;
+    5px 5px 5px 0 rgba(0, 0, 0, 0.2),
+    15px 15px 15px 0 rgba(0, 0, 0, 0.1),
+    30px 30px 30px 0 rgba(0, 0, 0, 0.075),
+    -3px -3px 3px 0 rgba(255, 255, 255, 1),
+    -7px -7px 7px 0 rgba(255, 255, 255, 1),
+    -15px -15px 15px 0 rgba(255, 255, 255, 1) !important;
   background: linear-gradient(
     345deg,
     $grey-lightest 0%,

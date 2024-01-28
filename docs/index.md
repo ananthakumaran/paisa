@@ -84,7 +84,7 @@ hide:
 - :material-microsoft-excel: **Convert** CSV, Excel and PDF files to Ledger journal.
 - :fontawesome-solid-calculator: **Calculate** your taxes, emis, etc using **[sheets](./reference/sheets.md)**.
 - :octicons-goal-16: Track your **goals**.
-- :material-timer-sync: View your **recurring** transactions.
+- :material-timer-sync: View your **recurring** transactions and **credit card** bills.
 - :material-beach: Plan your **retirement**.
 - :material-chart-bar: And many more **visualizations** to help you make any financial
   decisions.
@@ -222,7 +222,7 @@ you need to save each month to achieve your goal.
 # Bills
 
 Paisa can help you track your [recurring](./reference/recurring.md) transactions like rent, emi,
-credit card bills, etc. The calendar view will show you all the bills
+[credit card](./reference/credit-cards.md) bills, etc. The calendar view will show you all the bills
 that are due in the current month. You can set the recurring period of
 the transaction, which is flexible enough to handle any kind of
 schedule like weekly, monthly, quarterly, last day of the month, last

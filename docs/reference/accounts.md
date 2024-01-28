@@ -128,6 +128,15 @@ your Savings Rate. If you want to track different types of taxes, you
 can use sub accounts as well, for example `#!ledger Expenses:Tax:Income`
 and `#!ledger Expenses:Tax:GST`.
 
+## Liabilities
+
+### Credit Card
+
+Credit card accounts should be named `#!ledger
+Liabilities:CreditCard:{name}`, for example `#!ledger
+Liabilities:CreditCard:Freedom` and `#!ledger
+Liabilities:CreditCard:AmazonPay`
+
 ## Equity
 
 Equity is used in rare cases where you want to balance the

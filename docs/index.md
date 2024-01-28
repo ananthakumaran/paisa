@@ -6,8 +6,9 @@ hide:
 ---
 
 <div class="hero" markdown>
+![Logo](./images/logo.svg)
 # Paisa
-<p>Personal Finance Manager</p>
+<p class="subtitle">Personal Finance Manager</p>
 </div>
 
 <div class="home" markdown>

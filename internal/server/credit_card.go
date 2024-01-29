@@ -87,7 +87,7 @@ func buildCreditCard(db *gorm.DB, creditCardConfig config.CreditCard, ps []posti
 		balance = bills[len(bills)-1].ClosingBalance
 	}
 
-	expirationDate, err := time.ParseInLocation("2006-01-02", creditCardConfig.ExpirationDate, time.Local)
+	expirationDate, err := time.ParseInLocation("2006-01-02", creditCardConfig.ExpirationDate, config.TimeZone())
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -119,7 +119,7 @@ func computeBills(db *gorm.DB, creditCardConfig config.CreditCard, ps []posting.
 	unpaidBill := 0
 
 	for _, month := range utils.SortedKeys(grouped) {
-		statementEndDate, err := time.Parse("2006-01", month)
+		statementEndDate, err := time.ParseInLocation("2006-01", month, config.TimeZone())
 		if err != nil {
 			log.Fatal(err)
 		}

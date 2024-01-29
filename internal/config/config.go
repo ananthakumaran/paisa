@@ -134,6 +134,7 @@ type Config struct {
 	DisplayPrecision           int          `json:"display_precision" yaml:"display_precision"`
 	AmountAlignmentColumn      int          `json:"amount_alignment_column" yaml:"amount_alignment_column"`
 	Locale                     string       `json:"locale" yaml:"locale"`
+	TimeZone                   string       `json:"time_zone" yaml:"time_zone"`
 	FinancialYearStartingMonth time.Month   `json:"financial_year_starting_month" yaml:"financial_year_starting_month"`
 	WeekStartingDay            time.Weekday `json:"week_starting_day" yaml:"week_starting_day"`
 	Strict                     BoolType     `json:"strict" yaml:"strict"`
@@ -159,6 +160,7 @@ type Config struct {
 
 var config Config
 var configPath string
+var location *time.Location
 
 var defaultConfig = Config{
 	Readonly:                   false,
@@ -167,6 +169,7 @@ var defaultConfig = Config{
 	DisplayPrecision:           0,
 	AmountAlignmentColumn:      52,
 	Locale:                     "en-IN",
+	TimeZone:                   "",
 	Budget:                     Budget{Rollover: Yes},
 	FinancialYearStartingMonth: 4,
 	Strict:                     No,
@@ -320,6 +323,16 @@ func LoadConfig(content []byte, cp string) error {
 		configPath = cp
 	}
 
+	if config.TimeZone == "" {
+		location = time.Local
+	} else {
+		location, err = time.LoadLocation(config.TimeZone)
+		if err != nil {
+			location = time.Local
+			return errors.New(fmt.Sprintf("Invalid time zone: %s\n%#v", config.TimeZone, err))
+		}
+	}
+
 	return nil
 }
 
@@ -392,4 +405,12 @@ func EnsureLogFilePath() (string, error) {
 
 func DefaultCurrency() string {
 	return config.DefaultCurrency
+}
+
+func TimeZone() *time.Location {
+	if location != nil {
+		return location
+	}
+
+	return time.Local
 }

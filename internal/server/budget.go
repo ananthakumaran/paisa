@@ -60,7 +60,7 @@ func computeBudet(db *gorm.DB, forecastPostings, expensesPostings []posting.Post
 	budgetsByMonth := make(map[string]Budget)
 	balance := make(map[string]decimal.Decimal)
 
-	currentMonth := lo.Must(time.Parse("2006-01", utils.Now().Format("2006-01")))
+	currentMonth := lo.Must(time.ParseInLocation("2006-01", utils.Now().Format("2006-01"), config.TimeZone()))
 
 	if len(forecastPostings) > 0 {
 		start := utils.BeginningOfMonth(forecastPostings[0].Date)
@@ -71,7 +71,7 @@ func computeBudet(db *gorm.DB, forecastPostings, expensesPostings []posting.Post
 			var accountBudgets []AccountBudget
 
 			forecastsByMonth := forecasts[month]
-			date := lo.Must(time.Parse("2006-01", month))
+			date := lo.Must(time.ParseInLocation("2006-01", month, config.TimeZone()))
 			expensesByMonth, ok := expenses[month]
 			if !ok {
 				expensesByMonth = []posting.Posting{}

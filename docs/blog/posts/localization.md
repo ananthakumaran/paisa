@@ -43,6 +43,12 @@ numbers in the default currency.
 Paisa also allows you to control the number of digits shown after the
 decimal point. By default, it's set to zero.
 
+### `time_zone`
+
+Paisa by default will try to use the system time zone. But if you
+deploy the application in a server, then you would have to set the
+time zone explicitly, as the server time zone might not be same as
+your local time zone. The time zone is used to parse and format dates.
 
 ## Journal
 

@@ -73,7 +73,7 @@ func YearHumanCutOffAt(date time.Time, cutoff time.Time) string {
 }
 
 func ParseFY(fy string) (time.Time, time.Time) {
-	start, _ := time.Parse("2006", strings.Split(fy, " ")[0])
+	start, _ := time.ParseInLocation("2006", strings.Split(fy, " ")[0], config.TimeZone())
 	start = start.AddDate(0, int(config.GetConfig().FinancialYearStartingMonth-time.January), 0)
 	return BeginningOfFinancialYear(start), EndOfFinancialYear(start)
 }
@@ -114,7 +114,7 @@ func EndOfDay(date time.Time) time.Time {
 var now time.Time
 
 func SetNow(date string) {
-	t, err := time.ParseInLocation("2006-01-02", date, time.Local)
+	t, err := time.ParseInLocation("2006-01-02", date, config.TimeZone())
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -138,7 +138,7 @@ func EndOfToday() time.Time {
 }
 
 func toDate(date time.Time) time.Time {
-	return time.Date(date.Year(), date.Month(), date.Day(), 0, 0, 0, 0, time.Local)
+	return time.Date(date.Year(), date.Month(), date.Day(), 0, 0, 0, 0, config.TimeZone())
 }
 
 func IsSameOrParent(account string, comparison string) bool {

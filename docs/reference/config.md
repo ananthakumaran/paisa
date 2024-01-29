@@ -70,6 +70,13 @@ amount_alignment_column: 52
 # OPTIONAL, DEFAULT: en-IN
 locale: en-IN
 
+# The time zone used to parse and format dates. If not set, system
+# time zone will be used. Example values are Asia/Kolkata,
+# America/New_York, etc
+#
+# OPTIONAL, DEFAULT: system timezone
+time_zone: ""
+
 # First month of the financial year. This can be set to 1 to follow
 # January to December.
 #

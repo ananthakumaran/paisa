@@ -117,7 +117,7 @@ func getHistory(code, commodityName string) ([]*price.Price, error) {
 
 		exchangePrice = btree.New(2)
 		for date, value := range response.TimeSeriesFX {
-			dateTime, err := time.Parse("2006-01-02", date)
+			dateTime, err := time.ParseInLocation("2006-01-02", date, config.TimeZone())
 			if err != nil {
 				return nil, err
 			}
@@ -132,7 +132,7 @@ func getHistory(code, commodityName string) ([]*price.Price, error) {
 
 	var prices []*price.Price
 	for date, value := range response.TimeSeriesDaily {
-		dateTime, err := time.Parse("2006-01-02", date)
+		dateTime, err := time.ParseInLocation("2006-01-02", date, config.TimeZone())
 		if err != nil {
 			return nil, err
 		}

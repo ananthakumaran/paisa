@@ -17,9 +17,9 @@ var THREE_YEAR = ONE_YEAR * 3
 var TWO_YEAR = ONE_YEAR * 2
 
 func init() {
-	EQUITY_GRANDFATHER_DATE, _ = time.ParseInLocation("2006-01-02", "2018-02-01", time.Local)
-	DEBT_INDEXATION_REVOCATION_DATE, _ = time.ParseInLocation("2006-01-02", "2023-04-01", time.Local)
-	CII_START_DATE, _ = time.ParseInLocation("2006-01-02", "2001-03-31", time.Local)
+	EQUITY_GRANDFATHER_DATE, _ = time.ParseInLocation("2006-01-02", "2018-02-01", config.TimeZone())
+	DEBT_INDEXATION_REVOCATION_DATE, _ = time.ParseInLocation("2006-01-02", "2023-04-01", config.TimeZone())
+	CII_START_DATE, _ = time.ParseInLocation("2006-01-02", "2001-03-31", config.TimeZone())
 }
 
 type Tax struct {

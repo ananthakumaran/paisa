@@ -310,7 +310,7 @@ func (Beancount) Parse(journalPath string, prices []price.Price) ([]*posting.Pos
 	locationRegex := regexp.MustCompile(`.*:(\d+):`)
 
 	for _, record := range records[1:] {
-		date, err := time.ParseInLocation("2006-01-02", record[Date], time.Local)
+		date, err := time.ParseInLocation("2006-01-02", record[Date], config.TimeZone())
 		if err != nil {
 			return nil, err
 		}
@@ -458,7 +458,7 @@ func parseLedgerPrices(output string, defaultCurrency string) ([]price.Price, er
 
 		commodity := utils.UnQuote(match[2])
 
-		date, err := time.ParseInLocation("2006/01/02", match[1], time.Local)
+		date, err := time.ParseInLocation("2006/01/02", match[1], config.TimeZone())
 		if err != nil {
 			return nil, err
 		}
@@ -491,7 +491,7 @@ func parseHLedgerPrices(output string, defaultCurrency string) ([]price.Price, e
 			}
 		}
 
-		date, err := time.ParseInLocation("2006-01-02", match[1], time.Local)
+		date, err := time.ParseInLocation("2006-01-02", match[1], config.TimeZone())
 		if err != nil {
 			return nil, err
 		}
@@ -524,7 +524,7 @@ func parseBeancountPrices(output string, defaultCurrency string) ([]price.Price,
 			}
 		}
 
-		date, err := time.ParseInLocation("2006-01-02", match[1], time.Local)
+		date, err := time.ParseInLocation("2006-01-02", match[1], config.TimeZone())
 		if err != nil {
 			return nil, err
 		}
@@ -599,7 +599,7 @@ func execLedgerCommand(journalPath string, flags []string) ([]*posting.Posting, 
 	dir := filepath.Dir(config.GetJournalPath())
 
 	for _, record := range records {
-		date, err := time.ParseInLocation("2006/01/02", record[Date], time.Local)
+		date, err := time.ParseInLocation("2006/01/02", record[Date], config.TimeZone())
 		if err != nil {
 			return nil, err
 		}
@@ -776,7 +776,7 @@ func execHLedgerCommand(journalPath string, prices []price.Price, flags []string
 
 	pricesTree := buildPricesTree(prices)
 	for _, t := range transactions {
-		date, err := time.ParseInLocation("2006-01-02", t.Date, time.Local)
+		date, err := time.ParseInLocation("2006-01-02", t.Date, config.TimeZone())
 		if err != nil {
 			return nil, err
 		}

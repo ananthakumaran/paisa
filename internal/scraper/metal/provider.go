@@ -80,7 +80,7 @@ func (p *PriceProvider) GetPrices(code string, commodityName string) ([]*price.P
 
 	var prices []*price.Price
 	for _, data := range result.Data {
-		date, err := time.ParseInLocation("2006-01-02", data.Date, time.Local)
+		date, err := time.ParseInLocation("2006-01-02", data.Date, config.TimeZone())
 		if err != nil {
 			return nil, err
 		}

@@ -35,7 +35,7 @@
   <div class="flex justify-between mb-4">
     <div class="flex">
       {#if action}
-        <span use:action class="icon is-size-4 mr-1 mt-1 has-text-grey">
+        <span use:action class="icon is-size-4 mr-1 mt-1 has-text-grey-light">
           <i class="fas fa-grip-vertical" />
         </span>
       {/if}

@@ -45,7 +45,9 @@
         {@const gain = b.gainAmount}
         {@const changeClass = calculateChangeClass(gain)}
         <tr>
-          <td class="whitespace-nowrap has-text-left" style="max-width: 200px; overflow: hidden;"
+          <td
+            class="whitespace-nowrap has-text-left"
+            style="max-width: max(15rem, 33.33vw); overflow: hidden;"
             >{@html indentWidth}<span class="has-text-grey custom-icon">{iconText(b.group)}</span>
             <a href="/assets/gain/{b.group}">{indent ? lastName(b.group) : b.group}</a></td
           >

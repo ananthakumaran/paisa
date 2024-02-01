@@ -150,3 +150,21 @@ export function updateContent(editor: EditorView, content: string) {
   const newColumn = Math.min(newLine.from + column, newLine.to);
   editor.dispatch({ selection: { anchor: newColumn, head: newColumn } });
 }
+
+export function focus(editor: EditorView, retry = 5) {
+  if (!editor.hasFocus) {
+    editor.focus();
+    if (!editor.hasFocus && retry > 0) {
+      setTimeout(
+        () => {
+          try {
+            focus(editor, retry - 1);
+          } catch (e) {
+            // ignore
+          }
+        },
+        (5 - retry) * 100 + 100
+      );
+    }
+  }
+}

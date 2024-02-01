@@ -1,5 +1,12 @@
 <script lang="ts">
-  import { createEditor, editorState, moveToEnd, moveToLine, updateContent } from "$lib/editor";
+  import {
+    createEditor,
+    editorState,
+    focus,
+    moveToEnd,
+    moveToLine,
+    updateContent
+  } from "$lib/editor";
   import { insertTab } from "@codemirror/commands";
   import { ajax, buildDirectoryTree, type LedgerFile } from "$lib/utils";
   import { redo, undo } from "@codemirror/commands";
@@ -164,10 +171,8 @@
         }
       });
       if (lineNumber > 0) {
-        if (!editor.hasFocus) {
-          editor.focus();
-        }
         moveToLine(editor, lineNumber, true);
+        focus(editor);
         lineNumber = 0;
       } else {
         moveToEnd(editor);

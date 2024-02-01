@@ -1,6 +1,6 @@
 <script lang="ts">
   import { createEditor, sheetEditorState } from "$lib/sheet";
-  import { moveToLine, updateContent } from "$lib/editor";
+  import { focus, moveToLine, updateContent } from "$lib/editor";
   import {
     ajax,
     buildDirectoryTree,
@@ -157,10 +157,8 @@
         }
       });
       if (lineNumber > 0) {
-        if (!editor.hasFocus) {
-          editor.focus();
-        }
         moveToLine(editor, lineNumber, true);
+        focus(editor);
         lineNumber = 0;
       }
     }

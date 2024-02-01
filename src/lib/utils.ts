@@ -1010,6 +1010,10 @@ export function secondName(account: string) {
   return account.split(":")[1];
 }
 
+export function firstNames(account: string, n: number) {
+  return _.take(account.split(":"), n).join(":");
+}
+
 export function restName(account: string) {
   return _.drop(account.split(":")).join(":");
 }

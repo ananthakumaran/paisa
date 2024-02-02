@@ -26,6 +26,11 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
+         <loc>https://paisa.fyi/blog/2024/01/26/sovereign-gold-bond/</loc>
+         <lastmod>1980-01-01</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
          <loc>https://paisa.fyi/getting-started/installation/</loc>
          <lastmod>1980-01-01</lastmod>
          <changefreq>daily</changefreq>
@@ -72,6 +77,11 @@
     </url>
     <url>
          <loc>https://paisa.fyi/reference/config/</loc>
+         <lastmod>1980-01-01</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://paisa.fyi/reference/credit-cards/</loc>
          <lastmod>1980-01-01</lastmod>
          <changefreq>daily</changefreq>
     </url>
@@ -147,6 +157,26 @@
     </url>
     <url>
          <loc>https://paisa.fyi/blog/archive/2024/</loc>
+         <lastmod>1980-01-01</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://paisa.fyi/blog/category/sovereign-gold-bond/</loc>
+         <lastmod>1980-01-01</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://paisa.fyi/blog/category/gold/</loc>
+         <lastmod>1980-01-01</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://paisa.fyi/blog/category/sgb/</loc>
+         <lastmod>1980-01-01</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://paisa.fyi/blog/category/price/</loc>
          <lastmod>1980-01-01</lastmod>
          <changefreq>daily</changefreq>
     </url>

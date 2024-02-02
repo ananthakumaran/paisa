@@ -58,12 +58,18 @@
   margin-bottom: 3rem;
 }
 
+.hero img {
+  height: 90px;
+  margin-top: -60px;
+  margin-bottom: 15px;
+}
+
 .hero h1 {
   text-align: center;
   color: inherit;
   font-weight: 700;
   color: var(--logo-color);
-  margin-bottom: 0;
+  margin-bottom: -7px;
   margin-top: -30px;
   font-size: 3rem;
 }
@@ -82,7 +88,11 @@
   margin: auto;
   line-height: 1.28;
   color: var(--md-default-fg-color--light);
-  font-size: 0.72rem;
+  font-size: 0.9rem;
+}
+
+.hero p.subtitle {
+  opacity: 0.7;
 }
 
 .home .tabbed-set {
@@ -322,4 +332,8 @@
 .feature-card-icon-income .twemoji {
   background-color: var(--account-color-income-background);
   color: var(--account-color-income);
+}
+
+.language-ledger pre code {
+  max-height: 500px;
 }

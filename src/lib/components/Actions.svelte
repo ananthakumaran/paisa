@@ -68,7 +68,7 @@
           <span class="ml-0 icon is-small">
             <i class="fas {$obscure ? 'fa-eye-slash' : 'fa-eye'}" />
           </span>
-          <span>Hide numbers</span>
+          <span>{$obscure ? "Show" : "Hide"} numbers</span>
         </label>
       </a>
       {#if showLogout}

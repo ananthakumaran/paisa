@@ -1399,13 +1399,13 @@ let
         sha512 = "6lMvf7xYEJ+oGeR5L8DFJJrowkefTK6ZgA4JiMqoClMkKq0s6yvsd3FZfCFvX1fQ0tpCD7fkuRVHsnUVgsHyNg==";
       };
     };
-    "@sveltejs/kit-2.0.6" = {
+    "@sveltejs/kit-2.5.0" = {
       name = "_at_sveltejs_slash_kit";
       packageName = "@sveltejs/kit";
-      version = "2.0.6";
+      version = "2.5.0";
       src = fetchurl {
-        url = "https://registry.npmjs.org/@sveltejs/kit/-/kit-2.0.6.tgz";
-        sha512 = "dnHtyjBLGXx+hrZQ9GuqLlSfTBixewJaByUVWai7LmB4dgV3FwkK155OltEgONDQW6KW64hLNS/uojdx3uC2/g==";
+        url = "https://registry.npmjs.org/@sveltejs/kit/-/kit-2.5.0.tgz";
+        sha512 = "1uyXvzC2Lu1FZa30T4y5jUAC21R309ZMRG0TPt+PPPbNUoDpy8zSmSNVWYaBWxYDqLGQ5oPNWvjvvF2IjJ1jmA==";
       };
     };
     "@sveltejs/vite-plugin-svelte-3.0.1" = {
@@ -9706,7 +9706,7 @@ let
       sources."@rollup/rollup-win32-x64-msvc-4.9.2"
       sources."@sveltejs/adapter-auto-3.0.1"
       sources."@sveltejs/adapter-static-3.0.1"
-      sources."@sveltejs/kit-2.0.6"
+      sources."@sveltejs/kit-2.5.0"
       sources."@sveltejs/vite-plugin-svelte-3.0.1"
       sources."@sveltejs/vite-plugin-svelte-inspector-2.0.0"
       sources."@tokenizer/token-0.3.0"

@@ -1,5 +1,11 @@
 # CHANGELOG
 
+### 0.6.5 (2024-02-02)
+
+* Add Liabilities > [Credit Card](https://paisa.fyi/reference/credit-cards) page
+* Support password protected XLSX file
+* Allow user to configure timezone
+* Bug fixes
 
 ### 0.6.4 (2024-01-22)
 

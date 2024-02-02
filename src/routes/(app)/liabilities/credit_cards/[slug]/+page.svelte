@@ -104,15 +104,15 @@
       <div class="column is-9-widescreen is-8">
         {#if currentBill}
           <div class="flex flex-wrap gap-4 mb-4">
-            <div class="box py-2 m-0 flex-grow" style="border: 1px solid transparent">
-              <div
-                class="is-flex mr-2 is-align-items-baseline overflow-x-scroll"
-                style="min-width: fit-content"
-              >
-                <div class="ml-3 custom-icon is-size-5">
+            <div
+              class="box py-2 m-0 flex-grow overflow-x-scroll"
+              style="border: 1px solid transparent"
+            >
+              <div class="is-flex mr-2 is-align-items-baseline" style="min-width: fit-content">
+                <div class="ml-3 custom-icon is-size-5 whitespace-nowrap">
                   <span>{iconify(creditCard.account)}</span>
                 </div>
-                <div class="ml-3">
+                <div class="ml-3 whitespace-nowrap">
                   <span class="mr-1 is-size-7 has-text-grey">Payment</span>
                   <span
                     ><DueDate dueDate={currentBill.dueDate} paidDate={currentBill.paidDate} /></span

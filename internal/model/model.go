@@ -6,6 +6,7 @@ import (
 
 	"github.com/ananthakumaran/paisa/internal/config"
 	"github.com/ananthakumaran/paisa/internal/ledger"
+	"github.com/ananthakumaran/paisa/internal/model/cache"
 	"github.com/ananthakumaran/paisa/internal/model/cii"
 	"github.com/ananthakumaran/paisa/internal/model/commodity"
 	mutualfundModel "github.com/ananthakumaran/paisa/internal/model/mutualfund/scheme"
@@ -29,6 +30,7 @@ func AutoMigrate(db *gorm.DB) {
 	db.AutoMigrate(&portfolio.Portfolio{})
 	db.AutoMigrate(&price.Price{})
 	db.AutoMigrate(&cii.CII{})
+	db.AutoMigrate(&cache.Cache{})
 }
 
 func SyncJournal(db *gorm.DB) (string, error) {

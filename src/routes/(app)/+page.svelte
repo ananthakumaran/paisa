@@ -159,7 +159,7 @@
           <div class="tile is-child">
             <div class="content">
               <p class="subtitle">
-                <a class="secondary-link" href="/assets/networth">Assets</a>
+                <a class="secondary-link has-text-grey" href="/assets/networth">Assets</a>
               </p>
               <div class="content">
                 <div>
@@ -201,7 +201,8 @@
             <article class="tile is-child">
               <div class="content">
                 <p class="subtitle">
-                  <a class="secondary-link" href="/assets/balance">Checking Balance</a>
+                  <a class="secondary-link has-text-grey" href="/assets/balance">Checking Balance</a
+                  >
                 </p>
                 <div class="content">
                   <UntypedMasonryGrid gap={10} maxStretchColumnSize={400} align="stretch">
@@ -220,7 +221,7 @@
         <div class="tile is-parent">
           <article class="tile is-child min-w-0">
             <p class="subtitle">
-              <a class="secondary-link" href="/cash_flow/monthly">Cash Flow</a>
+              <a class="secondary-link has-text-grey" href="/cash_flow/monthly">Cash Flow</a>
             </p>
             <div class="content box px-2 pb-0">
               <ZeroState item={cashFlows}>
@@ -243,7 +244,7 @@
             <div class="tile is-child">
               <div class="content">
                 <p class="subtitle">
-                  <a class="secondary-link" href="/expense/budget">Budget</a>
+                  <a class="secondary-link has-text-grey" href="/expense/budget">Budget</a>
                 </p>
                 <div class="content">
                   <div>
@@ -262,7 +263,7 @@
               <article class="tile is-child">
                 <div class="content">
                   <p class="subtitle">
-                    <a class="secondary-link" href="/more/goals">Goals</a>
+                    <a class="secondary-link has-text-grey" href="/more/goals">Goals</a>
                   </p>
                   <div class="content">
                     {#each goalSummaries as goal}
@@ -280,7 +281,7 @@
           <article class="tile is-child">
             <p class="subtitle is-flex is-justify-content-space-between is-align-items-end">
               <span
-                ><a class="secondary-link" href="/expense/monthly">Expenses</a>
+                ><a class="secondary-link has-text-grey" href="/expense/monthly">Expenses</a>
                 <span class="is-size-5 has-text-weight-bold px-2" style="color: {COLORS.expenses}"
                   >{formatCurrency(totalExpense)}</span
                 ></span
@@ -301,7 +302,8 @@
               <article class="tile is-child">
                 <div class="content">
                   <p class="subtitle">
-                    <a class="secondary-link" href="/cash_flow/recurring">Recurring</a>
+                    <a class="secondary-link has-text-grey" href="/cash_flow/recurring">Recurring</a
+                    >
                   </p>
                   <div class="content box">
                     <div
@@ -324,7 +326,9 @@
               <article class="tile is-child">
                 <div class="content">
                   <p class="subtitle">
-                    <a class="secondary-link" href="/ledger/transaction">Recent Transactions</a>
+                    <a class="secondary-link has-text-grey" href="/ledger/transaction"
+                      >Recent Transactions</a
+                    >
                   </p>
                   <div>
                     <UntypedMasonryGrid gap={10} maxStretchColumnSize={500} align="stretch">
@@ -348,5 +352,10 @@
 <style lang="scss">
   p.subtitle {
     margin-bottom: 0.5rem !important;
+  }
+
+  p.subtitle a.secondary-link {
+    text-transform: uppercase;
+    font-size: 1rem;
   }
 </style>

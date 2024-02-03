@@ -24,9 +24,17 @@ func DeleteExpired(db *gorm.DB) error {
 	return nil
 }
 
+var lastGarbageCollectedAt *time.Time
+
 func Lookup[I any, K any](db *gorm.DB, key K, fallback func() I) I {
 	var item I
 	var cache Cache
+
+	if lastGarbageCollectedAt == nil || time.Now().Sub(*lastGarbageCollectedAt) > 24*time.Hour {
+		DeleteExpired(db)
+		lastGarbageCollectedAt = new(time.Time)
+		*lastGarbageCollectedAt = time.Now()
+	}
 
 	hash, err := hashstructure.Hash(key, hashstructure.FormatV2, nil)
 	hashKey := fmt.Sprintf("%d", hash)

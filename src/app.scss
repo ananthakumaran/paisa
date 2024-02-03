@@ -125,6 +125,9 @@ $editor-full-height: calc(100vh - 45.5px - 7px - 15.75px - 21px - 57.75px - 10.5
 html,
 body {
   background: $white-bis;
+  background-image: radial-gradient(rgba($grey-light, 0.2) 1px, $white-bis 1px);
+  background-size: 20px 20px;
+  min-height: 100vh;
 }
 
 .is-primary-color {

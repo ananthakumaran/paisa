@@ -1,6 +1,6 @@
 <script lang="ts">
   export let active = false;
-  export let width = "640px";
+  export let width = "min(640px, 100vw)";
   export let bodyClass = "";
   export let headerClass = "";
   export let footerClass = "";

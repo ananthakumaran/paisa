@@ -44,7 +44,7 @@
 
 <Modal
   bind:active={open}
-  width="1300px"
+  width="min(1300px, 100vw)"
   bodyClass="p-0 min-h-[500px]"
   headerClass="pt-1 pb-1"
   footerClass="is-justify-content-right"

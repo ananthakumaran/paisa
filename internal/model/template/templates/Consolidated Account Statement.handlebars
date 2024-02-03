@@ -2,5 +2,5 @@
  {{date ROW.A "DD-MMM-YYYY"}} {{findAbove A regexp="^([A-Z0-9]{4,10})(?<!CAMSCASWS)-([^-]+).*$" group=2}} | {{ROW.B}}
     {{predictAccount (findAbove A regexp="^([A-Z0-9]{4,10})(?<!CAMSCASWS)-([^-]+).*$" group=2) prefix="Asset"}}		{{amount ROW.D}} "{{findAbove A regexp="^([A-Z0-9]{4,10})(?<!CAMSCASWS)-.*$" group=1}}" @ {{ROW.E}} INR
     Assets:Checking                       {{negate (amount ROW.C)}} INR
-    Expense:Misc  ;; balance any rounding errors
+    Expenses:Misc  ;; balance any rounding errors
 {{/if}}

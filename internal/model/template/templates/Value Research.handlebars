@@ -1,0 +1,6 @@
+{{#if (isDate ROW.A "YYYY-MM-DD")}}
+ {{date ROW.A "YYYY-MM-DD"}} {{ROW.D}}
+    Assets:Equity:{{acronym ROW.B}}    {{ROW.E}} {{acronym ROW.B}} @ {{ROW.F}} INR
+    Assets:Checking                    {{negate ROW.H}} INR
+    Expenses:Misc   ;; balance any rounding errors
+{{/if}}

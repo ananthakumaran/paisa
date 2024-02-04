@@ -196,7 +196,7 @@
               <ZeroState item={expenses}>
                 <strong>Oops!</strong> You have no expenses.
               </ZeroState>
-              <LegendCard {legends} clazz="ml-4" />
+              <LegendCard {legends} clazz="ml-4 overflow-x-auto" />
               <svg id="d3-monthly-expense-timeline" width="100%" height="400" />
             </div>
           </div>

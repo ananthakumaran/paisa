@@ -5,14 +5,10 @@
   import { obscure } from "../../persisted_store";
   import { goto } from "$app/navigation";
 
-  let isLoading = false;
-
   async function syncWithLoader(request: Record<string, any>) {
-    isLoading = true;
     try {
       await sync(request);
     } finally {
-      isLoading = false;
       refresh();
     }
   }
@@ -33,11 +29,11 @@
   let showLogout = isLoggedIn();
 </script>
 
-<div class="dropdown {isMobile() ? 'is-left' : 'is-right'}" class:is-hoverable={!isLoading}>
-  <div class="dropdown-trigger">
-    <button class:is-loading={isLoading} class="button is-small" aria-haspopup="true">
-      <span class="icon is-small">
-        <i class="fas fa-caret-down" />
+<div class="dropdown ml-2 is-hoverable {isMobile() ? 'is-left' : 'is-right'}">
+  <div class="dropdown-trigger dropdown-icon">
+    <button class="button is-large" aria-haspopup="true">
+      <span class="icon">
+        <i class="fas fa-ellipsis-vertical" />
       </span>
     </button>
   </div>

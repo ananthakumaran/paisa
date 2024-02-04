@@ -2,7 +2,7 @@
   import { onMount } from "svelte";
   import _ from "lodash";
   import { renderFlow } from "$lib/cash_flow";
-  import { ajax, depth, firstName, type Graph, type Legend, type Posting } from "$lib/utils";
+  import { ajax, depth, firstName, rem, type Graph, type Legend, type Posting } from "$lib/utils";
   import { dateMin, year } from "../../../../store";
   import {
     setCashflowDepthAllowed,
@@ -69,7 +69,7 @@
   });
 </script>
 
-<section class="section">
+<section class="section" style="padding-bottom: 0 !important">
   <div class="container is-fluid">
     <div class="columns">
       <div class="column is-12">
@@ -82,7 +82,7 @@
           <svg
             class:is-not-visible={isEmpty}
             id="d3-expense-flow"
-            height={window.innerHeight - 100}
+            height={window.innerHeight - rem(210)}
           />
         </div>
       </div>

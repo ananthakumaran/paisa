@@ -228,7 +228,7 @@
                 <strong>Oops!</strong> You have not made any transactions in the last 3 months.
               </ZeroState>
 
-              <LegendCard legends={cashflowLegends} clazz="mb-2 overflow-x-scroll" />
+              <LegendCard legends={cashflowLegends} clazz="mb-2 overflow-x-auto" />
 
               <svg
                 class:is-not-visible={_.isEmpty(cashFlows)}

@@ -63,7 +63,7 @@
       {small}
       narrow
       title="Target"
-      color={COLORS.secondary}
+      color={COLORS.primary}
       value={formatCurrency(goal.target)}
     />
   </nav>

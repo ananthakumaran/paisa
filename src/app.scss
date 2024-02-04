@@ -441,7 +441,13 @@ svg text {
 }
 
 .weekdays-grid {
-  border-radius: $radius-small;
+  div:first-child {
+    border-radius: $radius-small 0 0 $radius-small !important;
+  }
+
+  div:last-child {
+    border-radius: 0 $radius-small $radius-small 0 !important;
+  }
 
   div {
     padding: 2px 0;
@@ -525,10 +531,13 @@ nav.level.grid-2 {
 }
 
 .navbar {
-  background-color: $white-bis !important;
+  background-color: $white !important;
   color: rgba(0, 0, 0, 0.7);
-}
 
+  a.navbar-item {
+    background-color: $white !important;
+  }
+}
 .cm-editor {
   .cm-gutters {
     background-color: $white-ter;
@@ -1042,6 +1051,19 @@ span.progress-percent.less-than-10 {
 input:invalid,
 textarea:invalid {
   border-color: $danger;
+}
+
+.dropdown-trigger.dropdown-icon {
+  button {
+    height: 2rem;
+    padding: 0;
+    border: none;
+    background: none;
+  }
+
+  button:hover {
+    color: $link;
+  }
 }
 
 .nested.has-dropdown {

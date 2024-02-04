@@ -37,6 +37,8 @@
   let investmentTimelineSvg: Element;
   let targetDateObject: dayjs.Dayjs;
   let savingsTotal = 0,
+    investmentTotal = 0,
+    gainTotal = 0,
     targetSavings = 0,
     pmt = 0,
     xirr = 0,
@@ -60,6 +62,8 @@
   onMount(async () => {
     ({
       savingsTotal,
+      investmentTotal,
+      gainTotal,
       savingsTimeline,
       target: targetSavings,
       rate,
@@ -114,6 +118,13 @@
     <nav class="level custom-icon {isMobile() && 'grid-2'}">
       <LevelItem title={name} value={iconGlyph(icon)} />
       <LevelItem
+        title="Net Investment"
+        value={formatCurrency(investmentTotal)}
+        color={COLORS.secondary}
+        subtitle={`<b>${formatCurrency(gainTotal)}</b> ${gainTotal >= 0 ? "gain" : "loss"}`}
+      />
+
+      <LevelItem
         title="Current Savings"
         value={formatCurrency(savingsTotal)}
         color={COLORS.gainText}
@@ -123,7 +134,7 @@
       <LevelItem
         title="Target Savings"
         value={formatCurrency(targetSavings)}
-        color={COLORS.secondary}
+        color={COLORS.primary}
         subtitle={targetDateObject?.isValid() ? targetDateObject.format("DD MMM YYYY") : null}
       />
 
@@ -180,11 +191,11 @@
                 {posting}
                 color={posting.amount >= 0
                   ? posting.account.startsWith("Income:CapitalGains")
-                    ? COLORS.lossText
-                    : COLORS.gainText
+                    ? COLORS.tertiary
+                    : COLORS.secondary
                   : posting.account.startsWith("Income:CapitalGains")
-                    ? COLORS.gainText
-                    : COLORS.lossText}
+                    ? COLORS.secondary
+                    : COLORS.tertiary}
               />
             {/each}
           </div>

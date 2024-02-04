@@ -310,7 +310,7 @@
   </div>
 </nav>
 
-<div class="mt-2 px-3 is-flex is-justify-content-space-between">
+<div class="mt-3 px-3 is-flex is-justify-content-space-between">
   {#if selectedLink}
     <nav
       style="margin-left: 0.73rem;"

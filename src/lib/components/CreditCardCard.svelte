@@ -59,7 +59,7 @@
         href="/liabilities/credit_cards/{encodeURIComponent(creditCard.account)}"
       >
         <span class="custom-icon">{iconText(creditCard.account)}</span>
-        <span class="ml-1">{restName(restName(creditCard.account))}</span>
+        <span>{restName(restName(creditCard.account))}</span>
       </a>
     </div>
   </div>

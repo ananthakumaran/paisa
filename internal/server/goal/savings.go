@@ -32,6 +32,7 @@ func getSavingsDetail(db *gorm.DB, conf config.SavingsGoal) gin.H {
 	savings := accounting.FilterByGlob(query.Init(db).Like("Assets:%").All(), conf.Accounts)
 	savings = service.PopulateMarketPrice(db, savings)
 	savingsTotal := accounting.CurrentBalance(savings)
+	investmentTotal := accounting.CostBalance(savings)
 
 	savingsWithCapitalGains := accounting.FilterByGlob(query.Init(db).Like("Assets:%", "Income:CapitalGains:%").All(), conf.Accounts)
 	savingsWithCapitalGains = service.PopulateMarketPrice(db, savingsWithCapitalGains)
@@ -42,8 +43,10 @@ func getSavingsDetail(db *gorm.DB, conf config.SavingsGoal) gin.H {
 		"type":             "savings",
 		"name":             conf.Name,
 		"icon":             conf.Icon,
-		"savingsTimeline":  accounting.RunningBalance(db, savings),
+		"investmentTotal":  investmentTotal,
 		"savingsTotal":     savingsTotal,
+		"gainTotal":        savingsTotal.Sub(investmentTotal),
+		"savingsTimeline":  accounting.RunningBalance(db, savings),
 		"target":           decimal.NewFromFloat(conf.Target),
 		"targetDate":       conf.TargetDate,
 		"rate":             conf.Rate,

@@ -105,7 +105,7 @@
         {#if currentBill}
           <div class="flex flex-wrap gap-4 mb-4">
             <div
-              class="box py-2 m-0 flex-grow overflow-x-scroll"
+              class="box py-2 m-0 flex-grow overflow-x-auto"
               style="border: 1px solid transparent"
             >
               <div class="is-flex mr-2 is-align-items-baseline" style="min-width: fit-content">
@@ -134,7 +134,7 @@
               </div>
             </div>
           </div>
-          <nav class="level flex gap-4 overflow-x-scroll" style="justify-content: start;">
+          <nav class="level flex gap-4 overflow-x-auto" style="justify-content: start;">
             <LevelItem
               {small}
               narrow

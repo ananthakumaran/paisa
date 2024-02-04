@@ -49,6 +49,8 @@ func getRetirementDetail(db *gorm.DB, conf config.RetirementGoal) gin.H {
 	savingsWithCapitalGains := accounting.FilterByGlob(query.Init(db).Like("Assets:%", "Income:CapitalGains:%").All(), conf.Savings)
 	savingsWithCapitalGains = service.PopulateMarketPrice(db, savingsWithCapitalGains)
 	savingsTotal := accounting.CurrentBalance(savings)
+	investmentTotal := accounting.CostBalance(savings)
+	gainsTotal := savingsTotal.Sub(investmentTotal)
 
 	yearlyExpenses := decimal.NewFromFloat(conf.YearlyExpenses)
 	if !(yearlyExpenses.GreaterThan(decimal.Zero)) {
@@ -63,6 +65,8 @@ func getRetirementDetail(db *gorm.DB, conf config.RetirementGoal) gin.H {
 		"icon":            conf.Icon,
 		"savingsTimeline": accounting.RunningBalance(db, savings),
 		"savingsTotal":    savingsTotal,
+		"investmentTotal": investmentTotal,
+		"gainTotal":       gainsTotal,
 		"swr":             conf.SWR,
 		"yearlyExpense":   yearlyExpenses,
 		"xirr":            service.XIRR(db, savingsWithCapitalGains),

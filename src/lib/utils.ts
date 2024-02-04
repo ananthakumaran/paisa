@@ -356,6 +356,8 @@ export interface AccountBudget {
 
 export interface RetirementGoalProgress {
   savingsTotal: number;
+  investmentTotal: number;
+  gainTotal: number;
   savingsTimeline: Point[];
   swr: number;
   yearlyExpense: number;
@@ -368,6 +370,8 @@ export interface RetirementGoalProgress {
 }
 
 export interface SavingsGoalProgress {
+  investmentTotal: number;
+  gainTotal: number;
   savingsTotal: number;
   savingsTimeline: Point[];
   target: number;

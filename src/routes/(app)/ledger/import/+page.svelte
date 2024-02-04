@@ -246,7 +246,7 @@
   <div class="container is-fluid">
     <div class="columns mb-0">
       <div class="column is-5 py-0">
-        <div class="box p-3 mb-3 overflow-x-scroll">
+        <div class="box p-3 mb-3 overflow-x-auto">
           <div class="field is-grouped mb-0">
             <p class="control">
               <span data-tippy-content="Create" data-tippy-followCursor="false">
@@ -426,14 +426,14 @@
     float: right;
     position: absolute;
     right: 0;
-    z-index: 10;
+    z-index: 1;
   }
 
   .save {
     float: right;
     position: absolute !important;
     right: 40px;
-    z-index: 10;
+    z-index: 1;
   }
 
   .table-wrapper {

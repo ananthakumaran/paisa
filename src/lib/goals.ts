@@ -180,7 +180,7 @@ export function renderProgress(
   const lineScale = d3
     .scaleOrdinal<string>()
     .domain(lineKeys)
-    .range([COLORS.gainText, COLORS.secondary]);
+    .range([COLORS.secondary, COLORS.primary]);
 
   const x = d3.scaleTime().range([0, width]).domain([start, end]),
     y = d3
@@ -391,7 +391,7 @@ export function renderInvestmentTimeline(postings: Posting[], element: Element, 
   if (pmt > 0) {
     g.append("line")
       .attr("fill", "none")
-      .attr("stroke", COLORS.secondary)
+      .attr("stroke", COLORS.primary)
       .attr("x1", 0)
       .attr("x2", width)
       .attr("y1", y(pmt))
@@ -406,7 +406,7 @@ export function renderInvestmentTimeline(postings: Posting[], element: Element, 
       .attr("dy", "0.3em")
       .attr("x", width)
       .attr("y", y(pmt))
-      .attr("fill", COLORS.secondary)
+      .attr("fill", COLORS.primary)
       .text(formatCurrencyCrude(pmt));
   }
 
@@ -415,9 +415,9 @@ export function renderInvestmentTimeline(postings: Posting[], element: Element, 
     .data(points)
     .enter()
     .append("rect")
-    .attr("stroke", (p) => (p.total <= 0 ? COLORS.lossText : COLORS.gainText))
-    .attr("fill", (p) => (p.total <= 0 ? COLORS.lossText : COLORS.gainText))
-    .attr("fill-opacity", 0.6)
+    .attr("stroke", (p) => (p.total <= 0 ? COLORS.tertiary : COLORS.secondary))
+    .attr("fill", (p) => (p.total <= 0 ? COLORS.tertiary : COLORS.secondary))
+    .attr("fill-opacity", 0.5)
     .attr("data-tippy-content", (p) => {
       const group = groupSumBy(p.postings, (p) => p.account);
       return tooltip(

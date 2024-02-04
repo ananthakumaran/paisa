@@ -27,6 +27,8 @@
   let svg: Element;
   let investmentTimelineSvg: Element;
   let savingsTotal = 0,
+    investmentTotal = 0,
+    gainTotal = 0,
     icon = "",
     name = "",
     targetSavings = 0,
@@ -48,8 +50,19 @@
   });
 
   onMount(async () => {
-    ({ savingsTotal, savingsTimeline, yearlyExpense, swr, xirr, icon, name, postings, balances } =
-      await ajax("/api/goals/retirement/:name", null, data));
+    ({
+      savingsTotal,
+      investmentTotal,
+      gainTotal,
+      savingsTimeline,
+      yearlyExpense,
+      swr,
+      xirr,
+      icon,
+      name,
+      postings,
+      balances
+    } = await ajax("/api/goals/retirement/:name", null, data));
     targetSavings = yearlyExpense * (100 / swr);
 
     latestPostings = _.chain(postings)
@@ -85,6 +98,15 @@
     <nav class="level custom-icon {isMobile() && 'grid-2'}">
       <LevelItem title={name} value={iconGlyph(icon)} />
       <LevelItem
+        title="Net Investment"
+        value={formatCurrency(investmentTotal)}
+        color={COLORS.secondary}
+        subtitle={`<b>${formatCurrency(gainTotal)}</b> ${
+          gainTotal >= 0 ? "gain" : "loss"
+        } at <b>${formatFloat(xirr)}</b> XIRR`}
+      />
+
+      <LevelItem
         title="Current Savings"
         value={formatCurrency(savingsTotal)}
         color={COLORS.gainText}
@@ -99,11 +121,10 @@
       <LevelItem
         title="Target Savings"
         value={formatCurrency(targetSavings)}
-        color={COLORS.secondary}
+        color={COLORS.primary}
         subtitle="{formatFloat(targetX, 0)}x times Yearly Expenses"
       />
       <LevelItem title="SWR" value={formatFloat(swr)} />
-      <LevelItem title="XIRR" value={formatFloat(xirr)} />
     </nav>
   </div>
 </section>
@@ -149,11 +170,11 @@
                 {posting}
                 color={posting.amount >= 0
                   ? posting.account.startsWith("Income:CapitalGains")
-                    ? COLORS.lossText
-                    : COLORS.gainText
+                    ? COLORS.tertiary
+                    : COLORS.secondary
                   : posting.account.startsWith("Income:CapitalGains")
-                    ? COLORS.gainText
-                    : COLORS.lossText}
+                    ? COLORS.secondary
+                    : COLORS.tertiary}
               />
             {/each}
           </div>

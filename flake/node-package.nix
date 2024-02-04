@@ -1912,6 +1912,15 @@ let
         sha512 = "7BUT1sEFSNBIcc0wlwKn2l3l3OnYJdjsrlruDbAp6hpOK3HbpgMjLVH4ql6xXwD+qYy+XEHrb2EMkIpo9kWZ+Q==";
       };
     };
+    "@types/tabulator-tables-5.5.7" = {
+      name = "_at_types_slash_tabulator-tables";
+      packageName = "@types/tabulator-tables";
+      version = "5.5.7";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/@types/tabulator-tables/-/tabulator-tables-5.5.7.tgz";
+        sha512 = "2G6i6QhJ/L+8Xk3KAfFZ91qADS9MEu6ve1uT59iaA7fpA6h6AswbFP/5dl3yg8lUhMsP4Zcst073FhbK7Y0TJA==";
+      };
+    };
     "@types/tar-6.1.10" = {
       name = "_at_types_slash_tar";
       packageName = "@types/tar";
@@ -8610,6 +8619,15 @@ let
         sha512 = "C2PqiSdxDA0v+OH9SP8UxyyfTRLzdxtdwgMjeX/5fvPPYbFixaUXp0hQw3aDN2RrLrwE2vmRJK3sAOICk+0wHA==";
       };
     };
+    "tabulator-tables-5.5.4" = {
+      name = "tabulator-tables";
+      packageName = "tabulator-tables";
+      version = "5.5.4";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/tabulator-tables/-/tabulator-tables-5.5.4.tgz";
+        sha512 = "hVcITAfO2G3gm2ILW9GN2ORgcmNsbVmC+Q+2E3xfthIE9xtFxGKSbhbsNk39h11Uzm9GNUvjGfos1IVKrfeeOA==";
+      };
+    };
     "tailwindcss-3.4.0" = {
       name = "tailwindcss";
       packageName = "tailwindcss";
@@ -9762,6 +9780,7 @@ let
       sources."@types/sprintf-js-1.1.4"
       sources."@types/svg2ttf-5.0.3"
       sources."@types/svgicons2svgfont-10.0.5"
+      sources."@types/tabulator-tables-5.5.7"
       sources."@types/tar-6.1.10"
       sources."@types/ttf2eot-2.0.2"
       sources."@types/ttf2woff-2.0.4"
@@ -10731,6 +10750,7 @@ let
       sources."svgo-3.0.3"
       sources."svgpath-2.6.0"
       sources."svgtofont-4.1.1"
+      sources."tabulator-tables-5.5.4"
       (sources."tailwindcss-3.4.0" // {
         dependencies = [
           (sources."postcss-load-config-4.0.2" // {

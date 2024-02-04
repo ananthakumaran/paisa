@@ -1276,3 +1276,30 @@ export function dueDateIcon(dueDate: dayjs.Dayjs, clearedDate: dayjs.Dayjs) {
 
   return { icon, color, svgColor, glyph };
 }
+
+export function buildTree<I>(items: I[], accountAccessor: (item: I) => string): I[] {
+  const result: I[] = [];
+
+  const sorted = _.sortBy(items, accountAccessor);
+
+  for (const item of sorted) {
+    const account = accountAccessor(item);
+    const parts = account.split(":");
+    let current = result;
+    for (let i = 0; i < parts.length; i++) {
+      const part = parts[i];
+      let found: any = current.find((c) => accountAccessor(c).split(":")[i] === part);
+      if (!found) {
+        found = { ...item };
+        current.push(found);
+      }
+
+      if (i !== parts.length - 1) {
+        found._children = found._children || [];
+        current = found._children;
+      }
+    }
+  }
+
+  return result;
+}

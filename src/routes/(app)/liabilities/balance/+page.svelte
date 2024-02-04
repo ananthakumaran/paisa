@@ -1,28 +1,17 @@
 <script lang="ts">
-  import { iconText } from "$lib/icon";
+  import Table from "$lib/components/Table.svelte";
   import {
-    ajax,
-    depth,
-    formatCurrency,
-    formatFloat,
-    lastName,
-    type LiabilityBreakdown
-  } from "$lib/utils";
+    indendedLiabilityAccountName,
+    nonZeroCurrency,
+    nonZeroFloatChange
+  } from "$lib/table_formatters";
+  import { ajax, buildTree, type LiabilityBreakdown } from "$lib/utils";
   import _ from "lodash";
   import { onMount } from "svelte";
+  import type { ColumnDefinition } from "tabulator-tables";
 
   let breakdowns: LiabilityBreakdown[] = [];
   let isEmpty = false;
-
-  function calculateChangeClass(gain: number) {
-    let changeClass = "";
-    if (gain > 0) {
-      changeClass = "has-text-success";
-    } else if (gain < 0) {
-      changeClass = "has-text-danger";
-    }
-    return changeClass;
-  }
 
   onMount(async () => {
     ({ liability_breakdowns: breakdowns } = await ajax("/api/liabilities/balance"));
@@ -31,6 +20,46 @@
       isEmpty = true;
     }
   });
+
+  const columns: ColumnDefinition[] = [
+    {
+      title: "Account",
+      field: "group",
+      formatter: indendedLiabilityAccountName,
+      frozen: true
+    },
+    {
+      title: "Drawn Amount",
+      field: "drawn_amount",
+      hozAlign: "right",
+      vertAlign: "middle",
+      formatter: nonZeroCurrency
+    },
+    {
+      title: "Repaid Amount",
+      field: "repaid_amount",
+      hozAlign: "right",
+      formatter: nonZeroCurrency
+    },
+    {
+      title: "Balance Amount",
+      field: "balance_amount",
+      hozAlign: "right",
+      formatter: nonZeroCurrency
+    },
+    {
+      title: "Interest",
+      field: "interest_amount",
+      hozAlign: "right",
+      formatter: nonZeroCurrency
+    },
+    { title: "APR", field: "apr", hozAlign: "right", formatter: nonZeroFloatChange }
+  ];
+
+  let tree: LiabilityBreakdown[] = [];
+  $: if (breakdowns) {
+    tree = buildTree(Object.values(breakdowns), (i) => i.group);
+  }
 </script>
 
 <section class="section" class:is-hidden={!isEmpty}>
@@ -51,48 +80,7 @@
   <div class="container is-fluid">
     <div class="columns">
       <div class="column is-12 pb-0">
-        <div class="box overflow-x-auto max-h-screen max-w-fit pt-0">
-          <table class="table is-narrow is-hoverable has-sticky-header is-light-border">
-            <thead>
-              <tr>
-                <th class="py-2">Account</th>
-                <th class="py-2 has-text-right">Drawn Amount</th>
-                <th class="py-2 has-text-right">Repaid Amount</th>
-                <th class="py-2 has-text-right">Balance Amount</th>
-                <th class="py-2 has-text-right">Interest</th>
-                <th class="py-2 has-text-right">APR</th>
-              </tr>
-            </thead>
-            <tbody class="has-text-grey-dark">
-              {#each Object.values(breakdowns) as b}
-                {@const indent = _.repeat("&emsp;&emsp;", depth(b.group) - 1)}
-                {@const changeClass = calculateChangeClass(-b.interest_amount)}
-                <tr>
-                  <td class="whitespace-nowrap" style="max-width: 200px; overflow: hidden;"
-                    >{@html indent}<span class="has-text-grey custom-icon">{iconText(b.group)}</span
-                    >
-                    {lastName(b.group)}</td
-                  >
-                  <td class="has-text-right"
-                    >{b.drawn_amount != 0 ? formatCurrency(b.drawn_amount) : ""}</td
-                  >
-                  <td class="has-text-right"
-                    >{b.repaid_amount != 0 ? formatCurrency(b.repaid_amount) : ""}</td
-                  >
-                  <td class="has-text-right"
-                    >{b.balance_amount != 0 ? formatCurrency(b.balance_amount) : ""}</td
-                  >
-                  <td class="has-text-right"
-                    >{b.interest_amount != 0 ? formatCurrency(b.interest_amount) : ""}</td
-                  >
-                  <td class="{changeClass} has-text-right"
-                    >{b.apr > 0.0001 || b.apr < -0.0001 ? formatFloat(b.apr) : ""}</td
-                  >
-                </tr>
-              {/each}
-            </tbody>
-          </table>
-        </div>
+        <Table data={tree} tree {columns} />
       </div>
     </div>
   </div>

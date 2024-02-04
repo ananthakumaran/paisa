@@ -31,6 +31,45 @@ $editor-full-height: calc(100vh - 45.5px - 7px - 15.75px - 21px - 57.75px - 10.5
 @import "bulma-switch/src/sass/index.sass";
 @import "@cityssm/bulma-sticky-table/sticky-table";
 
+$backgroundColor: $white;
+$borderColor: none;
+$textSize: 1rem;
+$headerBackgroundColor: $white;
+$headerTextColor: $grey-dark;
+$headerBorderColor: rgba($grey-lightest, 1);
+$headerSeparatorColor: rgba($grey-light, 0.5);
+$headerMargin: 0.2857rem;
+$sortArrowActive: $black;
+$sortArrowInactive: $grey-light;
+$rowBackgroundColor: $white;
+$rowAltBackgroundColor: $white;
+$rowBorderColor: rgba($grey-lightest, 0.5);
+$rowTextColor: $grey-dark;
+$rowHoverBackground: $white-bis;
+$rowSelectedBackground: #9abcea;
+$rowSelectedBackgroundHover: #769bcc;
+$editBoxColor: #1d68cd;
+$errorColor: #dd0000;
+$footerBackgroundColor: #fff;
+$footerTextColor: #555;
+$footerBorderColor: #aaa;
+$footerSeparatorColor: #999;
+$footerActiveColor: #d00;
+
+@import "tabulator-tables/src/scss/themes/tabulator_simple.scss";
+
+.tabulator .tabulator-header .tabulator-col .tabulator-col-content .tabulator-col-title {
+  white-space: normal;
+}
+
+.tabulator {
+  border-radius: $radius;
+}
+
+.tabulator-col {
+  padding: 0.5rem;
+}
+
 // override message style
 
 .message {

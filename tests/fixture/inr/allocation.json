@@ -3,43 +3,36 @@
     "Assets": {
       "date": "0001-01-01T00:00:00Z",
       "account": "Assets",
-      "amount": 0,
       "market_amount": 0
     },
     "Assets:Checking": {
       "date": "2022-02-07T23:59:59.999999999Z",
       "account": "Assets:Checking",
-      "amount": 12097.5625128704,
       "market_amount": 12097.5625128704
     },
     "Assets:Dollar": {
       "date": "2022-02-07T23:59:59.999999999Z",
       "account": "Assets:Dollar",
-      "amount": 804.42048,
       "market_amount": 804.42048
     },
     "Assets:Equity": {
       "date": "0001-01-01T00:00:00Z",
       "account": "Assets:Equity",
-      "amount": 0,
       "market_amount": 0
     },
     "Assets:Equity:AAPL": {
       "date": "2022-02-07T23:59:59.999999999Z",
       "account": "Assets:Equity:AAPL",
-      "amount": 0,
       "market_amount": 0
     },
     "Assets:Equity:ABNB": {
       "date": "2022-02-07T23:59:59.999999999Z",
       "account": "Assets:Equity:ABNB",
-      "amount": 8025.3170071296,
       "market_amount": 8025.3170071296
     },
     "Assets:Equity:NIFTY": {
       "date": "2022-02-07T23:59:59.999999999Z",
       "account": "Assets:Equity:NIFTY",
-      "amount": 80000,
       "market_amount": 80218.4
     }
   },
@@ -48,7 +41,6 @@
       "Assets:Checking": {
         "date": "2022-01-01T00:00:00Z",
         "account": "Assets:Checking",
-        "amount": 100000,
         "market_amount": 100000
       }
     },
@@ -56,7 +48,6 @@
       "Assets:Checking": {
         "date": "2022-01-02T00:00:00Z",
         "account": "Assets:Checking",
-        "amount": 100000,
         "market_amount": 100000
       }
     },
@@ -64,7 +55,6 @@
       "Assets:Checking": {
         "date": "2022-01-03T00:00:00Z",
         "account": "Assets:Checking",
-        "amount": 80000,
         "market_amount": 80000
       }
     },
@@ -72,7 +62,6 @@
       "Assets:Checking": {
         "date": "2022-01-04T00:00:00Z",
         "account": "Assets:Checking",
-        "amount": 80000,
         "market_amount": 80000
       }
     },
@@ -80,7 +69,6 @@
       "Assets:Checking": {
         "date": "2022-01-05T00:00:00Z",
         "account": "Assets:Checking",
-        "amount": 80000,
         "market_amount": 80000
       }
     },
@@ -88,7 +76,6 @@
       "Assets:Checking": {
         "date": "2022-01-06T00:00:00Z",
         "account": "Assets:Checking",
-        "amount": 100000,
         "market_amount": 100000
       }
     },
@@ -96,13 +83,11 @@
       "Assets:Checking": {
         "date": "2022-01-07T00:00:00Z",
         "account": "Assets:Checking",
-        "amount": 20000,
         "market_amount": 20000
       },
       "Assets:Equity:NIFTY": {
         "date": "2022-01-07T00:00:00Z",
         "account": "Assets:Equity:NIFTY",
-        "amount": 80000,
         "market_amount": 80000
       }
     },
@@ -110,25 +95,21 @@
       "Assets:Checking": {
         "date": "2022-01-08T00:00:00Z",
         "account": "Assets:Checking",
-        "amount": 1974.6829928704,
         "market_amount": 1974.6829928704
       },
       "Assets:Equity:AAPL": {
         "date": "2022-01-08T00:00:00Z",
         "account": "Assets:Equity:AAPL",
-        "amount": 10000,
         "market_amount": 10000
       },
       "Assets:Equity:ABNB": {
         "date": "2022-01-08T00:00:00Z",
         "account": "Assets:Equity:ABNB",
-        "amount": 8025.3170071296,
         "market_amount": 8025.3170071296
       },
       "Assets:Equity:NIFTY": {
         "date": "2022-01-08T00:00:00Z",
         "account": "Assets:Equity:NIFTY",
-        "amount": 80000,
         "market_amount": 80000
       }
     },
@@ -136,31 +117,26 @@
       "Assets:Checking": {
         "date": "2022-01-09T00:00:00Z",
         "account": "Assets:Checking",
-        "amount": 11097.5625128704,
         "market_amount": 11097.5625128704
       },
       "Assets:Dollar": {
         "date": "2022-01-09T00:00:00Z",
         "account": "Assets:Dollar",
-        "amount": 804.42048,
         "market_amount": 804.42048
       },
       "Assets:Equity:AAPL": {
         "date": "2022-01-09T00:00:00Z",
         "account": "Assets:Equity:AAPL",
-        "amount": 0,
         "market_amount": 0
       },
       "Assets:Equity:ABNB": {
         "date": "2022-01-09T00:00:00Z",
         "account": "Assets:Equity:ABNB",
-        "amount": 8025.3170071296,
         "market_amount": 8025.3170071296
       },
       "Assets:Equity:NIFTY": {
         "date": "2022-01-09T00:00:00Z",
         "account": "Assets:Equity:NIFTY",
-        "amount": 80000,
         "market_amount": 80000
       }
     },
@@ -168,31 +144,26 @@
       "Assets:Checking": {
         "date": "2022-01-10T00:00:00Z",
         "account": "Assets:Checking",
-        "amount": 11097.5625128704,
         "market_amount": 11097.5625128704
       },
       "Assets:Dollar": {
         "date": "2022-01-10T00:00:00Z",
         "account": "Assets:Dollar",
-        "amount": 804.42048,
         "market_amount": 804.42048
       },
       "Assets:Equity:AAPL": {
         "date": "2022-01-10T00:00:00Z",
         "account": "Assets:Equity:AAPL",
-        "amount": 0,
         "market_amount": 0
       },
       "Assets:Equity:ABNB": {
         "date": "2022-01-10T00:00:00Z",
         "account": "Assets:Equity:ABNB",
-        "amount": 8025.3170071296,
         "market_amount": 8025.3170071296
       },
       "Assets:Equity:NIFTY": {
         "date": "2022-01-10T00:00:00Z",
         "account": "Assets:Equity:NIFTY",
-        "amount": 80000,
         "market_amount": 80000
       }
     },
@@ -200,31 +171,26 @@
       "Assets:Checking": {
         "date": "2022-01-11T00:00:00Z",
         "account": "Assets:Checking",
-        "amount": 11097.5625128704,
         "market_amount": 11097.5625128704
       },
       "Assets:Dollar": {
         "date": "2022-01-11T00:00:00Z",
         "account": "Assets:Dollar",
-        "amount": 804.42048,
         "market_amount": 804.42048
       },
       "Assets:Equity:AAPL": {
         "date": "2022-01-11T00:00:00Z",
         "account": "Assets:Equity:AAPL",
-        "amount": 0,
         "market_amount": 0
       },
       "Assets:Equity:ABNB": {
         "date": "2022-01-11T00:00:00Z",
         "account": "Assets:Equity:ABNB",
-        "amount": 8025.3170071296,
         "market_amount": 8025.3170071296
       },
       "Assets:Equity:NIFTY": {
         "date": "2022-01-11T00:00:00Z",
         "account": "Assets:Equity:NIFTY",
-        "amount": 80000,
         "market_amount": 80000
       }
     },
@@ -232,31 +198,26 @@
       "Assets:Checking": {
         "date": "2022-01-12T00:00:00Z",
         "account": "Assets:Checking",
-        "amount": 11097.5625128704,
         "market_amount": 11097.5625128704
       },
       "Assets:Dollar": {
         "date": "2022-01-12T00:00:00Z",
         "account": "Assets:Dollar",
-        "amount": 804.42048,
         "market_amount": 804.42048
       },
       "Assets:Equity:AAPL": {
         "date": "2022-01-12T00:00:00Z",
         "account": "Assets:Equity:AAPL",
-        "amount": 0,
         "market_amount": 0
       },
       "Assets:Equity:ABNB": {
         "date": "2022-01-12T00:00:00Z",
         "account": "Assets:Equity:ABNB",
-        "amount": 8025.3170071296,
         "market_amount": 8025.3170071296
       },
       "Assets:Equity:NIFTY": {
         "date": "2022-01-12T00:00:00Z",
         "account": "Assets:Equity:NIFTY",
-        "amount": 80000,
         "market_amount": 80000
       }
     },
@@ -264,31 +225,26 @@
       "Assets:Checking": {
         "date": "2022-01-13T00:00:00Z",
         "account": "Assets:Checking",
-        "amount": 11097.5625128704,
         "market_amount": 11097.5625128704
       },
       "Assets:Dollar": {
         "date": "2022-01-13T00:00:00Z",
         "account": "Assets:Dollar",
-        "amount": 804.42048,
         "market_amount": 804.42048
       },
       "Assets:Equity:AAPL": {
         "date": "2022-01-13T00:00:00Z",
         "account": "Assets:Equity:AAPL",
-        "amount": 0,
         "market_amount": 0
       },
       "Assets:Equity:ABNB": {
         "date": "2022-01-13T00:00:00Z",
         "account": "Assets:Equity:ABNB",
-        "amount": 8025.3170071296,
         "market_amount": 8025.3170071296
       },
       "Assets:Equity:NIFTY": {
         "date": "2022-01-13T00:00:00Z",
         "account": "Assets:Equity:NIFTY",
-        "amount": 80000,
         "market_amount": 80000
       }
     },
@@ -296,31 +252,26 @@
       "Assets:Checking": {
         "date": "2022-01-14T00:00:00Z",
         "account": "Assets:Checking",
-        "amount": 11097.5625128704,
         "market_amount": 11097.5625128704
       },
       "Assets:Dollar": {
         "date": "2022-01-14T00:00:00Z",
         "account": "Assets:Dollar",
-        "amount": 804.42048,
         "market_amount": 804.42048
       },
       "Assets:Equity:AAPL": {
         "date": "2022-01-14T00:00:00Z",
         "account": "Assets:Equity:AAPL",
-        "amount": 0,
         "market_amount": 0
       },
       "Assets:Equity:ABNB": {
         "date": "2022-01-14T00:00:00Z",
         "account": "Assets:Equity:ABNB",
-        "amount": 8025.3170071296,
         "market_amount": 8025.3170071296
       },
       "Assets:Equity:NIFTY": {
         "date": "2022-01-14T00:00:00Z",
         "account": "Assets:Equity:NIFTY",
-        "amount": 80000,
         "market_amount": 80000
       }
     },
@@ -328,31 +279,26 @@
       "Assets:Checking": {
         "date": "2022-01-15T00:00:00Z",
         "account": "Assets:Checking",
-        "amount": 11097.5625128704,
         "market_amount": 11097.5625128704
       },
       "Assets:Dollar": {
         "date": "2022-01-15T00:00:00Z",
         "account": "Assets:Dollar",
-        "amount": 804.42048,
         "market_amount": 804.42048
       },
       "Assets:Equity:AAPL": {
         "date": "2022-01-15T00:00:00Z",
         "account": "Assets:Equity:AAPL",
-        "amount": 0,
         "market_amount": 0
       },
       "Assets:Equity:ABNB": {
         "date": "2022-01-15T00:00:00Z",
         "account": "Assets:Equity:ABNB",
-        "amount": 8025.3170071296,
         "market_amount": 8025.3170071296
       },
       "Assets:Equity:NIFTY": {
         "date": "2022-01-15T00:00:00Z",
         "account": "Assets:Equity:NIFTY",
-        "amount": 80000,
         "market_amount": 80000
       }
     },
@@ -360,31 +306,26 @@
       "Assets:Checking": {
         "date": "2022-01-16T00:00:00Z",
         "account": "Assets:Checking",
-        "amount": 11097.5625128704,
         "market_amount": 11097.5625128704
       },
       "Assets:Dollar": {
         "date": "2022-01-16T00:00:00Z",
         "account": "Assets:Dollar",
-        "amount": 804.42048,
         "market_amount": 804.42048
       },
       "Assets:Equity:AAPL": {
         "date": "2022-01-16T00:00:00Z",
         "account": "Assets:Equity:AAPL",
-        "amount": 0,
         "market_amount": 0
       },
       "Assets:Equity:ABNB": {
         "date": "2022-01-16T00:00:00Z",
         "account": "Assets:Equity:ABNB",
-        "amount": 8025.3170071296,
         "market_amount": 8025.3170071296
       },
       "Assets:Equity:NIFTY": {
         "date": "2022-01-16T00:00:00Z",
         "account": "Assets:Equity:NIFTY",
-        "amount": 80000,
         "market_amount": 80000
       }
     },
@@ -392,31 +333,26 @@
       "Assets:Checking": {
         "date": "2022-01-17T00:00:00Z",
         "account": "Assets:Checking",
-        "amount": 11097.5625128704,
         "market_amount": 11097.5625128704
       },
       "Assets:Dollar": {
         "date": "2022-01-17T00:00:00Z",
         "account": "Assets:Dollar",
-        "amount": 804.42048,
         "market_amount": 804.42048
       },
       "Assets:Equity:AAPL": {
         "date": "2022-01-17T00:00:00Z",
         "account": "Assets:Equity:AAPL",
-        "amount": 0,
         "market_amount": 0
       },
       "Assets:Equity:ABNB": {
         "date": "2022-01-17T00:00:00Z",
         "account": "Assets:Equity:ABNB",
-        "amount": 8025.3170071296,
         "market_amount": 8025.3170071296
       },
       "Assets:Equity:NIFTY": {
         "date": "2022-01-17T00:00:00Z",
         "account": "Assets:Equity:NIFTY",
-        "amount": 80000,
         "market_amount": 80000
       }
     },
@@ -424,31 +360,26 @@
       "Assets:Checking": {
         "date": "2022-01-18T00:00:00Z",
         "account": "Assets:Checking",
-        "amount": 11097.5625128704,
         "market_amount": 11097.5625128704
       },
       "Assets:Dollar": {
         "date": "2022-01-18T00:00:00Z",
         "account": "Assets:Dollar",
-        "amount": 804.42048,
         "market_amount": 804.42048
       },
       "Assets:Equity:AAPL": {
         "date": "2022-01-18T00:00:00Z",
         "account": "Assets:Equity:AAPL",
-        "amount": 0,
         "market_amount": 0
       },
       "Assets:Equity:ABNB": {
         "date": "2022-01-18T00:00:00Z",
         "account": "Assets:Equity:ABNB",
-        "amount": 8025.3170071296,
         "market_amount": 8025.3170071296
       },
       "Assets:Equity:NIFTY": {
         "date": "2022-01-18T00:00:00Z",
         "account": "Assets:Equity:NIFTY",
-        "amount": 80000,
         "market_amount": 80000
       }
     },
@@ -456,31 +387,26 @@
       "Assets:Checking": {
         "date": "2022-01-19T00:00:00Z",
         "account": "Assets:Checking",
-        "amount": 11097.5625128704,
         "market_amount": 11097.5625128704
       },
       "Assets:Dollar": {
         "date": "2022-01-19T00:00:00Z",
         "account": "Assets:Dollar",
-        "amount": 804.42048,
         "market_amount": 804.42048
       },
       "Assets:Equity:AAPL": {
         "date": "2022-01-19T00:00:00Z",
         "account": "Assets:Equity:AAPL",
-        "amount": 0,
         "market_amount": 0
       },
       "Assets:Equity:ABNB": {
         "date": "2022-01-19T00:00:00Z",
         "account": "Assets:Equity:ABNB",
-        "amount": 8025.3170071296,
         "market_amount": 8025.3170071296
       },
       "Assets:Equity:NIFTY": {
         "date": "2022-01-19T00:00:00Z",
         "account": "Assets:Equity:NIFTY",
-        "amount": 80000,
         "market_amount": 80000
       }
     },
@@ -488,31 +414,26 @@
       "Assets:Checking": {
         "date": "2022-01-20T00:00:00Z",
         "account": "Assets:Checking",
-        "amount": 11097.5625128704,
         "market_amount": 11097.5625128704
       },
       "Assets:Dollar": {
         "date": "2022-01-20T00:00:00Z",
         "account": "Assets:Dollar",
-        "amount": 804.42048,
         "market_amount": 804.42048
       },
       "Assets:Equity:AAPL": {
         "date": "2022-01-20T00:00:00Z",
         "account": "Assets:Equity:AAPL",
-        "amount": 0,
         "market_amount": 0
       },
       "Assets:Equity:ABNB": {
         "date": "2022-01-20T00:00:00Z",
         "account": "Assets:Equity:ABNB",
-        "amount": 8025.3170071296,
         "market_amount": 8025.3170071296
       },
       "Assets:Equity:NIFTY": {
         "date": "2022-01-20T00:00:00Z",
         "account": "Assets:Equity:NIFTY",
-        "amount": 80000,
         "market_amount": 80000
       }
     },
@@ -520,31 +441,26 @@
       "Assets:Checking": {
         "date": "2022-01-21T00:00:00Z",
         "account": "Assets:Checking",
-        "amount": 11097.5625128704,
         "market_amount": 11097.5625128704
       },
       "Assets:Dollar": {
         "date": "2022-01-21T00:00:00Z",
         "account": "Assets:Dollar",
-        "amount": 804.42048,
         "market_amount": 804.42048
       },
       "Assets:Equity:AAPL": {
         "date": "2022-01-21T00:00:00Z",
         "account": "Assets:Equity:AAPL",
-        "amount": 0,
         "market_amount": 0
       },
       "Assets:Equity:ABNB": {
         "date": "2022-01-21T00:00:00Z",
         "account": "Assets:Equity:ABNB",
-        "amount": 8025.3170071296,
         "market_amount": 8025.3170071296
       },
       "Assets:Equity:NIFTY": {
         "date": "2022-01-21T00:00:00Z",
         "account": "Assets:Equity:NIFTY",
-        "amount": 80000,
         "market_amount": 80000
       }
     },
@@ -552,31 +468,26 @@
       "Assets:Checking": {
         "date": "2022-01-22T00:00:00Z",
         "account": "Assets:Checking",
-        "amount": 11097.5625128704,
         "market_amount": 11097.5625128704
       },
       "Assets:Dollar": {
         "date": "2022-01-22T00:00:00Z",
         "account": "Assets:Dollar",
-        "amount": 804.42048,
         "market_amount": 804.42048
       },
       "Assets:Equity:AAPL": {
         "date": "2022-01-22T00:00:00Z",
         "account": "Assets:Equity:AAPL",
-        "amount": 0,
         "market_amount": 0
       },
       "Assets:Equity:ABNB": {
         "date": "2022-01-22T00:00:00Z",
         "account": "Assets:Equity:ABNB",
-        "amount": 8025.3170071296,
         "market_amount": 8025.3170071296
       },
       "Assets:Equity:NIFTY": {
         "date": "2022-01-22T00:00:00Z",
         "account": "Assets:Equity:NIFTY",
-        "amount": 80000,
         "market_amount": 80000
       }
     },
@@ -584,31 +495,26 @@
       "Assets:Checking": {
         "date": "2022-01-23T00:00:00Z",
         "account": "Assets:Checking",
-        "amount": 11097.5625128704,
         "market_amount": 11097.5625128704
       },
       "Assets:Dollar": {
         "date": "2022-01-23T00:00:00Z",
         "account": "Assets:Dollar",
-        "amount": 804.42048,
         "market_amount": 804.42048
       },
       "Assets:Equity:AAPL": {
         "date": "2022-01-23T00:00:00Z",
         "account": "Assets:Equity:AAPL",
-        "amount": 0,
         "market_amount": 0
       },
       "Assets:Equity:ABNB": {
         "date": "2022-01-23T00:00:00Z",
         "account": "Assets:Equity:ABNB",
-        "amount": 8025.3170071296,
         "market_amount": 8025.3170071296
       },
       "Assets:Equity:NIFTY": {
         "date": "2022-01-23T00:00:00Z",
         "account": "Assets:Equity:NIFTY",
-        "amount": 80000,
         "market_amount": 80000
       }
     },
@@ -616,31 +522,26 @@
       "Assets:Checking": {
         "date": "2022-01-24T00:00:00Z",
         "account": "Assets:Checking",
-        "amount": 11097.5625128704,
         "market_amount": 11097.5625128704
       },
       "Assets:Dollar": {
         "date": "2022-01-24T00:00:00Z",
         "account": "Assets:Dollar",
-        "amount": 804.42048,
         "market_amount": 804.42048
       },
       "Assets:Equity:AAPL": {
         "date": "2022-01-24T00:00:00Z",
         "account": "Assets:Equity:AAPL",
-        "amount": 0,
         "market_amount": 0
       },
       "Assets:Equity:ABNB": {
         "date": "2022-01-24T00:00:00Z",
         "account": "Assets:Equity:ABNB",
-        "amount": 8025.3170071296,
         "market_amount": 8025.3170071296
       },
       "Assets:Equity:NIFTY": {
         "date": "2022-01-24T00:00:00Z",
         "account": "Assets:Equity:NIFTY",
-        "amount": 80000,
         "market_amount": 80000
       }
     },
@@ -648,31 +549,26 @@
       "Assets:Checking": {
         "date": "2022-01-25T00:00:00Z",
         "account": "Assets:Checking",
-        "amount": 11097.5625128704,
         "market_amount": 11097.5625128704
       },
       "Assets:Dollar": {
         "date": "2022-01-25T00:00:00Z",
         "account": "Assets:Dollar",
-        "amount": 804.42048,
         "market_amount": 804.42048
       },
       "Assets:Equity:AAPL": {
         "date": "2022-01-25T00:00:00Z",
         "account": "Assets:Equity:AAPL",
-        "amount": 0,
         "market_amount": 0
       },
       "Assets:Equity:ABNB": {
         "date": "2022-01-25T00:00:00Z",
         "account": "Assets:Equity:ABNB",
-        "amount": 8025.3170071296,
         "market_amount": 8025.3170071296
       },
       "Assets:Equity:NIFTY": {
         "date": "2022-01-25T00:00:00Z",
         "account": "Assets:Equity:NIFTY",
-        "amount": 80000,
         "market_amount": 80000
       }
     },
@@ -680,31 +576,26 @@
       "Assets:Checking": {
         "date": "2022-01-26T00:00:00Z",
         "account": "Assets:Checking",
-        "amount": 11097.5625128704,
         "market_amount": 11097.5625128704
       },
       "Assets:Dollar": {
         "date": "2022-01-26T00:00:00Z",
         "account": "Assets:Dollar",
-        "amount": 804.42048,
         "market_amount": 804.42048
       },
       "Assets:Equity:AAPL": {
         "date": "2022-01-26T00:00:00Z",
         "account": "Assets:Equity:AAPL",
-        "amount": 0,
         "market_amount": 0
       },
       "Assets:Equity:ABNB": {
         "date": "2022-01-26T00:00:00Z",
         "account": "Assets:Equity:ABNB",
-        "amount": 8025.3170071296,
         "market_amount": 8025.3170071296
       },
       "Assets:Equity:NIFTY": {
         "date": "2022-01-26T00:00:00Z",
         "account": "Assets:Equity:NIFTY",
-        "amount": 80000,
         "market_amount": 80000
       }
     },
@@ -712,31 +603,26 @@
       "Assets:Checking": {
         "date": "2022-01-27T00:00:00Z",
         "account": "Assets:Checking",
-        "amount": 11097.5625128704,
         "market_amount": 11097.5625128704
       },
       "Assets:Dollar": {
         "date": "2022-01-27T00:00:00Z",
         "account": "Assets:Dollar",
-        "amount": 804.42048,
         "market_amount": 804.42048
       },
       "Assets:Equity:AAPL": {
         "date": "2022-01-27T00:00:00Z",
         "account": "Assets:Equity:AAPL",
-        "amount": 0,
         "market_amount": 0
       },
       "Assets:Equity:ABNB": {
         "date": "2022-01-27T00:00:00Z",
         "account": "Assets:Equity:ABNB",
-        "amount": 8025.3170071296,
         "market_amount": 8025.3170071296
       },
       "Assets:Equity:NIFTY": {
         "date": "2022-01-27T00:00:00Z",
         "account": "Assets:Equity:NIFTY",
-        "amount": 80000,
         "market_amount": 80000
       }
     },
@@ -744,31 +630,26 @@
       "Assets:Checking": {
         "date": "2022-01-28T00:00:00Z",
         "account": "Assets:Checking",
-        "amount": 11097.5625128704,
         "market_amount": 11097.5625128704
       },
       "Assets:Dollar": {
         "date": "2022-01-28T00:00:00Z",
         "account": "Assets:Dollar",
-        "amount": 804.42048,
         "market_amount": 804.42048
       },
       "Assets:Equity:AAPL": {
         "date": "2022-01-28T00:00:00Z",
         "account": "Assets:Equity:AAPL",
-        "amount": 0,
         "market_amount": 0
       },
       "Assets:Equity:ABNB": {
         "date": "2022-01-28T00:00:00Z",
         "account": "Assets:Equity:ABNB",
-        "amount": 8025.3170071296,
         "market_amount": 8025.3170071296
       },
       "Assets:Equity:NIFTY": {
         "date": "2022-01-28T00:00:00Z",
         "account": "Assets:Equity:NIFTY",
-        "amount": 80000,
         "market_amount": 80000
       }
     },
@@ -776,31 +657,26 @@
       "Assets:Checking": {
         "date": "2022-01-29T00:00:00Z",
         "account": "Assets:Checking",
-        "amount": 11097.5625128704,
         "market_amount": 11097.5625128704
       },
       "Assets:Dollar": {
         "date": "2022-01-29T00:00:00Z",
         "account": "Assets:Dollar",
-        "amount": 804.42048,
         "market_amount": 804.42048
       },
       "Assets:Equity:AAPL": {
         "date": "2022-01-29T00:00:00Z",
         "account": "Assets:Equity:AAPL",
-        "amount": 0,
         "market_amount": 0
       },
       "Assets:Equity:ABNB": {
         "date": "2022-01-29T00:00:00Z",
         "account": "Assets:Equity:ABNB",
-        "amount": 8025.3170071296,
         "market_amount": 8025.3170071296
       },
       "Assets:Equity:NIFTY": {
         "date": "2022-01-29T00:00:00Z",
         "account": "Assets:Equity:NIFTY",
-        "amount": 80000,
         "market_amount": 80000
       }
     },
@@ -808,31 +684,26 @@
       "Assets:Checking": {
         "date": "2022-01-30T00:00:00Z",
         "account": "Assets:Checking",
-        "amount": 11097.5625128704,
         "market_amount": 11097.5625128704
       },
       "Assets:Dollar": {
         "date": "2022-01-30T00:00:00Z",
         "account": "Assets:Dollar",
-        "amount": 804.42048,
         "market_amount": 804.42048
       },
       "Assets:Equity:AAPL": {
         "date": "2022-01-30T00:00:00Z",
         "account": "Assets:Equity:AAPL",
-        "amount": 0,
         "market_amount": 0
       },
       "Assets:Equity:ABNB": {
         "date": "2022-01-30T00:00:00Z",
         "account": "Assets:Equity:ABNB",
-        "amount": 8025.3170071296,
         "market_amount": 8025.3170071296
       },
       "Assets:Equity:NIFTY": {
         "date": "2022-01-30T00:00:00Z",
         "account": "Assets:Equity:NIFTY",
-        "amount": 80000,
         "market_amount": 80000
       }
     },
@@ -840,31 +711,26 @@
       "Assets:Checking": {
         "date": "2022-01-31T00:00:00Z",
         "account": "Assets:Checking",
-        "amount": 12097.5625128704,
         "market_amount": 12097.5625128704
       },
       "Assets:Dollar": {
         "date": "2022-01-31T00:00:00Z",
         "account": "Assets:Dollar",
-        "amount": 804.42048,
         "market_amount": 804.42048
       },
       "Assets:Equity:AAPL": {
         "date": "2022-01-31T00:00:00Z",
         "account": "Assets:Equity:AAPL",
-        "amount": 0,
         "market_amount": 0
       },
       "Assets:Equity:ABNB": {
         "date": "2022-01-31T00:00:00Z",
         "account": "Assets:Equity:ABNB",
-        "amount": 8025.3170071296,
         "market_amount": 8025.3170071296
       },
       "Assets:Equity:NIFTY": {
         "date": "2022-01-31T00:00:00Z",
         "account": "Assets:Equity:NIFTY",
-        "amount": 80000,
         "market_amount": 80000
       }
     },
@@ -872,31 +738,26 @@
       "Assets:Checking": {
         "date": "2022-02-01T00:00:00Z",
         "account": "Assets:Checking",
-        "amount": 12097.5625128704,
         "market_amount": 12097.5625128704
       },
       "Assets:Dollar": {
         "date": "2022-02-01T00:00:00Z",
         "account": "Assets:Dollar",
-        "amount": 804.42048,
         "market_amount": 804.42048
       },
       "Assets:Equity:AAPL": {
         "date": "2022-02-01T00:00:00Z",
         "account": "Assets:Equity:AAPL",
-        "amount": 0,
         "market_amount": 0
       },
       "Assets:Equity:ABNB": {
         "date": "2022-02-01T00:00:00Z",
         "account": "Assets:Equity:ABNB",
-        "amount": 8025.3170071296,
         "market_amount": 8025.3170071296
       },
       "Assets:Equity:NIFTY": {
         "date": "2022-02-01T00:00:00Z",
         "account": "Assets:Equity:NIFTY",
-        "amount": 80000,
         "market_amount": 80000
       }
     },
@@ -904,31 +765,26 @@
       "Assets:Checking": {
         "date": "2022-02-02T00:00:00Z",
         "account": "Assets:Checking",
-        "amount": 12097.5625128704,
         "market_amount": 12097.5625128704
       },
       "Assets:Dollar": {
         "date": "2022-02-02T00:00:00Z",
         "account": "Assets:Dollar",
-        "amount": 804.42048,
         "market_amount": 804.42048
       },
       "Assets:Equity:AAPL": {
         "date": "2022-02-02T00:00:00Z",
         "account": "Assets:Equity:AAPL",
-        "amount": 0,
         "market_amount": 0
       },
       "Assets:Equity:ABNB": {
         "date": "2022-02-02T00:00:00Z",
         "account": "Assets:Equity:ABNB",
-        "amount": 8025.3170071296,
         "market_amount": 8025.3170071296
       },
       "Assets:Equity:NIFTY": {
         "date": "2022-02-02T00:00:00Z",
         "account": "Assets:Equity:NIFTY",
-        "amount": 80000,
         "market_amount": 80000
       }
     },
@@ -936,31 +792,26 @@
       "Assets:Checking": {
         "date": "2022-02-03T00:00:00Z",
         "account": "Assets:Checking",
-        "amount": 12097.5625128704,
         "market_amount": 12097.5625128704
       },
       "Assets:Dollar": {
         "date": "2022-02-03T00:00:00Z",
         "account": "Assets:Dollar",
-        "amount": 804.42048,
         "market_amount": 804.42048
       },
       "Assets:Equity:AAPL": {
         "date": "2022-02-03T00:00:00Z",
         "account": "Assets:Equity:AAPL",
-        "amount": 0,
         "market_amount": 0
       },
       "Assets:Equity:ABNB": {
         "date": "2022-02-03T00:00:00Z",
         "account": "Assets:Equity:ABNB",
-        "amount": 8025.3170071296,
         "market_amount": 8025.3170071296
       },
       "Assets:Equity:NIFTY": {
         "date": "2022-02-03T00:00:00Z",
         "account": "Assets:Equity:NIFTY",
-        "amount": 80000,
         "market_amount": 80000
       }
     },
@@ -968,31 +819,26 @@
       "Assets:Checking": {
         "date": "2022-02-04T00:00:00Z",
         "account": "Assets:Checking",
-        "amount": 12097.5625128704,
         "market_amount": 12097.5625128704
       },
       "Assets:Dollar": {
         "date": "2022-02-04T00:00:00Z",
         "account": "Assets:Dollar",
-        "amount": 804.42048,
         "market_amount": 804.42048
       },
       "Assets:Equity:AAPL": {
         "date": "2022-02-04T00:00:00Z",
         "account": "Assets:Equity:AAPL",
-        "amount": 0,
         "market_amount": 0
       },
       "Assets:Equity:ABNB": {
         "date": "2022-02-04T00:00:00Z",
         "account": "Assets:Equity:ABNB",
-        "amount": 8025.3170071296,
         "market_amount": 8025.3170071296
       },
       "Assets:Equity:NIFTY": {
         "date": "2022-02-04T00:00:00Z",
         "account": "Assets:Equity:NIFTY",
-        "amount": 80000,
         "market_amount": 80000
       }
     },
@@ -1000,31 +846,26 @@
       "Assets:Checking": {
         "date": "2022-02-05T00:00:00Z",
         "account": "Assets:Checking",
-        "amount": 12097.5625128704,
         "market_amount": 12097.5625128704
       },
       "Assets:Dollar": {
         "date": "2022-02-05T00:00:00Z",
         "account": "Assets:Dollar",
-        "amount": 804.42048,
         "market_amount": 804.42048
       },
       "Assets:Equity:AAPL": {
         "date": "2022-02-05T00:00:00Z",
         "account": "Assets:Equity:AAPL",
-        "amount": 0,
         "market_amount": 0
       },
       "Assets:Equity:ABNB": {
         "date": "2022-02-05T00:00:00Z",
         "account": "Assets:Equity:ABNB",
-        "amount": 8025.3170071296,
         "market_amount": 8025.3170071296
       },
       "Assets:Equity:NIFTY": {
         "date": "2022-02-05T00:00:00Z",
         "account": "Assets:Equity:NIFTY",
-        "amount": 80000,
         "market_amount": 80000
       }
     },
@@ -1032,31 +873,26 @@
       "Assets:Checking": {
         "date": "2022-02-06T00:00:00Z",
         "account": "Assets:Checking",
-        "amount": 12097.5625128704,
         "market_amount": 12097.5625128704
       },
       "Assets:Dollar": {
         "date": "2022-02-06T00:00:00Z",
         "account": "Assets:Dollar",
-        "amount": 804.42048,
         "market_amount": 804.42048
       },
       "Assets:Equity:AAPL": {
         "date": "2022-02-06T00:00:00Z",
         "account": "Assets:Equity:AAPL",
-        "amount": 0,
         "market_amount": 0
       },
       "Assets:Equity:ABNB": {
         "date": "2022-02-06T00:00:00Z",
         "account": "Assets:Equity:ABNB",
-        "amount": 8025.3170071296,
         "market_amount": 8025.3170071296
       },
       "Assets:Equity:NIFTY": {
         "date": "2022-02-06T00:00:00Z",
         "account": "Assets:Equity:NIFTY",
-        "amount": 80000,
         "market_amount": 80000
       }
     },
@@ -1064,31 +900,26 @@
       "Assets:Checking": {
         "date": "2022-02-07T00:00:00Z",
         "account": "Assets:Checking",
-        "amount": 12097.5625128704,
         "market_amount": 12097.5625128704
       },
       "Assets:Dollar": {
         "date": "2022-02-07T00:00:00Z",
         "account": "Assets:Dollar",
-        "amount": 804.42048,
         "market_amount": 804.42048
       },
       "Assets:Equity:AAPL": {
         "date": "2022-02-07T00:00:00Z",
         "account": "Assets:Equity:AAPL",
-        "amount": 0,
         "market_amount": 0
       },
       "Assets:Equity:ABNB": {
         "date": "2022-02-07T00:00:00Z",
         "account": "Assets:Equity:ABNB",
-        "amount": 8025.3170071296,
         "market_amount": 8025.3170071296
       },
       "Assets:Equity:NIFTY": {
         "date": "2022-02-07T00:00:00Z",
         "account": "Assets:Equity:NIFTY",
-        "amount": 80000,
         "market_amount": 80218.4
       }
     }

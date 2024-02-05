@@ -183,8 +183,10 @@ export interface LiabilityBreakdown {
 export interface Aggregate {
   date: dayjs.Dayjs;
   account: string;
-  amount: number;
   market_amount: number;
+
+  // computed
+  percent: number;
 }
 
 export interface CommodityBreakdown {

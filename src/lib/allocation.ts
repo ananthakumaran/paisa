@@ -280,7 +280,7 @@ function renderPartition(
     .attr("data-tippy-content", (d) => {
       return tooltip([
         ["Account", [d.id, "has-text-right"]],
-        ["MarketAmount", [formatCurrency(d.value), "has-text-weight-bold has-text-right"]],
+        ["Market Value", [formatCurrency(d.value), "has-text-weight-bold has-text-right"]],
         ["Percentage", [percent(d), "has-text-weight-bold has-text-right"]]
       ]);
     })
@@ -309,13 +309,12 @@ export function renderAllocationTimeline(
   const timeline = _.map(aggregatesTimeline, (aggregates) => {
     return _.chain(aggregates)
       .values()
-      .filter((a) => a.amount != 0)
+      .filter((a) => a.market_amount != 0)
       .groupBy((a) => secondName(a.account))
       .map((aggregates, group) => {
         return {
           date: aggregates[0].date,
           account: group,
-          amount: _.sum(_.map(aggregates, (a) => a.amount)),
           market_amount: _.sum(_.map(aggregates, (a) => a.market_amount)),
           timestamp: aggregates[0].date
         };

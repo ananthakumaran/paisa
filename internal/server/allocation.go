@@ -20,7 +20,6 @@ import (
 type Aggregate struct {
 	Date         time.Time       `json:"date"`
 	Account      string          `json:"account"`
-	Amount       decimal.Decimal `json:"amount"`
 	MarketAmount decimal.Decimal `json:"market_amount"`
 }
 
@@ -88,11 +87,9 @@ func computeAggregateTimeline(db *gorm.DB, postings []posting.Posting) []map[str
 		result := make(map[string]Aggregate)
 
 		for account, rsByAccount := range accumulator {
-			amount := decimal.Zero
 			marketAmount := decimal.Zero
 
 			for commodity, rs := range rsByAccount {
-				amount = amount.Add(rs.cost)
 				if utils.IsCurrency(commodity) {
 					marketAmount = marketAmount.Add(rs.cost)
 				} else {
@@ -105,7 +102,7 @@ func computeAggregateTimeline(db *gorm.DB, postings []posting.Posting) []map[str
 				}
 			}
 
-			result[account] = Aggregate{Date: start, Account: account, Amount: amount, MarketAmount: marketAmount}
+			result[account] = Aggregate{Date: start, Account: account, MarketAmount: marketAmount}
 
 		}
 
@@ -151,9 +148,8 @@ func computeAggregate(db *gorm.DB, postings []posting.Posting, date time.Time) m
 			result[parent] = Aggregate{Account: parent}
 		}
 
-		amount := accounting.CostSum(ps)
 		marketAmount := accounting.CurrentBalanceOn(db, ps, date)
-		result[account] = Aggregate{Date: date, Account: account, Amount: amount, MarketAmount: marketAmount}
+		result[account] = Aggregate{Date: date, Account: account, MarketAmount: marketAmount}
 
 	}
 	return result

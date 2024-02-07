@@ -194,6 +194,10 @@ func Build(db *gorm.DB, enableCompression bool) *gin.Engine {
 
 		c.JSON(200, GetPriceAutoCompletions(db, autoCompleteRequest))
 	})
+
+	router.GET("/api/transaction/balanced", func(c *gin.Context) {
+		c.JSON(200, GetBalancedPostings(db))
+	})
 	router.GET("/api/transaction", func(c *gin.Context) {
 		c.JSON(200, GetTransactions(db))
 	})

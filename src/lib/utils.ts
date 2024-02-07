@@ -106,6 +106,11 @@ export interface Transaction {
   postings: Posting[];
 }
 
+export interface BalancedPosting {
+  from: Posting;
+  to: Posting;
+}
+
 export interface Price {
   id: string;
   date: dayjs.Dayjs;
@@ -563,6 +568,9 @@ export function ajax(
 ): Promise<{ liability_breakdowns: LiabilityBreakdown[] }>;
 export function ajax(route: "/api/price"): Promise<{ prices: Record<string, Price[]> }>;
 export function ajax(route: "/api/transaction"): Promise<{ transactions: Transaction[] }>;
+export function ajax(
+  route: "/api/transaction/balanced"
+): Promise<{ balancedPostings: BalancedPosting[] }>;
 export function ajax(route: "/api/networth"): Promise<{
   networthTimeline: Networth[];
   xirr: number;

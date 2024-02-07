@@ -12,6 +12,7 @@
   import SearchQuery from "$lib/components/SearchQuery.svelte";
   import { editorState } from "$lib/search_query_editor";
   import { get } from "svelte/store";
+  import { download } from "$lib/export";
 
   let buldEditOpen = false;
   let transactions: T[] = null;
@@ -59,6 +60,11 @@
     handleInputRaw(get(editorState).predicate);
 
     newFiles = files;
+  }
+
+  async function downloadTransactions() {
+    const { balancedPostings } = await ajax("/api/transaction/balanced");
+    download(balancedPostings);
   }
 
   function showPreview(detail: any) {
@@ -147,6 +153,14 @@
             <div class="level-right">
               <div class="level-item">
                 <p class="is-6"><b>{filtered.length}</b> transaction(s)</p>
+              </div>
+              <div class="level-item">
+                <a on:click={(_e) => downloadTransactions()}>
+                  <span class="icon is-small">
+                    <i class="fa-solid fa-file-arrow-down"></i>
+                  </span>
+                  download
+                </a>
               </div>
             </div>
           </nav>

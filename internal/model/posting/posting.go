@@ -87,6 +87,17 @@ func (p Posting) WithQuantity(quantity decimal.Decimal) Posting {
 	return clone
 }
 
+func (p Posting) WithAmount(amount decimal.Decimal) Posting {
+	clone := p
+	clone.Amount = amount
+	clone.Quantity = amount.Div(p.Price())
+	return clone
+}
+
+func (p Posting) Split(amount decimal.Decimal) (Posting, Posting) {
+	return p.WithAmount(amount), p.WithAmount(p.Amount.Sub(amount))
+}
+
 func (p Posting) Behaviours() []string {
 	if p.behaviours == nil {
 		p.behaviours = Behaviours(p.Account)

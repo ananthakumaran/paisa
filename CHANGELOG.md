@@ -1,5 +1,12 @@
 # CHANGELOG
 
+### 0.6.6 (2024-02-10)
+
+* Improve tables (make it sortable)
+* Show tabulated value on allocation page
+* Show invested value on goals page
+* Bug fixes
+
 ### 0.6.5 (2024-02-02)
 
 * Add Liabilities > [Credit Card](https://paisa.fyi/reference/credit-cards) page

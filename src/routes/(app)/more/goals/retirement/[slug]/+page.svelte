@@ -156,7 +156,7 @@
         </div>
         <BoxLabel text="Monthly Investment" />
         <div class="columns">
-          <div class="column is-12 has-text-centered has-text-grey">
+          <div class="column is-12 has-text-grey">
             <AssetsBalance breakdowns={balances} indent={false} />
           </div>
         </div>

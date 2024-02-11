@@ -48,7 +48,7 @@
         {
           "id": 14,
           "transaction_id": "b2e50492-9dc7-5845-8ed9-9f4590b301a8",
-          "date": "2022-01-09T00:00:00Z",
+          "date": "2022-01-10T00:00:00Z",
           "payee": "Sell",
           "account": "Income:CapitalGains:Equity:AAPL",
           "commodity": "INR",
@@ -145,7 +145,7 @@
         {
           "id": 14,
           "transaction_id": "b2e50492-9dc7-5845-8ed9-9f4590b301a8",
-          "date": "2022-01-09T00:00:00Z",
+          "date": "2022-01-10T00:00:00Z",
           "payee": "Sell",
           "account": "Income:CapitalGains:Equity:AAPL",
           "commodity": "INR",

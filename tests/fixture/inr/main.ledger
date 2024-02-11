@@ -23,16 +23,16 @@ P 2022/02/07 00:00:00 NIFTY 100.273 INR
     Assets:Equity:ABNB                          0.76 ABNB @ 131.27 USD
     Assets:Checking
 
-2022/01/08 Buy Apple
+2022/01/09 Buy Apple
     Assets:Equity:AAPL                           100 AAPL @ 100 INR
     Assets:Checking
 
-2022/01/09 Sell
+2022/01/10 Sell
     Assets:Equity:AAPL                          -100 AAPL {100 INR} @ 100.273 INR
     Income:CapitalGains:Equity:AAPL            -27.3 INR
     Assets:Checking                          10027.3 INR
 
-2022/01/09 Multi Currency Debit
+2022/01/11 Multi Currency Debit
     Expenses:Charges                             100 INR
     Assets:Dollar                                 10 USD
     Assets:Checking

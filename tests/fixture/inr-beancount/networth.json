@@ -65,6 +65,15 @@
     },
     {
       "date": "2022-01-08T00:00:00Z",
+      "investmentAmount": 207963.762752,
+      "withdrawalAmount": 107963.762752,
+      "gainAmount": -61.5542551296,
+      "balanceAmount": 99938.4457448704,
+      "balanceUnits": 0,
+      "netInvestmentAmount": 100000
+    },
+    {
+      "date": "2022-01-09T00:00:00Z",
       "investmentAmount": 217963.762752,
       "withdrawalAmount": 117963.762752,
       "gainAmount": -61.5542551296,
@@ -73,29 +82,20 @@
       "netInvestmentAmount": 100000
     },
     {
-      "date": "2022-01-09T00:00:00Z",
-      "investmentAmount": 228795.183232,
-      "withdrawalAmount": 128895.183232,
-      "gainAmount": -34.5542551296,
-      "balanceAmount": 99865.4457448704,
-      "balanceUnits": 0,
-      "netInvestmentAmount": 99900
-    },
-    {
       "date": "2022-01-10T00:00:00Z",
-      "investmentAmount": 228795.183232,
-      "withdrawalAmount": 128895.183232,
-      "gainAmount": -34.58866180237056,
-      "balanceAmount": 99865.41133819763,
+      "investmentAmount": 227990.762752,
+      "withdrawalAmount": 127990.762752,
+      "gainAmount": -34.5542551296,
+      "balanceAmount": 99965.4457448704,
       "balanceUnits": 0,
-      "netInvestmentAmount": 99900
+      "netInvestmentAmount": 100000
     },
     {
       "date": "2022-01-11T00:00:00Z",
       "investmentAmount": 228795.183232,
       "withdrawalAmount": 128895.183232,
-      "gainAmount": -34.58866180237056,
-      "balanceAmount": 99865.41133819763,
+      "gainAmount": -34.5542551296,
+      "balanceAmount": 99865.4457448704,
       "balanceUnits": 0,
       "netInvestmentAmount": 99900
     },
@@ -254,12 +254,12 @@
     },
     {
       "date": "2022-01-29T00:00:00Z",
-      "investmentAmount": 228795.183232,
+      "investmentAmount": 229867.183232,
       "withdrawalAmount": 128895.183232,
       "gainAmount": -34.58866180237056,
-      "balanceAmount": 99865.41133819763,
+      "balanceAmount": 100937.41133819763,
       "balanceUnits": 0,
-      "netInvestmentAmount": 99900
+      "netInvestmentAmount": 100972
     },
     {
       "date": "2022-01-30T00:00:00Z",
@@ -343,5 +343,5 @@
       "netInvestmentAmount": 100972
     }
   ],
-  "xirr": 12.15
+  "xirr": 12.14
 }

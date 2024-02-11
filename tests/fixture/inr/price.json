@@ -3,7 +3,7 @@
     "AAPL": [
       {
         "id": 5,
-        "date": "2022-01-09T00:00:00Z",
+        "date": "2022-01-10T00:00:00Z",
         "commodity_type": "unknown",
         "commodity_id": "AAPL",
         "commodity_name": "AAPL",
@@ -11,7 +11,7 @@
       },
       {
         "id": 4,
-        "date": "2022-01-08T00:00:00Z",
+        "date": "2022-01-09T00:00:00Z",
         "commodity_type": "unknown",
         "commodity_id": "AAPL",
         "commodity_name": "AAPL",

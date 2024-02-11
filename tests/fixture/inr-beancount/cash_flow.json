@@ -7,8 +7,8 @@
       "liabilities": 0,
       "investment": 88768.183232,
       "tax": 0,
-      "checking": 12158.816768,
-      "balance": 12158.816768
+      "checking": 13230.816768,
+      "balance": 13230.816768
     },
     {
       "date": "2022-02-01T00:00:00Z",
@@ -18,7 +18,7 @@
       "investment": 0,
       "tax": 0,
       "checking": 0,
-      "balance": 12158.816768
+      "balance": 13230.816768
     }
   ]
 }

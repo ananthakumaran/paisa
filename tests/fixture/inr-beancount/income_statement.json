@@ -2,7 +2,7 @@
   "yearly": {
     "2021 - 22": {
       "startingBalance": 0,
-      "endingBalance": 93121.10858620763,
+      "endingBalance": 94193.80858620763,
       "date": "2021-04-01T00:00:00Z",
       "income": {
         "Income:Salary:Acme": -120000
@@ -10,9 +10,11 @@
       "interest": {
         "Income:Interest:Checking": -1000
       },
-      "equity": {},
+      "equity": {
+        "Equity:OpeningBalances": -1072
+      },
       "pnl": {
-        "Assets:Checking": -61.28866180237056,
+        "Assets:Checking": -60.58866180237056,
         "Assets:Coinbase:BTC": 1e-8,
         "Assets:Equity:AAPL": 27,
         "Assets:Equity:ABNB": -7963.002752,

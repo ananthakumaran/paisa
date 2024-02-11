@@ -9,6 +9,7 @@
 1970-01-01 open Income:Salary:Acme
 1970-01-01 open Assets:Coinbase:BTC
 1970-01-01 open Assets:Dollar
+1970-01-01 open Equity:OpeningBalances
 
 1970-01-01 commodity AAPL
 1970-01-01 commodity ABNB
@@ -67,3 +68,6 @@
   Assets:Checking
 
 2022/01/31 balance Assets:Equity:NIFTY  800 NIFTY
+
+2022/01/30 pad Assets:Checking Equity:OpeningBalances
+2022/01/31 balance Assets:Checking 21000 INR

@@ -391,7 +391,7 @@ func (Beancount) Parse(journalPath string, prices []price.Price) ([]*posting.Pos
 
 	postings = lo.Map(postings, func(p *posting.Posting, _ int) *posting.Posting {
 		r := transactionRanges[p.TransactionID]
-		p.TransactionBeginLine = r.Begin - 1
+		p.TransactionBeginLine = max(r.Begin, 1) - 1
 		p.TransactionEndLine = r.End + 1
 		return p
 	})

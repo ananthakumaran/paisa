@@ -42,6 +42,12 @@ journal_path: /home/john/Documents/paisa/main.ledger
 # REQUIRED
 db_path: /home/john/Documents/paisa/paisa.db
 
+# Path to your sheets directory. It can be absolute or relative to the
+# configuration file. The sheets directory will be created if it does not exist.
+# By default it will be created in the same directory as the journal file.
+# OPTIONAL, DEFAULT: same directory as journal file.
+sheets_directory: sheets
+
 # The ledger client to use
 # OPTIONAL, DEFAULT: ledger, ENUM: ledger, hledger, beancount
 ledger_cli: ledger

@@ -14,6 +14,7 @@
   "config": {
     "journal_path": "main.ledger",
     "db_path": "paisa.db",
+    "sheets_directory": "",
     "readonly": false,
     "ledger_cli": "ledger",
     "default_currency": "INR",
@@ -610,6 +611,10 @@
           "code"
         ],
         "type": "array"
+      },
+      "sheets_directory": {
+        "description": "Path to your sheets directory. It can be absolute or relative to the configuration file. The sheets directory will be created if it does not exist. By default it will be created in the same directory as the journal file.",
+        "type": "string"
       },
       "strict": {
         "description": "When strict mode is enabled, all the accounts and commodities should be defined before use.",

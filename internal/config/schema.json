@@ -13,6 +13,10 @@
       "type": "string",
       "description": "Path to your database file. It can be absolute or relative to the configuration file. The database file will be created if it does not exist."
     },
+    "sheets_directory": {
+      "type": "string",
+      "description": "Path to your sheets directory. It can be absolute or relative to the configuration file. The sheets directory will be created if it does not exist. By default it will be created in the same directory as the journal file."
+    },
     "readonly": {
       "type": "boolean",
       "description": "Run in readonly mode.",

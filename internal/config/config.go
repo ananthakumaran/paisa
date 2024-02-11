@@ -128,6 +128,7 @@ type CreditCard struct {
 type Config struct {
 	JournalPath                string       `json:"journal_path" yaml:"journal_path"`
 	DBPath                     string       `json:"db_path" yaml:"db_path"`
+	SheetsDirectory            string       `json:"sheets_directory" yaml:"sheets_directory"`
 	Readonly                   bool         `json:"readonly" yaml:"readonly"`
 	LedgerCli                  string       `json:"ledger_cli" yaml:"ledger_cli"`
 	DefaultCurrency            string       `json:"default_currency" yaml:"default_currency"`
@@ -349,7 +350,21 @@ func GetJournalPath() string {
 }
 
 func GetSheetDir() string {
-	return filepath.Dir(GetJournalPath())
+	if config.SheetsDirectory == "" {
+		return filepath.Dir(GetJournalPath())
+	}
+
+	dir := config.SheetsDirectory
+	if !filepath.IsAbs(config.SheetsDirectory) {
+		dir = filepath.Join(GetConfigDir(), config.SheetsDirectory)
+	}
+
+	err := os.MkdirAll(dir, 0750)
+	if err != nil {
+		log.Fatal("Failed to create sheets directory", err)
+	}
+
+	return dir
 }
 
 func GetDBPath() string {

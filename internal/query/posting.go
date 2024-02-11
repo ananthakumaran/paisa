@@ -130,7 +130,7 @@ func (q *Query) All() []posting.Posting {
 	var postings []posting.Posting
 
 	q.context = q.context.Where("forecast = ?", q.includeForecast)
-	result := q.context.Order("date " + q.order + ", amount desc").Find(&postings)
+	result := q.context.Order("date " + q.order + ", amount desc, account asc").Find(&postings)
 	if result.Error != nil {
 		log.Fatal(result.Error)
 	}
@@ -140,7 +140,7 @@ func (q *Query) All() []posting.Posting {
 func (q *Query) First() *posting.Posting {
 	var posting posting.Posting
 	q.context = q.context.Where("forecast = ?", q.includeForecast)
-	result := q.context.Order("date " + q.order + ", amount desc").First(&posting)
+	result := q.context.Order("date " + q.order + ", amount desc, account asc").First(&posting)
 
 	if result.Error != nil {
 		if errors.Is(result.Error, gorm.ErrRecordNotFound) {

@@ -21,7 +21,7 @@ jobs:
         cache: npm
     - uses: actions/setup-go@v4
       with:
-        go-version: '1.20.5'
+        go-version: '1.21.5'
     - uses: vegardit/fast-apt-mirror.sh@v1
     - run: |
         sudo apt-get install -y sqlite3 libgtk-3-dev libwebkit2gtk-4.0-dev build-essential pkg-config

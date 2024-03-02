@@ -267,9 +267,13 @@ Returns the acronym of the given string that is suitable to be used as
 a commodity symbol. For example, `UTI Nifty Next 50 Index Growth
 Direct Plan` will be converted to `UNNI`
 
-#### `#!typescript replace(str: string, search: string, replace: string): string`
+#### `#!typescript trim(str: string): string`
 
 Trims the given string.
+
+#### `#!typescript replace(str: string, search: string, replace: string): string`
+
+Replace the given search string with the given replace string.
 
 #### `#!typescript regexpTest(str: string, regexp: string): boolean`
 

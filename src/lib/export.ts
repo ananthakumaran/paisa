@@ -3,7 +3,6 @@ import Papa from "papaparse";
 
 export function download(balancedPostings: BalancedPosting[]) {
   const rows = balancedPostings.map((balancedPosting) => {
-    console.log(balancedPosting);
     return {
       Date: balancedPosting.from.date.toISOString(),
       Payee: balancedPosting.from.payee,

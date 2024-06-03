@@ -1006,7 +1006,7 @@ function begingingOfFinancialYear(date: dayjs.Dayjs) {
   if (date.month() + 1 < USER_CONFIG.financial_year_starting_month) {
     return date
       .add(-1, "year")
-      .add(USER_CONFIG.financial_year_starting_month - date.month() + 1, "month");
+      .add(USER_CONFIG.financial_year_starting_month - date.month() - 1, "month");
   } else {
     return date.add(-(date.month() + 1 - USER_CONFIG.financial_year_starting_month), "month");
   }

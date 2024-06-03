@@ -965,10 +965,10 @@ export function forEachMonth(
   end: dayjs.Dayjs,
   cb: (current: dayjs.Dayjs) => any
 ) {
-  let current = start;
+  let current = start.startOf("month");
   while (current.isSameOrBefore(end, "month")) {
     cb(current);
-    current = current.startOf("month").add(1, "month");
+    current = current.add(1, "month");
   }
 }
 

@@ -965,7 +965,7 @@ export function forEachMonth(
   end: dayjs.Dayjs,
   cb: (current: dayjs.Dayjs) => any
 ) {
-  let current = start;
+  let current = start.startOf("month");
   while (current.isSameOrBefore(end, "month")) {
     cb(current);
     current = current.add(1, "month");
@@ -989,7 +989,7 @@ export function forEachFinancialYear(
   end: dayjs.Dayjs,
   cb?: (current: dayjs.Dayjs) => any
 ) {
-  let current = begingingOfFinancialYear(start);
+  let current = beginningOfFinancialYear(start);
   const years: dayjs.Dayjs[] = [];
   while (current.isSameOrBefore(end, "month")) {
     if (cb) {
@@ -1001,7 +1001,7 @@ export function forEachFinancialYear(
   return years;
 }
 
-function begingingOfFinancialYear(date: dayjs.Dayjs) {
+function beginningOfFinancialYear(date: dayjs.Dayjs) {
   date = date.startOf("month");
   if (date.month() + 1 < USER_CONFIG.financial_year_starting_month) {
     return date

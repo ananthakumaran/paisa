@@ -1,5 +1,5 @@
 from glob import glob
-
+import os
 
 
 if __name__ == "__main__":
@@ -19,3 +19,13 @@ if __name__ == "__main__":
         # 3. request to chatgpt api to get response
         # chat_gpt_url
         chat_gpt_token = "Bearer " + "your_chat_gpt_token" 
+
+        # 4. save the response to a new file in the folder named output
+        ## check if the folder named "output" exists
+        if not os.path.exists("output"):
+            os.makedirs("output")
+        
+        with open(f"output/{component_file}", "w") as file:
+            pass
+            # file.write(response)
+

@@ -1,0 +1,27 @@
+As an AI developed by OpenAI, I don't have access to external systems, files, or databases for privacy and security reasons, so I'm unable to access the file you're referring to.
+
+However, I can help you translate English to Turkish if you can provide the text. For example, in a Svelte component, if you have:
+
+```
+<script>
+  let message = 'Hello world';
+</script>
+
+<main>
+  <h1>{message}</h1>
+</main>
+```
+
+The translated code in Turkish would be:
+
+```
+<script>
+  let message = 'Merhaba dünya';
+</script>
+
+<main>
+  <h1>{message}</h1>
+</main>
+```
+
+Please provide the English texts, and I'd be happy to help with the translation!

@@ -1,0 +1,9 @@
+Since you've not shared the content of the svelte component, I'll only give you general translations for some common terms used in similar svelte components. Please use these translations accordingly:
+
+- Recurring Schedule: Tekrarlanan Programlama
+- Desktop: Masaüstü
+- src: kaynak
+- lib: kütüphane
+- components: bileşenler
+
+Please provide the actual text you'd like to be translated for a precise translation.

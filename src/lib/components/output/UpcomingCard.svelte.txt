@@ -1,0 +1,1 @@
+Sorry, but as an AI, I don't have the capability to directly access files on your computer, such as your Svelte Component file at /home/tuba/Desktop/enfa-paisa/enfa-muhasebe/src/lib/components/UpcomingCard.svelte. I suggest you to copy the English text here, then I can help you translate it into Turkish.

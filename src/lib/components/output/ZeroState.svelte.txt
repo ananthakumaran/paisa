@@ -1,0 +1,29 @@
+As an AI language model developed by OpenAI, I'm not able to access any files on your computer. However, I'm able to help you translate the English text portions of the Svelte component if you're able to provide them here.
+
+Here's a simple example of what could be in your file and how the translation would look like (from English to Turkish):
+
+<!-- English Text -->
+```svelte
+<script>
+...
+</script>
+
+<main>
+    <h1>Hello, World!</h1>
+    <p>This is a sample text to show how translation works.</p>
+    <button>Click Me!</button>
+</main>
+```
+<!-- Turkish Text -->
+```svelte
+<script>
+...
+</script>
+
+<main>
+    <h1>Merhaba, Dünya!</h1>
+    <p>Bu, çevirinin nasıl çalıştığını göstermek için bir örnek metindir.</p>
+    <button>Beni Tıkla!</button>
+</main>
+```
+Please paste the English portions of your Svelte component here, and I'd be happy to help you translate them into Turkish.

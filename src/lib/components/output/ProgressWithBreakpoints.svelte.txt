@@ -1,0 +1,5 @@
+Since you have not shared the English text of your Svelte component, I cannot provide the exact translation at the moment. However, I can guide you how to make the translations based on a hypothetical example.
+
+Imagine you have an English text inside your ProgressWithBreakpoints.svelte file that says "Loading, please wait". This sentence would be translated to Turkish as "Yükleniyor, lütfen bekleyin".
+
+If the actual content of your component is different, please provide it so that I can assist you better.

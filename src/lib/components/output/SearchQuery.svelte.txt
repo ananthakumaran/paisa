@@ -1,0 +1,1 @@
+Since no English texts are provided within the svelte component that you have posted, I cannot provide any translations. Please provide the texts in English that are within the component located at "/home/tuba/Desktop/enfa-paisa/enfa-muhasebe/src/lib/components/SearchQuery.svelte" and I will gladly translate them into Turkish for you.

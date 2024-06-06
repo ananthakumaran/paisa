@@ -1,0 +1,31 @@
+Unfortunately, I cannot access your local files on your computer. However, I can provide you an example translation. You would need to paste the contents which you want to be translated here. Here is a simple example:
+
+If you have this in your svelte component:
+
+```svelte
+<script>
+  let message = "Hello world";
+</script>
+
+<main>
+  <h1>{message}</h1>
+  
+  <p>Welcome to my app!</p>
+</main>
+```
+
+The translated version in Turkish would be:
+
+```svelte
+<script>
+  let message = "Merhaba dünya";
+</script>
+
+<main>
+  <h1>{message}</h1>
+  
+  <p>Uygulamama hoş geldiniz!</p>
+</main>
+```
+
+In this simple example, the text "Hello world" is translated to "Merhaba dünya", and "Welcome to my app!" is translated to "Uygulamama hoş geldiniz!".

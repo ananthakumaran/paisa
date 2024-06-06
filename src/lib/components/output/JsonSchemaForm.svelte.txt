@@ -1,0 +1,1 @@
+As an AI, I don't have direct access to your local files such as the svelte component you mentioned at /home/tuba/Desktop/enfa-paisa/enfa-muhasebe/src/lib/components/JsonSchemaForm.svelte. However, you could certainly provide me with the English text snippets from your code that you would like to be translated into Turkish and I could translate them for you.

@@ -1,0 +1,28 @@
+Since I can't directly access your file system, I can't give you the exact translation. However, I can help you with a general guide.
+
+For Example;
+
+```
+<script>
+    let startDate = new Date();
+    let endDate = new Date();
+</script>
+
+<div>
+    Start Date: <input type="date" bind:value={startDate} /> 
+    End Date: <input type="date" bind:value={endDate} /> 
+</div>
+```
+Translation:
+```
+<script>
+    let baslangicTarihi = new Date();
+    let bitisTarihi = new Date();
+</script>
+
+<div>
+    Başlangıç Tarihi: <input type="date" bind:value={baslangicTarihi} /> 
+    Bitiş Tarihi: <input type="date" bind:value={bitisTarihi} /> 
+</div>
+```
+For a more detailed answer, please provide directly the texts you want to be translated.

@@ -1,0 +1,33 @@
+Since there's no specific English texts shared in your question, it's not possible to perform any actual translation. However, I can guide you where to find English texts in Svelte files.
+
+When translating Svelte components, you'll be focusing on translating user-facing text (i.e., text that the user of your application directly interacts with). 
+
+For example, you might have a component like this:
+
+```svelte
+<script>
+  let message = 'Hello world';
+</script>
+
+<main>
+  <h1>{message}</h1>
+</main>
+```
+
+To translate this component, you might replace 'Hello world' with 'Merhaba Dünya' like so:
+
+```svelte
+<script>
+  let message = 'Merhaba Dünya';
+</script>
+
+<main>
+  <h1>{message}</h1>
+</main>
+```
+
+Browsing through your Svelte components, look for English texts appearing inside { } (e.g., {message}), ' ' (e.g., 'Hello World'), or " " (e.g., "Hello World"). Make sure that you don't change any code syntax, variable names, or curly braces {} while interpreting.
+
+NOTE: Sometimes, English text may be fed into the component as a prop value or may be part of a variable, in which case it needs to be translated at point where the value is given. 
+
+Please extract the English texts you need translation so we can help.

@@ -1,0 +1,1 @@
+In this svelte component, there is no English text that needs to be translated into Turkish. The text present is part of the programming code and should not be translated.

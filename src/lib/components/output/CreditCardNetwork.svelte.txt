@@ -1,0 +1,3 @@
+As an AI language model, I cannot directly access your file system or interact with your Svelte component in "/home/tuba/Desktop/enfa-paisa/enfa-muhasebe/src/lib/components/CreditCardNetwork.svelte". 
+
+However, I can help translate English texts into Turkish if you paste them here. Or, if you share the content of that file, I can assist in translating the text inside it.

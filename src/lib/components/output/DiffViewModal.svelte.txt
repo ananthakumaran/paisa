@@ -1,0 +1,1 @@
+As an AI model developed by OpenAI, I'm currently not able to navigate file paths or access files on a physical computer like "/home/tuba/Desktop/enfa-paisa/enfa-muhasebe/src/lib/components/DiffViewModal.svelte". Please provide the English content from your Svelte component that you'd like translated to Turkish and I'd be happy to assist!

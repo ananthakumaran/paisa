@@ -1,11 +1,11 @@
-FROM node:18-alpine3.18 as web
+FROM node:18-alpine3.18 AS web
 WORKDIR /usr/src/paisa
 COPY package.json package-lock.json* ./
 RUN npm install
 COPY . .
 RUN npm run build
 
-FROM golang:1.21-alpine3.18 as go
+FROM golang:1.21-alpine3.18 AS go
 WORKDIR /usr/src/paisa
 RUN apk --no-cache add sqlite gcc g++
 COPY go.mod go.sum ./

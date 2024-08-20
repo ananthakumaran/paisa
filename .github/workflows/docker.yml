@@ -29,3 +29,27 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+      - uses: docker/build-push-action@v5
+        with:
+          context: .
+          platforms: linux/amd64,linux/arm64
+          file: ./Dockerfile.hledger
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}-hledger
+          labels: ${{ steps.meta.outputs.labels }}
+      - uses: docker/build-push-action@v5
+        with:
+          context: .
+          platforms: linux/amd64,linux/arm64
+          file: ./Dockerfile.beancount
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}-beancount
+          labels: ${{ steps.meta.outputs.labels }}
+      - uses: docker/build-push-action@v5
+        with:
+          context: .
+          platforms: linux/amd64,linux/arm64
+          file: ./Dockerfile.all
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}-all
+          labels: ${{ steps.meta.outputs.labels }}

@@ -1,0 +1,7 @@
+FROM docker.io/ananthakumaran/paisa:latest
+
+RUN apk --no-cache add hledger
+
+WORKDIR /root/
+
+CMD ["paisa", "serve"]

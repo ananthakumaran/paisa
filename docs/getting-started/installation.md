@@ -135,7 +135,10 @@ more.
 
 ## Docker
 
-Paisa CLI is available on [dockerhub](https://hub.docker.com/r/ananthakumaran/paisa).
+Paisa CLI is available on [dockerhub](https://hub.docker.com/r/ananthakumaran/paisa). The default image only
+supports ledger. `paisa:<version>-hledger`,
+`paisa:<version>-beancount` or `paisa:<version>-all` image variants
+can be used if you want to use paisa with others.
 
 === "Linux"
 

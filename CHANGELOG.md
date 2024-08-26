@@ -1,5 +1,10 @@
 # CHANGELOG
 
+### 0.6.7 (2024-08-26)
+
+* Add [docker image variant](https://github.com/ananthakumaran/paisa/pull/274) for hledger and beancount
+* Bug fixes
+
 ### 0.6.6 (2024-02-10)
 
 * Improve tables (make it sortable)

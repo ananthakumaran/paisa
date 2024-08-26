@@ -1,6 +1,6 @@
 # CHANGELOG
 
-### 0.6.7 (2024-08-26)
+### 0.6.8 (2024-08-26)
 
 * Add [docker image variant](https://github.com/ananthakumaran/paisa/pull/274) for hledger and beancount
 * Bug fixes

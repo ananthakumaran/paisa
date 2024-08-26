@@ -1,4 +1,4 @@
-FROM docker.io/ananthakumaran/paisa:latest
+FROM docker.io/ananthakumaran/paisa:v0.6.8
 
 RUN apk --no-cache add hledger beancount
 

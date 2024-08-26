@@ -29,27 +29,51 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+      - id: meta-hledger
+        uses: docker/metadata-action@v5
+        with:
+          images: ananthakumaran/paisa
+          flavor: |
+            latest=auto
+            prefix=
+            suffix=-hledger,onlatest=true
       - uses: docker/build-push-action@v5
         with:
           context: .
           platforms: linux/amd64,linux/arm64
           file: ./Dockerfile.hledger
           push: true
-          tags: ${{ steps.meta.outputs.tags }}-hledger
-          labels: ${{ steps.meta.outputs.labels }}
+          tags: ${{ steps.meta-hledger.outputs.tags }}
+          labels: ${{ steps.meta-hledger.outputs.labels }}
+      - id: meta-beancount
+        uses: docker/metadata-action@v5
+        with:
+          images: ananthakumaran/paisa
+          flavor: |
+            latest=auto
+            prefix=
+            suffix=-beancount,onlatest=true
       - uses: docker/build-push-action@v5
         with:
           context: .
           platforms: linux/amd64,linux/arm64
           file: ./Dockerfile.beancount
           push: true
-          tags: ${{ steps.meta.outputs.tags }}-beancount
-          labels: ${{ steps.meta.outputs.labels }}
+          tags: ${{ steps.meta-beancount.outputs.tags }}
+          labels: ${{ steps.meta-beancount.outputs.labels }}
+      - id: meta-all
+        uses: docker/metadata-action@v5
+        with:
+          images: ananthakumaran/paisa
+          flavor: |
+            latest=auto
+            prefix=
+            suffix=-all,onlatest=true
       - uses: docker/build-push-action@v5
         with:
           context: .
           platforms: linux/amd64,linux/arm64
           file: ./Dockerfile.all
           push: true
-          tags: ${{ steps.meta.outputs.tags }}-all
-          labels: ${{ steps.meta.outputs.labels }}
+          tags: ${{ steps.meta-all.outputs.tags }}
+          labels: ${{ steps.meta-all.outputs.labels }}

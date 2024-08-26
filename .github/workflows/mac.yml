@@ -9,7 +9,7 @@ on:
 
 jobs:
   mac-binary:
-    runs-on: macos-11
+    runs-on: macos-12
     steps:
     - uses: actions/checkout@v2.4.0
     - uses: actions/setup-node@v3

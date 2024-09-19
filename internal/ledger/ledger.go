@@ -452,7 +452,7 @@ func parseLedgerPrices(output string, defaultCurrency string) ([]price.Price, er
 			return nil, err
 		}
 
-		if target != defaultCurrency {
+		if target != defaultCurrency && defaultCurrency != "USD" && target != "$" {
 			continue
 		}
 

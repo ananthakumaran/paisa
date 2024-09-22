@@ -305,6 +305,10 @@ Converts the given string to lower case.
 
 Converts the given string to upper case.
 
+#### `#!typescript capitalize(str: string): string`
+
+Capitalize the given string.
+
 #### `#!typescript match(str: string, {[string]: string}): string`
 
 Let's say you are trying to import your Credit Card bill and you want

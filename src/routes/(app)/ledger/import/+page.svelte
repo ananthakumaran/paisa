@@ -30,7 +30,7 @@
   let data: any[][] = [];
   let rows: Array<Record<string, any>> = [];
   let lastOptions: any;
-  let options: { reverse: boolean } = { reverse: false };
+  let options: { reverse: boolean; trim: boolean } = { reverse: false, trim: true };
 
   let templateEditorDom: Element;
   let templateEditor: EditorView;
@@ -122,7 +122,10 @@
       lastOptions != options
     ) {
       try {
-        preview = renderJournal(rows, $templateEditorState.template, { reverse: options.reverse });
+        preview = renderJournal(rows, $templateEditorState.template, {
+          reverse: options.reverse,
+          trim: options.trim
+        });
         updatePreviewContent(previewEditor, preview);
         lastTemplate = $templateEditorState.template;
         lastData = data;
@@ -368,7 +371,7 @@
             Drag 'n' drop CSV, TXT, XLS, XLSX, PDF file here or click to select
           </Dropzone>
         </div>
-        <div class="is-flex justify-end mb-3">
+        <div class="is-flex justify-end mb-3 gap-4">
           <div class="field color-switch">
             <input
               id="import-reverse"
@@ -377,6 +380,15 @@
               class="switch is-rounded is-small"
             />
             <label for="import-reverse">Reverse</label>
+          </div>
+          <div class="field color-switch">
+            <input
+              id="trim-reverse"
+              type="checkbox"
+              bind:checked={options.trim}
+              class="switch is-rounded is-small"
+            />
+            <label for="trim-reverse">Trim</label>
           </div>
         </div>
         {#if parseErrorMessage}

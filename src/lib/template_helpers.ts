@@ -263,5 +263,8 @@ export default {
   },
   toUpperCase(str: string) {
     return str.toUpperCase();
+  },
+  capitalize(str: string) {
+    return _.capitalize(str);
   }
 };

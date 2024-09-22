@@ -52,7 +52,7 @@ describe("import", () => {
           const result = await parse(new File([input], inputFile));
           const rows = asRows(result);
 
-          const actual = render(rows, compiled);
+          const actual = render(rows, compiled, { trim: true });
 
           expect(actual).toBe(_.trim(output));
         }

@@ -44,11 +44,14 @@ const COLUMN_REFS = _.chain(_.range(65, 90))
 export function render(
   rows: Array<Record<string, any>>,
   template: Handlebars.TemplateDelegate,
-  options: { reverse?: boolean } = {}
+  options: { reverse?: boolean; trim?: boolean } = {}
 ) {
   const output: string[] = [];
   _.each(rows, (row) => {
-    const rendered = _.trim(template(_.assign({ ROW: row, SHEET: rows }, COLUMN_REFS)));
+    let rendered = template(_.assign({ ROW: row, SHEET: rows }, COLUMN_REFS));
+    if (options.trim) {
+      rendered = _.trim(rendered);
+    }
     if (!_.isEmpty(rendered)) {
       output.push(rendered);
     }
@@ -56,7 +59,12 @@ export function render(
   if (options.reverse) {
     output.reverse();
   }
-  return format(output.join("\n\n"));
+
+  if (options.trim) {
+    return format(output.join("\n\n"));
+  } else {
+    return format(output.join(""));
+  }
 }
 
 function parseCSV(file: File): Promise<Result> {

@@ -10,6 +10,7 @@ import (
 	"github.com/ananthakumaran/paisa/internal/config"
 	"github.com/ananthakumaran/paisa/internal/ledger"
 	"github.com/ananthakumaran/paisa/internal/model/posting"
+	"github.com/ananthakumaran/paisa/internal/utils"
 	"github.com/bmatcuk/doublestar/v4"
 	"github.com/gin-gonic/gin"
 	"github.com/samber/lo"
@@ -77,8 +78,13 @@ func SaveFile(db *gorm.DB, file LedgerFile) gin.H {
 	path := config.GetJournalPath()
 	dir := filepath.Dir(path)
 
-	filePath := filepath.Join(dir, file.Name)
-	backupPath := filepath.Join(dir, file.Name+".backup."+time.Now().Format("2006-01-02-15-04-05.000"))
+	filePath, err := utils.BuildSubPath(dir, file.Name)
+	if err != nil {
+		log.Warn(err)
+		return gin.H{"errors": errors, "saved": false, "message": "Invalid file name"}
+	}
+
+	backupPath := filePath + ".backup." + time.Now().Format("2006-01-02-15-04-05.000")
 
 	err = os.MkdirAll(filepath.Dir(filePath), 0700)
 	if err != nil {

@@ -410,7 +410,7 @@ func TokenAuthMiddleware() gin.HandlerFunc {
 
 	return func(c *gin.Context) {
 		userAccounts := config.GetConfig().UserAccounts
-		if len(userAccounts) == 0 || !strings.HasPrefix(c.Request.RequestURI, "/api") {
+		if len(userAccounts) == 0 || !strings.HasPrefix(c.Request.URL.Path, "/api") {
 			c.Next()
 			return
 		}

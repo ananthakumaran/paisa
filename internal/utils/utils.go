@@ -3,8 +3,10 @@ package utils
 import (
 	"crypto/sha256"
 	"encoding/hex"
+	"errors"
 	"fmt"
 	"os"
+	"path/filepath"
 	"sort"
 	"strings"
 	"time"
@@ -293,4 +295,20 @@ func Sha256(str string) string {
 	h := sha256.New()
 	h.Write([]byte(str))
 	return hex.EncodeToString(h.Sum(nil))
+}
+
+func BuildSubPath(baseDirectory string, path string) (string, error) {
+	baseDirectory = filepath.Clean(baseDirectory)
+	fullpath := filepath.Clean(filepath.Join(baseDirectory, filepath.Clean(path)))
+
+	relpath, err := filepath.Rel(baseDirectory, fullpath)
+	if err != nil {
+		return "", err
+	}
+
+	if strings.Contains(relpath, "..") {
+		return "", errors.New("Not allowed to refer path outside the base directory")
+	}
+
+	return fullpath, nil
 }

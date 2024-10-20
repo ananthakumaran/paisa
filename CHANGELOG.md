@@ -1,5 +1,9 @@
 # CHANGELOG
 
+### 0.7.1 (2024-10-20)
+
+* Fix remote code execution [vulnerability](https://github.com/ananthakumaran/paisa/issues/294)
+
 ### 0.7.0 (2024-08-26)
 
 * Add [docker image variant](https://github.com/ananthakumaran/paisa/pull/274) for hledger and beancount

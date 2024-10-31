@@ -232,5 +232,10 @@ day of the quarter, etc.
 </div>
 </div>
 
+!!! note ""
+
+    Interested in double-entry accounting but new to text editing? Try <a href="https://finbodhi.com" target="_blank">FinBodhi</a>
+
 <p></p>
+
 </div>

@@ -74,6 +74,7 @@ theme:
     - navigation.footer
     - search.suggest
     - search.highlight
+    - announce.dismiss
 
 markdown_extensions:
   - toc:

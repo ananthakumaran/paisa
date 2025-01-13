@@ -406,7 +406,7 @@
                 <tr>
                   <th />
                   {#each _.range(0, columnCount) as ci}
-                    <th class="has-background-light">{String.fromCharCode(65 + ci)}</th>
+                    <th class="has-background-light">{ci>25 ? String.fromCharCode(64+ci /26)+ String.fromCharCode(65+ci % 26): String.fromCharCode(65+ci)}</th>
                   {/each}
                 </tr>
               </thead>

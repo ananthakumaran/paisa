@@ -45,8 +45,7 @@ export function render(
   rows: Array<Record<string, any>>,
   template: Handlebars.TemplateDelegate,
   options: { reverse?: boolean; trim?: boolean } = {}
-) {
-  console.log("render",rows); 
+) { 
   const output: string[] = [];
   _.each(rows, (row) => {
     let rendered = template(_.assign({ ROW: row, SHEET: rows }, COLUMN_REFS));
@@ -72,8 +71,7 @@ function parseCSV(file: File): Promise<Result> {
   return new Promise((resolve, reject) => {
     Papa.parse<string[]>(file, {
       skipEmptyLines: true,
-      complete: function (results) {
-        console.log("results", results);
+      complete: function (results) {        
         resolve(results);
       },
       error: function (error) {

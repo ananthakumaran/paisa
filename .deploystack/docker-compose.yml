@@ -1,0 +1,14 @@
+version: "3"
+
+services:
+  webarchive:
+    image: ghcr.io/derfenix/webarchive:latest
+    environment:
+      LOGGING_DEBUG: "true"
+      API_ADDRESS: "0.0.0.0:5001"
+      PDF_DPI: "300"
+      DB_PATH: "/db"
+    volumes:
+      - ./db:/db
+    ports:
+      - "0.0.0.0:5001:5001"

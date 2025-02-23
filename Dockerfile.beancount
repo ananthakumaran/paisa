@@ -1,4 +1,4 @@
-FROM docker.io/ananthakumaran/paisa:v0.7.2
+FROM docker.io/ananthakumaran/paisa:v0.7.3
 
 RUN apk --no-cache add beancount
 

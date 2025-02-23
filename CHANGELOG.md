@@ -1,6 +1,10 @@
 # CHANGELOG
 
-### 0.7.1 (2024-10-20)
+### 0.7.2 (2025-02-23)
+
+* Fix yahoo price fetcher
+
+### 0.7.2 (2024-10-20)
 
 * Fix remote code execution [vulnerability](https://github.com/ananthakumaran/paisa/issues/294)
 

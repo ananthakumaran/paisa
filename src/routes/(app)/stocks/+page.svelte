@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { formatCurrency, formatDate } from '$lib/utils';
-	import { ChevronUp, ChevronDown, Edit2, Check, X } from 'lucide-svelte';
+	import { ChevronUp, ChevronDown, Edit2, Check, X, Plus, Tag } from 'lucide-svelte';
 
 	interface Stock {
 		symbol: string;
@@ -14,6 +14,7 @@
 		gainAmount: number;
 		drawdownFromPeak: number;
 		lastPurchaseDate: string;
+		tags: { tag: string; color: string }[];
 	}
 
 	let stocks: Stock[] = [];
@@ -22,6 +23,10 @@
 	let sortDirection: 'asc' | 'desc' = 'asc';
 	let editingTargetPrice: string | null = null;
 	let newTargetPrice: number = 0;
+	let ltpLoading: { [key: string]: boolean } = {};
+	let editingTag: { symbol: string; tag: string } | null = null;
+	let newTag: string = '';
+	let newTagColor: string = '#4F46E5';
 
 	onMount(async () => {
 		try {
@@ -63,6 +68,53 @@
 
 	function cancelEditing() {
 		editingTargetPrice = null;
+	}
+
+	async function addTag(symbol: string) {
+		try {
+			const response = await fetch('/api/stocks/tag', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({ symbol, tag: newTag, color: newTagColor }),
+			});
+			if (response.ok) {
+				const updatedStocks = await fetch('/api/stocks').then(r => r.json());
+				stocks = updatedStocks.stocks;
+				editingTag = null;
+				newTag = '';
+			}
+		} catch (error) {
+			console.error('Error adding tag:', error);
+		}
+	}
+
+	async function removeTag(symbol: string, tag: string) {
+		try {
+			const response = await fetch('/api/stocks/tag', {
+				method: 'DELETE',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({ symbol, tag }),
+			});
+			if (response.ok) {
+				const updatedStocks = await fetch('/api/stocks').then(r => r.json());
+				stocks = updatedStocks.stocks;
+			}
+		} catch (error) {
+			console.error('Error removing tag:', error);
+		}
+	}
+
+	function startAddingTag(symbol: string) {
+		editingTag = { symbol, tag: '' };
+	}
+
+	function cancelAddingTag() {
+		editingTag = null;
+		newTag = '';
 	}
 
 	$: sortedStocks = [...stocks].sort((a, b) => {
@@ -207,7 +259,60 @@
 					{#each sortedStocks as stock}
 						<tr class="hover:bg-gray-50">
 							<td class="px-3 py-4 whitespace-nowrap font-medium text-gray-900 text-base">
-								{stock.symbol}
+								<div class="flex items-center gap-2">
+									{stock.symbol}
+									<div class="flex flex-wrap gap-1">
+										{#each stock.tags || [] as tag}
+											<span
+												class="px-2 py-1 text-xs rounded-full flex items-center gap-1"
+												style="background-color: {tag.color}20; color: {tag.color}"
+											>
+												{tag.tag}
+												<button
+													on:click={() => removeTag(stock.symbol, tag.tag)}
+													class="hover:text-gray-700"
+												>
+													<X size={12} />
+												</button>
+											</span>
+										{/each}
+										{#if editingTag?.symbol === stock.symbol}
+											<div class="flex items-center gap-1">
+												<input
+													type="text"
+													bind:value={newTag}
+													class="w-24 px-2 py-1 border rounded text-sm"
+													placeholder="New tag"
+												/>
+												<input
+													type="color"
+													bind:value={newTagColor}
+													class="w-6 h-6 rounded cursor-pointer"
+												/>
+												<button
+													on:click={() => addTag(stock.symbol)}
+													class="text-green-600 hover:text-green-800"
+												>
+													<Check size={16} />
+												</button>
+												<button
+													on:click={cancelAddingTag}
+													class="text-red-600 hover:text-red-800"
+												>
+													<X size={16} />
+												</button>
+											</div>
+										{:else}
+											<button
+												on:click={() => startAddingTag(stock.symbol)}
+												class="p-0.5 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded transition-colors"
+												title="Add tag"
+											>
+												<Plus size={12} />
+											</button>
+										{/if}
+									</div>
+								</div>
 							</td>
 							<td class="px-3 py-4 whitespace-nowrap text-gray-500 text-base">
 								{stock.shares}

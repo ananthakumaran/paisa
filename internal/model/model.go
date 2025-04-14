@@ -14,6 +14,7 @@ import (
 	"github.com/ananthakumaran/paisa/internal/model/portfolio"
 	"github.com/ananthakumaran/paisa/internal/model/posting"
 	"github.com/ananthakumaran/paisa/internal/model/price"
+	"github.com/ananthakumaran/paisa/internal/model/stock_tag"
 	"github.com/ananthakumaran/paisa/internal/model/stock_target_price"
 	"github.com/ananthakumaran/paisa/internal/scraper"
 	"github.com/ananthakumaran/paisa/internal/scraper/india"
@@ -33,6 +34,7 @@ func AutoMigrate(db *gorm.DB) {
 	db.AutoMigrate(&cii.CII{})
 	db.AutoMigrate(&cache.Cache{})
 	db.AutoMigrate(&stock_target_price.StockTargetPrice{})
+	db.AutoMigrate(&stock_tag.StockTag{})
 }
 
 func SyncJournal(db *gorm.DB) (string, error) {

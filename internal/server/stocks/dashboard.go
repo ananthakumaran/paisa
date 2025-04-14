@@ -12,6 +12,7 @@ import (
 	"github.com/ananthakumaran/paisa/internal/accounting"
 	"github.com/ananthakumaran/paisa/internal/model/posting"
 	"github.com/ananthakumaran/paisa/internal/model/price"
+	"github.com/ananthakumaran/paisa/internal/model/stock_tag"
 	"github.com/ananthakumaran/paisa/internal/model/stock_target_price"
 	"github.com/ananthakumaran/paisa/internal/query"
 	"github.com/ananthakumaran/paisa/internal/service"
@@ -22,16 +23,17 @@ import (
 )
 
 type Stock struct {
-	Symbol           string          `json:"symbol"`
-	AveragePrice     decimal.Decimal `json:"averagePrice"`
-	LastTradedPrice  decimal.Decimal `json:"lastTradedPrice"`
-	TargetPrice      decimal.Decimal `json:"targetPrice"`
-	Shares           int             `json:"shares"`
-	TotalInvestment  decimal.Decimal `json:"totalInvestment"`
-	GainPercent      decimal.Decimal `json:"gainPercent"`
-	GainAmount       decimal.Decimal `json:"gainAmount"`
-	DrawdownFromPeak decimal.Decimal `json:"drawdownFromPeak"`
-	LastPurchaseDate string          `json:"lastPurchaseDate"`
+	Symbol           string               `json:"symbol"`
+	AveragePrice     decimal.Decimal      `json:"averagePrice"`
+	LastTradedPrice  decimal.Decimal      `json:"lastTradedPrice"`
+	TargetPrice      decimal.Decimal      `json:"targetPrice"`
+	Shares           int                  `json:"shares"`
+	TotalInvestment  decimal.Decimal      `json:"totalInvestment"`
+	GainPercent      decimal.Decimal      `json:"gainPercent"`
+	GainAmount       decimal.Decimal      `json:"gainAmount"`
+	DrawdownFromPeak decimal.Decimal      `json:"drawdownFromPeak"`
+	LastPurchaseDate string               `json:"lastPurchaseDate"`
+	Tags             []stock_tag.StockTag `json:"tags"`
 }
 
 type AssetBreakdown struct {
@@ -50,6 +52,17 @@ type AssetBreakdown struct {
 type UpdateTargetPriceRequest struct {
 	Symbol      string          `json:"symbol"`
 	TargetPrice decimal.Decimal `json:"targetPrice"`
+}
+
+type AddTagRequest struct {
+	Symbol string `json:"symbol"`
+	Tag    string `json:"tag"`
+	Color  string `json:"color"`
+}
+
+type RemoveTagRequest struct {
+	Symbol string `json:"symbol"`
+	Tag    string `json:"tag"`
 }
 
 func GetDashboard(db *gorm.DB) gin.H {
@@ -88,6 +101,13 @@ func doGetBalance(db *gorm.DB, pattern string, rollup bool) gin.H {
 		targetPriceMap[tp.Symbol] = tp.TargetPrice
 	}
 
+	// Fetch all tags
+	tags, err := stock_tag.GetAllTags(db)
+	if err != nil {
+		log.Errorf("Failed to fetch tags: %v", err)
+		tags = make(map[string][]stock_tag.StockTag)
+	}
+
 	stocks := make([]Stock, 0)
 	for _, breakdown := range breakdowns {
 		// Extract symbol from the group path (e.g., "Assets:Equity:Stocks:AAPL" -> "AAPL")
@@ -115,6 +135,7 @@ func doGetBalance(db *gorm.DB, pattern string, rollup bool) gin.H {
 			GainAmount:       breakdown.GainAmount.Round(2),
 			DrawdownFromPeak: decimal.Zero,
 			LastPurchaseDate: breakdown.LastPurchaseDate.Format("2006-01-02"),
+			Tags:             tags[symbol],
 		}
 		stocks = append(stocks, stock)
 	}
@@ -254,5 +275,39 @@ func UpdateTargetPrice(db *gorm.DB) gin.HandlerFunc {
 			"symbol":      req.Symbol,
 			"targetPrice": req.TargetPrice,
 		})
+	}
+}
+
+func AddTag(db *gorm.DB) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		var req AddTagRequest
+		if err := c.ShouldBindJSON(&req); err != nil {
+			c.JSON(400, gin.H{"error": "Invalid request"})
+			return
+		}
+
+		if err := stock_tag.AddTag(db, req.Symbol, req.Tag, req.Color); err != nil {
+			c.JSON(500, gin.H{"error": "Failed to add tag"})
+			return
+		}
+
+		c.JSON(200, gin.H{"success": true})
+	}
+}
+
+func RemoveTag(db *gorm.DB) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		var req RemoveTagRequest
+		if err := c.ShouldBindJSON(&req); err != nil {
+			c.JSON(400, gin.H{"error": "Invalid request"})
+			return
+		}
+
+		if err := stock_tag.RemoveTag(db, req.Symbol, req.Tag); err != nil {
+			c.JSON(500, gin.H{"error": "Failed to remove tag"})
+			return
+		}
+
+		c.JSON(200, gin.H{"success": true})
 	}
 }

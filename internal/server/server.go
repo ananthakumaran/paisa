@@ -233,6 +233,9 @@ func Build(db *gorm.DB, enableCompression bool) *gin.Engine {
 		c.JSON(200, stocks.GetDashboard(db))
 	})
 
+	router.POST("/api/stocks/tag", stocks.AddTag(db))
+	router.DELETE("/api/stocks/tag", stocks.RemoveTag(db))
+
 	router.POST("/api/stocks/target-price", stocks.UpdateTargetPrice(db))
 
 	router.GET("/api/stocksdebug", func(c *gin.Context) {

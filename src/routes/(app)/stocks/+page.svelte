@@ -18,6 +18,7 @@
 	}
 
 	let stocks: Stock[] = [];
+	let filteredStocks: Stock[] = [];
 	let loading = true;
 	let sortColumn: keyof Stock = 'symbol';
 	let sortDirection: 'asc' | 'desc' = 'asc';
@@ -27,12 +28,16 @@
 	let editingTag: { symbol: string; tag: string } | null = null;
 	let newTag: string = '';
 	let newTagColor: string = '#4F46E5';
+	let selectedTag: string = 'all';
+
+	$: uniqueTags = [...new Set(stocks.flatMap(stock => stock.tags?.map(t => t.tag) || []))];
 
 	onMount(async () => {
 		try {
 			const response = await fetch('/api/stocks');
 			const data = await response.json();
 			stocks = data.stocks;
+			filteredStocks = stocks;
 		} catch (error) {
 			console.error('Error fetching stocks:', error);
 		} finally {
@@ -117,7 +122,7 @@
 		newTag = '';
 	}
 
-	$: sortedStocks = [...stocks].sort((a, b) => {
+	$: sortedStocks = [...filteredStocks].sort((a, b) => {
 		let comparison = 0;
 		if (sortColumn === 'symbol' || sortColumn === 'lastPurchaseDate') {
 			comparison = String(a[sortColumn]).localeCompare(String(b[sortColumn]));
@@ -144,6 +149,32 @@
 
 <div class="container mx-auto px-2 py-8 max-w-[95%]">
 	<h1 class="text-2xl font-bold mb-6">Stocks Portfolio</h1>
+
+	<div class="mb-4 flex items-center gap-4">
+		<select
+			bind:value={selectedTag}
+			class="px-3 py-2 border rounded-md text-sm"
+			on:change={() => {
+				if (selectedTag === 'all') {
+					filteredStocks = stocks;
+				} else {
+					filteredStocks = stocks.filter(stock => 
+						stock.tags?.some(tag => tag.tag === selectedTag)
+					);
+				}
+			}}
+		>
+			<option value="all">All Tags</option>
+			{#each uniqueTags as tag}
+				<option value={tag}>
+					<div class="flex items-center gap-2">
+						<div class="w-3 h-3 rounded-full" style="background-color: {stocks.find(s => s.tags?.some(t => t.tag === tag))?.tags?.find(t => t.tag === tag)?.color || '#4F46E5'}"></div>
+						{tag}
+					</div>
+				</option>
+			{/each}
+		</select>
+	</div>
 
 	{#if loading}
 		<div class="flex justify-center items-center h-64">

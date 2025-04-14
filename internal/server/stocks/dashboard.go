@@ -9,6 +9,7 @@ import (
 
 	"github.com/ananthakumaran/paisa/internal/accounting"
 	"github.com/ananthakumaran/paisa/internal/model/posting"
+	"github.com/ananthakumaran/paisa/internal/model/stock_target_price"
 	"github.com/ananthakumaran/paisa/internal/query"
 	"github.com/ananthakumaran/paisa/internal/service"
 	"github.com/ananthakumaran/paisa/internal/utils"
@@ -18,16 +19,16 @@ import (
 )
 
 type Stock struct {
-	Symbol           string  `json:"symbol"`
-	AveragePrice     float64 `json:"averagePrice"`
-	LastTradedPrice  float64 `json:"lastTradedPrice"`
-	TargetPrice      float64 `json:"targetPrice"`
-	Shares           int     `json:"shares"`
-	TotalInvestment  float64 `json:"totalInvestment"`
-	GainPercent      float64 `json:"gainPercent"`
-	GainAmount       float64 `json:"gainAmount"`
-	DrawdownFromPeak float64 `json:"drawdownFromPeak"`
-	LastPurchaseDate string  `json:"lastPurchaseDate"`
+	Symbol           string          `json:"symbol"`
+	AveragePrice     decimal.Decimal `json:"averagePrice"`
+	LastTradedPrice  decimal.Decimal `json:"lastTradedPrice"`
+	TargetPrice      decimal.Decimal `json:"targetPrice"`
+	Shares           int             `json:"shares"`
+	TotalInvestment  decimal.Decimal `json:"totalInvestment"`
+	GainPercent      decimal.Decimal `json:"gainPercent"`
+	GainAmount       decimal.Decimal `json:"gainAmount"`
+	DrawdownFromPeak decimal.Decimal `json:"drawdownFromPeak"`
+	LastPurchaseDate string          `json:"lastPurchaseDate"`
 }
 
 type AssetBreakdown struct {
@@ -44,8 +45,8 @@ type AssetBreakdown struct {
 }
 
 type UpdateTargetPriceRequest struct {
-	Symbol      string  `json:"symbol"`
-	TargetPrice float64 `json:"targetPrice"`
+	Symbol      string          `json:"symbol"`
+	TargetPrice decimal.Decimal `json:"targetPrice"`
 }
 
 func GetDashboard(db *gorm.DB) gin.H {
@@ -76,6 +77,14 @@ func doGetBalance(db *gorm.DB, pattern string, rollup bool) gin.H {
 	postings = service.PopulateMarketPrice(db, postings)
 	breakdowns := ComputeBreakdowns(db, postings, rollup)
 
+	// Fetch all target prices in one query
+	var targetPrices []stock_target_price.StockTargetPrice
+	db.Find(&targetPrices)
+	targetPriceMap := make(map[string]decimal.Decimal)
+	for _, tp := range targetPrices {
+		targetPriceMap[tp.Symbol] = tp.TargetPrice
+	}
+
 	stocks := make([]Stock, 0)
 	for _, breakdown := range breakdowns {
 		// Extract symbol from the group path (e.g., "Assets:Equity:Stocks:AAPL" -> "AAPL")
@@ -89,16 +98,19 @@ func doGetBalance(db *gorm.DB, pattern string, rollup bool) gin.H {
 			averagePrice = netInvestment.Div(breakdown.BalanceUnits)
 		}
 
+		// Get target price from map, default to zero if not found
+		targetPrice := targetPriceMap[symbol]
+
 		stock := Stock{
 			Symbol:           symbol,
-			AveragePrice:     averagePrice.Round(2).InexactFloat64(),
-			LastTradedPrice:  breakdown.LatestPrice.Round(2).InexactFloat64(),
-			TargetPrice:      0,
+			AveragePrice:     averagePrice.Round(2),
+			LastTradedPrice:  breakdown.LatestPrice.Round(2),
+			TargetPrice:      targetPrice,
 			Shares:           int(breakdown.BalanceUnits.InexactFloat64()),
-			TotalInvestment:  breakdown.InvestmentAmount.Sub(breakdown.WithdrawalAmount).Round(2).InexactFloat64(),
-			GainPercent:      breakdown.GainAmount.Div(breakdown.InvestmentAmount).Mul(decimal.NewFromInt(100)).Round(2).InexactFloat64(),
-			GainAmount:       breakdown.GainAmount.Round(2).InexactFloat64(),
-			DrawdownFromPeak: 0,
+			TotalInvestment:  breakdown.InvestmentAmount.Sub(breakdown.WithdrawalAmount).Round(2),
+			GainPercent:      breakdown.GainAmount.Div(breakdown.InvestmentAmount).Mul(decimal.NewFromInt(100)).Round(2),
+			GainAmount:       breakdown.GainAmount.Round(2),
+			DrawdownFromPeak: decimal.Zero,
 			LastPurchaseDate: breakdown.LastPurchaseDate.Format("2006-01-02"),
 		}
 		stocks = append(stocks, stock)
@@ -207,8 +219,11 @@ func UpdateTargetPrice(db *gorm.DB) gin.HandlerFunc {
 			return
 		}
 
-		// TODO: Implement actual database update
-		// For now, we'll just return the updated value
+		if err := stock_target_price.SetTargetPrice(db, req.Symbol, req.TargetPrice); err != nil {
+			c.JSON(500, gin.H{"error": "Failed to update target price"})
+			return
+		}
+
 		c.JSON(200, gin.H{
 			"symbol":      req.Symbol,
 			"targetPrice": req.TargetPrice,

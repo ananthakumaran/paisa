@@ -272,13 +272,16 @@
 										</button>
 									</div>
 								{:else}
-									<div class="flex items-center gap-2">
-										{formatCurrency(stock.targetPrice || 0, 2)}
+									<div class="flex items-center gap-1">
+										{#if stock.targetPrice > 0}
+											{formatCurrency(stock.targetPrice, 2)}
+										{/if}
 										<button
 											on:click={() => startEditing(stock.symbol, stock.targetPrice || 0)}
-											class="text-gray-400 hover:text-gray-600"
+											class="p-0.7 text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors"
+											title="Edit target price"
 										>
-											<Edit2 size={14} />
+											<Edit2 size={8} />
 										</button>
 									</div>
 								{/if}

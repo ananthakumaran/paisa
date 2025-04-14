@@ -1,14 +1,17 @@
 package stocks
 
 import (
+	"fmt"
 	"strings"
 	"time"
 
+	"github.com/labstack/gommon/log"
 	"github.com/samber/lo"
 	"github.com/shopspring/decimal"
 
 	"github.com/ananthakumaran/paisa/internal/accounting"
 	"github.com/ananthakumaran/paisa/internal/model/posting"
+	"github.com/ananthakumaran/paisa/internal/model/price"
 	"github.com/ananthakumaran/paisa/internal/model/stock_target_price"
 	"github.com/ananthakumaran/paisa/internal/query"
 	"github.com/ananthakumaran/paisa/internal/service"
@@ -37,11 +40,11 @@ type AssetBreakdown struct {
 	WithdrawalAmount decimal.Decimal `json:"withdrawalAmount"`
 	MarketAmount     decimal.Decimal `json:"marketAmount"`
 	BalanceUnits     decimal.Decimal `json:"balanceUnits"`
-	LatestPrice      decimal.Decimal `json:"latestPrice"`
 	XIRR             decimal.Decimal `json:"xirr"`
 	GainAmount       decimal.Decimal `json:"gainAmount"`
 	AbsoluteReturn   decimal.Decimal `json:"absoluteReturn"`
 	LastPurchaseDate time.Time       `json:"lastPurchaseDate"`
+	LastTradedPrice  decimal.Decimal `json:"lastTradedPrice"`
 }
 
 type UpdateTargetPriceRequest struct {
@@ -104,7 +107,7 @@ func doGetBalance(db *gorm.DB, pattern string, rollup bool) gin.H {
 		stock := Stock{
 			Symbol:           symbol,
 			AveragePrice:     averagePrice.Round(2),
-			LastTradedPrice:  breakdown.LatestPrice.Round(2),
+			LastTradedPrice:  breakdown.LastTradedPrice,
 			TargetPrice:      targetPrice,
 			Shares:           int(breakdown.BalanceUnits.InexactFloat64()),
 			TotalInvestment:  breakdown.InvestmentAmount.Sub(breakdown.WithdrawalAmount).Round(2),
@@ -192,12 +195,34 @@ func ComputeBreakdown(db *gorm.DB, ps []posting.Posting, leaf bool, group string
 	if !investmentAmount.IsZero() {
 		absoluteReturn = marketAmount.Sub(netInvestment).Div(investmentAmount)
 	}
+
 	lastPurchaseDate := time.Time{}
 	for _, p := range ps {
 		if p.Date.After(lastPurchaseDate) {
 			lastPurchaseDate = p.Date
 		}
 	}
+
+	// Get the latest price from the prices table
+	lastTradedPrice := decimal.Zero
+	if leaf && len(ps) > 0 {
+		// Get the commodity name from the first posting
+		commodityName := ps[0].Commodity
+		// Get the latest price from the prices table
+		var latestPrice price.Price
+		result := db.Where("commodity_name = ?", commodityName).
+			Order("date desc").
+			First(&latestPrice)
+		if result.Error == nil {
+			fmt.Printf("Latest price for %s: %s\n", commodityName, latestPrice.Value)
+			lastTradedPrice = latestPrice.Value
+		} else {
+			log.Debugf("Failed to fetch latest price for %s: %v", commodityName, result.Error)
+		}
+	}
+	// TODO(Nitin) : The above call is very slow.Fix the above to use below line (it uses cache).
+	// lastTradedPrice := service.GetMarketPrice(db, ps[0], time.Now())
+
 	return AssetBreakdown{
 		InvestmentAmount: investmentAmount,
 		WithdrawalAmount: withdrawalAmount,
@@ -208,6 +233,7 @@ func ComputeBreakdown(db *gorm.DB, ps []posting.Posting, leaf bool, group string
 		GainAmount:       gainAmount,
 		AbsoluteReturn:   absoluteReturn,
 		LastPurchaseDate: lastPurchaseDate,
+		LastTradedPrice:  lastTradedPrice,
 	}
 }
 

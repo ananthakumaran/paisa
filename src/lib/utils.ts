@@ -1313,3 +1313,12 @@ export function buildTree<I>(items: I[], accountAccessor: (item: I) => string): 
 
   return result;
 }
+
+export function formatDate(dateString: string): string {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-IN', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric'
+    });
+}

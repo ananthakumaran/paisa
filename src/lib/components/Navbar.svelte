@@ -103,6 +103,7 @@
       ]
     },
     { label: "Income", href: "/income" },
+    { label: "Stocks Dashboard", href: "/stocks" },
     {
       label: "Ledger",
       href: "/ledger",
@@ -124,7 +125,7 @@
         { label: "Doctor", href: "/doctor" },
         { label: "Logs", href: "/logs" }
       ]
-    }
+    },
   ];
 
   const tax = {

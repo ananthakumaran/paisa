@@ -8,7 +8,7 @@
         pkgs = nixpkgs.legacyPackages.${system};
         mkdocs = mkdocs-pkgs.legacyPackages.${system};
         nodeDependencies = (pkgs.callPackage ./flake/override.nix {
-          nodejs = pkgs.nodejs-18_x;
+          nodejs = pkgs.nodejs-20_x;
         }).nodeDependencies;
       in {
         devShells.default = import ./shell.nix {

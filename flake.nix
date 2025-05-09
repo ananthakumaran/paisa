@@ -8,7 +8,7 @@
         pkgs = nixpkgs.legacyPackages.${system};
         mkdocs = mkdocs-pkgs.legacyPackages.${system};
         nodeDependencies = (pkgs.callPackage ./flake/override.nix {
-          nodejs = pkgs.nodejs-18_x;
+          nodejs = pkgs.nodejs_22;
         }).nodeDependencies;
       in {
         devShells.default = import ./shell.nix {
@@ -23,7 +23,7 @@
 
           src = ./.;
 
-          nativeBuildInputs = [ pkgs.nodejs-18_x ];
+          nativeBuildInputs = [ pkgs.nodejs_22 ];
 
           vendorHash = "sha256-KnHJ6+aMahTeNdbRcRAgBERGVYen/tM/tDcFI/NyLdE=";
 

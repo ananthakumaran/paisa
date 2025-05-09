@@ -2,18 +2,18 @@
 
 pkgs.mkShell {
   nativeBuildInputs = [
-    pkgs.go_1_21
+    pkgs.go_1_24
     pkgs.gotools
     pkgs.gopls
     pkgs.sqlite
-    pkgs.nodejs-18_x
+    pkgs.nodejs_22
     pkgs.libuuid
     pkgs.bun
     pkgs.node2nix
     # pkgs.pkgsCross.mingwW64.buildPackages.gcc
 
-    mkdocs.python311Packages.mkdocs-material
-    pkgs.python311Packages.beancount
+    mkdocs.python312Packages.mkdocs-material
+    pkgs.python312Packages.beancount_2
 
     # test
     pkgs.ledger

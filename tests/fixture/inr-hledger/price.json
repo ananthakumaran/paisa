@@ -2,7 +2,7 @@
   "prices": {
     "AAPL": [
       {
-        "id": 7,
+        "id": 6,
         "date": "2022-01-09T00:00:00Z",
         "commodity_type": "unknown",
         "commodity_id": "AAPL",
@@ -10,7 +10,7 @@
         "value": 100
       },
       {
-        "id": 6,
+        "id": 5,
         "date": "2022-01-08T00:00:00Z",
         "commodity_type": "unknown",
         "commodity_id": "AAPL",
@@ -21,7 +21,7 @@
     "ABNB": [],
     "NIFTY": [
       {
-        "id": 8,
+        "id": 7,
         "date": "2022-02-07T00:00:00Z",
         "commodity_type": "unknown",
         "commodity_id": "NIFTY",
@@ -29,7 +29,7 @@
         "value": 100.273
       },
       {
-        "id": 5,
+        "id": 4,
         "date": "2022-01-08T00:00:00Z",
         "commodity_type": "unknown",
         "commodity_id": "NIFTY",
@@ -37,7 +37,7 @@
         "value": 100
       },
       {
-        "id": 2,
+        "id": 1,
         "date": "2022-01-07T00:00:00Z",
         "commodity_type": "unknown",
         "commodity_id": "NIFTY",
@@ -47,7 +47,7 @@
     ],
     "USD": [
       {
-        "id": 3,
+        "id": 2,
         "date": "2022-01-08T00:00:00Z",
         "commodity_type": "unknown",
         "commodity_id": "USD",

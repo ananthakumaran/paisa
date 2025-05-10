@@ -33,7 +33,6 @@
           "<span class='has-text-link icon is-small mr-3'><i class='fas fa-angle-down'></i></span>",
         data: data,
         columns: columns,
-        maxHeight: "100vh",
         layout: "fitDataTable"
       });
     }

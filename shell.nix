@@ -1,4 +1,4 @@
-{ pkgs ? import <nixpkgs> { }, mkdocs ? import <nixpkgs> { } }:
+{ pkgs ? import <nixpkgs> { }, hledger ? import <nixpkgs> { } }:
 
 pkgs.mkShell {
   nativeBuildInputs = [
@@ -12,12 +12,12 @@ pkgs.mkShell {
     pkgs.node2nix
     # pkgs.pkgsCross.mingwW64.buildPackages.gcc
 
-    mkdocs.python312Packages.mkdocs-material
+    pkgs.python312Packages.mkdocs-material
     pkgs.python312Packages.beancount_2
 
     # test
     pkgs.ledger
-    pkgs.hledger
+    hledger.hledger
   ] ++ (pkgs.lib.optional pkgs.stdenv.isLinux pkgs.wails);
 
   shellHook = ''

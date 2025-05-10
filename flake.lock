@@ -17,19 +17,19 @@
         "type": "indirect"
       }
     },
-    "mkdocs-pkgs": {
+    "hledger-pkgs": {
       "locked": {
-        "lastModified": 1746749784,
-        "narHash": "sha256-moUUaN25cSaUoIppXO6dcPSckT2oZPsw9nfYvkzfsHo=",
+        "lastModified": 1744868846,
+        "narHash": "sha256-5RJTdUHDmj12Qsv7XOhuospjAjATNiTMElplWnJE9Hs=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "116f782c56b5fa7c96fd7a53008250d40611f709",
+        "rev": "ebe4301cbd8f81c4f8d3244b3632338bbeb6d49c",
         "type": "github"
       },
       "original": {
         "owner": "NixOS",
-        "ref": "staging-next",
         "repo": "nixpkgs",
+        "rev": "ebe4301cbd8f81c4f8d3244b3632338bbeb6d49c",
         "type": "github"
       }
     },
@@ -50,7 +50,7 @@
     "root": {
       "inputs": {
         "flake-utils": "flake-utils",
-        "mkdocs-pkgs": "mkdocs-pkgs",
+        "hledger-pkgs": "hledger-pkgs",
         "nixpkgs": "nixpkgs"
       }
     },

@@ -18,7 +18,7 @@ jobs:
         cache: npm
     - uses: actions/setup-go@v4
       with:
-        go-version: '1.21.5'
+        go-version: '1.24.2'
     - run: |
         choco install sqlite
         choco install wget

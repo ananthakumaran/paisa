@@ -56,7 +56,7 @@
     "svelte-local-storage-store": "^0.6.0",
     "svelte-select": "^5.8.0",
     "svelte-tiny-virtual-list": "^2.0.5",
-    "tabulator-tables": "^5.5.4",
+    "tabulator-tables": "^6.3.1",
     "textures": "^1.2.3",
     "tippy.js": "^6.3.7",
     "xlsx": "https://cdn.sheetjs.com/xlsx-0.19.3/xlsx-0.19.3.tgz",

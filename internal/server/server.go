@@ -12,7 +12,6 @@ import (
 	"github.com/ananthakumaran/paisa/internal/config"
 	"github.com/ananthakumaran/paisa/internal/generator"
 	"github.com/ananthakumaran/paisa/internal/ledger"
-	"github.com/ananthakumaran/paisa/internal/model/rule"
 	"github.com/ananthakumaran/paisa/internal/model/template"
 	"github.com/ananthakumaran/paisa/internal/prediction"
 	"github.com/ananthakumaran/paisa/internal/server/assets"
@@ -323,94 +322,6 @@ func Build(db *gorm.DB, enableCompression bool) *gin.Engine {
 
 	router.GET("/api/account/tf_idf", func(c *gin.Context) {
 		c.JSON(200, prediction.GetTfIdf(db))
-	})
-
-	router.GET("/api/rules", func(c *gin.Context) {
-		rules, err := rule.FindAll(db)
-		if err != nil {
-			c.JSON(500, gin.H{"error": err.Error()})
-			return
-		}
-		c.JSON(200, gin.H{"rules": rules})
-	})
-
-	router.POST("/api/rules", func(c *gin.Context) {
-		if config.GetConfig().Readonly {
-			c.JSON(403, gin.H{"error": "Readonly mode"})
-			return
-		}
-
-		var newRule rule.Rule
-		if err := c.ShouldBindJSON(&newRule); err != nil {
-			c.JSON(400, gin.H{"error": err.Error()})
-			return
-		}
-
-		if err := rule.Create(db, &newRule); err != nil {
-			c.JSON(500, gin.H{"error": err.Error()})
-			return
-		}
-
-		c.JSON(201, newRule)
-	})
-
-	router.PUT("/api/rules/:id", func(c *gin.Context) {
-		if config.GetConfig().Readonly {
-			c.JSON(403, gin.H{"error": "Readonly mode"})
-			return
-		}
-
-		id := c.Param("id")
-		var updatedRule rule.Rule
-		if err := c.ShouldBindJSON(&updatedRule); err != nil {
-			c.JSON(400, gin.H{"error": err.Error()})
-			return
-		}
-
-		var idUint uint
-		fmt.Sscanf(id, "%d", &idUint)
-		updatedRule.ID = idUint
-
-		if err := rule.Update(db, &updatedRule); err != nil {
-			c.JSON(500, gin.H{"error": err.Error()})
-			return
-		}
-
-		c.JSON(200, updatedRule)
-	})
-
-	router.DELETE("/api/rules/:id", func(c *gin.Context) {
-		if config.GetConfig().Readonly {
-			c.JSON(403, gin.H{"error": "Readonly mode"})
-			return
-		}
-
-		id := c.Param("id")
-		var idUint uint
-		fmt.Sscanf(id, "%d", &idUint)
-
-		if err := rule.Delete(db, idUint); err != nil {
-			c.JSON(500, gin.H{"error": err.Error()})
-			return
-		}
-
-		c.JSON(204, nil)
-	})
-
-	router.POST("/api/predict/rules", func(c *gin.Context) {
-		var details prediction.TransactionDetails
-		if err := c.ShouldBindJSON(&details); err != nil {
-			c.JSON(400, gin.H{"error": err.Error()})
-			return
-		}
-
-		account, found := prediction.PredictWithRules(db, details)
-		if !found {
-			c.JSON(404, gin.H{"error": "No matching rule found"})
-			return
-		}
-
-		c.JSON(200, gin.H{"account": account})
 	})
 
 	router.GET("/api/templates", func(c *gin.Context) {

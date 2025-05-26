@@ -107,7 +107,14 @@
       label: "Ledger",
       href: "/ledger",
       children: [
-        { label: "Import", href: "/import", help: "import" },
+        { 
+          label: "Import", 
+          href: "/import", 
+          help: "import",
+          children: [
+            { label: "Rules", href: "/import/rules", help: "rules" }
+          ]
+        },
         { label: "Editor", href: "/editor", help: "editor", disablePreload: true },
         { label: "Transactions", href: "/transaction", help: "bulk-edit" },
         { label: "Postings", href: "/posting" },

@@ -337,3 +337,11 @@
 .language-ledger pre code {
   max-height: 500px;
 }
+
+a.finbodhi {
+  color: oklch(0.7 0.17 142.89);
+}
+
+a.finbodhi:hover {
+  color: oklab(0.7 -0.135571 0.102569 / 0.9);
+}

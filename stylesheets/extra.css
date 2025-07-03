@@ -338,12 +338,19 @@
   max-height: 500px;
 }
 
+.md-banner {
+  background-color: rgb(30, 33, 41);
+}
+
 .md-banner p span {
   opacity: 0.7;
 }
 
 a.finbodhi {
   color: oklch(0.7 0.17 142.89);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  font-size: 16px;
 }
 
 a.finbodhi:hover {

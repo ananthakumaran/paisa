@@ -338,6 +338,10 @@
   max-height: 500px;
 }
 
+.md-banner p span {
+  opacity: 0.7;
+}
+
 a.finbodhi {
   color: oklch(0.7 0.17 142.89);
 }

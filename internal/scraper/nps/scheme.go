@@ -12,7 +12,7 @@ import (
 
 func GetSchemes() ([]*scheme.Scheme, error) {
 	log.Info("Fetching NPS scheme list from Purified Bytes")
-	resp, err := http.Get("https://nps.purifiedbytes.com/api/schemes.json")
+	resp, err := http.Get("https://nps.finbodhi.com/api/schemes.json")
 	if err != nil {
 		return nil, err
 	}

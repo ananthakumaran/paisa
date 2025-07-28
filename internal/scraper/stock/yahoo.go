@@ -90,6 +90,10 @@ func GetHistory(ticker string, commodityName string) ([]*price.Price, error) {
 		return nil, err
 	}
 
+	if len(response.Chart.Result) == 0 {
+		return nil, fmt.Errorf("no data found for ticker %s", ticker)
+	}
+
 	var prices []*price.Price
 	result := response.Chart.Result[0]
 	needExchangePrice := false
@@ -102,12 +106,28 @@ func GetHistory(ticker string, commodityName string) ([]*price.Price, error) {
 			return nil, err
 		}
 
+		if len(exchangeResponse.Chart.Result) == 0 {
+			return nil, fmt.Errorf("no exchange rate data found for %s to %s", result.Meta.Currency, config.DefaultCurrency())
+		}
 		exchangeResult := exchangeResponse.Chart.Result[0]
+		if len(exchangeResult.Indicators.Quote) == 0 {
+			return nil, fmt.Errorf("no quote data found in exchange rate response for %s to %s", result.Meta.Currency, config.DefaultCurrency())
+		}
+		if len(exchangeResult.Indicators.Quote[0].Close) == 0 {
+			return nil, fmt.Errorf("no closing price data found in exchange rate response for %s to %s", result.Meta.Currency, config.DefaultCurrency())
+		}
 
 		exchangePrice = btree.New(2)
 		for i, t := range exchangeResult.Timestamp {
 			exchangePrice.ReplaceOrInsert(ExchangePrice{Timestamp: t, Close: exchangeResult.Indicators.Quote[0].Close[i]})
 		}
+	}
+
+	if len(result.Indicators.Quote) == 0 {
+		return nil, fmt.Errorf("no quote data found for ticker %s", ticker)
+	}
+	if len(result.Indicators.Quote[0].Close) == 0 {
+		return nil, fmt.Errorf("no closing price data found for ticker %s", ticker)
 	}
 
 	for i, timestamp := range result.Timestamp {

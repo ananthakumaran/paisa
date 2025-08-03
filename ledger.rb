@@ -51,6 +51,7 @@ class Ledger < Formula
       --boost=#{Formula["boost@1.85"].opt_prefix}
       --
       -DCMAKE_FIND_LIBRARY_SUFFIXES=.a
+      -DCMAKE_POLICY_VERSION_MINIMUM=3.5
       -DBUILD_SHARED_LIBS:BOOL=OFF
       -DBUILD_DOCS:BOOL=OFF
       -DBoost_NO_BOOST_CMAKE=ON

@@ -9,7 +9,7 @@ on:
 
 jobs:
   windows-binary:
-    runs-on: windows-2019
+    runs-on: windows-2022
     steps:
     - uses: actions/checkout@v2.4.0
     - uses: actions/setup-node@v3

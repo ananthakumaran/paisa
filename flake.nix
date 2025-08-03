@@ -28,7 +28,7 @@
 
           nativeBuildInputs = [ pkgs.nodejs_22 ];
 
-          vendorHash = "sha256-KnHJ6+aMahTeNdbRcRAgBERGVYen/tM/tDcFI/NyLdE=";
+          vendorHash = "sha256-5jrxI+zSKbopGs5GmGVyqQcMHNZJbCsiFEH/LPXWxpk=";
 
           CGO_ENABLED = 1;
 

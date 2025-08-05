@@ -26,8 +26,8 @@ export function parse(file: File): Promise<Result> {
 export function asRows(result: Result): Array<Record<string, any>> {
   return _.map(result.data, (row, i) => {
     return _.chain(row)
-      .map((cell, j) => {
-        return [String.fromCharCode(65 + j), cell];
+      .map((cell, j) => {        
+        return [j>25 ? String.fromCharCode(64+j /26)+ String.fromCharCode(65+j % 26): String.fromCharCode(65+j), cell]; // A-AA-ZZZ
       })
       .concat([["index", i as any]])
       .fromPairs()
@@ -35,17 +35,17 @@ export function asRows(result: Result): Array<Record<string, any>> {
   });
 }
 
-const COLUMN_REFS = _.chain(_.range(65, 90))
-  .map((i) => String.fromCharCode(i))
-  .map((a) => [a, a])
-  .fromPairs()
-  .value();
+const COLUMN_REFS = _.chain(_.range(0, 255)) //lets support up to 255 rows of data
+   .map((j) => j>25 ? String.fromCharCode(64+j /26)+ String.fromCharCode(65+j % 26): String.fromCharCode(65+j))
+   .map((a) => [a, a])
+   .fromPairs()
+   .value();
 
 export function render(
   rows: Array<Record<string, any>>,
   template: Handlebars.TemplateDelegate,
   options: { reverse?: boolean; trim?: boolean } = {}
-) {
+) { 
   const output: string[] = [];
   _.each(rows, (row) => {
     let rendered = template(_.assign({ ROW: row, SHEET: rows }, COLUMN_REFS));
@@ -71,7 +71,7 @@ function parseCSV(file: File): Promise<Result> {
   return new Promise((resolve, reject) => {
     Papa.parse<string[]>(file, {
       skipEmptyLines: true,
-      complete: function (results) {
+      complete: function (results) {        
         resolve(results);
       },
       error: function (error) {

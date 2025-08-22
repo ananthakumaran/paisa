@@ -16,7 +16,7 @@ import (
 
 func GetPortfolio(schemeCode string, commodityName string) ([]*portfolio.Portfolio, error) {
 	log.Info("Fetching Mutual Fund portfolio from Purified Bytes")
-	url := "https://mutualfund.purifiedbytes.com?default_format=JSON"
+	url := "https://mutualfund.finbodhi.com?default_format=JSON"
 	q := `
 SELECT coalesce(nullIf(i.issuer, ''), nullIf(i.name, ''), p.name) as name,
        p.isin as isin,

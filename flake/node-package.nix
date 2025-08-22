@@ -607,13 +607,13 @@ let
         sha512 = "k2Ty1JcVojjJFwrg/ThKi2ujJ7XNLYaFGNB/bWT9wGR+oSMJHMa5w+CUq6p/pVrKeNNgA7pCqEcjSnHVoqJQFw==";
       };
     };
-    "@happy-dom/global-registrator-12.10.3" = {
+    "@happy-dom/global-registrator-17.4.6" = {
       name = "_at_happy-dom_slash_global-registrator";
       packageName = "@happy-dom/global-registrator";
-      version = "12.10.3";
+      version = "17.4.6";
       src = fetchurl {
-        url = "https://registry.npmjs.org/@happy-dom/global-registrator/-/global-registrator-12.10.3.tgz";
-        sha512 = "miSMqJS1B1Je9/z9ClgJafGX1ioM/rvxWFWqjOy8I82RSoa2/k4//iPfI+dOxT2d9f5KEaHZycw+3FH9TzjmSQ==";
+        url = "https://registry.npmjs.org/@happy-dom/global-registrator/-/global-registrator-17.4.6.tgz";
+        sha512 = "I8ABrK88YQ8zNImb+VrnfzlAvIKo9UrcGqd6DjE1f70XdSDlIJx3vHf4KUdOR3dwVQx6G/mzVbad9TbNEs/I2g==";
       };
     };
     "@humanwhocodes/config-array-0.11.13" = {
@@ -2785,15 +2785,6 @@ let
         sha512 = "1Pbh5FLmn5y4+QhNyJE9j3/7dK44dGB83/ZMjv/qJk86TvDbjk0LosiZo0i0WB0Vx607qMX9jYrn1VLHCkN4rw==";
       };
     };
-    "canvas-2.11.2" = {
-      name = "canvas";
-      packageName = "canvas";
-      version = "2.11.2";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/canvas/-/canvas-2.11.2.tgz";
-        sha512 = "ItanGBMrmRV7Py2Z+Xhs7cT+FNt5K0vPL4p9EZ/UX/Mu7hFbkxSjKF2KVtPwX7UYWp7dRKnrTvReflgrItJbdw==";
-      };
-    };
     "cfb-1.2.2" = {
       name = "cfb";
       packageName = "cfb";
@@ -3278,15 +3269,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/css-what/-/css-what-6.1.0.tgz";
         sha512 = "HTUrgRJ7r4dsZKU6GjmpfRK1O76h97Z8MfS1G0FozR+oF2kG6Vfe8JE6zwrkbxigziPHinCJ+gCPjA9EaBDtRw==";
-      };
-    };
-    "css.escape-1.5.1" = {
-      name = "css.escape";
-      packageName = "css.escape";
-      version = "1.5.1";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/css.escape/-/css.escape-1.5.1.tgz";
-        sha512 = "YUifsXXuknHlUsmlgyY0PKzgPOr7/FjCePfHNt0jxm83wHZi44VDMQ7/fGNkjY3/jV1MC+1CmZbaHzugyeRtpg==";
       };
     };
     "cssesc-3.0.0" = {
@@ -5082,13 +5064,13 @@ let
         sha512 = "vafaFqs8MZkRrSX7sFVUdo3ap/eNiLnb4IakshzvP56X5Nr1iGKAIqdX6tMlm6HcNRIkr6AxO5jFEoJzzpT8aQ==";
       };
     };
-    "happy-dom-12.10.3" = {
+    "happy-dom-17.4.6" = {
       name = "happy-dom";
       packageName = "happy-dom";
-      version = "12.10.3";
+      version = "17.4.6";
       src = fetchurl {
-        url = "https://registry.npmjs.org/happy-dom/-/happy-dom-12.10.3.tgz";
-        sha512 = "JzUXOh0wdNGY54oKng5hliuBkq/+aT1V3YpTM+lrN/GoLQTANZsMaIvmHiHe612rauHvPJnDZkZ+5GZR++1Abg==";
+        url = "https://registry.npmjs.org/happy-dom/-/happy-dom-17.4.6.tgz";
+        sha512 = "OEV1hDe9i2rFr66+WZNiwy1S8rAJy6bRXmXql68YJDjdfHBRbN76om+qVh68vQACf6y5Bcr90e/oK53RQxsDdg==";
       };
     };
     "has-flag-3.0.0" = {
@@ -8619,13 +8601,13 @@ let
         sha512 = "C2PqiSdxDA0v+OH9SP8UxyyfTRLzdxtdwgMjeX/5fvPPYbFixaUXp0hQw3aDN2RrLrwE2vmRJK3sAOICk+0wHA==";
       };
     };
-    "tabulator-tables-5.5.4" = {
+    "tabulator-tables-6.3.1" = {
       name = "tabulator-tables";
       packageName = "tabulator-tables";
-      version = "5.5.4";
+      version = "6.3.1";
       src = fetchurl {
-        url = "https://registry.npmjs.org/tabulator-tables/-/tabulator-tables-5.5.4.tgz";
-        sha512 = "hVcITAfO2G3gm2ILW9GN2ORgcmNsbVmC+Q+2E3xfthIE9xtFxGKSbhbsNk39h11Uzm9GNUvjGfos1IVKrfeeOA==";
+        url = "https://registry.npmjs.org/tabulator-tables/-/tabulator-tables-6.3.1.tgz";
+        sha512 = "qFW7kfadtcaISQIibKAIy0f3eeIXUVi8242Vly1iJfMD79kfEGzfczNuPBN/80hDxHzQJXYbmJ8VipI40hQtfA==";
       };
     };
     "tailwindcss-3.4.0" = {
@@ -9276,15 +9258,6 @@ let
         sha512 = "VwddBukDzu71offAQR975unBIGqfKZpM+8ZX6ySk8nYhVoo5CYaZyzt3YBvYtRtO+aoGlqxPg/B87NGVZ/fu6g==";
       };
     };
-    "whatwg-encoding-2.0.0" = {
-      name = "whatwg-encoding";
-      packageName = "whatwg-encoding";
-      version = "2.0.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/whatwg-encoding/-/whatwg-encoding-2.0.0.tgz";
-        sha512 = "p41ogyeMUrw3jWclHWTQg1k05DSVXPLcVxRTYsXUk+ZooOCZLcoYgPZ/HL/D/N+uQPOtcp1me1WhBEaX02mhWg==";
-      };
-    };
     "whatwg-mimetype-3.0.0" = {
       name = "whatwg-mimetype";
       packageName = "whatwg-mimetype";
@@ -9611,7 +9584,7 @@ let
       sources."@formatjs/intl-numberformat-8.9.0"
       sources."@fortawesome/fontawesome-free-6.5.1"
       sources."@gar/promisify-1.1.3"
-      sources."@happy-dom/global-registrator-12.10.3"
+      sources."@happy-dom/global-registrator-17.4.6"
       sources."@humanwhocodes/config-array-0.11.13"
       sources."@humanwhocodes/module-importer-1.0.1"
       sources."@humanwhocodes/object-schema-2.0.1"
@@ -9892,7 +9865,6 @@ let
       sources."callsites-3.1.0"
       sources."camelcase-css-2.0.1"
       sources."caniuse-lite-1.0.30001572"
-      sources."canvas-2.11.2"
       sources."cfb-1.2.2"
       (sources."chalk-4.1.2" // {
         dependencies = [
@@ -9985,7 +9957,6 @@ let
       sources."css-selector-tokenizer-0.8.0"
       sources."css-tree-2.3.1"
       sources."css-what-6.1.0"
-      sources."css.escape-1.5.1"
       sources."cssesc-3.0.0"
       (sources."csso-5.0.5" // {
         dependencies = [
@@ -10240,7 +10211,7 @@ let
       sources."graceful-fs-4.2.11"
       sources."graphemer-1.4.0"
       sources."handlebars-4.7.8"
-      sources."happy-dom-12.10.3"
+      sources."happy-dom-17.4.6"
       sources."has-flag-4.0.0"
       sources."has-property-descriptors-1.0.1"
       sources."has-proto-1.0.1"
@@ -10750,7 +10721,7 @@ let
       sources."svgo-3.0.3"
       sources."svgpath-2.6.0"
       sources."svgtofont-4.1.1"
-      sources."tabulator-tables-5.5.4"
+      sources."tabulator-tables-6.3.1"
       (sources."tailwindcss-3.4.0" // {
         dependencies = [
           (sources."postcss-load-config-4.0.2" // {
@@ -10884,7 +10855,6 @@ let
         ];
       })
       sources."webidl-conversions-7.0.0"
-      sources."whatwg-encoding-2.0.0"
       sources."whatwg-mimetype-3.0.0"
       (sources."whatwg-url-5.0.0" // {
         dependencies = [

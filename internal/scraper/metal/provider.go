@@ -51,7 +51,7 @@ func (p *PriceProvider) ClearCache(db *gorm.DB) {
 
 func (p *PriceProvider) GetPrices(code string, commodityName string) ([]*price.Price, error) {
 	log.Info("Fetching Metal price history from Purified Bytes")
-	url := fmt.Sprintf("https://india.purifiedbytes.com/api/metal/%s/price.json", code)
+	url := fmt.Sprintf("https://india.finbodhi.com/api/metal/%s/price.json", code)
 	resp, err := http.Get(url)
 	if err != nil {
 		return nil, err

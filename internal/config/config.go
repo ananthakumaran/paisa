@@ -51,6 +51,14 @@ type ImportTemplate struct {
 	Content string `json:"content" yaml:"content"`
 }
 
+type AccountRule struct {
+	Name        string `json:"name" yaml:"name"`
+	Pattern     string `json:"pattern" yaml:"pattern"`
+	Account     string `json:"account" yaml:"account"`
+	Description string `json:"description" yaml:"description"`
+	Enabled     bool   `json:"enabled" yaml:"enabled"`
+}
+
 type Price struct {
 	Provider string `json:"provider" yaml:"provider"`
 	Code     string `json:"code" yaml:"code"`
@@ -150,6 +158,8 @@ type Config struct {
 
 	ImportTemplates []ImportTemplate `json:"import_templates" yaml:"import_templates"`
 
+	AccountRules []AccountRule `json:"account_rules" yaml:"account_rules"`
+
 	Accounts []Account `json:"accounts" yaml:"accounts"`
 
 	Goals Goals `json:"goals" yaml:"goals"`
@@ -179,6 +189,7 @@ var defaultConfig = Config{
 	AllocationTargets:          []AllocationTarget{},
 	Commodities:                []Commodity{},
 	ImportTemplates:            []ImportTemplate{},
+	AccountRules:               []AccountRule{},
 	Accounts:                   []Account{},
 	Goals:                      Goals{Retirement: []RetirementGoal{}, Savings: []SavingsGoal{}},
 	UserAccounts:               []UserAccount{},

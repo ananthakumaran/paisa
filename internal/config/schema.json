@@ -1032,6 +1032,52 @@
         "additionalProperties": false
       }
     },
+    "account_rules": {
+      "description": "List of regex-based account prediction rules",
+      "type": "array",
+      "default": [
+        {
+          "name": "Amazon Purchase",
+          "pattern": "AMAZON.*",
+          "account": "Expenses:Shopping:Online",
+          "description": "Amazon purchases",
+          "enabled": true
+        }
+      ],
+      "itemsUniqueProperties": ["name"],
+      "items": {
+        "type": "object",
+        "ui:header": "name",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Name of the rule",
+            "minLength": 1
+          },
+          "pattern": {
+            "type": "string",
+            "description": "Regular expression pattern to match transaction data",
+            "minLength": 1
+          },
+          "account": {
+            "type": "string",
+            "description": "Account to use when pattern matches",
+            "minLength": 1
+          },
+          "description": {
+            "type": "string",
+            "description": "Description of what this rule does"
+          },
+          "enabled": {
+            "type": "boolean",
+            "description": "Whether this rule is active",
+            "default": true
+          }
+        },
+        "required": ["name", "pattern", "account"],
+        "additionalProperties": false
+      }
+    },
     "accounts": {
       "type": "array",
       "default": [

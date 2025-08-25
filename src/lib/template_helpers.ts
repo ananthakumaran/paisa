@@ -1,7 +1,7 @@
 import dayjs from "dayjs";
 import _ from "lodash";
 import { get } from "svelte/store";
-import { accountTfIdf } from "../store";
+import { accountTfIdf, accountRules } from "../store";
 import similarity from "compute-cosine-similarity";
 
 const STOP_WORDS = ["", "fof", "growth", "direct", "plan", "the"];
@@ -122,6 +122,60 @@ export default {
       return false;
     }
     return dayjs(_.trim(str), format, true).isValid();
+  },
+  predictAccountWithRules(...args: any) {
+    const options = args.pop();
+
+    let query: string;
+    if (args.length === 0) {
+      query = Object.values(options.data.root.ROW).join(" ");
+    } else {
+      query = _.chain(args)
+        .map((a) => {
+          if (_.isObject(a)) {
+            return Object.values(a);
+          }
+          return a;
+        })
+        .flattenDeep()
+        .value()
+        .join(" ");
+    }
+
+    const prefix: string = options.hash.prefix || "";
+
+    // First, try to match against regex rules from accountRules store
+    const rules = get(accountRules);
+    if (rules && rules.length > 0) {
+      for (const rule of rules) {
+        if (rule.enabled) {
+          try {
+            const regex = new RegExp(rule.pattern, "i");
+            if (regex.test(query)) {
+              // If prefix is provided, make sure the account matches
+              if (!prefix || rule.account.startsWith(prefix)) {
+                return rule.account;
+              }
+            }
+          } catch (e) {
+            // Invalid regex, skip this rule
+            console.warn(`Invalid regex pattern in rule "${rule.name}": ${rule.pattern}`);
+          }
+        }
+      }
+    }
+
+    // Fallback to original predictAccount logic
+    const matches = findMatch(query);
+    const match = _.find(matches, ([account]) => account.toString().startsWith(prefix));
+    if (match) {
+      return match[0];
+    }
+    if (prefix.endsWith(":")) {
+      return prefix + "Unknown";
+    } else {
+      return prefix + ":Unknown";
+    }
   },
   predictAccount(...args: any) {
     const options = args.pop();

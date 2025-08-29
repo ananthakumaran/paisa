@@ -166,11 +166,11 @@ export default {
     }
 
     // Fallback to original predictAccount logic
-    const matches = findMatch(query);
-    const match = _.find(matches, ([account]) => account.toString().startsWith(prefix));
-    if (match) {
-      return match[0];
-    }
+    // const matches = findMatch(query);
+    // const match = _.find(matches, ([account]) => account.toString().startsWith(prefix));
+    // if (match) {
+    //   return match[0];
+    // }
     if (prefix.endsWith(":")) {
       return prefix + "Unknown";
     } else {

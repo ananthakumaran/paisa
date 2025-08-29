@@ -74,6 +74,52 @@ function findMatch(query: string) {
     .value();
 }
 
+/**
+ * Specifically finds matches between transactions based on description similarity
+ * @param queryTransaction The transaction description to find matches for
+ * @param taggedTransactions Array of previously tagged transaction descriptions
+ * @param threshold Minimum similarity score to consider a match (default: 0.3)
+ * @returns Sorted array of matching transactions with similarity scores
+ */
+function findTransactionMatches(
+  queryTransaction: string, 
+  taggedTransactions: string[], 
+  threshold = 0.3
+) {
+  if (!queryTransaction || !taggedTransactions?.length) {
+    return [];
+  }
+
+  // Process the query transaction text
+  const queryTerms = new Set(
+    queryTransaction.toLowerCase().split(/\s+/).filter(term => term.length > 2)
+  );
+
+  // Compare with each tagged transaction
+  return taggedTransactions
+    .map(transaction => {
+      const transactionTerms = new Set(
+        transaction.toLowerCase().split(/\s+/).filter(term => term.length > 2)
+      );
+
+      // Calculate Jaccard similarity
+      const intersection = new Set(
+        [...queryTerms].filter(term => transactionTerms.has(term))
+      );
+      const union = new Set([...queryTerms, ...transactionTerms]);
+      
+      const similarity = union.size > 0 ? intersection.size / union.size : 0;
+      
+      return {
+        transaction,
+        score: similarity,
+        matchingTerms: [...intersection]
+      };
+    })
+    .filter(match => match.score >= threshold)
+    .sort((a, b) => b.score - a.score);
+}
+
 function scrubAmount(str: string) {
   const amount = _.trim(str)
     .replace(/\((.+)\)/, "-$1")
@@ -165,17 +211,28 @@ export default {
       }
     }
 
-    // Fallback to original predictAccount logic
-    // const matches = findMatch(query);
-    // const match = _.find(matches, ([account]) => account.toString().startsWith(prefix));
-    // if (match) {
-    //   return match[0];
-    // }
-    if (prefix.endsWith(":")) {
-      return prefix + "Unknown";
-    } else {
-      return prefix + ":Unknown";
+    // Instead of using findMatch, use findTransactionMatches
+    if (accountTfIdf === null || get(accountTfIdf) == null) {
+      // Return a default account if no TF-IDF data is available
+      return prefix.endsWith(":") ? prefix + "Unknown" : prefix + ":Unknown";
     }
+
+    // Extract accounts from the tf_idf data
+    const { tf_idf } = get(accountTfIdf);
+    const taggedAccounts = Object.keys(tf_idf);
+    
+    // Use findTransactionMatches to match the query against account names
+    const matches = findTransactionMatches(query, taggedAccounts);
+    
+    // Find the first match that starts with the prefix
+    const match = matches.find(item => item.transaction.startsWith(prefix));
+    
+    if (match) {
+      return match.transaction;
+    }
+    
+    // Return default if no match found
+    return prefix.endsWith(":") ? prefix + "Unknown" : prefix + ":Unknown";
   },
   predictAccount(...args: any) {
     const options = args.pop();

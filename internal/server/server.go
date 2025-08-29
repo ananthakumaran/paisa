@@ -359,6 +359,76 @@ func Build(db *gorm.DB, enableCompression bool) *gin.Engine {
 		c.JSON(200, gin.H{"success": true})
 	})
 
+	router.GET("/api/account-rules", func(c *gin.Context) {
+		c.JSON(200, gin.H{"rules": config.GetConfig().AccountRules})
+	})
+
+	router.POST("/api/account-rules/upsert", func(c *gin.Context) {
+		if config.GetConfig().Readonly {
+			c.JSON(200, gin.H{"saved": false, "message": "Readonly mode"})
+			return
+		}
+
+		var rule config.AccountRule
+		if err := c.ShouldBindJSON(&rule); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+
+		currentConfig := config.GetConfig()
+		rules := currentConfig.AccountRules
+
+		// Update existing rule or add new one
+		found := false
+		for i, r := range rules {
+			if r.Name == rule.Name {
+				rules[i] = rule
+				found = true
+				break
+			}
+		}
+		if !found {
+			rules = append(rules, rule)
+		}
+
+		currentConfig.AccountRules = rules
+		if err := config.SaveConfigObject(currentConfig); err != nil {
+			c.JSON(500, gin.H{"saved": false, "message": err.Error()})
+			return
+		}
+
+		c.JSON(200, gin.H{"rule": rule, "saved": true})
+	})
+
+	router.POST("/api/account-rules/delete", func(c *gin.Context) {
+		if config.GetConfig().Readonly {
+			c.JSON(200, gin.H{"success": false, "message": "Readonly mode"})
+			return
+		}
+
+		var rule config.AccountRule
+		if err := c.ShouldBindJSON(&rule); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+
+		currentConfig := config.GetConfig()
+		rules := []config.AccountRule{}
+		for _, r := range currentConfig.AccountRules {
+			if r.Name != rule.Name {
+				rules = append(rules, r)
+			}
+		}
+
+		currentConfig.AccountRules = rules
+		if err := config.SaveConfigObject(currentConfig); err != nil {
+			c.JSON(500, gin.H{"success": false, "message": err.Error()})
+			return
+		}
+
+		c.JSON(200, gin.H{"success": true})
+	})
+
 	router.GET("/api/goals", func(c *gin.Context) {
 		c.JSON(200, gin.H{"goals": goal.GetGoalSummaries(db)})
 	})

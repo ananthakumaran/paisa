@@ -14,7 +14,7 @@
   import type { EditorView } from "codemirror";
   import { onMount } from "svelte";
   import { ajax, type ImportTemplate } from "$lib/utils";
-  import { accountTfIdf } from "../../../../store";
+  import { accountTfIdf, accountRules } from "../../../../store";
   import * as toast from "bulma-toast";
   import FileModal from "$lib/components/FileModal.svelte";
   import Modal from "$lib/components/Modal.svelte";
@@ -40,6 +40,16 @@
 
   onMount(async () => {
     accountTfIdf.set(await ajax("/api/account/tf_idf"));
+    
+    // Load account rules for predictAccountWithRules function
+    try {
+      const rulesResponse = await ajax("/api/account-rules");
+      accountRules.set(rulesResponse.rules || []);
+    } catch (error) {
+      console.warn("Failed to load account rules:", error);
+      accountRules.set([]);
+    }
+    
     ({ templates } = await ajax("/api/templates"));
     selectedTemplate = templates[0];
     saveAsName = selectedTemplate.name;

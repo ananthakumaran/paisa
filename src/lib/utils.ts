@@ -769,6 +769,16 @@ export function ajax(
 
 export function ajax(route: "/api/ping"): Promise<{ success: boolean; error?: string }>;
 
+export function ajax(route: "/api/account-rules"): Promise<{ rules: any[] }>;
+export function ajax(
+  route: "/api/account-rules/upsert",
+  options?: RequestOptions
+): Promise<{ saved: boolean; message?: string; rule: any }>;
+export function ajax(
+  route: "/api/account-rules/delete",
+  options?: RequestOptions
+): Promise<{ success: boolean; message?: string }>;
+
 export async function ajax(
   route: string,
   options?: RequestOptions,

@@ -119,6 +119,7 @@
       href: "/more",
       children: [
         { label: "Configuration", href: "/config", help: "config" },
+        { label: "Account Rules", href: "/account-rules" },
         { label: "Sheets", href: "/sheets", help: "sheets", disablePreload: true },
         { label: "Goals", href: "/goals", help: "goals" },
         { label: "Doctor", href: "/doctor" },

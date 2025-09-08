@@ -111,7 +111,7 @@ Sheet(Line(FunctionDefinition(Identifier,Parameters(Identifier),Expression(Binar
 
 ===>
 
-Sheet(Line(Expression(Postings(SearchQueryString(Query)))))
+Sheet(Line(Expression(Postings(SearchQueryString(...)))))
 
 # Query composition AND
 

@@ -1,5 +1,14 @@
 # CHANGELOG
 
+### 0.7.4 (2025-02-23)
+* Update price data domain
+* Fix NixOS build
+
+### 0.7.3 (2025-02-23)
+
+* Fix yahoo price fetcher
+* Build fixes
+
 ### 0.7.1 (2024-10-20)
 
 * Fix remote code execution [vulnerability](https://github.com/ananthakumaran/paisa/issues/294)

@@ -1,23 +1,23 @@
-{ pkgs ? import <nixpkgs> { }, mkdocs ? import <nixpkgs> { } }:
+{ pkgs ? import <nixpkgs> { }, hledger ? import <nixpkgs> { } }:
 
 pkgs.mkShell {
   nativeBuildInputs = [
-    pkgs.go_1_21
+    pkgs.go_1_24
     pkgs.gotools
     pkgs.gopls
     pkgs.sqlite
-    pkgs.nodejs-18_x
+    pkgs.nodejs_22
     pkgs.libuuid
     pkgs.bun
     pkgs.node2nix
     # pkgs.pkgsCross.mingwW64.buildPackages.gcc
 
-    mkdocs.python311Packages.mkdocs-material
-    pkgs.python311Packages.beancount
+    pkgs.python312Packages.mkdocs-material
+    pkgs.python312Packages.beancount_2
 
     # test
     pkgs.ledger
-    pkgs.hledger
+    hledger.hledger
   ] ++ (pkgs.lib.optional pkgs.stdenv.isLinux pkgs.wails);
 
   shellHook = ''

@@ -97,7 +97,7 @@ func SyncCommodities(db *gorm.DB) error {
 		for _, error := range errors {
 			message += error.Error() + "\n"
 		}
-		return fmt.Errorf(strings.Trim(message, "\n"))
+		return fmt.Errorf("%s", strings.Trim(message, "\n"))
 	}
 	return nil
 }

@@ -9,19 +9,19 @@ on:
 
 jobs:
   linux-cli-binary:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
     - uses: actions/checkout@v2.4.0
     - uses: cachix/install-nix-action@v22
       with:
-        nix_path: nixpkgs=channel:nixos-unstable
+        nix_path: nixpkgs=channel:nixos-24.11
     - uses: actions/setup-node@v3
       with:
-        node-version: 18
+        node-version: 22
         cache: npm
     - uses: actions/setup-go@v4
       with:
-        go-version: '1.21.5'
+        go-version: '1.24.2'
     - uses: vegardit/fast-apt-mirror.sh@v1
     - run: |
         sudo apt-get install -y sqlite3

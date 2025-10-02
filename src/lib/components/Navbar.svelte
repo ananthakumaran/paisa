@@ -1,7 +1,15 @@
 <script lang="ts">
   import { page } from "$app/stores";
   import Actions from "$lib/components/Actions.svelte";
-  import { month, year, dateMax, dateMin, dateRangeOption } from "../../store";
+  import {
+    month,
+    year,
+    viewMode,
+    selectedMonths,
+    dateMax,
+    dateMin,
+    dateRangeOption
+  } from "../../store";
   import {
     cashflowExpenseDepth,
     cashflowExpenseDepthAllowed,
@@ -16,6 +24,7 @@
   import DateRange from "./DateRange.svelte";
   import ThemeSwitcher from "./ThemeSwitcher.svelte";
   import MonthPicker from "./MonthPicker.svelte";
+  import MultiSelectMonthPicker from "./MultiSelectMonthPicker.svelte";
   import Logo from "./Logo.svelte";
   import InputRange from "./InputRange.svelte";
   export let isBurger: boolean = null;
@@ -26,6 +35,11 @@
       year.set(financialYear(now()));
     }
   });
+
+  // Auto-select all months when switching to monthly view
+  $: if ($viewMode === "monthly" && $selectedMonths.length === 0) {
+    selectedMonths.set(["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"]);
+  }
 
   const RecurringIcons = [
     { icon: "fa-circle-check", color: "success", label: "Cleared" },
@@ -43,6 +57,7 @@
     dateRangeSelector?: boolean;
     monthPicker?: boolean;
     financialYearPicker?: boolean;
+    customYearMonthPicker?: boolean;
     maxDepthSelector?: boolean;
     recurringIcons?: boolean;
     children?: Link[];
@@ -54,7 +69,7 @@
       label: "Cash Flow",
       href: "/cash_flow",
       children: [
-        { label: "Income Statement", href: "/income_statement", financialYearPicker: true },
+        { label: "Income Statement", href: "/income_statement", customYearMonthPicker: true },
         { label: "Monthly", href: "/monthly", dateRangeSelector: true },
         {
           label: "Yearly",
@@ -427,6 +442,43 @@
               <option>{financialYear(fy)}</option>
             {/each}
           </select>
+        </div>
+      </div>
+    {/if}
+
+    {#if selectedSubSubLink?.customYearMonthPicker || selectedSubLink?.customYearMonthPicker || selectedLink?.customYearMonthPicker}
+      <div class="has-text-centered">
+        <div class="field has-addons">
+          <!-- Multi-select Month Dropdown (positioned on the left, only shown when monthly is selected) -->
+          {#if $viewMode === "monthly"}
+            <div class="control">
+              <MultiSelectMonthPicker
+                bind:selectedMonths={$selectedMonths}
+                on:change={(e) => selectedMonths.set(e.detail)}
+              />
+            </div>
+          {/if}
+
+          <!-- View Mode Dropdown (Yearly/Monthly) -->
+          <div class="control">
+            <div class="select is-small">
+              <select bind:value={$viewMode}>
+                <option value="yearly">Yearly</option>
+                <option value="monthly">Monthly</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Year Dropdown -->
+          <div class="control">
+            <div class="select is-small">
+              <select bind:value={$year}>
+                {#each forEachFinancialYear($dateMin, $dateMax).reverse() as fy}
+                  <option>{financialYear(fy)}</option>
+                {/each}
+              </select>
+            </div>
+          </div>
         </div>
       </div>
     {/if}

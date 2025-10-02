@@ -636,9 +636,10 @@ export function ajax(route: "/api/budget"): Promise<{
 }>;
 
 export function ajax(route: "/api/cash_flow"): Promise<{ cash_flows: CashFlow[] }>;
-export function ajax(
-  route: "/api/income_statement"
-): Promise<{ yearly: Record<string, IncomeStatement> }>;
+export function ajax(route: "/api/income_statement"): Promise<{
+  yearly: Record<string, IncomeStatement>;
+  monthly: Record<string, Record<string, IncomeStatement>>;
+}>;
 
 export function ajax(
   route: "/api/recurring"

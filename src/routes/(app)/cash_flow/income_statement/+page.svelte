@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import _ from "lodash";
+  import dayjs from "dayjs";
   import { renderIncomeStatement } from "$lib/income_statement";
   import {
     ajax,
@@ -10,7 +11,7 @@
     type IncomeStatement,
     firstName
   } from "$lib/utils";
-  import { dateMin, year } from "../../../../store";
+  import { dateMin, year, viewMode, selectedMonths } from "../../../../store";
   import ZeroState from "$lib/components/ZeroState.svelte";
   import { iconify } from "$lib/icon";
 
@@ -20,6 +21,7 @@
   let incomeStatement: IncomeStatement;
   let renderer: (data: IncomeStatement) => void;
   let yearly: Record<string, IncomeStatement> = {};
+  let monthly: Record<string, Record<string, IncomeStatement>> = {};
   let diff: number;
   let diffPercent: number;
   let years: string[] = [];
@@ -60,20 +62,107 @@
 
   const accountGroups: AccountGroup[] = [];
 
-  $: if (yearly && renderer) {
-    if (yearly[$year] == null) {
-      incomeStatement = null;
-      isEmpty = true;
+  $: if (yearly && monthly && renderer) {
+    let currentIncomeStatement: IncomeStatement = null;
+
+    if (isMonthlyView && $selectedMonths.length > 0) {
+      // Aggregate data from selected months
+      if (monthly[$year]) {
+        const aggregatedStatement: IncomeStatement = {
+          startingBalance: 0,
+          endingBalance: 0,
+          date: dayjs(),
+          income: {},
+          interest: {},
+          equity: {},
+          pnl: {},
+          liabilities: {},
+          tax: {},
+          expenses: {}
+        };
+
+        let hasData = false;
+        let firstMonthData: IncomeStatement | null = null;
+        let lastMonthData: IncomeStatement | null = null;
+
+        // Sort selected months to get first and last
+        const sortedMonths = $selectedMonths.sort();
+
+        for (const month of sortedMonths) {
+          const monthKey = `${$year}-${month}`;
+          if (monthly[$year][monthKey]) {
+            hasData = true;
+            const monthData = monthly[$year][monthKey];
+
+            // Set first and last month data for balance calculations
+            if (!firstMonthData) {
+              firstMonthData = monthData;
+            }
+            lastMonthData = monthData;
+
+            // Helper function to merge records
+            const mergeRecords = (
+              target: Record<string, number>,
+              source: Record<string, number>
+            ) => {
+              for (const [account, amount] of Object.entries(source)) {
+                target[account] = (target[account] || 0) + amount;
+              }
+            };
+
+            // Aggregate all account records
+            mergeRecords(aggregatedStatement.income, monthData.income);
+            mergeRecords(aggregatedStatement.interest, monthData.interest);
+            mergeRecords(aggregatedStatement.equity, monthData.equity);
+            mergeRecords(aggregatedStatement.pnl, monthData.pnl);
+            mergeRecords(aggregatedStatement.liabilities, monthData.liabilities);
+            mergeRecords(aggregatedStatement.tax, monthData.tax);
+            mergeRecords(aggregatedStatement.expenses, monthData.expenses);
+          }
+        }
+
+        if (hasData && firstMonthData && lastMonthData) {
+          // Use yearly starting balance and calculate ending balance using the same formula as backend
+          aggregatedStatement.startingBalance = yearly[$year]?.startingBalance || 0;
+
+          // Calculate ending balance: startingBalance + sum(income)*-1 + sum(interest)*-1 + sum(equity)*-1 + sum(tax)*-1 + sum(expenses)*-1 + sum(pnl) + sum(liabilities)*-1
+          aggregatedStatement.endingBalance =
+            aggregatedStatement.startingBalance +
+            sum(aggregatedStatement.income) * -1 +
+            sum(aggregatedStatement.interest) * -1 +
+            sum(aggregatedStatement.equity) * -1 +
+            sum(aggregatedStatement.tax) * -1 +
+            sum(aggregatedStatement.expenses) * -1 +
+            sum(aggregatedStatement.pnl) +
+            sum(aggregatedStatement.liabilities) * -1;
+
+          currentIncomeStatement = aggregatedStatement;
+        }
+      }
     } else {
-      incomeStatement = yearly[$year];
+      // Show yearly data
+      currentIncomeStatement = yearly[$year];
+    }
+
+    if (currentIncomeStatement) {
+      incomeStatement = currentIncomeStatement;
       years = _.sortBy(_.keys(yearly)).reverse();
       diff = incomeStatement.endingBalance - incomeStatement.startingBalance;
       diffPercent = diff / incomeStatement.startingBalance;
 
       renderer(incomeStatement);
       isEmpty = false;
+    } else {
+      incomeStatement = null;
+      isEmpty = true;
     }
   }
+
+  // Reactive statement to determine if we're in monthly view
+  $: isMonthlyView = $viewMode === "monthly";
+
+  // Get available months for the selected year
+  $: availableMonths = monthly && monthly[$year] ? Object.keys(monthly[$year]).sort() : [];
 
   function uniqueAccounts(statements: IncomeStatement[], key: AccountGroupName) {
     const accounts = new Set<string>();
@@ -86,7 +175,9 @@
   }
 
   onMount(async () => {
-    ({ yearly } = await ajax("/api/income_statement"));
+    const response = await ajax("/api/income_statement");
+    yearly = response.yearly;
+    monthly = response.monthly;
     const y = _.minBy(_.values(yearly), (y) => y.date);
     renderer = renderIncomeStatement(svg);
     if (y) {
@@ -202,22 +293,46 @@
             <thead>
               <tr>
                 <th class="py-2">Account</th>
-                {#each years as y}
-                  <th class="py-2 has-text-right">{y}</th>
-                {/each}
+                {#if !isMonthlyView}
+                  {#each years as y}
+                    <th class="py-2 has-text-right">{y}</th>
+                  {/each}
+                {:else}
+                  <th class="py-2 has-text-right">Total</th>
+                  {#each $selectedMonths.sort() as month}
+                    <th class="py-2 has-text-right">{$year}-{month}</th>
+                  {/each}
+                {/if}
               </tr>
             </thead>
             <tbody class="has-text-grey-dark">
               {#each accountGroups as group}
                 <tr class="has-text-weight-bold is-sub-header">
                   <th>{group.label}</th>
-                  {#each years as y}
+                  {#if !isMonthlyView}
+                    {#each years as y}
+                      <td class="has-text-right">
+                        {#if yearly[y]?.[group.key]}
+                          {formatUnlessZero(sum(yearly[y][group.key]) * group.multiplier)}
+                        {/if}
+                      </td>
+                    {/each}
+                  {:else}
                     <td class="has-text-right">
-                      {#if yearly[y]?.[group.key]}
-                        {formatUnlessZero(sum(yearly[y][group.key]) * group.multiplier)}
+                      {#if incomeStatement?.[group.key]}
+                        {formatUnlessZero(sum(incomeStatement[group.key]) * group.multiplier)}
                       {/if}
                     </td>
-                  {/each}
+                    {#each $selectedMonths.sort() as month}
+                      <td class="has-text-right">
+                        {#if monthly[$year]?.[`${$year}-${month}`]?.[group.key]}
+                          {formatUnlessZero(
+                            sum(monthly[$year][`${$year}-${month}`][group.key]) * group.multiplier
+                          )}
+                        {/if}
+                      </td>
+                    {/each}
+                  {/if}
                 </tr>
                 {#each group.accounts as account}
                   <tr>
@@ -226,51 +341,128 @@
                         >{iconify(restName(account), { group: firstName(account) })}</span
                       ></th
                     >
-                    {#each years as y}
+                    {#if !isMonthlyView}
+                      {#each years as y}
+                        <td class="has-text-right">
+                          {#if yearly[y]?.[group.key]?.[account]}
+                            {formatUnlessZero(yearly[y][group.key][account] * group.multiplier)}
+                          {/if}
+                        </td>
+                      {/each}
+                    {:else}
                       <td class="has-text-right">
-                        {#if yearly[y]?.[group.key]?.[account]}
-                          {formatUnlessZero(yearly[y][group.key][account] * group.multiplier)}
+                        {#if incomeStatement?.[group.key]?.[account]}
+                          {formatUnlessZero(incomeStatement[group.key][account] * group.multiplier)}
                         {/if}
                       </td>
-                    {/each}
+                      {#each $selectedMonths.sort() as month}
+                        <td class="has-text-right">
+                          {#if monthly[$year]?.[`${$year}-${month}`]?.[group.key]?.[account]}
+                            {formatUnlessZero(
+                              monthly[$year][`${$year}-${month}`][group.key][account] *
+                                group.multiplier
+                            )}
+                          {/if}
+                        </td>
+                      {/each}
+                    {/if}
                   </tr>
                 {/each}
-                <tr><td colspan={years.length + 1}>&nbsp;</td></tr>
+                <tr
+                  ><td colspan={!isMonthlyView ? years.length + 1 : $selectedMonths.length + 2}
+                    >&nbsp;</td
+                  ></tr
+                >
               {/each}
 
               <tr class="has-text-weight-bold">
                 <th>Change</th>
-                {#each years as y}
-                  {#if yearly[y]}
-                    {@const diff = yearly[y].endingBalance - yearly[y].startingBalance}
-                    <td class="has-text-right {changeClass(diff)}">
-                      <div>{formatCurrency(diff)}</div>
-                      <div>{formatPercentage(diff / yearly[y].startingBalance)}</div>
+                {#if !isMonthlyView}
+                  {#each years as y}
+                    {#if yearly[y]}
+                      {@const diff = yearly[y].endingBalance - yearly[y].startingBalance}
+                      <td class="has-text-right {changeClass(diff)}">
+                        <div>{formatCurrency(diff)}</div>
+                        <div>{formatPercentage(diff / yearly[y].startingBalance)}</div>
+                      </td>
+                    {:else}
+                      <td></td>
+                    {/if}
+                  {/each}
+                {:else}
+                  {#if incomeStatement}
+                    {@const monthlyDiff =
+                      incomeStatement.endingBalance - incomeStatement.startingBalance}
+                    <td class="has-text-right {changeClass(monthlyDiff)}">
+                      <div>{formatCurrency(monthlyDiff)}</div>
+                      <div>{formatPercentage(monthlyDiff / incomeStatement.startingBalance)}</div>
                     </td>
                   {:else}
                     <td></td>
                   {/if}
-                {/each}
+                  {#each $selectedMonths.sort() as month}
+                    {#if monthly[$year]?.[`${$year}-${month}`]}
+                      {@const monthData = monthly[$year][`${$year}-${month}`]}
+                      {@const diff = monthData.endingBalance - monthData.startingBalance}
+                      <td class="has-text-right {changeClass(diff)}">
+                        <div>{formatCurrency(diff)}</div>
+                        <div>{formatPercentage(diff / monthData.startingBalance)}</div>
+                      </td>
+                    {:else}
+                      <td></td>
+                    {/if}
+                  {/each}
+                {/if}
               </tr>
               <tr class="has-text-weight-bold">
                 <th>End Balance</th>
-                {#each years as y}
+                {#if !isMonthlyView}
+                  {#each years as y}
+                    <td class="has-text-right">
+                      {#if yearly[y]}
+                        {formatCurrency(yearly[y].endingBalance)}
+                      {/if}
+                    </td>
+                  {/each}
+                {:else}
                   <td class="has-text-right">
-                    {#if yearly[y]}
-                      {formatCurrency(yearly[y].endingBalance)}
+                    {#if incomeStatement}
+                      {formatCurrency(incomeStatement.endingBalance)}
                     {/if}
                   </td>
-                {/each}
+                  {#each $selectedMonths.sort() as month}
+                    <td class="has-text-right">
+                      {#if monthly[$year]?.[`${$year}-${month}`]}
+                        {formatCurrency(monthly[$year][`${$year}-${month}`].endingBalance)}
+                      {/if}
+                    </td>
+                  {/each}
+                {/if}
               </tr>
               <tr class="has-text-weight-bold">
                 <th>Start Balance</th>
-                {#each years as y}
+                {#if !isMonthlyView}
+                  {#each years as y}
+                    <td class="has-text-right">
+                      {#if yearly[y]}
+                        {formatCurrency(yearly[y].startingBalance)}
+                      {/if}
+                    </td>
+                  {/each}
+                {:else}
                   <td class="has-text-right">
-                    {#if yearly[y]}
-                      {formatCurrency(yearly[y].startingBalance)}
+                    {#if incomeStatement}
+                      {formatCurrency(incomeStatement.startingBalance)}
                     {/if}
                   </td>
-                {/each}
+                  {#each $selectedMonths.sort() as month}
+                    <td class="has-text-right">
+                      {#if monthly[$year]?.[`${$year}-${month}`]}
+                        {formatCurrency(monthly[$year][`${$year}-${month}`].startingBalance)}
+                      {/if}
+                    </td>
+                  {/each}
+                {/if}
               </tr>
             </tbody>
           </table>

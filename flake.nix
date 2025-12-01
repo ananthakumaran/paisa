@@ -30,7 +30,9 @@
 
           vendorHash = "sha256-5jrxI+zSKbopGs5GmGVyqQcMHNZJbCsiFEH/LPXWxpk=";
 
-          CGO_ENABLED = 1;
+          env = {
+            CGO_ENABLED = 1;
+          };
 
           doCheck = false;
 

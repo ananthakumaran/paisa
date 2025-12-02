@@ -15,5 +15,6 @@ let
 in import ./node-package.nix {
   inherit (pkgs) fetchurl nix-gitignore stdenv lib fetchgit;
   inherit nodeEnv;
-  globalBuildInputs = [ pkgs.pkg-config pkgs.cairo pkgs.pango pkgs.python312Packages.distutils ];
+  globalBuildInputs =
+    [ pkgs.pkg-config pkgs.cairo pkgs.pango pkgs.python312Packages.distutils ];
 }

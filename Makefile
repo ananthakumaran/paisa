@@ -75,7 +75,6 @@ generate-fonts:
 	bun download-svgs.js
 	node generate-font.js
 
-# manually remove canvas (optional) package as it's broken on nix
 node2nix:
 	npm install --lockfile-version 2
 	node2nix --development -18 --input package.json \

@@ -8,6 +8,7 @@ import (
 	"os"
 
 	"github.com/ananthakumaran/paisa/internal/config"
+	"github.com/ananthakumaran/paisa/internal/encryption"
 	"github.com/ananthakumaran/paisa/internal/ledger"
 	"github.com/ananthakumaran/paisa/internal/model/posting"
 	"github.com/ananthakumaran/paisa/internal/utils"
@@ -118,7 +119,7 @@ func SaveFile(db *gorm.DB, file LedgerFile) gin.H {
 		}
 	}
 
-	err = os.WriteFile(filePath, []byte(file.Content), perm)
+	err = encryption.WriteFile(filePath, []byte(file.Content), perm, config.IsEncryptionEnabled())
 	if err != nil {
 		log.Warn(err)
 		return gin.H{"errors": errors, "saved": false, "message": "Failed to write file"}
@@ -156,7 +157,7 @@ func validateFile(file LedgerFile) ([]ledger.LedgerFileError, string, error) {
 }
 
 func readLedgerFile(dir string, path string) *LedgerFile {
-	content, err := os.ReadFile(path)
+	content, err := encryption.ReadFile(path)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -170,7 +171,7 @@ func readLedgerFile(dir string, path string) *LedgerFile {
 }
 
 func readLedgerFileWithVersions(dir string, path string) *LedgerFile {
-	content, err := os.ReadFile(path)
+	content, err := encryption.ReadFile(path)
 	if err != nil {
 		log.Fatal(err)
 	}

@@ -8,6 +8,7 @@ import (
 	"os"
 
 	"github.com/ananthakumaran/paisa/internal/config"
+	"github.com/ananthakumaran/paisa/internal/encryption"
 	"github.com/ananthakumaran/paisa/internal/query"
 	"github.com/ananthakumaran/paisa/internal/service"
 	"github.com/ananthakumaran/paisa/internal/utils"
@@ -107,7 +108,7 @@ func SaveSheetFile(db *gorm.DB, file SheetFile) gin.H {
 		}
 	}
 
-	err = os.WriteFile(filePath, []byte(file.Content), perm)
+	err = encryption.WriteFile(filePath, []byte(file.Content), perm, config.IsEncryptionEnabled())
 	if err != nil {
 		log.Warn(err)
 		return gin.H{"saved": false, "message": "Failed to write file"}
@@ -117,7 +118,7 @@ func SaveSheetFile(db *gorm.DB, file SheetFile) gin.H {
 }
 
 func readSheetFile(dir string, path string) *SheetFile {
-	content, err := os.ReadFile(path)
+	content, err := encryption.ReadFile(path)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -131,7 +132,7 @@ func readSheetFile(dir string, path string) *SheetFile {
 }
 
 func readSheetFileWithVersions(dir string, path string) *SheetFile {
-	content, err := os.ReadFile(path)
+	content, err := encryption.ReadFile(path)
 	if err != nil {
 		log.Fatal(err)
 	}

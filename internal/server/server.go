@@ -5,11 +5,13 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"path/filepath"
 	"strings"
 	"time"
 
 	"github.com/ananthakumaran/paisa/internal/accounting"
 	"github.com/ananthakumaran/paisa/internal/config"
+	"github.com/ananthakumaran/paisa/internal/encryption"
 	"github.com/ananthakumaran/paisa/internal/generator"
 	"github.com/ananthakumaran/paisa/internal/ledger"
 	"github.com/ananthakumaran/paisa/internal/model/template"
@@ -373,6 +375,61 @@ func Build(db *gorm.DB, enableCompression bool) *gin.Engine {
 
 	router.GET("/api/credit_cards/:account", func(c *gin.Context) {
 		c.JSON(200, GetCreditCard(db, c.Param("account")))
+	})
+
+	router.GET("/api/encryption/status", func(c *gin.Context) {
+		c.JSON(200, gin.H{
+			"enabled":      config.IsEncryptionEnabled(),
+			"password_set": encryption.IsPasswordSet(),
+		})
+	})
+
+	router.POST("/api/encryption/encrypt", func(c *gin.Context) {
+		if config.GetConfig().Readonly {
+			c.JSON(200, gin.H{"success": false, "message": "Readonly mode"})
+			return
+		}
+
+		if !encryption.IsPasswordSet() {
+			c.JSON(http.StatusBadRequest, gin.H{"success": false, "message": "Encryption password not set. Set PAISA_ENCRYPTION_KEY environment variable."})
+			return
+		}
+
+		journalPath := config.GetJournalPath()
+		ext := filepath.Ext(journalPath)
+		dir := filepath.Dir(journalPath)
+
+		count, err := encryption.EncryptExistingFiles(dir, ext)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"success": false, "message": err.Error()})
+			return
+		}
+
+		c.JSON(200, gin.H{"success": true, "message": fmt.Sprintf("Encrypted %d file(s)", count)})
+	})
+
+	router.POST("/api/encryption/decrypt", func(c *gin.Context) {
+		if config.GetConfig().Readonly {
+			c.JSON(200, gin.H{"success": false, "message": "Readonly mode"})
+			return
+		}
+
+		if !encryption.IsPasswordSet() {
+			c.JSON(http.StatusBadRequest, gin.H{"success": false, "message": "Encryption password not set. Set PAISA_ENCRYPTION_KEY environment variable."})
+			return
+		}
+
+		journalPath := config.GetJournalPath()
+		ext := filepath.Ext(journalPath)
+		dir := filepath.Dir(journalPath)
+
+		count, err := encryption.DecryptExistingFiles(dir, ext)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"success": false, "message": err.Error()})
+			return
+		}
+
+		c.JSON(200, gin.H{"success": true, "message": fmt.Sprintf("Decrypted %d file(s)", count)})
 	})
 
 	router.NoRoute(func(c *gin.Context) {

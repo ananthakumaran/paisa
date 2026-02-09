@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/ananthakumaran/paisa/internal/config"
+	"github.com/ananthakumaran/paisa/internal/encryption"
 	"github.com/ananthakumaran/paisa/internal/ledger"
 	"github.com/ananthakumaran/paisa/internal/model/cache"
 	"github.com/ananthakumaran/paisa/internal/model/cii"
@@ -37,7 +38,14 @@ func SyncJournal(db *gorm.DB) (string, error) {
 	AutoMigrate(db)
 	log.Info("Syncing transactions from journal")
 
-	errors, _, err := ledger.Cli().ValidateFile(config.GetJournalPath())
+	// If encryption is enabled, decrypt files to a temp directory for the CLI
+	journalPath, cleanup, err := encryption.PrepareDecryptedJournal(config.GetJournalPath())
+	if err != nil {
+		return err.Error(), err
+	}
+	defer cleanup()
+
+	errors, _, err := ledger.Cli().ValidateFile(journalPath)
 	if err != nil {
 
 		if len(errors) == 0 {
@@ -51,14 +59,14 @@ func SyncJournal(db *gorm.DB) (string, error) {
 		return strings.TrimRight(message, "\n"), err
 	}
 
-	prices, err := ledger.Cli().Prices(config.GetJournalPath())
+	prices, err := ledger.Cli().Prices(journalPath)
 	if err != nil {
 		return err.Error(), err
 	}
 
 	price.UpsertAllByType(db, config.Unknown, prices)
 
-	postings, err := ledger.Cli().Parse(config.GetJournalPath(), prices)
+	postings, err := ledger.Cli().Parse(journalPath, prices)
 	if err != nil {
 		return err.Error(), err
 	}

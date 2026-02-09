@@ -1125,6 +1125,21 @@
         ],
         "additionalProperties": false
       }
+    },
+    "encryption": {
+      "type": "object",
+      "description": "Ledger file encryption settings. Set PAISA_ENCRYPTION_KEY environment variable to provide the password.",
+      "default": {
+        "enabled": false
+      },
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Enable AES-256-GCM encryption of ledger files at rest",
+          "default": false
+        }
+      },
+      "additionalProperties": false
     }
   },
   "required": ["journal_path", "db_path"],

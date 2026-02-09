@@ -125,6 +125,10 @@ type CreditCard struct {
 	ExpirationDate  string `json:"expiration_date" yaml:"expiration_date"`
 }
 
+type Encryption struct {
+	Enabled bool `json:"enabled" yaml:"enabled"`
+}
+
 type Config struct {
 	JournalPath                string       `json:"journal_path" yaml:"journal_path"`
 	DBPath                     string       `json:"db_path" yaml:"db_path"`
@@ -139,6 +143,7 @@ type Config struct {
 	FinancialYearStartingMonth time.Month   `json:"financial_year_starting_month" yaml:"financial_year_starting_month"`
 	WeekStartingDay            time.Weekday `json:"week_starting_day" yaml:"week_starting_day"`
 	Strict                     BoolType     `json:"strict" yaml:"strict"`
+	Encryption                 Encryption   `json:"encryption" yaml:"encryption"`
 
 	Budget Budget `json:"budget" yaml:"budget"`
 
@@ -183,6 +188,7 @@ var defaultConfig = Config{
 	Goals:                      Goals{Retirement: []RetirementGoal{}, Savings: []SavingsGoal{}},
 	UserAccounts:               []UserAccount{},
 	CreditCards:                []CreditCard{},
+	Encryption:                 Encryption{Enabled: false},
 }
 
 var itemsUniquePropertiesMeta = jsonschema.MustCompileString("itemsUniqueProperties.json", `{
@@ -416,6 +422,10 @@ func EnsureLogFilePath() (string, error) {
 	}
 
 	return path, err
+}
+
+func IsEncryptionEnabled() bool {
+	return config.Encryption.Enabled
 }
 
 func DefaultCurrency() string {

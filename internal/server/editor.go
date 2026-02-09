@@ -136,9 +136,26 @@ func ValidateFile(file LedgerFile) gin.H {
 }
 
 func validateFile(file LedgerFile) ([]ledger.LedgerFileError, string, error) {
-	path := config.GetJournalPath()
+	journalPath := config.GetJournalPath()
+	dir := filepath.Dir(journalPath)
 
-	tmpfile, err := os.CreateTemp(filepath.Dir(path), "paisa-tmp-")
+	// When encryption is enabled, decrypt all files to a temp directory
+	// so the ledger CLI can read included files
+	decryptedDir, cleanup, err := encryption.PrepareDecryptedJournal(journalPath)
+	if err != nil {
+		return nil, "", err
+	}
+	defer cleanup()
+
+	var validateDir string
+	if decryptedDir != journalPath {
+		// Encryption was active; use the decrypted temp directory
+		validateDir = filepath.Dir(decryptedDir)
+	} else {
+		validateDir = dir
+	}
+
+	tmpfile, err := os.CreateTemp(validateDir, "paisa-tmp-")
 	if err != nil {
 		log.Fatal(err)
 	}

@@ -36,6 +36,9 @@
   async function save(newConfig: UserConfig) {
     isLoading = true;
     try {
+      const encryptionChanged = lastConfig && newConfig.encryption !== lastConfig.encryption;
+      const encryptionEnabled = newConfig.encryption === "yes";
+
       let success = false;
       ({ success, error } = await ajax("/api/config", {
         method: "POST",
@@ -44,6 +47,18 @@
       }));
 
       if (success) {
+        if (encryptionChanged) {
+          const endpoint = encryptionEnabled
+            ? "/api/encryption/encrypt"
+            : "/api/encryption/decrypt";
+          const result = await ajax(endpoint, { method: "POST", background: true });
+          if (result.success) {
+            toast.toast({ message: result.message, type: "is-success" });
+          } else {
+            toast.toast({ message: result.message, type: "is-danger", duration: 10000 });
+          }
+        }
+
         lastConfig = _.cloneDeep(newConfig);
         config = _.cloneDeep(newConfig);
         globalThis.USER_CONFIG = _.cloneDeep(newConfig);

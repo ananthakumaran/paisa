@@ -136,11 +136,11 @@
       <div class="field">
         <div class="control">
           <label class="radio">
-            <input value="yes" bind:group={value} type="radio" name="yes" />
+            <input value="yes" bind:group={value} type="radio" name="{key}" />
             Yes
           </label>
           <label class="radio">
-            <input value="no" bind:group={value} type="radio" name="no" />
+            <input value="no" bind:group={value} type="radio" name="{key}" />
             No
           </label>
         </div>

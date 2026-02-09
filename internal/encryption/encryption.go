@@ -217,12 +217,7 @@ func DecryptDir(srcDir, dstDir, ext string) error {
 			return os.MkdirAll(dstPath, 0700)
 		}
 
-		// Skip backup files and non-matching extensions
-		if strings.Contains(filepath.Base(path), ".backup.") {
-			return nil
-		}
-
-		if ext != "" && filepath.Ext(path) != ext {
+		if ext != "" && !strings.Contains(filepath.Base(path), ext) {
 			// Copy non-ledger files as-is (e.g., .dat, include files)
 			data, err := os.ReadFile(path)
 			if err != nil {
@@ -256,12 +251,7 @@ func EncryptExistingFiles(dir, ext string) (int, error) {
 			return nil
 		}
 
-		// Skip backup files
-		if strings.Contains(filepath.Base(path), ".backup.") {
-			return nil
-		}
-
-		if ext != "" && filepath.Ext(path) != ext {
+		if ext != "" && !strings.Contains(filepath.Base(path), ext) {
 			return nil
 		}
 
@@ -348,11 +338,7 @@ func DecryptExistingFiles(dir, ext string) (int, error) {
 			return nil
 		}
 
-		if strings.Contains(filepath.Base(path), ".backup.") {
-			return nil
-		}
-
-		if ext != "" && filepath.Ext(path) != ext {
+		if ext != "" && !strings.Contains(filepath.Base(path), ext) {
 			return nil
 		}
 

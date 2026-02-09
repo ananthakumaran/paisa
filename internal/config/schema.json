@@ -681,6 +681,12 @@
       "description": "When strict mode is enabled, all the accounts and commodities should be defined before use.",
       "enum": ["", "yes", "no"]
     },
+    "encryption": {
+      "ui:widget": "boolean",
+      "type": "string",
+      "description": "Enable AES-256-GCM encryption of ledger files at rest. Set PAISA_ENCRYPTION_KEY environment variable to provide the password.",
+      "enum": ["", "yes", "no"]
+    },
     "retirement": {
       "type": "object",
       "ui:widget": "hidden"
@@ -1125,21 +1131,6 @@
         ],
         "additionalProperties": false
       }
-    },
-    "encryption": {
-      "type": "object",
-      "description": "Ledger file encryption settings. Set PAISA_ENCRYPTION_KEY environment variable to provide the password.",
-      "default": {
-        "enabled": false
-      },
-      "properties": {
-        "enabled": {
-          "type": "boolean",
-          "description": "Enable AES-256-GCM encryption of ledger files at rest",
-          "default": false
-        }
-      },
-      "additionalProperties": false
     }
   },
   "required": ["journal_path", "db_path"],

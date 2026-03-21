@@ -16,6 +16,8 @@ import (
 	"dario.cat/mergo"
 	"github.com/santhosh-tekuri/jsonschema/v5"
 
+	"github.com/ananthakumaran/paisa/internal/encryption"
+
 	"gopkg.in/yaml.v3"
 )
 
@@ -260,18 +262,88 @@ func SaveConfigObject(config Config) error {
 }
 
 func SaveConfig(content []byte) error {
-	err := LoadConfig(content, "")
-	if err != nil {
+	var previous []byte
+	if configPath != "" {
+		b, err := os.ReadFile(configPath)
+		if err == nil {
+			previous = b
+		} else if !errors.Is(err, os.ErrNotExist) {
+			return err
+		}
+	}
+
+	wasEncrypted := IsEncryptionEnabled()
+
+	if err := LoadConfig(content, ""); err != nil {
 		return err
+	}
+
+	nowEncrypted := IsEncryptionEnabled()
+	journalPath := GetJournalPath()
+	ext := filepath.Ext(journalPath)
+	dir := filepath.Dir(journalPath)
+
+	reloadPrevious := func() {
+		if len(previous) == 0 {
+			return
+		}
+		_ = LoadConfig(previous, configPath)
+	}
+
+	didEncrypt := false
+	didDecrypt := false
+
+	if !wasEncrypted && nowEncrypted {
+		if !encryption.IsPasswordSet() {
+			reloadPrevious()
+			return fmt.Errorf("%w", encryption.ErrNoPassword)
+		}
+		if _, err := encryption.EncryptExistingFiles(dir, ext); err != nil {
+			reloadPrevious()
+			return err
+		}
+		didEncrypt = true
+	} else if wasEncrypted && !nowEncrypted {
+		if !encryption.IsPasswordSet() {
+			reloadPrevious()
+			return fmt.Errorf("%w", encryption.ErrNoPassword)
+		}
+		if _, err := encryption.DecryptExistingFiles(dir, ext); err != nil {
+			reloadPrevious()
+			return err
+		}
+		didDecrypt = true
 	}
 
 	yamlContent, err := yaml.Marshal(config)
 	if err != nil {
+		if didEncrypt {
+			if _, rerr := encryption.DecryptExistingFiles(dir, ext); rerr != nil {
+				log.Errorf("failed to roll back encryption after marshal error: %v", rerr)
+			}
+		}
+		if didDecrypt {
+			if _, rerr := encryption.EncryptExistingFiles(dir, ext); rerr != nil {
+				log.Errorf("failed to roll back decryption after marshal error: %v", rerr)
+			}
+		}
+		reloadPrevious()
 		return err
 	}
 
 	err = os.WriteFile(configPath, yamlContent, 0644)
 	if err != nil {
+		if didEncrypt {
+			if _, rerr := encryption.DecryptExistingFiles(dir, ext); rerr != nil {
+				log.Errorf("failed to roll back encryption after write error: %v", rerr)
+			}
+		}
+		if didDecrypt {
+			if _, rerr := encryption.EncryptExistingFiles(dir, ext); rerr != nil {
+				log.Errorf("failed to roll back decryption after write error: %v", rerr)
+			}
+		}
+		reloadPrevious()
 		return err
 	}
 

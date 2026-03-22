@@ -28,7 +28,7 @@
 
   async function submit() {
     errorMessage = "";
-    if (mode === "set" && password !== confirmPassword) {
+    if ((mode === "set" || mode === "disable") && password !== confirmPassword) {
       errorMessage = "Passwords do not match";
       return;
     }
@@ -44,7 +44,9 @@
         return;
       }
       resetFields();
-      toast.toast({ message: "Encryption password saved for this session", type: "is-success" });
+      if (mode === "unlock" || mode === "set") {
+        toast.toast({ message: "Encryption password saved for this session", type: "is-success" });
+      }
       await runEncryptionAfterSubmit();
     } catch (e) {
       errorMessage = e instanceof Error ? e.message : "Request failed";
@@ -57,18 +59,27 @@
 <Modal
   bind:active={$encryptionModalOpen}
   width="min(480px, 100vw)"
-  dismissable={mode === "set"}
-  onDismiss={mode === "set" ? () => cancelEncryptionModal() : undefined}
+  dismissable={mode === "set" || mode === "disable"}
+  onDismiss={mode === "set" || mode === "disable" ? () => cancelEncryptionModal() : undefined}
 >
   <span slot="head" let:close>
     <p class="modal-card-title">
-      {mode === "unlock" ? "Unlock encrypted ledger" : "Set encryption password"}
+      {mode === "unlock"
+        ? "Unlock encrypted ledger"
+        : mode === "disable"
+          ? "Confirm to disable encryption"
+          : "Set encryption password"}
     </p>
   </span>
   <div slot="body">
     {#if mode === "unlock"}
       <p class="mb-3">
         Encrypted journal files were found. Enter the password to decrypt them for this session.
+      </p>
+    {:else if mode === "disable"}
+      <p class="mb-3">
+        Turning off encryption will decrypt ledger files on disk. Enter your encryption password
+        twice to confirm. After saving, the password will be cleared from this session.
       </p>
     {:else}
       <p class="mb-3">
@@ -94,7 +105,7 @@
         />
       </div>
     </div>
-    {#if mode === "set"}
+    {#if mode === "set" || mode === "disable"}
       <div class="field">
         <label class="label" for="enc-password2">Confirm password</label>
         <div class="control">
@@ -122,7 +133,8 @@
       type="button"
       class="button is-success"
       class:is-loading={submitting}
-      on:click={submit}>{mode === "unlock" ? "Unlock" : "Continue"}</button
+      on:click={submit}
+      >{mode === "unlock" ? "Unlock" : mode === "disable" ? "Confirm and save" : "Continue"}</button
     >
   </span>
 </Modal>

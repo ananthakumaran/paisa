@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { invalidateAll } from "$app/navigation";
   import { openEncryptionModal } from "$lib/encryptionUnlock";
   import { ajax, configUpdated } from "$lib/utils";
   import { onMount } from "svelte";
@@ -34,7 +35,20 @@
     }
   }
 
-  async function save(newConfig: UserConfig) {
+  async function save(
+    newConfig: UserConfig,
+    opts?: { skipDisableEncryptionConfirm?: boolean }
+  ) {
+    const wasEnc = lastConfig != null && lastConfig.encryption === "yes";
+    const turningOffEnc =
+      wasEnc && newConfig.encryption !== "yes" && !opts?.skipDisableEncryptionConfirm;
+    if (turningOffEnc) {
+      openEncryptionModal("disable", () => {
+        void save(newConfig, { skipDisableEncryptionConfirm: true });
+      });
+      return;
+    }
+
     const turningOnEnc =
       lastConfig != null && lastConfig.encryption !== "yes" && newConfig.encryption === "yes";
     if (turningOnEnc) {
@@ -66,6 +80,10 @@
           message: `Saved config`,
           type: "is-success"
         });
+
+        if (wasEnc && newConfig.encryption !== "yes") {
+          await invalidateAll();
+        }
 
         await sync({ journal: true });
       }

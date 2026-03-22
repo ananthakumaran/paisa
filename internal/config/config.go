@@ -347,6 +347,10 @@ func SaveConfig(content []byte) error {
 		return err
 	}
 
+	if didDecrypt {
+		encryption.SetPassword("")
+	}
+
 	return nil
 }
 

@@ -2,7 +2,7 @@ import _ from "lodash";
 import { get, writable } from "svelte/store";
 import { tokenKey } from "$lib/utils";
 
-export type EncryptionModalMode = "unlock" | "set";
+export type EncryptionModalMode = "unlock" | "set" | "disable";
 
 export const encryptionModalOpen = writable(false);
 export const encryptionModalMode = writable<EncryptionModalMode>("unlock");

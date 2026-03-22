@@ -2,8 +2,10 @@ package server
 
 import (
 	"crypto/subtle"
+	"errors"
 	"fmt"
 	"io"
+	"io/fs"
 	"net/http"
 	"path/filepath"
 	"strings"
@@ -31,6 +33,15 @@ import (
 )
 
 func Build(db *gorm.DB, enableCompression bool) *gin.Engine {
+	return buildRouter(db, enableCompression, web.Static, web.Index)
+}
+
+// BuildWithAssets is like Build but serves the SPA from the given filesystem and index HTML (e.g. rupee's embed).
+func BuildWithAssets(db *gorm.DB, enableCompression bool, static fs.FS, indexHTML string) *gin.Engine {
+	return buildRouter(db, enableCompression, static, indexHTML)
+}
+
+func buildRouter(db *gorm.DB, enableCompression bool, static fs.FS, indexHTML string) *gin.Engine {
 	gin.SetMode(gin.ReleaseMode)
 
 	router := gin.New()
@@ -47,7 +58,7 @@ func Build(db *gorm.DB, enableCompression bool) *gin.Engine {
 	})
 
 	router.GET("/_app/*filepath", func(c *gin.Context) {
-		c.FileFromFS("/static"+c.Request.URL.Path, http.FS(web.Static))
+		c.FileFromFS("/static"+c.Request.URL.Path, http.FS(static))
 	})
 
 	router.GET("/api/ping", func(c *gin.Context) {
@@ -235,7 +246,8 @@ func Build(db *gorm.DB, enableCompression bool) *gin.Engine {
 	})
 
 	router.GET("/api/editor/files", func(c *gin.Context) {
-		c.JSON(200, GetFiles(db))
+		h, code := GetFiles(db)
+		c.JSON(code, h)
 	})
 
 	router.POST("/api/editor/file", func(c *gin.Context) {
@@ -245,7 +257,8 @@ func Build(db *gorm.DB, enableCompression bool) *gin.Engine {
 			return
 		}
 
-		c.JSON(200, GetFile(ledgerFile))
+		h, code := GetFile(ledgerFile)
+		c.JSON(code, h)
 	})
 
 	router.POST("/api/editor/file/delete_backups", func(c *gin.Context) {
@@ -255,7 +268,8 @@ func Build(db *gorm.DB, enableCompression bool) *gin.Engine {
 			return
 		}
 
-		c.JSON(200, DeleteBackups(ledgerFile))
+		h, code := DeleteBackups(ledgerFile)
+		c.JSON(code, h)
 	})
 
 	router.POST("/api/editor/validate", func(c *gin.Context) {
@@ -265,7 +279,8 @@ func Build(db *gorm.DB, enableCompression bool) *gin.Engine {
 			return
 		}
 
-		c.JSON(200, ValidateFile(ledgerFile))
+		h, code := ValidateFile(ledgerFile)
+		c.JSON(code, h)
 	})
 
 	router.POST("/api/editor/save", func(c *gin.Context) {
@@ -280,11 +295,13 @@ func Build(db *gorm.DB, enableCompression bool) *gin.Engine {
 			return
 		}
 
-		c.JSON(200, SaveFile(db, ledgerFile))
+		h, code := SaveFile(db, ledgerFile)
+		c.JSON(code, h)
 	})
 
 	router.GET("/api/sheets/files", func(c *gin.Context) {
-		c.JSON(200, GetSheets(db))
+		h, code := GetSheets(db)
+		c.JSON(code, h)
 	})
 
 	router.POST("/api/sheets/file", func(c *gin.Context) {
@@ -294,7 +311,8 @@ func Build(db *gorm.DB, enableCompression bool) *gin.Engine {
 			return
 		}
 
-		c.JSON(200, GetSheet(sheetFile))
+		h, code := GetSheet(sheetFile)
+		c.JSON(code, h)
 	})
 
 	router.POST("/api/sheets/file/delete_backups", func(c *gin.Context) {
@@ -304,7 +322,8 @@ func Build(db *gorm.DB, enableCompression bool) *gin.Engine {
 			return
 		}
 
-		c.JSON(200, DeleteSheetBackups(sheetFile))
+		h, code := DeleteSheetBackups(sheetFile)
+		c.JSON(code, h)
 	})
 
 	router.POST("/api/sheets/save", func(c *gin.Context) {
@@ -319,7 +338,8 @@ func Build(db *gorm.DB, enableCompression bool) *gin.Engine {
 			return
 		}
 
-		c.JSON(200, SaveSheetFile(db, sheetFile))
+		h, code := SaveSheetFile(db, sheetFile)
+		c.JSON(code, h)
 	})
 
 	router.GET("/api/account/tf_idf", func(c *gin.Context) {
@@ -381,7 +401,38 @@ func Build(db *gorm.DB, enableCompression bool) *gin.Engine {
 		c.JSON(200, gin.H{
 			"enabled":      config.IsEncryptionEnabled(),
 			"password_set": encryption.IsPasswordSet(),
+			"needs_unlock": encryptionNeedsUnlock(),
 		})
+	})
+
+	router.POST("/api/encryption/password", func(c *gin.Context) {
+		if config.GetConfig().Readonly {
+			c.JSON(http.StatusBadRequest, gin.H{"success": false, "message": "Readonly mode"})
+			return
+		}
+
+		var body struct {
+			Password string `json:"password"`
+		}
+		if err := c.ShouldBindJSON(&body); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"success": false, "message": err.Error()})
+			return
+		}
+
+		if err := trySetEncryptionPasswordFromInput(body.Password); err != nil {
+			if errors.Is(err, encryption.ErrDecryptFailed) {
+				c.JSON(http.StatusBadRequest, gin.H{
+					"success": false,
+					"message": "Wrong password or corrupted encrypted file",
+					"code":    "encryption_bad_password",
+				})
+				return
+			}
+			c.JSON(http.StatusBadRequest, gin.H{"success": false, "message": err.Error()})
+			return
+		}
+
+		c.JSON(http.StatusOK, gin.H{"success": true})
 	})
 
 	router.POST("/api/encryption/encrypt", func(c *gin.Context) {
@@ -391,7 +442,7 @@ func Build(db *gorm.DB, enableCompression bool) *gin.Engine {
 		}
 
 		if !encryption.IsPasswordSet() {
-			c.JSON(http.StatusBadRequest, gin.H{"success": false, "message": "Encryption password not set. Set PAISA_ENCRYPTION_KEY environment variable."})
+			c.JSON(http.StatusBadRequest, gin.H{"success": false, "message": "Encryption password not set. Enter it in the encryption dialog."})
 			return
 		}
 
@@ -415,7 +466,7 @@ func Build(db *gorm.DB, enableCompression bool) *gin.Engine {
 		}
 
 		if !encryption.IsPasswordSet() {
-			c.JSON(http.StatusBadRequest, gin.H{"success": false, "message": "Encryption password not set. Set PAISA_ENCRYPTION_KEY environment variable."})
+			c.JSON(http.StatusBadRequest, gin.H{"success": false, "message": "Encryption password not set. Enter it in the encryption dialog."})
 			return
 		}
 
@@ -433,7 +484,7 @@ func Build(db *gorm.DB, enableCompression bool) *gin.Engine {
 	})
 
 	router.NoRoute(func(c *gin.Context) {
-		c.Data(http.StatusOK, "text/html; charset=utf-8", []byte(web.Index))
+		c.Data(http.StatusOK, "text/html; charset=utf-8", []byte(indexHTML))
 	})
 
 	return router
@@ -441,6 +492,17 @@ func Build(db *gorm.DB, enableCompression bool) *gin.Engine {
 
 func Listen(db *gorm.DB, port int) {
 	router := Build(db, true)
+
+	log.Infof("Listening on http://localhost:%d", port)
+	err := router.Run(fmt.Sprintf(":%d", port))
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
+// ListenWithAssets serves the API with a custom embedded frontend (used by rupee).
+func ListenWithAssets(db *gorm.DB, port int, static fs.FS, indexHTML string) {
+	router := BuildWithAssets(db, true, static, indexHTML)
 
 	log.Infof("Listening on http://localhost:%d", port)
 	err := router.Run(fmt.Sprintf(":%d", port))

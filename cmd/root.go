@@ -11,7 +11,6 @@ import (
 
 	"github.com/adrg/xdg"
 	"github.com/ananthakumaran/paisa/internal/config"
-	"github.com/ananthakumaran/paisa/internal/encryption"
 	"github.com/ananthakumaran/paisa/internal/generator"
 	"github.com/ananthakumaran/paisa/internal/utils"
 	"github.com/samber/lo"
@@ -53,14 +52,6 @@ func Initialize() {
 	}
 
 	InitConfig()
-
-	// Initialize encryption password from environment variable
-	if encKey := os.Getenv("PAISA_ENCRYPTION_KEY"); encKey != "" {
-		encryption.SetPassword(encKey)
-		log.Info("Encryption password loaded from PAISA_ENCRYPTION_KEY")
-	} else if config.IsEncryptionEnabled() {
-		log.Fatal("Encryption is enabled in config but PAISA_ENCRYPTION_KEY environment variable is not set")
-	}
 
 }
 

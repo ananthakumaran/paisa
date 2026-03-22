@@ -684,7 +684,7 @@
     "encryption": {
       "ui:widget": "boolean",
       "type": "string",
-      "description": "Enable AES-256-GCM encryption of ledger files at rest. Set PAISA_ENCRYPTION_KEY environment variable to provide the password.",
+      "description": "Enable AES-256-GCM encryption of ledger files at rest. You will be prompted for a password in the app when you save this setting and on each start.",
       "enum": ["", "yes", "no"]
     },
     "retirement": {

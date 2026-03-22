@@ -1,6 +1,7 @@
 package server
 
 import (
+	"net/http"
 	"path/filepath"
 	"sort"
 	"time"
@@ -28,27 +29,43 @@ type SheetFile struct {
 	Operation string   `json:"operation"`
 }
 
-func GetSheets(db *gorm.DB) gin.H {
+func GetSheets(db *gorm.DB) (gin.H, int) {
 	dir := config.GetSheetDir()
 	paths, _ := doublestar.FilepathGlob(dir + "/**/*" + EXTENSION)
 
 	files := []*SheetFile{}
 	for _, path := range paths {
-		files = append(files, readSheetFileWithVersions(dir, path))
+		sf, err := readSheetFileWithVersions(dir, path)
+		if err != nil {
+			code, h := ledgerReadErrHTTP(err)
+			if code != 0 {
+				return h, code
+			}
+			return gin.H{"error": err.Error()}, http.StatusInternalServerError
+		}
+		files = append(files, sf)
 	}
 
 	postings := query.Init(db).All()
 	postings = service.PopulateMarketPrice(db, postings)
 
-	return gin.H{"files": files, "postings": postings}
+	return gin.H{"files": files, "postings": postings}, http.StatusOK
 }
 
-func GetSheet(file SheetFile) gin.H {
+func GetSheet(file SheetFile) (gin.H, int) {
 	dir := config.GetSheetDir()
-	return gin.H{"file": readSheetFile(dir, filepath.Join(dir, file.Name))}
+	sf, err := readSheetFile(dir, filepath.Join(dir, file.Name))
+	if err != nil {
+		code, h := ledgerReadErrHTTP(err)
+		if code != 0 {
+			return h, code
+		}
+		return gin.H{"error": err.Error()}, http.StatusInternalServerError
+	}
+	return gin.H{"file": sf}, http.StatusOK
 }
 
-func DeleteSheetBackups(file SheetFile) gin.H {
+func DeleteSheetBackups(file SheetFile) (gin.H, int) {
 	dir := config.GetSheetDir()
 
 	if !config.GetConfig().Readonly {
@@ -56,22 +73,30 @@ func DeleteSheetBackups(file SheetFile) gin.H {
 		for _, version := range versions {
 			err := os.Remove(version)
 			if err != nil {
-				log.Fatal(err)
+				log.Warn(err)
+				return gin.H{"error": err.Error()}, http.StatusInternalServerError
 			}
 		}
 	}
 
-	return gin.H{"file": readSheetFileWithVersions(dir, filepath.Join(dir, file.Name))}
+	sf, err := readSheetFileWithVersions(dir, filepath.Join(dir, file.Name))
+	if err != nil {
+		code, h := ledgerReadErrHTTP(err)
+		if code != 0 {
+			return h, code
+		}
+		return gin.H{"error": err.Error()}, http.StatusInternalServerError
+	}
+	return gin.H{"file": sf}, http.StatusOK
 }
 
-func SaveSheetFile(db *gorm.DB, file SheetFile) gin.H {
+func SaveSheetFile(db *gorm.DB, file SheetFile) (gin.H, int) {
 	dir := config.GetSheetDir()
 
-	filePath := filepath.Join(dir, file.Name)
 	filePath, err := utils.BuildSubPath(dir, file.Name)
 	if err != nil {
 		log.Warn(err)
-		return gin.H{"saved": false, "message": "Invalid file name"}
+		return gin.H{"saved": false, "message": "Invalid file name"}, http.StatusOK
 	}
 
 	backupPath := filePath + ".backup." + time.Now().Format("2006-01-02-15-04-05.000")
@@ -79,83 +104,101 @@ func SaveSheetFile(db *gorm.DB, file SheetFile) gin.H {
 	err = os.MkdirAll(filepath.Dir(filePath), 0700)
 	if err != nil {
 		log.Warn(err)
-		return gin.H{"saved": false, "message": "Failed to create directory"}
+		return gin.H{"saved": false, "message": "Failed to create directory"}, http.StatusOK
 	}
 
 	fileStat, err := os.Stat(filePath)
 	if err != nil && file.Operation != "overwrite" && file.Operation != "create" {
 		log.Warn(err)
-		return gin.H{"saved": false, "message": "File does not exist"}
+		return gin.H{"saved": false, "message": "File does not exist"}, http.StatusOK
 	}
 
 	var perm os.FileMode = 0644
 	if err == nil {
 		if file.Operation == "create" {
-			return gin.H{"saved": false, "message": "File already exists"}
+			return gin.H{"saved": false, "message": "File already exists"}, http.StatusOK
 		}
 
 		perm = fileStat.Mode().Perm()
 		existingContent, err := os.ReadFile(filePath)
 		if err != nil {
 			log.Warn(err)
-			return gin.H{"saved": false, "message": "Failed to read file"}
+			return gin.H{"saved": false, "message": "Failed to read file"}, http.StatusOK
 		}
 
 		err = os.WriteFile(backupPath, existingContent, perm)
 		if err != nil {
 			log.Warn(err)
-			return gin.H{"saved": false, "message": "Failed to create backup"}
+			return gin.H{"saved": false, "message": "Failed to create backup"}, http.StatusOK
 		}
 	}
 
 	err = encryption.WriteFile(filePath, []byte(file.Content), perm, config.IsEncryptionEnabled())
 	if err != nil {
+		code, h := ledgerReadErrHTTP(err)
+		if code != 0 {
+			return h, code
+		}
 		log.Warn(err)
-		return gin.H{"saved": false, "message": "Failed to write file"}
+		return gin.H{"saved": false, "message": "Failed to write file"}, http.StatusOK
 	}
 
-	return gin.H{"saved": true, "file": readSheetFileWithVersions(dir, filePath)}
+	sf, err := readSheetFileWithVersions(dir, filePath)
+	if err != nil {
+		code, h := ledgerReadErrHTTP(err)
+		if code != 0 {
+			return h, code
+		}
+		return gin.H{"saved": false, "message": err.Error()}, http.StatusInternalServerError
+	}
+
+	return gin.H{"saved": true, "file": sf}, http.StatusOK
 }
 
-func readSheetFile(dir string, path string) *SheetFile {
+func readSheetFile(dir string, path string) (*SheetFile, error) {
 	content, err := encryption.ReadFile(path)
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
 
 	name, err := filepath.Rel(dir, path)
+	if err != nil {
+		return nil, err
+	}
 
 	return &SheetFile{
 		Name:    name,
 		Content: string(content),
-	}
+	}, nil
 }
 
-func readSheetFileWithVersions(dir string, path string) *SheetFile {
+func readSheetFileWithVersions(dir string, path string) (*SheetFile, error) {
 	content, err := encryption.ReadFile(path)
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
 
 	versions, _ := filepath.Glob(filepath.Join(filepath.Dir(path), filepath.Base(path)+".backup.*"))
 	versionPaths := lo.Map(versions, func(path string, _ int) string {
-		name, err := filepath.Rel(dir, path)
-		if err != nil {
-			log.Fatal(err)
+		name, relErr := filepath.Rel(dir, path)
+		if relErr != nil {
+			return ""
 		}
-
 		return name
+	})
+	versionPaths = lo.Filter(versionPaths, func(s string, _ int) bool {
+		return s != ""
 	})
 	sort.Sort(sort.Reverse(sort.StringSlice(versionPaths)))
 
 	name, err := filepath.Rel(dir, path)
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
 
 	return &SheetFile{
 		Name:     name,
 		Content:  string(content),
 		Versions: versionPaths,
-	}
+	}, nil
 }

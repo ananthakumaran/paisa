@@ -415,6 +415,11 @@ func GetConfig() Config {
 	return config
 }
 
+// ForceLedgerCLIOnly sets ledger_cli to C++ ledger. Rupee uses this so hledger/beancount are never selected.
+func ForceLedgerCLIOnly() {
+	config.LedgerCli = "ledger"
+}
+
 func GetJournalPath() string {
 	if !filepath.IsAbs(config.JournalPath) {
 		return filepath.Join(GetConfigDir(), config.JournalPath)
@@ -423,7 +428,8 @@ func GetJournalPath() string {
 	return config.JournalPath
 }
 
-func GetSheetDir() string {
+// ResolveSheetDirectory returns the sheets directory path without creating it.
+func ResolveSheetDirectory() string {
 	if config.SheetsDirectory == "" {
 		return filepath.Dir(GetJournalPath())
 	}
@@ -432,6 +438,12 @@ func GetSheetDir() string {
 	if !filepath.IsAbs(config.SheetsDirectory) {
 		dir = filepath.Join(GetConfigDir(), config.SheetsDirectory)
 	}
+
+	return dir
+}
+
+func GetSheetDir() string {
+	dir := ResolveSheetDirectory()
 
 	err := os.MkdirAll(dir, 0750)
 	if err != nil {

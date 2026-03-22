@@ -35,7 +35,7 @@ const (
 )
 
 var (
-	ErrNoPassword     = errors.New("encryption password not set: provide PAISA_ENCRYPTION_KEY environment variable")
+	ErrNoPassword     = errors.New("encryption password not set: enter it in the app")
 	ErrNotEncrypted   = errors.New("file is not encrypted")
 	ErrDecryptFailed  = errors.New("decryption failed: wrong password or corrupted file")
 	ErrAlreadyEnabled = errors.New("encryption is already enabled")
@@ -43,7 +43,7 @@ var (
 
 var password string
 
-// SetPassword sets the in-memory encryption password (called once at startup).
+// SetPassword sets the in-memory encryption password (may be called again after restart or unlock).
 func SetPassword(p string) {
 	password = p
 }

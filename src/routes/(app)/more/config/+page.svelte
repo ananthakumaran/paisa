@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { openEncryptionModal } from "$lib/encryptionUnlock";
   import { ajax, configUpdated } from "$lib/utils";
   import { onMount } from "svelte";
   import type { JSONSchema7 } from "json-schema";
@@ -34,6 +35,18 @@
   }
 
   async function save(newConfig: UserConfig) {
+    const turningOnEnc =
+      lastConfig != null && lastConfig.encryption !== "yes" && newConfig.encryption === "yes";
+    if (turningOnEnc) {
+      const st = await ajax("/api/encryption/status");
+      if (!st.password_set) {
+        openEncryptionModal("set", () => {
+          void save(newConfig);
+        });
+        return;
+      }
+    }
+
     isLoading = true;
     try {
       let success = false;

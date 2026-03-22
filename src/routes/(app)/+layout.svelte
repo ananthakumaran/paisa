@@ -4,7 +4,11 @@
   import _ from "lodash";
   import Spinner from "$lib/components/Spinner.svelte";
   import Navbar from "$lib/components/Navbar.svelte";
+  import EncryptionGate from "$lib/components/EncryptionGate.svelte";
+  import EncryptionPasswordModal from "$lib/components/EncryptionPasswordModal.svelte";
   import { willClearTippy, willRefresh } from "../../store";
+
+  export let data: { encryptionLocked: boolean };
 
   let isBurger: boolean = null;
 
@@ -55,10 +59,16 @@
   });
 </script>
 
-{#key $willRefresh}
-  <Navbar bind:isBurger />
+{#if data.encryptionLocked}
+  <EncryptionGate />
+{:else}
+  <EncryptionPasswordModal />
 
-  <Spinner>
-    <slot />
-  </Spinner>
-{/key}
+  {#key $willRefresh}
+    <Navbar bind:isBurger />
+
+    <Spinner>
+      <slot />
+    </Spinner>
+  {/key}
+{/if}

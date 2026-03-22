@@ -40,6 +40,8 @@ interface UserConfig {
     name: string;
     icon: string;
   }[];
+  strict?: string;
+  encryption?: string;
 }
 
 interface Runtime {

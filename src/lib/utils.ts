@@ -537,14 +537,19 @@ export interface SheetLineResult {
   align?: "left" | "right";
 }
 
-const tokenKey = "token";
+export const tokenKey = "token";
 
 type RequestOptions = RequestInit & {
   background?: boolean;
 };
 
 export function ajax(
-  route: "/api/config"
+  route: "/api/config",
+  options: RequestOptions & { method: "POST" }
+): Promise<{ success: boolean; error?: string }>;
+export function ajax(
+  route: "/api/config",
+  options?: RequestOptions
 ): Promise<{ config: UserConfig; schema: JSONSchema7; now: dayjs.Dayjs; accounts: string[] }>;
 export function ajax(route: "/api/harvest"): Promise<{ harvestables: Record<string, Harvestable> }>;
 export function ajax(
@@ -762,12 +767,16 @@ export function ajax(
 ): Promise<{ completions: AutoCompleteItem[] }>;
 export function ajax(route: "/api/init", options?: RequestOptions): Promise<any>;
 
-export function ajax(
-  route: "/api/config",
-  options?: RequestOptions
-): Promise<{ success: boolean; error?: string }>;
-
 export function ajax(route: "/api/ping"): Promise<{ success: boolean; error?: string }>;
+
+export function ajax(
+  route: "/api/encryption/status",
+  options?: RequestOptions
+): Promise<{
+  enabled: boolean;
+  password_set: boolean;
+  needs_unlock: boolean;
+}>;
 
 export async function ajax(
   route: string,

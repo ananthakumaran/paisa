@@ -47,7 +47,7 @@ func Initialize() {
 	}
 	currentCommand, _, _ := rootCmd.Find(os.Args[1:])
 
-	if !lo.Contains([]string{"serve", "update"}, currentCommand.Name()) {
+	if !lo.Contains([]string{"serve", "update", "mcp"}, currentCommand.Name()) {
 		return
 	}
 

@@ -375,6 +375,8 @@ func Build(db *gorm.DB, enableCompression bool) *gin.Engine {
 		c.JSON(200, GetCreditCard(db, c.Param("account")))
 	})
 
+	RegisterAIRoutes(router, db)
+
 	router.NoRoute(func(c *gin.Context) {
 		c.Data(http.StatusOK, "text/html; charset=utf-8", []byte(web.Index))
 	})
@@ -441,4 +443,56 @@ func TokenAuthMiddleware() gin.HandlerFunc {
 		return
 
 	}
+}
+
+// MCPAuthMiddleware is the same as TokenAuthMiddleware but applies to any path
+// (not just /api/*), so it can be used to protect the /mcp endpoint.
+func MCPAuthMiddleware(rateLimiter *throttled.GCRARateLimiterCtx) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		userAccounts := config.GetConfig().UserAccounts
+		if len(userAccounts) == 0 {
+			c.Next()
+			return
+		}
+
+		_, detail, _ := rateLimiter.RateLimitCtx(c.Request.Context(), "user", 0)
+		if detail.Remaining <= 0 {
+			c.AbortWithStatusJSON(http.StatusTooManyRequests, gin.H{"error": "Too many requests"})
+			return
+		}
+
+		tokens := strings.SplitN(c.Request.Header.Get("X-Auth"), ":", 2)
+		if len(tokens) != 2 {
+			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Invalid Token"})
+			return
+		}
+
+		hashed := utils.Sha256(tokens[1])
+		for _, userAccount := range userAccounts {
+			if subtle.ConstantTimeCompare([]byte(userAccount.Username), []byte(tokens[0])) == 1 &&
+				subtle.ConstantTimeCompare([]byte(userAccount.Password), []byte("sha256:"+hashed)) == 1 {
+				c.Next()
+				return
+			}
+		}
+
+		rateLimiter.RateLimitCtx(c.Request.Context(), "user", 1)
+		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Invalid username or password"})
+	}
+}
+
+// NewMCPRateLimiter creates a rate limiter for use with MCPAuthMiddleware.
+func NewMCPRateLimiter() *throttled.GCRARateLimiterCtx {
+	store, err := memstore.NewCtx(10)
+	if err != nil {
+		log.Fatal(err)
+	}
+	rateLimiter, err := throttled.NewGCRARateLimiterCtx(store, throttled.RateQuota{
+		MaxRate:  throttled.PerMin(6),
+		MaxBurst: 3,
+	})
+	if err != nil {
+		log.Fatal(err)
+	}
+	return rateLimiter
 }

@@ -13,6 +13,7 @@ import (
 	"github.com/ananthakumaran/paisa/internal/accounting"
 	"github.com/ananthakumaran/paisa/internal/config"
 	"github.com/ananthakumaran/paisa/internal/model/posting"
+	"github.com/ananthakumaran/paisa/internal/model/transaction"
 	"github.com/ananthakumaran/paisa/internal/prediction"
 	"github.com/ananthakumaran/paisa/internal/query"
 	"github.com/ananthakumaran/paisa/internal/server/goal"
@@ -411,11 +412,21 @@ func SuggestAccounts(db *gorm.DB, payee, amountStr, prefix string) gin.H {
 
 // ── GET /api/ai/spending/trends ───────────────────────────────────────────────
 
-func GetSpendingTrends(db *gorm.DB, months int) gin.H {
+func GetSpendingTrends(db *gorm.DB, months int, fromDate, toDate string) gin.H {
 	if months <= 0 {
 		months = 6
 	}
-	postings := query.Init(db).Like("Expenses:%").LastNMonths(months).All()
+	q := query.Init(db).Like("Expenses:%")
+	if fromDate != "" && toDate != "" {
+		q = q.Where("date >= ? and date < ?", fromDate, toDate)
+	} else if fromDate != "" {
+		q = q.Where("date >= ?", fromDate)
+	} else if toDate != "" {
+		q = q.Where("date < ?", toDate)
+	} else {
+		q = q.LastNMonths(months)
+	}
+	postings := q.All()
 	byAccount := lo.GroupBy(postings, func(p posting.Posting) string { return p.Account })
 
 	var trends []SpendingTrend
@@ -499,25 +510,28 @@ func GetSpendingAnomalies(db *gorm.DB) gin.H {
 
 // ── GET /api/ai/budget/recommend ─────────────────────────────────────────────
 
-func RecommendBudget(db *gorm.DB) gin.H {
-	postings := query.Init(db).Like("Expenses:%").LastNMonths(3).All()
+func RecommendBudget(db *gorm.DB, months int) gin.H {
+	if months <= 0 {
+		months = 3
+	}
+	postings := query.Init(db).Like("Expenses:%").LastNMonths(months).All()
 	byAccount := lo.GroupBy(postings, func(p posting.Posting) string { return p.Account })
 
 	type Recommendation struct {
-		Account   string          `json:"account"`
-		Average3M decimal.Decimal `json:"average_3m"`
-		Suggested decimal.Decimal `json:"suggested"`
+		Account      string          `json:"account"`
+		AverageMonth decimal.Decimal `json:"average_monthly"`
+		Suggested    decimal.Decimal `json:"suggested"`
 	}
 	var recs []Recommendation
 	for _, account := range utils.SortedKeys(byAccount) {
 		ps := byAccount[account]
 		total := accounting.CostSum(ps)
-		avg := total.Div(decimal.NewFromInt(3))
-		// Suggest 10% buffer over 3-month average
+		avg := total.Div(decimal.NewFromInt(int64(months)))
+		// Suggest 10% buffer over monthly average
 		suggested := avg.Mul(decimal.NewFromFloat(1.10)).Round(0)
-		recs = append(recs, Recommendation{Account: account, Average3M: avg, Suggested: suggested})
+		recs = append(recs, Recommendation{Account: account, AverageMonth: avg, Suggested: suggested})
 	}
-	return gin.H{"recommendations": recs}
+	return gin.H{"recommendations": recs, "months": months}
 }
 
 // ── POST /api/ai/budget/set ───────────────────────────────────────────────────
@@ -689,7 +703,9 @@ func GetTaxSummary(db *gorm.DB) gin.H {
 	capitalGains := GetCapitalGains(db)
 	harvest := GetHarvest(db)
 	scheduleAL := GetScheduleAL(db)
-	taxPaid := accounting.CostSum(query.Init(db).AccountPrefix("Expenses:Tax").All()).Abs()
+	fyStart := utils.BeginningOfFinancialYear(utils.Now())
+	fyEnd := utils.EndOfFinancialYear(utils.Now())
+	taxPaid := accounting.CostSum(query.Init(db).AccountPrefix("Expenses:Tax").Where("date >= ? and date <= ?", fyStart, fyEnd).All()).Abs()
 
 	return gin.H{
 		"tax_paid_ytd":    taxPaid,
@@ -829,6 +845,29 @@ func GetGoalProgress(db *gorm.DB) gin.H {
 	return gin.H{"goals": progress}
 }
 
+// ── GET /api/ai/transactions ──────────────────────────────────────────────────
+
+func GetFilteredTransactions(db *gorm.DB, accountPrefix, fromDate, toDate string, limit int) gin.H {
+	q := query.Init(db).Desc()
+	if accountPrefix != "" {
+		q = q.AccountPrefix(accountPrefix)
+	}
+	if fromDate != "" && toDate != "" {
+		q = q.Where("date >= ? and date < ?", fromDate, toDate)
+	} else if fromDate != "" {
+		q = q.Where("date >= ?", fromDate)
+	} else if toDate != "" {
+		q = q.Where("date < ?", toDate)
+	}
+	if limit > 0 {
+		q = q.Limit(limit)
+	}
+	postings := q.All()
+	txns := transaction.Build(postings)
+	sort.Slice(txns, func(i, j int) bool { return txns[i].Date.After(txns[j].Date) })
+	return gin.H{"transactions": txns, "count": len(txns)}
+}
+
 // ── GET /api/ai/summary ───────────────────────────────────────────────────────
 
 func GetAISummary(db *gorm.DB) gin.H {
@@ -904,7 +943,7 @@ func RegisterAIRoutes(router *gin.Engine, db *gorm.DB) {
 	router.GET("/api/ai/spending/trends", func(c *gin.Context) {
 		months := 0
 		fmt.Sscanf(c.DefaultQuery("months", "6"), "%d", &months)
-		c.JSON(http.StatusOK, GetSpendingTrends(db, months))
+		c.JSON(http.StatusOK, GetSpendingTrends(db, months, c.Query("from_date"), c.Query("to_date")))
 	})
 
 	router.GET("/api/ai/spending/anomalies", func(c *gin.Context) {
@@ -912,7 +951,9 @@ func RegisterAIRoutes(router *gin.Engine, db *gorm.DB) {
 	})
 
 	router.GET("/api/ai/budget/recommend", func(c *gin.Context) {
-		c.JSON(http.StatusOK, RecommendBudget(db))
+		months := 0
+		fmt.Sscanf(c.DefaultQuery("months", "3"), "%d", &months)
+		c.JSON(http.StatusOK, RecommendBudget(db, months))
 	})
 
 	router.POST("/api/ai/budget/set", func(c *gin.Context) {

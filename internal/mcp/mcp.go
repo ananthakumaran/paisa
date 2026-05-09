@@ -113,12 +113,16 @@ func BuildMCPServer(db *gorm.DB) *mcpserver.MCPServer {
 
 	s.AddTool(
 		mcpgo.NewTool("get_spending_trends",
-			mcpgo.WithDescription("Month-over-month spending breakdown per Expenses:* account with rolling average and trend direction."),
-			mcpgo.WithNumber("months", mcpgo.Description("Number of months to analyse (default 6)")),
+			mcpgo.WithDescription("BEST TOOL for spending questions. Returns pre-aggregated monthly totals per Expenses:* account — no post-processing needed. For a specific month use from_date + to_date (e.g. from_date=2025-10-01 to_date=2025-11-01 for all of October 2025). For recent months use the months param."),
+			mcpgo.WithNumber("months", mcpgo.Description("Number of past months to analyse (default 6). Ignored if from_date is provided.")),
+			mcpgo.WithString("from_date", mcpgo.Description("Start date inclusive, YYYY-MM-DD. If set, overrides months.")),
+			mcpgo.WithString("to_date", mcpgo.Description("End date exclusive, YYYY-MM-DD. Use next month start for a full month.")),
 		),
 		func(_ context.Context, req mcpgo.CallToolRequest) (*mcpgo.CallToolResult, error) {
 			months := req.GetInt("months", 6)
-			return jsonResult(server.GetSpendingTrends(db, months))
+			fromDate := req.GetString("from_date", "")
+			toDate := req.GetString("to_date", "")
+			return jsonResult(server.GetSpendingTrends(db, months, fromDate, toDate))
 		},
 	)
 
@@ -144,10 +148,12 @@ func BuildMCPServer(db *gorm.DB) *mcpserver.MCPServer {
 
 	s.AddTool(
 		mcpgo.NewTool("recommend_budget",
-			mcpgo.WithDescription("Suggest budget amounts for each Expenses:* account based on 3-month averages (with 10% buffer)."),
+			mcpgo.WithDescription("Suggest budget amounts for each Expenses:* account based on N-month averages (with 10% buffer). Default is 3 months."),
+			mcpgo.WithNumber("months", mcpgo.Description("Months of history to average (default 3)")),
 		),
-		func(_ context.Context, _ mcpgo.CallToolRequest) (*mcpgo.CallToolResult, error) {
-			return jsonResult(server.RecommendBudget(db))
+		func(_ context.Context, req mcpgo.CallToolRequest) (*mcpgo.CallToolResult, error) {
+			months := req.GetInt("months", 3)
+			return jsonResult(server.RecommendBudget(db, months))
 		},
 	)
 
@@ -284,10 +290,18 @@ func BuildMCPServer(db *gorm.DB) *mcpserver.MCPServer {
 
 	s.AddTool(
 		mcpgo.NewTool("get_transactions",
-			mcpgo.WithDescription("All ledger transactions with their postings."),
+			mcpgo.WithDescription("Fetch raw ledger transactions. ALWAYS provide filters — calling without filters returns the entire ledger which is too large. For spending totals by month use get_spending_trends instead. Use account_prefix + from_date + to_date to narrow results, e.g. account_prefix=Expenses:Shopping from_date=2025-10-01 to_date=2025-11-01."),
+			mcpgo.WithString("account_prefix", mcpgo.Description("REQUIRED: Filter by account prefix, e.g. Expenses:Shopping or Income:Salary")),
+			mcpgo.WithString("from_date", mcpgo.Description("Start date inclusive, YYYY-MM-DD")),
+			mcpgo.WithString("to_date", mcpgo.Description("End date exclusive, YYYY-MM-DD")),
+			mcpgo.WithNumber("limit", mcpgo.Description("Max transactions to return (default all)")),
 		),
-		func(_ context.Context, _ mcpgo.CallToolRequest) (*mcpgo.CallToolResult, error) {
-			return jsonResult(server.GetTransactions(db))
+		func(_ context.Context, req mcpgo.CallToolRequest) (*mcpgo.CallToolResult, error) {
+			accountPrefix := req.GetString("account_prefix", "")
+			fromDate := req.GetString("from_date", "")
+			toDate := req.GetString("to_date", "")
+			limit := req.GetInt("limit", 0)
+			return jsonResult(server.GetFilteredTransactions(db, accountPrefix, fromDate, toDate, limit))
 		},
 	)
 

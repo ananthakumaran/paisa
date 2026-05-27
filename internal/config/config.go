@@ -157,6 +157,8 @@ type Config struct {
 	UserAccounts []UserAccount `json:"user_accounts" yaml:"user_accounts"`
 
 	CreditCards []CreditCard `json:"credit_cards" yaml:"credit_cards"`
+
+	TransferAccounts []string `json:"transfer_accounts" yaml:"transfer_accounts"`
 }
 
 var config Config
@@ -183,6 +185,7 @@ var defaultConfig = Config{
 	Goals:                      Goals{Retirement: []RetirementGoal{}, Savings: []SavingsGoal{}},
 	UserAccounts:               []UserAccount{},
 	CreditCards:                []CreditCard{},
+	TransferAccounts:           []string{},
 }
 
 var itemsUniquePropertiesMeta = jsonschema.MustCompileString("itemsUniqueProperties.json", `{

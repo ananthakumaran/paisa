@@ -16,6 +16,12 @@ import (
 	"github.com/shopspring/decimal"
 	log "github.com/sirupsen/logrus"
 	"gorm.io/gorm"
+
+	// Production importer plug-ins register themselves via init(). Add a
+	// blank import here for each new format so the binary picks them up
+	// without the server package gaining any knowledge of the format
+	// itself. M3-B/C/D will append to this block.
+	_ "github.com/ananthakumaran/paisa/internal/importer/ibkr"
 )
 
 // importer/{detect,parse,commit} together implement the new pluggable

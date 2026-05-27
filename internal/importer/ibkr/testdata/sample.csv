@@ -1,0 +1,30 @@
+ClientAccountID,U0000000,Description,"Activity Statement"
+"Account Information","Header","Field Name","Field Value"
+"Account Information","Data","Name","Test User"
+"Account Information","Data","Account","U0000000"
+"Account Information","Data","Account Type","Individual"
+
+"Statement","Header","Field Name","Field Value"
+"Statement","Data","BrokerName","Interactive Brokers LLC"
+"Statement","Data","Period","2024-01-01 to 2024-01-31"
+
+"Cash Report","Header","Currency Summary","Currency","Total"
+"Cash Report","Data","USD","Starting Cash","10000.00"
+"Cash Report","Data","USD","Ending Cash","9999.00"
+
+"Trades","Header","DataDiscriminator","Asset Category","Currency","Symbol","Date/Time","Quantity","T. Price","C. Price","Proceeds","Comm/Fee","Basis","Realized P/L","MTM P/L","Code"
+"Trades","Data","Order","Stocks","USD","UBER","2024-01-15;10:30:00","10","45.00","45.05","-450","-1.00","451","0","0.5","O"
+"Trades","Data","Order","Stocks","USD","AAPL","2024-01-20;14:00:00","-5","190.00","189.50","950","-1.00","-900","50","-2.5","C"
+"Trades","Data","Order","Stocks","HKD","700","2024-01-22;09:45:00","100","320.00","319.00","-32000","-15.00","32015","0","-100","O"
+
+"Dividends","Header","Currency","Date","Description","Amount"
+"Dividends","Data","USD","2024-01-25","AAPL(US0378331005) Cash Dividend USD 0.24 per Share","2.40"
+
+"Withholding Tax","Header","Currency","Date","Description","Amount","Code"
+"Withholding Tax","Data","USD","2024-01-25","AAPL(US0378331005) Cash Dividend USD 0.24 per Share - US Tax","-0.36",""
+
+"Fees","Header","Subtitle","Currency","Date","Description","Amount"
+"Fees","Data","Other Fees","USD","2024-01-31","Activity Statement Fee","-1.00"
+
+"Interest","Header","Currency","Date","Description","Amount"
+"Interest","Data","USD","2024-01-31","USD Credit Interest for Jan-2024","0.50"

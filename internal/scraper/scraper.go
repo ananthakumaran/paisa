@@ -6,12 +6,14 @@ import (
 	"github.com/ananthakumaran/paisa/internal/scraper/mutualfund"
 	"github.com/ananthakumaran/paisa/internal/scraper/nps"
 	"github.com/ananthakumaran/paisa/internal/scraper/stock"
+	"github.com/ananthakumaran/paisa/internal/scraper/yahoo"
 	log "github.com/sirupsen/logrus"
 )
 
 func GetAllProviders() []price.PriceProvider {
 	return []price.PriceProvider{
 		&stock.YahooPriceProvider{},
+		&yahoo.PriceProvider{},
 		&mutualfund.PriceProvider{},
 		&stock.AlphaVantagePriceProvider{},
 		&nps.PriceProvider{},
@@ -30,6 +32,8 @@ func GetProviderByCode(code string) price.PriceProvider {
 		return &metal.PriceProvider{}
 	case "com-yahoo":
 		return &stock.YahooPriceProvider{}
+	case "yahoo":
+		return &yahoo.PriceProvider{}
 	case "co-alphavantage":
 		return &stock.AlphaVantagePriceProvider{}
 	}

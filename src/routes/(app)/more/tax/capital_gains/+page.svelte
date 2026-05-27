@@ -13,7 +13,7 @@
 
     years = _.chain(capital_gains)
       .values()
-      .flatMap((c) => _.keys(c.fy))
+      .flatMap((c) => _.keys(c.year))
       .uniq()
       .sort()
       .reverse()
@@ -27,7 +27,7 @@
   <div class="container is-fluid">
     <div class="columns is-flex-wrap-wrap">
       {#each years as year}
-        <CapitalGainCard financialYear={year} {capitalGains} />
+        <CapitalGainCard calendarYear={year} {capitalGains} />
       {/each}
     </div>
   </div>

@@ -19,7 +19,10 @@ type PostingPair struct {
 	Tax      taxation.Tax    `json:"tax"`
 }
 
-type FYCapitalGain struct {
+// YearCapitalGain holds aggregated capital-gain figures for a single
+// calendar year. (Previously keyed by Indian fiscal year as
+// FYCapitalGain — renamed for issue #5.)
+type YearCapitalGain struct {
 	Units         decimal.Decimal `json:"units"`
 	PurchasePrice decimal.Decimal `json:"purchase_price"`
 	SellPrice     decimal.Decimal `json:"sell_price"`
@@ -28,9 +31,9 @@ type FYCapitalGain struct {
 }
 
 type CapitalGain struct {
-	Account     string                   `json:"account"`
-	TaxCategory string                   `json:"tax_category"`
-	FY          map[string]FYCapitalGain `json:"fy"`
+	Account     string                     `json:"account"`
+	TaxCategory string                     `json:"tax_category"`
+	Year        map[string]YearCapitalGain `json:"year"`
 }
 
 func GetCapitalGains(db *gorm.DB) gin.H {
@@ -47,7 +50,7 @@ func GetCapitalGains(db *gorm.DB) gin.H {
 }
 
 func computeCapitalGains(db *gorm.DB, account string, commodity config.Commodity, postings []posting.Posting) CapitalGain {
-	capitalGain := CapitalGain{Account: account, TaxCategory: string(commodity.TaxCategory), FY: make(map[string]FYCapitalGain)}
+	capitalGain := CapitalGain{Account: account, TaxCategory: string(commodity.TaxCategory), Year: make(map[string]YearCapitalGain)}
 	var available []posting.Posting
 	for _, p := range postings {
 		if p.Quantity.GreaterThan(decimal.Zero) {
@@ -79,15 +82,15 @@ func computeCapitalGains(db *gorm.DB, account string, commodity config.Commodity
 				postingPairs = append(postingPairs, postingPair)
 
 			}
-			fy := utils.FY(p.Date)
-			fyCapitalGain := capitalGain.FY[fy]
-			fyCapitalGain.Tax = taxation.Add(fyCapitalGain.Tax, totalTax)
-			fyCapitalGain.Units = fyCapitalGain.Units.Add(p.Quantity.Neg())
-			fyCapitalGain.PurchasePrice = fyCapitalGain.PurchasePrice.Add(purchasePrice)
-			fyCapitalGain.SellPrice = fyCapitalGain.SellPrice.Add(p.Amount.Neg())
-			fyCapitalGain.PostingPairs = append(fyCapitalGain.PostingPairs, postingPairs...)
+			year := utils.CalendarYear(p.Date)
+			yearGain := capitalGain.Year[year]
+			yearGain.Tax = taxation.Add(yearGain.Tax, totalTax)
+			yearGain.Units = yearGain.Units.Add(p.Quantity.Neg())
+			yearGain.PurchasePrice = yearGain.PurchasePrice.Add(purchasePrice)
+			yearGain.SellPrice = yearGain.SellPrice.Add(p.Amount.Neg())
+			yearGain.PostingPairs = append(yearGain.PostingPairs, postingPairs...)
 
-			capitalGain.FY[fy] = fyCapitalGain
+			capitalGain.Year[year] = yearGain
 
 		}
 	}

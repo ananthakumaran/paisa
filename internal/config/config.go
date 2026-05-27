@@ -16,6 +16,7 @@ import (
 	"dario.cat/mergo"
 	"github.com/santhosh-tekuri/jsonschema/v5"
 
+	"github.com/ananthakumaran/paisa/internal/model/account"
 	"gopkg.in/yaml.v3"
 )
 
@@ -65,8 +66,9 @@ type Commodity struct {
 }
 
 type Account struct {
-	Name string `json:"name" yaml:"name"`
-	Icon string `json:"icon" yaml:"icon"`
+	Name string              `json:"name" yaml:"name"`
+	Icon string              `json:"icon" yaml:"icon"`
+	Kind account.AccountKind `json:"kind,omitempty" yaml:"kind,omitempty"`
 }
 
 type UserAccount struct {
@@ -126,19 +128,18 @@ type CreditCard struct {
 }
 
 type Config struct {
-	JournalPath                string       `json:"journal_path" yaml:"journal_path"`
-	DBPath                     string       `json:"db_path" yaml:"db_path"`
-	SheetsDirectory            string       `json:"sheets_directory" yaml:"sheets_directory"`
-	Readonly                   bool         `json:"readonly" yaml:"readonly"`
-	LedgerCli                  string       `json:"ledger_cli" yaml:"ledger_cli"`
-	DefaultCurrency            string       `json:"default_currency" yaml:"default_currency"`
-	DisplayPrecision           int          `json:"display_precision" yaml:"display_precision"`
-	AmountAlignmentColumn      int          `json:"amount_alignment_column" yaml:"amount_alignment_column"`
-	Locale                     string       `json:"locale" yaml:"locale"`
-	TimeZone                   string       `json:"time_zone" yaml:"time_zone"`
-	FinancialYearStartingMonth time.Month   `json:"financial_year_starting_month" yaml:"financial_year_starting_month"`
-	WeekStartingDay            time.Weekday `json:"week_starting_day" yaml:"week_starting_day"`
-	Strict                     BoolType     `json:"strict" yaml:"strict"`
+	JournalPath           string       `json:"journal_path" yaml:"journal_path"`
+	DBPath                string       `json:"db_path" yaml:"db_path"`
+	SheetsDirectory       string       `json:"sheets_directory" yaml:"sheets_directory"`
+	Readonly              bool         `json:"readonly" yaml:"readonly"`
+	LedgerCli             string       `json:"ledger_cli" yaml:"ledger_cli"`
+	DefaultCurrency       string       `json:"default_currency" yaml:"default_currency"`
+	DisplayPrecision      int          `json:"display_precision" yaml:"display_precision"`
+	AmountAlignmentColumn int          `json:"amount_alignment_column" yaml:"amount_alignment_column"`
+	Locale                string       `json:"locale" yaml:"locale"`
+	TimeZone              string       `json:"time_zone" yaml:"time_zone"`
+	WeekStartingDay       time.Weekday `json:"week_starting_day" yaml:"week_starting_day"`
+	Strict                BoolType     `json:"strict" yaml:"strict"`
 
 	Budget Budget `json:"budget" yaml:"budget"`
 
@@ -166,26 +167,25 @@ var configPath string
 var location *time.Location
 
 var defaultConfig = Config{
-	Readonly:                   false,
-	LedgerCli:                  "ledger",
-	DefaultCurrency:            "INR",
-	DisplayPrecision:           0,
-	AmountAlignmentColumn:      52,
-	Locale:                     "en-IN",
-	TimeZone:                   "",
-	Budget:                     Budget{Rollover: Yes},
-	FinancialYearStartingMonth: 4,
-	Strict:                     No,
-	WeekStartingDay:            0,
-	ScheduleALs:                []ScheduleAL{},
-	AllocationTargets:          []AllocationTarget{},
-	Commodities:                []Commodity{},
-	ImportTemplates:            []ImportTemplate{},
-	Accounts:                   []Account{},
-	Goals:                      Goals{Retirement: []RetirementGoal{}, Savings: []SavingsGoal{}},
-	UserAccounts:               []UserAccount{},
-	CreditCards:                []CreditCard{},
-	TransferAccounts:           []string{},
+	Readonly:              false,
+	LedgerCli:             "ledger",
+	DefaultCurrency:       "INR",
+	DisplayPrecision:      0,
+	AmountAlignmentColumn: 52,
+	Locale:                "en-IN",
+	TimeZone:              "",
+	Budget:                Budget{Rollover: Yes},
+	Strict:                No,
+	WeekStartingDay:       0,
+	ScheduleALs:           []ScheduleAL{},
+	AllocationTargets:     []AllocationTarget{},
+	Commodities:           []Commodity{},
+	ImportTemplates:       []ImportTemplate{},
+	Accounts:              []Account{},
+	Goals:                 Goals{Retirement: []RetirementGoal{}, Savings: []SavingsGoal{}},
+	UserAccounts:          []UserAccount{},
+	CreditCards:           []CreditCard{},
+	TransferAccounts:      []string{},
 }
 
 var itemsUniquePropertiesMeta = jsonschema.MustCompileString("itemsUniqueProperties.json", `{

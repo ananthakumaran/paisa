@@ -2,14 +2,14 @@
   "asset_breakdowns": {
     "Assets": {
       "group": "Assets",
-      "investmentAmount": 106855.0544942592,
+      "investmentAmount": 90805.94048,
       "withdrawalAmount": 10027.3,
-      "marketAmount": 101145.7,
+      "marketAmount": 85096.5859857408,
       "balanceUnits": 0,
       "latestPrice": 0,
-      "xirr": 12.85,
+      "xirr": 14.91,
       "gainAmount": 4317.9455057408,
-      "absoluteReturn": 0.0404093706767309
+      "absoluteReturn": 0.0475513549324653
     },
     "Assets:Checking": {
       "group": "Assets:Checking",
@@ -35,14 +35,14 @@
     },
     "Assets:Equity": {
       "group": "Assets:Equity",
-      "investmentAmount": 106050.6340142592,
+      "investmentAmount": 90001.52,
       "withdrawalAmount": 10027.3,
-      "marketAmount": 96269.0340142592,
+      "marketAmount": 80219.92,
       "balanceUnits": 0,
       "latestPrice": 0,
-      "xirr": 3.01,
+      "xirr": 3.6,
       "gainAmount": 245.7,
-      "absoluteReturn": 0.0023168178321967
+      "absoluteReturn": 0.002729953894112
     },
     "Assets:Equity:AAPL": {
       "group": "Assets:Equity:AAPL",
@@ -57,9 +57,9 @@
     },
     "Assets:Equity:ABNB": {
       "group": "Assets:Equity:ABNB",
-      "investmentAmount": 16050.6340142592,
+      "investmentAmount": 1.52,
       "withdrawalAmount": 0,
-      "marketAmount": 16050.6340142592,
+      "marketAmount": 1.52,
       "balanceUnits": 1.52,
       "latestPrice": 0,
       "xirr": 0,

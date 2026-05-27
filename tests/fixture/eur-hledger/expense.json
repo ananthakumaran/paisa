@@ -1,7 +1,7 @@
 {
   "expenses": [],
   "graph": {
-    "2021 - 22": {
+    "2022": {
       "nodes": [
         {
           "id": 1,
@@ -53,7 +53,7 @@
     "incomes": {
       "2022-01": [
         {
-          "id": 1,
+          "id": 9,
           "transaction_id": "1",
           "date": "2022-01-01T00:00:00Z",
           "payee": "Salary",
@@ -78,7 +78,7 @@
     "investments": {
       "2022-01": [
         {
-          "id": 3,
+          "id": 11,
           "transaction_id": "2",
           "date": "2022-01-05T00:00:00Z",
           "payee": "Buy stock",
@@ -105,9 +105,9 @@
   "year_wise": {
     "expenses": {},
     "incomes": {
-      "2021 - 22": [
+      "2022": [
         {
-          "id": 1,
+          "id": 9,
           "transaction_id": "1",
           "date": "2022-01-01T00:00:00Z",
           "payee": "Salary",
@@ -130,9 +130,9 @@
       ]
     },
     "investments": {
-      "2021 - 22": [
+      "2022": [
         {
-          "id": 3,
+          "id": 11,
           "transaction_id": "2",
           "date": "2022-01-05T00:00:00Z",
           "payee": "Buy stock",

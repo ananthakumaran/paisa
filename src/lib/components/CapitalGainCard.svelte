@@ -1,28 +1,28 @@
 <script lang="ts">
-  import { formatCurrency, formatFloat, type CapitalGain, type FYCapitalGain } from "$lib/utils";
+  import { formatCurrency, formatFloat, type CapitalGain, type YearCapitalGain } from "$lib/utils";
   import _ from "lodash";
   import CapitalGainDetailCard from "./CapitalGainDetailCard.svelte";
   import Toggleable from "./Toggleable.svelte";
 
-  export let financialYear: string;
+  export let calendarYear: string;
   export let capitalGains: CapitalGain[];
 
-  const fyGains: FYCapitalGain[] = _.flatMap(capitalGains, (cg) => cg.fy[financialYear] || []);
+  const yearGains: YearCapitalGain[] = _.flatMap(capitalGains, (cg) => cg.year[calendarYear] || []);
 
   const total = {
-    withdrawn: _.sumBy(fyGains, (fy) => fy.sell_price),
-    gain: _.sumBy(fyGains, (fy) => fy.tax.gain),
-    taxableGain: _.sumBy(fyGains, (fy) => fy.tax.taxable),
-    shortTermTax: _.sumBy(fyGains, (fy) => fy.tax.short_term),
-    longTermTax: _.sumBy(fyGains, (fy) => fy.tax.long_term),
-    slab: _.sumBy(fyGains, (fy) => fy.tax.slab)
+    withdrawn: _.sumBy(yearGains, (yg) => yg.sell_price),
+    gain: _.sumBy(yearGains, (yg) => yg.tax.gain),
+    taxableGain: _.sumBy(yearGains, (yg) => yg.tax.taxable),
+    shortTermTax: _.sumBy(yearGains, (yg) => yg.tax.short_term),
+    longTermTax: _.sumBy(yearGains, (yg) => yg.tax.long_term),
+    slab: _.sumBy(yearGains, (yg) => yg.tax.slab)
   };
 </script>
 
 <div class="column is-12">
   <div class="card">
     <header class="card-header">
-      <p class="card-header-title">{financialYear}</p>
+      <p class="card-header-title">{calendarYear}</p>
     </header>
 
     <div class="card-content">
@@ -91,8 +91,8 @@
               </thead>
               <tbody>
                 {#each capitalGains as cg}
-                  {#if cg.fy[financialYear]}
-                    {@const fy = cg.fy[financialYear]}
+                  {#if cg.year[calendarYear]}
+                    {@const yg = cg.year[calendarYear]}
                     <Toggleable>
                       <tr
                         class={active ? "is-active has-background-white-ter" : ""}
@@ -112,33 +112,33 @@
                         </td>
                         <td>{cg.account}</td>
                         <td>{cg.tax_category}</td>
-                        <td class="has-text-right">{formatFloat(fy.units)}</td>
-                        <td class="has-text-right">{formatCurrency(fy.purchase_price)}</td>
+                        <td class="has-text-right">{formatFloat(yg.units)}</td>
+                        <td class="has-text-right">{formatCurrency(yg.purchase_price)}</td>
                         <td class="has-text-right"
-                          >{formatCurrency(fy.purchase_price / fy.units, 4)}</td
+                          >{formatCurrency(yg.purchase_price / yg.units, 4)}</td
                         >
-                        <td class="has-text-right">{formatCurrency(fy.sell_price)}</td>
-                        <td class="has-text-right">{formatCurrency(fy.sell_price / fy.units, 4)}</td
-                        >
-                        <td class="has-text-right has-text-weight-bold"
-                          >{formatCurrency(fy.tax.gain)}</td
+                        <td class="has-text-right">{formatCurrency(yg.sell_price)}</td>
+                        <td class="has-text-right">{formatCurrency(yg.sell_price / yg.units, 4)}</td
                         >
                         <td class="has-text-right has-text-weight-bold"
-                          >{formatCurrency(fy.tax.taxable)}</td
+                          >{formatCurrency(yg.tax.gain)}</td
                         >
                         <td class="has-text-right has-text-weight-bold"
-                          >{formatCurrency(fy.tax.short_term)}</td
+                          >{formatCurrency(yg.tax.taxable)}</td
                         >
                         <td class="has-text-right has-text-weight-bold"
-                          >{formatCurrency(fy.tax.long_term)}</td
+                          >{formatCurrency(yg.tax.short_term)}</td
                         >
                         <td class="has-text-right has-text-weight-bold"
-                          >{formatCurrency(fy.tax.slab)}</td
+                          >{formatCurrency(yg.tax.long_term)}</td
+                        >
+                        <td class="has-text-right has-text-weight-bold"
+                          >{formatCurrency(yg.tax.slab)}</td
                         >
                       </tr>
                       <tr slot="content">
                         <td colspan="13" class="p-0">
-                          <CapitalGainDetailCard fyCapitalGain={fy} />
+                          <CapitalGainDetailCard yearCapitalGain={yg} />
                         </td>
                       </tr>
                     </Toggleable>

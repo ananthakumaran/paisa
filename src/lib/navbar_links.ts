@@ -8,7 +8,7 @@ export interface Link {
   hide?: boolean;
   dateRangeSelector?: boolean;
   monthPicker?: boolean;
-  financialYearPicker?: boolean;
+  calendarYearPicker?: boolean;
   maxDepthSelector?: boolean;
   recurringIcons?: boolean;
   children?: Link[];

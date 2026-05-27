@@ -42,28 +42,17 @@ func BTreeToSlice[I btree.Item](tree *btree.BTree) []I {
 	return items
 }
 
-func FY(date time.Time) string {
-	if config.GetConfig().FinancialYearStartingMonth == time.January {
-		return fmt.Sprintf("%d", date.Year())
-	}
-
-	if date.Month() < config.GetConfig().FinancialYearStartingMonth {
+// IndianFY returns the Indian government fiscal-year string (April–March,
+// e.g. "2023-24") for the given date. This is used ONLY to look up the
+// Cost Inflation Index, which is published by the Indian government and
+// keyed by Indian FY regardless of the user's locale. It is NOT used for
+// any display aggregation — display aggregation uses calendar years
+// (Jan–Dec) after issue #5.
+func IndianFY(date time.Time) string {
+	if date.Month() < time.April {
 		return fmt.Sprintf("%d-%d", date.Year()-1, date.Year()%100)
-	} else {
-		return fmt.Sprintf("%d-%d", date.Year(), (date.Year()+1)%100)
 	}
-}
-
-func FYHuman(date time.Time) string {
-	if config.GetConfig().FinancialYearStartingMonth == time.January {
-		return fmt.Sprintf("%d", date.Year())
-	}
-
-	if date.Month() < config.GetConfig().FinancialYearStartingMonth {
-		return fmt.Sprintf("%d - %d", date.Year()-1, date.Year()%100)
-	} else {
-		return fmt.Sprintf("%d - %d", date.Year(), (date.Year()+1)%100)
-	}
+	return fmt.Sprintf("%d-%d", date.Year(), (date.Year()+1)%100)
 }
 
 func YearHumanCutOffAt(date time.Time, cutoff time.Time) string {
@@ -74,23 +63,29 @@ func YearHumanCutOffAt(date time.Time, cutoff time.Time) string {
 	}
 }
 
-func ParseFY(fy string) (time.Time, time.Time) {
-	start, _ := time.ParseInLocation("2006", strings.Split(fy, " ")[0], config.TimeZone())
-	start = start.AddDate(0, int(config.GetConfig().FinancialYearStartingMonth-time.January), 0)
-	return BeginningOfFinancialYear(start), EndOfFinancialYear(start)
+// CalendarYear returns a plain 4-digit year string (e.g. "2024") for
+// the given date. Used as the aggregation key for Income Statement,
+// Investment Timeline, Capital Gains, and Schedule AL after the
+// fiscal-year → calendar-year migration (issue #5).
+func CalendarYear(date time.Time) string {
+	return fmt.Sprintf("%d", date.Year())
 }
 
-func BeginningOfFinancialYear(date time.Time) time.Time {
-	beginningOfMonth := BeginningOfMonth(date)
-	if beginningOfMonth.Month() < config.GetConfig().FinancialYearStartingMonth {
-		return beginningOfMonth.AddDate(-1, int(config.GetConfig().FinancialYearStartingMonth-beginningOfMonth.Month()), 0)
-	} else {
-		return beginningOfMonth.AddDate(0, -int(beginningOfMonth.Month()-config.GetConfig().FinancialYearStartingMonth), 0)
-	}
+// ParseCalendarYear parses a 4-digit year string and returns the
+// inclusive [start, end] range covering Jan 1 → Dec 31.
+func ParseCalendarYear(year string) (time.Time, time.Time) {
+	start, _ := time.ParseInLocation("2006", strings.TrimSpace(year), config.TimeZone())
+	return BeginningOfCalendarYear(start), EndOfCalendarYear(start)
 }
 
-func EndOfFinancialYear(date time.Time) time.Time {
-	return EndOfMonth(BeginningOfFinancialYear(date).AddDate(0, 11, 0))
+// BeginningOfCalendarYear returns Jan 1 of the date's year.
+func BeginningOfCalendarYear(date time.Time) time.Time {
+	return time.Date(date.Year(), time.January, 1, 0, 0, 0, 0, config.TimeZone())
+}
+
+// EndOfCalendarYear returns Dec 31 23:59:59.999... of the date's year.
+func EndOfCalendarYear(date time.Time) time.Time {
+	return EndOfDay(time.Date(date.Year(), time.December, 31, 0, 0, 0, 0, config.TimeZone()))
 }
 
 func BeginningOfMonth(date time.Time) time.Time {
@@ -213,10 +208,12 @@ func GroupByMonth[G GroupableByDate](groupables []G) map[string][]G {
 	return grouped
 }
 
-func GroupByFY[G GroupableByDate](groupables []G) map[string][]G {
+// GroupByCalendarYear groups items by calendar-year string (e.g. "2024").
+// Replaces the previous GroupByFY which keyed on Indian fiscal year.
+func GroupByCalendarYear[G GroupableByDate](groupables []G) map[string][]G {
 	grouped := make(map[string][]G)
 	for _, g := range groupables {
-		key := FYHuman(g.GroupDate())
+		key := CalendarYear(g.GroupDate())
 		ps, ok := grouped[key]
 		if ok {
 			grouped[key] = append(ps, g)

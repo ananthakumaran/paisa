@@ -4,7 +4,7 @@
       "date": "2022-01-01T00:00:00Z",
       "postings": [
         {
-          "id": 1,
+          "id": 106,
           "transaction_id": "d84b6999-200b-5b90-9a3e-f94dc8a177da",
           "date": "2022-01-01T00:00:00Z",
           "payee": "Salary",
@@ -25,7 +25,7 @@
           "balance": 0
         },
         {
-          "id": 5,
+          "id": 110,
           "transaction_id": "9ac83c1f-ba46-515b-8e19-3ca8ab332eab",
           "date": "2022-01-06T00:00:00Z",
           "payee": "Bonus",
@@ -46,7 +46,7 @@
           "balance": 0
         },
         {
-          "id": 14,
+          "id": 119,
           "transaction_id": "b2e50492-9dc7-5845-8ed9-9f4590b301a8",
           "date": "2022-01-10T00:00:00Z",
           "payee": "Sell",
@@ -67,7 +67,7 @@
           "balance": 0
         },
         {
-          "id": 20,
+          "id": 125,
           "transaction_id": "6c08d472-cc1e-5b12-8838-03a21e3d8964",
           "date": "2022-01-31T00:00:00Z",
           "payee": "Interest",
@@ -97,11 +97,11 @@
   "tax_timeline": [],
   "yearly_cards": [
     {
-      "start_date": "2021-04-01T00:00:00Z",
-      "end_date": "2022-03-31T23:59:59.999999999Z",
+      "start_date": "2022-01-01T00:00:00Z",
+      "end_date": "2022-12-31T23:59:59.999999999Z",
       "postings": [
         {
-          "id": 1,
+          "id": 106,
           "transaction_id": "d84b6999-200b-5b90-9a3e-f94dc8a177da",
           "date": "2022-01-01T00:00:00Z",
           "payee": "Salary",
@@ -122,7 +122,7 @@
           "balance": 0
         },
         {
-          "id": 5,
+          "id": 110,
           "transaction_id": "9ac83c1f-ba46-515b-8e19-3ca8ab332eab",
           "date": "2022-01-06T00:00:00Z",
           "payee": "Bonus",
@@ -143,7 +143,7 @@
           "balance": 0
         },
         {
-          "id": 14,
+          "id": 119,
           "transaction_id": "b2e50492-9dc7-5845-8ed9-9f4590b301a8",
           "date": "2022-01-10T00:00:00Z",
           "payee": "Sell",
@@ -164,7 +164,7 @@
           "balance": 0
         },
         {
-          "id": 20,
+          "id": 125,
           "transaction_id": "6c08d472-cc1e-5b12-8838-03a21e3d8964",
           "date": "2022-01-31T00:00:00Z",
           "payee": "Interest",

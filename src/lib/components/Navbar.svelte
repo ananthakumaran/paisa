@@ -10,7 +10,7 @@
     obscure
   } from "../../persisted_store";
   import _ from "lodash";
-  import { financialYear, forEachFinancialYear, helpUrl, isMobile, now } from "$lib/utils";
+  import { calendarYear, forEachCalendarYear, helpUrl, isMobile, now } from "$lib/utils";
   import { resolveSelectedLinks, type Link } from "$lib/navbar_links";
   import { onMount } from "svelte";
   import { get } from "svelte/store";
@@ -24,7 +24,7 @@
 
   onMount(async () => {
     if (get(year) == "") {
-      year.set(financialYear(now()));
+      year.set(calendarYear(now()));
     }
   });
 
@@ -41,12 +41,12 @@
       label: "Cash Flow",
       href: "/cash_flow",
       children: [
-        { label: "Income Statement", href: "/income_statement", financialYearPicker: true },
+        { label: "Income Statement", href: "/income_statement", calendarYearPicker: true },
         { label: "Monthly", href: "/monthly", dateRangeSelector: true },
         {
           label: "Yearly",
           href: "/yearly",
-          financialYearPicker: true,
+          calendarYearPicker: true,
           maxDepthSelector: true
         },
         {
@@ -63,7 +63,7 @@
       href: "/expense",
       children: [
         { label: "Monthly", href: "/monthly", monthPicker: true, dateRangeSelector: true },
-        { label: "Yearly", href: "/yearly", financialYearPicker: true },
+        { label: "Yearly", href: "/yearly", calendarYearPicker: true },
         { label: "Budget", href: "/budget", help: "budget", monthPicker: true }
       ]
     },
@@ -125,7 +125,7 @@
         label: "Schedule AL",
         href: "/schedule_al",
         help: "schedule-al",
-        financialYearPicker: true
+        calendarYearPicker: true
       }
     ]
   };
@@ -384,12 +384,12 @@
       <MonthPicker bind:value={$month} max={$dateMax} min={$dateMin} />
     {/if}
 
-    {#if selectedSubSubLink?.financialYearPicker || selectedSubLink?.financialYearPicker || selectedLink?.financialYearPicker}
+    {#if selectedSubSubLink?.calendarYearPicker || selectedSubLink?.calendarYearPicker || selectedLink?.calendarYearPicker}
       <div class="has-text-centered">
         <div class="select is-small">
           <select bind:value={$year}>
-            {#each forEachFinancialYear($dateMin, $dateMax).reverse() as fy}
-              <option>{financialYear(fy)}</option>
+            {#each forEachCalendarYear($dateMin, $dateMax).reverse() as cy}
+              <option>{calendarYear(cy)}</option>
             {/each}
           </select>
         </div>

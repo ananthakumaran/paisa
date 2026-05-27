@@ -377,7 +377,7 @@ func Build(db *gorm.DB, enableCompression bool) *gin.Engine {
 	// importer is added.
 	router.POST("/api/import/detect", ImportDetect)
 	router.POST("/api/import/parse", ImportParse)
-	router.POST("/api/import/commit", ImportCommit)
+	router.POST("/api/import/commit", ImportCommit(db))
 
 	router.GET("/api/credit_cards/:account", func(c *gin.Context) {
 		c.JSON(200, GetCreditCard(db, c.Param("account")))

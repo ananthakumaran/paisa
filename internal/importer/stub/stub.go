@@ -10,6 +10,7 @@ import (
 	"bytes"
 	"encoding/csv"
 	"errors"
+	"strconv"
 	"strings"
 	"time"
 
@@ -57,15 +58,15 @@ func (Stub) Parse(content []byte) ([]importer.ParsedTxn, error) {
 	var out []importer.ParsedTxn
 	for i, row := range rows[1:] {
 		if len(row) != 3 {
-			return nil, errors.New("stub: malformed row " + itoa(i+2))
+			return nil, errors.New("stub: malformed row " + strconv.Itoa(i+2))
 		}
 		date, err := time.Parse("2006-01-02", strings.TrimSpace(row[0]))
 		if err != nil {
-			return nil, errors.New("stub: bad date on row " + itoa(i+2) + ": " + err.Error())
+			return nil, errors.New("stub: bad date on row " + strconv.Itoa(i+2) + ": " + err.Error())
 		}
 		amount, err := decimal.NewFromString(strings.TrimSpace(row[2]))
 		if err != nil {
-			return nil, errors.New("stub: bad amount on row " + itoa(i+2) + ": " + err.Error())
+			return nil, errors.New("stub: bad amount on row " + strconv.Itoa(i+2) + ": " + err.Error())
 		}
 		out = append(out, importer.ParsedTxn{
 			Date:     date,
@@ -82,28 +83,4 @@ func (Stub) Parse(content []byte) ([]importer.ParsedTxn, error) {
 // test's setup; production binaries must NOT call this function.
 func Register() {
 	importer.Register(Stub{})
-}
-
-// itoa is a tiny strconv.Itoa to avoid the strconv import (keeps the stub
-// package's footprint small and easy to audit).
-func itoa(n int) string {
-	if n == 0 {
-		return "0"
-	}
-	neg := n < 0
-	if neg {
-		n = -n
-	}
-	var buf [20]byte
-	i := len(buf)
-	for n > 0 {
-		i--
-		buf[i] = byte('0' + n%10)
-		n /= 10
-	}
-	if neg {
-		i--
-		buf[i] = '-'
-	}
-	return string(buf[i:])
 }

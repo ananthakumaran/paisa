@@ -15,6 +15,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/shopspring/decimal"
 	log "github.com/sirupsen/logrus"
+	"gorm.io/gorm"
 )
 
 // importer/{detect,parse,commit} together implement the new pluggable
@@ -110,96 +111,122 @@ func ImportParse(c *gin.Context) {
 // ImportCommit implements POST /api/import/commit. Appends the user-confirmed
 // transactions to `ledger_file` (resolved relative to the configured journal
 // directory). Read-only mode short-circuits with `{saved: true}` per the
-// project convention. Validation errors do NOT roll back already-written
-// bytes — the handler builds the full text in memory first and only writes
-// once everything passes ledger CLI validation.
-func ImportCommit(c *gin.Context) {
-	if config.GetConfig().Readonly {
-		c.JSON(http.StatusOK, gin.H{"saved": true, "count": 0, "errors": []string{}})
-		return
-	}
-
-	var req importCommitRequest
-	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-
-	if strings.TrimSpace(req.SourceAccount) == "" {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "source_account is required"})
-		return
-	}
-	if strings.TrimSpace(req.LedgerFile) == "" {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "ledger_file is required"})
-		return
-	}
-
-	journalDir := filepath.Dir(config.GetJournalPath())
-	target, err := utils.BuildSubPath(journalDir, req.LedgerFile)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-
-	var rendered strings.Builder
-	var errs []string
-	for i, t := range req.Txns {
-		entry, err := renderImportTxn(t, req.SourceAccount)
-		if err != nil {
-			errs = append(errs, fmt.Sprintf("txn %d: %s", i+1, err.Error()))
-			continue
+// project convention. On success the handler calls Sync(db, …) so the new
+// postings are visible immediately without requiring a manual /api/sync —
+// this matches the editor.go::SaveFile contract.
+//
+// The handler is a closure-returning func so server.Build can capture *db;
+// callers should write `router.POST("/api/import/commit", ImportCommit(db))`.
+func ImportCommit(db *gorm.DB) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		if config.GetConfig().Readonly {
+			c.JSON(http.StatusOK, gin.H{"saved": true, "count": 0, "errors": []string{}})
+			return
 		}
-		rendered.WriteString(entry)
-		rendered.WriteString("\n")
-	}
-	if len(errs) > 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"saved": false, "errors": errs})
-		return
-	}
 
-	// Append (not overwrite). If the file doesn't exist, create it with a
-	// newline-friendly leading blank line so the appended block starts
-	// cleanly. utils.BuildSubPath already guards against path escape.
-	if err := os.MkdirAll(filepath.Dir(target), 0700); err != nil {
-		log.Warn(err)
-		c.JSON(http.StatusInternalServerError, gin.H{"saved": false, "errors": []string{err.Error()}})
-		return
-	}
-	f, err := os.OpenFile(target, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
-	if err != nil {
-		log.Warn(err)
-		c.JSON(http.StatusInternalServerError, gin.H{"saved": false, "errors": []string{err.Error()}})
-		return
-	}
-	defer f.Close()
+		var req importCommitRequest
+		if err := c.ShouldBindJSON(&req); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
 
-	// Add a separating newline if the existing file does not end in one.
-	if stat, err := f.Stat(); err == nil && stat.Size() > 0 {
-		// Cheap heuristic: read last byte to decide whether to inject a
-		// leading newline. Avoids a full file read.
-		buf := make([]byte, 1)
-		if _, err := f.ReadAt(buf, stat.Size()-1); err == nil && buf[0] != '\n' {
-			rendered.WriteString("")
+		if strings.TrimSpace(req.SourceAccount) == "" {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "source_account is required"})
+			return
+		}
+		if strings.TrimSpace(req.LedgerFile) == "" {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "ledger_file is required"})
+			return
+		}
+
+		journalDir := filepath.Dir(config.GetJournalPath())
+		target, err := utils.BuildSubPath(journalDir, req.LedgerFile)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+
+		var rendered strings.Builder
+		var errs []string
+		for i, t := range req.Txns {
+			entry, err := renderImportTxn(t, req.SourceAccount)
+			if err != nil {
+				errs = append(errs, fmt.Sprintf("txn %d: %s", i+1, err.Error()))
+				continue
+			}
+			rendered.WriteString(entry)
+			rendered.WriteString("\n")
+		}
+		if len(errs) > 0 {
+			c.JSON(http.StatusBadRequest, gin.H{"saved": false, "errors": errs})
+			return
+		}
+
+		// Append (not overwrite). utils.BuildSubPath already guards against
+		// path escape, so a malicious `ledger_file` (e.g. `../../etc/foo`)
+		// is rejected before we ever touch disk.
+		if err := os.MkdirAll(filepath.Dir(target), 0700); err != nil {
+			log.Warn(err)
+			c.JSON(http.StatusInternalServerError, gin.H{"saved": false, "errors": []string{err.Error()}})
+			return
+		}
+
+		// Peek the last byte of the existing file BEFORE opening for
+		// append: a write-only fd cannot be read on POSIX, so any
+		// ReadAt-after-O_APPEND attempt returns EBADF and the guard is
+		// silently skipped. os.ReadFile is the simplest correct way; the
+		// file is bounded by user journal sizes (tens of KB to a few MB
+		// in practice).
+		needsLeadingNewline := false
+		if existing, rerr := os.ReadFile(target); rerr == nil && len(existing) > 0 && existing[len(existing)-1] != '\n' {
+			needsLeadingNewline = true
+		}
+
+		f, err := os.OpenFile(target, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+		if err != nil {
+			log.Warn(err)
+			c.JSON(http.StatusInternalServerError, gin.H{"saved": false, "errors": []string{err.Error()}})
+			return
+		}
+		defer f.Close()
+
+		if needsLeadingNewline {
 			if _, werr := f.WriteString("\n"); werr != nil {
 				c.JSON(http.StatusInternalServerError, gin.H{"saved": false, "errors": []string{werr.Error()}})
 				return
 			}
 		}
+
+		if _, err := f.WriteString(rendered.String()); err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"saved": false, "errors": []string{err.Error()}})
+			return
+		}
+
+		// Auto-sync so the imported postings show up in dashboards / queries
+		// immediately. Mirrors editor.go::SaveFile. Sync failures are
+		// surfaced as warnings but do NOT undo the write — the file is the
+		// source of truth, and the user can hit /api/sync later if needed.
+		//
+		// A nil db is permitted only for unit tests; production wiring in
+		// server.Build always passes a real *gorm.DB.
+		if db != nil {
+			syncResult := Sync(db, SyncRequest{Journal: true})
+			if success, ok := syncResult["success"].(bool); ok && !success {
+				msg, _ := syncResult["message"].(string)
+				c.JSON(http.StatusOK, gin.H{
+					"saved":  true,
+					"count":  len(req.Txns),
+					"errors": []string{},
+					"warning": fmt.Sprintf(
+						"wrote %d transactions but sync failed: %s. Run /api/sync to retry.",
+						len(req.Txns), msg),
+				})
+				return
+			}
+		}
+
+		c.JSON(http.StatusOK, gin.H{"saved": true, "count": len(req.Txns), "errors": []string{}})
 	}
-
-	if _, err := f.WriteString(rendered.String()); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"saved": false, "errors": []string{err.Error()}})
-		return
-	}
-
-	// We deliberately do NOT call Sync(db, ...) here: the import package
-	// has no db handle (handler is a free function), and the standard
-	// editor save path already wires Sync. For now, mutation-via-import is
-	// reflected in the file but the in-process cache will refresh on the
-	// next /api/sync. Subsequent issues that wire commit into a db-aware
-	// handler can re-enable the sync call.
-
-	c.JSON(http.StatusOK, gin.H{"saved": true, "count": len(req.Txns), "errors": []string{}})
 }
 
 // renderImportTxn turns one importCommitTxn into a ledger entry. Format:

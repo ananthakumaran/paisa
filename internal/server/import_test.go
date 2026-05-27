@@ -4,11 +4,9 @@ import (
 	"bytes"
 	"encoding/base64"
 	"encoding/json"
-	"io"
 	"net/http/httptest"
 	"os"
 	"path/filepath"
-	"strings"
 	"testing"
 
 	"github.com/ananthakumaran/paisa/internal/config"
@@ -32,7 +30,10 @@ func newImportTestRouter(t *testing.T) *gin.Engine {
 	r := gin.New()
 	r.POST("/api/import/detect", ImportDetect)
 	r.POST("/api/import/parse", ImportParse)
-	r.POST("/api/import/commit", ImportCommit)
+	// nil db: the auto-sync branch is skipped, which is what we want — these
+	// unit tests verify the file-write contract without a real sqlite +
+	// ledger CLI in the loop. Integration coverage lives in tests/.
+	r.POST("/api/import/commit", ImportCommit(nil))
 	return r
 }
 
@@ -233,12 +234,4 @@ func TestImportDetectBadBase64(t *testing.T) {
 	}
 	w := doJSON(r, "/api/import/detect", body)
 	assert.Equal(t, 400, w.Code)
-}
-
-// helper to silence linter about io.Discard import in case we want to log
-var _ = io.Discard
-
-func init() {
-	// keep strings import live across refactors
-	_ = strings.TrimSpace
 }

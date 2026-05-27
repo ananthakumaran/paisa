@@ -74,7 +74,12 @@ export function createPreviewStore(): Writable<PreviewState> & {
     });
     try {
       const detected = await detect(file.name, buf);
-      patch({ phase: detected.length > 0 ? "ready" : "ready", detected });
+      // Whether or not anything matched, transition to "ready": the preview
+      // UI shows a "No importer detected" disabled option for the empty
+      // case so the user can still see their file is uploaded. Future work
+      // (issue M3-B+) may add a manual-override list of all registered
+      // importers; for now the surface stays minimal.
+      patch({ phase: "ready", detected });
       // Auto-select the first detected importer; user can switch in the UI.
       if (detected.length > 0) {
         await pickImporter(detected[0].code);

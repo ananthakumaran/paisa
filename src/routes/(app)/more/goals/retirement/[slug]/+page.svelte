@@ -21,6 +21,8 @@
   import ProgressWithBreakpoints from "$lib/components/ProgressWithBreakpoints.svelte";
   import AssetsBalance from "$lib/components/AssetsBalance.svelte";
   import BoxLabel from "$lib/components/BoxLabel.svelte";
+  import { _ as t } from "$lib/i18n";
+  import { get } from "svelte/store";
 
   export let data: PageData;
 
@@ -98,33 +100,33 @@
     <nav class="level custom-icon {isMobile() && 'grid-2'}">
       <LevelItem title={name} value={iconGlyph(icon)} />
       <LevelItem
-        title="Net Investment"
+        title={$t("page.more.goals.net_investment")}
         value={formatCurrency(investmentTotal)}
         color={COLORS.secondary}
         subtitle={`<b>${formatCurrency(gainTotal)}</b> ${
-          gainTotal >= 0 ? "gain" : "loss"
+          gainTotal >= 0 ? get(t)("page.more.goals.gain") : get(t)("page.more.goals.loss")
         } at <b>${formatFloat(xirr)}</b> XIRR`}
       />
 
       <LevelItem
-        title="Current Savings"
+        title={$t("page.more.goals.current_savings")}
         value={formatCurrency(savingsTotal)}
         color={COLORS.gainText}
-        subtitle="{formatFloat(savingsX, 0)}x times Yearly Expenses"
+        subtitle="{formatFloat(savingsX, 0)}{$t('page.more.goals.times_yearly_expenses_suffix')}"
       />
       <LevelItem
-        title="Yearly Expenses"
+        title={$t("page.more.goals.yearly_expenses")}
         color={COLORS.lossText}
         value={formatCurrency(yearlyExpense)}
       />
 
       <LevelItem
-        title="Target Savings"
+        title={$t("page.more.goals.target_savings")}
         value={formatCurrency(targetSavings)}
         color={COLORS.primary}
-        subtitle="{formatFloat(targetX, 0)}x times Yearly Expenses"
+        subtitle="{formatFloat(targetX, 0)}{$t('page.more.goals.times_yearly_expenses_suffix')}"
       />
-      <LevelItem title="SWR" value={formatFloat(swr)} />
+      <LevelItem title={$t("page.more.goals.swr")} value={formatFloat(swr)} />
     </nav>
   </div>
 </section>
@@ -146,7 +148,7 @@
             </div>
           </div>
         </div>
-        <BoxLabel text="{iconGlyph(icon)} {name} progress" />
+        <BoxLabel text="{iconGlyph(icon)} {name} {$t('page.more.goals.progress_suffix')}" />
         <div class="columns">
           <div class="column is-12">
             <div class="box overflow-x-auto">
@@ -154,13 +156,13 @@
             </div>
           </div>
         </div>
-        <BoxLabel text="Monthly Investment" />
+        <BoxLabel text={$t("page.more.goals.monthly_investment")} />
         <div class="columns">
           <div class="column is-12 has-text-grey">
             <AssetsBalance breakdowns={balances} indent={false} />
           </div>
         </div>
-        <BoxLabel text="Current Balance" />
+        <BoxLabel text={$t("page.more.goals.current_balance")} />
       </div>
       <div class="column is-3">
         <PostingGroup postings={latestPostings} groupFormat="MMM YYYY" let:groupedPostings>

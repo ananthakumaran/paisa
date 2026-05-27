@@ -13,6 +13,7 @@
   import { editorState } from "$lib/search_query_editor";
   import { get } from "svelte/store";
   import { download } from "$lib/export";
+  import { _ as t } from "$lib/i18n";
 
   let buldEditOpen = false;
   let transactions: T[] = null;
@@ -141,7 +142,7 @@
                       class="button is-link is-light invertable"
                       on:click={(_e) => (buldEditOpen = !buldEditOpen)}
                     >
-                      <span>Bulk Edit</span>
+                      <span>{$t("page.ledger.transaction.bulk_edit")}</span>
                       <span class="icon is-small">
                         <i class="fas {buldEditOpen ? 'fa-angle-up' : 'fa-angle-down'}"></i>
                       </span>
@@ -152,14 +153,17 @@
             </div>
             <div class="level-right">
               <div class="level-item">
-                <p class="is-6"><b>{filtered.length}</b> transaction(s)</p>
+                <p class="is-6">
+                  <b>{filtered.length}</b>
+                  {$t("page.ledger.transaction.transactions_suffix")}
+                </p>
               </div>
               <div class="level-item">
                 <a on:click={(_e) => downloadTransactions()}>
                   <span class="icon is-small">
                     <i class="fa-solid fa-file-arrow-down"></i>
                   </span>
-                  download
+                  {$t("page.ledger.transaction.download")}
                 </a>
               </div>
             </div>

@@ -22,6 +22,7 @@
   import { iconify } from "$lib/icon";
   import BoxLabel from "$lib/components/BoxLabel.svelte";
   import LegendCard from "$lib/components/LegendCard.svelte";
+  import { _ as t } from "$lib/i18n";
 
   let commodities: string[] = [];
   let selectedCommodities: string[] = [];
@@ -125,13 +126,13 @@
                 <nav class="level grid-2">
                   <LevelItem
                     narrow
-                    title="Balance"
+                    title={$t("page.assets.balance")}
                     color={COLORS.primary}
                     value={formatCurrency(overview.balanceAmount)}
                   />
                   <LevelItem
                     narrow
-                    title="Net Investment"
+                    title={$t("page.assets.net_investment")}
                     color={COLORS.secondary}
                     value={formatCurrency(overview.netInvestmentAmount)}
                   />
@@ -143,16 +144,18 @@
                 <nav class="level grid-2">
                   <LevelItem
                     narrow
-                    title="Gain / Loss"
+                    title={$t("page.assets.gain_loss")}
                     color={overview.gainAmount >= 0 ? COLORS.gainText : COLORS.lossText}
                     value={formatCurrency(overview.gainAmount)}
                   />
 
                   <LevelItem
                     narrow
-                    title="XIRR"
+                    title={$t("page.assets.xirr")}
                     value={formatFloat(gain.xirr)}
-                    subtitle="{formatPercentage(assetBreakdown.absoluteReturn, 2)} absolute return"
+                    subtitle="{formatPercentage(assetBreakdown.absoluteReturn, 2)} {$t(
+                      'page.assets.absolute_return_suffix'
+                    )}"
                   />
                 </nav>
               </div>
@@ -160,7 +163,7 @@
           {/if}
 
           <div class="column is-full">
-            Postings
+            {$t("page.assets.postings")}
             {#each postings as posting}
               <PostingCard
                 {posting}
@@ -184,18 +187,19 @@
                 <span>{iconify(data.name)}</span>
               </div>
               <div class="ml-3">
-                <span class="mr-1 is-size-7 has-text-grey">Investment</span>
+                <span class="mr-1 is-size-7 has-text-grey">{$t("page.assets.investment")}</span>
                 <span class="has-text-weight-bold">{formatCurrency(overview.investmentAmount)}</span
                 >
               </div>
               <div class="ml-3">
-                <span class="mr-1 is-size-7 has-text-grey">Withdrawal</span>
+                <span class="mr-1 is-size-7 has-text-grey">{$t("page.assets.withdrawal")}</span>
                 <span class="has-text-weight-bold">{formatCurrency(overview.withdrawalAmount)}</span
                 >
               </div>
               {#if overview.balanceUnits > 0}
                 <div class="ml-3">
-                  <span class="mr-1 is-size-7 has-text-grey">Balance Units</span>
+                  <span class="mr-1 is-size-7 has-text-grey">{$t("page.assets.balance_units")}</span
+                  >
                   <span class="has-text-weight-bold"
                     >{formatFloatUptoPrecision(overview.balanceUnits, 4)}</span
                   >
@@ -208,7 +212,7 @@
         <div class="box">
           <svg id="d3-account-timeline-breakdown" width="100%" height="450" />
         </div>
-        <BoxLabel text="Timeline" />
+        <BoxLabel text={$t("page.assets.timeline")} />
 
         <div class="columns">
           <div class="column is-6">
@@ -220,7 +224,7 @@
                 />
                 <svg id="d3-portfolio-security-type" width="100%" />
               </div>
-              <BoxLabel text="Security Type" />
+              <BoxLabel text={$t("page.assets.security_type")} />
             </div>
 
             <div class="mt-5" class:is-hidden={ratingEmpty}>
@@ -231,7 +235,7 @@
                 />
                 <svg id="d3-portfolio-security-rating" width="100%" />
               </div>
-              <BoxLabel text="Security Rating" />
+              <BoxLabel text={$t("page.assets.security_rating")} />
             </div>
 
             <div class="mt-5" class:is-hidden={industryEmpty}>
@@ -242,7 +246,7 @@
                 />
                 <svg id="d3-portfolio-security-industry" width="100%" />
               </div>
-              <BoxLabel text="Industry" />
+              <BoxLabel text={$t("page.assets.industry")} />
             </div>
           </div>
           <div class="column is-6 mt-5">
@@ -251,7 +255,7 @@
                 <div id="d3-portfolio-treemap" style="width: 100%; position: relative" />
                 <svg id="d3-portfolio" width="100%" />
               </div>
-              <BoxLabel text="Security" />
+              <BoxLabel text={$t("page.assets.security")} />
             </div>
           </div>
         </div>

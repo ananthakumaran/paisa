@@ -11,41 +11,60 @@
     nonZeroFloatChange,
     nonZeroPercentageChange
   } from "$lib/table_formatters";
+  import { _ as t } from "$lib/i18n";
+  import { get } from "svelte/store";
+
+  const tt = get(t);
 
   export let breakdowns: Record<string, AssetBreakdown>;
   export let indent = true;
 
   const columns: ColumnDefinition[] = [
     {
-      title: "Account",
+      title: tt("component.asset_breakdown.col_account"),
       field: "group",
       formatter: indent ? indendedAssetAccountName : accountName,
       frozen: true
     },
     {
-      title: "Investment Amount",
+      title: tt("component.asset_breakdown.col_investment_amount"),
       field: "investmentAmount",
       hozAlign: "right",
       vertAlign: "middle",
       formatter: nonZeroCurrency
     },
     {
-      title: "Withdrawal Amount",
+      title: tt("component.asset_breakdown.col_withdrawal_amount"),
       field: "withdrawalAmount",
       hozAlign: "right",
       formatter: nonZeroCurrency
     },
     {
-      title: "Balance Units",
+      title: tt("component.asset_breakdown.col_balance_units"),
       field: "balanceUnits",
       hozAlign: "right",
       formatter: nonZeroCurrency
     },
-    { title: "Market Value", field: "marketAmount", hozAlign: "right", formatter: nonZeroCurrency },
-    { title: "Change", field: "gainAmount", hozAlign: "right", formatter: formatCurrencyChange },
-    { title: "XIRR", field: "xirr", hozAlign: "right", formatter: nonZeroFloatChange },
     {
-      title: "Absolute Return",
+      title: tt("component.asset_breakdown.col_market_value"),
+      field: "marketAmount",
+      hozAlign: "right",
+      formatter: nonZeroCurrency
+    },
+    {
+      title: tt("component.asset_breakdown.col_change"),
+      field: "gainAmount",
+      hozAlign: "right",
+      formatter: formatCurrencyChange
+    },
+    {
+      title: tt("component.asset_breakdown.col_xirr"),
+      field: "xirr",
+      hozAlign: "right",
+      formatter: nonZeroFloatChange
+    },
+    {
+      title: tt("component.asset_breakdown.col_absolute_return"),
       field: "absoluteReturn",
       hozAlign: "right",
       formatter: nonZeroPercentageChange

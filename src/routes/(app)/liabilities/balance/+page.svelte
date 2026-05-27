@@ -9,7 +9,10 @@
   import _ from "lodash";
   import { onMount } from "svelte";
   import type { ColumnDefinition } from "tabulator-tables";
+  import { _ as t } from "$lib/i18n";
+  import { get } from "svelte/store";
 
+  const tt = get(t);
   let breakdowns: LiabilityBreakdown[] = [];
   let isEmpty = false;
 
@@ -23,37 +26,42 @@
 
   const columns: ColumnDefinition[] = [
     {
-      title: "Account",
+      title: tt("page.liabilities.col_account"),
       field: "group",
       formatter: indendedLiabilityAccountName,
       frozen: true
     },
     {
-      title: "Drawn Amount",
+      title: tt("page.liabilities.col_drawn_amount"),
       field: "drawn_amount",
       hozAlign: "right",
       vertAlign: "middle",
       formatter: nonZeroCurrency
     },
     {
-      title: "Repaid Amount",
+      title: tt("page.liabilities.col_repaid_amount"),
       field: "repaid_amount",
       hozAlign: "right",
       formatter: nonZeroCurrency
     },
     {
-      title: "Balance Amount",
+      title: tt("page.liabilities.col_balance_amount"),
       field: "balance_amount",
       hozAlign: "right",
       formatter: nonZeroCurrency
     },
     {
-      title: "Interest",
+      title: tt("page.liabilities.col_interest"),
       field: "interest_amount",
       hozAlign: "right",
       formatter: nonZeroCurrency
     },
-    { title: "APR", field: "apr", hozAlign: "right", formatter: nonZeroFloatChange }
+    {
+      title: tt("page.liabilities.col_apr"),
+      field: "apr",
+      hozAlign: "right",
+      formatter: nonZeroFloatChange
+    }
   ];
 
   let tree: LiabilityBreakdown[] = [];
@@ -68,7 +76,8 @@
       <div class="column is-4 has-text-centered">
         <article class="message">
           <div class="message-body">
-            <strong>Hurray!</strong> You have no liabilities.
+            <strong>{$t("common.hurray")}</strong>
+            {$t("page.liabilities.no_liabilities")}
           </div>
         </article>
       </div>

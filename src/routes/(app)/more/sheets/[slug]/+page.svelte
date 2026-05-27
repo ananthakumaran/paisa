@@ -20,6 +20,8 @@
   import FileTree from "$lib/components/FileTree.svelte";
   import FileModal from "$lib/components/FileModal.svelte";
   import { page } from "$app/stores";
+  import { _ as t } from "$lib/i18n";
+  import { get } from "svelte/store";
 
   let ledgerFiles: LedgerFile[] = [];
   let accounts: string[] = [];
@@ -52,7 +54,7 @@
   let cancelled = false;
   beforeNavigate(async ({ cancel }) => {
     if ($sheetEditorState.hasUnsavedChanges) {
-      const confirmed = confirm("You have unsaved changes. Are you sure you want to leave?");
+      const confirmed = confirm(get(t)("page.more.sheets.unsaved_warning"));
       if (!confirmed) {
         cancel();
         cancelled = true;
@@ -203,9 +205,9 @@
 <FileModal
   bind:open={modalOpen}
   on:save={(e) => createFile(e.detail)}
-  label="Create"
-  placeholder="scratch"
-  help="Filename without any extension"
+  label={$t("page.more.sheets.create")}
+  placeholder={$t("page.more.sheets.placeholder")}
+  help={$t("page.more.sheets.filename_no_ext")}
 />
 
 <section class="section tab-editor max-h-screen" style="padding-bottom: 0 !important">
@@ -223,7 +225,7 @@
                 <span class="icon is-small">
                   <i class="fas fa-file-circle-plus" />
                 </span>
-                <span>Create</span>
+                <span>{$t("page.more.sheets.create")}</span>
               </button>
             </p>
           </div>
@@ -238,7 +240,7 @@
                 <span class="icon is-small">
                   <i class="fas fa-floppy-disk" />
                 </span>
-                <span>Save</span>
+                <span>{$t("page.more.sheets.save")}</span>
               </button>
             </p>
             <p class="control">
@@ -250,7 +252,7 @@
                 <span class="icon is-small">
                   <i class="fas fa-arrow-left" />
                 </span>
-                <span>Undo</span>
+                <span>{$t("page.more.sheets.undo")}</span>
               </button>
             </p>
             <p class="control">
@@ -259,7 +261,7 @@
                 disabled={$sheetEditorState.redoDepth == 0}
                 on:click={(_e) => redo(editor)}
               >
-                <span>Redo</span>
+                <span>{$t("page.more.sheets.redo")}</span>
                 <span class="icon is-small">
                   <i class="fas fa-arrow-right" />
                 </span>
@@ -278,7 +280,7 @@
                   <span class="icon is-small">
                     <i class="fas fa-clock-rotate-left" />
                   </span>
-                  <span>Revert</span>
+                  <span>{$t("page.more.sheets.revert")}</span>
                 </button>
               </p>
 
@@ -306,7 +308,8 @@
             <div class="control ml-5">
               <a on:click={(_e) => moveToLine(editor, $sheetEditorState.errors[0].line_from)}
                 ><span class="ml-1 tag invertable is-danger is-light"
-                  >{$sheetEditorState.errors.length} error(s) found</span
+                  >{$sheetEditorState.errors.length}
+                  {$t("page.more.sheets.errors_suffix")}</span
                 ></a
               >
             </div>

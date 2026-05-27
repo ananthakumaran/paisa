@@ -9,6 +9,7 @@
   import { ajax, type Legend } from "$lib/utils";
   import _ from "lodash";
   import { onMount } from "svelte";
+  import { _ as t } from "$lib/i18n";
 
   let monthlyInvestmentTimelineLegends: Legend[] = [];
   let yearlyInvestmentTimelineLegends: Legend[] = [];
@@ -31,7 +32,7 @@
         </div>
       </div>
     </div>
-    <BoxLabel text="Monthly Investment Timeline" />
+    <BoxLabel text={$t("page.assets.monthly_investment_timeline")} />
   </div>
 </section>
 <section class="section tab-investment">
@@ -42,7 +43,7 @@
           <LegendCard legends={yearlyInvestmentTimelineLegends} clazz="ml-4" />
           <svg id="d3-yearly-investment-timeline" width="100%" />
         </div>
-        <BoxLabel text="Financial Year Investment Timeline" />
+        <BoxLabel text={$t("page.assets.financial_year_investment_timeline")} />
       </div>
       <div class="column is-full-tablet is-half-fullhd">
         <div class="columns is-flex-wrap-wrap" id="d3-yearly-investment-cards" />

@@ -3,6 +3,7 @@
   import { ajax } from "$lib/utils";
   import type { Issue, Severity } from "$lib/utils";
   import { groupBySeverity, bulmaClassFor, severityLabel, SEVERITY_ORDER } from "$lib/doctor";
+  import { _ as t } from "$lib/i18n";
 
   let issues: Issue[] = [];
   // Infos are collapsed by default — they are informational, not blocking.
@@ -36,7 +37,8 @@
       <div class="column is-12 has-text-centered">
         {#if issues.length === 0}
           <div>
-            <b class="tag is-success">0</b> potential issue(s) found.
+            <b class="tag is-success">0</b>
+            {$t("page.more.doctor.potential_issues_suffix")}
           </div>
         {:else}
           <div class="severity-counter">

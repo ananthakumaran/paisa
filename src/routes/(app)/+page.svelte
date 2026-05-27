@@ -32,6 +32,7 @@
   import GoalSummaryCard from "$lib/components/GoalSummaryCard.svelte";
   import LegendCard from "$lib/components/LegendCard.svelte";
   import BalanceCard from "$lib/components/BalanceCard.svelte";
+  import { _ as t } from "$lib/i18n";
 
   let UntypedMasonryGrid = MasonryGrid as any;
 
@@ -111,38 +112,43 @@
         <ZeroState item={!isEmpty}>
           <div class="has-text-left" style="max-width: 640px;">
             <p class="mb-2">
-              Looks like you are new here, you can either get started or look at a demo setup
+              {$t("page.dashboard.new_user_intro")}
             </p>
             <div>
-              <p class="is-size-4">I want to get started</p>
+              <p class="is-size-4">{$t("page.dashboard.get_started_title")}</p>
               <ol class="ml-5 mt-2 mb-4">
                 <li>
-                  Go to <a href="/more/config">configuration</a> page and set your default currency and
-                  locale.
+                  {$t("page.dashboard.get_started_step1_pre")}<a href="/more/config"
+                    >{$t("page.dashboard.configuration_link")}</a
+                  >{$t("page.dashboard.get_started_step1_post")}
                 </li>
                 <li>
-                  Go to <a href="/ledger/editor">editor</a> page and start adding transactions to your
-                  journal.
+                  {$t("page.dashboard.get_started_step2_pre")}<a href="/ledger/editor"
+                    >{$t("page.dashboard.editor_link")}</a
+                  >{$t("page.dashboard.get_started_step2_post")}
                 </li>
               </ol>
-              <p class="is-size-4">I want to view a Demo</p>
+              <p class="is-size-4">{$t("page.dashboard.demo_title")}</p>
               <p class="ml-3"></p>
               <ol class="ml-5 mt-2 mb-4">
                 <li>
-                  Click the button below to load a demo setup. This will load a demo journal with
-                  relevant config.
+                  {$t("page.dashboard.demo_step1")}
                 </li>
                 <li>
-                  Once you are done playing around, you can go to <a href="/ledger/editor">editor</a
-                  > page and select all the content and delete them.
+                  {$t("page.dashboard.demo_step2_pre")}<a href="/ledger/editor"
+                    >{$t("page.dashboard.editor_link")}</a
+                  >{$t("page.dashboard.demo_step2_post")}
                 </li>
                 <li>
-                  Go to <a href="/more/config">configuration</a> page and click the reset to defaults
-                  button.
+                  {$t("page.dashboard.demo_step3_pre")}<a href="/more/config"
+                    >{$t("page.dashboard.configuration_link")}</a
+                  >{$t("page.dashboard.demo_step3_post")}
                 </li>
               </ol>
 
-              <a on:click={(_e) => initDemo()} class="button is-link">Setup Demo</a>
+              <a on:click={(_e) => initDemo()} class="button is-link"
+                >{$t("page.dashboard.setup_demo")}</a
+              >
             </div>
           </div>
         </ZeroState>
@@ -159,7 +165,9 @@
           <div class="tile is-child">
             <div class="content">
               <p class="subtitle">
-                <a class="secondary-link has-text-grey" href="/assets/networth">Assets</a>
+                <a class="secondary-link has-text-grey" href="/assets/networth"
+                  >{$t("page.dashboard.section_assets")}</a
+                >
               </p>
               <div class="content">
                 <div>
@@ -167,14 +175,14 @@
                     <nav class="level grid-2">
                       <LevelItem
                         narrow
-                        title="Net worth"
+                        title={$t("page.dashboard.net_worth")}
                         color={COLORS.primary}
                         value={formatCurrency(networth.balanceAmount)}
                       />
 
                       <LevelItem
                         narrow
-                        title="Net Investment"
+                        title={$t("page.dashboard.net_investment")}
                         color={COLORS.secondary}
                         value={formatCurrency(networth.netInvestmentAmount)}
                       />
@@ -182,12 +190,16 @@
                     <nav class="level grid-2">
                       <LevelItem
                         narrow
-                        title="Gain / Loss"
+                        title={$t("page.dashboard.gain_loss")}
                         color={networth.gainAmount >= 0 ? COLORS.gainText : COLORS.lossText}
                         value={formatCurrency(networth.gainAmount)}
                       />
 
-                      <LevelItem narrow title="XIRR" value={formatFloat(xirr)} />
+                      <LevelItem
+                        narrow
+                        title={$t("page.dashboard.xirr")}
+                        value={formatFloat(xirr)}
+                      />
                     </nav>
                   {/if}
                 </div>
@@ -201,7 +213,8 @@
             <article class="tile is-child">
               <div class="content">
                 <p class="subtitle">
-                  <a class="secondary-link has-text-grey" href="/assets/balance">Checking Balance</a
+                  <a class="secondary-link has-text-grey" href="/assets/balance"
+                    >{$t("page.dashboard.section_checking_balance")}</a
                   >
                 </p>
                 <div class="content">
@@ -221,11 +234,14 @@
         <div class="tile is-parent">
           <article class="tile is-child min-w-0">
             <p class="subtitle">
-              <a class="secondary-link has-text-grey" href="/cash_flow/monthly">Cash Flow</a>
+              <a class="secondary-link has-text-grey" href="/cash_flow/monthly"
+                >{$t("page.dashboard.section_cash_flow")}</a
+              >
             </p>
             <div class="content box px-2 pb-0">
               <ZeroState item={cashFlows}>
-                <strong>Oops!</strong> You have not made any transactions in the last 3 months.
+                <strong>{$t("common.oops")}</strong>
+                {$t("page.dashboard.no_cash_flow_recent")}
               </ZeroState>
 
               <LegendCard legends={cashflowLegends} clazz="mb-2 overflow-x-auto" />
@@ -244,7 +260,9 @@
             <div class="tile is-child">
               <div class="content">
                 <p class="subtitle">
-                  <a class="secondary-link has-text-grey" href="/expense/budget">Budget</a>
+                  <a class="secondary-link has-text-grey" href="/expense/budget"
+                    >{$t("page.dashboard.section_budget")}</a
+                  >
                 </p>
                 <div class="content">
                   <div>
@@ -263,7 +281,9 @@
               <article class="tile is-child">
                 <div class="content">
                   <p class="subtitle">
-                    <a class="secondary-link has-text-grey" href="/more/goals">Goals</a>
+                    <a class="secondary-link has-text-grey" href="/more/goals"
+                      >{$t("page.dashboard.section_goals")}</a
+                    >
                   </p>
                   <div class="content">
                     {#each goalSummaries as goal}
@@ -281,7 +301,9 @@
           <article class="tile is-child">
             <p class="subtitle is-flex is-justify-content-space-between is-align-items-end">
               <span
-                ><a class="secondary-link has-text-grey" href="/expense/monthly">Expenses</a>
+                ><a class="secondary-link has-text-grey" href="/expense/monthly"
+                  >{$t("page.dashboard.section_expenses")}</a
+                >
                 <span class="is-size-5 has-text-weight-bold px-2" style="color: {COLORS.expenses}"
                   >{formatCurrency(totalExpense)}</span
                 ></span
@@ -290,7 +312,8 @@
             </p>
             <div class="content box px-3">
               <ZeroState item={selectedExpenses}>
-                <strong>Hurray!</strong> You have no expenses this month.
+                <strong>{$t("common.hurray")}</strong>
+                {$t("page.dashboard.no_expenses_this_month")}
               </ZeroState>
               <svg id="d3-current-month-breakdown" width="100%" />
             </div>
@@ -302,7 +325,8 @@
               <article class="tile is-child">
                 <div class="content">
                   <p class="subtitle">
-                    <a class="secondary-link has-text-grey" href="/cash_flow/recurring">Recurring</a
+                    <a class="secondary-link has-text-grey" href="/cash_flow/recurring"
+                      >{$t("page.dashboard.section_recurring")}</a
                     >
                   </p>
                   <div class="content box">
@@ -327,7 +351,7 @@
                 <div class="content">
                   <p class="subtitle">
                     <a class="secondary-link has-text-grey" href="/ledger/transaction"
-                      >Recent Transactions</a
+                      >{$t("page.dashboard.section_recent_transactions")}</a
                     >
                   </p>
                   <div>

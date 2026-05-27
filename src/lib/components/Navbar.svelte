@@ -11,6 +11,7 @@
   } from "../../persisted_store";
   import _ from "lodash";
   import { financialYear, forEachFinancialYear, helpUrl, isMobile, now } from "$lib/utils";
+  import { resolveSelectedLinks, type Link } from "$lib/navbar_links";
   import { onMount } from "svelte";
   import { get } from "svelte/store";
   import DateRange from "./DateRange.svelte";
@@ -34,20 +35,6 @@
     { icon: "fa-circle-check", color: "grey", label: "Upcoming" }
   ];
 
-  interface Link {
-    label: string;
-    href: string;
-    tag?: string;
-    help?: string;
-    hide?: boolean;
-    dateRangeSelector?: boolean;
-    monthPicker?: boolean;
-    financialYearPicker?: boolean;
-    maxDepthSelector?: boolean;
-    recurringIcons?: boolean;
-    children?: Link[];
-    disablePreload?: boolean;
-  }
   const links: Link[] = [
     { label: "Dashboard", href: "/", hide: true },
     {
@@ -157,32 +144,10 @@
   $: normalizedPath = $page.url.pathname?.replace(/(.+)\/$/, "");
 
   $: if (normalizedPath) {
-    selectedSubLink = null;
-    selectedSubSubLink = null;
-    selectedLink = _.find(links, (l) => normalizedPath == l.href);
-    if (!selectedLink) {
-      selectedLink = _.find(
-        links,
-        (l) => !_.isEmpty(l.children) && normalizedPath.startsWith(l.href)
-      );
-
-      selectedSubLink = _.find(
-        selectedLink.children,
-        (l) => normalizedPath == selectedLink.href + l.href
-      );
-
-      if (!selectedSubLink) {
-        selectedSubLink = _.find(selectedLink.children, (l) =>
-          normalizedPath.startsWith(selectedLink.href + l.href)
-        );
-
-        if (!_.isEmpty(selectedSubLink.children)) {
-          selectedSubSubLink = _.find(selectedSubLink.children, (l) =>
-            normalizedPath.startsWith(selectedLink.href + selectedSubLink.href + l.href)
-          );
-        }
-      }
-    }
+    ({ selectedLink, selectedSubLink, selectedSubSubLink } = resolveSelectedLinks(
+      links,
+      normalizedPath
+    ));
   }
 </script>
 

@@ -14,7 +14,7 @@
       "xirr": 2.17,
       "postings": [
         {
-          "id": 3,
+          "id": 23,
           "transaction_id": "67f44c92-c138-550d-9ae2-84034aca39d3",
           "date": "2022-01-05T00:00:00Z",
           "payee": "Buy stock",

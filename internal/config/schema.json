@@ -978,7 +978,12 @@
                   "com-purifiedbytes-nps",
                   "com-purifiedbytes-metal",
                   "co-alphavantage",
+<<<<<<< HEAD
                   "yahoo",
+=======
+                  "cn-okx",
+                  "cn-ttjj",
+>>>>>>> origin/master
                   "cn-eastmoney"
                 ]
               },

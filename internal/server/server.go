@@ -11,6 +11,11 @@ import (
 	"github.com/ananthakumaran/paisa/internal/accounting"
 	"github.com/ananthakumaran/paisa/internal/config"
 	"github.com/ananthakumaran/paisa/internal/generator"
+	// Importer subpackages register themselves into the shared registry via
+	// init(). A blank import here is the only wiring needed to make the
+	// pluggable importers (M3-B…E) discoverable from the /api/import/*
+	// routes — no per-importer changes to this file are required.
+	_ "github.com/ananthakumaran/paisa/internal/importer/wechat"
 	"github.com/ananthakumaran/paisa/internal/ledger"
 	"github.com/ananthakumaran/paisa/internal/model/template"
 	"github.com/ananthakumaran/paisa/internal/prediction"

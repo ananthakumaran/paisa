@@ -1,5 +1,79 @@
 {
   "app": {
     "title": "Paisa"
+  },
+  "common": {
+    "loading": "Loading...",
+    "readonly": "readonly",
+    "readonly_tooltip": "Paisa is in readonly mode"
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "cash_flow": "Cash Flow",
+    "expenses": "Expenses",
+    "assets": "Assets",
+    "liabilities": "Liabilities",
+    "income": "Income",
+    "ledger": "Ledger",
+    "more": "More",
+    "about": "About",
+    "tax": "Tax",
+    "income_statement": "Income Statement",
+    "monthly": "Monthly",
+    "yearly": "Yearly",
+    "recurring": "Recurring",
+    "budget": "Budget",
+    "balance": "Balance",
+    "networth": "Networth",
+    "investment": "Investment",
+    "gain": "Gain",
+    "allocation": "Allocation",
+    "analysis": "Analysis",
+    "credit_cards": "Credit Cards",
+    "repayment": "Repayment",
+    "interest": "Interest",
+    "import": "Import",
+    "editor": "Editor",
+    "transactions": "Transactions",
+    "postings": "Postings",
+    "price": "Price",
+    "configuration": "Configuration",
+    "sheets": "Sheets",
+    "goals": "Goals",
+    "doctor": "Doctor",
+    "logs": "Logs",
+    "harvest": "Harvest",
+    "capital_gains": "Capital Gains",
+    "schedule_al": "Schedule AL"
+  },
+  "navbar": {
+    "recurring_icon": {
+      "cleared": "Cleared",
+      "cleared_late": "Cleared late",
+      "past_due": "Past due",
+      "upcoming": "Upcoming"
+    },
+    "depth_selector": {
+      "expenses": "Expenses",
+      "income": "Income"
+    }
+  },
+  "error": {
+    "page_not_found": {
+      "title": "Page not found",
+      "body": "The page you are looking for does not exist. It may have been moved, or removed altogether. Perhaps you can return back to the site's {homeLink} and see if you can find what you are looking for.",
+      "homepage": "homepage"
+    },
+    "critical": {
+      "title": "Something Went Wrong",
+      "intro": "Paisa has encountered a critical error",
+      "report": "Please report this issue at {link}. Closing and reopening the app may help."
+    }
+  },
+  "login": {
+    "username": "Username",
+    "password": "Password",
+    "submit": "Login",
+    "invalid_credentials": "Invalid credentials"
   }
 }

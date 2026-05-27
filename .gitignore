@@ -26,3 +26,10 @@ fonts/*
 !fonts/*.scss
 /result
 brand/*.png
+
+# local scratch (not for upstream)
+.tmp-issues.json
+.tmp-issue-map.json
+.screenshots/
+mydata/
+.claude/

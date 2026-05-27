@@ -92,6 +92,13 @@ should match the code used in yahoo. If the fetched price currency is
 not the default currency, it will be converted to default currency
 using the forex rate apis.
 
+!!! tip "HK / US / China-ADR stocks"
+    A modular Yahoo provider registered under the code `yahoo` adds first-class
+    support for Hong Kong (`0700.HK`, `1810.HK`), US (`AAPL`, `UBER`), China
+    ADR (`BABA`, `BIDU`) tickers and indices (`^GSPC`, `^HSI`), with
+    backoff on 429s and graceful handling of delisted symbols. See
+    [Yahoo provider reference](providers/yahoo.md).
+
 ## Alpha Vantage <sub>:globe_with_meridians:</sub>
 
 Supports 100,000+ stocks, ETFs, mutual funds etc. It also provides
@@ -172,6 +179,33 @@ The following metals and purity combinations are supported.
 | Gold   | 585    | gold-585   |
 | Silver | 999    | silver-999 |
 
+
+## OKX Crypto <sub>:globe_with_meridians:</sub>
+
+To automatically track the value of your cryptocurrency holdings, link
+the commodity to the OKX instrument id.
+
+```yaml
+commodities:
+  - name: BTC # (1)!
+    type: unknown # (2)!
+    price:
+        provider: cn-okx # (3)!
+        code: BTC-USDT # (4)!
+```
+
+1. commodity name
+1. type
+1. price provider name
+1. OKX instrument id (e.g. `BTC-USDT`, `ETH-USDT`, `BTC-USD`)
+
+Crypto prices are denominated in the quote currency of the instrument
+(typically `USDT` or `USD`). The conversion to your
+`default_currency` is handled by the FX layer, so you must have an
+exchange rate available from the quote currency to your default
+currency.
+
+See [OKX provider reference](providers/cn-okx.md) for full details.
 
 ## RealEstate
 

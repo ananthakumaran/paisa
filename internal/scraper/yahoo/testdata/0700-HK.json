@@ -1,0 +1,24 @@
+{
+  "chart": {
+    "result": [
+      {
+        "meta": {
+          "currency": "HKD",
+          "symbol": "0700.HK",
+          "exchangeName": "HKG",
+          "instrumentType": "EQUITY",
+          "regularMarketPrice": 380.0
+        },
+        "timestamp": [1704067200, 1704153600],
+        "indicators": {
+          "quote": [
+            {
+              "close": [310.4, 312.6]
+            }
+          ]
+        }
+      }
+    ],
+    "error": null
+  }
+}

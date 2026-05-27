@@ -48,11 +48,11 @@ func Calculate(db *gorm.DB, quantity decimal.Decimal, commodity config.Commodity
 	}
 
 	if commodity.TaxCategory == config.Debt && purchaseDate.After(CII_START_DATE) && dateDiff > THREE_YEAR {
-		purchasePrice = purchasePrice.Mul(decimal.NewFromInt(int64(cii.GetIndex(db, utils.FY(sellDate)))).Div(decimal.NewFromInt(int64(cii.GetIndex(db, utils.FY(purchaseDate))))))
+		purchasePrice = purchasePrice.Mul(decimal.NewFromInt(int64(cii.GetIndex(db, utils.IndianFY(sellDate)))).Div(decimal.NewFromInt(int64(cii.GetIndex(db, utils.IndianFY(purchaseDate))))))
 	}
 
 	if commodity.TaxCategory == config.UnlistedEquity && purchaseDate.After(CII_START_DATE) && dateDiff > TWO_YEAR {
-		purchasePrice = purchasePrice.Mul(decimal.NewFromInt(int64(cii.GetIndex(db, utils.FY(sellDate)))).Div(decimal.NewFromInt(int64(cii.GetIndex(db, utils.FY(purchaseDate))))))
+		purchasePrice = purchasePrice.Mul(decimal.NewFromInt(int64(cii.GetIndex(db, utils.IndianFY(sellDate)))).Div(decimal.NewFromInt(int64(cii.GetIndex(db, utils.IndianFY(purchaseDate))))))
 	}
 
 	taxable := sellPrice.Mul(quantity).Sub(purchasePrice.Mul(quantity))

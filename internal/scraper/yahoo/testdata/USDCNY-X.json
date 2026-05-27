@@ -1,0 +1,24 @@
+{
+  "chart": {
+    "result": [
+      {
+        "meta": {
+          "currency": "CNY",
+          "symbol": "USDCNY=X",
+          "exchangeName": "CCY",
+          "instrumentType": "CURRENCY",
+          "regularMarketPrice": 7.2
+        },
+        "timestamp": [1704067200, 1704153600, 1704240000],
+        "indicators": {
+          "quote": [
+            {
+              "close": [7.0, 7.1, 7.2]
+            }
+          ]
+        }
+      }
+    ],
+    "error": null
+  }
+}

@@ -2,7 +2,7 @@
   "prices": {
     "AAPL": [
       {
-        "id": 6,
+        "id": 10,
         "date": "2022-01-15T00:00:00Z",
         "commodity_type": "unknown",
         "commodity_id": "AAPL",
@@ -10,7 +10,7 @@
         "value": 10025.05
       },
       {
-        "id": 5,
+        "id": 9,
         "date": "2022-01-05T00:00:00Z",
         "commodity_type": "unknown",
         "commodity_id": "AAPL",

@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"sync"
 	"time"
 
 	"github.com/shopspring/decimal"
@@ -16,8 +17,121 @@ import (
 	"gorm.io/gorm"
 
 	"github.com/ananthakumaran/paisa/internal/config"
+	"github.com/ananthakumaran/paisa/internal/model/fx"
 	"github.com/ananthakumaran/paisa/internal/model/price"
 )
+
+// init wires the M1-F FX subsystem into M2-D's stock scraper and replaces
+// M2-D's own FX-history hook so that any commodity registered under
+// provider "yahoo" with an FX-style symbol (e.g. USDCNY=X) is resolved
+// through the configured FX provider chain rather than only Yahoo's chart
+// endpoint.
+//
+// There are two hooks here because M2-D shipped two integration points:
+//
+//  1. fxLookupFn (per-timestamp lookup used by stock.go to convert each
+//     foreign-currency stock quote into the user's default currency).
+//  2. getFXPricesFn (full-history fetcher used by yahoo.PriceProvider
+//     when GetPrices receives a FX-style symbol).
+//
+// Neither hook blocks on a network fetch in the common case: by the time
+// the stock scraper runs in a server, the RateStore has been seeded from
+// the prices table (see internal/server/networth.go::loadFxRatesFromDB)
+// and from the FxProviders chain (see chooseFXPrices below). If the
+// RateStore is empty (fresh `paisa update` before any FX commodity has
+// been synced), both hooks return ok=false / fall back to Yahoo.
+func init() {
+	SetFXLookupFn(func(base, target string, asOf time.Time) (float64, bool) {
+		store := fx.Store()
+		if store == nil {
+			return 0, false
+		}
+		rate, ok := store.Lookup(base, target, asOf)
+		if !ok {
+			return 0, false
+		}
+		v, _ := rate.Float64()
+		if v == 0 {
+			return 0, false
+		}
+		return v, true
+	})
+
+	// Replace yahoo.go's package-level getFXPricesFn with one that goes
+	// through the configured FX provider chain (config.FxProviders()).
+	// When the chain has data we use it; otherwise we fall back to the
+	// original Yahoo behaviour so single-currency users see no change.
+	getFXPricesFn = func(c *Client, code, commodityName string) ([]*price.Price, error) {
+		if prices, ok := chooseFXPrices(code, commodityName); ok {
+			return prices, nil
+		}
+		return getHistoryWithClient(c, code, commodityName)
+	}
+
+	// Self-register the Yahoo FX provider so the chain in chooseFXPrices
+	// can find it under config.FxProviders() = [..., "yahoo-fx", ...].
+	RegisterFxProvider("yahoo-fx", &FxPriceProvider{})
+}
+
+// chooseFXPrices iterates config.FxProviders() in order, returning the first
+// non-empty result. We let the result through unchanged; the caller writes
+// it to the prices table via the regular price.UpsertAllByTypeNameAndID
+// path, so the rate store seeder picks it up on the next /api/networth
+// request.
+//
+// Symbol shape handling: yahoo's FX symbols look like "USDCNY=X" (8 chars,
+// trailing "=X"). Our FX providers expect "USDCNY" (no =X). We strip the
+// suffix when present.
+func chooseFXPrices(code, commodityName string) ([]*price.Price, bool) {
+	pair := code
+	if len(pair) == 8 && pair[6:] == "=X" {
+		pair = pair[:6]
+	}
+	if len(pair) != 6 {
+		return nil, false
+	}
+	providers := config.FxProviders()
+	for _, providerCode := range providers {
+		provider := lookupFxProvider(providerCode)
+		if provider == nil {
+			continue
+		}
+		prices, err := provider.GetPrices(pair, commodityName)
+		if err != nil {
+			log.Warnf("fx provider %s failed for %s: %v", providerCode, pair, err)
+			continue
+		}
+		if len(prices) > 0 {
+			log.Infof("fx provider %s returned %d points for %s", providerCode, len(prices), pair)
+			return prices, true
+		}
+	}
+	return nil, false
+}
+
+// fxProviderRegistry holds the FX-capable providers known to the yahoo
+// package. We can't import the top-level scraper package (cycle), so each
+// FX provider self-registers via RegisterFxProvider on init.
+var (
+	fxProviderRegistry   = map[string]price.PriceProvider{}
+	fxProviderRegistryMu sync.Mutex
+)
+
+// RegisterFxProvider lets an FX-capable provider package register itself
+// for use by the chained FX resolver. The yahoo FX provider self-registers
+// in this file; the BoC provider registers via its package's init() (see
+// internal/scraper/cn/boc/boc.go).
+func RegisterFxProvider(code string, p price.PriceProvider) {
+	fxProviderRegistryMu.Lock()
+	defer fxProviderRegistryMu.Unlock()
+	fxProviderRegistry[code] = p
+}
+
+func lookupFxProvider(code string) price.PriceProvider {
+	fxProviderRegistryMu.Lock()
+	defer fxProviderRegistryMu.Unlock()
+	return fxProviderRegistry[code]
+}
 
 // FxSymbol returns Yahoo's ticker form for a base->target rate. For example,
 // FxSymbol("USD", "CNY") -> "USDCNY=X".

@@ -4,7 +4,7 @@
       "date": "2022-01-01T00:00:00Z",
       "postings": [
         {
-          "id": 69,
+          "id": 17,
           "transaction_id": "d84b6999-200b-5b90-9a3e-f94dc8a177da",
           "date": "2022-01-01T00:00:00Z",
           "payee": "Salary",
@@ -38,7 +38,7 @@
       "end_date": "2022-12-31T23:59:59.999999999Z",
       "postings": [
         {
-          "id": 69,
+          "id": 17,
           "transaction_id": "d84b6999-200b-5b90-9a3e-f94dc8a177da",
           "date": "2022-01-01T00:00:00Z",
           "payee": "Salary",

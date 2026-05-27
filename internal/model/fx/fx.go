@@ -42,6 +42,11 @@ func NewRateStore() *RateStore {
 
 // Put inserts a rate point into the store. Subsequent inserts re-sort the
 // time series so lookups stay O(log n).
+//
+// Same-day duplicates are coalesced: if an entry already exists for `date`,
+// the value is overwritten rather than appended. This keeps the store stable
+// across repeat seeder invocations (sync runs every time `/api/update` is
+// called, and the store is process-cached — see Store/ClearStore).
 func (s *RateStore) Put(from, to string, date time.Time, value decimal.Decimal) {
 	if from == to {
 		return
@@ -52,11 +57,24 @@ func (s *RateStore) Put(from, to string, date time.Time, value decimal.Decimal) 
 		s.rates[from] = make(map[string][]ratePoint)
 	}
 	series := s.rates[from][to]
+	// Dedup-by-date: overwrite an existing same-day point if present.
+	day := dayKey(date)
+	for i := range series {
+		if dayKey(series[i].date) == day {
+			series[i].value = value
+			s.rates[from][to] = series
+			return
+		}
+	}
 	series = append(series, ratePoint{date: date, value: value})
 	sort.Slice(series, func(i, j int) bool {
 		return series[i].date.Before(series[j].date)
 	})
 	s.rates[from][to] = series
+}
+
+func dayKey(t time.Time) string {
+	return t.Format("2006-01-02")
 }
 
 // Lookup returns the rate from -> to on or before `asOf`. If no exact direct
@@ -86,25 +104,35 @@ func (s *RateStore) Lookup(from, to string, asOf time.Time) (decimal.Decimal, bo
 }
 
 func (s *RateStore) directLookup(from, to string, asOf time.Time) (decimal.Decimal, bool) {
+	v, ok, _ := s.directLookupWithStale(from, to, asOf)
+	return v, ok
+}
+
+// directLookupWithStale returns the direct rate (if any) plus a `stale` flag
+// indicating that we had to extrapolate backwards (asOf is earlier than the
+// first known data point). Callers that care can warn; today both callers
+// just use the value because the alternative — erroring an entire timeline
+// because the user's first transaction predates frankfurter's 1999-01-04
+// epoch — would be worse.
+func (s *RateStore) directLookupWithStale(from, to string, asOf time.Time) (decimal.Decimal, bool, bool) {
 	s.mu.RLock()
 	defer s.mu.RUnlock()
 	if s.rates[from] == nil {
-		return decimal.Zero, false
+		return decimal.Zero, false, false
 	}
 	series := s.rates[from][to]
 	if len(series) == 0 {
-		return decimal.Zero, false
+		return decimal.Zero, false, false
 	}
-	// Binary search for the last entry whose date is <= asOf.
 	idx := sort.Search(len(series), func(i int) bool {
 		return series[i].date.After(asOf)
 	})
 	if idx == 0 {
-		// No rate is on or before asOf; fall back to the earliest known rate
-		// to give a reasonable answer for early-period postings.
-		return series[0].value, true
+		// No rate is on or before asOf; extrapolate backwards with the
+		// earliest known rate (stale).
+		return series[0].value, true, true
 	}
-	return series[idx-1].value, true
+	return series[idx-1].value, true, false
 }
 
 // ConvertToBase converts amount denominated in `from` to `base` as of
@@ -139,6 +167,27 @@ func (s *RateStore) HistoricalConvert(timeline []DatedAmount, from, base string)
 		out = append(out, DatedAmount{Date: p.Date, Amount: v})
 	}
 	return out, nil
+}
+
+// IsKnownCurrency reports whether `c` looks like an ISO-4217-style currency
+// code: exactly 3 uppercase ASCII letters. This is intentionally permissive —
+// we don't want to maintain a hard-coded whitelist that future scrapers would
+// have to update. The combination "looks like a currency" + "has a rate in
+// the store" is what `RateStore.Lookup` ultimately enforces. Used to gate
+// FX-attribution branches when iterating ledger postings whose `Commodity`
+// field may be a ticker (e.g. "AAPL"), an empty string, or a real currency
+// like "USD"/"HKD".
+func IsKnownCurrency(c string) bool {
+	if len(c) != 3 {
+		return false
+	}
+	for i := 0; i < len(c); i++ {
+		ch := c[i]
+		if ch < 'A' || ch > 'Z' {
+			return false
+		}
+	}
+	return true
 }
 
 // processStore is the singleton FX rate store consulted by server handlers.

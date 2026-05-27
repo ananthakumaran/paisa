@@ -455,6 +455,24 @@ func DefaultCurrency() string {
 	return config.DefaultCurrency
 }
 
+// SetConfigForTest replaces the package-level Config and resolves the
+// TimeZone-derived `location` so tests can pin a config without going
+// through the full YAML/schema load path. Returns the previous Config so
+// callers can restore it via t.Cleanup if they care.
+func SetConfigForTest(c Config) Config {
+	prev := config
+	config = c
+	if c.TimeZone == "" {
+		location = time.Local
+	} else {
+		loc, err := time.LoadLocation(c.TimeZone)
+		if err == nil {
+			location = loc
+		}
+	}
+	return prev
+}
+
 // BaseCurrency returns the configured base currency used for net-worth
 // aggregation. If unset, it falls back to DefaultCurrency so existing single
 // currency setups (the entire pre-M1 user base) keep working without any

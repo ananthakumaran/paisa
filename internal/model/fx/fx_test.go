@@ -89,3 +89,58 @@ func TestConvertToBase_Missing(t *testing.T) {
 	_, err := store.ConvertToBase(decimal.NewFromInt(100), "USD", "CNY", d)
 	assert.Error(t, err)
 }
+
+// TestIsKnownCurrency_Shape: accepts 3 uppercase letters and rejects everything
+// else (tickers, lowercase, empty, fund codes).
+func TestIsKnownCurrency_Shape(t *testing.T) {
+	cases := map[string]bool{
+		"USD":      true,
+		"CNY":      true,
+		"HKD":      true,
+		"EUR":      true,
+		"INR":      true,
+		"":         false,
+		"usd":      false,
+		"AAPL":     false,
+		"600000":   false,
+		"AB":       false,
+		"US D":     false,
+		"BTC-USDT": false,
+	}
+	for in, want := range cases {
+		assert.Equal(t, want, IsKnownCurrency(in), "IsKnownCurrency(%q)", in)
+	}
+}
+
+// TestPut_DedupSameDay: re-Put on the same (from,to,date) replaces the value
+// in place rather than appending. Without this guarantee the series would
+// grow unbounded across `paisa update` invocations because the store is
+// process-cached (see Store()).
+func TestPut_DedupSameDay(t *testing.T) {
+	d := time.Date(2024, 6, 1, 0, 0, 0, 0, time.UTC)
+	store := NewRateStore()
+	store.Put("USD", "CNY", d, decimal.NewFromFloat(7.10))
+	store.Put("USD", "CNY", d, decimal.NewFromFloat(7.20))
+	store.Put("USD", "CNY", d.Add(2*time.Hour), decimal.NewFromFloat(7.30))
+
+	// Three Puts, but only one logical day -> series length should be 1 and
+	// hold the most recent value.
+	got, ok := store.Lookup("USD", "CNY", d)
+	assert.True(t, ok)
+	assert.True(t, got.Equal(decimal.NewFromFloat(7.30)),
+		"expected last value 7.30, got %s", got.String())
+}
+
+// TestStaleLookup: when asOf < earliest known date, we extrapolate backwards
+// and signal stale=true so callers can warn but not break.
+func TestStaleLookup(t *testing.T) {
+	d1 := time.Date(2024, 6, 1, 0, 0, 0, 0, time.UTC)
+	d0 := time.Date(2023, 1, 1, 0, 0, 0, 0, time.UTC)
+	store := NewRateStore()
+	store.Put("USD", "CNY", d1, decimal.NewFromFloat(7.20))
+
+	got, ok, stale := store.directLookupWithStale("USD", "CNY", d0)
+	assert.True(t, ok)
+	assert.True(t, stale, "should mark stale when asOf precedes first datapoint")
+	assert.True(t, got.Equal(decimal.NewFromFloat(7.20)))
+}

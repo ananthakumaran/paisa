@@ -23,7 +23,16 @@ import (
 
 	"github.com/ananthakumaran/paisa/internal/config"
 	"github.com/ananthakumaran/paisa/internal/model/price"
+	"github.com/ananthakumaran/paisa/internal/scraper/yahoo"
 )
+
+// init self-registers this provider into the yahoo package's FX provider
+// registry so config.FxProviders() chain resolution finds it without the
+// yahoo package needing to import us (which would create a cycle:
+// yahoo -> boc -> yahoo).
+func init() {
+	yahoo.RegisterFxProvider("cn-boc", &PriceProvider{})
+}
 
 const defaultEndpoint = "https://api.frankfurter.app"
 

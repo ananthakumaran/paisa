@@ -1125,6 +1125,16 @@
         ],
         "additionalProperties": false
       }
+    },
+    "transfer_accounts": {
+      "type": "array",
+      "description": "List of account globs that represent internal transfers (e.g. bridge / inter-account-transfer / saving sub-accounts). Transactions whose postings are all under Assets:* AND have at least one leg matching one of these globs are treated as internal transfers and excluded from the Investment Timeline and Savings Rate. They still appear in Cash Flow.",
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "ui:widget": "accounts",
+      "uniqueItems": true
     }
   },
   "required": ["journal_path", "db_path"],

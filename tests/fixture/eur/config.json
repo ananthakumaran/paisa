@@ -31,7 +31,8 @@
       "savings": []
     },
     "user_accounts": [],
-    "credit_cards": []
+    "credit_cards": [],
+    "transfer_accounts": []
   },
   "now": "2022-02-07T00:00:00Z",
   "schema": {
@@ -1233,6 +1234,16 @@
           "Zulu"
         ],
         "type": "string"
+      },
+      "transfer_accounts": {
+        "default": [],
+        "description": "List of account globs that represent internal transfers (e.g. bridge / inter-account-transfer / saving sub-accounts). Transactions whose postings are all under Assets:* AND have at least one leg matching one of these globs are treated as internal transfers and excluded from the Investment Timeline and Savings Rate. They still appear in Cash Flow.",
+        "items": {
+          "type": "string"
+        },
+        "type": "array",
+        "ui:widget": "accounts",
+        "uniqueItems": true
       },
       "user_accounts": {
         "default": [

@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/ananthakumaran/paisa/internal/accounting"
+	"github.com/ananthakumaran/paisa/internal/config"
 	"github.com/ananthakumaran/paisa/internal/model/posting"
 	"github.com/ananthakumaran/paisa/internal/query"
 	"github.com/ananthakumaran/paisa/internal/service"
@@ -28,6 +29,32 @@ type InvestmentYearlyCard struct {
 	SavingsRate       decimal.Decimal   `json:"savings_rate"`
 }
 
+// filterOutInternalTransfers removes postings that belong to a
+// transaction classified as an internal transfer under the user's
+// `transfer_accounts` config. To classify correctly we need the FULL
+// transaction (including legs that may not be present in the filtered
+// `assets` slice — e.g. an Assets:Checking leg that was excluded
+// upstream), so we fetch every posting that shares a transaction id
+// with one in `assets`.
+func filterOutInternalTransfers(db *gorm.DB, assets []posting.Posting) []posting.Posting {
+	transferGlobs := config.GetConfig().TransferAccounts
+	if len(transferGlobs) == 0 || len(assets) == 0 {
+		return assets
+	}
+
+	txIDs := lo.Uniq(lo.Map(assets, func(p posting.Posting, _ int) string { return p.TransactionID }))
+	allLegs := query.Init(db).Where("transaction_id in ?", txIDs).All()
+	byTx := lo.GroupBy(allLegs, func(p posting.Posting) string { return p.TransactionID })
+
+	return lo.Filter(assets, func(p posting.Posting, _ int) bool {
+		ps, ok := byTx[p.TransactionID]
+		if !ok {
+			return true
+		}
+		return !accounting.IsInternalTransfer(ps, transferGlobs)
+	})
+}
+
 func GetInvestment(db *gorm.DB) gin.H {
 	assets := query.Init(db).Like("Assets:%").NotAccountPrefix("Assets:Checking").
 		Where("transaction_id not in (select transaction_id from postings p where p.account like ? and p.transaction_id = transaction_id)", "Liabilities:%").
@@ -41,6 +68,7 @@ func GetInvestment(db *gorm.DB) gin.H {
 	}
 
 	assets = lo.Filter(assets, func(p posting.Posting, _ int) bool { return !service.IsStockSplit(db, p) })
+	assets = filterOutInternalTransfers(db, assets)
 	return gin.H{"assets": assets, "yearly_cards": computeInvestmentYearlyCard(p.Date, assets, expenses, incomes)}
 }
 

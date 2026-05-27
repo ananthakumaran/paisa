@@ -42,6 +42,9 @@ func All() []Template {
 	}
 	for _, f := range dirEntries {
 		name := f.Name()
+		if filepath.Ext(name) != ".handlebars" {
+			continue
+		}
 		content, err := BuiltinTemplates.ReadFile(fmt.Sprintf("templates/%s", name))
 		if err != nil {
 			log.Fatal(err)

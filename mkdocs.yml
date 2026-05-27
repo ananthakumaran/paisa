@@ -13,7 +13,11 @@ nav:
     - reference/accounts.md
     - reference/commodities.md
     - 'Price Providers':
+<<<<<<< HEAD
+        - reference/providers/yahoo.md
+=======
         - reference/providers/cn-ttjj.md
+>>>>>>> origin/master
         - reference/providers/cn-eastmoney.md
     - reference/journal.md
     - reference/allocation-targets.md

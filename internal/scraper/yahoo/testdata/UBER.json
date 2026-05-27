@@ -1,0 +1,24 @@
+{
+  "chart": {
+    "result": [
+      {
+        "meta": {
+          "currency": "USD",
+          "symbol": "UBER",
+          "exchangeName": "NYQ",
+          "instrumentType": "EQUITY",
+          "regularMarketPrice": 71.5
+        },
+        "timestamp": [1704067200, 1704153600, 1704240000],
+        "indicators": {
+          "quote": [
+            {
+              "close": [61.25, 62.4, 63.1]
+            }
+          ]
+        }
+      }
+    ],
+    "error": null
+  }
+}

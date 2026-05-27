@@ -92,6 +92,13 @@ should match the code used in yahoo. If the fetched price currency is
 not the default currency, it will be converted to default currency
 using the forex rate apis.
 
+!!! tip "HK / US / China-ADR stocks"
+    A modular Yahoo provider registered under the code `yahoo` adds first-class
+    support for Hong Kong (`0700.HK`, `1810.HK`), US (`AAPL`, `UBER`), China
+    ADR (`BABA`, `BIDU`) tickers and indices (`^GSPC`, `^HSI`), with
+    backoff on 429s and graceful handling of delisted symbols. See
+    [Yahoo provider reference](providers/yahoo.md).
+
 ## Alpha Vantage <sub>:globe_with_meridians:</sub>
 
 Supports 100,000+ stocks, ETFs, mutual funds etc. It also provides

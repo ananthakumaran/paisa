@@ -11,6 +11,10 @@ import (
 	"github.com/ananthakumaran/paisa/internal/accounting"
 	"github.com/ananthakumaran/paisa/internal/config"
 	"github.com/ananthakumaran/paisa/internal/generator"
+	// Blank import so the alipay importer's init() registers itself
+	// against the global importer registry. See internal/importer/alipay.
+	// Additional importers (微信, 招商银行, …) will follow the same pattern.
+	_ "github.com/ananthakumaran/paisa/internal/importer/alipay"
 	"github.com/ananthakumaran/paisa/internal/ledger"
 	"github.com/ananthakumaran/paisa/internal/model/template"
 	"github.com/ananthakumaran/paisa/internal/prediction"

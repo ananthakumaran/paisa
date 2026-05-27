@@ -55,7 +55,14 @@
       allocation_targets: allocationTargets
     } = await ajax("/api/allocation");
     const accounts = _.keys(aggregates);
-    aggregateLeafNodes = _.filter(_.values(aggregates), (a) => a.market_amount > 0);
+    // For the table we want one row per real ledger account, not the
+    // synthetic root or kind-bucket nodes. Filter to leaves with a value
+    // and prefer the human-readable `original_account` for the link
+    // formatter — the synthetic `account` path contains '/' separators.
+    aggregateLeafNodes = _.chain(_.values(aggregates))
+      .filter((a) => a.market_amount > 0 && Boolean(a.original_account))
+      .map((a) => ({ ...a, account: a.original_account as string }))
+      .value();
     total = _.sumBy(aggregateLeafNodes, (a) => a.market_amount);
     aggregateLeafNodes = _.map(aggregateLeafNodes, (a) => {
       a.percent = (a.market_amount / total) * 100;

@@ -6,6 +6,7 @@ import (
 
 	"github.com/ananthakumaran/paisa/internal/accounting"
 	"github.com/ananthakumaran/paisa/internal/config"
+	"github.com/ananthakumaran/paisa/internal/model/account"
 	"github.com/ananthakumaran/paisa/internal/model/posting"
 	"github.com/ananthakumaran/paisa/internal/query"
 	"github.com/ananthakumaran/paisa/internal/service"
@@ -69,7 +70,48 @@ func GetInvestment(db *gorm.DB) gin.H {
 
 	assets = lo.Filter(assets, func(p posting.Posting, _ int) bool { return !service.IsStockSplit(db, p) })
 	assets = filterOutInternalTransfers(db, assets)
+	assets = filterOutNonInvestmentKinds(assets, toAccountLookup(config.GetConfig().Accounts))
 	return gin.H{"assets": assets, "yearly_cards": computeInvestmentYearlyCard(p.Date, assets, expenses, incomes)}
+}
+
+// isInvestmentKind reports whether an AccountKind represents a flow that
+// counts as a new investment for the Investment Timeline and Savings Rate
+// computations.
+//
+// Investment kinds:
+//
+//	mutual_fund, stock, bond, structured_deposit,
+//	tax_deferred_fund, crypto
+//
+// Everything else — including cash-like accounts (bank_current,
+// bank_savings, cash_equivalent), durable assets (real_estate, vehicle),
+// the cash portion of PPA (tax_deferred_cash), and receivables / housing
+// fund — is excluded so that mere reshuffling between cash accounts is
+// not counted as "investment".
+func isInvestmentKind(k account.AccountKind) bool {
+	switch k {
+	case account.MutualFund,
+		account.Stock,
+		account.Bond,
+		account.StructuredDeposit,
+		account.TaxDeferredFund,
+		account.Crypto:
+		return true
+	}
+	return false
+}
+
+// filterOutNonInvestmentKinds keeps only postings whose account resolves
+// to an investment kind (see isInvestmentKind). Pass `accounts` to honor
+// user-configured `accounts[].kind` overrides; without it the function
+// falls back to M1-D's path-prefix rules in account.GetKind.
+func filterOutNonInvestmentKinds(postings []posting.Posting, accounts []account.Account) []posting.Posting {
+	if len(postings) == 0 {
+		return postings
+	}
+	return lo.Filter(postings, func(p posting.Posting, _ int) bool {
+		return isInvestmentKind(account.GetKind(p.Account, accounts))
+	})
 }
 
 func computeInvestmentYearlyCard(start time.Time, assets []posting.Posting, expenses []posting.Posting, incomes []posting.Posting) []InvestmentYearlyCard {

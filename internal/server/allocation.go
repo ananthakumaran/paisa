@@ -9,6 +9,7 @@ import (
 
 	"github.com/ananthakumaran/paisa/internal/accounting"
 	"github.com/ananthakumaran/paisa/internal/config"
+	"github.com/ananthakumaran/paisa/internal/model/account"
 	"github.com/ananthakumaran/paisa/internal/model/posting"
 	"github.com/ananthakumaran/paisa/internal/query"
 	"github.com/ananthakumaran/paisa/internal/service"
@@ -17,10 +18,30 @@ import (
 	"gorm.io/gorm"
 )
 
+// allocationRootKey is the synthetic top-level node under which all
+// kind-grouped buckets live. Using a fixed key (instead of "Assets") makes
+// the API shape independent of the user's ledger account naming and keeps
+// the d3 hierarchy stable.
+const allocationRootKey = "Allocation"
+
+// Aggregate represents a single node in the kind-grouped allocation tree.
+//
+// As of M1-E the tree is layered as:
+//
+//	Allocation                                   // root (always present)
+//	  Allocation:<account_kind>                  // one per kind that has children
+//	    Allocation:<account_kind>:<ledger:path>  // leaf, one per posting account
+//
+// The `Account` field is the synthetic path (used by d3 stratify on the
+// frontend); `OriginalAccount` carries the real ledger account name for
+// links / table display; `Kind` is machine-readable for the UI to look up
+// a localized label.
 type Aggregate struct {
-	Date         time.Time       `json:"date"`
-	Account      string          `json:"account"`
-	MarketAmount decimal.Decimal `json:"market_amount"`
+	Date            time.Time           `json:"date"`
+	Account         string              `json:"account"`
+	OriginalAccount string              `json:"original_account,omitempty"`
+	Kind            account.AccountKind `json:"kind,omitempty"`
+	MarketAmount    decimal.Decimal     `json:"market_amount"`
 }
 
 type AllocationTargetConfig struct {
@@ -66,6 +87,8 @@ func computeAggregateTimeline(db *gorm.DB, postings []posting.Posting) []map[str
 		return timeline
 	}
 
+	configAccounts := toAccountLookup(config.GetConfig().Accounts)
+
 	end := utils.EndOfToday()
 	for start := postings[0].Date; start.Before(end); start = start.AddDate(0, 0, 1) {
 		for len(postings) > 0 && (postings[0].Date.Before(start) || postings[0].Date.Equal(start)) {
@@ -86,7 +109,7 @@ func computeAggregateTimeline(db *gorm.DB, postings []posting.Posting) []map[str
 
 		result := make(map[string]Aggregate)
 
-		for account, rsByAccount := range accumulator {
+		for accountName, rsByAccount := range accumulator {
 			marketAmount := decimal.Zero
 
 			for commodity, rs := range rsByAccount {
@@ -102,7 +125,15 @@ func computeAggregateTimeline(db *gorm.DB, postings []posting.Posting) []map[str
 				}
 			}
 
-			result[account] = Aggregate{Date: start, Account: account, MarketAmount: marketAmount}
+			kind := account.GetKind(accountName, configAccounts)
+			synthetic := buildSyntheticPath(kind, accountName)
+			result[synthetic] = Aggregate{
+				Date:            start,
+				Account:         synthetic,
+				OriginalAccount: accountName,
+				Kind:            kind,
+				MarketAmount:    marketAmount,
+			}
 
 		}
 
@@ -137,20 +168,111 @@ func computeAllocationTarget(db *gorm.DB, postings []posting.Posting, allocation
 	return AllocationTarget{Name: allocationTargetConfig.Name, Target: decimal.NewFromFloat(allocationTargetConfig.Target), Current: (currentTotal.Div(total)).Mul(decimal.NewFromInt(100)), Aggregates: aggregates}
 }
 
+// computeAggregate resolves each posting's market amount as of `date` and
+// then defers to aggregateByKind. Split from aggregateByKind so the latter
+// stays unit-testable without a *gorm.DB.
 func computeAggregate(db *gorm.DB, postings []posting.Posting, date time.Time) map[string]Aggregate {
-	byAccount := lo.GroupBy(postings, func(p posting.Posting) string { return p.Account })
+	priced := lo.Map(postings, func(p posting.Posting, _ int) posting.Posting {
+		p.MarketAmount = service.GetMarketPrice(db, p, date)
+		return p
+	})
+	return aggregateByKindFromConfigAt(priced, date)
+}
+
+// aggregateByKindFromConfig is a convenience wrapper that reads the
+// account list from the loaded user config. Used directly by tests that
+// want the production code path with config-driven kind overrides.
+func aggregateByKindFromConfig(postings []posting.Posting, date time.Time) map[string]Aggregate {
+	return aggregateByKindFromConfigAt(postings, date)
+}
+
+func aggregateByKindFromConfigAt(postings []posting.Posting, date time.Time) map[string]Aggregate {
+	return aggregateByKind(postings, toAccountLookup(config.GetConfig().Accounts), date)
+}
+
+// toAccountLookup adapts the rich config.Account slice down to the minimal
+// shape expected by account.GetKind (avoids an import cycle).
+func toAccountLookup(in []config.Account) []account.Account {
+	out := make([]account.Account, 0, len(in))
+	for _, a := range in {
+		out = append(out, account.Account{Name: a.Name, Kind: a.Kind})
+	}
+	return out
+}
+
+// aggregateByKind groups postings into a kind-bucketed tree.
+//
+// The returned map always contains a root entry under `allocationRootKey`;
+// for every distinct AccountKind seen across `postings` it adds an
+// intermediate bucket node and one leaf node per ledger account.
+//
+// Each posting must already carry its market amount in `MarketAmount`;
+// callers using a DB-backed posting source should pre-populate that
+// (see computeAggregate).
+//
+// `accounts` is the user-configured override list (M1-D); pass nil to
+// rely entirely on path-prefix fallback rules.
+func aggregateByKind(postings []posting.Posting, accounts []account.Account, date time.Time) map[string]Aggregate {
 	result := make(map[string]Aggregate)
-	for account, ps := range byAccount {
-		var parts []string
-		for _, part := range strings.Split(account, ":") {
-			parts = append(parts, part)
-			parent := strings.Join(parts, ":")
-			result[parent] = Aggregate{Account: parent}
+	result[allocationRootKey] = Aggregate{Account: allocationRootKey}
+
+	byAccount := lo.GroupBy(postings, func(p posting.Posting) string { return p.Account })
+
+	// Track which kind buckets we've created so the bucket node is added
+	// exactly once.
+	bucketSeen := make(map[account.AccountKind]bool)
+
+	for accountName, ps := range byAccount {
+		kind := account.GetKind(accountName, accounts)
+		bucketKey := bucketKeyFor(kind)
+		if !bucketSeen[kind] {
+			result[bucketKey] = Aggregate{Account: bucketKey, Kind: kind}
+			bucketSeen[kind] = true
 		}
 
-		marketAmount := accounting.CurrentBalanceOn(db, ps, date)
-		result[account] = Aggregate{Date: date, Account: account, MarketAmount: marketAmount}
-
+		leafKey := buildSyntheticPath(kind, accountName)
+		marketAmount := accounting.CurrentBalance(ps)
+		result[leafKey] = Aggregate{
+			Date:            date,
+			Account:         leafKey,
+			OriginalAccount: accountName,
+			Kind:            kind,
+			MarketAmount:    marketAmount,
+		}
 	}
+
 	return result
+}
+
+// bucketKeyFor returns the synthetic path of the kind-level bucket node.
+func bucketKeyFor(kind account.AccountKind) string {
+	return allocationRootKey + ":" + string(kind)
+}
+
+// buildSyntheticPath joins the root, kind, and (sanitized) original ledger
+// account into the synthetic colon path used by the frontend's d3
+// hierarchy. The original ledger account is collapsed to a single segment
+// via sanitizeAccountSegment so that d3 stratify resolves each leaf's
+// parent to the kind bucket — not to some intermediate ":Assets:Saving:..."
+// node that doesn't exist in the map.
+func buildSyntheticPath(kind account.AccountKind, accountName string) string {
+	return bucketKeyFor(kind) + ":" + sanitizeAccountSegment(accountName)
+}
+
+// accountSegmentSeparator is the placeholder inserted in place of `:` when
+// flattening a ledger account name into a single synthetic-path segment.
+// We deliberately use a double underscore rather than `/` so that legal
+// (if unusual) account names containing `/` do not collide with their
+// `:`-form siblings inside the d3 stratify map. The real account name is
+// always kept in Aggregate.OriginalAccount; this string only appears in
+// the synthetic key.
+const accountSegmentSeparator = "__"
+
+// sanitizeAccountSegment replaces every ledger account separator (`:`)
+// with accountSegmentSeparator so the entire account name becomes a
+// single segment in the synthetic colon-delimited path. The frontend
+// keeps the real account name in Aggregate.OriginalAccount for display
+// and linking.
+func sanitizeAccountSegment(accountName string) string {
+	return strings.ReplaceAll(accountName, ":", accountSegmentSeparator)
 }

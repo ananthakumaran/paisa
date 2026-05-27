@@ -131,6 +131,21 @@ type Liability struct {
 	Schedule   LiabilitySchedule `json:"schedule,omitempty" yaml:"schedule,omitempty"`
 }
 
+// Receivable carries per-loan metadata for an Assets:* account marked with
+// `kind: receivable`. The handler at /api/receivables joins this metadata
+// with the live outstanding balance derived from posting aggregation. None
+// of the metadata fields are required: an account with `kind: receivable`
+// but no matching `receivables[]` entry still appears on the page with the
+// account leaf name used as borrower and the dates left blank.
+type Receivable struct {
+	Name         string  `json:"name" yaml:"name"`
+	Borrower     string  `json:"borrower,omitempty" yaml:"borrower,omitempty"`
+	LendDate     string  `json:"lend_date,omitempty" yaml:"lend_date,omitempty"`
+	DueDate      string  `json:"due_date,omitempty" yaml:"due_date,omitempty"`
+	InterestRate float64 `json:"interest_rate,omitempty" yaml:"interest_rate,omitempty"`
+	Note         string  `json:"note,omitempty" yaml:"note,omitempty"`
+}
+
 type Config struct {
 	JournalPath           string       `json:"journal_path" yaml:"journal_path"`
 	DBPath                string       `json:"db_path" yaml:"db_path"`
@@ -163,6 +178,8 @@ type Config struct {
 
 	Liabilities []Liability `json:"liabilities" yaml:"liabilities"`
 
+	Receivables []Receivable `json:"receivables" yaml:"receivables"`
+
 	TransferAccounts []string `json:"transfer_accounts" yaml:"transfer_accounts"`
 }
 
@@ -189,6 +206,7 @@ var defaultConfig = Config{
 	UserAccounts:          []UserAccount{},
 	CreditCards:           []CreditCard{},
 	Liabilities:           []Liability{},
+	Receivables:           []Receivable{},
 	TransferAccounts:      []string{},
 }
 

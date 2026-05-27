@@ -54,6 +54,7 @@ async function verifyApi(dir: string) {
   await recordAndVerify(dir, "/api/liabilities/balance", "liabilities_balance");
   await recordAndVerify(dir, "/api/liabilities/repayment", "liabilities_repayment");
   await recordAndVerify(dir, "/api/liabilities/interest", "liabilities_interest");
+  await recordAndVerify(dir, "/api/receivables", "receivables");
   await recordAndVerify(dir, "/api/income", "income");
   await recordAndVerify(dir, "/api/transaction", "transaction");
   await recordAndVerify(dir, "/api/editor/files", "files");

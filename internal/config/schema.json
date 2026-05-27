@@ -1152,6 +1152,54 @@
         ]
       }
     },
+    "receivables": {
+      "type": "array",
+      "description": "Per-loan metadata for accounts classified as kind: receivable. The handler at /api/receivables joins this metadata with the outstanding balance derived from posting aggregation. Any Assets:* account with kind: receivable that is not listed here still appears on the receivables page (with the leaf account name used as borrower and dates blank).",
+      "itemsUniqueProperties": ["name"],
+      "default": [],
+      "items": {
+        "type": "object",
+        "ui:header": "name",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Receivable account name (must match an entry in accounts[] with kind: receivable, e.g. Assets:Loans:Alice)",
+            "minLength": 1
+          },
+          "borrower": {
+            "type": "string",
+            "description": "Borrower display name"
+          },
+          "lend_date": {
+            "type": "string",
+            "description": "Date the money was lent out.",
+            "oneOf": [
+              { "format": "date" },
+              { "type": "string", "enum": [""] }
+            ]
+          },
+          "due_date": {
+            "type": "string",
+            "description": "Agreed return date. Leave blank when there is no agreed date.",
+            "oneOf": [
+              { "format": "date" },
+              { "type": "string", "enum": [""] }
+            ]
+          },
+          "interest_rate": {
+            "type": "number",
+            "description": "Annual percentage rate (e.g. 5 for 5%). Use 0 for interest-free.",
+            "minimum": 0
+          },
+          "note": {
+            "type": "string",
+            "description": "Optional free-form note (e.g. purpose of the loan)"
+          }
+        },
+        "required": ["name"],
+        "additionalProperties": false
+      }
+    },
     "transfer_accounts": {
       "type": "array",
       "description": "List of account globs that represent internal transfers (e.g. bridge / inter-account-transfer / saving sub-accounts). Transactions whose postings are all under Assets:* AND have at least one leg matching one of these globs are treated as internal transfers and excluded from the Investment Timeline and Savings Rate. They still appear in Cash Flow.",

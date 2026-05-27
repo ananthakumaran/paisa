@@ -42,6 +42,7 @@
     "user_accounts": [],
     "credit_cards": [],
     "liabilities": [],
+    "receivables": [],
     "transfer_accounts": []
   },
   "now": "2022-02-07T00:00:00Z",
@@ -640,6 +641,72 @@
         "description": "Run in readonly mode.",
         "type": "boolean",
         "ui:widget": "hidden"
+      },
+      "receivables": {
+        "default": [],
+        "description": "Per-loan metadata for accounts classified as kind: receivable. The handler at /api/receivables joins this metadata with the outstanding balance derived from posting aggregation. Any Assets:* account with kind: receivable that is not listed here still appears on the receivables page (with the leaf account name used as borrower and dates blank).",
+        "items": {
+          "additionalProperties": false,
+          "properties": {
+            "borrower": {
+              "description": "Borrower display name",
+              "type": "string"
+            },
+            "due_date": {
+              "description": "Agreed return date. Leave blank when there is no agreed date.",
+              "oneOf": [
+                {
+                  "format": "date"
+                },
+                {
+                  "enum": [
+                    ""
+                  ],
+                  "type": "string"
+                }
+              ],
+              "type": "string"
+            },
+            "interest_rate": {
+              "description": "Annual percentage rate (e.g. 5 for 5%). Use 0 for interest-free.",
+              "minimum": 0,
+              "type": "number"
+            },
+            "lend_date": {
+              "description": "Date the money was lent out.",
+              "oneOf": [
+                {
+                  "format": "date"
+                },
+                {
+                  "enum": [
+                    ""
+                  ],
+                  "type": "string"
+                }
+              ],
+              "type": "string"
+            },
+            "name": {
+              "description": "Receivable account name (must match an entry in accounts[] with kind: receivable, e.g. Assets:Loans:Alice)",
+              "minLength": 1,
+              "type": "string"
+            },
+            "note": {
+              "description": "Optional free-form note (e.g. purpose of the loan)",
+              "type": "string"
+            }
+          },
+          "required": [
+            "name"
+          ],
+          "type": "object",
+          "ui:header": "name"
+        },
+        "itemsUniqueProperties": [
+          "name"
+        ],
+        "type": "array"
       },
       "retirement": {
         "type": "object",

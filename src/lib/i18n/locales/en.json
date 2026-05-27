@@ -27,6 +27,7 @@
     "investment": "Investment",
     "gain": "Gain",
     "allocation": "Allocation",
+    "receivables": "Receivables",
     "analysis": "Analysis",
     "credit_cards": "Credit Cards",
     "repayment": "Repayment",
@@ -64,6 +65,22 @@
       "title": "Something Went Wrong",
       "intro": "Paisa has encountered a critical error",
       "report": "Please report this issue at {link}. Closing and reopening the app may help."
+    }
+  },
+  "receivables": {
+    "empty": "No receivables to display. Mark an Assets:* account with kind: receivable to track outstanding loans here.",
+    "summary": {
+      "total_outstanding": "Total Outstanding",
+      "count": "Loans"
+    },
+    "column": {
+      "borrower": "Borrower",
+      "account": "Account",
+      "outstanding": "Outstanding",
+      "lend_date": "Lend Date",
+      "due_date": "Due Date",
+      "interest_rate": "Interest Rate",
+      "note": "Note"
     }
   },
   "login": {

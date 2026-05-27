@@ -15,6 +15,7 @@
   import COLORS from "$lib/colors";
   import LevelItem from "$lib/components/LevelItem.svelte";
   import ZeroState from "$lib/components/ZeroState.svelte";
+  import { _ as t } from "$lib/i18n";
 
   const monthStart = now().startOf("month");
   let budgetsByMonth: Record<string, Budget> = {};
@@ -50,22 +51,29 @@
       {#if currentMonthBudget}
         <div class="column is-12">
           <nav class="level {isMobile() && 'grid-2'}">
-            <LevelItem title="Checking Current Balance" value={formatCurrency(checkingBalance)} />
             <LevelItem
-              title={availableForBudgeting >= 0 ? "Available for Budgeting" : "Budget Deficit"}
+              title={$t("page.expense.checking_current_balance")}
+              value={formatCurrency(checkingBalance)}
+            />
+            <LevelItem
+              title={availableForBudgeting >= 0
+                ? $t("page.expense.available_for_budgeting")
+                : $t("page.expense.budget_deficit")}
               color={availableForBudgeting >= 0 ? COLORS.gainText : COLORS.lossText}
               value={formatCurrency(Math.abs(availableForBudgeting))}
             />
 
             {#if currentMonthBudget.date.isSameOrAfter(monthStart)}
               <LevelItem
-                title="Available for Spending"
+                title={$t("page.expense.available_for_spending")}
                 value={formatCurrency(currentMonthBudget.availableThisMonth)}
-                subtitle="out of {formatCurrency(currentMonthBudget.forecast)} budgeted"
+                subtitle="{$t('page.expense.out_of_budgeted_pre')}{formatCurrency(
+                  currentMonthBudget.forecast
+                )}{$t('page.expense.out_of_budgeted_post')}"
               />
 
               <LevelItem
-                title="Projected Month End Balance"
+                title={$t("page.expense.projected_month_end_balance")}
                 value={formatCurrency(currentMonthBudget.endOfMonthBalance)}
               />
             {/if}
@@ -76,8 +84,10 @@
         <div class="is-flex">
           <div style="max-width: 800px; min-width: 350px; width: 100%; margin: auto;">
             <ZeroState item={!isEmpty}>
-              <strong>Oops!</strong> You haven't set a budget yet. Checkout the
-              <a href={helpUrl("budget")}>docs</a> page to get started.
+              <strong>{$t("common.oops")}</strong>
+              {$t("page.expense.no_budget_pre")}<a href={helpUrl("budget")}
+                >{$t("page.expense.docs")}</a
+              >{$t("page.expense.no_budget_post")}
             </ZeroState>
 
             {#each currentMonthAccountBudgets as accountBudget (accountBudget)}

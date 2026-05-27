@@ -20,6 +20,7 @@
   import _ from "lodash";
   import { onDestroy, onMount } from "svelte";
   import VirtualList from "svelte-tiny-virtual-list";
+  import { _ as t } from "$lib/i18n";
 
   let files: LedgerFile[] = [];
   let accounts: string[] = [];
@@ -97,16 +98,16 @@
             <div
               class="px-3 pt-1 grid grid-cols-7x gap-1 posting-row items-baseline has-text-weight-bold"
             >
-              <div>Date</div>
-              <div>Description</div>
-              <div>Account</div>
-              <div class="has-text-right">Amount</div>
-              <div class="has-text-right">Balance</div>
-              <div class="has-text-right">Units</div>
-              <div class="has-text-right">Unit Price</div>
-              <div class="has-text-right">Market Value</div>
-              <div class="has-text-right">Change</div>
-              <div class="has-text-right">CAGR</div>
+              <div>{$t("page.ledger.posting.col_date")}</div>
+              <div>{$t("page.ledger.posting.col_description")}</div>
+              <div>{$t("page.ledger.posting.col_account")}</div>
+              <div class="has-text-right">{$t("page.ledger.posting.col_amount")}</div>
+              <div class="has-text-right">{$t("page.ledger.posting.col_balance")}</div>
+              <div class="has-text-right">{$t("page.ledger.posting.col_units")}</div>
+              <div class="has-text-right">{$t("page.ledger.posting.col_unit_price")}</div>
+              <div class="has-text-right">{$t("page.ledger.posting.col_market_value")}</div>
+              <div class="has-text-right">{$t("page.ledger.posting.col_change")}</div>
+              <div class="has-text-right">{$t("page.ledger.posting.col_cagr")}</div>
             </div>
             <VirtualList
               height={window.innerHeight - 245}

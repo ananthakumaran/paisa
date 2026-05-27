@@ -9,6 +9,7 @@
   import * as toast from "bulma-toast";
   import { writable } from "svelte/store";
   import type { Action } from "svelte/action";
+  import { _ as t } from "$lib/i18n";
 
   let isEmpty = false;
   let config: UserConfig;
@@ -127,8 +128,10 @@
     <div class="columns flex-wrap">
       <div class="column is-12">
         <ZeroState item={!isEmpty}>
-          <strong>Oops!</strong> You haven't configured any goals yet. Checkout the
-          <a href={helpUrl("goals")}>docs</a> page to get started.
+          <strong>{$t("common.oops")}</strong>
+          {$t("page.more.goals.no_goals_pre")}<a href={helpUrl("goals")}
+            >{$t("page.more.goals.docs")}</a
+          >{$t("page.more.goals.no_goals_post")}
         </ZeroState>
       </div>
     </div>

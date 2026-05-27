@@ -4,6 +4,7 @@
   import type { MergeView } from "@codemirror/merge";
   import { createDiffEditor } from "$lib/editor";
   import type { LedgerFile } from "$lib/utils";
+  import { _ as t } from "$lib/i18n";
   let editorDom: Element;
   let editor: MergeView;
   export let oldFiles: LedgerFile[] = [];
@@ -55,12 +56,15 @@
         {changedOldFiles[selectedFileIndex]?.name}
         [{selectedFileIndex + 1}/{changedNewFiles.length}]
       {:else}
-        No Changes
+        {$t("component.diff_view.no_changes_title")}
       {/if}
     </p>
     <div class="field has-addons mt-3 mr-3">
       {#if changedOldFiles.length > 0}
-        <div class="mr-3 mt-2"><b>{updatedTransactionsCount}</b> transaction(s) changed</div>
+        <div class="mr-3 mt-2">
+          <b>{updatedTransactionsCount}</b>
+          {$t("component.diff_view.transactions_changed_suffix")}
+        </div>
       {/if}
       <p class="control">
         <button
@@ -71,7 +75,7 @@
           <span class="icon is-small">
             <i class="fas fa-chevron-left"></i>
           </span>
-          <span>Prev</span>
+          <span>{$t("component.diff_view.prev")}</span>
         </button>
       </p>
       <p class="control">
@@ -80,7 +84,7 @@
           disabled={selectedFileIndex >= changedNewFiles.length - 1}
           on:click={(_e) => selectedFileIndex++}
         >
-          <span>Next</span>
+          <span>{$t("component.diff_view.next")}</span>
           <span class="icon is-small">
             <i class="fas fa-chevron-right"></i>
           </span>
@@ -94,17 +98,19 @@
       <div class="diff-editor" bind:this={editorDom} />
       {#if changedOldFiles.length === 0}
         <div class="has-text-centered mt-6">
-          <strong>Oops!</strong> No changes has been made. Make sure the bulk edit arguments are correct.
+          <strong>{$t("common.oops")}</strong>
+          {$t("component.diff_view.no_changes_body")}
         </div>
       {/if}
     </div>
   </div>
   <svelte:fragment slot="foot" let:close>
-    <button class="button" on:click={(e) => close(e)}>Cancel</button>
+    <button class="button" on:click={(e) => close(e)}>{$t("component.diff_view.cancel")}</button>
     {#if changedOldFiles.length > 0}
       <button
         class="button is-success"
-        on:click={(e) => dispatch("save", changedNewFiles) && close(e)}>Save All</button
+        on:click={(e) => dispatch("save", changedNewFiles) && close(e)}
+        >{$t("component.diff_view.save_all")}</button
       >
     {/if}
   </svelte:fragment>

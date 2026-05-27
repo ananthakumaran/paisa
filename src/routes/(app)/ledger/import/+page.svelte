@@ -23,6 +23,8 @@
   // without disrupting power users who have already built templates.
   import ImportPreview from "$lib/components/ImportPreview.svelte";
   import { createPreviewStore } from "$lib/importers/preview";
+  import { _ as t } from "$lib/i18n";
+  import { get } from "svelte/store";
 
   type Tab = "template" | "importer";
   let tab: Tab = "template";
@@ -37,7 +39,10 @@
   $: if ($importerState.lastCommitCount > 0 && $importerState.lastCommitCount !== lastCount) {
     lastCount = $importerState.lastCommitCount;
     toast.toast({
-      message: `Saved ${lastCount} transactions`,
+      message:
+        get(t)("page.ledger.import.save_n_prefix") +
+        lastCount +
+        get(t)("page.ledger.import.save_n_suffix"),
       type: "is-success"
     });
   }
@@ -241,7 +246,12 @@
 
   function builtinNotAllowed(action: string, template: ImportTemplate) {
     if (template?.template_type == "builtin") {
-      return `Not allowed to ${action.toLowerCase()} builtin template`;
+      // Returns a tooltip explaining the disabled state. Falls back to action
+      // when the template isn't a builtin so the data-tippy-content still has
+      // a sensible label.
+      return get(t)("page.ledger.import.builtin_not_allowed", {
+        values: { action: action.toLowerCase() }
+      });
     }
     return action;
   }
@@ -254,15 +264,15 @@
 
 <Modal bind:active={templateCreateModalOpen}>
   <svelte:fragment slot="head" let:close>
-    <p class="modal-card-title">Create Template</p>
+    <p class="modal-card-title">{$t("page.ledger.import.create_template")}</p>
     <button class="delete" aria-label="close" on:click={(e) => close(e)} />
   </svelte:fragment>
   <div class="field" slot="body">
-    <label class="label" for="save-filename">Template Name</label>
+    <label class="label" for="save-filename">{$t("page.ledger.import.template_name")}</label>
     <div class="control" id="save-filename">
       <input class="input" type="text" bind:value={saveAsName} />
       {#if saveAsNameDuplicate}
-        <p class="help is-danger">Template with the same name already exists</p>
+        <p class="help is-danger">{$t("page.ledger.import.template_duplicate")}</p>
       {/if}
     </div>
   </div>
@@ -270,9 +280,9 @@
     <button
       class="button is-success"
       disabled={_.isEmpty(saveAsName) || saveAsNameDuplicate}
-      on:click={(e) => save() && close(e)}>Create</button
+      on:click={(e) => save() && close(e)}>{$t("common.create")}</button
     >
-    <button class="button" on:click={(e) => close(e)}>Cancel</button>
+    <button class="button" on:click={(e) => close(e)}>{$t("common.cancel")}</button>
   </svelte:fragment>
 </Modal>
 
@@ -284,11 +294,13 @@
       <ul>
         <li class={tab === "template" ? "is-active" : ""}>
           <a href={"#"} on:click|preventDefault={() => (tab = "template")}>
-            Handlebars Template (advanced)
+            {$t("page.ledger.import.tab_template")}
           </a>
         </li>
         <li class={tab === "importer" ? "is-active" : ""}>
-          <a href={"#"} on:click|preventDefault={() => (tab = "importer")}>Importers (new)</a>
+          <a href={"#"} on:click|preventDefault={() => (tab = "importer")}
+            >{$t("page.ledger.import.tab_importer")}</a
+          >
         </li>
       </ul>
     </div>
@@ -301,7 +313,7 @@
           accept=".csv,.txt,.xls,.xlsx,.pdf,.CSV,.TXT,.XLS,.XLSX,.PDF"
           on:drop={handleImporterFiles}
         >
-          Drag 'n' drop a statement file here, or click to select.
+          {$t("page.ledger.import.dropzone_importer")}
         </Dropzone>
         <div class="mt-3">
           <ImportPreview state={importerState} accounts={knownAccounts} />
@@ -327,8 +339,8 @@
                   class="ml-4"
                   data-tippy-followCursor="false"
                   data-tippy-content={$templateEditorState.hasUnsavedChanges == false
-                    ? "No Unsaved Chagnes"
-                    : builtinNotAllowed("Save", selectedTemplate)}
+                    ? $t("page.ledger.import.no_unsaved")
+                    : builtinNotAllowed($t("common.save"), selectedTemplate)}
                 >
                   <button
                     class="button"
@@ -344,7 +356,7 @@
 
                 <span
                   data-tippy-followCursor="false"
-                  data-tippy-content={builtinNotAllowed("Delete", selectedTemplate)}
+                  data-tippy-content={builtinNotAllowed($t("common.delete"), selectedTemplate)}
                 >
                   <button
                     class="button"
@@ -400,7 +412,7 @@
               <div class="control">
                 <button
                   data-tippy-followCursor="false"
-                  data-tippy-content="Copy to Clipboard"
+                  data-tippy-content={$t("page.ledger.import.copy_to_clipboard")}
                   class="button clipboard"
                   disabled={_.isEmpty(preview)}
                   on:click={copyToClipboard}
@@ -411,7 +423,7 @@
                 </button>
                 <button
                   data-tippy-followCursor="false"
-                  data-tippy-content="Save"
+                  data-tippy-content={$t("common.save")}
                   class="button save"
                   disabled={_.isEmpty(preview)}
                   on:click={openSaveModal}
@@ -433,7 +445,7 @@
               accept=".csv,.txt,.xls,.xlsx,.pdf,.CSV,.TXT,.XLS,.XLSX,.PDF"
               on:drop={handleFilesSelect}
             >
-              Drag 'n' drop CSV, TXT, XLS, XLSX, PDF file here or click to select
+              {$t("page.ledger.import.dropzone_template")}
             </Dropzone>
           </div>
           <div class="is-flex justify-end mb-3 gap-4">
@@ -444,7 +456,7 @@
                 bind:checked={options.reverse}
                 class="switch is-rounded is-small"
               />
-              <label for="import-reverse">Reverse</label>
+              <label for="import-reverse">{$t("page.ledger.import.reverse")}</label>
             </div>
             <div class="field color-switch">
               <input
@@ -453,12 +465,12 @@
                 bind:checked={options.trim}
                 class="switch is-rounded is-small"
               />
-              <label for="trim-reverse">Trim</label>
+              <label for="trim-reverse">{$t("page.ledger.import.trim")}</label>
             </div>
           </div>
           {#if parseErrorMessage}
             <div class="message invertable is-danger">
-              <div class="message-header">Failed to parse document</div>
+              <div class="message-header">{$t("page.ledger.import.failed_parse_title")}</div>
               <div class="message-body">{parseErrorMessage}</div>
             </div>
           {/if}

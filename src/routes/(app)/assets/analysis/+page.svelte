@@ -6,6 +6,7 @@
   import { ajax, type PortfolioAggregate } from "$lib/utils";
   import _ from "lodash";
   import { onMount } from "svelte";
+  import { _ as t } from "$lib/i18n";
 
   let commodities: string[] = [];
   let selectedCommodities: string[] = [];
@@ -60,10 +61,11 @@
       <div class="column is-4 has-text-centered">
         <article class="message">
           <div class="message-body">
-            <strong>Oops!</strong> Looks like mutual fund portfolio data is not available<br /><br
-            />
-            Use the <strong>Update Mutual Fund Portfolios</strong> menu option at the right corner to
-            update the data.
+            <strong>{$t("common.oops")}</strong>
+            {$t("page.assets.no_portfolio")}<br /><br />
+            {$t("page.assets.update_portfolio_hint_pre")}<strong
+              >{$t("page.assets.update_portfolio_action")}</strong
+            >{$t("page.assets.update_portfolio_hint_post")}
           </div>
         </article>
       </div>
@@ -99,7 +101,7 @@
         </div>
       </div>
     </div>
-    <BoxLabel text="Security Type" />
+    <BoxLabel text={$t("page.assets.security_type")} />
 
     <div class="columns">
       <div class="column is-12 has-text-centered">
@@ -109,7 +111,7 @@
         </div>
       </div>
     </div>
-    <BoxLabel text="Security Rating" />
+    <BoxLabel text={$t("page.assets.security_rating")} />
 
     <div class="columns">
       <div class="column is-12 has-text-centered">
@@ -122,7 +124,7 @@
         </div>
       </div>
     </div>
-    <BoxLabel text="Industry" />
+    <BoxLabel text={$t("page.assets.industry")} />
 
     <div class="columns">
       <div class="column is-12 has-text-centered">
@@ -135,7 +137,7 @@
         </div>
       </div>
     </div>
-    <BoxLabel text="Security" />
+    <BoxLabel text={$t("page.assets.security")} />
   </div>
 </section>
 

@@ -4,6 +4,7 @@
   import type { Action } from "svelte/action";
   import { firstName, formatCurrency, restName, type AccountBudget, tooltip } from "$lib/utils";
   import _ from "lodash";
+  import { _ as t } from "$lib/i18n";
 
   export let compact = false;
   export let accountBudget: AccountBudget;
@@ -55,23 +56,25 @@
     >
       {#if !compact}
         <div class="mr-3">
-          <span class="budget-label mr-1">Budget</span>
+          <span class="budget-label mr-1">{$t("component.budget_card.budget")}</span>
           <span class="budget-amount">{formatCurrency(accountBudget.forecast)}</span>
         </div>
         <div class="mr-3">
-          <span class="budget-label mr-1">Spent</span>
+          <span class="budget-label mr-1">{$t("component.budget_card.spent")}</span>
           <span class="budget-amount">{formatCurrency(accountBudget.actual)}</span>
         </div>
       {/if}
       {#if !compact && accountBudget.rollover != 0}
         <div class="mr-3">
-          <span class="budget-label mr-1">Rollover</span>
+          <span class="budget-label mr-1">{$t("component.budget_card.rollover")}</span>
           <span class="budget-amount warn">{formatCurrency(accountBudget.rollover)}</span>
         </div>
       {/if}
       <div>
         <span class="budget-label mr-1"
-          >{accountBudget.available >= 0 ? "Available" : "Overspent"}</span
+          >{accountBudget.available >= 0
+            ? $t("component.budget_card.available")
+            : $t("component.budget_card.overspent")}</span
         >
         <span class="budget-amount {color(accountBudget)}"
           >{formatCurrency(Math.abs(accountBudget.available))}</span

@@ -13,6 +13,8 @@
   import { dateMin, year } from "../../../../store";
   import ZeroState from "$lib/components/ZeroState.svelte";
   import { iconify } from "$lib/icon";
+  import { _ as t } from "$lib/i18n";
+  import { get } from "svelte/store";
 
   let isEmpty = false;
 
@@ -93,52 +95,53 @@
       dateMin.set(y.date);
     }
 
+    const tt = get(t);
     accountGroups.push({
       key: "income",
       accounts: uniqueAccounts(_.values(yearly), "income"),
-      label: "Income",
+      label: tt("page.cash_flow.label_income"),
       multiplier: -1
     });
 
     accountGroups.push({
       key: "tax",
       accounts: uniqueAccounts(_.values(yearly), "tax"),
-      label: "Tax",
+      label: tt("page.cash_flow.label_tax"),
       multiplier: -1
     });
 
     accountGroups.push({
       key: "interest",
       accounts: uniqueAccounts(_.values(yearly), "interest"),
-      label: "Interest",
+      label: tt("page.cash_flow.label_interest"),
       multiplier: -1
     });
 
     accountGroups.push({
       key: "pnl",
       accounts: uniqueAccounts(_.values(yearly), "pnl"),
-      label: "Gain / Loss",
+      label: tt("page.cash_flow.label_pnl"),
       multiplier: 1
     });
 
     accountGroups.push({
       key: "equity",
       accounts: uniqueAccounts(_.values(yearly), "equity"),
-      label: "Equity",
+      label: tt("page.cash_flow.label_equity"),
       multiplier: -1
     });
 
     accountGroups.push({
       key: "liabilities",
       accounts: uniqueAccounts(_.values(yearly), "liabilities"),
-      label: "Liabilities",
+      label: tt("page.cash_flow.label_liabilities"),
       multiplier: -1
     });
 
     accountGroups.push({
       key: "expenses",
       accounts: uniqueAccounts(_.values(yearly), "expenses"),
-      label: "Expenses",
+      label: tt("page.cash_flow.label_expenses"),
       multiplier: -1
     });
   });
@@ -155,20 +158,20 @@
                 {$year}
               </div>
               <div class="ml-3 whitespace-nowrap">
-                <span class="mr-1 is-size-7 has-text-grey">Start</span>
+                <span class="mr-1 is-size-7 has-text-grey">{$t("page.cash_flow.start")}</span>
                 <span class="has-text-weight-bold"
                   >{formatCurrency(incomeStatement.startingBalance)}</span
                 >
               </div>
               <div class="ml-3 whitespace-nowrap">
-                <span class="mr-1 is-size-7 has-text-grey">End</span>
+                <span class="mr-1 is-size-7 has-text-grey">{$t("page.cash_flow.end")}</span>
                 <span class="has-text-weight-bold"
                   >{formatCurrency(incomeStatement.endingBalance)}</span
                 >
               </div>
 
               <div class="ml-3 whitespace-nowrap">
-                <span class="mr-1 is-size-7 has-text-grey">change</span>
+                <span class="mr-1 is-size-7 has-text-grey">{$t("page.cash_flow.change")}</span>
                 <span class="has-text-weight-bold {changeClass(diff)}">{formatCurrency(diff)}</span>
                 <span class="mr-1 is-size-7 has-text-weight-bold {changeClass(diff)}"
                   >{formatPercentage(diffPercent, 2)}</span
@@ -181,7 +184,8 @@
       <div class="column is-12">
         <div class="box overflow-x-auto">
           <ZeroState item={!isEmpty}
-            ><strong>Oops!</strong> You have not made any transactions for the selected year.</ZeroState
+            ><strong>{$t("common.oops")}</strong>
+            {$t("page.cash_flow.no_transactions_year")}</ZeroState
           >
 
           <svg class:is-not-visible={isEmpty} bind:this={svg}></svg>
@@ -201,7 +205,7 @@
           >
             <thead>
               <tr>
-                <th class="py-2">Account</th>
+                <th class="py-2">{$t("page.cash_flow.account")}</th>
                 {#each years as y}
                   <th class="py-2 has-text-right">{y}</th>
                 {/each}
@@ -239,7 +243,7 @@
               {/each}
 
               <tr class="has-text-weight-bold">
-                <th>Change</th>
+                <th>{$t("page.cash_flow.change_row")}</th>
                 {#each years as y}
                   {#if yearly[y]}
                     {@const diff = yearly[y].endingBalance - yearly[y].startingBalance}
@@ -253,7 +257,7 @@
                 {/each}
               </tr>
               <tr class="has-text-weight-bold">
-                <th>End Balance</th>
+                <th>{$t("page.cash_flow.end_balance")}</th>
                 {#each years as y}
                   <td class="has-text-right">
                     {#if yearly[y]}
@@ -263,7 +267,7 @@
                 {/each}
               </tr>
               <tr class="has-text-weight-bold">
-                <th>Start Balance</th>
+                <th>{$t("page.cash_flow.start_balance")}</th>
                 {#each years as y}
                   <td class="has-text-right">
                     {#if yearly[y]}

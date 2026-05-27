@@ -2,6 +2,7 @@
   import type { Directory, LedgerFile } from "$lib/utils";
   import _ from "lodash";
   import { createEventDispatcher } from "svelte";
+  import { _ as t } from "$lib/i18n";
 
   export let files: Array<Directory | LedgerFile>;
   export let path: string;
@@ -38,7 +39,7 @@
           </span>
           <span title={fileName(file.name)} class="truncate">{fileName(file.name)}</span>
           {#if file.name == selectedFileName && hasUnsavedChanges}
-            <span class="ml-1 tag is-danger">unsaved</span>
+            <span class="ml-1 tag is-danger">{$t("component.file_tree.unsaved")}</span>
           {/if}
         </a>
       </li>

@@ -7,6 +7,7 @@
   import COLORS from "$lib/colors";
   import dayjs from "dayjs";
   import type { Action } from "svelte/action";
+  import { _ as t } from "$lib/i18n";
 
   export let goal: GoalSummary;
   export let small = false;
@@ -54,7 +55,7 @@
     <LevelItem
       {small}
       narrow
-      title="Current"
+      title={$t("component.goal_summary.current")}
       color={COLORS.gainText}
       value={formatCurrency(goal.current)}
     />
@@ -62,7 +63,7 @@
     <LevelItem
       {small}
       narrow
-      title="Target"
+      title={$t("component.goal_summary.target")}
       color={COLORS.primary}
       value={formatCurrency(goal.target)}
     />

@@ -11,6 +11,7 @@
   import _ from "lodash";
   import CreditCardNetwork from "./CreditCardNetwork.svelte";
   import DueDate from "./DueDate.svelte";
+  import { _ as t } from "$lib/i18n";
 
   export let creditCard: CreditCardSummary;
 
@@ -67,7 +68,7 @@
     <div class="flex flex-col">
       {#if bill}
         <div class="is-size-7">
-          <span class="has-text-grey">Amount Due</span>
+          <span class="has-text-grey">{$t("component.credit_card_card.amount_due")}</span>
         </div>
         <div>
           <span class="is-size-4 has-text-grey-dark">{formatCurrency(bill.closingBalance)}</span>
@@ -79,7 +80,7 @@
     </div>
     <div class="flex flex-col">
       <div class="is-size-7">
-        <span class="has-text-grey">Balance</span>
+        <span class="has-text-grey">{$t("component.credit_card_card.balance")}</span>
       </div>
       <div class="flex flex-col">
         <span class="is-size-4 has-text-grey-dark">{formatCurrency(creditCard.balance)}</span>

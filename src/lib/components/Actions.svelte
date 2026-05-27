@@ -4,6 +4,7 @@
   import { refresh } from "../../store";
   import { obscure } from "../../persisted_store";
   import { goto } from "$app/navigation";
+  import { _ as t } from "$lib/i18n";
 
   async function syncWithLoader(request: Record<string, any>) {
     try {
@@ -43,19 +44,19 @@
         <span class="icon is-small">
           <i class="fa-regular fa-file-lines" />
         </span>
-        <span>Sync Journal</span>
+        <span>{$t("component.actions.sync_journal")}</span>
       </a>
       <a on:click={(_e) => syncWithLoader({ prices: true })} class="dropdown-item icon-text">
         <span class="icon is-small">
           <i class="fas fa-dollar-sign" />
         </span>
-        <span>Update Prices</span></a
+        <span>{$t("component.actions.update_prices")}</span></a
       >
       <a on:click={(_e) => syncWithLoader({ portfolios: true })} class="dropdown-item icon-text">
         <span class="icon is-small">
           <i class="fas fa-layer-group" />
         </span>
-        <span>Update Mutual Fund Portfolios</span></a
+        <span>{$t("component.actions.update_portfolios")}</span></a
       >
       <hr class="dropdown-divider" />
       <a class="dropdown-item icon-text">
@@ -64,7 +65,11 @@
           <span class="ml-0 icon is-small">
             <i class="fas {$obscure ? 'fa-eye-slash' : 'fa-eye'}" />
           </span>
-          <span>{$obscure ? "Show" : "Hide"} numbers</span>
+          <span
+            >{$obscure
+              ? $t("component.actions.show_numbers")
+              : $t("component.actions.hide_numbers")}</span
+          >
         </label>
       </a>
       {#if showLogout}
@@ -73,7 +78,7 @@
           <span class="icon is-small">
             <i class="fas fa-arrow-right-from-bracket" />
           </span>
-          <span>Logout</span>
+          <span>{$t("component.actions.logout")}</span>
         </a>
       {/if}
     </div>

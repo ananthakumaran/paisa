@@ -13,7 +13,10 @@
   import _ from "lodash";
   import { onMount, tick } from "svelte";
   import type { ColumnDefinition, ProgressBarParams } from "tabulator-tables";
+  import { _ as t } from "$lib/i18n";
+  import { get } from "svelte/store";
 
+  const tt = get(t);
   let showAllocation = false;
   let depth = 2;
   let allocationTimelineLegends: Legend[] = [];
@@ -21,15 +24,15 @@
   let total = 0;
 
   const columns: ColumnDefinition[] = [
-    { title: "Account", field: "account", formatter: accountName },
+    { title: tt("page.assets.col_account"), field: "account", formatter: accountName },
     {
-      title: "Market Value",
+      title: tt("page.assets.col_market_value"),
       field: "market_amount",
       hozAlign: "right",
       formatter: nonZeroCurrency
     },
     {
-      title: "Percent",
+      title: tt("page.assets.col_percent"),
       field: "percent",
       hozAlign: "right",
       formatter: (cell) => formatPercentage(cell.getValue() / 100, 2)
@@ -94,7 +97,7 @@
         </div>
       </div>
     </div>
-    <BoxLabel text="Allocation Targets" />
+    <BoxLabel text={$t("page.assets.allocation_targets")} />
   </div>
 </section>
 <section class="section tab-allocation">
@@ -104,7 +107,7 @@
         <div id="d3-allocation-category" style="width: 100%; height: {depth * 100}px" />
       </div>
     </div>
-    <BoxLabel text="Allocation by category" />
+    <BoxLabel text={$t("page.assets.allocation_by_category")} />
   </div>
 </section>
 <section class="section tab-allocation">
@@ -114,7 +117,7 @@
         <div id="d3-allocation-value" style="width: 100%; height: 300px" />
       </div>
     </div>
-    <BoxLabel text="Allocation by value" />
+    <BoxLabel text={$t("page.assets.allocation_by_value")} />
   </div>
 </section>
 <section class="section tab-allocation">
@@ -127,7 +130,7 @@
         </div>
       </div>
     </div>
-    <BoxLabel text="Allocation Timeline" />
+    <BoxLabel text={$t("page.assets.allocation_timeline")} />
   </div>
 </section>
 <section class="section tab-allocation">
@@ -137,6 +140,6 @@
         <Table data={aggregateLeafNodes} tree {columns} />
       </div>
     </div>
-    <BoxLabel text="Allocation Table" />
+    <BoxLabel text={$t("page.assets.allocation_table")} />
   </div>
 </section>

@@ -30,6 +30,10 @@ import localeData from "dayjs/plugin/localeData";
 dayjs.extend(localeData);
 import updateLocale from "dayjs/plugin/updateLocale";
 dayjs.extend(updateLocale);
+// The zh-cn locale is registered in src/lib/format.ts (which is imported
+// transitively by every app page through $lib/utils). Doing it there
+// rather than here keeps the registration close to the consuming
+// configUpdated() helper and avoids duplicating the locale definition.
 
 import * as pdfjs from "pdfjs-dist";
 import pdfjsWorkerUrl from "pdfjs-dist/build/pdf.worker.js?url";
@@ -45,6 +49,12 @@ import _ from "lodash";
 
 import "@formatjs/intl-numberformat/polyfill";
 import "@formatjs/intl-numberformat/locale-data/en";
+// Indian and Chinese locale-data — the polyfill needs the specific
+// dataset for compact notation (lakh/crore, 万/亿) and grouping rules to
+// match what the configured locale would render. `zh-CN` resolves to
+// `zh-Hans-CN` in CLDR, so we load `zh-Hans`.
+import "@formatjs/intl-numberformat/locale-data/en-IN";
+import "@formatjs/intl-numberformat/locale-data/zh-Hans";
 
 Handlebars.registerHelper(
   _.mapValues(helpers, (helper, name) => {

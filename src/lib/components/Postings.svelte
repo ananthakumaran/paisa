@@ -13,6 +13,11 @@
     }
   };
 
+  // Render the amount with the posting's own commodity symbol — so a
+  // USD line shows `$11.23`, HKD shows `HK$1,663.80`, and the default
+  // CNY (or whatever the config says) shows `¥…`.
+  const amountWithCurrency = (p: Posting) => formatCurrency(p.amount, p.commodity);
+
   export let postings: Posting[];
 </script>
 
@@ -28,7 +33,7 @@
           {unlessDefaultCurrency(p)}
         </div>
         <div class="has-text-right" style="min-width: 50px;">
-          {formatCurrency(p.amount, 2)}
+          {amountWithCurrency(p)}
         </div>
       </div>
     </div>

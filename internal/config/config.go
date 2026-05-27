@@ -16,6 +16,7 @@ import (
 	"dario.cat/mergo"
 	"github.com/santhosh-tekuri/jsonschema/v5"
 
+	"github.com/ananthakumaran/paisa/internal/model/account"
 	"gopkg.in/yaml.v3"
 )
 
@@ -65,8 +66,9 @@ type Commodity struct {
 }
 
 type Account struct {
-	Name string `json:"name" yaml:"name"`
-	Icon string `json:"icon" yaml:"icon"`
+	Name string              `json:"name" yaml:"name"`
+	Icon string              `json:"icon" yaml:"icon"`
+	Kind account.AccountKind `json:"kind,omitempty" yaml:"kind,omitempty"`
 }
 
 type UserAccount struct {

@@ -1054,6 +1054,29 @@
             "type": "string",
             "description": "Account icon name",
             "ui:widget": "icon"
+          },
+          "kind": {
+            "type": "string",
+            "description": "Optional classification used by allocation / receivables / net worth aggregation. Leave blank to fall back to path-prefix rules.",
+            "enum": [
+              "",
+              "bank_current",
+              "bank_savings",
+              "cash_equivalent",
+              "mutual_fund",
+              "stock",
+              "bond",
+              "structured_deposit",
+              "real_estate",
+              "vehicle",
+              "tax_deferred_fund",
+              "tax_deferred_cash",
+              "housing_fund",
+              "receivable",
+              "crypto",
+              "foreign_currency",
+              "unknown"
+            ]
           }
         },
         "required": ["name"],

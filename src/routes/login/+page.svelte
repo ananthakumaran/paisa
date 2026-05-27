@@ -3,6 +3,8 @@
   import Logo from "$lib/components/Logo.svelte";
   import { login } from "$lib/utils";
   import _ from "lodash";
+  // Aliased to `t` to avoid colliding with lodash's `_` already in scope.
+  import { _ as t } from "$lib/i18n";
   let username = "";
   let password = "";
 
@@ -19,7 +21,11 @@
     if (success) {
       goto("/");
     } else if (error) {
-      invalidErrorMessage = error;
+      // Backend currently returns English error messages; translate the
+      // canonical "Invalid credentials" string at the boundary and pass
+      // anything else through verbatim.
+      invalidErrorMessage =
+        error === "Invalid credentials" ? $t("login.invalid_credentials") : error;
     }
   }
 </script>
@@ -38,14 +44,14 @@
             </div>
             <form on:submit|preventDefault={tryLogin}>
               <div class="field">
-                <label for="" class="label">Username</label>
+                <label for="" class="label">{$t("login.username")}</label>
                 <div class="control">
                   <input class="input" type="text" bind:value={username} />
                 </div>
               </div>
 
               <div class="field">
-                <label for="" class="label">Password</label>
+                <label for="" class="label">{$t("login.password")}</label>
                 <div class="control">
                   <input class="input" type="password" bind:value={password} />
                 </div>
@@ -56,7 +62,9 @@
 
               <div class="field is-grouped is-grouped-right">
                 <div class="control">
-                  <button class="button is-link" disabled={loginDisabled}>Login</button>
+                  <button class="button is-link" disabled={loginDisabled}
+                    >{$t("login.submit")}</button
+                  >
                 </div>
               </div>
             </form>

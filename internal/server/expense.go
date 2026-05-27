@@ -48,8 +48,8 @@ func GetExpense(db *gorm.DB) gin.H {
 	postings := query.Init(db).All()
 
 	graph := make(map[string]Graph)
-	for fy, ps := range utils.GroupByFY(postings) {
-		graph[fy] = sortGraph(computeHierarchyGraph(ps))
+	for year, ps := range utils.GroupByCalendarYear(postings) {
+		graph[year] = sortGraph(computeHierarchyGraph(ps))
 	}
 
 	return gin.H{
@@ -60,10 +60,10 @@ func GetExpense(db *gorm.DB) gin.H {
 			"investments": utils.GroupByMonth(investments),
 			"taxes":       utils.GroupByMonth(taxes)},
 		"year_wise": gin.H{
-			"expenses":    utils.GroupByFY(expenses),
-			"incomes":     utils.GroupByFY(incomes),
-			"investments": utils.GroupByFY(investments),
-			"taxes":       utils.GroupByFY(taxes)},
+			"expenses":    utils.GroupByCalendarYear(expenses),
+			"incomes":     utils.GroupByCalendarYear(incomes),
+			"investments": utils.GroupByCalendarYear(investments),
+			"taxes":       utils.GroupByCalendarYear(taxes)},
 		"graph": graph}
 }
 

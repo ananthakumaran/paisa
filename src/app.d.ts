@@ -32,7 +32,6 @@ interface UserConfig {
   journal_path: string;
   display_precision: number;
   db_path: string;
-  financial_year_starting_month: number;
   amount_alignment_column: number;
   week_starting_day: number;
   goals: Record<string, Array<GoalSummary>>;

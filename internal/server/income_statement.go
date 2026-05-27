@@ -42,16 +42,16 @@ func GetIncomeStatement(db *gorm.DB) gin.H {
 func computeStatement(db *gorm.DB, postings []posting.Posting) map[string]IncomeStatement {
 	statements := make(map[string]IncomeStatement)
 
-	grouped := utils.GroupByFY(postings)
-	fys := lo.Keys(grouped)
-	sort.Strings(fys)
+	grouped := utils.GroupByCalendarYear(postings)
+	years := lo.Keys(grouped)
+	sort.Strings(years)
 
 	runnings := make(map[string]RunningBalance)
 	startingBalance := decimal.Zero
 
-	for _, fy := range fys {
+	for _, year := range years {
 		incomeStatement := IncomeStatement{}
-		start, end := utils.ParseFY(fy)
+		start, end := utils.ParseCalendarYear(year)
 		incomeStatement.Date = start
 		incomeStatement.StartingBalance = startingBalance
 		incomeStatement.Income = make(map[string]decimal.Decimal)
@@ -62,7 +62,7 @@ func computeStatement(db *gorm.DB, postings []posting.Posting) map[string]Income
 		incomeStatement.Tax = make(map[string]decimal.Decimal)
 		incomeStatement.Expenses = make(map[string]decimal.Decimal)
 
-		for _, p := range grouped[fy] {
+		for _, p := range grouped[year] {
 
 			category := utils.FirstName(p.Account)
 
@@ -126,7 +126,7 @@ func computeStatement(db *gorm.DB, postings []posting.Posting) map[string]Income
 
 		incomeStatement.EndingBalance = startingBalance
 
-		statements[fy] = incomeStatement
+		statements[year] = incomeStatement
 	}
 
 	return statements

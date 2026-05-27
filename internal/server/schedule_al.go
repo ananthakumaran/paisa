@@ -54,14 +54,14 @@ func GetScheduleAL(db *gorm.DB) gin.H {
 	start := utils.Now().AddDate(1, 0, 0)
 
 	for {
-		start = utils.BeginningOfFinancialYear(start)
+		start = utils.BeginningOfCalendarYear(start)
 		postings = lo.Filter(postings, func(p posting.Posting, _ int) bool { return p.Date.Before(start) })
 		if len(postings) == 0 {
 			break
 		}
 
 		start = start.AddDate(0, 0, -1)
-		scheduleALs[utils.FYHuman(start)] = ScheduleAL{Entries: computeScheduleAL(postings), Date: start}
+		scheduleALs[utils.CalendarYear(start)] = ScheduleAL{Entries: computeScheduleAL(postings), Date: start}
 	}
 
 	return gin.H{"schedule_als": scheduleALs}

@@ -1,7 +1,7 @@
 {
   "assets": [
     {
-      "id": 3,
+      "id": 11,
       "transaction_id": "2",
       "date": "2022-01-05T00:00:00Z",
       "payee": "Buy stock",
@@ -24,11 +24,11 @@
   ],
   "yearly_cards": [
     {
-      "start_date": "2021-04-01T00:00:00Z",
-      "end_date": "2022-03-31T23:59:59.999999999Z",
+      "start_date": "2022-01-01T00:00:00Z",
+      "end_date": "2022-12-31T23:59:59.999999999Z",
       "postings": [
         {
-          "id": 3,
+          "id": 11,
           "transaction_id": "2",
           "date": "2022-01-05T00:00:00Z",
           "payee": "Buy stock",

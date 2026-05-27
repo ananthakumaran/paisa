@@ -7,6 +7,8 @@
   import * as toast from "bulma-toast";
   import { refresh } from "../../../../store";
   import { sync } from "$lib/sync";
+  import { _ as t } from "$lib/i18n";
+  import { get } from "svelte/store";
 
   let lastConfig: UserConfig;
   let config: UserConfig;
@@ -21,11 +23,7 @@
   });
 
   async function resetToDefault() {
-    if (
-      confirm(
-        "Are you sure you want to reset the config to defaults? This action is not reversible."
-      )
-    ) {
+    if (confirm(get(t)("page.more.config.reset_confirm"))) {
       save({
         journal_path: lastConfig.journal_path,
         db_path: lastConfig.db_path
@@ -72,9 +70,7 @@
           <div class="box px-3" style="max-width: 1024px;">
             <article class="message">
               <div class="message-body">
-                Prices are <b>not</b> automatically updated after config change. Use the menu at the
-                top right corner to update prices. If the journal failed to sync due to any issues, fix
-                the issues and use the menu to sync again.
+                {@html $t("page.more.config.intro")}
               </div>
             </article>
 
@@ -90,18 +86,18 @@
                 <button
                   on:click={(_e) => save(config)}
                   class="button is-success {isLoading && 'is-loading'}"
-                  disabled={!hasChanges}>Save</button
+                  disabled={!hasChanges}>{$t("page.more.config.save")}</button
                 >
               </div>
               <div class="control">
                 <button
                   on:click={(_e) => (config = _.cloneDeep(lastConfig))}
-                  class="button is-light">Cancel</button
+                  class="button is-light">{$t("page.more.config.cancel")}</button
                 >
               </div>
               <div class="control">
                 <button on:click={(_e) => resetToDefault()} class="button is-danger"
-                  >Reset to Defaults</button
+                  >{$t("page.more.config.reset_defaults")}</button
                 >
               </div>
             </div>

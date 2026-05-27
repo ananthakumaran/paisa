@@ -6,6 +6,7 @@
   import _ from "lodash";
   import { onMount } from "svelte";
   import VirtualList from "svelte-tiny-virtual-list";
+  import { _ as t } from "$lib/i18n";
 
   let prices: Record<string, Price[]> = {};
 
@@ -67,7 +68,7 @@
                 <span class="icon is-small">
                   <i class="fas fa-trash-can" />
                 </span>
-                <span>Clear Price Cache</span>
+                <span>{$t("page.ledger.price.clear_cache")}</span>
               </button>
             </p>
           </div>
@@ -79,17 +80,17 @@
             <thead>
               <tr>
                 <th />
-                <th>Commodity Name</th>
-                <th>Last Date</th>
-                <th class="has-text-right">Last Price</th>
-                <th class="has-text-right">1 Day</th>
-                <th class="has-text-right">1 Week</th>
-                <th class="has-text-right">4 Weeks</th>
-                <th class="has-text-right">1 Year</th>
-                <th class="has-text-right">3 Years</th>
-                <th class="has-text-right">5 Years</th>
-                <th>Commodity Type</th>
-                <th>Commodity ID</th>
+                <th>{$t("page.ledger.price.col_commodity_name")}</th>
+                <th>{$t("page.ledger.price.col_last_date")}</th>
+                <th class="has-text-right">{$t("page.ledger.price.col_last_price")}</th>
+                <th class="has-text-right">{$t("page.ledger.price.col_1_day")}</th>
+                <th class="has-text-right">{$t("page.ledger.price.col_1_week")}</th>
+                <th class="has-text-right">{$t("page.ledger.price.col_4_weeks")}</th>
+                <th class="has-text-right">{$t("page.ledger.price.col_1_year")}</th>
+                <th class="has-text-right">{$t("page.ledger.price.col_3_years")}</th>
+                <th class="has-text-right">{$t("page.ledger.price.col_5_years")}</th>
+                <th>{$t("page.ledger.price.col_commodity_type")}</th>
+                <th>{$t("page.ledger.price.col_commodity_id")}</th>
               </tr>
             </thead>
             <tbody class="has-text-grey-dark">

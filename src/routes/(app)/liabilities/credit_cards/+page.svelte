@@ -4,6 +4,7 @@
   import { ajax, helpUrl, type CreditCardSummary } from "$lib/utils";
   import _ from "lodash";
   import { onMount } from "svelte";
+  import { _ as t } from "$lib/i18n";
 
   let isEmpty = false;
   let creditCards: CreditCardSummary[] = [];
@@ -30,8 +31,10 @@
     <div class="columns flex-wrap">
       <div class="column is-12">
         <ZeroState item={!isEmpty}>
-          <strong>Oops!</strong> You haven't configured any credit cards yet. Checkout the
-          <a href={helpUrl("credit-card")}>docs</a> page to get started.
+          <strong>{$t("common.oops")}</strong>
+          {$t("page.liabilities.no_credit_cards_pre")}<a href={helpUrl("credit-card")}
+            >{$t("page.liabilities.docs")}</a
+          >{$t("page.liabilities.no_credit_cards_post")}
         </ZeroState>
       </div>
     </div>

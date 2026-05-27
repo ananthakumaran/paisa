@@ -21,6 +21,8 @@
   import FileTree from "$lib/components/FileTree.svelte";
   import FileModal from "$lib/components/FileModal.svelte";
   import { page } from "$app/stores";
+  import { _ as t } from "$lib/i18n";
+  import { get } from "svelte/store";
 
   export let data: PageData;
   let editorDom: Element;
@@ -57,7 +59,7 @@
   let cancelled = false;
   beforeNavigate(async ({ cancel }) => {
     if ($editorState.hasUnsavedChanges) {
-      const confirmed = confirm("You have unsaved changes. Are you sure you want to leave?");
+      const confirmed = confirm(get(t)("page.ledger.editor.unsaved_warning"));
       if (!confirmed) {
         cancel();
         cancelled = true;
@@ -215,7 +217,12 @@
   }
 </script>
 
-<FileModal bind:open={modalOpen} on:save={(e) => createFile(e.detail)} label="Create" help="" />
+<FileModal
+  bind:open={modalOpen}
+  on:save={(e) => createFile(e.detail)}
+  label={$t("page.ledger.editor.create")}
+  help=""
+/>
 
 <section class="section tab-editor max-h-screen" style="padding-bottom: 0 !important">
   <div class="container is-fluid">
@@ -232,7 +239,7 @@
                 <span class="icon is-small">
                   <i class="fas fa-file-circle-plus" />
                 </span>
-                <span>Create</span>
+                <span>{$t("page.ledger.editor.create")}</span>
               </button>
             </p>
           </div>
@@ -247,7 +254,7 @@
                 <span class="icon is-small">
                   <i class="fas fa-floppy-disk" />
                 </span>
-                <span>Save</span>
+                <span>{$t("page.ledger.editor.save")}</span>
               </button>
             </p>
             <p class="control">
@@ -259,7 +266,7 @@
                 <span class="icon is-small">
                   <i class="fas fa-arrow-left" />
                 </span>
-                <span>Undo</span>
+                <span>{$t("page.ledger.editor.undo")}</span>
               </button>
             </p>
             <p class="control">
@@ -268,7 +275,7 @@
                 disabled={$editorState.redoDepth == 0}
                 on:click={(_e) => redo(editor)}
               >
-                <span>Redo</span>
+                <span>{$t("page.ledger.editor.redo")}</span>
                 <span class="icon is-small">
                   <i class="fas fa-arrow-right" />
                 </span>
@@ -279,7 +286,7 @@
                 <span class="icon is-small">
                   <i class="fas fa-code" />
                 </span>
-                <span>Prettify</span>
+                <span>{$t("page.ledger.editor.prettify")}</span>
               </button>
             </p>
           </div>
@@ -295,7 +302,7 @@
                   <span class="icon is-small">
                     <i class="fas fa-clock-rotate-left" />
                   </span>
-                  <span>Revert</span>
+                  <span>{$t("page.ledger.editor.revert")}</span>
                 </button>
               </p>
 
@@ -323,7 +330,8 @@
             <div class="control ml-5">
               <a on:click={(_e) => moveToLine(editor, $editorState.errors[0].line_from)}
                 ><span class="ml-1 tag invertable is-danger is-light"
-                  >{$editorState.errors.length} error(s) found</span
+                  >{$editorState.errors.length}
+                  {$t("page.ledger.editor.errors_suffix")}</span
                 ></a
               >
             </div>

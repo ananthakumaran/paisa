@@ -3,6 +3,7 @@
   import FileModal from "$lib/components/FileModal.svelte";
   import { ajax } from "$lib/utils";
   import * as toast from "bulma-toast";
+  import { _ as t } from "$lib/i18n";
 
   let modalOpen = false;
   function openCreateModal() {
@@ -40,9 +41,9 @@
 <FileModal
   bind:open={modalOpen}
   on:save={(e) => createFile(e.detail)}
-  label="Create"
-  placeholder="scratch"
-  help="Filename without any extension"
+  label={$t("page.more.sheets.create")}
+  placeholder={$t("page.more.sheets.placeholder")}
+  help={$t("page.more.sheets.filename_no_ext")}
 />
 
 <section class="section">
@@ -56,10 +57,10 @@
                 <span class="icon is-small">
                   <i class="fas fa-file-circle-plus" />
                 </span>
-                <span>Create</span>
+                <span>{$t("page.more.sheets.create")}</span>
               </button>
             </p>
-            <p class="mt-2 has-text-grey has-text-bold">Create your first sheet</p>
+            <p class="mt-2 has-text-grey has-text-bold">{$t("page.more.sheets.create_first")}</p>
           </div>
         </div>
       </div>

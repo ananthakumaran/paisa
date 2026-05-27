@@ -5,6 +5,7 @@
   import { ajax, type Legend } from "$lib/utils";
   import _ from "lodash";
   import { onMount } from "svelte";
+  import { _ as t } from "$lib/i18n";
 
   let legends: Legend[] = [];
 
@@ -26,7 +27,7 @@
         </div>
       </div>
     </div>
-    <BoxLabel text="Gain Overview" />
+    <BoxLabel text={$t("page.assets.gain_overview")} />
   </div>
 </section>
 <section class="section tab-gain">

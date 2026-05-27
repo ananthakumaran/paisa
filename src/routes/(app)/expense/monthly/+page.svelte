@@ -23,6 +23,8 @@
   import BoxLabel from "$lib/components/BoxLabel.svelte";
   import dayjs from "dayjs";
   import LegendCard from "$lib/components/LegendCard.svelte";
+  import { _ as t } from "$lib/i18n";
+  import { get } from "svelte/store";
 
   let groups = writable([]);
   let z: d3.ScaleOrdinal<string, string, never>,
@@ -74,12 +76,19 @@
       savingRate = "";
       netIncome = "";
     } else {
-      netIncome = formatCurrency(sum(incomes, -1) - sum(taxes)) + " net income";
-      taxRate = formatPercentage(sum(taxes) / sum(incomes, -1)) + " on income";
+      const tt = get(t);
+      netIncome =
+        formatCurrency(sum(incomes, -1) - sum(taxes)) + " " + tt("page.expense.net_income_suffix");
+      taxRate =
+        formatPercentage(sum(taxes) / sum(incomes, -1)) + " " + tt("page.expense.on_income_suffix");
       expenseRate =
-        formatPercentage(sum(expenses) / (sum(incomes, -1) - sum(taxes))) + " of net income";
+        formatPercentage(sum(expenses) / (sum(incomes, -1) - sum(taxes))) +
+        " " +
+        tt("page.expense.of_net_income_suffix");
       savingRate =
-        formatPercentage(sum(investments) / (sum(incomes, -1) - sum(taxes))) + " of net income";
+        formatPercentage(sum(investments) / (sum(incomes, -1) - sum(taxes))) +
+        " " +
+        tt("page.expense.of_net_income_suffix");
     }
 
     renderer(expenses);
@@ -126,14 +135,14 @@
               <nav class="level grid-2">
                 <LevelItem
                   narrow
-                  title="Gross Income"
+                  title={$t("page.expense.gross_income")}
                   value={income}
                   color={COLORS.gainText}
                   subtitle={netIncome}
                 />
                 <LevelItem
                   narrow
-                  title="Tax"
+                  title={$t("page.expense.tax")}
                   value={tax}
                   subtitle={taxRate}
                   color={COLORS.lossText}
@@ -146,7 +155,7 @@
               <nav class="level grid-2">
                 <LevelItem
                   narrow
-                  title="Net Investment"
+                  title={$t("page.expense.net_investment")}
                   value={saving}
                   subtitle={savingRate}
                   color={COLORS.secondary}
@@ -154,7 +163,7 @@
 
                 <LevelItem
                   narrow
-                  title="Expenses"
+                  title={$t("page.expense.expenses")}
                   value={expense}
                   color={COLORS.lossText}
                   subtitle={expenseRate}
@@ -186,7 +195,8 @@
           <div class="column is-8">
             <div class="px-3 box" style="height: 100%">
               <ZeroState item={grouped_expenses?.[$month]}>
-                <strong>Hurray!</strong> You have no expenses this month.
+                <strong>{$t("common.hurray")}</strong>
+                {$t("page.expense.no_expenses_this_month")}
               </ZeroState>
               <svg id="d3-current-month-breakdown" width="100%" />
             </div>
@@ -194,14 +204,15 @@
           <div class="column is-full">
             <div class="box">
               <ZeroState item={expenses}>
-                <strong>Oops!</strong> You have no expenses.
+                <strong>{$t("common.oops")}</strong>
+                {$t("page.expense.no_expenses")}
               </ZeroState>
               <LegendCard {legends} clazz="ml-4 overflow-x-auto" />
               <svg id="d3-monthly-expense-timeline" width="100%" height="400" />
             </div>
           </div>
         </div>
-        <BoxLabel text="Monthly Expenses" />
+        <BoxLabel text={$t("page.expense.monthly_expenses")} />
       </div>
     </div>
   </div>

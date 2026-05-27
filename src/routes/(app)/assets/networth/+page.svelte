@@ -16,6 +16,7 @@
   import ZeroState from "$lib/components/ZeroState.svelte";
   import BoxLabel from "$lib/components/BoxLabel.svelte";
   import LegendCard from "$lib/components/LegendCard.svelte";
+  import { _ as t } from "$lib/i18n";
 
   let networth = 0;
   let investment = 0;
@@ -64,18 +65,22 @@
 <section class="section tab-networth">
   <div class="container is-fluid">
     <nav class="level {isMobile() && 'grid-2'}">
-      <LevelItem title="Net worth" color={COLORS.primary} value={formatCurrency(networth)} />
       <LevelItem
-        title="Net Investment"
+        title={$t("page.assets.net_worth")}
+        color={COLORS.primary}
+        value={formatCurrency(networth)}
+      />
+      <LevelItem
+        title={$t("page.assets.net_investment")}
         color={COLORS.secondary}
         value={formatCurrency(investment)}
       />
       <LevelItem
-        title="Gain / Loss"
+        title={$t("page.assets.gain_loss")}
         color={gain >= 0 ? COLORS.gainText : COLORS.lossText}
         value={formatCurrency(gain)}
       />
-      <LevelItem title="XIRR" value={formatFloat(xirr)} />
+      <LevelItem title={$t("page.assets.xirr")} value={formatFloat(xirr)} />
     </nav>
   </div>
 </section>
@@ -86,7 +91,8 @@
       <div class="column is-12">
         <div class="box overflow-x-auto">
           <ZeroState item={points}>
-            <strong>Oops!</strong> You have no transactions.
+            <strong>{$t("common.oops")}</strong>
+            {$t("page.assets.no_transactions")}
           </ZeroState>
 
           <LegendCard {legends} clazz="ml-4" />
@@ -94,6 +100,6 @@
         </div>
       </div>
     </div>
-    <BoxLabel text="Networth Timeline" />
+    <BoxLabel text={$t("page.assets.networth_timeline")} />
   </div>
 </section>

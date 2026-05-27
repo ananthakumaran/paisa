@@ -10,6 +10,8 @@
   import { ajax, formatCurrency, formatPercentage, type Legend } from "$lib/utils";
   import _ from "lodash";
   import { onMount, tick } from "svelte";
+  import { _ as t } from "$lib/i18n";
+  import { get } from "svelte/store";
 
   let isEmpty = false;
   let legends: Legend[] = [];
@@ -21,7 +23,10 @@
   }
 
   function scheduleLabel(s: string) {
-    return s === "equal_payment" ? "Equal Payment (等额本息)" : "Equal Principal (等额本金)";
+    const tt = get(t);
+    return s === "equal_payment"
+      ? tt("page.liabilities.schedule_equal_payment")
+      : tt("page.liabilities.schedule_equal_principal");
   }
 
   onMount(async () => {
@@ -53,7 +58,7 @@
     <div class="columns is-centered">
       <div class="column is-4 has-text-centered">
         <article class="message">
-          <div class="message-body">You haven't repaid any liabilities.</div>
+          <div class="message-body">{$t("page.liabilities.no_repayment")}</div>
         </article>
       </div>
     </div>
@@ -70,7 +75,7 @@
         </div>
       </div>
     </div>
-    <BoxLabel text="Monthly Repayment Timeline" />
+    <BoxLabel text={$t("page.liabilities.monthly_repayment_timeline")} />
   </div>
 </section>
 
@@ -85,35 +90,39 @@
             <table class="table is-narrow is-fullwidth">
               <tbody>
                 <tr>
-                  <td>Principal</td>
+                  <td>{$t("page.liabilities.principal")}</td>
                   <td class="has-text-right">{formatCurrency(a.principal)}</td>
                 </tr>
                 <tr>
-                  <td>APR</td>
+                  <td>{$t("page.liabilities.apr")}</td>
                   <td class="has-text-right">{formatPercentage(a.apr / 100, 2)}</td>
                 </tr>
                 <tr>
-                  <td>Term</td>
-                  <td class="has-text-right">{a.term_months} months</td>
+                  <td>{$t("page.liabilities.term")}</td>
+                  <td class="has-text-right"
+                    >{a.term_months} {$t("page.liabilities.term_months_suffix")}</td
+                  >
                 </tr>
                 {#if a.start_date}
                   <tr>
-                    <td>Start</td>
+                    <td>{$t("page.liabilities.start")}</td>
                     <td class="has-text-right">{a.start_date}</td>
                   </tr>
                 {/if}
                 <tr>
                   <td>
-                    {a.schedule === "equal_payment" ? "Monthly Payment" : "First Payment"}
+                    {a.schedule === "equal_payment"
+                      ? $t("page.liabilities.monthly_payment")
+                      : $t("page.liabilities.first_payment")}
                   </td>
                   <td class="has-text-right">{formatCurrency(a.monthly_payment)}</td>
                 </tr>
                 <tr>
-                  <td>Total Interest</td>
+                  <td>{$t("page.liabilities.total_interest")}</td>
                   <td class="has-text-right">{formatCurrency(a.total_interest)}</td>
                 </tr>
                 <tr>
-                  <td>Total Payment</td>
+                  <td>{$t("page.liabilities.total_payment")}</td>
                   <td class="has-text-right">{formatCurrency(a.total_payment)}</td>
                 </tr>
               </tbody>
@@ -127,7 +136,7 @@
           </div>
         </div>
       </div>
-      <BoxLabel text={"Amortization Schedule – " + a.name} />
+      <BoxLabel text={$t("page.liabilities.amortization_schedule") + " – " + a.name} />
     </div>
   </section>
 {/each}

@@ -278,54 +278,6 @@ export interface IncomeYearlyCard {
   net_income: number;
 }
 
-export interface Tax {
-  gain: number;
-  taxable: number;
-  short_term: number;
-  long_term: number;
-  slab: number;
-}
-
-export interface PostingPair {
-  purchase: Posting;
-  sell: Posting;
-  tax: Tax;
-}
-
-export interface YearCapitalGain {
-  tax: Tax;
-  units: number;
-  purchase_price: number;
-  sell_price: number;
-  posting_pairs: PostingPair[];
-}
-export interface HarvestBreakdown {
-  units: number;
-  purchase_date: string;
-  purchase_price: number;
-  purchase_unit_price: number;
-  current_price: number;
-  tax: Tax;
-}
-
-export interface Harvestable {
-  account: string;
-  tax_category: string;
-  total_units: number;
-  harvestable_units: number;
-  unrealized_gain: number;
-  taxable_unrealized_gain: number;
-  current_unit_price: number;
-  current_unit_date: string;
-  harvest_breakdown: HarvestBreakdown[];
-}
-
-export interface CapitalGain {
-  account: string;
-  tax_category: string;
-  year: { [key: string]: YearCapitalGain };
-}
-
 export type Severity = "error" | "warning" | "info";
 
 export interface Issue {
@@ -334,22 +286,6 @@ export interface Issue {
   summary: string;
   description: string;
   details: string;
-}
-
-export interface ScheduleALSection {
-  code: string;
-  section: string;
-  details: string;
-}
-
-export interface ScheduleALEntry {
-  section: ScheduleALSection;
-  amount: number;
-}
-
-export interface ScheduleAL {
-  entries: ScheduleALEntry[];
-  date: dayjs.Dayjs;
 }
 
 export interface Point {
@@ -567,13 +503,6 @@ type RequestOptions = RequestInit & {
 export function ajax(
   route: "/api/config"
 ): Promise<{ config: UserConfig; schema: JSONSchema7; now: dayjs.Dayjs; accounts: string[] }>;
-export function ajax(route: "/api/harvest"): Promise<{ harvestables: Record<string, Harvestable> }>;
-export function ajax(
-  route: "/api/capital_gains"
-): Promise<{ capital_gains: Record<string, CapitalGain> }>;
-export function ajax(route: "/api/schedule_al"): Promise<{
-  schedule_als: Record<string, ScheduleAL>;
-}>;
 export function ajax(route: "/api/diagnosis"): Promise<{ issues: Issue[] }>;
 export function ajax(route: "/api/logs"): Promise<{ logs: Log[] }>;
 export function ajax(

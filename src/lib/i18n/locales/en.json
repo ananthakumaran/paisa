@@ -17,7 +17,6 @@
     "ledger": "Ledger",
     "more": "More",
     "about": "About",
-    "tax": "Tax",
     "income_statement": "Income Statement",
     "monthly": "Monthly",
     "yearly": "Yearly",
@@ -41,10 +40,7 @@
     "sheets": "Sheets",
     "goals": "Goals",
     "doctor": "Doctor",
-    "logs": "Logs",
-    "harvest": "Harvest",
-    "capital_gains": "Capital Gains",
-    "schedule_al": "Schedule AL"
+    "logs": "Logs"
   },
   "navbar": {
     "recurring_icon": {

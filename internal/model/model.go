@@ -7,29 +7,21 @@ import (
 	"github.com/ananthakumaran/paisa/internal/config"
 	"github.com/ananthakumaran/paisa/internal/ledger"
 	"github.com/ananthakumaran/paisa/internal/model/cache"
-	"github.com/ananthakumaran/paisa/internal/model/cii"
 	"github.com/ananthakumaran/paisa/internal/model/commodity"
-	mutualfundModel "github.com/ananthakumaran/paisa/internal/model/mutualfund/scheme"
-	npsModel "github.com/ananthakumaran/paisa/internal/model/nps/scheme"
 	"github.com/ananthakumaran/paisa/internal/model/portfolio"
 	"github.com/ananthakumaran/paisa/internal/model/posting"
 	"github.com/ananthakumaran/paisa/internal/model/price"
 	"github.com/ananthakumaran/paisa/internal/scraper"
-	"github.com/ananthakumaran/paisa/internal/scraper/india"
-	"github.com/ananthakumaran/paisa/internal/scraper/mutualfund"
 	"github.com/samber/lo"
 	log "github.com/sirupsen/logrus"
 	"gorm.io/gorm"
 )
 
 func AutoMigrate(db *gorm.DB) {
-	db.AutoMigrate(&npsModel.Scheme{})
-	db.AutoMigrate(&mutualfundModel.Scheme{})
 	db.AutoMigrate(&posting.Posting{})
 	db.AutoMigrate(&price.Price{})
 	db.AutoMigrate(&portfolio.Portfolio{})
 	db.AutoMigrate(&price.Price{})
-	db.AutoMigrate(&cii.CII{})
 	db.AutoMigrate(&cache.Cache{})
 }
 
@@ -102,37 +94,12 @@ func SyncCommodities(db *gorm.DB) error {
 	return nil
 }
 
-func SyncCII(db *gorm.DB) error {
-	AutoMigrate(db)
-	log.Info("Fetching taxation related info")
-	ciis, err := india.GetCostInflationIndex()
-	if err != nil {
-		log.Error(err)
-		return fmt.Errorf("Failed to fetch CII: %w", err)
-	}
-	cii.UpsertAll(db, ciis)
-	return nil
-}
-
+// SyncPortfolios is a placeholder that runs the portfolio auto-migration
+// and returns. The previous implementation scraped Indian mutual-fund
+// holdings via the AMFI portfolio endpoint; that scraper was removed
+// when India-specific business logic was dropped. Until a generic
+// portfolio provider is added, this is a no-op.
 func SyncPortfolios(db *gorm.DB) error {
 	db.AutoMigrate(&portfolio.Portfolio{})
-	log.Info("Fetching commodities portfolio")
-	commodities := commodity.FindByType(config.MutualFund)
-	for _, commodity := range commodities {
-		if commodity.Price.Provider != "in-mfapi" {
-			continue
-		}
-
-		name := commodity.Name
-		log.Info("Fetching portfolio for ", name)
-		portfolios, err := mutualfund.GetPortfolio(commodity.Price.Code, commodity.Name)
-
-		if err != nil {
-			log.Error(err)
-			return fmt.Errorf("Failed to fetch portfolio for %s: %w", name, err)
-		}
-
-		portfolio.UpsertAll(db, commodity.Type, commodity.Price.Code, portfolios)
-	}
 	return nil
 }

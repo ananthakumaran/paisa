@@ -72,7 +72,7 @@ describe("formatCurrency (default zh-CN + CNY)", () => {
   });
 
   test("legacy (value, precision) overload skips the currency symbol", () => {
-    // Existing callers (CapitalGainCard, price page) rely on this shape.
+    // The price page relies on this shape.
     expect(formatCurrency(1234.5678, 2)).toBe("1,234.57");
     expect(formatCurrency(0, 4)).toBe("0.0000");
   });

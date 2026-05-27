@@ -53,7 +53,7 @@
     "incomes": {
       "2022-01": [
         {
-          "id": 17,
+          "id": 21,
           "transaction_id": "d84b6999-200b-5b90-9a3e-f94dc8a177da",
           "date": "2022-01-01T00:00:00Z",
           "payee": "Salary",
@@ -78,7 +78,7 @@
     "investments": {
       "2022-01": [
         {
-          "id": 19,
+          "id": 23,
           "transaction_id": "67f44c92-c138-550d-9ae2-84034aca39d3",
           "date": "2022-01-05T00:00:00Z",
           "payee": "Buy stock",
@@ -107,7 +107,7 @@
     "incomes": {
       "2022": [
         {
-          "id": 17,
+          "id": 21,
           "transaction_id": "d84b6999-200b-5b90-9a3e-f94dc8a177da",
           "date": "2022-01-01T00:00:00Z",
           "payee": "Salary",
@@ -132,7 +132,7 @@
     "investments": {
       "2022": [
         {
-          "id": 19,
+          "id": 23,
           "transaction_id": "67f44c92-c138-550d-9ae2-84034aca39d3",
           "date": "2022-01-05T00:00:00Z",
           "payee": "Buy stock",

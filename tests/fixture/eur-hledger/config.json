@@ -25,7 +25,6 @@
     "budget": {
       "rollover": "yes"
     },
-    "schedule_al": [],
     "allocation_targets": [],
     "commodities": [],
     "import_templates": [],
@@ -193,16 +192,12 @@
             "price": {
               "code": "AAPL",
               "provider": "com-yahoo"
-            },
-            "tax_category": "unlisted_equity"
+            }
           }
         ],
         "items": {
           "additionalProperties": false,
           "properties": {
-            "harvest": {
-              "type": "integer"
-            },
             "name": {
               "description": "Name of the commodity",
               "type": "string"
@@ -217,10 +212,7 @@
                 },
                 "provider": {
                   "enum": [
-                    "in-mfapi",
                     "com-yahoo",
-                    "com-purifiedbytes-nps",
-                    "com-purifiedbytes-metal",
                     "co-alphavantage",
                     "yahoo",
                     "cn-okx",
@@ -237,23 +229,10 @@
               "type": "object",
               "ui:widget": "price"
             },
-            "tax_category": {
-              "enum": [
-                "",
-                "debt",
-                "equity",
-                "equity65",
-                "equity35",
-                "unlisted_equity"
-              ],
-              "type": "string"
-            },
             "type": {
               "enum": [
                 "mutualfund",
                 "stock",
-                "nps",
-                "metal",
                 "unknown"
               ],
               "type": "string"
@@ -690,58 +669,6 @@
       "retirement": {
         "type": "object",
         "ui:widget": "hidden"
-      },
-      "schedule_al": {
-        "default": [
-          {
-            "accounts": [
-              "Assets:Checking"
-            ],
-            "code": "bank"
-          }
-        ],
-        "description": "Schedule AL configuration",
-        "items": {
-          "additionalProperties": false,
-          "properties": {
-            "accounts": {
-              "default": [
-                "Assets:Checking"
-              ],
-              "items": {
-                "type": "string"
-              },
-              "type": "array",
-              "ui:widget": "accounts",
-              "uniqueItems": true
-            },
-            "code": {
-              "enum": [
-                "immovable",
-                "metal",
-                "art",
-                "vehicle",
-                "bank",
-                "share",
-                "insurance",
-                "loan",
-                "cash",
-                "liability"
-              ],
-              "type": "string"
-            }
-          },
-          "required": [
-            "code",
-            "accounts"
-          ],
-          "type": "object",
-          "ui:header": "code"
-        },
-        "itemsUniqueProperties": [
-          "code"
-        ],
-        "type": "array"
       },
       "sheets_directory": {
         "description": "Path to your sheets directory. It can be absolute or relative to the configuration file. The sheets directory will be created if it does not exist. By default it will be created in the same directory as the journal file.",

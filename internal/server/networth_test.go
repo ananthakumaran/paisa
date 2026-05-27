@@ -5,7 +5,6 @@ import (
 	"time"
 
 	"github.com/ananthakumaran/paisa/internal/config"
-	"github.com/ananthakumaran/paisa/internal/model/cii"
 	"github.com/ananthakumaran/paisa/internal/model/fx"
 	"github.com/ananthakumaran/paisa/internal/model/portfolio"
 	"github.com/ananthakumaran/paisa/internal/model/posting"
@@ -101,7 +100,6 @@ func inMemoryDB(t *testing.T) *gorm.DB {
 	assert.NoError(t, db.AutoMigrate(&posting.Posting{}))
 	assert.NoError(t, db.AutoMigrate(&price.Price{}))
 	assert.NoError(t, db.AutoMigrate(&portfolio.Portfolio{}))
-	assert.NoError(t, db.AutoMigrate(&cii.CII{}))
 	return db
 }
 

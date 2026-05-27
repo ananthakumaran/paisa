@@ -20,23 +20,11 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-type TaxCategoryType string
-
-const (
-	Debt           TaxCategoryType = "debt"
-	Equity         TaxCategoryType = "equity"
-	Equity65       TaxCategoryType = "equity65"
-	Equity35       TaxCategoryType = "equity35"
-	UnlistedEquity TaxCategoryType = "unlisted_equity"
-)
-
 type CommodityType string
 
 const (
 	MutualFund CommodityType = "mutualfund"
-	NPS        CommodityType = "nps"
 	Stock      CommodityType = "stock"
-	Metal      CommodityType = "metal"
 	Unknown    CommodityType = "unknown"
 )
 
@@ -58,11 +46,9 @@ type Price struct {
 }
 
 type Commodity struct {
-	Name        string          `json:"name" yaml:"name"`
-	Type        CommodityType   `json:"type" yaml:"type"`
-	Price       Price           `json:"price" yaml:"price"`
-	Harvest     int             `json:"harvest" yaml:"harvest"`
-	TaxCategory TaxCategoryType `json:"tax_category" yaml:"tax_category"`
+	Name  string        `json:"name" yaml:"name"`
+	Type  CommodityType `json:"type" yaml:"type"`
+	Price Price         `json:"price" yaml:"price"`
 }
 
 type Account struct {
@@ -100,11 +86,6 @@ type SavingsGoal struct {
 	PaymentPerPeriod float64  `json:"payment_per_period" yaml:"payment_per_period"`
 	Accounts         []string `json:"accounts" yaml:"accounts"`
 	Priority         int      `json:"priority" yaml:"priority"`
-}
-
-type ScheduleAL struct {
-	Code     string   `json:"code" yaml:"code"`
-	Accounts []string `json:"accounts" yaml:"accounts"`
 }
 
 type Budget struct {
@@ -168,8 +149,6 @@ type Config struct {
 
 	Budget Budget `json:"budget" yaml:"budget"`
 
-	ScheduleALs []ScheduleAL `json:"schedule_al" yaml:"schedule_al"`
-
 	AllocationTargets []AllocationTarget `json:"allocation_targets" yaml:"allocation_targets"`
 
 	Commodities []Commodity `json:"commodities" yaml:"commodities"`
@@ -206,7 +185,6 @@ var defaultConfig = Config{
 	Budget:                Budget{Rollover: Yes},
 	Strict:                No,
 	WeekStartingDay:       0,
-	ScheduleALs:           []ScheduleAL{},
 	AllocationTargets:     []AllocationTarget{},
 	Commodities:           []Commodity{},
 	ImportTemplates:       []ImportTemplate{},
@@ -309,6 +287,83 @@ func SaveConfig(content []byte) error {
 	return nil
 }
 
+// stripDeprecatedKeys mutates the parsed-yaml tree to drop config
+// keys that were removed in M2-A (India-specific tax / harvest /
+// Schedule AL / CII / NPS / metal / in-mfapi). For every key (or
+// whole commodity entry) that gets stripped, an INFO log line is
+// emitted so users notice their config has stale fields.
+//
+// The schema has `additionalProperties: false` at root and inside
+// `commodities[*]`, plus tight enums on `commodities[*].type` and
+// `commodities[*].price.provider`, so without this scrubbing a legacy
+// yaml would fail validation and crash the binary on first upgrade.
+func stripDeprecatedKeys(parsed interface{}) {
+	root, ok := parsed.(map[string]interface{})
+	if !ok {
+		return
+	}
+
+	for _, key := range []string{"schedule_al", "cii"} {
+		if _, present := root[key]; present {
+			log.Infof("Ignored deprecated config key '%s' (removed in M2-A)", key)
+			delete(root, key)
+		}
+	}
+
+	commodities, ok := root["commodities"].([]interface{})
+	if !ok {
+		return
+	}
+
+	// Two passes: (1) per-item key strip (harvest, tax_category);
+	// (2) drop whole commodity entries whose `type` or `price.provider`
+	// is no longer supported (nps, metal, in-mfapi, com-purifiedbytes-*).
+	deprecatedTypes := map[string]bool{"nps": true, "metal": true}
+	deprecatedProviders := map[string]bool{
+		"in-mfapi":                true,
+		"com-purifiedbytes-nps":   true,
+		"com-purifiedbytes-metal": true,
+	}
+
+	kept := make([]interface{}, 0, len(commodities))
+	for _, c := range commodities {
+		item, ok := c.(map[string]interface{})
+		if !ok {
+			kept = append(kept, c)
+			continue
+		}
+		name, _ := item["name"].(string)
+		for _, key := range []string{"harvest", "tax_category"} {
+			if _, present := item[key]; present {
+				if name != "" {
+					log.Infof("Ignored deprecated config key 'commodities[%s].%s' (removed in M2-A)", name, key)
+				} else {
+					log.Infof("Ignored deprecated config key 'commodities[].%s' (removed in M2-A)", key)
+				}
+				delete(item, key)
+			}
+		}
+
+		commodityType, _ := item["type"].(string)
+		var providerCode string
+		if price, ok := item["price"].(map[string]interface{}); ok {
+			providerCode, _ = price["provider"].(string)
+		}
+
+		if deprecatedTypes[commodityType] || deprecatedProviders[providerCode] {
+			label := name
+			if label == "" {
+				label = "<unnamed>"
+			}
+			log.Infof("Dropping deprecated commodity '%s' (type=%q provider=%q removed in M2-A)", label, commodityType, providerCode)
+			continue
+		}
+
+		kept = append(kept, item)
+	}
+	root["commodities"] = kept
+}
+
 func LoadConfigFile(path string) {
 	path, err := filepath.Abs(path)
 	if err != nil {
@@ -336,13 +391,36 @@ func LoadConfig(content []byte, cp string) error {
 		return err
 	}
 
+	// M2-A removed the India-specific tax / harvest / Schedule AL stack
+	// (and the in-mfapi / NPS / metal commodity surface). The schema has
+	// `additionalProperties: false` at root and inside commodities[*],
+	// so a legacy yaml that still carries any of those keys would fail
+	// validation and crash `paisa update` / `paisa serve`.
+	//
+	// To keep the upgrade path painless, strip the deprecated keys from
+	// the parsed structure BEFORE schema validation and emit an INFO log
+	// so the user knows their config still loaded but the field has no
+	// effect. We do NOT mutate the on-disk file — `paisa config save`
+	// would, but plain reads stay non-destructive.
+	stripDeprecatedKeys(configJson)
+
 	err = schema.Validate(configJson)
 	if err != nil {
 		return errors.New(fmt.Sprintf("Invalid configuration\n%#v", err))
 	}
 
+	// Re-marshal the scrubbed tree so the typed unmarshal below sees the
+	// post-strip view too. Otherwise nps / metal commodities (or the now-
+	// dead in-mfapi / com-purifiedbytes-* providers) would still land in
+	// config.Commodities and trip `Unknown price provider: ...` at sync
+	// time.
+	scrubbed, err := yaml.Marshal(configJson)
+	if err != nil {
+		return err
+	}
+
 	config = Config{}
-	err = yaml.Unmarshal(content, &config)
+	err = yaml.Unmarshal(scrubbed, &config)
 	if err != nil {
 		return err
 	}

@@ -127,26 +127,6 @@
     }
   ];
 
-  const tax = {
-    label: "nav.tax",
-    href: "/tax",
-    help: "tax",
-    children: [
-      { label: "nav.harvest", href: "/harvest", help: "tax-harvesting" },
-      { label: "nav.capital_gains", href: "/capital_gains", help: "capital-gains" },
-      {
-        label: "nav.schedule_al",
-        href: "/schedule_al",
-        help: "schedule-al",
-        calendarYearPicker: true
-      }
-    ]
-  };
-
-  if (USER_CONFIG.default_currency == "INR") {
-    _.last(links).children.push(tax);
-  }
-
   const about = { label: "nav.about", href: "/about" };
   _.last(links).children.push(about);
 

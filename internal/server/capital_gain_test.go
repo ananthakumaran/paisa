@@ -5,7 +5,6 @@ import (
 	"testing"
 	"time"
 
-	"github.com/ananthakumaran/paisa/internal/config"
 	"github.com/ananthakumaran/paisa/internal/model/posting"
 	"github.com/shopspring/decimal"
 	"github.com/stretchr/testify/assert"
@@ -33,29 +32,24 @@ func makePosting(date string, account string, commodity string, qty float64, pri
 	}
 }
 
-// When the commodity has no tax_category (zero-value Commodity, e.g.
-// untagged境外 holdings such as USD/HKD cash or UBER/0700.HK shares),
-// computeCapitalGains must still produce a well-formed CapitalGain
-// struct: TaxCategory is the empty string, FY map is non-nil, and the
-// resulting JSON has no nil collections (so the frontend does not crash
-// when it iterates over them).
+// When a posting set has no tax classification (untagged境外 holdings
+// such as USD/HKD cash or UBER/0700.HK shares), computeCapitalGains
+// must still produce a well-formed CapitalGain struct: TaxCategory is
+// the empty string, Year map is non-nil, and the resulting JSON has no
+// nil collections (so the frontend does not crash when it iterates
+// over them).
 //
 // See issue #1.
 func TestComputeCapitalGains_EmptyTaxCategoryProducesWellFormedOutput(t *testing.T) {
-	// zero-value commodity → TaxCategory is "" (empty)
-	untagged := config.Commodity{Name: "UBER", Type: config.Stock}
-
 	// One buy on 2023-01-01, one sell on 2024-01-01 — even with no tax
 	// classification, the handler must not panic and must return a
-	// JSON-serialisable structure with a non-nil fy map.
+	// JSON-serialisable structure with a non-nil year map.
 	postings := []posting.Posting{
 		makePosting("2023/01/01", "Assets:Brokerage:IBKR", "UBER", 3, 128.02),
 		makePosting("2024/01/01", "Assets:Brokerage:IBKR", "UBER", -3, 150.00),
 	}
 
-	// Don't actually need the db for these untagged postings — the tax
-	// engine will produce zeros — but the function takes one regardless.
-	gain := computeCapitalGains(nil, "Assets:Brokerage:IBKR", untagged, postings)
+	gain := computeCapitalGains(nil, "Assets:Brokerage:IBKR", "", postings)
 
 	assert.Equal(t, "Assets:Brokerage:IBKR", gain.Account)
 	assert.Equal(t, "", gain.TaxCategory)
@@ -80,17 +74,16 @@ func TestComputeCapitalGains_EmptyTaxCategoryProducesWellFormedOutput(t *testing
 	}
 }
 
-// When GetCapitalGains is fed postings whose commodity lacks a
+// When computeCapitalGains is fed postings whose commodity lacks a
 // tax_category, the resulting map must be well-formed JSON. We test
 // this at the unit level on the helper because spinning a full gin
 // router needs a working sqlite + ledger CLI.
 func TestComputeCapitalGains_NoSellsProducesEmptyYear(t *testing.T) {
-	untagged := config.Commodity{Name: "HKD", Type: config.Stock}
 	postings := []posting.Posting{
 		makePosting("2023/01/01", "Assets:Brokerage:IBKR", "HKD", 1000, 1.0),
 	}
 
-	gain := computeCapitalGains(nil, "Assets:Brokerage:IBKR", untagged, postings)
+	gain := computeCapitalGains(nil, "Assets:Brokerage:IBKR", "", postings)
 	assert.Equal(t, "", gain.TaxCategory)
 	assert.NotNil(t, gain.Year)
 	assert.Empty(t, gain.Year)
@@ -101,7 +94,6 @@ func TestComputeCapitalGains_NoSellsProducesEmptyYear(t *testing.T) {
 // (buy in Apr, sell in Feb of the next calendar year) must aggregate
 // under the SELL date's calendar year — not the FY range.
 func TestComputeCapitalGains_AggregatesUnderCalendarYearOfSellDate(t *testing.T) {
-	untagged := config.Commodity{Name: "UBER", Type: config.Stock}
 	postings := []posting.Posting{
 		// Buy in April 2023 (Indian FY 2023-24).
 		makePosting("2023/04/15", "Assets:Brokerage:IBKR", "UBER", 5, 100.0),
@@ -110,7 +102,7 @@ func TestComputeCapitalGains_AggregatesUnderCalendarYearOfSellDate(t *testing.T)
 		makePosting("2024/02/15", "Assets:Brokerage:IBKR", "UBER", -5, 150.0),
 	}
 
-	gain := computeCapitalGains(nil, "Assets:Brokerage:IBKR", untagged, postings)
+	gain := computeCapitalGains(nil, "Assets:Brokerage:IBKR", "", postings)
 	_, has2024 := gain.Year["2024"]
 	assert.True(t, has2024, "expected key '2024' (calendar year of sell), got %v", keysOf(gain.Year))
 	for k := range gain.Year {

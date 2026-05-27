@@ -1147,6 +1147,66 @@
         "additionalProperties": false
       }
     },
+    "liabilities": {
+      "type": "array",
+      "description": "Liability accounts. When kind is set to amortizing_loan, an amortization schedule (equal_payment / equal_principal) is computed and displayed on the Repayment page.",
+      "itemsUniqueProperties": ["name"],
+      "default": [],
+      "items": {
+        "type": "object",
+        "ui:header": "name",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Liability account name (e.g. Liabilities:Mortgage:House)",
+            "minLength": 1
+          },
+          "kind": {
+            "type": "string",
+            "description": "Liability kind. Set to amortizing_loan to opt in to amortization schedule.",
+            "enum": ["amortizing_loan"]
+          },
+          "principal": {
+            "type": "number",
+            "description": "Initial loan principal.",
+            "exclusiveMinimum": 0
+          },
+          "rate": {
+            "type": "number",
+            "description": "Annual percentage rate, expressed as a percent (e.g. 4.9 for 4.9%).",
+            "minimum": 0
+          },
+          "start_date": {
+            "type": "string",
+            "description": "Loan start date.",
+            "format": "date"
+          },
+          "term_months": {
+            "type": "integer",
+            "description": "Total number of monthly installments.",
+            "minimum": 1
+          },
+          "schedule": {
+            "type": "string",
+            "description": "Amortization method.",
+            "enum": ["equal_payment", "equal_principal"]
+          }
+        },
+        "required": ["name"],
+        "additionalProperties": false,
+        "allOf": [
+          {
+            "if": {
+              "properties": { "kind": { "const": "amortizing_loan" } },
+              "required": ["kind"]
+            },
+            "then": {
+              "required": ["principal", "rate", "term_months", "schedule"]
+            }
+          }
+        ]
+      }
+    },
     "transfer_accounts": {
       "type": "array",
       "description": "List of account globs that represent internal transfers (e.g. bridge / inter-account-transfer / saving sub-accounts). Transactions whose postings are all under Assets:* AND have at least one leg matching one of these globs are treated as internal transfers and excluded from the Investment Timeline and Savings Rate. They still appear in Cash Flow.",

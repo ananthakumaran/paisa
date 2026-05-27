@@ -31,6 +31,7 @@
     },
     "user_accounts": [],
     "credit_cards": [],
+    "liabilities": [],
     "transfer_accounts": []
   },
   "now": "2022-02-07T00:00:00Z",
@@ -555,6 +556,86 @@
           "beancount"
         ],
         "type": "string"
+      },
+      "liabilities": {
+        "default": [],
+        "description": "Liability accounts. When kind is set to amortizing_loan, an amortization schedule (equal_payment / equal_principal) is computed and displayed on the Repayment page.",
+        "items": {
+          "additionalProperties": false,
+          "allOf": [
+            {
+              "if": {
+                "properties": {
+                  "kind": {
+                    "const": "amortizing_loan"
+                  }
+                },
+                "required": [
+                  "kind"
+                ]
+              },
+              "then": {
+                "required": [
+                  "principal",
+                  "rate",
+                  "term_months",
+                  "schedule"
+                ]
+              }
+            }
+          ],
+          "properties": {
+            "kind": {
+              "description": "Liability kind. Set to amortizing_loan to opt in to amortization schedule.",
+              "enum": [
+                "amortizing_loan"
+              ],
+              "type": "string"
+            },
+            "name": {
+              "description": "Liability account name (e.g. Liabilities:Mortgage:House)",
+              "minLength": 1,
+              "type": "string"
+            },
+            "principal": {
+              "description": "Initial loan principal.",
+              "exclusiveMinimum": 0,
+              "type": "number"
+            },
+            "rate": {
+              "description": "Annual percentage rate, expressed as a percent (e.g. 4.9 for 4.9%).",
+              "minimum": 0,
+              "type": "number"
+            },
+            "schedule": {
+              "description": "Amortization method.",
+              "enum": [
+                "equal_payment",
+                "equal_principal"
+              ],
+              "type": "string"
+            },
+            "start_date": {
+              "description": "Loan start date.",
+              "format": "date",
+              "type": "string"
+            },
+            "term_months": {
+              "description": "Total number of monthly installments.",
+              "minimum": 1,
+              "type": "integer"
+            }
+          },
+          "required": [
+            "name"
+          ],
+          "type": "object",
+          "ui:header": "name"
+        },
+        "itemsUniqueProperties": [
+          "name"
+        ],
+        "type": "array"
       },
       "locale": {
         "description": "The locale used to format numbers. The list of locales supported depends on your browser. It's known to work well with en-US and en-IN.",

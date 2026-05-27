@@ -127,6 +127,29 @@ type CreditCard struct {
 	ExpirationDate  string `json:"expiration_date" yaml:"expiration_date"`
 }
 
+type LiabilityKind string
+
+const (
+	AmortizingLoan LiabilityKind = "amortizing_loan"
+)
+
+type LiabilitySchedule string
+
+const (
+	LiabilityEqualPayment   LiabilitySchedule = "equal_payment"
+	LiabilityEqualPrincipal LiabilitySchedule = "equal_principal"
+)
+
+type Liability struct {
+	Name       string            `json:"name" yaml:"name"`
+	Kind       LiabilityKind     `json:"kind,omitempty" yaml:"kind,omitempty"`
+	Principal  float64           `json:"principal,omitempty" yaml:"principal,omitempty"`
+	Rate       float64           `json:"rate,omitempty" yaml:"rate,omitempty"`
+	StartDate  string            `json:"start_date,omitempty" yaml:"start_date,omitempty"`
+	TermMonths int               `json:"term_months,omitempty" yaml:"term_months,omitempty"`
+	Schedule   LiabilitySchedule `json:"schedule,omitempty" yaml:"schedule,omitempty"`
+}
+
 type Config struct {
 	JournalPath           string       `json:"journal_path" yaml:"journal_path"`
 	DBPath                string       `json:"db_path" yaml:"db_path"`
@@ -159,6 +182,8 @@ type Config struct {
 
 	CreditCards []CreditCard `json:"credit_cards" yaml:"credit_cards"`
 
+	Liabilities []Liability `json:"liabilities" yaml:"liabilities"`
+
 	TransferAccounts []string `json:"transfer_accounts" yaml:"transfer_accounts"`
 }
 
@@ -185,6 +210,7 @@ var defaultConfig = Config{
 	Goals:                 Goals{Retirement: []RetirementGoal{}, Savings: []SavingsGoal{}},
 	UserAccounts:          []UserAccount{},
 	CreditCards:           []CreditCard{},
+	Liabilities:           []Liability{},
 	TransferAccounts:      []string{},
 }
 

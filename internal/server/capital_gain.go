@@ -1,22 +1,23 @@
 package server
 
 import (
-	"github.com/ananthakumaran/paisa/internal/config"
-	c "github.com/ananthakumaran/paisa/internal/model/commodity"
 	"github.com/ananthakumaran/paisa/internal/model/posting"
-	"github.com/ananthakumaran/paisa/internal/query"
-	"github.com/ananthakumaran/paisa/internal/taxation"
 	"github.com/ananthakumaran/paisa/internal/utils"
 	"github.com/gin-gonic/gin"
-	"github.com/samber/lo"
 	"github.com/shopspring/decimal"
 	"gorm.io/gorm"
 )
 
+// PostingPair is a (purchase, sell) lot match-up produced by the
+// FIFO walk in computeCapitalGains.
+//
+// After the M2-A delete of the India-specific taxation engine this
+// struct no longer carries a Tax field — capital gains are reported
+// in pure decimal currency terms; jurisdiction-specific tax rules
+// (CN / US / etc.) will be reintroduced in M4 with a different shape.
 type PostingPair struct {
 	Purchase posting.Posting `json:"purchase"`
 	Sell     posting.Posting `json:"sell"`
-	Tax      taxation.Tax    `json:"tax"`
 }
 
 // YearCapitalGain holds aggregated capital-gain figures for a single
@@ -26,7 +27,6 @@ type YearCapitalGain struct {
 	Units         decimal.Decimal `json:"units"`
 	PurchasePrice decimal.Decimal `json:"purchase_price"`
 	SellPrice     decimal.Decimal `json:"sell_price"`
-	Tax           taxation.Tax    `json:"tax"`
 	PostingPairs  []PostingPair   `json:"posting_pairs"`
 }
 
@@ -36,28 +36,29 @@ type CapitalGain struct {
 	Year        map[string]YearCapitalGain `json:"year"`
 }
 
+// GetCapitalGains is a no-op stub after M2-A. The India-specific
+// taxation engine (LTCG / STCG / CII indexation / Schedule AL) was
+// removed; until M4 rebuilds capital-gains for the CN tax regime,
+// this endpoint returns an empty map so the frontend can still call
+// it without crashing.
 func GetCapitalGains(db *gorm.DB) gin.H {
-	commodities := lo.Filter(c.All(), func(c config.Commodity, _ int) bool {
-		return (c.Type == config.MutualFund || c.Type == config.Stock) &&
-			(c.TaxCategory == config.Debt || c.TaxCategory == config.Equity || c.TaxCategory == config.Equity65 || c.TaxCategory == config.Equity35 || c.TaxCategory == config.UnlistedEquity)
-	})
-	postings := query.Init(db).Like("Assets:%").Commodities(commodities).All()
-	byAccount := lo.GroupBy(postings, func(p posting.Posting) string { return p.Account })
-	capitalGains := lo.MapValues(byAccount, func(postings []posting.Posting, account string) CapitalGain {
-		return computeCapitalGains(db, account, c.FindByName(postings[0].Commodity), postings)
-	})
-	return gin.H{"capital_gains": capitalGains}
+	return gin.H{"capital_gains": map[string]CapitalGain{}}
 }
 
-func computeCapitalGains(db *gorm.DB, account string, commodity config.Commodity, postings []posting.Posting) CapitalGain {
-	capitalGain := CapitalGain{Account: account, TaxCategory: string(commodity.TaxCategory), Year: make(map[string]YearCapitalGain)}
+// computeCapitalGains walks a single account's postings FIFO and
+// aggregates buy/sell pairs by the sell date's calendar year. It is
+// retained (separately from GetCapitalGains) so that the unit tests
+// covering the FY → calendar-year migration (issue #5) continue to
+// pin the output shape. The full server endpoint stays a stub until
+// M4 rebuilds capital gains for the CN tax regime.
+func computeCapitalGains(_ *gorm.DB, account string, taxCategory string, postings []posting.Posting) CapitalGain {
+	capitalGain := CapitalGain{Account: account, TaxCategory: taxCategory, Year: make(map[string]YearCapitalGain)}
 	var available []posting.Posting
 	for _, p := range postings {
 		if p.Quantity.GreaterThan(decimal.Zero) {
 			available = append(available, p)
 		} else {
 			quantity := p.Quantity.Neg()
-			totalTax := taxation.Tax{}
 			purchasePrice := decimal.Zero
 			postingPairs := make([]PostingPair, 0)
 			for quantity.GreaterThan(decimal.Zero) && len(available) > 0 {
@@ -76,15 +77,12 @@ func computeCapitalGains(db *gorm.DB, account string, commodity config.Commodity
 				}
 
 				purchasePrice = purchasePrice.Add(q.Mul(first.Price()))
-				tax := taxation.Calculate(db, q, commodity, first.Price(), first.Date, p.Price(), p.Date)
-				totalTax = taxation.Add(totalTax, tax)
-				postingPair := PostingPair{Purchase: first.WithQuantity(q), Sell: p.WithQuantity(q.Neg()), Tax: tax}
+				postingPair := PostingPair{Purchase: first.WithQuantity(q), Sell: p.WithQuantity(q.Neg())}
 				postingPairs = append(postingPairs, postingPair)
 
 			}
 			year := utils.CalendarYear(p.Date)
 			yearGain := capitalGain.Year[year]
-			yearGain.Tax = taxation.Add(yearGain.Tax, totalTax)
 			yearGain.Units = yearGain.Units.Add(p.Quantity.Neg())
 			yearGain.PurchasePrice = yearGain.PurchasePrice.Add(purchasePrice)
 			yearGain.SellPrice = yearGain.SellPrice.Add(p.Amount.Neg())

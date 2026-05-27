@@ -28,10 +28,6 @@ func Sync(db *gorm.DB, request SyncRequest) gin.H {
 		if err != nil {
 			return gin.H{"success": false, "message": err.Error()}
 		}
-		err = model.SyncCII(db)
-		if err != nil {
-			return gin.H{"success": false, "message": err.Error()}
-		}
 	}
 
 	if request.Portfolios {

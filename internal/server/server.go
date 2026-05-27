@@ -201,17 +201,10 @@ func Build(db *gorm.DB, enableCompression bool) *gin.Engine {
 	router.GET("/api/transaction", func(c *gin.Context) {
 		c.JSON(200, GetTransactions(db))
 	})
-	router.GET("/api/harvest", func(c *gin.Context) {
-		c.JSON(200, GetHarvest(db))
-	})
-
 	router.GET("/api/capital_gains", func(c *gin.Context) {
 		c.JSON(200, GetCapitalGains(db))
 	})
 
-	router.GET("/api/schedule_al", func(c *gin.Context) {
-		c.JSON(200, GetScheduleAL(db))
-	})
 	router.GET("/api/diagnosis", func(c *gin.Context) {
 		c.JSON(200, GetDiagnosis(db))
 	})

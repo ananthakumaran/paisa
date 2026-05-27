@@ -194,7 +194,7 @@ function formatWithLiteralPrefix(
  *   that currency: e.g. `$11.23` / `US$11.23` / `HK$1,663.80`.
  * - `formatCurrency(value, 2)` is the legacy overload — emits a plain
  *   locale-grouped number with the given fixed precision and NO currency
- *   prefix. Several callers depend on this (CapitalGainCard, price page).
+ *   prefix. The price page depends on this.
  */
 export function formatCurrency(value: number, currency?: string): string;
 export function formatCurrency(value: number, precision: number): string;

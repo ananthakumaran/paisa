@@ -1,6 +1,8 @@
 package liabilities
 
 import (
+	"strconv"
+
 	"github.com/ananthakumaran/paisa/internal/config"
 	"github.com/ananthakumaran/paisa/internal/loan"
 	"github.com/ananthakumaran/paisa/internal/query"
@@ -38,6 +40,24 @@ func GetRepayment(db *gorm.DB) gin.H {
 	return gin.H{"repayments": postings, "amortizations": amortizations}
 }
 
+// decimalFromYAMLFloat converts a YAML-decoded float64 to decimal.Decimal
+// without round-tripping the IEEE-754 bits. We format the float with the
+// shortest representation that exactly reproduces it (strconv 'g' / -1 prec),
+// then parse it as decimal text. For typical YAML inputs like `1100000` or
+// `4.9` this yields exactly `1100000` and `4.9` — no `1.0999999...` noise.
+// Per CLAUDE.md "Don't introduce native floats for money", money never
+// actually flows through float arithmetic; the float64 here is just the
+// shape of the YAML AST.
+func decimalFromYAMLFloat(v float64) decimal.Decimal {
+	d, err := decimal.NewFromString(strconv.FormatFloat(v, 'g', -1, 64))
+	if err != nil {
+		// strconv 'g' / -1 round-trips every finite float64, so this should
+		// never trigger; fall back to NewFromFloat to stay safe.
+		return decimal.NewFromFloat(v)
+	}
+	return d
+}
+
 func buildAmortizations(liabs []config.Liability) []Amortization {
 	result := make([]Amortization, 0)
 	for _, l := range liabs {
@@ -45,8 +65,8 @@ func buildAmortizations(liabs []config.Liability) []Amortization {
 			continue
 		}
 		schedule, err := loan.Amortize(
-			decimal.NewFromFloat(l.Principal),
-			decimal.NewFromFloat(l.Rate),
+			decimalFromYAMLFloat(l.Principal),
+			decimalFromYAMLFloat(l.Rate),
 			l.TermMonths,
 			loan.ScheduleKind(l.Schedule),
 		)

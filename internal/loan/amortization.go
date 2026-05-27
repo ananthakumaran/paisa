@@ -19,7 +19,12 @@ const (
 	EqualPrincipal ScheduleKind = "equal_principal"
 )
 
-// Month represents one row of the amortization table.
+// Month represents one row of the amortization table. All amounts are rounded
+// to 2dp. Invariants enforced by Amortize across the full schedule:
+//
+//	row.Payment == row.Principal + row.Interest          (every row)
+//	sum(row.Principal for row in months) == Principal     (initial principal)
+//	last month Balance == 0
 type Month struct {
 	Index     int             `json:"index"`     // 1-based month number
 	Payment   decimal.Decimal `json:"payment"`   // total payment in this month
@@ -35,7 +40,7 @@ type Schedule struct {
 	APR            decimal.Decimal `json:"apr"`
 	TermMonths     int             `json:"term_months"`
 	MonthlyRate    decimal.Decimal `json:"monthly_rate"`
-	MonthlyPayment decimal.Decimal `json:"monthly_payment"` // for equal_payment; first month payment for equal_principal
+	MonthlyPayment decimal.Decimal `json:"monthly_payment"` // for equal_payment: constant payment; for equal_principal: first month's payment
 	TotalPayment   decimal.Decimal `json:"total_payment"`
 	TotalPrincipal decimal.Decimal `json:"total_principal"`
 	TotalInterest  decimal.Decimal `json:"total_interest"`
@@ -55,9 +60,15 @@ var (
 //   - termMonths: total number of monthly installments (must be > 0)
 //   - kind: EqualPayment or EqualPrincipal
 //
-// All arithmetic uses shopspring/decimal. Internal precision is 12 dp; outputs
-// in Month rows are rounded to 2 dp (banker-friendly) with any rounding drift
-// folded into the last row so totals reconcile exactly to the input principal.
+// Reconciliation strategy: per-row arithmetic runs in full decimal precision.
+// Rounding to 2dp happens only at the row-emit step. The last row is then
+// adjusted in a reconciliation pass so the following invariants hold exactly:
+//
+//   - row.Payment == row.Principal + row.Interest (every row, including the last)
+//   - sum(row.Principal) == initial principal     (no drift loss)
+//   - last row Balance == 0
+//
+// All arithmetic uses shopspring/decimal; no float64 round-trips.
 func Amortize(principal decimal.Decimal, aprPercent decimal.Decimal, termMonths int, kind ScheduleKind) (*Schedule, error) {
 	if termMonths <= 0 {
 		return nil, errors.New("term_months must be > 0")
@@ -91,7 +102,10 @@ func Amortize(principal decimal.Decimal, aprPercent decimal.Decimal, termMonths 
 		buildEqualPrincipal(out, principal, monthlyRate, termMonths)
 	}
 
-	// Totals (sum from rounded rows so totals match what UI shows).
+	reconcile(out, principal)
+
+	// Totals are summed from the (now reconciled) rounded rows so the UI sees
+	// the exact same numbers as the rows.
 	totalPrincipal := decimal.Zero
 	totalInterest := decimal.Zero
 	totalPayment := decimal.Zero
@@ -108,88 +122,160 @@ func Amortize(principal decimal.Decimal, aprPercent decimal.Decimal, termMonths 
 }
 
 // buildEqualPayment: M = P * r * (1+r)^n / ((1+r)^n - 1) (or P/n when r==0).
+//
+// All per-row arithmetic stays in exact decimal. Each row's interest is rounded
+// from the exact value, and payment is the rounded constant M. Principal is
+// then derived as Payment - Interest so the per-row invariant
+// `payment == principal + interest` holds by construction. The last-row
+// reconciliation pass fixes up cumulative drift.
 func buildEqualPayment(out *Schedule, principal, r decimal.Decimal, n int) {
-	var monthly decimal.Decimal
+	var monthlyExact decimal.Decimal
 	nDec := decimal.NewFromInt(int64(n))
 
 	if r.IsZero() {
-		monthly = principal.Div(nDec)
+		monthlyExact = principal.Div(nDec)
 	} else {
-		// (1+r)^n -- use float pow then back to decimal for the exponent; precision
-		// of the result is fine for monetary math (rounding drift is absorbed below).
 		onePlusR := one.Add(r)
 		pow := decimalPow(onePlusR, n)
 		num := principal.Mul(r).Mul(pow)
 		den := pow.Sub(one)
-		monthly = num.Div(den)
+		monthlyExact = num.Div(den)
 	}
 
-	out.MonthlyPayment = monthly.Round(2)
+	paymentR := monthlyExact.Round(2)
+	out.MonthlyPayment = paymentR
 
-	balance := principal
+	// Track remaining principal as a rounded running total so a row never pays
+	// down more than is left owed (which would push the reconciled last-row
+	// principal negative on tiny-principal corner cases).
+	remaining := principal
+	balanceExact := principal
 	for i := 1; i <= n; i++ {
-		interest := balance.Mul(r)
-		paymentThisMonth := monthly
-		principalThisMonth := paymentThisMonth.Sub(interest)
-		balance = balance.Sub(principalThisMonth)
+		interestExact := balanceExact.Mul(r)
+		// In exact arithmetic the principal portion is monthlyExact - interestExact;
+		// stepping the balance by that exact value keeps every subsequent interest
+		// calculation precise.
+		principalExact := monthlyExact.Sub(interestExact)
+		balanceExact = balanceExact.Sub(principalExact)
 
-		// Round outputs to 2dp; fold rounding into the last row.
-		interestR := interest.Round(2)
-		principalR := principalThisMonth.Round(2)
-		paymentR := paymentThisMonth.Round(2)
-		balanceR := balance.Round(2)
-
-		if i == n {
-			// Force final balance to exactly 0 and adjust principal so totals reconcile.
-			principalR = principalR.Add(balanceR)
-			paymentR = principalR.Add(interestR)
-			balanceR = decimal.Zero
+		interestR := interestExact.Round(2)
+		// Derive principal from payment - interest so the per-row invariant
+		// `payment == principal + interest` holds exactly.
+		principalR := paymentR.Sub(interestR)
+		// Cap principal payment at the remaining balance so we never overpay.
+		// reconcile() will absorb any residual mismatch into the final row.
+		if principalR.GreaterThan(remaining) {
+			principalR = remaining
 		}
+		if principalR.IsNegative() {
+			principalR = decimal.Zero
+		}
+		remaining = remaining.Sub(principalR)
+		// Re-derive payment from the (possibly capped) principal so the per-row
+		// invariant still holds.
+		thisPaymentR := principalR.Add(interestR)
 
 		out.Months = append(out.Months, Month{
 			Index:     i,
-			Payment:   paymentR,
+			Payment:   thisPaymentR,
 			Principal: principalR,
 			Interest:  interestR,
-			Balance:   balanceR,
+			// Balance is recomputed in reconcile() as a running running-sum to
+			// guarantee the final balance is exactly zero.
 		})
 	}
 }
 
-// buildEqualPrincipal: principal portion = P/n; interest_k = balance_{k-1} * r.
+// buildEqualPrincipal: principalPart = P/n; interest_k = balance_{k-1} * r.
+//
+// Per-row principal is computed as a delta of the rounded running cumulative
+// target (i = P * k / n, rounded). This guarantees sum(principal) tracks P
+// to within at most one cent across the whole schedule (corner cases where
+// P/n < 0.005 no longer drift catastrophically). Payment is then derived as
+// Principal + Interest so the per-row invariant holds by construction.
+// The last-row reconciliation pass absorbs any final cent of drift.
 func buildEqualPrincipal(out *Schedule, principal, r decimal.Decimal, n int) {
 	nDec := decimal.NewFromInt(int64(n))
-	principalPart := principal.Div(nDec)
+	principalPartExact := principal.Div(nDec)
 
-	// "Monthly payment" reported for the summary is the first month's payment.
-	firstInterest := principal.Mul(r)
-	out.MonthlyPayment = principalPart.Add(firstInterest).Round(2)
+	// Summary "monthly payment" shown to the user is the first month's payment.
+	firstInterestExact := principal.Mul(r)
+	out.MonthlyPayment = principalPartExact.Add(firstInterestExact).Round(2)
 
-	balance := principal
+	balanceExact := principal
+	prevCumPrincipalR := decimal.Zero
+	remaining := principal
 	for i := 1; i <= n; i++ {
-		interest := balance.Mul(r)
-		thisPrincipal := principalPart
-		balance = balance.Sub(thisPrincipal)
-		payment := thisPrincipal.Add(interest)
+		interestExact := balanceExact.Mul(r)
+		// Step balance by the exact principalPart so subsequent interests stay accurate.
+		balanceExact = balanceExact.Sub(principalPartExact)
 
-		interestR := interest.Round(2)
-		principalR := thisPrincipal.Round(2)
-		paymentR := payment.Round(2)
-		balanceR := balance.Round(2)
-
-		if i == n {
-			principalR = principalR.Add(balanceR)
-			paymentR = principalR.Add(interestR)
-			balanceR = decimal.Zero
+		// Principal for this row = rounded-cumulative-target - sum-of-previous-principal.
+		// This pulls the rounding error back toward zero each row instead of letting
+		// it accumulate in one direction.
+		cumTargetExact := principalPartExact.Mul(decimal.NewFromInt(int64(i)))
+		cumTargetR := cumTargetExact.Round(2)
+		principalR := cumTargetR.Sub(prevCumPrincipalR)
+		// Cap principal at remaining balance so we never overpay.
+		if principalR.GreaterThan(remaining) {
+			principalR = remaining
 		}
+		if principalR.IsNegative() {
+			principalR = decimal.Zero
+		}
+		prevCumPrincipalR = prevCumPrincipalR.Add(principalR)
+		remaining = remaining.Sub(principalR)
+
+		interestR := interestExact.Round(2)
+		// Derive payment from principal + interest so the per-row invariant holds.
+		paymentR := principalR.Add(interestR)
 
 		out.Months = append(out.Months, Month{
 			Index:     i,
 			Payment:   paymentR,
 			Principal: principalR,
 			Interest:  interestR,
-			Balance:   balanceR,
 		})
+	}
+}
+
+// reconcile performs the final pass that guarantees:
+//
+//	sum(month.Principal) == initial principal
+//	last month Balance    == 0
+//	month.Payment         == month.Principal + month.Interest (still holds after fixups)
+//
+// It does this by overwriting the LAST row's Principal so the principal total
+// reconciles to the input, then recomputing Payment as Principal + Interest for
+// that row. Balance is then filled in as a running sum so the final value is
+// exactly zero.
+func reconcile(s *Schedule, principal decimal.Decimal) {
+	n := len(s.Months)
+	if n == 0 {
+		return
+	}
+
+	// 1. Absorb principal-rounding drift into the last row.
+	sumPrincipalExceptLast := decimal.Zero
+	for i := 0; i < n-1; i++ {
+		sumPrincipalExceptLast = sumPrincipalExceptLast.Add(s.Months[i].Principal)
+	}
+	lastPrincipal := principal.Sub(sumPrincipalExceptLast)
+	s.Months[n-1].Principal = lastPrincipal
+	// Keep the per-row invariant: payment == principal + interest. Interest in
+	// the last row is whatever was computed from the exact balance; payment is
+	// now derived from the reconciled principal.
+	s.Months[n-1].Payment = lastPrincipal.Add(s.Months[n-1].Interest)
+
+	// 2. Fill Balance as a running deduction so the final balance is exactly 0.
+	running := principal
+	for i := range s.Months {
+		running = running.Sub(s.Months[i].Principal)
+		s.Months[i].Balance = running
+	}
+	// Guard against tiny rounding noise in the final balance (e.g. -0.00).
+	if !s.Months[n-1].Balance.IsZero() {
+		s.Months[n-1].Balance = decimal.Zero
 	}
 }
 

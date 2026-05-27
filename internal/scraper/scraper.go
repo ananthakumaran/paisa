@@ -2,6 +2,7 @@ package scraper
 
 import (
 	"github.com/ananthakumaran/paisa/internal/model/price"
+	"github.com/ananthakumaran/paisa/internal/scraper/cn/ttjj"
 	"github.com/ananthakumaran/paisa/internal/scraper/metal"
 	"github.com/ananthakumaran/paisa/internal/scraper/mutualfund"
 	"github.com/ananthakumaran/paisa/internal/scraper/nps"
@@ -16,6 +17,7 @@ func GetAllProviders() []price.PriceProvider {
 		&stock.AlphaVantagePriceProvider{},
 		&nps.PriceProvider{},
 		&metal.PriceProvider{},
+		&ttjj.PriceProvider{},
 	}
 
 }
@@ -32,6 +34,8 @@ func GetProviderByCode(code string) price.PriceProvider {
 		return &stock.YahooPriceProvider{}
 	case "co-alphavantage":
 		return &stock.AlphaVantagePriceProvider{}
+	case "cn-ttjj":
+		return &ttjj.PriceProvider{}
 	}
 	log.Fatal("Unknown price provider: ", code)
 	return nil

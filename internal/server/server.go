@@ -16,6 +16,7 @@ import (
 	// pluggable importers (M3-B…E) discoverable from the /api/import/*
 	// routes — no per-importer changes to this file are required.
 	_ "github.com/ananthakumaran/paisa/internal/importer/alipay"
+	_ "github.com/ananthakumaran/paisa/internal/importer/cmb"
 	_ "github.com/ananthakumaran/paisa/internal/importer/wechat"
 	"github.com/ananthakumaran/paisa/internal/ledger"
 	"github.com/ananthakumaran/paisa/internal/model/template"

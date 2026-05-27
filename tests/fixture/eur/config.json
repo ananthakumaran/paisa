@@ -224,8 +224,6 @@
               "enum": [
                 "mutualfund",
                 "stock",
-                "nps",
-                "metal",
                 "unknown"
               ],
               "type": "string"

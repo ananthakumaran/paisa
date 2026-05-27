@@ -26,13 +26,14 @@ export interface SelectedLinks {
  * given URL path.
  *
  * This function MUST be tolerant of paths that have no matching entry
- * in the menu tree. The Tax submenu, for example, is only registered
- * when default_currency is "INR" — but the tax routes themselves still
- * exist at `/more/tax/*` and may be reached via direct navigation or
- * deep links. Previously a missing parent / sub-link caused a
+ * in the menu tree. Previously a missing parent / sub-link caused a
  * `Cannot read properties of undefined (reading 'children')` crash that
  * took the whole route bundle down. We now return whatever prefix we
  * managed to resolve instead.
+ *
+ * The India-specific Tax submenu (`/more/tax/*`) was removed in M2-A;
+ * M4 will reintroduce a CN-specific tax surface, at which point this
+ * tolerance will matter again for the same reasons.
  *
  * See issue #1.
  */

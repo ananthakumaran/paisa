@@ -920,7 +920,7 @@
           },
           "type": {
             "type": "string",
-            "enum": ["mutualfund", "stock", "nps", "metal", "unknown"]
+            "enum": ["mutualfund", "stock", "unknown"]
           },
           "price": {
             "type": "object",

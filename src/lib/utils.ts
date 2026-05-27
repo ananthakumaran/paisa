@@ -308,8 +308,11 @@ export interface CapitalGain {
   fy: { [key: string]: FYCapitalGain };
 }
 
+export type Severity = "error" | "warning" | "info";
+
 export interface Issue {
   level: string;
+  severity: Severity;
   summary: string;
   description: string;
   details: string;

@@ -6,7 +6,6 @@ import {
   type AllocationTarget,
   formatCurrency,
   formatFloat,
-  lastName,
   parentName,
   secondName,
   tooltip,
@@ -18,6 +17,7 @@ import {
 } from "./utils";
 import COLORS, { generateColorScheme } from "./colors";
 import chroma from "chroma-js";
+import { ALLOCATION_ROOT, allocationNodeLabel, timelineGroupLabel } from "./allocation_label";
 
 export function renderAllocationTarget(
   allocationTargets: AllocationTarget[],
@@ -279,7 +279,7 @@ function renderPartition(
     .attr("class", "node")
     .attr("data-tippy-content", (d) => {
       return tooltip([
-        ["Account", [d.id, "has-text-right"]],
+        ["Account", [allocationNodeLabel(d.id, d.data), "has-text-right"]],
         ["Market Value", [formatCurrency(d.value), "has-text-weight-bold has-text-right"]],
         ["Percentage", [percent(d), "has-text-weight-bold has-text-right"]]
       ]);
@@ -294,7 +294,7 @@ function renderPartition(
   cell
     .append("p")
     .attr("class", "heading has-text-weight-bold")
-    .text((d) => lastName(d.id));
+    .text((d) => allocationNodeLabel(d.id, d.data));
 
   cell
     .append("p")
@@ -306,10 +306,14 @@ function renderPartition(
 export function renderAllocationTimeline(
   aggregatesTimeline: { [key: string]: Aggregate }[]
 ): Legend[] {
+  // Group each day's aggregates by the *kind* segment of the synthetic
+  // path so the timeline shows one line per top-level allocation category
+  // (mutual_fund, bank_current, …). `secondName` returns the kind code
+  // because the backend builds paths as "Allocation:<kind>:<acct>".
   const timeline = _.map(aggregatesTimeline, (aggregates) => {
     return _.chain(aggregates)
       .values()
-      .filter((a) => a.market_amount != 0)
+      .filter((a) => a.market_amount != 0 && a.account !== ALLOCATION_ROOT)
       .groupBy((a) => secondName(a.account))
       .map((aggregates, group) => {
         return {
@@ -413,7 +417,8 @@ export function renderAllocationTimeline(
 
   return assets.map((a) => {
     return {
-      label: a,
+      // `a` is a kind code (e.g. "mutual_fund"); show the localized label.
+      label: timelineGroupLabel(a),
       color: z(a),
       shape: "square"
     };

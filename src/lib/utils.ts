@@ -198,7 +198,12 @@ export interface LiabilityBreakdown {
 
 export interface Aggregate {
   date: dayjs.Dayjs;
+  // `account` is the synthetic path the backend builds for the
+  // Allocation tree (e.g. "Allocation:mutual_fund:Assets/Saving/CMB/Fund").
+  // Use `original_account` when you need the real ledger account name.
   account: string;
+  original_account?: string;
+  kind?: string;
   market_amount: number;
 
   // computed

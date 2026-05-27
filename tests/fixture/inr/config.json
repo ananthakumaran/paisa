@@ -31,7 +31,33 @@
     "allocation_targets": [],
     "commodities": [],
     "import_templates": [],
-    "accounts": [],
+    "accounts": [
+      {
+        "name": "Assets:Checking",
+        "icon": "",
+        "kind": "bank_current"
+      },
+      {
+        "name": "Assets:Dollar",
+        "icon": "",
+        "kind": "foreign_currency"
+      },
+      {
+        "name": "Assets:Equity:AAPL",
+        "icon": "",
+        "kind": "stock"
+      },
+      {
+        "name": "Assets:Equity:ABNB",
+        "icon": "",
+        "kind": "stock"
+      },
+      {
+        "name": "Assets:Equity:NIFTY",
+        "icon": "",
+        "kind": "mutual_fund"
+      }
+    ],
     "goals": {
       "retirement": [],
       "savings": []
@@ -41,7 +67,7 @@
     "liabilities": [],
     "transfer_accounts": []
   },
-  "now": "2022-02-07T00:00:00Z",
+  "now": "2022-02-07T00:00:00+08:00",
   "schema": {
     "$id": "https://paisa.fyi/schema.json",
     "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -208,7 +234,11 @@
                     "com-yahoo",
                     "com-purifiedbytes-nps",
                     "com-purifiedbytes-metal",
-                    "co-alphavantage"
+                    "co-alphavantage",
+                    "yahoo",
+                    "cn-okx",
+                    "cn-ttjj",
+                    "cn-eastmoney"
                   ],
                   "type": "string"
                 }

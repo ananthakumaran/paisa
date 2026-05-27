@@ -15,7 +15,6 @@
     "amount_alignment_column": 52,
     "locale": "es-EU",
     "time_zone": "",
-    "financial_year_starting_month": 4,
     "week_starting_day": 0,
     "strict": "no",
     "budget": {
@@ -55,6 +54,29 @@
               "description": "Account icon name",
               "type": "string",
               "ui:widget": "icon"
+            },
+            "kind": {
+              "description": "Optional classification used by allocation / receivables / net worth aggregation. Leave blank to fall back to path-prefix rules.",
+              "enum": [
+                "",
+                "bank_current",
+                "bank_savings",
+                "cash_equivalent",
+                "mutual_fund",
+                "stock",
+                "bond",
+                "structured_deposit",
+                "real_estate",
+                "vehicle",
+                "tax_deferred_fund",
+                "tax_deferred_cash",
+                "housing_fund",
+                "receivable",
+                "crypto",
+                "foreign_currency",
+                "unknown"
+              ],
+              "type": "string"
             },
             "name": {
               "description": "Name of the account",
@@ -313,12 +335,6 @@
         "description": "The precision to show in UI. NOTE: This applies only to the UI, not to the entries in journal.",
         "maximum": 4,
         "minimum": 0,
-        "type": "integer"
-      },
-      "financial_year_starting_month": {
-        "description": "First month of the financial year. This can be set to 1 to follow January to December.",
-        "maximum": 12,
-        "minimum": 1,
         "type": "integer"
       },
       "goals": {

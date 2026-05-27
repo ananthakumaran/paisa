@@ -23,7 +23,6 @@ function setConfig(overrides: ConfigOverrides = {}) {
     default_currency: "CNY",
     locale: "zh-CN",
     display_precision: 0,
-    financial_year_starting_month: 1,
     week_starting_day: 1,
     readonly: false,
     journal_path: "",

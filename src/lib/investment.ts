@@ -17,8 +17,10 @@ import {
 import { generateColorScheme } from "./colors";
 import type dayjs from "dayjs";
 
-function financialYear(card: InvestmentYearlyCard) {
-  return `${card.start_date.format("YYYY")} - ${card.end_date.format("YY")}`;
+// Calendar-year label for an InvestmentYearlyCard. The backend now
+// emits Jan–Dec ranges (issue #5), so the start_date's year suffices.
+function yearLabel(card: InvestmentYearlyCard) {
+  return card.start_date.format("YYYY");
 }
 
 export function renderMonthlyInvestmentTimeline(postings: Posting[]): Legend[] {
@@ -265,7 +267,7 @@ export function renderYearlyInvestmentTimeline(yearlyCards: InvestmentYearlyCard
     points.push(
       _.merge(
         {
-          year: financialYear(card),
+          year: yearLabel(card),
           postings: postings
         },
         defaultValues,
@@ -381,7 +383,7 @@ export function renderYearlyCards(yearlyCards: InvestmentYearlyCard[]) {
     .attr("class", "card-header")
     .append("p")
     .attr("class", "card-header-title has-text-grey-dark")
-    .text((c) => financialYear(c));
+    .text((c) => yearLabel(c));
 
   card
     .append("div")

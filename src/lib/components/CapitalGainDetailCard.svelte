@@ -1,8 +1,8 @@
 <script lang="ts">
-  import { formatCurrency, type FYCapitalGain } from "$lib/utils";
+  import { formatCurrency, type YearCapitalGain } from "$lib/utils";
   const DATE_FORMAT = "DD MMM YYYY";
 
-  export let fyCapitalGain: FYCapitalGain;
+  export let yearCapitalGain: YearCapitalGain;
 </script>
 
 <div>
@@ -21,7 +21,7 @@
       </tr>
     </thead>
     <tbody>
-      {#each fyCapitalGain.posting_pairs as pp}
+      {#each yearCapitalGain.posting_pairs as pp}
         <tr class="is-size-7">
           <td>{pp.purchase.date.format(DATE_FORMAT)}</td>
           <td class="has-text-right">{formatCurrency(pp.purchase.amount)}</td>

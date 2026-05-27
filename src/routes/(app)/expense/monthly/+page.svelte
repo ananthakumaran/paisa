@@ -14,6 +14,7 @@
     renderCurrentExpensesBreakdown,
     renderCalendar
   } from "$lib/expense/monthly";
+  import { filterRefunds } from "$lib/expense";
   import { dateRange, month, setAllowedDateRange } from "../../../../store";
   import { writable } from "svelte/store";
   import PostingCard from "$lib/components/PostingCard.svelte";
@@ -36,6 +37,18 @@
     grouped_taxes: Record<string, Posting[]>,
     destroy: () => void;
 
+  // M3-G refund toggle. Default = net (the user's intuitive "支出").
+  // Persisted under `expense.show_gross` so the choice survives reloads.
+  const SHOW_GROSS_KEY = "expense.show_gross";
+  let showGross = false;
+  function persistShowGross() {
+    try {
+      localStorage.setItem(SHOW_GROSS_KEY, showGross ? "1" : "0");
+    } catch (_e) {
+      // localStorage may be unavailable (private mode); ignore.
+    }
+  }
+
   let legends: Legend[] = [];
 
   let taxRate = "",
@@ -50,7 +63,9 @@
   let current_month_expenses: Posting[] = [];
 
   $: {
-    current_month_expenses = _.chain((grouped_expenses && grouped_expenses[$month]) || [])
+    current_month_expenses = _.chain(
+      filterRefunds((grouped_expenses && grouped_expenses[$month]) || [], showGross)
+    )
       .filter((e) => _.includes($groups, secondName(e.account)))
       .sortBy((e) => e.date)
       .reverse()
@@ -58,9 +73,10 @@
   }
 
   $: if (grouped_expenses) {
-    renderCalendar($month, grouped_expenses[$month], z, $groups);
+    const monthlyExpenses = filterRefunds(grouped_expenses[$month] || [], showGross);
+    renderCalendar($month, monthlyExpenses, z, $groups);
 
-    const expenses = grouped_expenses[$month] || [];
+    const expenses = monthlyExpenses;
     const incomes = grouped_incomes[$month] || [];
     const taxes = grouped_taxes[$month] || [];
     const investments = grouped_investments[$month] || [];
@@ -100,7 +116,37 @@
     }
   });
 
+  // Rebuild the timeline + breakdown when the refund toggle flips.
+  // We can't just re-call render(): the closure captures the original
+  // posting set, the d3 stack keys, and the color scale. Easiest is to
+  // tear down the existing renderers, clear the SVGs, and re-init from
+  // the filtered postings. The toggle is a low-frequency action, so the
+  // cost of re-binding is fine.
+  async function rebuildCharts() {
+    if (!expenses) return;
+    if (destroy) destroy();
+    const filtered = filterRefunds(expenses, showGross);
+    const timelineSvg = document.getElementById("d3-monthly-expense-timeline");
+    if (timelineSvg) timelineSvg.innerHTML = "";
+    const breakdownSvg = document.getElementById("d3-current-month-breakdown");
+    if (breakdownSvg) breakdownSvg.innerHTML = "";
+    ({ z, destroy, legends } = renderMonthlyExpensesTimeline(filtered, groups, month, dateRange));
+    renderer = renderCurrentExpensesBreakdown(z);
+  }
+
+  function toggleShowGross() {
+    showGross = !showGross;
+    persistShowGross();
+    rebuildCharts();
+  }
+
   onMount(async () => {
+    try {
+      showGross = localStorage.getItem(SHOW_GROSS_KEY) === "1";
+    } catch (_e) {
+      showGross = false;
+    }
+
     ({
       expenses: expenses,
       month_wise: {
@@ -112,7 +158,8 @@
     } = await ajax("/api/expense"));
 
     setAllowedDateRange(_.map(expenses, (e) => e.date));
-    ({ z, destroy, legends } = renderMonthlyExpensesTimeline(expenses, groups, month, dateRange));
+    const filtered = filterRefunds(expenses, showGross);
+    ({ z, destroy, legends } = renderMonthlyExpensesTimeline(filtered, groups, month, dateRange));
     renderer = renderCurrentExpensesBreakdown(z);
   });
 
@@ -207,7 +254,18 @@
                 <strong>{$t("common.oops")}</strong>
                 {$t("page.expense.no_expenses")}
               </ZeroState>
-              <LegendCard {legends} clazz="ml-4 overflow-x-auto" />
+              <div class="is-flex is-justify-content-space-between is-align-items-center ml-4 mr-4">
+                <LegendCard {legends} clazz="overflow-x-auto" />
+                <label class="checkbox is-size-7 has-text-grey ml-3">
+                  <input
+                    type="checkbox"
+                    data-testid="expense-show-gross-toggle"
+                    checked={showGross}
+                    on:change={toggleShowGross}
+                  />
+                  {showGross ? $t("page.expense.show_gross") : $t("page.expense.show_net")}
+                </label>
+              </div>
               <svg id="d3-monthly-expense-timeline" width="100%" height="400" />
             </div>
           </div>

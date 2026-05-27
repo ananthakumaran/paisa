@@ -25,3 +25,8 @@ export function byExpenseGroup(expenses: Posting[]) {
 export function expenseGroup(posting: Posting) {
   return secondName(posting.account);
 }
+
+// Re-export the M3-G refund helpers from their dependency-free home so
+// page code can `import { filterRefunds } from "$lib/expense"` without
+// caring where it lives.
+export { isRefundPosting, filterRefunds } from "$lib/expense/refund";

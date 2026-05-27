@@ -8,6 +8,7 @@
     renderCurrentExpensesBreakdown,
     renderCalendar
   } from "$lib/expense/yearly";
+  import { filterRefunds } from "$lib/expense";
   import { dateMin, dateMax, year } from "../../../../store";
   import { writable } from "svelte/store";
   import LevelItem from "$lib/components/LevelItem.svelte";
@@ -27,6 +28,18 @@
     grouped_investments: Record<string, Posting[]>,
     grouped_taxes: Record<string, Posting[]>;
 
+  // M3-G refund toggle (see monthly page for rationale). Same key so
+  // both views share the user's choice.
+  const SHOW_GROSS_KEY = "expense.show_gross";
+  let showGross = false;
+  function persistShowGross() {
+    try {
+      localStorage.setItem(SHOW_GROSS_KEY, showGross ? "1" : "0");
+    } catch (_e) {
+      // ignore
+    }
+  }
+
   let currentYearExpenses: Posting[] = [];
 
   let legends: Legend[] = [];
@@ -41,10 +54,10 @@
     savingRate = "";
 
   $: if (grouped_expenses) {
-    currentYearExpenses = grouped_expenses[$year];
+    currentYearExpenses = filterRefunds(grouped_expenses[$year] || [], showGross);
     renderCalendar(currentYearExpenses, z, $groups);
 
-    const expenses = grouped_expenses[$year] || [];
+    const expenses = currentYearExpenses;
     const incomes = grouped_incomes[$year] || [];
     const taxes = grouped_taxes[$year] || [];
     const investments = grouped_investments[$year] || [];
@@ -79,7 +92,30 @@
     renderer(expenses);
   }
 
+  function rebuildCharts() {
+    if (!expenses) return;
+    const filtered = filterRefunds(expenses, showGross);
+    const timelineSvg = document.getElementById("d3-yearly-expense-timeline");
+    if (timelineSvg) timelineSvg.innerHTML = "";
+    const breakdownSvg = document.getElementById("d3-current-year-breakdown");
+    if (breakdownSvg) breakdownSvg.innerHTML = "";
+    ({ z, legends } = renderYearlyExpensesTimeline(filtered, groups, year));
+    renderer = renderCurrentExpensesBreakdown(z);
+  }
+
+  function toggleShowGross() {
+    showGross = !showGross;
+    persistShowGross();
+    rebuildCharts();
+  }
+
   onMount(async () => {
+    try {
+      showGross = localStorage.getItem(SHOW_GROSS_KEY) === "1";
+    } catch (_e) {
+      showGross = false;
+    }
+
     ({
       expenses: expenses,
       year_wise: {
@@ -96,7 +132,8 @@
       dateMax.set(end);
     }
 
-    ({ z, legends } = renderYearlyExpensesTimeline(expenses, groups, year));
+    const filtered = filterRefunds(expenses, showGross);
+    ({ z, legends } = renderYearlyExpensesTimeline(filtered, groups, year));
 
     renderer = renderCurrentExpensesBreakdown(z);
   });
@@ -177,7 +214,18 @@
             {$t("page.expense.no_expenses")}
           </ZeroState>
 
-          <LegendCard {legends} clazz="ml-4" />
+          <div class="is-flex is-justify-content-space-between is-align-items-center ml-4 mr-4">
+            <LegendCard {legends} />
+            <label class="checkbox is-size-7 has-text-grey ml-3">
+              <input
+                type="checkbox"
+                data-testid="expense-show-gross-toggle"
+                checked={showGross}
+                on:change={toggleShowGross}
+              />
+              {showGross ? $t("page.expense.show_gross") : $t("page.expense.show_net")}
+            </label>
+          </div>
           <svg id="d3-yearly-expense-timeline" width="100%" height="500" />
         </div>
       </div>

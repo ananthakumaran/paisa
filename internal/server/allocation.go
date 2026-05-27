@@ -1,6 +1,7 @@
 package server
 
 import (
+	"strings"
 	"time"
 
 	"github.com/samber/lo"
@@ -258,18 +259,20 @@ func buildSyntheticPath(kind account.AccountKind, accountName string) string {
 	return bucketKeyFor(kind) + ":" + sanitizeAccountSegment(accountName)
 }
 
-// sanitizeAccountSegment replaces the ledger account separator (`:`) with a
-// safe character so the entire account name becomes a single segment in
-// the synthetic colon-delimited path. The frontend keeps the real account
-// name in Aggregate.OriginalAccount for display / linking.
+// accountSegmentSeparator is the placeholder inserted in place of `:` when
+// flattening a ledger account name into a single synthetic-path segment.
+// We deliberately use a double underscore rather than `/` so that legal
+// (if unusual) account names containing `/` do not collide with their
+// `:`-form siblings inside the d3 stratify map. The real account name is
+// always kept in Aggregate.OriginalAccount; this string only appears in
+// the synthetic key.
+const accountSegmentSeparator = "__"
+
+// sanitizeAccountSegment replaces every ledger account separator (`:`)
+// with accountSegmentSeparator so the entire account name becomes a
+// single segment in the synthetic colon-delimited path. The frontend
+// keeps the real account name in Aggregate.OriginalAccount for display
+// and linking.
 func sanitizeAccountSegment(accountName string) string {
-	out := make([]byte, len(accountName))
-	for i := 0; i < len(accountName); i++ {
-		if accountName[i] == ':' {
-			out[i] = '/'
-		} else {
-			out[i] = accountName[i]
-		}
-	}
-	return string(out)
+	return strings.ReplaceAll(accountName, ":", accountSegmentSeparator)
 }

@@ -67,7 +67,7 @@
     "liabilities": [],
     "transfer_accounts": []
   },
-  "now": "2022-02-07T00:00:00+08:00",
+  "now": "2022-02-07T00:00:00Z",
   "schema": {
     "$id": "https://paisa.fyi/schema.json",
     "$schema": "https://json-schema.org/draft/2020-12/schema",

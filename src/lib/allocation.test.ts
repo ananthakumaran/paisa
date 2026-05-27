@@ -20,20 +20,21 @@ describe("allocationNodeLabel", () => {
 
   test("leaf node uses original_account when supplied", () => {
     const agg = {
-      account: "Allocation:mutual_fund:Assets/Saving/CMB/Fund",
+      account: "Allocation:mutual_fund:Assets__Saving__CMB__Fund",
       original_account: "Assets:Saving:CMB:Fund",
       kind: "mutual_fund"
     };
-    expect(allocationNodeLabel("Allocation:mutual_fund:Assets/Saving/CMB/Fund", agg)).toBe(
+    expect(allocationNodeLabel("Allocation:mutual_fund:Assets__Saving__CMB__Fund", agg)).toBe(
       "Assets:Saving:CMB:Fund"
     );
   });
 
-  test("leaf node without original_account falls back to lastName of synthetic id", () => {
-    // No aggregate.original_account supplied — the sanitized leaf has '/'
-    // separators so we expect the entire trailing segment back.
-    expect(allocationNodeLabel("Allocation:bank_current:Assets/Saving/CMB")).toBe(
-      "Assets/Saving/CMB"
+  test("leaf node without original_account restores ':' from sanitized id", () => {
+    // No aggregate.original_account supplied — the sanitizer collapses ':'
+    // to '__'; the fallback path splits that back out so the user still
+    // sees a real-looking ledger account name.
+    expect(allocationNodeLabel("Allocation:bank_current:Assets__Saving__CMB")).toBe(
+      "Assets:Saving:CMB"
     );
   });
 });

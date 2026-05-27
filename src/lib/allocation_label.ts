@@ -10,6 +10,13 @@ import { getKindLabel, isValidAccountKind, type AccountKindValue } from "./accou
 // rooted on a stable, kind-grouped tree.
 export const ALLOCATION_ROOT = "Allocation";
 
+// ACCOUNT_SEGMENT_SEPARATOR mirrors `accountSegmentSeparator` in
+// internal/server/allocation.go. The backend flattens a ledger account
+// (e.g. "Assets:Saving:CMB") into a single synthetic-path segment by
+// replacing each ":" with this string. Keep the two constants in
+// lockstep — changing only one will silently break leaf label rendering.
+export const ACCOUNT_SEGMENT_SEPARATOR = "__";
+
 // Minimal Aggregate shape this module reads from. We don't re-import the
 // canonical `Aggregate` interface to avoid pulling in `./utils` here.
 export interface AllocationNode {
@@ -44,9 +51,11 @@ export function allocationNodeLabel(id: string, aggregate?: AllocationNode): str
     return kind;
   }
   // Leaf without a populated original_account — fall back to the last
-  // segment of the synthetic id (the sanitizer replaces ':' with '/' so
-  // this is the full original account with '/' separators).
-  return parts[parts.length - 1] ?? id;
+  // synthetic segment, but restore the ':' separator that
+  // sanitizeAccountSegment collapsed away so the user sees a real-looking
+  // ledger account name.
+  const lastSegment = parts[parts.length - 1] ?? id;
+  return lastSegment.split(ACCOUNT_SEGMENT_SEPARATOR).join(":");
 }
 
 // timelineGroupLabel converts the kind code that

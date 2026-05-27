@@ -18,16 +18,19 @@ func makeInvestPosting(account string, amount int64) posting.Posting {
 	}
 }
 
-// TestFilterOutNonInvestmentKinds_DropsBankCurrent — accounts with
-// non-investment kinds (bank_current, real_estate, vehicle, etc.) are flows
-// that should not be counted as "new investment".
+// TestFilterOutNonInvestmentKinds_DropsBankCurrent — an account configured
+// as `kind: bank_current` must be dropped from the Investment Timeline.
+// The second posting (`Assets:Equity:VOO`) has no config and no matching
+// path-prefix rule, so it resolves to KindUnknown and is also dropped;
+// the assertion below specifically guards the BankCurrent → drop path,
+// which is the regression the issue describes.
 func TestFilterOutNonInvestmentKinds_DropsBankCurrent(t *testing.T) {
 	accounts := []account.Account{
 		{Name: "Assets:Saving:CMB", Kind: account.BankCurrent},
 	}
 	postings := []posting.Posting{
-		makeInvestPosting("Assets:Saving:CMB", 1000), // bank_current — skip
-		makeInvestPosting("Assets:Equity:VOO", 5000), // unknown -> stock prefix would, but Assets:Equity has no prefix rule → unknown. Adjusted below.
+		makeInvestPosting("Assets:Saving:CMB", 1000), // bank_current → dropped
+		makeInvestPosting("Assets:Equity:VOO", 5000), // unknown → dropped
 	}
 
 	out := filterOutNonInvestmentKinds(postings, accounts)

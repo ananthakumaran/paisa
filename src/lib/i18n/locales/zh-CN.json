@@ -17,7 +17,6 @@
     "ledger": "账本",
     "more": "更多",
     "about": "关于",
-    "tax": "税务",
     "income_statement": "利润表",
     "monthly": "月度",
     "yearly": "年度",
@@ -41,10 +40,7 @@
     "sheets": "表格",
     "goals": "目标",
     "doctor": "体检",
-    "logs": "日志",
-    "harvest": "税务收割",
-    "capital_gains": "资本利得",
-    "schedule_al": "附表 AL"
+    "logs": "日志"
   },
   "navbar": {
     "recurring_icon": {

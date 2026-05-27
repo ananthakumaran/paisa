@@ -36,10 +36,6 @@ var updateCmd = &cobra.Command{
 		if syncAll || updatePortfolios {
 			model.SyncPortfolios(db)
 		}
-
-		if syncAll {
-			model.SyncCII(db)
-		}
 	},
 }
 

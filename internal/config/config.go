@@ -20,16 +20,6 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-type TaxCategoryType string
-
-const (
-	Debt           TaxCategoryType = "debt"
-	Equity         TaxCategoryType = "equity"
-	Equity65       TaxCategoryType = "equity65"
-	Equity35       TaxCategoryType = "equity35"
-	UnlistedEquity TaxCategoryType = "unlisted_equity"
-)
-
 type CommodityType string
 
 const (
@@ -58,11 +48,9 @@ type Price struct {
 }
 
 type Commodity struct {
-	Name        string          `json:"name" yaml:"name"`
-	Type        CommodityType   `json:"type" yaml:"type"`
-	Price       Price           `json:"price" yaml:"price"`
-	Harvest     int             `json:"harvest" yaml:"harvest"`
-	TaxCategory TaxCategoryType `json:"tax_category" yaml:"tax_category"`
+	Name  string        `json:"name" yaml:"name"`
+	Type  CommodityType `json:"type" yaml:"type"`
+	Price Price         `json:"price" yaml:"price"`
 }
 
 type Account struct {
@@ -100,11 +88,6 @@ type SavingsGoal struct {
 	PaymentPerPeriod float64  `json:"payment_per_period" yaml:"payment_per_period"`
 	Accounts         []string `json:"accounts" yaml:"accounts"`
 	Priority         int      `json:"priority" yaml:"priority"`
-}
-
-type ScheduleAL struct {
-	Code     string   `json:"code" yaml:"code"`
-	Accounts []string `json:"accounts" yaml:"accounts"`
 }
 
 type Budget struct {
@@ -166,8 +149,6 @@ type Config struct {
 
 	Budget Budget `json:"budget" yaml:"budget"`
 
-	ScheduleALs []ScheduleAL `json:"schedule_al" yaml:"schedule_al"`
-
 	AllocationTargets []AllocationTarget `json:"allocation_targets" yaml:"allocation_targets"`
 
 	Commodities []Commodity `json:"commodities" yaml:"commodities"`
@@ -202,7 +183,6 @@ var defaultConfig = Config{
 	Budget:                Budget{Rollover: Yes},
 	Strict:                No,
 	WeekStartingDay:       0,
-	ScheduleALs:           []ScheduleAL{},
 	AllocationTargets:     []AllocationTarget{},
 	Commodities:           []Commodity{},
 	ImportTemplates:       []ImportTemplate{},

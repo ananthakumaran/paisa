@@ -42,19 +42,6 @@ func BTreeToSlice[I btree.Item](tree *btree.BTree) []I {
 	return items
 }
 
-// IndianFY returns the Indian government fiscal-year string (April–March,
-// e.g. "2023-24") for the given date. This is used ONLY to look up the
-// Cost Inflation Index, which is published by the Indian government and
-// keyed by Indian FY regardless of the user's locale. It is NOT used for
-// any display aggregation — display aggregation uses calendar years
-// (Jan–Dec) after issue #5.
-func IndianFY(date time.Time) string {
-	if date.Month() < time.April {
-		return fmt.Sprintf("%d-%d", date.Year()-1, date.Year()%100)
-	}
-	return fmt.Sprintf("%d-%d", date.Year(), (date.Year()+1)%100)
-}
-
 func YearHumanCutOffAt(date time.Time, cutoff time.Time) string {
 	if date.Month() < cutoff.Month() || date.Month() == cutoff.Month() && date.Day() < cutoff.Day() {
 		return fmt.Sprintf("%d - %d", date.Year()-1, date.Year()%100)

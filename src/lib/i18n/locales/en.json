@@ -61,7 +61,9 @@
     "sheets": "Sheets",
     "goals": "Goals",
     "doctor": "Doctor",
-    "logs": "Logs"
+    "logs": "Logs",
+    "switch_to_english": "Switch to English",
+    "switch_to_chinese": "Switch to Chinese"
   },
   "navbar": {
     "recurring_icon": {

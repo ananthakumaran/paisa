@@ -17,6 +17,7 @@
   import { onMount } from "svelte";
   import { get } from "svelte/store";
   import DateRange from "./DateRange.svelte";
+  import LanguageSwitcher from "./LanguageSwitcher.svelte";
   import ThemeSwitcher from "./ThemeSwitcher.svelte";
   import MonthPicker from "./MonthPicker.svelte";
   import Logo from "./Logo.svelte";
@@ -258,6 +259,9 @@
             </p>
           {/if}
 
+          <p class="control">
+            <LanguageSwitcher />
+          </p>
           <p class="control">
             <ThemeSwitcher />
           </p>

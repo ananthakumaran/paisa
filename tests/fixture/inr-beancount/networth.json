@@ -5,6 +5,8 @@
       "investmentAmount": 100000,
       "withdrawalAmount": 0,
       "gainAmount": 0,
+      "marketGainAmount": 0,
+      "fxGainAmount": 0,
       "balanceAmount": 100000,
       "balanceUnits": 0,
       "netInvestmentAmount": 100000
@@ -14,6 +16,8 @@
       "investmentAmount": 100000,
       "withdrawalAmount": 0,
       "gainAmount": 0,
+      "marketGainAmount": 0,
+      "fxGainAmount": 0,
       "balanceAmount": 100000,
       "balanceUnits": 0,
       "netInvestmentAmount": 100000
@@ -23,6 +27,8 @@
       "investmentAmount": 100000,
       "withdrawalAmount": 20000,
       "gainAmount": 0,
+      "marketGainAmount": 0,
+      "fxGainAmount": 0,
       "balanceAmount": 80000,
       "balanceUnits": 0,
       "netInvestmentAmount": 80000
@@ -32,6 +38,8 @@
       "investmentAmount": 100000,
       "withdrawalAmount": 20000,
       "gainAmount": 0,
+      "marketGainAmount": 0,
+      "fxGainAmount": 0,
       "balanceAmount": 80000,
       "balanceUnits": 0,
       "netInvestmentAmount": 80000
@@ -41,6 +49,8 @@
       "investmentAmount": 100000,
       "withdrawalAmount": 20000,
       "gainAmount": 0,
+      "marketGainAmount": 0,
+      "fxGainAmount": 0,
       "balanceAmount": 80000,
       "balanceUnits": 0,
       "netInvestmentAmount": 80000
@@ -50,6 +60,8 @@
       "investmentAmount": 120000,
       "withdrawalAmount": 20000,
       "gainAmount": 0,
+      "marketGainAmount": 0,
+      "fxGainAmount": 0,
       "balanceAmount": 100000,
       "balanceUnits": 0,
       "netInvestmentAmount": 100000
@@ -59,6 +71,8 @@
       "investmentAmount": 200000,
       "withdrawalAmount": 100000,
       "gainAmount": 0,
+      "marketGainAmount": 0,
+      "fxGainAmount": 0,
       "balanceAmount": 100000,
       "balanceUnits": 0,
       "netInvestmentAmount": 100000
@@ -68,6 +82,8 @@
       "investmentAmount": 207963.762752,
       "withdrawalAmount": 107963.762752,
       "gainAmount": -61.5542551296,
+      "marketGainAmount": -61.5542551296,
+      "fxGainAmount": 0,
       "balanceAmount": 99938.4457448704,
       "balanceUnits": 0,
       "netInvestmentAmount": 100000
@@ -77,6 +93,8 @@
       "investmentAmount": 217963.762752,
       "withdrawalAmount": 117963.762752,
       "gainAmount": -61.5542551296,
+      "marketGainAmount": -61.5542551296,
+      "fxGainAmount": 0,
       "balanceAmount": 99938.4457448704,
       "balanceUnits": 0,
       "netInvestmentAmount": 100000
@@ -86,6 +104,8 @@
       "investmentAmount": 227990.762752,
       "withdrawalAmount": 127990.762752,
       "gainAmount": -34.5542551296,
+      "marketGainAmount": -34.5542551296,
+      "fxGainAmount": 0,
       "balanceAmount": 99965.4457448704,
       "balanceUnits": 0,
       "netInvestmentAmount": 100000
@@ -95,6 +115,8 @@
       "investmentAmount": 228795.183232,
       "withdrawalAmount": 128895.183232,
       "gainAmount": -34.5542551296,
+      "marketGainAmount": -34.5542551296,
+      "fxGainAmount": 0,
       "balanceAmount": 99865.4457448704,
       "balanceUnits": 0,
       "netInvestmentAmount": 99900
@@ -104,6 +126,8 @@
       "investmentAmount": 228795.183232,
       "withdrawalAmount": 128895.183232,
       "gainAmount": -34.58866180237056,
+      "marketGainAmount": -34.58866180237056,
+      "fxGainAmount": 0,
       "balanceAmount": 99865.41133819763,
       "balanceUnits": 0,
       "netInvestmentAmount": 99900
@@ -113,6 +137,8 @@
       "investmentAmount": 228795.183232,
       "withdrawalAmount": 128895.183232,
       "gainAmount": -34.58866180237056,
+      "marketGainAmount": -34.58866180237056,
+      "fxGainAmount": 0,
       "balanceAmount": 99865.41133819763,
       "balanceUnits": 0,
       "netInvestmentAmount": 99900
@@ -122,6 +148,8 @@
       "investmentAmount": 228795.183232,
       "withdrawalAmount": 128895.183232,
       "gainAmount": -34.58866180237056,
+      "marketGainAmount": -34.58866180237056,
+      "fxGainAmount": 0,
       "balanceAmount": 99865.41133819763,
       "balanceUnits": 0,
       "netInvestmentAmount": 99900
@@ -131,6 +159,8 @@
       "investmentAmount": 228795.183232,
       "withdrawalAmount": 128895.183232,
       "gainAmount": -34.58866180237056,
+      "marketGainAmount": -34.58866180237056,
+      "fxGainAmount": 0,
       "balanceAmount": 99865.41133819763,
       "balanceUnits": 0,
       "netInvestmentAmount": 99900
@@ -140,6 +170,8 @@
       "investmentAmount": 228795.183232,
       "withdrawalAmount": 128895.183232,
       "gainAmount": -34.58866180237056,
+      "marketGainAmount": -34.58866180237056,
+      "fxGainAmount": 0,
       "balanceAmount": 99865.41133819763,
       "balanceUnits": 0,
       "netInvestmentAmount": 99900
@@ -149,6 +181,8 @@
       "investmentAmount": 228795.183232,
       "withdrawalAmount": 128895.183232,
       "gainAmount": -34.58866180237056,
+      "marketGainAmount": -34.58866180237056,
+      "fxGainAmount": 0,
       "balanceAmount": 99865.41133819763,
       "balanceUnits": 0,
       "netInvestmentAmount": 99900
@@ -158,6 +192,8 @@
       "investmentAmount": 228795.183232,
       "withdrawalAmount": 128895.183232,
       "gainAmount": -34.58866180237056,
+      "marketGainAmount": -34.58866180237056,
+      "fxGainAmount": 0,
       "balanceAmount": 99865.41133819763,
       "balanceUnits": 0,
       "netInvestmentAmount": 99900
@@ -167,6 +203,8 @@
       "investmentAmount": 228795.183232,
       "withdrawalAmount": 128895.183232,
       "gainAmount": -34.58866180237056,
+      "marketGainAmount": -34.58866180237056,
+      "fxGainAmount": 0,
       "balanceAmount": 99865.41133819763,
       "balanceUnits": 0,
       "netInvestmentAmount": 99900
@@ -176,6 +214,8 @@
       "investmentAmount": 228795.183232,
       "withdrawalAmount": 128895.183232,
       "gainAmount": -34.58866180237056,
+      "marketGainAmount": -34.58866180237056,
+      "fxGainAmount": 0,
       "balanceAmount": 99865.41133819763,
       "balanceUnits": 0,
       "netInvestmentAmount": 99900
@@ -185,6 +225,8 @@
       "investmentAmount": 228795.183232,
       "withdrawalAmount": 128895.183232,
       "gainAmount": -34.58866180237056,
+      "marketGainAmount": -34.58866180237056,
+      "fxGainAmount": 0,
       "balanceAmount": 99865.41133819763,
       "balanceUnits": 0,
       "netInvestmentAmount": 99900
@@ -194,6 +236,8 @@
       "investmentAmount": 228795.183232,
       "withdrawalAmount": 128895.183232,
       "gainAmount": -34.58866180237056,
+      "marketGainAmount": -34.58866180237056,
+      "fxGainAmount": 0,
       "balanceAmount": 99865.41133819763,
       "balanceUnits": 0,
       "netInvestmentAmount": 99900
@@ -203,6 +247,8 @@
       "investmentAmount": 228795.183232,
       "withdrawalAmount": 128895.183232,
       "gainAmount": -34.58866180237056,
+      "marketGainAmount": -34.58866180237056,
+      "fxGainAmount": 0,
       "balanceAmount": 99865.41133819763,
       "balanceUnits": 0,
       "netInvestmentAmount": 99900
@@ -212,6 +258,8 @@
       "investmentAmount": 228795.183232,
       "withdrawalAmount": 128895.183232,
       "gainAmount": -34.58866180237056,
+      "marketGainAmount": -34.58866180237056,
+      "fxGainAmount": 0,
       "balanceAmount": 99865.41133819763,
       "balanceUnits": 0,
       "netInvestmentAmount": 99900
@@ -221,6 +269,8 @@
       "investmentAmount": 228795.183232,
       "withdrawalAmount": 128895.183232,
       "gainAmount": -34.58866180237056,
+      "marketGainAmount": -34.58866180237056,
+      "fxGainAmount": 0,
       "balanceAmount": 99865.41133819763,
       "balanceUnits": 0,
       "netInvestmentAmount": 99900
@@ -230,6 +280,8 @@
       "investmentAmount": 228795.183232,
       "withdrawalAmount": 128895.183232,
       "gainAmount": -34.58866180237056,
+      "marketGainAmount": -34.58866180237056,
+      "fxGainAmount": 0,
       "balanceAmount": 99865.41133819763,
       "balanceUnits": 0,
       "netInvestmentAmount": 99900
@@ -239,6 +291,8 @@
       "investmentAmount": 228795.183232,
       "withdrawalAmount": 128895.183232,
       "gainAmount": -34.58866180237056,
+      "marketGainAmount": -34.58866180237056,
+      "fxGainAmount": 0,
       "balanceAmount": 99865.41133819763,
       "balanceUnits": 0,
       "netInvestmentAmount": 99900
@@ -248,6 +302,8 @@
       "investmentAmount": 228795.183232,
       "withdrawalAmount": 128895.183232,
       "gainAmount": -34.58866180237056,
+      "marketGainAmount": -34.58866180237056,
+      "fxGainAmount": 0,
       "balanceAmount": 99865.41133819763,
       "balanceUnits": 0,
       "netInvestmentAmount": 99900
@@ -257,6 +313,8 @@
       "investmentAmount": 229867.183232,
       "withdrawalAmount": 128895.183232,
       "gainAmount": -34.58866180237056,
+      "marketGainAmount": -34.58866180237056,
+      "fxGainAmount": 0,
       "balanceAmount": 100937.41133819763,
       "balanceUnits": 0,
       "netInvestmentAmount": 100972
@@ -266,6 +324,8 @@
       "investmentAmount": 229867.183232,
       "withdrawalAmount": 128895.183232,
       "gainAmount": -34.58866180237056,
+      "marketGainAmount": -34.58866180237056,
+      "fxGainAmount": 0,
       "balanceAmount": 100937.41133819763,
       "balanceUnits": 0,
       "netInvestmentAmount": 100972
@@ -275,6 +335,8 @@
       "investmentAmount": 229867.183232,
       "withdrawalAmount": 128895.183232,
       "gainAmount": 965.4113381976294,
+      "marketGainAmount": 965.4113381976294,
+      "fxGainAmount": 0,
       "balanceAmount": 101937.41133819763,
       "balanceUnits": 0,
       "netInvestmentAmount": 100972
@@ -284,6 +346,8 @@
       "investmentAmount": 229867.183232,
       "withdrawalAmount": 128895.183232,
       "gainAmount": 965.4113381976294,
+      "marketGainAmount": 965.4113381976294,
+      "fxGainAmount": 0,
       "balanceAmount": 101937.41133819763,
       "balanceUnits": 0,
       "netInvestmentAmount": 100972
@@ -293,6 +357,8 @@
       "investmentAmount": 229867.183232,
       "withdrawalAmount": 128895.183232,
       "gainAmount": 965.4113381976294,
+      "marketGainAmount": 965.4113381976294,
+      "fxGainAmount": 0,
       "balanceAmount": 101937.41133819763,
       "balanceUnits": 0,
       "netInvestmentAmount": 100972
@@ -302,6 +368,8 @@
       "investmentAmount": 229867.183232,
       "withdrawalAmount": 128895.183232,
       "gainAmount": 965.4113381976294,
+      "marketGainAmount": 965.4113381976294,
+      "fxGainAmount": 0,
       "balanceAmount": 101937.41133819763,
       "balanceUnits": 0,
       "netInvestmentAmount": 100972
@@ -311,6 +379,8 @@
       "investmentAmount": 229867.183232,
       "withdrawalAmount": 128895.183232,
       "gainAmount": 965.4113381976294,
+      "marketGainAmount": 965.4113381976294,
+      "fxGainAmount": 0,
       "balanceAmount": 101937.41133819763,
       "balanceUnits": 0,
       "netInvestmentAmount": 100972
@@ -320,6 +390,8 @@
       "investmentAmount": 229867.183232,
       "withdrawalAmount": 128895.183232,
       "gainAmount": 965.4113381976294,
+      "marketGainAmount": 965.4113381976294,
+      "fxGainAmount": 0,
       "balanceAmount": 101937.41133819763,
       "balanceUnits": 0,
       "netInvestmentAmount": 100972
@@ -329,6 +401,8 @@
       "investmentAmount": 229867.183232,
       "withdrawalAmount": 128895.183232,
       "gainAmount": 965.4113381976294,
+      "marketGainAmount": 965.4113381976294,
+      "fxGainAmount": 0,
       "balanceAmount": 101937.41133819763,
       "balanceUnits": 0,
       "netInvestmentAmount": 100972
@@ -338,6 +412,8 @@
       "investmentAmount": 229867.183232,
       "withdrawalAmount": 128895.183232,
       "gainAmount": 1183.8113381976295,
+      "marketGainAmount": 1183.8113381976295,
+      "fxGainAmount": 0,
       "balanceAmount": 102155.81133819763,
       "balanceUnits": 0,
       "netInvestmentAmount": 100972

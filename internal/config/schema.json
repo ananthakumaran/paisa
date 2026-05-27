@@ -31,6 +31,20 @@
       "type": "string",
       "description": "The default currency to use. NOTE: Paisa tries to convert other currencies to default currency, so make sure it's possible to convert to default currency by specifying the exchange rate."
     },
+    "base_currency": {
+      "type": "string",
+      "description": "The currency used for net worth aggregation across multi-currency portfolios. If unset, defaults to default_currency. Holdings denominated in other currencies are converted via the configured fx_providers."
+    },
+    "fx_providers": {
+      "type": "array",
+      "description": "Ordered list of FX provider codes used to seed the daily exchange rate store. Defaults to [\"cn-boc\", \"yahoo-fx\"]. Each provider is tried in order until rates can be resolved.",
+      "default": ["cn-boc", "yahoo-fx"],
+      "items": {
+        "type": "string",
+        "enum": ["cn-boc", "yahoo-fx"]
+      },
+      "uniqueItems": true
+    },
     "display_precision": {
       "type": "integer",
       "minimum": 0,

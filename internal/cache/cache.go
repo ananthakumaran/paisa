@@ -2,6 +2,7 @@ package cache
 
 import (
 	"github.com/ananthakumaran/paisa/internal/accounting"
+	"github.com/ananthakumaran/paisa/internal/model/fx"
 	"github.com/ananthakumaran/paisa/internal/model/transaction"
 	"github.com/ananthakumaran/paisa/internal/prediction"
 	"github.com/ananthakumaran/paisa/internal/service"
@@ -13,4 +14,5 @@ func Clear() {
 	accounting.ClearCache()
 	prediction.ClearCache()
 	transaction.ClearCache()
+	fx.ClearStore()
 }

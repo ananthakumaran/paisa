@@ -11,6 +11,11 @@
     "readonly": false,
     "ledger_cli": "ledger",
     "default_currency": "EUR",
+    "base_currency": "",
+    "fx_providers": [
+      "cn-boc",
+      "yahoo-fx"
+    ],
     "display_precision": 0,
     "amount_alignment_column": 52,
     "locale": "es-EU",
@@ -125,6 +130,10 @@
         "maximum": 100,
         "minimum": 40,
         "type": "integer"
+      },
+      "base_currency": {
+        "description": "The currency used for net worth aggregation across multi-currency portfolios. If unset, defaults to default_currency. Holdings denominated in other currencies are converted via the configured fx_providers.",
+        "type": "string"
       },
       "budget": {
         "additionalProperties": false,
@@ -320,6 +329,22 @@
         "maximum": 12,
         "minimum": 1,
         "type": "integer"
+      },
+      "fx_providers": {
+        "default": [
+          "cn-boc",
+          "yahoo-fx"
+        ],
+        "description": "Ordered list of FX provider codes used to seed the daily exchange rate store. Defaults to [\"cn-boc\", \"yahoo-fx\"]. Each provider is tried in order until rates can be resolved.",
+        "items": {
+          "enum": [
+            "cn-boc",
+            "yahoo-fx"
+          ],
+          "type": "string"
+        },
+        "type": "array",
+        "uniqueItems": true
       },
       "goals": {
         "description": "Goals configuration",

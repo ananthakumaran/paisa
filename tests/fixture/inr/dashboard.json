@@ -82,6 +82,8 @@
       "investmentAmount": 228857.0374871296,
       "withdrawalAmount": 128957.0374871296,
       "gainAmount": 1245.7,
+      "marketGainAmount": 1245.7,
+      "fxGainAmount": 0,
       "balanceAmount": 101145.7,
       "balanceUnits": 0,
       "netInvestmentAmount": 99900

@@ -32,6 +32,8 @@ type AccountGain struct {
 func GetGain(db *gorm.DB) gin.H {
 	postings := query.Init(db).Like("Assets:%", "Income:CapitalGains:%").NotAccountPrefix("Assets:Checking").All()
 	postings = service.PopulateMarketPrice(db, postings)
+	store := FxStore()
+	loadFxRatesFromDB(db, store)
 	byAccount := lo.GroupBy(postings, func(p posting.Posting) string {
 		if service.IsCapitalGains(p) {
 			return service.CapitalGainsSourceAccount(p.Account)
@@ -41,7 +43,7 @@ func GetGain(db *gorm.DB) gin.H {
 	var gains []Gain
 	for _, account := range utils.SortedKeys(byAccount) {
 		ps := byAccount[account]
-		gains = append(gains, Gain{Account: account, XIRR: service.XIRR(db, ps), Networth: computeNetworth(db, ps), Postings: ps})
+		gains = append(gains, Gain{Account: account, XIRR: service.XIRR(db, ps), Networth: computeNetworth(db, ps, store), Postings: ps})
 	}
 
 	return gin.H{"gain_breakdown": gains}
@@ -51,7 +53,9 @@ func GetAccountGain(db *gorm.DB, account string) gin.H {
 	capitalGainsAccount := strings.Replace(account, "Assets", "Income:CapitalGains", 1)
 	postings := query.Init(db).AccountPrefix(account, capitalGainsAccount).All()
 	postings = service.PopulateMarketPrice(db, postings)
-	gain := AccountGain{Account: account, XIRR: service.XIRR(db, postings), NetworthTimeline: computeNetworthTimeline(db, postings, accounting.IsLeafAccount(db, account)), Postings: postings}
+	store := FxStore()
+	loadFxRatesFromDB(db, store)
+	gain := AccountGain{Account: account, XIRR: service.XIRR(db, postings), NetworthTimeline: computeNetworthTimeline(db, postings, accounting.IsLeafAccount(db, account), store), Postings: postings}
 
 	commodities := lo.Uniq(lo.Map(postings, func(p posting.Posting, _ int) string { return p.Commodity }))
 	var portfolio_groups PortfolioAllocationGroups

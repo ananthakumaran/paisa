@@ -54,19 +54,41 @@ func getHistoryWithClient(c *Client, ticker string, commodityName string) ([]*pr
 	if needExchangePrice {
 		fxSymbol := fmt.Sprintf("%s%s=X", result.Meta.Currency, config.DefaultCurrency())
 		fxResp, fxErr := c.FetchChart(fxSymbol)
-		if fxErr != nil {
-			return nil, fmt.Errorf("yahoo: fetch fx %s: %w", fxSymbol, fxErr)
-		}
-		if len(fxResp.Chart.Result) == 0 {
-			return nil, fmt.Errorf("yahoo: empty fx result for %s", fxSymbol)
-		}
-		fxResult := fxResp.Chart.Result[0]
-		exchangeTree = btree.New(2)
-		for i, t := range fxResult.Timestamp {
-			if i >= len(fxResult.Indicators.Quote[0].Close) {
-				break
+		// Graceful FX degrade: if Yahoo's FX series cannot be fetched (404,
+		// timeout, rate limit, empty), we log a warning and return the stock
+		// prices in their original currency. M1-F's FX subsystem can perform
+		// the conversion downstream; failing here would break the whole
+		// commodity sync just because the FX endpoint blipped.
+		switch {
+		case fxErr != nil:
+			log.Warnf("yahoo: fx fetch %s failed (%v); returning %s in %s",
+				fxSymbol, fxErr, ticker, result.Meta.Currency)
+			needExchangePrice = false
+		case len(fxResp.Chart.Result) == 0:
+			log.Warnf("yahoo: fx fetch %s returned empty; returning %s in %s",
+				fxSymbol, ticker, result.Meta.Currency)
+			needExchangePrice = false
+		default:
+			fxResult := fxResp.Chart.Result[0]
+			if len(fxResult.Indicators.Quote) == 0 {
+				log.Warnf("yahoo: fx fetch %s has no quote series; returning %s in %s",
+					fxSymbol, ticker, result.Meta.Currency)
+				needExchangePrice = false
+			} else {
+				exchangeTree = btree.New(2)
+				for i, t := range fxResult.Timestamp {
+					if i >= len(fxResult.Indicators.Quote[0].Close) {
+						break
+					}
+					exchangeTree.ReplaceOrInsert(exchangePoint{Timestamp: t, Close: fxResult.Indicators.Quote[0].Close[i]})
+				}
+				if exchangeTree.Len() == 0 {
+					log.Warnf("yahoo: fx fetch %s had no usable points; returning %s in %s",
+						fxSymbol, ticker, result.Meta.Currency)
+					needExchangePrice = false
+					exchangeTree = nil
+				}
 			}
-			exchangeTree.ReplaceOrInsert(exchangePoint{Timestamp: t, Close: fxResult.Indicators.Quote[0].Close[i]})
 		}
 	}
 

@@ -22,6 +22,7 @@ import (
 	"regexp"
 	"strings"
 	"sync"
+	"sync/atomic"
 	"time"
 
 	"gorm.io/gorm"
@@ -38,7 +39,8 @@ var ErrNotFound = errors.New("yahoo: symbol not found")
 const defaultBaseURL = "https://query1.finance.yahoo.com/v8/finance/chart"
 
 // userAgents is a small pool of common UA strings; Yahoo throttles aggressively
-// when it sees a default Go UA, so we rotate.
+// when it sees a default Go UA, so we rotate per request via a monotonically
+// increasing counter (one round-robin across the pool).
 var userAgents = []string{
 	"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36",
 	"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36",
@@ -47,16 +49,17 @@ var userAgents = []string{
 	"Mozilla/5.0 (Macintosh; Intel Mac OS X 14_7_4) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.3 Safari/605.1.15",
 }
 
-var (
-	uaOnce sync.Once
-	ua     string
-)
+// uaCounter rotates through userAgents one entry per request. Seeded with a
+// random offset so concurrent processes don't all start on UA[0].
+var uaCounter atomic.Uint64
+
+func init() {
+	uaCounter.Store(uint64(rand.Intn(len(userAgents))))
+}
 
 func pickUserAgent() string {
-	uaOnce.Do(func() {
-		ua = userAgents[rand.Intn(len(userAgents))]
-	})
-	return ua
+	n := uaCounter.Add(1)
+	return userAgents[int(n%uint64(len(userAgents)))]
 }
 
 // SymbolKind disambiguates the type of Yahoo Finance symbol being requested.
@@ -259,12 +262,18 @@ func parseChartResponse(body []byte) (*Response, error) {
 	return &resp, nil
 }
 
+// NewClient is the package-level constructor used by PriceProvider to obtain
+// a Client. Tests substitute this variable to point at a httptest server.
+// M1-F can also override it from fx.go if FX requests need different defaults.
+var NewClient = func() *Client { return DefaultClient() }
+
 // PriceProvider implements price.PriceProvider for Yahoo Finance under the
 // canonical code "yahoo". It routes incoming symbols to the stock or FX
 // fetcher based on ClassifySymbol; FX support is provided by fx.go (owned by
 // M1-F) and gracefully degrades when not compiled in.
 type PriceProvider struct {
-	// client is lazily initialised so tests can inject a fake.
+	// client is lazily initialised so tests can inject a fake; if nil, the
+	// package-level NewClient is used.
 	client *Client
 	once   sync.Once
 }
@@ -294,10 +303,12 @@ func (p *PriceProvider) AutoComplete(db *gorm.DB, field string, filter map[strin
 
 func (p *PriceProvider) ClearCache(db *gorm.DB) {}
 
-func (p *PriceProvider) client_() *Client {
+// getClient returns the Client for this provider, constructing it lazily via
+// the package-level NewClient on first use.
+func (p *PriceProvider) getClient() *Client {
 	p.once.Do(func() {
 		if p.client == nil {
-			p.client = DefaultClient()
+			p.client = NewClient()
 		}
 	})
 	return p.client
@@ -320,7 +331,7 @@ func (p *PriceProvider) GetPrices(code string, commodityName string) ([]*price.P
 	kind := ClassifySymbol(code)
 	switch kind {
 	case SymbolFX:
-		prices, err := getFXPricesFn(p.client_(), code, commodityName)
+		prices, err := getFXPricesFn(p.getClient(), code, commodityName)
 		if errors.Is(err, ErrNotFound) {
 			log.Warnf("yahoo: %s not found / delisted; using cached prices", code)
 			return nil, nil
@@ -328,7 +339,7 @@ func (p *PriceProvider) GetPrices(code string, commodityName string) ([]*price.P
 		return prices, err
 	default:
 		// Stocks, ETFs and indices all use the same chart endpoint.
-		prices, err := getHistoryWithClient(p.client_(), code, commodityName)
+		prices, err := getHistoryWithClient(p.getClient(), code, commodityName)
 		if errors.Is(err, ErrNotFound) {
 			log.Warnf("yahoo: %s not found / delisted; using cached prices", code)
 			return nil, nil

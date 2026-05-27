@@ -977,7 +977,8 @@
                   "com-yahoo",
                   "com-purifiedbytes-nps",
                   "com-purifiedbytes-metal",
-                  "co-alphavantage"
+                  "co-alphavantage",
+                  "cn-eastmoney"
                 ]
               },
               "code": {

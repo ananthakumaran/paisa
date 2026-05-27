@@ -136,8 +136,8 @@
                     {p.account}
                   </div>
                 </div>
-                <div class="has-text-right">{formatCurrency(p.amount, 2)}</div>
-                <div class="has-text-right">{formatCurrency(p.balance, 2)}</div>
+                <div class="has-text-right">{formatCurrency(p.amount, p.commodity)}</div>
+                <div class="has-text-right">{formatCurrency(p.balance, p.commodity)}</div>
                 <div class="has-text-right">{unlessDefault(p, formatFloat(p.quantity, 4))}</div>
                 <div class="has-text-right">
                   {unlessDefault(p, formatCurrency(Math.abs(p.amount / p.quantity), 4))}

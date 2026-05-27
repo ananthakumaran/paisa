@@ -7,6 +7,8 @@
         "investmentAmount": 10005.05,
         "withdrawalAmount": 0,
         "gainAmount": 20,
+        "marketGainAmount": 20,
+        "fxGainAmount": 0,
         "balanceAmount": 10025.05,
         "balanceUnits": 0,
         "netInvestmentAmount": 10005.05
@@ -14,7 +16,7 @@
       "xirr": 2.17,
       "postings": [
         {
-          "id": 11,
+          "id": 23,
           "transaction_id": "2",
           "date": "2022-01-05T00:00:00Z",
           "payee": "Buy stock",

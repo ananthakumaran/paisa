@@ -1,7 +1,7 @@
 {
   "assets": [
     {
-      "id": 11,
+      "id": 23,
       "transaction_id": "2",
       "date": "2022-01-05T00:00:00Z",
       "payee": "Buy stock",
@@ -28,7 +28,7 @@
       "end_date": "2022-12-31T23:59:59.999999999Z",
       "postings": [
         {
-          "id": 11,
+          "id": 23,
           "transaction_id": "2",
           "date": "2022-01-05T00:00:00Z",
           "payee": "Buy stock",

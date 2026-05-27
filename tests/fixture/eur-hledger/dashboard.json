@@ -37,6 +37,8 @@
       "investmentAmount": 21005.05,
       "withdrawalAmount": 10005.05,
       "gainAmount": 20,
+      "marketGainAmount": 20,
+      "fxGainAmount": 0,
       "balanceAmount": 11020,
       "balanceUnits": 0,
       "netInvestmentAmount": 11000
@@ -51,7 +53,7 @@
       "payee": "Buy stock",
       "postings": [
         {
-          "id": 11,
+          "id": 23,
           "transaction_id": "2",
           "date": "2022-01-05T00:00:00Z",
           "payee": "Buy stock",
@@ -72,7 +74,7 @@
           "balance": 0
         },
         {
-          "id": 12,
+          "id": 24,
           "transaction_id": "2",
           "date": "2022-01-05T00:00:00Z",
           "payee": "Buy stock",
@@ -106,7 +108,7 @@
       "payee": "Salary",
       "postings": [
         {
-          "id": 10,
+          "id": 22,
           "transaction_id": "1",
           "date": "2022-01-01T00:00:00Z",
           "payee": "Salary",
@@ -127,7 +129,7 @@
           "balance": 0
         },
         {
-          "id": 9,
+          "id": 21,
           "transaction_id": "1",
           "date": "2022-01-01T00:00:00Z",
           "payee": "Salary",

@@ -138,6 +138,8 @@ type Config struct {
 	Readonly              bool         `json:"readonly" yaml:"readonly"`
 	LedgerCli             string       `json:"ledger_cli" yaml:"ledger_cli"`
 	DefaultCurrency       string       `json:"default_currency" yaml:"default_currency"`
+	BaseCurrency          string       `json:"base_currency" yaml:"base_currency"`
+	FxProviders           []string     `json:"fx_providers" yaml:"fx_providers"`
 	DisplayPrecision      int          `json:"display_precision" yaml:"display_precision"`
 	AmountAlignmentColumn int          `json:"amount_alignment_column" yaml:"amount_alignment_column"`
 	Locale                string       `json:"locale" yaml:"locale"`
@@ -174,6 +176,8 @@ var defaultConfig = Config{
 	Readonly:              false,
 	LedgerCli:             "ledger",
 	DefaultCurrency:       "INR",
+	BaseCurrency:          "",
+	FxProviders:           []string{"cn-boc", "yahoo-fx"},
 	DisplayPrecision:      0,
 	AmountAlignmentColumn: 52,
 	Locale:                "en-IN",
@@ -527,6 +531,44 @@ func EnsureLogFilePath() (string, error) {
 
 func DefaultCurrency() string {
 	return config.DefaultCurrency
+}
+
+// SetConfigForTest replaces the package-level Config and resolves the
+// TimeZone-derived `location` so tests can pin a config without going
+// through the full YAML/schema load path. Returns the previous Config so
+// callers can restore it via t.Cleanup if they care.
+func SetConfigForTest(c Config) Config {
+	prev := config
+	config = c
+	if c.TimeZone == "" {
+		location = time.Local
+	} else {
+		loc, err := time.LoadLocation(c.TimeZone)
+		if err == nil {
+			location = loc
+		}
+	}
+	return prev
+}
+
+// BaseCurrency returns the configured base currency used for net-worth
+// aggregation. If unset, it falls back to DefaultCurrency so existing single
+// currency setups (the entire pre-M1 user base) keep working without any
+// config change.
+func BaseCurrency() string {
+	if config.BaseCurrency != "" {
+		return config.BaseCurrency
+	}
+	return config.DefaultCurrency
+}
+
+// FxProviders returns the configured FX provider codes used to seed the FX
+// rate store. Defaults to ["cn-boc", "yahoo-fx"] when absent.
+func FxProviders() []string {
+	if len(config.FxProviders) > 0 {
+		return config.FxProviders
+	}
+	return []string{"cn-boc", "yahoo-fx"}
 }
 
 func TimeZone() *time.Location {

@@ -24,6 +24,29 @@ func (p exchangePoint) Less(o btree.Item) bool {
 	return p.Timestamp < (o.(exchangePoint).Timestamp)
 }
 
+// fxLookupFn returns a single FX rate for base->target as of `asOf`, used by
+// the stock scraper to convert a stock's quote currency into the user's
+// default currency. The default implementation is nil (no override), in which
+// case the stock scraper falls back to Yahoo's own FX chart endpoint. M1-F
+// (issue #11) replaces this variable from fx.go's init() so the conversion
+// goes through the configured FX provider chain (BoC -> Yahoo-fx -> USD
+// pivot).
+//
+// Why a per-timestamp lookup rather than the [] series the rest of stock.go
+// uses? Because the M1-F RateStore has effectively-continuous data (it
+// re-uses the most recent prior rate), so passing each stock-quote
+// timestamp through gets us a more accurate conversion than the monthly
+// or weekly sampling we'd otherwise need to synthesise a tree from.
+var fxLookupFn func(base, target string, asOf time.Time) (float64, bool)
+
+// SetFXLookupFn installs a per-timestamp FX resolver. fx.go calls this from
+// its init() so the stock scraper picks up the M1-F provider chain without a
+// hard import dependency (which would cause a cycle: stock -> fx -> price ->
+// stock via the price interface).
+func SetFXLookupFn(fn func(base, target string, asOf time.Time) (float64, bool)) {
+	fxLookupFn = fn
+}
+
 // GetHistory fetches the daily price history for a stock / ETF / index from
 // Yahoo Finance and converts the values into the user's default currency
 // (when needed) using Yahoo FX rates.
@@ -50,9 +73,24 @@ func getHistoryWithClient(c *Client, ticker string, commodityName string) ([]*pr
 	result := resp.Chart.Result[0]
 	needExchangePrice := !utils.IsCurrency(result.Meta.Currency) && result.Meta.Currency != ""
 
+	base := result.Meta.Currency
+	target := config.DefaultCurrency()
+
+	// useM1FFx: when the M1-F FX subsystem has data for this pair, we skip
+	// the Yahoo FX fetch entirely and resolve each stock-quote timestamp
+	// through fxLookupFn below. Only fall back to Yahoo's FX series when
+	// the hook is unset or returns no rate.
+	useM1FFx := false
+	if needExchangePrice && fxLookupFn != nil {
+		if _, ok := fxLookupFn(base, target, time.Now()); ok {
+			useM1FFx = true
+			log.Infof("yahoo: stock fx for %s->%s sourced from M1-F provider chain", base, target)
+		}
+	}
+
 	var exchangeTree *btree.BTree
-	if needExchangePrice {
-		fxSymbol := fmt.Sprintf("%s%s=X", result.Meta.Currency, config.DefaultCurrency())
+	if needExchangePrice && !useM1FFx {
+		fxSymbol := fmt.Sprintf("%s%s=X", base, target)
 		fxResp, fxErr := c.FetchChart(fxSymbol)
 		// Graceful FX degrade: if Yahoo's FX series cannot be fetched (404,
 		// timeout, rate limit, empty), we log a warning and return the stock
@@ -109,7 +147,13 @@ func getHistoryWithClient(c *Client, ticker string, commodityName string) ([]*pr
 			continue
 		}
 
-		if needExchangePrice && exchangeTree != nil {
+		if needExchangePrice && useM1FFx {
+			// Per-timestamp lookup through the M1-F provider chain.
+			asOf := time.Unix(ts, 0)
+			if rate, ok := fxLookupFn(base, target, asOf); ok && rate > 0 {
+				value = value * rate
+			}
+		} else if needExchangePrice && exchangeTree != nil {
 			fx := utils.BTreeDescendFirstLessOrEqual(exchangeTree, exchangePoint{Timestamp: ts})
 			if fx.Close > 0 {
 				value = value * fx.Close

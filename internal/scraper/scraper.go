@@ -2,6 +2,7 @@ package scraper
 
 import (
 	"github.com/ananthakumaran/paisa/internal/model/price"
+	"github.com/ananthakumaran/paisa/internal/scraper/cn/boc"
 	"github.com/ananthakumaran/paisa/internal/scraper/cn/eastmoney"
 	"github.com/ananthakumaran/paisa/internal/scraper/cn/okx"
 	"github.com/ananthakumaran/paisa/internal/scraper/cn/ttjj"
@@ -15,6 +16,8 @@ func GetAllProviders() []price.PriceProvider {
 		&stock.YahooPriceProvider{},
 		&yahoo.PriceProvider{},
 		&stock.AlphaVantagePriceProvider{},
+		&boc.PriceProvider{},
+		&yahoo.FxPriceProvider{},
 		&eastmoney.PriceProvider{},
 		&okx.PriceProvider{},
 		&ttjj.PriceProvider{},
@@ -30,6 +33,10 @@ func GetProviderByCode(code string) price.PriceProvider {
 		return &yahoo.PriceProvider{}
 	case "co-alphavantage":
 		return &stock.AlphaVantagePriceProvider{}
+	case "cn-boc":
+		return &boc.PriceProvider{}
+	case "yahoo-fx":
+		return &yahoo.FxPriceProvider{}
 	case "cn-eastmoney":
 		return &eastmoney.PriceProvider{}
 	case "cn-okx":

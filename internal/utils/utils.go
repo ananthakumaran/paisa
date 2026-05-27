@@ -113,6 +113,13 @@ func Now() time.Time {
 	return time.Now()
 }
 
+// ResetNow undoes a previous SetNow, restoring `time.Now()`-based behaviour.
+// Used by tests that pin "now" via SetNow and need to leave the package
+// unaffected for subsequent tests.
+func ResetNow() {
+	now = time.Time{}
+}
+
 func IsNowDefined() bool {
 	return !now.Equal(time.Time{})
 }

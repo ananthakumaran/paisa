@@ -136,6 +136,8 @@ export interface Networth {
   investmentAmount: number;
   withdrawalAmount: number;
   gainAmount: number;
+  marketGainAmount: number;
+  fxGainAmount: number;
   balanceAmount: number;
   balanceUnits: number;
   netInvestmentAmount: number;

@@ -61,7 +61,9 @@
     "sheets": "表格",
     "goals": "目标",
     "doctor": "体检",
-    "logs": "日志"
+    "logs": "日志",
+    "switch_to_english": "切换到英文",
+    "switch_to_chinese": "切换到中文"
   },
   "navbar": {
     "recurring_icon": {

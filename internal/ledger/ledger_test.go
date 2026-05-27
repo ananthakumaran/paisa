@@ -61,6 +61,79 @@ func TestParseHLegerPrices(t *testing.T) {
 	assert.Len(t, parsedPrices, 0)
 }
 
+func TestParseLedgerPrices_NormalizesYenSymbolToCNY(t *testing.T) {
+	parsedPrices, err := parseLedgerPrices("P 2023/05/01 00:00:00 USD 7.2 ¥\n", "CNY")
+	assert.NoError(t, err)
+	assert.Len(t, parsedPrices, 1)
+	assertPriceEqual(t, parsedPrices[0], "2023/05/01", "USD", 7.2)
+}
+
+func TestParseLedgerPrices_NormalizesDollarToUSD(t *testing.T) {
+	parsedPrices, err := parseLedgerPrices("P 2023/05/01 00:00:00 EUR $1.1\n", "USD")
+	assert.NoError(t, err)
+	assert.Len(t, parsedPrices, 1)
+	assertPriceEqual(t, parsedPrices[0], "2023/05/01", "EUR", 1.1)
+}
+
+func TestParseLedgerPrices_DropsForeignCurrency(t *testing.T) {
+	parsedPrices, err := parseLedgerPrices("P 2023/05/01 00:00:00 USD 0.9 EUR\n", "CNY")
+	assert.NoError(t, err)
+	assert.Len(t, parsedPrices, 0)
+}
+
+func TestParseHLedgerPrices_NormalizesYenSymbolToCNY(t *testing.T) {
+	parsedPrices, err := parseHLedgerPrices("P 2023-05-01 USD 7.2 ¥\n", "CNY")
+	assert.NoError(t, err)
+	assert.Len(t, parsedPrices, 1)
+	assertPriceEqual(t, parsedPrices[0], "2023/05/01", "USD", 7.2)
+}
+
+func TestParseHLedgerPrices_NormalizesDollarToUSD(t *testing.T) {
+	parsedPrices, err := parseHLedgerPrices("P 2023-05-01 EUR $1.1\n", "USD")
+	assert.NoError(t, err)
+	assert.Len(t, parsedPrices, 1)
+	assertPriceEqual(t, parsedPrices[0], "2023/05/01", "EUR", 1.1)
+}
+
+func TestParseHLedgerPrices_DropsForeignCurrency(t *testing.T) {
+	parsedPrices, err := parseHLedgerPrices("P 2023-05-01 USD 0.9 EUR\n", "CNY")
+	assert.NoError(t, err)
+	assert.Len(t, parsedPrices, 0)
+}
+
+func TestParseBeancountPrices_NormalizesYenSymbolToCNY(t *testing.T) {
+	parsedPrices, err := parseBeancountPrices("2023-05-01 price USD 7.2 ¥\n", "CNY")
+	assert.NoError(t, err)
+	assert.Len(t, parsedPrices, 1)
+	assertPriceEqual(t, parsedPrices[0], "2023/05/01", "USD", 7.2)
+}
+
+func TestParseBeancountPrices_DropsForeignCurrency(t *testing.T) {
+	parsedPrices, err := parseBeancountPrices("2023-05-01 price USD 0.9 EUR\n", "CNY")
+	assert.NoError(t, err)
+	assert.Len(t, parsedPrices, 0)
+}
+
+func TestNormalizeCurrency_ISOPassthrough(t *testing.T) {
+	assert.Equal(t, "CNY", NormalizeCurrency("CNY"))
+	assert.Equal(t, "USD", NormalizeCurrency("USD"))
+	assert.Equal(t, "EUR", NormalizeCurrency("EUR"))
+}
+
+func TestNormalizeCurrency_UnknownPassthrough(t *testing.T) {
+	assert.Equal(t, "XAU", NormalizeCurrency("XAU"))
+	assert.Equal(t, "BTC", NormalizeCurrency("BTC"))
+	assert.Equal(t, "", NormalizeCurrency(""))
+}
+
+func TestNormalizeCurrency_KnownSymbols(t *testing.T) {
+	assert.Equal(t, "CNY", NormalizeCurrency("¥"))
+	assert.Equal(t, "USD", NormalizeCurrency("$"))
+	assert.Equal(t, "EUR", NormalizeCurrency("€"))
+	assert.Equal(t, "GBP", NormalizeCurrency("£"))
+	assert.Equal(t, "INR", NormalizeCurrency("₹"))
+}
+
 func TestParseAmount(t *testing.T) {
 	commodity, amount, _ := parseAmount("0.9 USD")
 	assert.Equal(t, "USD", commodity)

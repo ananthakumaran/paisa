@@ -371,6 +371,14 @@ func Build(db *gorm.DB, enableCompression bool) *gin.Engine {
 		c.JSON(200, GetCreditCards(db))
 	})
 
+	// M3-A importer framework. Specific importers (M3-B…E) self-register
+	// into internal/importer; these routes only dispatch to whatever is
+	// already in the registry, so no new wiring is needed when an
+	// importer is added.
+	router.POST("/api/import/detect", ImportDetect)
+	router.POST("/api/import/parse", ImportParse)
+	router.POST("/api/import/commit", ImportCommit)
+
 	router.GET("/api/credit_cards/:account", func(c *gin.Context) {
 		c.JSON(200, GetCreditCard(db, c.Param("account")))
 	})

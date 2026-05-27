@@ -18,6 +18,35 @@
   import * as toast from "bulma-toast";
   import FileModal from "$lib/components/FileModal.svelte";
   import Modal from "$lib/components/Modal.svelte";
+  // M3-A importer framework. Lives side-by-side with the existing Handlebars
+  // flow — `tab` toggles between them so we can ship the new pipeline
+  // without disrupting power users who have already built templates.
+  import ImportPreview from "$lib/components/ImportPreview.svelte";
+  import { createPreviewStore } from "$lib/importers/preview";
+
+  type Tab = "template" | "importer";
+  let tab: Tab = "template";
+
+  let knownAccounts: string[] = [];
+  let importerInput: any;
+  const importerState = createPreviewStore();
+
+  // Listen for a successful commit and surface a toast; the store resets to
+  // idle on its own so we don't need to clear anything here.
+  let lastCount = 0;
+  $: if ($importerState.lastCommitCount > 0 && $importerState.lastCommitCount !== lastCount) {
+    lastCount = $importerState.lastCommitCount;
+    toast.toast({
+      message: `Saved ${lastCount} transactions`,
+      type: "is-success"
+    });
+  }
+
+  async function handleImporterFiles(e: { detail: { acceptedFiles: File[] } }) {
+    const file = e.detail.acceptedFiles[0];
+    if (!file) return;
+    await importerState.uploadFile(file);
+  }
 
   let templates: ImportTemplate[] = [];
   let selectedTemplate: ImportTemplate;
@@ -45,6 +74,10 @@
     saveAsName = selectedTemplate.name;
     templateEditor = createTemplateEditor(selectedTemplate.content, templateEditorDom);
     previewEditor = createPreviewEditor(preview, previewEditorDom, { readonly: true });
+    // For the importer flow we need the list of known accounts to drive the
+    // counterpart autocomplete. /api/config already returns them.
+    const { accounts } = await ajax("/api/config");
+    knownAccounts = accounts || [];
   });
 
   $: saveAsNameDuplicate = !!_.find(templates, { name: saveAsName, template_type: "custom" });
@@ -247,185 +280,218 @@
 
 <section class="section tab-import" style="padding-bottom: 0 !important">
   <div class="container is-fluid">
-    <div class="columns mb-0">
-      <div class="column is-5 py-0">
-        <div class="box p-3 mb-3 overflow-x-auto">
-          <div class="field is-grouped mb-0">
-            <p class="control">
-              <span data-tippy-content="Create" data-tippy-followCursor="false">
-                <button class="button" on:click={(_e) => openTemplateCreateModal()}>
+    <div class="tabs is-toggle is-toggle-rounded is-small mb-3">
+      <ul>
+        <li class={tab === "template" ? "is-active" : ""}>
+          <a href={"#"} on:click|preventDefault={() => (tab = "template")}>
+            Handlebars Template (advanced)
+          </a>
+        </li>
+        <li class={tab === "importer" ? "is-active" : ""}>
+          <a href={"#"} on:click|preventDefault={() => (tab = "importer")}>Importers (new)</a>
+        </li>
+      </ul>
+    </div>
+
+    {#if tab === "importer"}
+      <div class="box p-4">
+        <Dropzone
+          multiple={false}
+          inputElement={importerInput}
+          accept=".csv,.txt,.xls,.xlsx,.pdf,.CSV,.TXT,.XLS,.XLSX,.PDF"
+          on:drop={handleImporterFiles}
+        >
+          Drag 'n' drop a statement file here, or click to select.
+        </Dropzone>
+        <div class="mt-3">
+          <ImportPreview state={importerState} accounts={knownAccounts} />
+        </div>
+      </div>
+    {/if}
+
+    <div class:is-hidden={tab !== "template"}>
+      <div class="columns mb-0">
+        <div class="column is-5 py-0">
+          <div class="box p-3 mb-3 overflow-x-auto">
+            <div class="field is-grouped mb-0">
+              <p class="control">
+                <span data-tippy-content="Create" data-tippy-followCursor="false">
+                  <button class="button" on:click={(_e) => openTemplateCreateModal()}>
+                    <span class="icon">
+                      <i class="fas fa-file-circle-plus" />
+                    </span>
+                  </button>
+                </span>
+
+                <span
+                  class="ml-4"
+                  data-tippy-followCursor="false"
+                  data-tippy-content={$templateEditorState.hasUnsavedChanges == false
+                    ? "No Unsaved Chagnes"
+                    : builtinNotAllowed("Save", selectedTemplate)}
+                >
+                  <button
+                    class="button"
+                    on:click={(_e) => save()}
+                    disabled={$templateEditorState.hasUnsavedChanges == false ||
+                      selectedTemplate?.template_type == "builtin"}
+                  >
+                    <span class="icon">
+                      <i class="fas fa-floppy-disk" />
+                    </span>
+                  </button>
+                </span>
+
+                <span
+                  data-tippy-followCursor="false"
+                  data-tippy-content={builtinNotAllowed("Delete", selectedTemplate)}
+                >
+                  <button
+                    class="button"
+                    on:click={(_e) => remove()}
+                    disabled={selectedTemplate?.template_type == "builtin"}
+                  >
+                    <span class="icon">
+                      <i class="fas fa-trash-can" />
+                    </span>
+                  </button>
+                </span>
+              </p>
+
+              <p class="control is-expanded">
+                <Select
+                  bind:value={selectedTemplate}
+                  showChevron={true}
+                  items={templates}
+                  label="name"
+                  itemId="id"
+                  searchable={true}
+                  clearable={false}
+                  floatingConfig={{ strategy: "fixed" }}
+                  on:change={(_e) => {
+                    saveAsName = selectedTemplate.name;
+                  }}
+                >
+                  <div slot="selection" let:selection>
+                    {selection.name}
+                    <span class="tag is-small is-link invertable is-light"
+                      >{selection.template_type}</span
+                    >
+                  </div>
+                  <div slot="item" let:item>
+                    <span class="name">{item.name}</span>
+                    <span class="tag is-small is-link invertable is-light"
+                      >{item.template_type}</span
+                    >
+                  </div>
+                </Select>
+              </p>
+            </div>
+          </div>
+          <div class="box py-0">
+            <div class="field">
+              <div class="control">
+                <div class="template-editor" bind:this={templateEditorDom} />
+              </div>
+            </div>
+          </div>
+          <div class="box py-0">
+            <div class="field">
+              <div class="control">
+                <button
+                  data-tippy-followCursor="false"
+                  data-tippy-content="Copy to Clipboard"
+                  class="button clipboard"
+                  disabled={_.isEmpty(preview)}
+                  on:click={copyToClipboard}
+                >
                   <span class="icon">
-                    <i class="fas fa-file-circle-plus" />
+                    <i class="fas fa-copy" />
                   </span>
                 </button>
-              </span>
-
-              <span
-                class="ml-4"
-                data-tippy-followCursor="false"
-                data-tippy-content={$templateEditorState.hasUnsavedChanges == false
-                  ? "No Unsaved Chagnes"
-                  : builtinNotAllowed("Save", selectedTemplate)}
-              >
                 <button
-                  class="button"
-                  on:click={(_e) => save()}
-                  disabled={$templateEditorState.hasUnsavedChanges == false ||
-                    selectedTemplate?.template_type == "builtin"}
+                  data-tippy-followCursor="false"
+                  data-tippy-content="Save"
+                  class="button save"
+                  disabled={_.isEmpty(preview)}
+                  on:click={openSaveModal}
                 >
                   <span class="icon">
                     <i class="fas fa-floppy-disk" />
                   </span>
                 </button>
-              </span>
-
-              <span
-                data-tippy-followCursor="false"
-                data-tippy-content={builtinNotAllowed("Delete", selectedTemplate)}
-              >
-                <button
-                  class="button"
-                  on:click={(_e) => remove()}
-                  disabled={selectedTemplate?.template_type == "builtin"}
-                >
-                  <span class="icon">
-                    <i class="fas fa-trash-can" />
-                  </span>
-                </button>
-              </span>
-            </p>
-
-            <p class="control is-expanded">
-              <Select
-                bind:value={selectedTemplate}
-                showChevron={true}
-                items={templates}
-                label="name"
-                itemId="id"
-                searchable={true}
-                clearable={false}
-                floatingConfig={{ strategy: "fixed" }}
-                on:change={(_e) => {
-                  saveAsName = selectedTemplate.name;
-                }}
-              >
-                <div slot="selection" let:selection>
-                  {selection.name}
-                  <span class="tag is-small is-link invertable is-light"
-                    >{selection.template_type}</span
-                  >
-                </div>
-                <div slot="item" let:item>
-                  <span class="name">{item.name}</span>
-                  <span class="tag is-small is-link invertable is-light">{item.template_type}</span>
-                </div>
-              </Select>
-            </p>
-          </div>
-        </div>
-        <div class="box py-0">
-          <div class="field">
-            <div class="control">
-              <div class="template-editor" bind:this={templateEditorDom} />
+                <div class="preview-editor" bind:this={previewEditorDom} />
+              </div>
             </div>
           </div>
         </div>
-        <div class="box py-0">
-          <div class="field">
-            <div class="control">
-              <button
-                data-tippy-followCursor="false"
-                data-tippy-content="Copy to Clipboard"
-                class="button clipboard"
-                disabled={_.isEmpty(preview)}
-                on:click={copyToClipboard}
-              >
-                <span class="icon">
-                  <i class="fas fa-copy" />
-                </span>
-              </button>
-              <button
-                data-tippy-followCursor="false"
-                data-tippy-content="Save"
-                class="button save"
-                disabled={_.isEmpty(preview)}
-                on:click={openSaveModal}
-              >
-                <span class="icon">
-                  <i class="fas fa-floppy-disk" />
-                </span>
-              </button>
-              <div class="preview-editor" bind:this={previewEditorDom} />
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="column is-7 py-0">
-        <div class="box p-3 mb-3">
-          <Dropzone
-            multiple={false}
-            inputElement={input}
-            accept=".csv,.txt,.xls,.xlsx,.pdf,.CSV,.TXT,.XLS,.XLSX,.PDF"
-            on:drop={handleFilesSelect}
-          >
-            Drag 'n' drop CSV, TXT, XLS, XLSX, PDF file here or click to select
-          </Dropzone>
-        </div>
-        <div class="is-flex justify-end mb-3 gap-4">
-          <div class="field color-switch">
-            <input
-              id="import-reverse"
-              type="checkbox"
-              bind:checked={options.reverse}
-              class="switch is-rounded is-small"
-            />
-            <label for="import-reverse">Reverse</label>
-          </div>
-          <div class="field color-switch">
-            <input
-              id="trim-reverse"
-              type="checkbox"
-              bind:checked={options.trim}
-              class="switch is-rounded is-small"
-            />
-            <label for="trim-reverse">Trim</label>
-          </div>
-        </div>
-        {#if parseErrorMessage}
-          <div class="message invertable is-danger">
-            <div class="message-header">Failed to parse document</div>
-            <div class="message-body">{parseErrorMessage}</div>
-          </div>
-        {/if}
-        {#if !_.isEmpty(data)}
-          <div class="table-wrapper">
-            <table
-              class="mt-0 table is-bordered is-size-7 is-narrow has-sticky-header has-sticky-column"
+        <div class="column is-7 py-0">
+          <div class="box p-3 mb-3">
+            <Dropzone
+              multiple={false}
+              inputElement={input}
+              accept=".csv,.txt,.xls,.xlsx,.pdf,.CSV,.TXT,.XLS,.XLSX,.PDF"
+              on:drop={handleFilesSelect}
             >
-              <thead>
-                <tr>
-                  <th />
-                  {#each _.range(0, columnCount) as ci}
-                    <th class="has-background-light">{String.fromCharCode(65 + ci)}</th>
-                  {/each}
-                </tr>
-              </thead>
-              <tbody>
-                {#each data as row, ri}
+              Drag 'n' drop CSV, TXT, XLS, XLSX, PDF file here or click to select
+            </Dropzone>
+          </div>
+          <div class="is-flex justify-end mb-3 gap-4">
+            <div class="field color-switch">
+              <input
+                id="import-reverse"
+                type="checkbox"
+                bind:checked={options.reverse}
+                class="switch is-rounded is-small"
+              />
+              <label for="import-reverse">Reverse</label>
+            </div>
+            <div class="field color-switch">
+              <input
+                id="trim-reverse"
+                type="checkbox"
+                bind:checked={options.trim}
+                class="switch is-rounded is-small"
+              />
+              <label for="trim-reverse">Trim</label>
+            </div>
+          </div>
+          {#if parseErrorMessage}
+            <div class="message invertable is-danger">
+              <div class="message-header">Failed to parse document</div>
+              <div class="message-body">{parseErrorMessage}</div>
+            </div>
+          {/if}
+          {#if !_.isEmpty(data)}
+            <div class="table-wrapper">
+              <table
+                class="mt-0 table is-bordered is-size-7 is-narrow has-sticky-header has-sticky-column"
+              >
+                <thead>
                   <tr>
-                    <th class="has-background-light"><b>{ri}</b></th>
-                    {#each row as cell}
-                      <td>{cell || ""}</td>
+                    <th />
+                    {#each _.range(0, columnCount) as ci}
+                      <th class="has-background-light">{String.fromCharCode(65 + ci)}</th>
                     {/each}
                   </tr>
-                {/each}
-              </tbody>
-            </table>
-          </div>
-        {/if}
+                </thead>
+                <tbody>
+                  {#each data as row, ri}
+                    <tr>
+                      <th class="has-background-light"><b>{ri}</b></th>
+                      {#each row as cell}
+                        <td>{cell || ""}</td>
+                      {/each}
+                    </tr>
+                  {/each}
+                </tbody>
+              </table>
+            </div>
+          {/if}
+        </div>
       </div>
+      <div />
     </div>
-    <div />
   </div>
 </section>
 

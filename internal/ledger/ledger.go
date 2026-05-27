@@ -443,6 +443,7 @@ func parseHLedgerCommodities(journalPath string) ([]string, error) {
 
 func parseLedgerPrices(output string, defaultCurrency string) ([]price.Price, error) {
 	var prices []price.Price
+	defaultCurrency = NormalizeCurrency(defaultCurrency)
 	re := regexp.MustCompile(`P (\d{4}\/\d{2}\/\d{2}) (?:\d{2}:\d{2}:\d{2}) ([^\s\d.-]+|"[^"]+") ([^\n]+)\n`)
 	matches := re.FindAllStringSubmatch(output, -1)
 
@@ -452,6 +453,7 @@ func parseLedgerPrices(output string, defaultCurrency string) ([]price.Price, er
 			return nil, err
 		}
 
+		target = NormalizeCurrency(target)
 		if target != defaultCurrency {
 			continue
 		}
@@ -471,6 +473,7 @@ func parseLedgerPrices(output string, defaultCurrency string) ([]price.Price, er
 
 func parseHLedgerPrices(output string, defaultCurrency string) ([]price.Price, error) {
 	var prices []price.Price
+	defaultCurrency = NormalizeCurrency(defaultCurrency)
 	re := regexp.MustCompile(`P (\d{4}-\d{2}-\d{2}) ([^\s\d.-]+|"[^"]+") ([^\n]+)\n`)
 	matches := re.FindAllStringSubmatch(output, -1)
 
@@ -480,9 +483,10 @@ func parseHLedgerPrices(output string, defaultCurrency string) ([]price.Price, e
 			return nil, err
 		}
 
+		target = NormalizeCurrency(target)
 		commodity := utils.UnQuote(match[2])
 		if target != defaultCurrency {
-			if commodity == defaultCurrency && !value.Equal(decimal.Zero) {
+			if NormalizeCurrency(commodity) == defaultCurrency && !value.Equal(decimal.Zero) {
 				commodity = target
 				target = defaultCurrency
 				value = decimal.NewFromInt(1).Div(value)
@@ -504,6 +508,7 @@ func parseHLedgerPrices(output string, defaultCurrency string) ([]price.Price, e
 
 func parseBeancountPrices(output string, defaultCurrency string) ([]price.Price, error) {
 	var prices []price.Price
+	defaultCurrency = NormalizeCurrency(defaultCurrency)
 	re := regexp.MustCompile(`(\d{4}-\d{2}-\d{2}) price ([^ ]+)\s*([^\n]+)\n`)
 	matches := re.FindAllStringSubmatch(output, -1)
 
@@ -513,9 +518,10 @@ func parseBeancountPrices(output string, defaultCurrency string) ([]price.Price,
 			return nil, err
 		}
 
+		target = NormalizeCurrency(target)
 		commodity := utils.UnQuote(match[2])
 		if target != defaultCurrency {
-			if commodity == defaultCurrency && !value.Equal(decimal.Zero) {
+			if NormalizeCurrency(commodity) == defaultCurrency && !value.Equal(decimal.Zero) {
 				commodity = target
 				target = defaultCurrency
 				value = decimal.NewFromInt(1).Div(value)

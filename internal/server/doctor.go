@@ -24,13 +24,26 @@ type Level string
 const (
 	WARN  Level = "warning"
 	ERROR Level = "danger"
+	INFO  Level = "info"
+)
+
+// Severity is the semantic classification of a diagnosis. The frontend uses
+// it to group, color, and collapse issues. Distinct from Level, which doubles
+// as a bulma css class hint (danger/warning/info) and predates this field.
+type Severity string
+
+const (
+	SeverityError   Severity = "error"
+	SeverityWarning Severity = "warning"
+	SeverityInfo    Severity = "info"
 )
 
 type Issue struct {
-	Level       Level  `json:"level"`
-	Summary     string `json:"summary"`
-	Description string `json:"description"`
-	Details     string `json:"details"`
+	Level       Level    `json:"level"`
+	Severity    Severity `json:"severity"`
+	Summary     string   `json:"summary"`
+	Description string   `json:"description"`
+	Details     string   `json:"details"`
 }
 
 type Rule struct {
@@ -47,36 +60,46 @@ func init() {
 		{
 			Issue: Issue{
 				Level:       ERROR,
+				Severity:    SeverityError,
 				Summary:     "Negative Balance",
 				Description: "The running balance of an <b>asset</b> account is not supposed to go negative at any time. This issue typically happens due to incorrect transaction entries."},
 			Predicate: ruleAssetRegisterNonNegative},
 		{
 			Issue: Issue{
 				Level:       ERROR,
+				Severity:    SeverityError,
 				Summary:     "Credit Entry",
 				Description: "Income account should never have credit entry."},
 			Predicate: ruleNonCreditAccount},
 		{
 			Issue: Issue{
-				Level:       ERROR,
+				// Demoted to info: a negative posting in an Expenses
+				// account is the standard ledger pattern for recording
+				// refunds (退款/红冲), 医保报销, returned travel
+				// expenses, etc. It is informational, not a defect.
+				Level:       INFO,
+				Severity:    SeverityInfo,
 				Summary:     "Debit Entry",
-				Description: "Expense Account should never have debit entry."},
+				Description: "Expense account has a debit (negative) entry. This is the normal way to record a refund or reversal in a ledger journal. Review only if it was unintentional."},
 			Predicate: ruleNonDebitAccount},
 		{
 			Issue: Issue{
 				Level:       ERROR,
+				Severity:    SeverityError,
 				Summary:     "Exchange Price Missing",
 				Description: "Exchange price is missing for the commodity."},
 			Predicate: ruleExchangePriceMissing},
 		{
 			Issue: Issue{
 				Level:       WARN,
+				Severity:    SeverityWarning,
 				Summary:     "Unit Price Mismatch",
 				Description: "Unit price used in the journal doesn't match the price fetched from external system."},
 			Predicate: ruleJournalPriceMismatch},
 		{
 			Issue: Issue{
 				Level:       WARN,
+				Severity:    SeverityWarning,
 				Summary:     "Asset Accounts missing from Allocation Target",
 				Description: "Asset accounts are not part of any allocation target."},
 			Predicate: ruleAllocationTargetMissingAssetAccounts}}

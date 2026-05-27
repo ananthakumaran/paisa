@@ -380,7 +380,7 @@ func Build(db *gorm.DB, enableCompression bool) *gin.Engine {
 	// already in the registry, so no new wiring is needed when an
 	// importer is added.
 	router.POST("/api/import/detect", ImportDetect)
-	router.POST("/api/import/parse", ImportParse)
+	router.POST("/api/import/parse", ImportParse(db))
 	router.POST("/api/import/commit", ImportCommit(db))
 
 	router.GET("/api/credit_cards/:account", func(c *gin.Context) {

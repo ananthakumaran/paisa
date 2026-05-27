@@ -11,6 +11,7 @@ import (
 	"github.com/ananthakumaran/paisa/internal/model/portfolio"
 	"github.com/ananthakumaran/paisa/internal/model/posting"
 	"github.com/ananthakumaran/paisa/internal/model/price"
+	"github.com/ananthakumaran/paisa/internal/prediction"
 	"github.com/ananthakumaran/paisa/internal/scraper"
 	"github.com/samber/lo"
 	log "github.com/sirupsen/logrus"
@@ -23,6 +24,15 @@ func AutoMigrate(db *gorm.DB) {
 	db.AutoMigrate(&portfolio.Portfolio{})
 	db.AutoMigrate(&price.Price{})
 	db.AutoMigrate(&cache.Cache{})
+	// account_learning persists user-confirmed payee → account mappings
+	// captured by the importer preview UI (issue #24). The prediction
+	// package owns the schema so its table sits alongside the model
+	// tables rather than under model/. Failure here is logged but not
+	// fatal — the suggestion layer falls back to the seed dictionary
+	// when the table is missing.
+	if err := prediction.AutoMigrateLearning(db); err != nil {
+		log.Warnf("failed to migrate account_learning table: %v", err)
+	}
 }
 
 func SyncJournal(db *gorm.DB) (string, error) {

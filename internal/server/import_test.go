@@ -12,8 +12,11 @@ import (
 	"github.com/ananthakumaran/paisa/internal/config"
 	"github.com/ananthakumaran/paisa/internal/importer"
 	"github.com/ananthakumaran/paisa/internal/importer/stub"
+	"github.com/ananthakumaran/paisa/internal/prediction"
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
+	"gorm.io/driver/sqlite"
+	"gorm.io/gorm"
 )
 
 // helper: build a gin engine with just the three import routes wired against
@@ -29,7 +32,10 @@ func newImportTestRouter(t *testing.T) *gin.Engine {
 
 	r := gin.New()
 	r.POST("/api/import/detect", ImportDetect)
-	r.POST("/api/import/parse", ImportParse)
+	// nil db: the parse handler's learning-overlay step (M3-F, #24) is
+	// skipped, which is what we want — these unit tests verify the
+	// dispatch + JSON contract without a real sqlite in the loop.
+	r.POST("/api/import/parse", ImportParse(nil))
 	// nil db: the auto-sync branch is skipped, which is what we want — these
 	// unit tests verify the file-write contract without a real sqlite +
 	// ledger CLI in the loop. Integration coverage lives in tests/.
@@ -234,4 +240,91 @@ func TestImportDetectBadBase64(t *testing.T) {
 	}
 	w := doJSON(r, "/api/import/detect", body)
 	assert.Equal(t, 400, w.Code)
+}
+
+// TestImportParseAppliesLearningOverlay drives the M3-F (#24) Layer-1
+// behaviour end-to-end through the HTTP handler. We seed the
+// account_learning table with a (payee → account) row, then ask the parse
+// handler to re-parse a stub CSV containing the same payee. The handler
+// should overlay the learned mapping on top of whatever the importer
+// suggested.
+func TestImportParseAppliesLearningOverlay(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+	importer.ResetForTesting()
+	stub.Register()
+
+	db, err := gorm.Open(sqlite.Open(":memory:"), &gorm.Config{})
+	assert.NoError(t, err)
+	assert.NoError(t, prediction.AutoMigrateLearning(db))
+	// Teach the system that "Coffee" goes to a custom account. The stub
+	// importer leaves SuggestedAccount blank, so without the overlay the
+	// response would carry an empty string.
+	assert.NoError(t, prediction.RecordUserChoice(db, "Coffee", "Expenses:Coffee:Daily"))
+
+	r := gin.New()
+	r.POST("/api/import/parse", ImportParse(db))
+
+	body := map[string]string{
+		"importer_code":  stub.Code,
+		"content_base64": b64("date,payee,amount\n2024-01-02,Coffee,4.50\n"),
+	}
+	w := doJSON(r, "/api/import/parse", body)
+	assert.Equal(t, 200, w.Code, "body: %s", w.Body.String())
+
+	var resp struct {
+		Transactions []struct {
+			Payee            string `json:"payee"`
+			SuggestedAccount string `json:"suggested_account"`
+		} `json:"transactions"`
+	}
+	assert.NoError(t, json.Unmarshal(w.Body.Bytes(), &resp))
+	if assert.Len(t, resp.Transactions, 1) {
+		assert.Equal(t, "Coffee", resp.Transactions[0].Payee)
+		assert.Equal(t, "Expenses:Coffee:Daily", resp.Transactions[0].SuggestedAccount,
+			"learning overlay must replace the importer's suggestion")
+	}
+}
+
+// TestImportCommitRecordsLearning drives the M3-F (#24) Layer-2 behaviour
+// end-to-end: committing a transaction with a non-empty SuggestedAccount
+// must persist a (payee → account) row in account_learning so the NEXT
+// parse for the same payee gets the same suggestion.
+func TestImportCommitRecordsLearning(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+	importer.ResetForTesting()
+	stub.Register()
+
+	tmpDir := t.TempDir()
+	journalPath := loadConfigInDir(t, tmpDir, false)
+	assert.NoError(t, os.WriteFile(journalPath, []byte(""), 0644))
+
+	db, err := gorm.Open(sqlite.Open(":memory:"), &gorm.Config{})
+	assert.NoError(t, err)
+	assert.NoError(t, prediction.AutoMigrateLearning(db))
+
+	r := gin.New()
+	r.POST("/api/import/commit", ImportCommit(db))
+
+	body := map[string]any{
+		"source_account": "Assets:Bank:Chase",
+		"ledger_file":    "main.ledger",
+		"txns": []map[string]any{
+			{
+				"date":              "2024-01-02T00:00:00Z",
+				"payee":             "星巴克咖啡",
+				"amount":            "38.00",
+				"currency":          "CNY",
+				"suggested_account": "Expenses:Coffee:Starbucks",
+			},
+		},
+	}
+	w := doJSON(r, "/api/import/commit", body)
+	// Without a real ledger CLI / posting model the auto-sync branch
+	// surfaces a warning but the write itself still succeeds — we only
+	// care that the learning row landed.
+	assert.Contains(t, []int{200, 500}, w.Code, "body: %s", w.Body.String())
+
+	got := prediction.LookupLearned(db, "星巴克咖啡")
+	assert.Equal(t, "Expenses:Coffee:Starbucks", got,
+		"commit must persist (payee → account) into account_learning")
 }

@@ -20,6 +20,7 @@ import (
 	"unicode/utf8"
 
 	"github.com/ananthakumaran/paisa/internal/importer"
+	"github.com/ananthakumaran/paisa/internal/prediction"
 	"github.com/shopspring/decimal"
 	"golang.org/x/text/encoding/simplifiedchinese"
 	"golang.org/x/text/transform"
@@ -340,47 +341,46 @@ func parseDate(s string) (time.Time, error) {
 	return time.Time{}, fmt.Errorf("unsupported date format: %s", s)
 }
 
-// suggestAccount applies coarse keyword heuristics to pick the counterpart
-// account. The mapping is intentionally short — anything not matched falls
-// back to Expenses/Income:Unknown so the import preview UI can prompt the
-// user. M3-F's TF-IDF predictor may override these later in the pipeline.
+// suggestAccount picks a counterpart account for the row.
+//
+// As of M3-F (#24), the merchant-keyword mapping that used to live inline
+// here has moved to the shared seed dictionary in
+// internal/prediction/seed_zh_cn.go so the wechat importer (and any future
+// CNY-denominated importer) gets the same suggestions for free. This
+// function now only handles the cases that depend on alipay-specific
+// signals the seed dictionary cannot see — namely the income / expense
+// direction (encoded in the signed amount) which decides whether the
+// fallback bucket is Income:Unknown vs Expenses:Unknown.
+//
+// The seed dictionary also contains a small number of income-side hints
+// (e.g. "工资" → Income:Salary, "结息" → Income:BankInterest); we feed
+// payee + note + typ into MatchSeed so those still fire when the row is
+// negative. The previous behaviour of "工资" → Income:Salary therefore
+// continues to hold through the seed dictionary rather than the inline
+// switch.
+//
+// nil db is intentional: Parse is stateless by contract (see
+// importer.go). Layer-1 (learned mappings) is applied by the server's
+// /api/import/parse handler — see internal/server/import.go — after this
+// function returns.
 func suggestAccount(payee, note, typ string, signed decimal.Decimal) string {
-	hay := payee + " " + note + " " + typ
-	// Income side first — "工资" can appear as either type or note.
+	fallback := "Expenses:Unknown"
 	if signed.IsNegative() {
-		switch {
-		case containsAny(hay, "工资", "薪资"):
-			return "Income:Salary"
-		default:
-			return "Income:Unknown"
+		fallback = "Income:Unknown"
+	}
+	// The seed dictionary's MatchSeed inspects payee then note. The alipay
+	// 交易分类 (typ) is also useful context — e.g. "转账" / "退款" rows
+	// often carry the discriminator there. We splice typ into the note
+	// channel so the matcher gets all three fields without expanding its
+	// public signature.
+	noteHay := note
+	if typ != "" {
+		if noteHay != "" {
+			noteHay += " "
 		}
+		noteHay += typ
 	}
-	// Refunds remain on the expense side at this point (they were re-signed
-	// to negative above and went down the income branch). Anything reaching
-	// here is a real outflow.
-	switch {
-	case containsAny(hay, "星巴克", "瑞幸", "麦当劳", "肯德基", "必胜客", "美团"):
-		return "Expenses:Dining"
-	case containsAny(hay, "滴滴", "高德"):
-		return "Expenses:Transport:Taxi"
-	case containsAny(hay, "中国移动", "中国联通", "中国电信"):
-		return "Expenses:Utilities:Phone"
-	case containsAny(hay, "国家电网", "水电", "燃气"):
-		return "Expenses:Utilities"
-	case containsAny(hay, "京东", "拼多多", "淘宝", "天猫"):
-		return "Expenses:Shopping"
-	default:
-		return "Expenses:Unknown"
-	}
-}
-
-func containsAny(s string, needles ...string) bool {
-	for _, n := range needles {
-		if strings.Contains(s, n) {
-			return true
-		}
-	}
-	return false
+	return prediction.SuggestForPayee(nil, payee, noteHay, fallback)
 }
 
 // decodeToUTF8 returns `content` as a UTF-8 string, autodetecting GBK vs

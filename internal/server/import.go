@@ -11,6 +11,7 @@ import (
 
 	"github.com/ananthakumaran/paisa/internal/config"
 	"github.com/ananthakumaran/paisa/internal/importer"
+	"github.com/ananthakumaran/paisa/internal/prediction"
 	"github.com/ananthakumaran/paisa/internal/utils"
 	"github.com/gin-gonic/gin"
 	"github.com/shopspring/decimal"
@@ -90,28 +91,57 @@ func ImportDetect(c *gin.Context) {
 // ImportParse implements POST /api/import/parse. Dispatches to the importer
 // identified by `importer_code` and returns the parsed transactions. The UI
 // then renders them in an editable preview before commit.
-func ImportParse(c *gin.Context) {
-	var req importParseRequest
-	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
+//
+// After the importer fills SuggestedAccount via the seed dictionary, this
+// handler overlays the learned mapping from the account_learning table —
+// see prediction.SuggestForPayee. Doing the overlay here (rather than
+// inside Parse) keeps importers stateless and gives every importer the
+// learning benefit for free.
+//
+// A nil db short-circuits the overlay so unit tests can drive the handler
+// without an open database; production wiring in server.Build always
+// passes a real *gorm.DB.
+func ImportParse(db *gorm.DB) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		var req importParseRequest
+		if err := c.ShouldBindJSON(&req); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+		imp := importer.ByCode(req.ImporterCode)
+		if imp == nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": fmt.Sprintf("unknown importer: %q", req.ImporterCode)})
+			return
+		}
+		content, err := base64.StdEncoding.DecodeString(req.ContentBase64)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "invalid base64: " + err.Error()})
+			return
+		}
+		txns, err := imp.Parse(content)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+
+		// Layer-1 of the suggestion stack: pull the user-confirmed
+		// mapping (if any) for each payee. We pass the importer's own
+		// suggestion as the fallback so the result never regresses
+		// quality — a missing learned entry just keeps the seed-or-
+		// importer-heuristic suggestion intact.
+		if db != nil {
+			for i := range txns {
+				txns[i].SuggestedAccount = prediction.SuggestForPayee(
+					db,
+					txns[i].Payee,
+					txns[i].Note,
+					txns[i].SuggestedAccount,
+				)
+			}
+		}
+
+		c.JSON(http.StatusOK, gin.H{"transactions": txns})
 	}
-	imp := importer.ByCode(req.ImporterCode)
-	if imp == nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": fmt.Sprintf("unknown importer: %q", req.ImporterCode)})
-		return
-	}
-	content, err := base64.StdEncoding.DecodeString(req.ContentBase64)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid base64: " + err.Error()})
-		return
-	}
-	txns, err := imp.Parse(content)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-	c.JSON(http.StatusOK, gin.H{"transactions": txns})
 }
 
 // ImportCommit implements POST /api/import/commit. Appends the user-confirmed
@@ -206,6 +236,23 @@ func ImportCommit(db *gorm.DB) gin.HandlerFunc {
 		if _, err := f.WriteString(rendered.String()); err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"saved": false, "errors": []string{err.Error()}})
 			return
+		}
+
+		// Record each (payee → account) pair into the learning table so
+		// next time the same payee imports, ImportParse's overlay picks
+		// up the user's preferred mapping. This is the "Layer 2" half of
+		// issue #24 and is intentionally opt-in: the only call site is
+		// this explicit commit handler, NEVER the importer Parse step.
+		//
+		// We swallow per-row errors because a learning-write failure
+		// must not undo a successful journal append — the ledger file is
+		// the source of truth.
+		if db != nil {
+			for _, t := range req.Txns {
+				if err := prediction.RecordUserChoice(db, t.Payee, t.SuggestedAccount); err != nil {
+					log.Warnf("account_learning record failed for payee=%q: %v", t.Payee, err)
+				}
+			}
 		}
 
 		// Auto-sync so the imported postings show up in dashboards / queries

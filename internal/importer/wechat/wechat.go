@@ -29,6 +29,7 @@ import (
 	"time"
 
 	"github.com/ananthakumaran/paisa/internal/importer"
+	"github.com/ananthakumaran/paisa/internal/prediction"
 	"github.com/shopspring/decimal"
 )
 
@@ -269,11 +270,31 @@ func parseRow(row []string) (importer.ParsedTxn, bool, error) {
 	return txn, true, nil
 }
 
-// suggestAccount returns a best-effort counterpart account based on cheap
-// substring heuristics. The same vocabulary will be used by the M3-B alipay
-// importer once it lands, so users see consistent suggestions whichever
-// statement they import. The TF-IDF predictor in M3-F may override these
-// at commit time — Detect's job here is just to give a sensible default.
+// suggestAccount returns a best-effort counterpart account.
+//
+// As of M3-F (#24) the merchant-keyword heuristics that used to live inline
+// here are gone — they moved to the shared seed dictionary in
+// internal/prediction/seed_zh_cn.go so the alipay importer (and any future
+// CNY-denominated importer) gets the same suggestions for free. This
+// function now only handles the cases that depend on WeChat-specific
+// fields the seed dictionary does not see (transaction-type and flow
+// direction): red-packet send vs receive, pure-transfer rows, and the
+// fallback for empty matches.
+//
+// Order of checks:
+//  1. Red-packet rules first. "微信红包" lives in the goods (商品) field,
+//     not in payee — and the income/expense direction is what disambiguates
+//     Expenses:Social:RedPacket vs Income:RedPacket. The seed dictionary
+//     has no way to know about flow, so we keep this rule here.
+//  2. "转账" → Assets:Checking placeholder. We genuinely can't guess the
+//     other end of a peer-to-peer transfer; the UI nudges the user.
+//  3. prediction.SuggestForPayee with a nil DB. db is nil here on purpose:
+//     Parse is stateless by contract (see importer.go), and pulling a DB
+//     handle into the parse path would force every importer to grow a
+//     constructor or accept a context. Layer-1 (learned mappings) is
+//     applied by the server's parse handler — see internal/server/import.go
+//     overlayLearning — after Parse returns.
+//  4. Direction-aware fallback (Income:Unknown vs Expenses:Unknown).
 func suggestAccount(payee, goods, tradeType, flow string) string {
 	// Red packet rules first — these are unambiguous and should not be
 	// shadowed by the merchant table even if a future "星巴克红包" promo
@@ -294,31 +315,13 @@ func suggestAccount(payee, goods, tradeType, flow string) string {
 		return "Assets:Checking"
 	}
 
-	// Merchant heuristics. Substring match on payee is enough; the data
-	// is dense and the vocabulary is shared with the alipay importer.
-	type rule struct {
-		needles []string
-		account string
-	}
-	merchantRules := []rule{
-		{[]string{"星巴克", "瑞幸"}, "Expenses:Dining"},
-		{[]string{"滴滴", "高德"}, "Expenses:Transport:Taxi"},
-		{[]string{"京东", "拼多多", "淘宝"}, "Expenses:Shopping"},
-	}
-	for _, rule := range merchantRules {
-		for _, n := range rule.needles {
-			if strings.Contains(payee, n) {
-				return rule.account
-			}
-		}
-	}
-
-	// Defaults — direction tells us which side of the ledger to fall back
-	// to. The user will refine the bucket in the preview UI.
+	// Direction-aware fallback. The seed dictionary returns "" when it
+	// has no opinion; SuggestForPayee then returns this fallback verbatim.
+	fallback := "Expenses:Unknown"
 	if flow == "收入" {
-		return "Income:Unknown"
+		fallback = "Income:Unknown"
 	}
-	return "Expenses:Unknown"
+	return prediction.SuggestForPayee(nil, payee, goods, fallback)
 }
 
 // isBlankRow returns true when every field of the record is empty (after

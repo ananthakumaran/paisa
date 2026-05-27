@@ -45,6 +45,10 @@ import _ from "lodash";
 
 import "@formatjs/intl-numberformat/polyfill";
 import "@formatjs/intl-numberformat/locale-data/en";
+// `zh-CN` resolves to `zh-Hans-CN` in CLDR. The polyfill needs the
+// `zh-Hans` dataset for compact (万 / 亿) and grouping rules to work
+// when the user picks the zh-CN locale.
+import "@formatjs/intl-numberformat/locale-data/zh-Hans";
 
 Handlebars.registerHelper(
   _.mapValues(helpers, (helper, name) => {

@@ -4,12 +4,21 @@ import _ from "lodash";
 import * as d3 from "d3";
 import { loading } from "../store";
 import type { JSONSchema7 } from "json-schema";
-import { get } from "svelte/store";
-import { obscure } from "../persisted_store";
 import { error } from "@sveltejs/kit";
 import { goto } from "$app/navigation";
 import chroma from "chroma-js";
 import { iconGlyph } from "./icon";
+
+export {
+  configUpdated,
+  formatCurrency,
+  formatCurrencyCrude,
+  formatCurrencyCrudeWithPrecision,
+  formatFloat,
+  formatFloatUptoPrecision,
+  formatPercentage,
+  formatFixedWidthFloat
+} from "./format";
 
 export interface AutoCompleteItem {
   label: string;
@@ -835,30 +844,6 @@ export function logout() {
   localStorage.removeItem(tokenKey);
 }
 
-function normalize(value: number) {
-  if (get(obscure)) {
-    value = 0;
-  }
-
-  // minus 0
-  if (1 / value === -Infinity) {
-    value = 0;
-  }
-
-  if (!Number.isFinite(value)) {
-    value = 0;
-  }
-
-  return value;
-}
-
-export function configUpdated() {
-  dayjs.locale("en");
-  dayjs.updateLocale("en", {
-    weekStart: USER_CONFIG.week_starting_day
-  });
-}
-
 export function setNow(value: dayjs.Dayjs) {
   if (value) {
     globalThis.__now = value;
@@ -870,94 +855,6 @@ export function now(): dayjs.Dayjs {
     return globalThis.__now;
   }
   return dayjs();
-}
-
-function unicodeMinus(value: string) {
-  return value.replace(/^-/, "\u2212");
-}
-
-export function formatCurrency(value: number, precision: number = null) {
-  value = normalize(value);
-
-  if (precision == null) {
-    precision = USER_CONFIG.display_precision;
-  }
-
-  return unicodeMinus(
-    value.toLocaleString(USER_CONFIG.locale, {
-      minimumFractionDigits: precision,
-      maximumFractionDigits: precision
-    })
-  );
-}
-
-export function formatCurrencyCrude(value: number) {
-  return formatCurrencyCrudeWithPrecision(value, -1);
-}
-
-export function formatCurrencyCrudeWithPrecision(value: number, precision: number) {
-  value = normalize(value);
-
-  const options: Intl.NumberFormatOptions = {
-    notation: "compact"
-  };
-
-  if (precision < 0) {
-    options.maximumFractionDigits = 2;
-  } else {
-    options.maximumFractionDigits = precision;
-    options.minimumFractionDigits = precision;
-  }
-
-  return unicodeMinus(value.toLocaleString(USER_CONFIG.locale, options));
-}
-
-export function formatFloat(value: number, precision = 2) {
-  value = normalize(value);
-
-  return unicodeMinus(
-    value.toLocaleString(USER_CONFIG.locale, {
-      minimumFractionDigits: precision,
-      maximumFractionDigits: precision
-    })
-  );
-}
-
-export function formatFloatUptoPrecision(value: number, precision = 2) {
-  value = normalize(value);
-
-  return unicodeMinus(
-    value.toLocaleString(USER_CONFIG.locale, {
-      maximumFractionDigits: precision
-    })
-  );
-}
-
-export function formatPercentage(value: number, precision = 0) {
-  value = normalize(value);
-
-  return unicodeMinus(
-    value.toLocaleString(USER_CONFIG.locale, {
-      style: "percent",
-      minimumFractionDigits: precision
-    })
-  );
-}
-
-export function formatFixedWidthFloat(value: number, width: number, precision = 2) {
-  value = normalize(value);
-
-  const formatted = unicodeMinus(
-    value.toLocaleString(USER_CONFIG.locale, {
-      minimumFractionDigits: precision,
-      maximumFractionDigits: precision
-    })
-  );
-
-  if (formatted.length < width) {
-    return formatted.padStart(width, " ");
-  }
-  return formatted;
 }
 
 export function forEachMonth(

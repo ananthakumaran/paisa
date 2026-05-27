@@ -20,6 +20,8 @@ export {
   formatFixedWidthFloat
 } from "./format";
 
+export { calendarYear, forEachCalendarYear } from "./calendar_year";
+
 export interface AutoCompleteItem {
   label: string;
   id: string;
@@ -198,7 +200,12 @@ export interface LiabilityBreakdown {
 
 export interface Aggregate {
   date: dayjs.Dayjs;
+  // `account` is the synthetic path the backend builds for the
+  // Allocation tree (e.g. "Allocation:mutual_fund:Assets/Saving/CMB/Fund").
+  // Use `original_account` when you need the real ledger account name.
   account: string;
+  original_account?: string;
+  kind?: string;
   market_amount: number;
 
   // computed
@@ -285,7 +292,7 @@ export interface PostingPair {
   tax: Tax;
 }
 
-export interface FYCapitalGain {
+export interface YearCapitalGain {
   tax: Tax;
   units: number;
   purchase_price: number;
@@ -316,7 +323,7 @@ export interface Harvestable {
 export interface CapitalGain {
   account: string;
   tax_category: string;
-  fy: { [key: string]: FYCapitalGain };
+  year: { [key: string]: YearCapitalGain };
 }
 
 export type Severity = "error" | "warning" | "info";
@@ -886,34 +893,6 @@ export function forEachYear(
   }
 }
 
-export function forEachFinancialYear(
-  start: dayjs.Dayjs,
-  end: dayjs.Dayjs,
-  cb?: (current: dayjs.Dayjs) => any
-) {
-  let current = beginningOfFinancialYear(start);
-  const years: dayjs.Dayjs[] = [];
-  while (current.isSameOrBefore(end, "month")) {
-    if (cb) {
-      cb(current);
-    }
-    years.push(current);
-    current = current.add(1, "year");
-  }
-  return years;
-}
-
-function beginningOfFinancialYear(date: dayjs.Dayjs) {
-  date = date.startOf("month");
-  if (date.month() + 1 < USER_CONFIG.financial_year_starting_month) {
-    return date
-      .add(-1, "year")
-      .add(USER_CONFIG.financial_year_starting_month - date.month() - 1, "month");
-  } else {
-    return date.add(-(date.month() + 1 - USER_CONFIG.financial_year_starting_month), "month");
-  }
-}
-
 export function firstName(account: string) {
   return _.first(account.split(":"));
 }
@@ -1035,22 +1014,6 @@ export function rem(value: number) {
     return value * 0.857;
   } else {
     return value;
-  }
-}
-
-export function financialYear(date: dayjs.Dayjs) {
-  if (USER_CONFIG.financial_year_starting_month == 1) {
-    return date.year().toString();
-  }
-
-  if (date.month() < USER_CONFIG.financial_year_starting_month - 1) {
-    return `${date.year() - 1} - ${(date.year() % 100).toLocaleString("en-US", {
-      minimumIntegerDigits: 2
-    })}`;
-  } else {
-    return `${date.year()} - ${((date.year() + 1) % 100).toLocaleString("en-US", {
-      minimumIntegerDigits: 2
-    })}`;
   }
 }
 

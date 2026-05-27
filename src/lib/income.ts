@@ -174,8 +174,10 @@ function renderIncomeTimeline(incomes: Income[], id: string, timeFormat: string)
   });
 }
 
-function financialYear(card: IncomeYearlyCard) {
-  return `${card.start_date.format("YYYY")} - ${card.end_date.format("YY")}`;
+// Calendar-year label for an IncomeYearlyCard. The backend now emits
+// Jan–Dec ranges (issue #5), so the start_date's year suffices.
+function yearLabel(card: IncomeYearlyCard) {
+  return card.start_date.format("YYYY");
 }
 
 export function renderYearlyIncomeTimeline(yearlyCards: IncomeYearlyCard[]): Legend[] {
@@ -228,7 +230,7 @@ export function renderYearlyIncomeTimeline(yearlyCards: IncomeYearlyCard[]): Leg
     points.push(
       _.merge(
         {
-          year: financialYear(card),
+          year: yearLabel(card),
           postings: postings
         },
         defaultValues,
@@ -339,7 +341,7 @@ export function renderYearlyTimelineOf(
 
   const points: Point[] = _.map(yearlyCards, (card) => {
     return {
-      year: financialYear(card),
+      year: yearLabel(card),
       value: card[key]
     };
   });

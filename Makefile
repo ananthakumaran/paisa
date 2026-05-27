@@ -31,7 +31,7 @@ parser:
 lint:
 	./node_modules/.bin/prettier --check src
 	npm run check
-	test -z $$(gofmt -l .)
+	test -z $$(gofmt -l $$(find . -name '*.go' -not -path './.claude/*' -not -path './node_modules/*'))
 
 regen:
 	go build

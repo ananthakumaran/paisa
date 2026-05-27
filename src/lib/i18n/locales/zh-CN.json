@@ -1,0 +1,79 @@
+{
+  "app": {
+    "title": "Paisa"
+  },
+  "common": {
+    "loading": "加载中...",
+    "readonly": "只读",
+    "readonly_tooltip": "Paisa 处于只读模式"
+  },
+  "nav": {
+    "dashboard": "仪表盘",
+    "cash_flow": "现金流",
+    "expenses": "支出",
+    "assets": "资产",
+    "liabilities": "负债",
+    "income": "收入",
+    "ledger": "账本",
+    "more": "更多",
+    "about": "关于",
+    "tax": "税务",
+    "income_statement": "利润表",
+    "monthly": "月度",
+    "yearly": "年度",
+    "recurring": "周期性收支",
+    "budget": "预算",
+    "balance": "余额",
+    "networth": "净值",
+    "investment": "投资",
+    "gain": "收益",
+    "allocation": "资产配置",
+    "analysis": "分析",
+    "credit_cards": "信用卡",
+    "repayment": "还款",
+    "interest": "利息",
+    "import": "导入",
+    "editor": "编辑器",
+    "transactions": "交易",
+    "postings": "分录",
+    "price": "价格",
+    "configuration": "配置",
+    "sheets": "表格",
+    "goals": "目标",
+    "doctor": "体检",
+    "logs": "日志",
+    "harvest": "税务收割",
+    "capital_gains": "资本利得",
+    "schedule_al": "附表 AL"
+  },
+  "navbar": {
+    "recurring_icon": {
+      "cleared": "已结清",
+      "cleared_late": "延迟结清",
+      "past_due": "已逾期",
+      "upcoming": "即将到期"
+    },
+    "depth_selector": {
+      "expenses": "支出",
+      "income": "收入"
+    }
+  },
+  "error": {
+    "page_not_found": {
+      "title": "页面未找到",
+      "body": "您访问的页面不存在，可能已被移动或删除。您可以返回{homeLink}重新查找。",
+      "homepage": "首页"
+    },
+    "critical": {
+      "title": "出现错误",
+      "intro": "Paisa 遇到严重错误",
+      "report": "请前往 {link} 反馈此问题，关闭并重新打开应用可能会有所帮助。"
+    }
+  },
+  "login": {
+    "username": "用户名",
+    "password": "密码",
+    "submit": "登录",
+    "invalid_credentials": "用户名或密码错误"
+  }
+}

@@ -11,16 +11,10 @@
     "readonly": false,
     "ledger_cli": "ledger",
     "default_currency": "EUR",
-    "base_currency": "",
-    "fx_providers": [
-      "cn-boc",
-      "yahoo-fx"
-    ],
     "display_precision": 0,
     "amount_alignment_column": 52,
     "locale": "es-EU",
     "time_zone": "",
-    "financial_year_starting_month": 4,
     "week_starting_day": 0,
     "strict": "no",
     "budget": {
@@ -30,13 +24,25 @@
     "allocation_targets": [],
     "commodities": [],
     "import_templates": [],
-    "accounts": [],
+    "accounts": [
+      {
+        "name": "Assets:Checking",
+        "icon": "",
+        "kind": "bank_current"
+      },
+      {
+        "name": "Assets:Equity:AAPL",
+        "icon": "",
+        "kind": "stock"
+      }
+    ],
     "goals": {
       "retirement": [],
       "savings": []
     },
     "user_accounts": [],
     "credit_cards": [],
+    "liabilities": [],
     "transfer_accounts": []
   },
   "now": "2022-02-07T00:00:00Z",
@@ -60,6 +66,29 @@
               "description": "Account icon name",
               "type": "string",
               "ui:widget": "icon"
+            },
+            "kind": {
+              "description": "Optional classification used by allocation / receivables / net worth aggregation. Leave blank to fall back to path-prefix rules.",
+              "enum": [
+                "",
+                "bank_current",
+                "bank_savings",
+                "cash_equivalent",
+                "mutual_fund",
+                "stock",
+                "bond",
+                "structured_deposit",
+                "real_estate",
+                "vehicle",
+                "tax_deferred_fund",
+                "tax_deferred_cash",
+                "housing_fund",
+                "receivable",
+                "crypto",
+                "foreign_currency",
+                "unknown"
+              ],
+              "type": "string"
             },
             "name": {
               "description": "Name of the account",
@@ -131,10 +160,6 @@
         "minimum": 40,
         "type": "integer"
       },
-      "base_currency": {
-        "description": "The currency used for net worth aggregation across multi-currency portfolios. If unset, defaults to default_currency. Holdings denominated in other currencies are converted via the configured fx_providers.",
-        "type": "string"
-      },
       "budget": {
         "additionalProperties": false,
         "description": "Budget configuration",
@@ -187,7 +212,11 @@
                     "com-yahoo",
                     "com-purifiedbytes-nps",
                     "com-purifiedbytes-metal",
-                    "co-alphavantage"
+                    "co-alphavantage",
+                    "yahoo",
+                    "cn-okx",
+                    "cn-ttjj",
+                    "cn-eastmoney"
                   ],
                   "type": "string"
                 }
@@ -323,28 +352,6 @@
         "maximum": 4,
         "minimum": 0,
         "type": "integer"
-      },
-      "financial_year_starting_month": {
-        "description": "First month of the financial year. This can be set to 1 to follow January to December.",
-        "maximum": 12,
-        "minimum": 1,
-        "type": "integer"
-      },
-      "fx_providers": {
-        "default": [
-          "cn-boc",
-          "yahoo-fx"
-        ],
-        "description": "Ordered list of FX provider codes used to seed the daily exchange rate store. Defaults to [\"cn-boc\", \"yahoo-fx\"]. Each provider is tried in order until rates can be resolved.",
-        "items": {
-          "enum": [
-            "cn-boc",
-            "yahoo-fx"
-          ],
-          "type": "string"
-        },
-        "type": "array",
-        "uniqueItems": true
       },
       "goals": {
         "description": "Goals configuration",
@@ -564,6 +571,86 @@
           "beancount"
         ],
         "type": "string"
+      },
+      "liabilities": {
+        "default": [],
+        "description": "Liability accounts. When kind is set to amortizing_loan, an amortization schedule (equal_payment / equal_principal) is computed and displayed on the Repayment page.",
+        "items": {
+          "additionalProperties": false,
+          "allOf": [
+            {
+              "if": {
+                "properties": {
+                  "kind": {
+                    "const": "amortizing_loan"
+                  }
+                },
+                "required": [
+                  "kind"
+                ]
+              },
+              "then": {
+                "required": [
+                  "principal",
+                  "rate",
+                  "term_months",
+                  "schedule"
+                ]
+              }
+            }
+          ],
+          "properties": {
+            "kind": {
+              "description": "Liability kind. Set to amortizing_loan to opt in to amortization schedule.",
+              "enum": [
+                "amortizing_loan"
+              ],
+              "type": "string"
+            },
+            "name": {
+              "description": "Liability account name (e.g. Liabilities:Mortgage:House)",
+              "minLength": 1,
+              "type": "string"
+            },
+            "principal": {
+              "description": "Initial loan principal.",
+              "exclusiveMinimum": 0,
+              "type": "number"
+            },
+            "rate": {
+              "description": "Annual percentage rate, expressed as a percent (e.g. 4.9 for 4.9%).",
+              "minimum": 0,
+              "type": "number"
+            },
+            "schedule": {
+              "description": "Amortization method.",
+              "enum": [
+                "equal_payment",
+                "equal_principal"
+              ],
+              "type": "string"
+            },
+            "start_date": {
+              "description": "Loan start date.",
+              "format": "date",
+              "type": "string"
+            },
+            "term_months": {
+              "description": "Total number of monthly installments.",
+              "minimum": 1,
+              "type": "integer"
+            }
+          },
+          "required": [
+            "name"
+          ],
+          "type": "object",
+          "ui:header": "name"
+        },
+        "itemsUniqueProperties": [
+          "name"
+        ],
+        "type": "array"
       },
       "locale": {
         "description": "The locale used to format numbers. The list of locales supported depends on your browser. It's known to work well with en-US and en-IN.",

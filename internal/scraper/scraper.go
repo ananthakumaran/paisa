@@ -3,6 +3,9 @@ package scraper
 import (
 	"github.com/ananthakumaran/paisa/internal/model/price"
 	"github.com/ananthakumaran/paisa/internal/scraper/cn/boc"
+	"github.com/ananthakumaran/paisa/internal/scraper/cn/eastmoney"
+	"github.com/ananthakumaran/paisa/internal/scraper/cn/okx"
+	"github.com/ananthakumaran/paisa/internal/scraper/cn/ttjj"
 	"github.com/ananthakumaran/paisa/internal/scraper/metal"
 	"github.com/ananthakumaran/paisa/internal/scraper/mutualfund"
 	"github.com/ananthakumaran/paisa/internal/scraper/nps"
@@ -14,12 +17,16 @@ import (
 func GetAllProviders() []price.PriceProvider {
 	return []price.PriceProvider{
 		&stock.YahooPriceProvider{},
+		&yahoo.PriceProvider{},
 		&mutualfund.PriceProvider{},
 		&stock.AlphaVantagePriceProvider{},
 		&nps.PriceProvider{},
 		&metal.PriceProvider{},
 		&boc.PriceProvider{},
 		&yahoo.FxPriceProvider{},
+		&eastmoney.PriceProvider{},
+		&okx.PriceProvider{},
+		&ttjj.PriceProvider{},
 	}
 
 }
@@ -34,12 +41,20 @@ func GetProviderByCode(code string) price.PriceProvider {
 		return &metal.PriceProvider{}
 	case "com-yahoo":
 		return &stock.YahooPriceProvider{}
+	case "yahoo":
+		return &yahoo.PriceProvider{}
 	case "co-alphavantage":
 		return &stock.AlphaVantagePriceProvider{}
 	case "cn-boc":
 		return &boc.PriceProvider{}
 	case "yahoo-fx":
 		return &yahoo.FxPriceProvider{}
+	case "cn-eastmoney":
+		return &eastmoney.PriceProvider{}
+	case "cn-okx":
+		return &okx.PriceProvider{}
+	case "cn-ttjj":
+		return &ttjj.PriceProvider{}
 	}
 	log.Fatal("Unknown price provider: ", code)
 	return nil

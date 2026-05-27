@@ -1,7 +1,7 @@
 {
   "postings": [
     {
-      "id": 3,
+      "id": 71,
       "transaction_id": "67f44c92-c138-550d-9ae2-84034aca39d3",
       "date": "2022-01-05T00:00:00Z",
       "payee": "Buy stock",
@@ -22,7 +22,7 @@
       "balance": 1
     },
     {
-      "id": 4,
+      "id": 72,
       "transaction_id": "67f44c92-c138-550d-9ae2-84034aca39d3",
       "date": "2022-01-05T00:00:00Z",
       "payee": "Buy stock",
@@ -43,7 +43,7 @@
       "balance": 994.95
     },
     {
-      "id": 2,
+      "id": 70,
       "transaction_id": "d84b6999-200b-5b90-9a3e-f94dc8a177da",
       "date": "2022-01-01T00:00:00Z",
       "payee": "Salary",
@@ -64,7 +64,7 @@
       "balance": 11000
     },
     {
-      "id": 1,
+      "id": 69,
       "transaction_id": "d84b6999-200b-5b90-9a3e-f94dc8a177da",
       "date": "2022-01-01T00:00:00Z",
       "payee": "Salary",

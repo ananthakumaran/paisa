@@ -3,3 +3,10 @@ db_path: paisa.db
 ledger_cli: ledger
 default_currency: EUR
 locale: es-EU
+
+# Explicit account kinds; see tests/fixture/inr/paisa.yaml for context.
+accounts:
+  - name: Assets:Checking
+    kind: bank_current
+  - name: Assets:Equity:AAPL
+    kind: stock

@@ -10,8 +10,8 @@ import {
   skipTicks,
   tooltip,
   secondName,
-  financialYear,
-  forEachFinancialYear,
+  calendarYear,
+  forEachCalendarYear,
   formatCurrencyCrudeWithPrecision,
   now,
   type Legend
@@ -45,10 +45,8 @@ export function renderCalendar(
     "Dec"
   ];
 
-  const months: string[] = _.concat(
-    _.drop(ALL_MONTHS, USER_CONFIG.financial_year_starting_month - 1),
-    _.take(ALL_MONTHS, USER_CONFIG.financial_year_starting_month - 1)
-  );
+  // Calendar-year aggregation (Jan–Dec) after issue #5.
+  const months: string[] = ALL_MONTHS;
   const expensesByMonth: Record<string, Posting[]> = _.chain(months)
     .map((month) => {
       return [
@@ -179,18 +177,18 @@ export function renderYearlyExpensesTimeline(
 
   const start = _.min(_.map(postings, (p) => p.date)),
     end = now().startOf("month");
-  const ms = _.groupBy(postings, (p) => financialYear(p.date));
+  const ms = _.groupBy(postings, (p) => calendarYear(p.date));
 
   interface Point {
-    fy: string;
+    year: string;
     timestamp: Dayjs;
     [key: string]: number | string | Dayjs;
   }
 
   const points: Point[] = [];
 
-  forEachFinancialYear(start, end, (year) => {
-    const postings = ms[financialYear(year)] || [];
+  forEachCalendarYear(start, end, (year) => {
+    const postings = ms[calendarYear(year)] || [];
     const values = _.chain(postings)
       .groupBy(expenseGroup)
       .map((postings, key) => [key, _.sum(_.map(postings, (p) => p.amount))])
@@ -201,7 +199,7 @@ export function renderYearlyExpensesTimeline(
       _.merge(
         {
           timestamp: year,
-          fy: financialYear(year),
+          year: calendarYear(year),
           postings: postings,
           trend: {}
         },
@@ -235,7 +233,7 @@ export function renderYearlyExpensesTimeline(
         }),
         {
           total: formatCurrency(grandTotal),
-          header: financialYear(d.data.timestamp as any)
+          header: calendarYear(d.data.timestamp as any)
         }
       );
     };
@@ -249,7 +247,7 @@ export function renderYearlyExpensesTimeline(
   const render = (allowedGroups: string[]) => {
     groupsStore.set(allowedGroups);
     const sum = (p: Point) => _.sum(_.map(allowedGroups, (k) => p[k]));
-    x.domain(points.map((p) => p.fy));
+    x.domain(points.map((p) => p.year));
     y.domain([0, d3.max(points, sum)]);
 
     const t = svg.transition().duration(750);
@@ -299,12 +297,13 @@ export function renderYearlyExpensesTimeline(
             .attr("class", "zoomable")
             .on("click", (_event, data) => {
               const timestamp: Dayjs = data.data.timestamp as any;
-              yearStore.set(financialYear(timestamp));
+              yearStore.set(calendarYear(timestamp));
             })
             .attr("data-tippy-content", tooltipContent(allowedGroups))
             .attr("x", function (d) {
               return (
-                x((d.data as any).fy) + (x.bandwidth() - Math.min(x.bandwidth(), MAX_BAR_WIDTH)) / 2
+                x((d.data as any).year) +
+                (x.bandwidth() - Math.min(x.bandwidth(), MAX_BAR_WIDTH)) / 2
               );
             })
             .attr("width", Math.min(x.bandwidth(), MAX_BAR_WIDTH))
@@ -428,7 +427,7 @@ export function renderCurrentExpensesBreakdown(z: d3.ScaleOrdinal<string, string
         }),
         {
           total: formatCurrency(total),
-          header: `${financialYear(d.postings[0].date)} ${d.category}`
+          header: `${calendarYear(d.postings[0].date)} ${d.category}`
         }
       );
     };

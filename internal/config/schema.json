@@ -677,12 +677,6 @@
         "Zulu"
       ]
     },
-    "financial_year_starting_month": {
-      "type": "integer",
-      "minimum": 1,
-      "maximum": 12,
-      "description": "First month of the financial year. This can be set to 1 to follow January to December."
-    },
     "week_starting_day": {
       "type": "integer",
       "minimum": 0,
@@ -997,7 +991,11 @@
                   "com-yahoo",
                   "com-purifiedbytes-nps",
                   "com-purifiedbytes-metal",
-                  "co-alphavantage"
+                  "co-alphavantage",
+                  "yahoo",
+                  "cn-okx",
+                  "cn-ttjj",
+                  "cn-eastmoney"
                 ]
               },
               "code": {
@@ -1068,6 +1066,29 @@
             "type": "string",
             "description": "Account icon name",
             "ui:widget": "icon"
+          },
+          "kind": {
+            "type": "string",
+            "description": "Optional classification used by allocation / receivables / net worth aggregation. Leave blank to fall back to path-prefix rules.",
+            "enum": [
+              "",
+              "bank_current",
+              "bank_savings",
+              "cash_equivalent",
+              "mutual_fund",
+              "stock",
+              "bond",
+              "structured_deposit",
+              "real_estate",
+              "vehicle",
+              "tax_deferred_fund",
+              "tax_deferred_cash",
+              "housing_fund",
+              "receivable",
+              "crypto",
+              "foreign_currency",
+              "unknown"
+            ]
           }
         },
         "required": ["name"],
@@ -1138,6 +1159,66 @@
           "expiration_date"
         ],
         "additionalProperties": false
+      }
+    },
+    "liabilities": {
+      "type": "array",
+      "description": "Liability accounts. When kind is set to amortizing_loan, an amortization schedule (equal_payment / equal_principal) is computed and displayed on the Repayment page.",
+      "itemsUniqueProperties": ["name"],
+      "default": [],
+      "items": {
+        "type": "object",
+        "ui:header": "name",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Liability account name (e.g. Liabilities:Mortgage:House)",
+            "minLength": 1
+          },
+          "kind": {
+            "type": "string",
+            "description": "Liability kind. Set to amortizing_loan to opt in to amortization schedule.",
+            "enum": ["amortizing_loan"]
+          },
+          "principal": {
+            "type": "number",
+            "description": "Initial loan principal.",
+            "exclusiveMinimum": 0
+          },
+          "rate": {
+            "type": "number",
+            "description": "Annual percentage rate, expressed as a percent (e.g. 4.9 for 4.9%).",
+            "minimum": 0
+          },
+          "start_date": {
+            "type": "string",
+            "description": "Loan start date.",
+            "format": "date"
+          },
+          "term_months": {
+            "type": "integer",
+            "description": "Total number of monthly installments.",
+            "minimum": 1
+          },
+          "schedule": {
+            "type": "string",
+            "description": "Amortization method.",
+            "enum": ["equal_payment", "equal_principal"]
+          }
+        },
+        "required": ["name"],
+        "additionalProperties": false,
+        "allOf": [
+          {
+            "if": {
+              "properties": { "kind": { "const": "amortizing_loan" } },
+              "required": ["kind"]
+            },
+            "then": {
+              "required": ["principal", "rate", "term_months", "schedule"]
+            }
+          }
+        ]
       }
     },
     "transfer_accounts": {

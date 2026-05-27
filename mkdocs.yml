@@ -13,6 +13,7 @@ nav:
     - reference/accounts.md
     - reference/commodities.md
     - 'Price Providers':
+        - reference/providers/cn-ttjj.md
         - reference/providers/cn-eastmoney.md
     - reference/journal.md
     - reference/allocation-targets.md

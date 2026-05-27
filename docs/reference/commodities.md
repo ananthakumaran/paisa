@@ -173,6 +173,33 @@ The following metals and purity combinations are supported.
 | Silver | 999    | silver-999 |
 
 
+## OKX Crypto <sub>:globe_with_meridians:</sub>
+
+To automatically track the value of your cryptocurrency holdings, link
+the commodity to the OKX instrument id.
+
+```yaml
+commodities:
+  - name: BTC # (1)!
+    type: unknown # (2)!
+    price:
+        provider: cn-okx # (3)!
+        code: BTC-USDT # (4)!
+```
+
+1. commodity name
+1. type
+1. price provider name
+1. OKX instrument id (e.g. `BTC-USDT`, `ETH-USDT`, `BTC-USD`)
+
+Crypto prices are denominated in the quote currency of the instrument
+(typically `USDT` or `USD`). The conversion to your
+`default_currency` is handled by the FX layer, so you must have an
+exchange rate available from the quote currency to your default
+currency.
+
+See [OKX provider reference](providers/cn-okx.md) for full details.
+
 ## RealEstate
 
 Some commodities like real estate are bought once and the price

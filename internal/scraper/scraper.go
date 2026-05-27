@@ -3,6 +3,7 @@ package scraper
 import (
 	"github.com/ananthakumaran/paisa/internal/model/price"
 	"github.com/ananthakumaran/paisa/internal/scraper/cn/eastmoney"
+	"github.com/ananthakumaran/paisa/internal/scraper/cn/okx"
 	"github.com/ananthakumaran/paisa/internal/scraper/cn/ttjj"
 	"github.com/ananthakumaran/paisa/internal/scraper/metal"
 	"github.com/ananthakumaran/paisa/internal/scraper/mutualfund"
@@ -19,6 +20,7 @@ func GetAllProviders() []price.PriceProvider {
 		&nps.PriceProvider{},
 		&metal.PriceProvider{},
 		&eastmoney.PriceProvider{},
+		&okx.PriceProvider{},
 		&ttjj.PriceProvider{},
 	}
 
@@ -38,6 +40,8 @@ func GetProviderByCode(code string) price.PriceProvider {
 		return &stock.AlphaVantagePriceProvider{}
 	case "cn-eastmoney":
 		return &eastmoney.PriceProvider{}
+	case "cn-okx":
+		return &okx.PriceProvider{}
 	case "cn-ttjj":
 		return &ttjj.PriceProvider{}
 	}

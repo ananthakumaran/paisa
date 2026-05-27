@@ -1,7 +1,7 @@
 {
   "expenses": [
     {
-      "id": 4,
+      "id": 58,
       "transaction_id": "2",
       "date": "2022-01-03T00:00:00Z",
       "payee": "Rent",
@@ -22,7 +22,7 @@
       "balance": 0
     },
     {
-      "id": 22,
+      "id": 76,
       "transaction_id": "11",
       "date": "2022-01-09T00:00:00Z",
       "payee": "Multi Currency Debit",
@@ -44,7 +44,7 @@
     }
   ],
   "graph": {
-    "2021 - 22": {
+    "2022": {
       "nodes": [
         {
           "id": 1,
@@ -55,11 +55,11 @@
           "name": "Assets:Dollar"
         },
         {
-          "id": 9,
+          "id": 8,
           "name": "Assets:Equity:AAPL"
         },
         {
-          "id": 8,
+          "id": 9,
           "name": "Assets:Equity:ABNB"
         },
         {
@@ -125,12 +125,12 @@
         {
           "source": 1,
           "target": 8,
-          "value": 16050.6340142592
+          "value": 10000
         },
         {
           "source": 1,
           "target": 9,
-          "value": 10000
+          "value": 1.52
         },
         {
           "source": 1,
@@ -163,7 +163,7 @@
           "value": 100
         },
         {
-          "source": 9,
+          "source": 8,
           "target": 1,
           "value": 10000
         },
@@ -199,7 +199,7 @@
     "expenses": {
       "2022-01": [
         {
-          "id": 4,
+          "id": 58,
           "transaction_id": "2",
           "date": "2022-01-03T00:00:00Z",
           "payee": "Rent",
@@ -220,7 +220,7 @@
           "balance": 0
         },
         {
-          "id": 22,
+          "id": 76,
           "transaction_id": "11",
           "date": "2022-01-09T00:00:00Z",
           "payee": "Multi Currency Debit",
@@ -245,7 +245,7 @@
     "incomes": {
       "2022-01": [
         {
-          "id": 1,
+          "id": 55,
           "transaction_id": "1",
           "date": "2022-01-01T00:00:00Z",
           "payee": "Salary",
@@ -266,7 +266,7 @@
           "balance": 0
         },
         {
-          "id": 5,
+          "id": 59,
           "transaction_id": "3",
           "date": "2022-01-06T00:00:00Z",
           "payee": "Bonus",
@@ -287,7 +287,7 @@
           "balance": 0
         },
         {
-          "id": 20,
+          "id": 74,
           "transaction_id": "10",
           "date": "2022-01-09T00:00:00Z",
           "payee": "Sell",
@@ -308,7 +308,7 @@
           "balance": 0
         },
         {
-          "id": 26,
+          "id": 80,
           "transaction_id": "12",
           "date": "2022-01-31T00:00:00Z",
           "payee": "Interest",
@@ -333,7 +333,7 @@
     "investments": {
       "2022-01": [
         {
-          "id": 8,
+          "id": 62,
           "transaction_id": "4",
           "date": "2022-01-07T00:00:00Z",
           "payee": "Investment",
@@ -354,28 +354,7 @@
           "balance": 0
         },
         {
-          "id": 13,
-          "transaction_id": "7",
-          "date": "2022-01-08T00:00:00Z",
-          "payee": "Buy ABNB",
-          "account": "Assets:Equity:ABNB",
-          "commodity": "ABNB",
-          "quantity": 0.76,
-          "amount": 8025.3170071296,
-          "status": "unmarked",
-          "tag_recurring": "",
-          "tag_period": "",
-          "transaction_begin_line": 30,
-          "transaction_end_line": 33,
-          "file_name": "main.ledger",
-          "forecast": false,
-          "note": "",
-          "transaction_note": "",
-          "market_amount": 0,
-          "balance": 0
-        },
-        {
-          "id": 10,
+          "id": 64,
           "transaction_id": "5",
           "date": "2022-01-08T00:00:00Z",
           "payee": "Investment 2",
@@ -396,7 +375,7 @@
           "balance": 0
         },
         {
-          "id": 15,
+          "id": 69,
           "transaction_id": "9",
           "date": "2022-01-08T00:00:00Z",
           "payee": "Buy Apple",
@@ -417,7 +396,7 @@
           "balance": 0
         },
         {
-          "id": 12,
+          "id": 66,
           "transaction_id": "6",
           "date": "2022-01-08T00:00:00Z",
           "payee": "Investment 3",
@@ -438,7 +417,28 @@
           "balance": 0
         },
         {
-          "id": 23,
+          "id": 67,
+          "transaction_id": "7",
+          "date": "2022-01-08T00:00:00Z",
+          "payee": "Buy ABNB",
+          "account": "Assets:Equity:ABNB",
+          "commodity": "ABNB",
+          "quantity": 0.76,
+          "amount": 0.76,
+          "status": "unmarked",
+          "tag_recurring": "",
+          "tag_period": "",
+          "transaction_begin_line": 30,
+          "transaction_end_line": 33,
+          "file_name": "main.ledger",
+          "forecast": false,
+          "note": "",
+          "transaction_note": "",
+          "market_amount": 0,
+          "balance": 0
+        },
+        {
+          "id": 77,
           "transaction_id": "11",
           "date": "2022-01-09T00:00:00Z",
           "payee": "Multi Currency Debit",
@@ -459,14 +459,14 @@
           "balance": 0
         },
         {
-          "id": 17,
+          "id": 71,
           "transaction_id": "8",
           "date": "2022-01-09T00:00:00Z",
           "payee": "Buy ABNB total price",
           "account": "Assets:Equity:ABNB",
           "commodity": "ABNB",
           "quantity": 0.76,
-          "amount": 8025.3170071296,
+          "amount": 0.76,
           "status": "unmarked",
           "tag_recurring": "",
           "tag_period": "",
@@ -480,7 +480,7 @@
           "balance": 0
         },
         {
-          "id": 19,
+          "id": 73,
           "transaction_id": "10",
           "date": "2022-01-09T00:00:00Z",
           "payee": "Sell",
@@ -506,9 +506,9 @@
   },
   "year_wise": {
     "expenses": {
-      "2021 - 22": [
+      "2022": [
         {
-          "id": 4,
+          "id": 58,
           "transaction_id": "2",
           "date": "2022-01-03T00:00:00Z",
           "payee": "Rent",
@@ -529,7 +529,7 @@
           "balance": 0
         },
         {
-          "id": 22,
+          "id": 76,
           "transaction_id": "11",
           "date": "2022-01-09T00:00:00Z",
           "payee": "Multi Currency Debit",
@@ -552,9 +552,9 @@
       ]
     },
     "incomes": {
-      "2021 - 22": [
+      "2022": [
         {
-          "id": 1,
+          "id": 55,
           "transaction_id": "1",
           "date": "2022-01-01T00:00:00Z",
           "payee": "Salary",
@@ -575,7 +575,7 @@
           "balance": 0
         },
         {
-          "id": 5,
+          "id": 59,
           "transaction_id": "3",
           "date": "2022-01-06T00:00:00Z",
           "payee": "Bonus",
@@ -596,7 +596,7 @@
           "balance": 0
         },
         {
-          "id": 20,
+          "id": 74,
           "transaction_id": "10",
           "date": "2022-01-09T00:00:00Z",
           "payee": "Sell",
@@ -617,7 +617,7 @@
           "balance": 0
         },
         {
-          "id": 26,
+          "id": 80,
           "transaction_id": "12",
           "date": "2022-01-31T00:00:00Z",
           "payee": "Interest",
@@ -640,9 +640,9 @@
       ]
     },
     "investments": {
-      "2021 - 22": [
+      "2022": [
         {
-          "id": 8,
+          "id": 62,
           "transaction_id": "4",
           "date": "2022-01-07T00:00:00Z",
           "payee": "Investment",
@@ -663,28 +663,7 @@
           "balance": 0
         },
         {
-          "id": 13,
-          "transaction_id": "7",
-          "date": "2022-01-08T00:00:00Z",
-          "payee": "Buy ABNB",
-          "account": "Assets:Equity:ABNB",
-          "commodity": "ABNB",
-          "quantity": 0.76,
-          "amount": 8025.3170071296,
-          "status": "unmarked",
-          "tag_recurring": "",
-          "tag_period": "",
-          "transaction_begin_line": 30,
-          "transaction_end_line": 33,
-          "file_name": "main.ledger",
-          "forecast": false,
-          "note": "",
-          "transaction_note": "",
-          "market_amount": 0,
-          "balance": 0
-        },
-        {
-          "id": 10,
+          "id": 64,
           "transaction_id": "5",
           "date": "2022-01-08T00:00:00Z",
           "payee": "Investment 2",
@@ -705,7 +684,7 @@
           "balance": 0
         },
         {
-          "id": 15,
+          "id": 69,
           "transaction_id": "9",
           "date": "2022-01-08T00:00:00Z",
           "payee": "Buy Apple",
@@ -726,7 +705,7 @@
           "balance": 0
         },
         {
-          "id": 12,
+          "id": 66,
           "transaction_id": "6",
           "date": "2022-01-08T00:00:00Z",
           "payee": "Investment 3",
@@ -747,7 +726,28 @@
           "balance": 0
         },
         {
-          "id": 23,
+          "id": 67,
+          "transaction_id": "7",
+          "date": "2022-01-08T00:00:00Z",
+          "payee": "Buy ABNB",
+          "account": "Assets:Equity:ABNB",
+          "commodity": "ABNB",
+          "quantity": 0.76,
+          "amount": 0.76,
+          "status": "unmarked",
+          "tag_recurring": "",
+          "tag_period": "",
+          "transaction_begin_line": 30,
+          "transaction_end_line": 33,
+          "file_name": "main.ledger",
+          "forecast": false,
+          "note": "",
+          "transaction_note": "",
+          "market_amount": 0,
+          "balance": 0
+        },
+        {
+          "id": 77,
           "transaction_id": "11",
           "date": "2022-01-09T00:00:00Z",
           "payee": "Multi Currency Debit",
@@ -768,14 +768,14 @@
           "balance": 0
         },
         {
-          "id": 17,
+          "id": 71,
           "transaction_id": "8",
           "date": "2022-01-09T00:00:00Z",
           "payee": "Buy ABNB total price",
           "account": "Assets:Equity:ABNB",
           "commodity": "ABNB",
           "quantity": 0.76,
-          "amount": 8025.3170071296,
+          "amount": 0.76,
           "status": "unmarked",
           "tag_recurring": "",
           "tag_period": "",
@@ -789,7 +789,7 @@
           "balance": 0
         },
         {
-          "id": 19,
+          "id": 73,
           "transaction_id": "10",
           "date": "2022-01-09T00:00:00Z",
           "payee": "Sell",

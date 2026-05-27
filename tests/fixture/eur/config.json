@@ -201,7 +201,11 @@
                     "com-yahoo",
                     "com-purifiedbytes-nps",
                     "com-purifiedbytes-metal",
-                    "co-alphavantage"
+                    "co-alphavantage",
+                    "yahoo",
+                    "cn-okx",
+                    "cn-ttjj",
+                    "cn-eastmoney"
                   ],
                   "type": "string"
                 }

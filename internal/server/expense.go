@@ -35,6 +35,22 @@ type Graph struct {
 	Links []Link `json:"links"`
 }
 
+// ExpenseSummary is the per-period (month or year) aggregate that
+// powers the "扣除退款后净支出" / "原始支出" toggle on the Expense pages.
+//
+// In paisa's convention, an Expenses:* posting carries a positive
+// amount for a real expense and a negative amount when it records a
+// refund / 红冲 against an earlier expense (style A in issue #25).
+// Gross sums the positive postings, Refunds sums the negative ones
+// (kept as a signed negative number so callers can render it as a
+// deduction), and Net is the algebraic sum — what the user actually
+// paid out of pocket.
+type ExpenseSummary struct {
+	Gross   decimal.Decimal `json:"gross"`
+	Net     decimal.Decimal `json:"net"`
+	Refunds decimal.Decimal `json:"refunds"`
+}
+
 func GetCurrentExpense(db *gorm.DB) map[string][]posting.Posting {
 	expenses := query.Init(db).LastNMonths(3).Like("Expenses:%").NotAccountPrefix("Expenses:Tax").All()
 	return utils.GroupByMonth(expenses)
@@ -55,16 +71,38 @@ func GetExpense(db *gorm.DB) gin.H {
 	return gin.H{
 		"expenses": expenses,
 		"month_wise": gin.H{
-			"expenses":    utils.GroupByMonth(expenses),
-			"incomes":     utils.GroupByMonth(incomes),
-			"investments": utils.GroupByMonth(investments),
-			"taxes":       utils.GroupByMonth(taxes)},
+			"expenses":        utils.GroupByMonth(expenses),
+			"incomes":         utils.GroupByMonth(incomes),
+			"investments":     utils.GroupByMonth(investments),
+			"taxes":           utils.GroupByMonth(taxes),
+			"expense_summary": computeExpenseSummary(expenses, "2006-01")},
 		"year_wise": gin.H{
-			"expenses":    utils.GroupByCalendarYear(expenses),
-			"incomes":     utils.GroupByCalendarYear(incomes),
-			"investments": utils.GroupByCalendarYear(investments),
-			"taxes":       utils.GroupByCalendarYear(taxes)},
+			"expenses":        utils.GroupByCalendarYear(expenses),
+			"incomes":         utils.GroupByCalendarYear(incomes),
+			"investments":     utils.GroupByCalendarYear(investments),
+			"taxes":           utils.GroupByCalendarYear(taxes),
+			"expense_summary": computeExpenseSummary(expenses, "2006")},
 		"graph": graph}
+}
+
+// computeExpenseSummary buckets expense postings by the date layout
+// (use "2006-01" for monthly, "2006" for yearly) and returns a per-
+// bucket gross/net/refund split. See ExpenseSummary for the sign
+// convention.
+func computeExpenseSummary(expenses []posting.Posting, dateLayout string) map[string]ExpenseSummary {
+	summary := make(map[string]ExpenseSummary)
+	for _, p := range expenses {
+		key := p.Date.Format(dateLayout)
+		s := summary[key]
+		if p.Amount.GreaterThanOrEqual(decimal.Zero) {
+			s.Gross = s.Gross.Add(p.Amount)
+		} else {
+			s.Refunds = s.Refunds.Add(p.Amount)
+		}
+		s.Net = s.Net.Add(p.Amount)
+		summary[key] = s
+	}
+	return summary
 }
 
 func sortGraph(graph Graph) Graph {

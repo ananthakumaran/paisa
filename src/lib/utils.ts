@@ -131,6 +131,16 @@ export interface Price {
   value: number;
 }
 
+// ExpenseSummary mirrors `server.ExpenseSummary` — the per-period
+// gross / net / refunds aggregate that drives the M3-G refund toggle on
+// the Expense Monthly / Yearly pages. Refunds is signed (negative),
+// matching the underlying posting convention.
+export interface ExpenseSummary {
+  gross: number;
+  net: number;
+  refunds: number;
+}
+
 export interface Networth {
   date: dayjs.Dayjs;
   investmentAmount: number;
@@ -573,12 +583,14 @@ export function ajax(route: "/api/expense"): Promise<{
     incomes: { [key: string]: Posting[] };
     investments: { [key: string]: Posting[] };
     taxes: { [key: string]: Posting[] };
+    expense_summary: { [key: string]: ExpenseSummary };
   };
   year_wise: {
     expenses: { [key: string]: Posting[] };
     incomes: { [key: string]: Posting[] };
     investments: { [key: string]: Posting[] };
     taxes: { [key: string]: Posting[] };
+    expense_summary: { [key: string]: ExpenseSummary };
   };
   graph: { [key: string]: Graph };
 }>;

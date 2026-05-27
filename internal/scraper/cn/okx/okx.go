@@ -3,8 +3,13 @@
 //
 // API: https://www.okx.com/api/v5/market/history-candles
 // Auth: not required for the public endpoint.
-// Pagination: descending by time; the `before` query parameter takes the
-// oldest timestamp (ms) from the previous page to walk further back.
+//
+// Pagination (per OKX v5 docs): the response is sorted DESCENDING by ts.
+//   - `before=<ts_ms>` returns candles strictly NEWER than ts (forward walk).
+//   - `after=<ts_ms>`  returns candles strictly OLDER than ts (backward walk).
+//
+// For historical backfill we walk BACKWARDS in time, so we use `after`,
+// seeded with the oldest ts from the previous page.
 //
 // OKX returns prices denominated in the quote currency of the instrument
 // (e.g. USDT for BTC-USDT). Conversion to the user's default currency is
@@ -30,9 +35,8 @@ import (
 )
 
 const (
-	// defaultEndpoint is the public OKX market data base URL. The
-	// `history-candles` resource is appended in fetchAll so tests can
-	// point at a local httptest server.
+	// defaultEndpoint is the public OKX `history-candles` URL. Tests
+	// substitute an httptest URL via fetchAll's endpoint argument.
 	defaultEndpoint = "https://www.okx.com/api/v5/market/history-candles"
 
 	// pageLimit is the per-page size requested from OKX. OKX accepts up
@@ -41,11 +45,20 @@ const (
 
 	// maxPages is a hard upper bound on how many pages we will fetch in
 	// a single GetPrices call. At pageLimit=100 daily candles per page
-	// this covers ~ 27 years of history, which is well beyond any
-	// crypto's lifetime. It exists to guarantee termination if the
-	// upstream returns degenerate (non-advancing) responses.
+	// this covers ~27 years of history, well beyond any crypto's
+	// lifetime. It exists to guarantee termination if the upstream
+	// returns degenerate (non-advancing) responses.
 	maxPages = 100
+
+	// httpTimeout caps a single HTTP request. OKX international routes
+	// can be slow from some regions; without a timeout the loop could
+	// stall indefinitely on a single page.
+	httpTimeout = 30 * time.Second
 )
+
+// httpClient is shared across fetches so we get a single connection pool
+// plus a sane request timeout.
+var httpClient = &http.Client{Timeout: httpTimeout}
 
 // okxResponse models the JSON envelope OKX returns from the candles
 // endpoint. Each candle is encoded as a heterogeneous string array:
@@ -59,10 +72,21 @@ type okxResponse struct {
 	Data [][]string `json:"data"`
 }
 
-// parseCandles converts one page of the OKX response into price records.
-// Order is preserved — OKX returns descending by timestamp, callers that
-// care about chronological order should sort downstream.
-func parseCandles(body []byte, code string, commodityName string) ([]*price.Price, error) {
+// parsedPage is the structured form of one OKX response page. `oldestMs`
+// is the raw ts_ms string of the oldest candle on the page (the last row
+// since OKX returns descending order), preserved verbatim so the cursor
+// keeps full millisecond precision when fed back as `after=` on the next
+// request.
+type parsedPage struct {
+	prices   []*price.Price
+	oldestMs string
+}
+
+// parseCandles converts one page of the OKX response into price records
+// plus the raw oldest-ts cursor string. Order is preserved — OKX returns
+// descending by timestamp; callers that care about chronological order
+// should sort downstream.
+func parseCandles(body []byte, code string, commodityName string) (*parsedPage, error) {
 	var resp okxResponse
 	if err := json.Unmarshal(body, &resp); err != nil {
 		return nil, fmt.Errorf("okx: decode response: %w", err)
@@ -71,7 +95,7 @@ func parseCandles(body []byte, code string, commodityName string) ([]*price.Pric
 		return nil, fmt.Errorf("okx: api error code=%s msg=%q", resp.Code, resp.Msg)
 	}
 
-	prices := make([]*price.Price, 0, len(resp.Data))
+	page := &parsedPage{prices: make([]*price.Price, 0, len(resp.Data))}
 	for _, row := range resp.Data {
 		if len(row) < 5 {
 			return nil, fmt.Errorf("okx: malformed candle row, expected >= 5 fields, got %d", len(row))
@@ -85,8 +109,11 @@ func parseCandles(body []byte, code string, commodityName string) ([]*price.Pric
 			return nil, fmt.Errorf("okx: invalid close %q: %w", row[4], err)
 		}
 
-		date := time.Unix(tsMs/1000, 0).In(config.TimeZone())
-		prices = append(prices, &price.Price{
+		// Crypto markets trade 24/7 and OKX defines daily candles on a
+		// UTC midnight boundary. Anchor the Price.Date in UTC so the
+		// day doesn't shift under negative timezones.
+		date := time.UnixMilli(tsMs).UTC()
+		page.prices = append(page.prices, &price.Price{
 			Date:          date,
 			CommodityType: config.Unknown,
 			CommodityID:   code,
@@ -94,54 +121,56 @@ func parseCandles(body []byte, code string, commodityName string) ([]*price.Pric
 			Value:         closeVal,
 		})
 	}
-	return prices, nil
+	if n := len(resp.Data); n > 0 {
+		page.oldestMs = resp.Data[n-1][0]
+	}
+	return page, nil
 }
 
-// fetchAll walks OKX's pagination until the server returns an empty page
-// or pagination stops advancing. The `endpoint` parameter is the full URL
-// for the history-candles resource (so tests can substitute httptest URLs).
+// fetchAll walks OKX's pagination backwards in time until the server
+// returns an empty page or pagination stops advancing. The `endpoint`
+// parameter is the full URL for the history-candles resource (so tests
+// can substitute httptest URLs).
 func fetchAll(endpoint string, instID string, commodityName string) ([]*price.Price, error) {
 	var (
-		all    []*price.Price
-		before string // empty on the first request
+		all   []*price.Price
+		after string // empty on the first request; "" means "latest"
 	)
 
 	for page := 0; page < maxPages; page++ {
-		body, err := getPage(endpoint, instID, before)
+		body, err := getPage(endpoint, instID, after)
 		if err != nil {
 			return nil, err
 		}
-		prices, err := parseCandles(body, instID, commodityName)
+		parsed, err := parseCandles(body, instID, commodityName)
 		if err != nil {
 			return nil, err
 		}
-		if len(prices) == 0 {
+		if len(parsed.prices) == 0 {
 			// Empty page: we've walked off the end of history.
 			break
 		}
 
-		// OKX returns descending order; the oldest timestamp on this
-		// page is the last element. Use it as the `before` cursor for
-		// the next page.
-		oldest := prices[len(prices)-1]
-		oldestMs := strconv.FormatInt(oldest.Date.Unix()*1000, 10)
-
-		all = append(all, prices...)
+		all = append(all, parsed.prices...)
 
 		// Degenerate-response guard: if the oldest timestamp didn't
 		// advance, stop to avoid an infinite loop.
-		if oldestMs == before {
-			log.Warnf("okx: pagination stalled at before=%s, terminating", before)
+		if parsed.oldestMs == after {
+			log.Warnf("okx: pagination stalled at after=%s, terminating", after)
 			break
 		}
-		before = oldestMs
+		after = parsed.oldestMs
 	}
 
 	return all, nil
 }
 
 // getPage performs a single GET against the OKX candles endpoint.
-func getPage(endpoint string, instID string, before string) ([]byte, error) {
+//
+// `after` is the cursor in OKX's pagination contract: the server returns
+// candles strictly OLDER than this timestamp (ms). Pass an empty string
+// on the first request to get the most recent `pageLimit` candles.
+func getPage(endpoint string, instID string, after string) ([]byte, error) {
 	u, err := url.Parse(endpoint)
 	if err != nil {
 		return nil, fmt.Errorf("okx: invalid endpoint %q: %w", endpoint, err)
@@ -150,8 +179,8 @@ func getPage(endpoint string, instID string, before string) ([]byte, error) {
 	q.Set("instId", instID)
 	q.Set("bar", "1D")
 	q.Set("limit", strconv.Itoa(pageLimit))
-	if before != "" {
-		q.Set("before", before)
+	if after != "" {
+		q.Set("after", after)
 	}
 	u.RawQuery = q.Encode()
 
@@ -161,7 +190,7 @@ func getPage(endpoint string, instID string, before string) ([]byte, error) {
 	}
 	req.Header.Set("Accept", "application/json")
 
-	resp, err := http.DefaultClient.Do(req)
+	resp, err := httpClient.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("okx: GET %s: %w", u.String(), err)
 	}

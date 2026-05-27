@@ -41,10 +41,19 @@ or a configured FX provider.
 
 ## Pagination & limits
 
-The provider walks the OKX `before` cursor 100 candles at a time and
-stops when an empty page is returned. There is also a hard upper bound
-of 100 pages (~27 years of daily data) to guarantee termination if the
-upstream returns degenerate responses.
+The provider walks the OKX `after` cursor backwards in time, 100
+candles at a time, and stops when an empty page is returned. (Per the
+OKX v5 contract, `after=<ts_ms>` returns candles strictly older than
+the given timestamp; `before=<ts_ms>` would walk forward — the wrong
+direction for backfill.) There is also a hard upper bound of 100 pages
+(~27 years of daily data) and a stalled-cursor guard to guarantee
+termination if the upstream returns degenerate responses.
+
+## Date / timezone
+
+Crypto markets trade 24/7 and OKX's daily candle boundary is **UTC
+midnight**. The stored `Price.Date` is anchored in UTC so the calendar
+day does not drift under negative timezones.
 
 ## Example transaction
 

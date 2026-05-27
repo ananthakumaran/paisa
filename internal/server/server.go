@@ -221,6 +221,10 @@ func Build(db *gorm.DB, enableCompression bool) *gin.Engine {
 		c.JSON(200, liabilities.GetRepayment(db))
 	})
 
+	router.GET("/api/receivables", func(c *gin.Context) {
+		c.JSON(200, GetReceivables(db))
+	})
+
 	router.GET("/api/logs", func(c *gin.Context) {
 		c.JSON(200, GetLogs())
 	})

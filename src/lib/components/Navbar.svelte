@@ -89,6 +89,7 @@
         { label: "nav.investment", href: "/investment" },
         { label: "nav.gain", href: "/gain" },
         { label: "nav.allocation", href: "/allocation", help: "allocation-targets" },
+        { label: "nav.receivables", href: "/receivables" },
         { label: "nav.analysis", href: "/analysis", tag: "alpha", help: "analysis" }
       ]
     },

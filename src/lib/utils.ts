@@ -513,6 +513,10 @@ export function ajax(
   route: "/api/assets/balance"
 ): Promise<{ asset_breakdowns: Record<string, AssetBreakdown> }>;
 export function ajax(route: "/api/liabilities/repayment"): Promise<{ repayments: Posting[] }>;
+export function ajax(route: "/api/receivables"): Promise<{
+  receivables: import("./receivables").Receivable[];
+  total_outstanding: number;
+}>;
 export function ajax(
   route: "/api/liabilities/balance"
 ): Promise<{ liability_breakdowns: LiabilityBreakdown[] }>;

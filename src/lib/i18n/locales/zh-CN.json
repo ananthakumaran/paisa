@@ -27,6 +27,7 @@
     "investment": "投资",
     "gain": "收益",
     "allocation": "资产配置",
+    "receivables": "应收款",
     "analysis": "分析",
     "credit_cards": "信用卡",
     "repayment": "还款",
@@ -64,6 +65,22 @@
       "title": "出现错误",
       "intro": "Paisa 遇到严重错误",
       "report": "请前往 {link} 反馈此问题，关闭并重新打开应用可能会有所帮助。"
+    }
+  },
+  "receivables": {
+    "empty": "暂无应收款。将 Assets:* 下的账户设置 kind: receivable 后可在此跟踪外借款项。",
+    "summary": {
+      "total_outstanding": "应收总额",
+      "count": "笔数"
+    },
+    "column": {
+      "borrower": "借款人",
+      "account": "账户路径",
+      "outstanding": "剩余金额",
+      "lend_date": "出借日",
+      "due_date": "约定归还日",
+      "interest_rate": "利率",
+      "note": "备注"
     }
   },
   "login": {

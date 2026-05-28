@@ -5,6 +5,7 @@ import { Delaunay } from "d3";
 import _ from "lodash";
 import tippy from "tippy.js";
 import COLORS from "./colors";
+import { computeLeftMargin } from "./gain_margin";
 import {
   formatCurrency,
   formatCurrencyCrude,
@@ -34,8 +35,19 @@ export function renderOverview(gains: Gain[]) {
   gains = _.sortBy(gains, (g) => g.account);
   const BAR_HEIGHT = rem(15);
   const id = "#d3-gain-overview";
+  // Y-axis labels are the account names with the leading "Assets:" stripped
+  // (see restName below). For long CJK-context paths the default 150px gutter
+  // clips the label — see issue #64 R2. Grow the margin to fit the widest
+  // label, never shrinking below the legacy 150px so short Indian-style
+  // accounts (Debt:ABCBF, Equity:NPS:HDFC:E) keep the same layout.
+  const labels = gains.map((g) => restName(g.account));
   const svg = d3.select(id),
-    margin = { top: rem(25), right: rem(20), bottom: rem(10), left: rem(150) },
+    margin = {
+      top: rem(25),
+      right: rem(20),
+      bottom: rem(10),
+      left: rem(computeLeftMargin(labels, 150))
+    },
     width =
       Math.max(document.getElementById(id.substring(1)).parentElement.clientWidth, 1000) -
       margin.left -

@@ -124,6 +124,16 @@ export const willClearTippy = writable(0);
 
 export const accountTfIdf = writable<AccountTfIdf>(null);
 
+export interface AccountRule {
+  name: string;
+  pattern: string;
+  account: string;
+  description: string;
+  enabled: boolean;
+}
+
+export const accountRules = writable<AccountRule[]>([]);
+
 export function setAllowedDateRange(dates: dayjs.Dayjs[]) {
   const [start, end] = d3.extent(dates);
   if (start) {

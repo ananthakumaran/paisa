@@ -1,5 +1,8 @@
-.PHONY: docs
+.PHONY: docs clean
 .PHONY: fixture/main.transactions.json
+
+clean:
+	deno task clean
 
 develop:
 	deno run -A npm:concurrently --names "GO,JS" -c "auto" "make serve" "deno task dev"

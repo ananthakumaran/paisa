@@ -15,6 +15,6 @@ jobs:
           primary-key: nix-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('**/*.nix', '**/flake.lock') }}
           restore-prefixes-first-match: nix-${{ runner.os }}-${{ runner.arch }}
       - run: |
-          nix develop --command npm install
+          nix develop --command deno install
           nix develop --command make lint
           nix develop --command make test

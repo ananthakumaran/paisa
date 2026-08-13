@@ -1,9 +1,9 @@
-FROM node:22-alpine3.21 AS web
+FROM denoland/deno:alpine AS web
 WORKDIR /usr/src/paisa
-COPY package.json package-lock.json* ./
-RUN npm install
+COPY deno.json deno.lock* ./
+RUN deno install
 COPY . .
-RUN npm run build
+RUN deno task build
 
 FROM golang:1.24-alpine3.21 AS go
 WORKDIR /usr/src/paisa

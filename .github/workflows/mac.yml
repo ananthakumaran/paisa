@@ -12,10 +12,9 @@ jobs:
     runs-on: macos-13
     steps:
       - uses: actions/checkout@v2.4.0
-      - uses: actions/setup-node@v3
+      - uses: denoland/setup-deno@v2
         with:
-          node-version: 22
-          cache: npm
+          deno-version: v2.x
       - uses: actions/setup-go@v4
         with:
           go-version: "1.24.2"
@@ -23,8 +22,8 @@ jobs:
           brew install --force --overwrite sqlite3 create-dmg
           brew install --build-from-source --verbose ./ledger.rb
           cp "$(brew --prefix ledger)/bin/ledger" internal/binary/ledger
-          npm install
-          npm run build
+          deno install
+          deno task build
           go build
           cp paisa paisa-cli-macos-amd64
           cd desktop

@@ -5,12 +5,14 @@ clean:
 	deno task clean
 
 develop:
+	@if [ ! -f web/static/index.html ]; then deno task build; fi
 	deno run -A npm:concurrently --names "GO,JS" -c "auto" "make serve" "deno task dev"
 
 serve:
 	deno run -A npm:nodemon --signal SIGTERM --delay 2000ms --watch '.' --ext go,json --exec 'go run . serve || exit 1'
 
 debug:
+	@if [ ! -f web/static/index.html ]; then deno task build; fi
 	deno run -A npm:concurrently --names "GO,JS" -c "auto" "make serve-now" "deno task dev"
 
 serve-now:

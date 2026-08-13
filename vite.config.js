@@ -3,6 +3,7 @@ import { nodePolyfills } from "vite-plugin-node-polyfills";
 
 /** @type {import('vite').UserConfig} */
 const config = {
+  cacheDir: "node_modules/.vite",
   build: {
     target: "es2021",
   },

@@ -1,20 +1,59 @@
 name: Test
 
 on:
-  - push
-  - pull_request
+  push:
+    branches: [master]
+    paths-ignore:
+      - "**/*.md"
+      - "docs/**"
+  pull_request:
+    paths-ignore:
+      - "**/*.md"
+      - "docs/**"
+  workflow_dispatch:
+
+concurrency:
+  group: test-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
 
 jobs:
   test:
     runs-on: ubuntu-latest
+    timeout-minutes: 60
     steps:
-      - uses: actions/checkout@v2.4.0
+      - uses: actions/checkout@v4
       - uses: nixbuild/nix-quick-install-action@v30
       - uses: nix-community/cache-nix-action@v6
         with:
           primary-key: nix-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('**/*.nix', '**/flake.lock') }}
           restore-prefixes-first-match: nix-${{ runner.os }}-${{ runner.arch }}
-      - run: |
-          nix develop --command deno install
-          nix develop --command make lint
-          nix develop --command make test
+      - name: Install dependencies
+        run: nix develop --command deno install
+      - name: Lint and type-check
+        run: nix develop --command make lint
+      - name: Build and test
+        run: nix develop --command make test
+      - name: Component tests
+        run: nix develop --command deno task test:component
+      - name: Browser tests
+        run: nix develop --command deno task test:e2e
+      - name: Visual tests
+        run: nix develop --command deno task test:visual
+      - name: Coverage report
+        # Enforce the 60% target after the authored frontend reaches it. Other
+        # coverage-generation failures still fail this step.
+        run: nix develop --command deno task test:coverage:report
+      - name: Upload failed-test reports
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-test-reports-${{ github.run_attempt }}
+          if-no-files-found: ignore
+          retention-days: 7
+          path: |
+            coverage/
+            playwright-report/
+            test-results/

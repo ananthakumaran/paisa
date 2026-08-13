@@ -19,6 +19,7 @@
           inherit pkgs;
           inherit hledger;
           deno = deno-pkgs.legacyPackages.${system}.deno;
+          playwright = deno-pkgs.legacyPackages.${system}.playwright-driver;
         };
 
         packages.default = pkgs.buildGoModule {

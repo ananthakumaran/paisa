@@ -27,3 +27,7 @@ fonts/*
 /result
 brand/*.png
 /graphify-out
+coverage/
+playwright-report/
+test-results/
+.vite/

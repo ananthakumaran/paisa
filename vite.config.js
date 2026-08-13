@@ -1,4 +1,5 @@
 import { sveltekit } from "@sveltejs/kit/vite";
+import { nodePolyfills } from "vite-plugin-node-polyfills";
 
 /** @type {import('vite').UserConfig} */
 const config = {
@@ -16,7 +17,11 @@ const config = {
   build: {
     target: "es2021",
   },
-  plugins: [sveltekit()],
+  plugins: [
+    sveltekit(),
+    // xlsx-populate uses Buffer when the lazy-loaded import route is opened.
+    nodePolyfills({ include: ["buffer"], globals: { Buffer: true } }),
+  ],
   server: {
     proxy: {
       "/api": {

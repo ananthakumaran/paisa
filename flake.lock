@@ -1,5 +1,21 @@
 {
   "nodes": {
+    "deno-pkgs": {
+      "locked": {
+        "lastModified": 1786514691,
+        "narHash": "sha256-9dkt1i5JNbEfPb+EjLcSDNs8zqEHQ/1JlSaKgj0SBAg=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "867dcbc30bafe3c862ef88620f2e7a109d7d3be5",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixos-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "flake-utils": {
       "inputs": {
         "systems": "systems"
@@ -49,6 +65,7 @@
     },
     "root": {
       "inputs": {
+        "deno-pkgs": "deno-pkgs",
         "flake-utils": "flake-utils",
         "hledger-pkgs": "hledger-pkgs",
         "nixpkgs": "nixpkgs"

@@ -1,4 +1,5 @@
-{ pkgs ? import <nixpkgs> { }, hledger ? import <nixpkgs> { } }:
+{ pkgs ? import <nixpkgs> { }, hledger ? import <nixpkgs> { }
+, deno ? pkgs.deno }:
 
 pkgs.mkShell {
   nativeBuildInputs = [
@@ -8,7 +9,7 @@ pkgs.mkShell {
     pkgs.sqlite
     pkgs.nodejs_22
     pkgs.libuuid
-    pkgs.deno
+    deno
     pkgs.node2nix
     # pkgs.pkgsCross.mingwW64.buildPackages.gcc
 

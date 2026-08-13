@@ -4,8 +4,9 @@
   # https://github.com/simonmichael/hledger/issues/2254
   inputs.hledger-pkgs.url =
     "github:NixOS/nixpkgs/ebe4301cbd8f81c4f8d3244b3632338bbeb6d49c";
+  inputs.deno-pkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
-  outputs = { self, nixpkgs, flake-utils, hledger-pkgs }:
+  outputs = { self, nixpkgs, flake-utils, hledger-pkgs, deno-pkgs }:
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = nixpkgs.legacyPackages.${system};
@@ -17,6 +18,7 @@
         devShells.default = import ./shell.nix {
           inherit pkgs;
           inherit hledger;
+          deno = deno-pkgs.legacyPackages.${system}.deno;
         };
 
         packages.default = pkgs.buildGoModule {

@@ -26,3 +26,4 @@ fonts/*
 !fonts/*.scss
 /result
 brand/*.png
+/graphify-out

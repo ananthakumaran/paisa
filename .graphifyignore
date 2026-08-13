@@ -1,0 +1,27 @@
+# Frontend and application build output
+/web/static/
+/.svelte-kit/
+/build/
+/dist/
+/package/
+/paisa
+
+# Generated Lezer parsers (keep grammars, tests, and handwritten helpers)
+/src/lib/sheet/parser.js
+/src/lib/sheet/parser.terms.js
+/src/lib/search/parser/parser.js
+/src/lib/search/parser/parser.terms.js
+
+# Generated tooling output
+/vite.config.js.timestamp-*
+/vite.config.ts.timestamp-*
+/docs/lexer/__pycache__/
+/svg/
+/result/
+
+# Generated brand/font assets; retain the source SVGs and committed font data
+/brand/*.png
+/fonts/*
+!/fonts/*.woff2
+!/fonts/*.json
+!/fonts/*.scss

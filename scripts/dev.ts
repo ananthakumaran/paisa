@@ -10,7 +10,10 @@ const ignoredDirectories = new Set([
 
 let backend: Deno.ChildProcess | undefined;
 let frontend: Deno.ChildProcess | undefined;
-const backendBinary = await Deno.makeTempFile({ prefix: "paisa-dev-" });
+const backendBinary = await Deno.makeTempFile({
+  prefix: "paisa-dev-",
+  suffix: Deno.build.os === "windows" ? ".exe" : undefined,
+});
 let restartTimer: ReturnType<typeof setTimeout> | undefined;
 let restarting = false;
 let shuttingDown = false;
@@ -97,7 +100,10 @@ function shouldRestart(paths: string[]) {
   });
 }
 
-for (const signal of ["SIGINT", "SIGTERM"] as const) {
+const terminationSignals = Deno.build.os === "windows"
+  ? (["SIGINT"] as const)
+  : (["SIGINT", "SIGTERM"] as const);
+for (const signal of terminationSignals) {
   Deno.addSignalListener(signal, () => void shutdown(0));
 }
 

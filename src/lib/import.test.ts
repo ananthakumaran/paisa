@@ -2,7 +2,6 @@ import { describe, it as test } from "@std/testing/bdd";
 import { expect } from "@std/expect";
 
 import { asRows, parse, render } from "./spreadsheet.ts";
-import fs from "node:fs";
 import helpers from "./template_helpers.ts";
 import _ from "lodash";
 import Handlebars from "handlebars";
@@ -33,9 +32,12 @@ Handlebars.registerHelper(
 );
 
 describe("import", () => {
-  fs.readdirSync("fixture/import").forEach((dir) => {
+  Array.from(Deno.readDirSync("fixture/import")).forEach(({ name: dir }) => {
     test(dir, async () => {
-      const files = fs.readdirSync(`fixture/import/${dir}`);
+      const files = Array.from(
+        Deno.readDirSync(`fixture/import/${dir}`),
+        ({ name }) => name,
+      );
       for (const file of files) {
         const [name, extension] = file.split(".");
         if (extension === "ledger") {
@@ -46,12 +48,11 @@ describe("import", () => {
           if (!inputFile || inputFile.endsWith(".pdf")) {
             break;
           }
-          const input = fs.readFileSync(`fixture/import/${dir}/${inputFile}`);
-          const output = fs.readFileSync(`fixture/import/${dir}/${file}`)
-            .toString();
-          const template = fs
-            .readFileSync(`internal/model/template/templates/${dir}.handlebars`)
-            .toString();
+          const input = Deno.readFileSync(`fixture/import/${dir}/${inputFile}`);
+          const output = Deno.readTextFileSync(`fixture/import/${dir}/${file}`);
+          const template = Deno.readTextFileSync(
+            `internal/model/template/templates/${dir}.handlebars`,
+          );
 
           const compiled = Handlebars.compile(template);
           const result = await parse(new File([input as any], inputFile));

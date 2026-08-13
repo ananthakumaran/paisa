@@ -1,32 +1,34 @@
 import { describe, it as test } from "@std/testing/bdd";
 import { expect } from "@std/expect";
-import fs from "node:fs";
 
 import { applyChanges } from "./bulk_edit.ts";
 import type { LedgerFile } from "./utils.ts";
 import _ from "lodash";
 
 describe("bulk_editor", () => {
-  const before = fs.readFileSync("fixture/main.ledger");
+  const before = Deno.readTextFileSync("fixture/main.ledger");
   const transactions = JSON.parse(
-    fs.readFileSync("fixture/main.transactions.json").toString(),
+    Deno.readTextFileSync("fixture/main.transactions.json"),
   );
-  fs.readdirSync("fixture/bulk_edit").forEach((dir) => {
+  Array.from(Deno.readDirSync("fixture/bulk_edit")).forEach(({ name: dir }) => {
     test(dir, () => {
-      const files = fs.readdirSync(`fixture/bulk_edit/${dir}`);
+      const files = Array.from(
+        Deno.readDirSync(`fixture/bulk_edit/${dir}`),
+        ({ name }) => name,
+      );
       for (const file of files) {
         const [name, extension] = file.split(".");
         if (extension === "ledger") {
           const args = JSON.parse(
-            fs.readFileSync(`fixture/bulk_edit/${dir}/${name}.json`).toString(),
+            Deno.readTextFileSync(`fixture/bulk_edit/${dir}/${name}.json`),
           );
-          const after = fs.readFileSync(
+          const after = Deno.readTextFileSync(
             `fixture/bulk_edit/${dir}/${name}.ledger`,
-          ).toString();
+          );
           const ledgerFile: LedgerFile = {
             type: "file",
             name: "main.ledger",
-            content: before.toString(),
+            content: before,
             versions: [],
           };
           const {

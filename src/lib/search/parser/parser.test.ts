@@ -2,19 +2,17 @@ import { describe, it as test } from "@std/testing/bdd";
 import { queryLanguage } from "./query.ts";
 import { fileTests } from "@lezer/generator/dist/test";
 
-import * as fs from "node:fs";
-import * as path from "node:path";
-import { fileURLToPath } from "node:url";
-const caseDir = path.dirname(fileURLToPath(import.meta.url));
+import { dirname, fromFileUrl, join } from "@std/path";
+const caseDir = dirname(fromFileUrl(import.meta.url));
 
-for (const file of fs.readdirSync(caseDir)) {
+for (const { name: file } of Deno.readDirSync(caseDir)) {
   if (!/\.txt$/.test(file)) continue;
 
   const name = /^[^.]*/.exec(file)[0];
   describe(name, () => {
     for (
       const { name, run } of fileTests(
-        fs.readFileSync(path.join(caseDir, file), "utf8"),
+        Deno.readTextFileSync(join(caseDir, file)),
         file,
       )
     ) {

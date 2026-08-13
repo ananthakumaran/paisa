@@ -1,8 +1,6 @@
-import path from "node:path";
+import { join } from "@std/path";
 import { describe, it as test } from "@std/testing/bdd";
 import { expect } from "@std/expect";
-import waitPort from "wait-port";
-import fs from "node:fs";
 import axios from "axios";
 import { diffString } from "json-diff";
 
@@ -11,18 +9,25 @@ const port = 5700;
 axios.defaults.baseURL = `http://localhost:${port}`;
 
 function updateConfig(dir: string, from: string, to: string) {
-  const filename = path.join(dir, "paisa.yaml");
-  let config = fs.readFileSync(filename).toString();
+  const filename = join(dir, "paisa.yaml");
+  let config = Deno.readTextFileSync(filename);
   config = config.replace(from, to);
-  fs.writeFileSync(filename, config);
+  Deno.writeTextFileSync(filename, config);
 }
 
 async function recordAndVerify(dir: string, route: string, name: string) {
   const { data: data } = await axios.get(route);
 
-  const filename = path.join(dir, name + ".json");
-  if (fs.existsSync(filename) && process.env["REGENERATE"] !== "true") {
-    const current = JSON.parse(fs.readFileSync(filename).toString());
+  const filename = join(dir, name + ".json");
+  let exists = true;
+  try {
+    Deno.statSync(filename);
+  } catch (error) {
+    if (error instanceof Deno.errors.NotFound) exists = false;
+    else throw error;
+  }
+  if (exists && Deno.env.get("REGENERATE") !== "true") {
+    const current = JSON.parse(Deno.readTextFileSync(filename));
     const diff = diffString(data, current, {
       excludeKeys: ["id", "transaction_id", "endLine", "transaction_end_line"],
     });
@@ -31,7 +36,7 @@ async function recordAndVerify(dir: string, route: string, name: string) {
       expect(diff).toBe("");
     }
   }
-  fs.writeFileSync(filename, JSON.stringify(data, null, 2));
+  Deno.writeTextFileSync(filename, JSON.stringify(data, null, 2));
 }
 
 async function verifyApi(dir: string) {
@@ -71,19 +76,29 @@ async function verifyApi(dir: string) {
   await recordAndVerify(dir, "/api/config", "config");
 }
 
-async function wait() {
-  try {
-    await waitPort({ port: port, output: "silent" });
-  } catch (e) {
-    // ignore
+async function waitForPort(timeout = 10_000) {
+  const deadline = Date.now() + timeout;
+  while (Date.now() < deadline) {
+    try {
+      const connection = await Deno.connect({
+        hostname: "127.0.0.1",
+        port,
+      });
+      connection.close();
+      return;
+    } catch (error) {
+      if (!(error instanceof Deno.errors.ConnectionRefused)) throw error;
+      await new Promise((resolve) => setTimeout(resolve, 100));
+    }
   }
+  throw new Error(`Timed out waiting for port ${port}`);
 }
 
 async function check(directory: string) {
   const command = new Deno.Command("./paisa", {
     args: [
       "--config",
-      path.join(directory, "paisa.yaml"),
+      join(directory, "paisa.yaml"),
       "--port",
       port.toString(),
       "--now",
@@ -93,7 +108,7 @@ async function check(directory: string) {
   });
   const child = command.spawn();
   try {
-    await wait();
+    await waitForPort();
     await verifyApi(directory);
   } finally {
     child.kill("SIGTERM");
@@ -102,9 +117,9 @@ async function check(directory: string) {
 }
 
 describe("regression", () => {
-  fs.readdirSync(fixture).forEach((dir) => {
+  Array.from(Deno.readDirSync(fixture)).forEach(({ name: dir }) => {
     test(dir, async () => {
-      const directory = path.join(fixture, dir);
+      const directory = join(fixture, dir);
       await check(directory);
     });
   });

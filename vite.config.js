@@ -1,5 +1,4 @@
 import { sveltekit } from "@sveltejs/kit/vite";
-import { nodePolyfills } from "vite-plugin-node-polyfills";
 
 /** @type {import('vite').UserConfig} */
 const config = {
@@ -7,14 +6,7 @@ const config = {
   build: {
     target: "es2021",
   },
-  plugins: [
-    sveltekit(),
-    nodePolyfills({
-      globals: {
-        Buffer: true,
-      },
-    }),
-  ],
+  plugins: [sveltekit()],
   server: {
     proxy: {
       "/api": {

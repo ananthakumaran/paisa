@@ -40,12 +40,12 @@ lint:
 
 regen:
 	go build
-	unset PAISA_CONFIG && REGENERATE=true TZ=UTC deno test --no-check --allow-all tests
+	unset PAISA_CONFIG && REGENERATE=true TZ=UTC deno task test:integration
 
 jstest:
-	deno test --no-check --allow-read --allow-env src
+	deno task test:unit
 	go build
-	unset PAISA_CONFIG && TZ=UTC deno test --no-check --allow-all tests
+	unset PAISA_CONFIG && TZ=UTC deno task test:integration
 
 jsbuild:
 	deno task build

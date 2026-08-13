@@ -17,6 +17,5 @@ export const parser = LRParser.deserialize({
   topRules: {"Sheet":[0,2]},
   dialects: {comment: 187, skip_comment: 692},
   specialized: [{term: 17, get: (value) => spec_Identifier[value] || -1}],
-  tokenPrec: 694,
-  termNames: {"0":"⚠","1":"Comment","2":"@top","3":"Line","4":"Expression","5":"Literal","6":"Number","7":"Percent","8":"UnaryExpression","9":"UnaryOperator","10":"BinaryExpression","11":"BinaryOperator<\"^\">","12":"BinaryOperator<\"*\" | \"/\">","13":"BinaryOperator<\"+\" | \"-\">","14":"BinaryOperator<\"<\" | \"<=\" | \">\" | \">=\">","15":"BinaryOperator<\"==\" | \"!=\">","16":"BinaryOperator<@specialize[@name=AND]<Identifier, \"AND\">>","17":"Identifier","18":"Identifier/\"AND\"","19":"BinaryOperator<@specialize[@name=OR]<Identifier, \"OR\">>","20":"Identifier/\"OR\"","21":"Grouping","22":"FunctionCall","23":"Arguments","24":"Postings","25":"SearchQueryString","26":"stringStart","27":"SearchQuery","28":"stringEnd","29":"Assignment","30":"AssignmentOperator","31":"FunctionDefinition","32":"Parameters","33":"Header","34":"newline+","35":"(\",\" Expression)+","36":"(stringContent | stringEscape)+","37":"(\",\" Identifier)+","38":"(newline+ Line)+","39":"␄","40":"%mainskip","41":"whitespace","42":"comment","43":"newline","44":"lines","45":"\"+\"","46":"\"-\"","47":"\"!\"","48":"\"^\"","49":"\"*\"","50":"\"/\"","51":"\"<\"","52":"\"<=\"","53":"\">\"","54":"\">=\"","55":"\"==\"","56":"\"!=\"","57":"\")\"","58":"\"(\"","59":"\",\"","60":"\"{\"","61":"stringContent","62":"stringEscape","63":"\"=\""}
+  tokenPrec: 694
 })

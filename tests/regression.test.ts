@@ -1,6 +1,6 @@
-import { spawn } from "bun";
 import path from "node:path";
-import { describe, expect, test } from "bun:test";
+import { describe, it as test } from "@std/testing/bdd";
+import { expect } from "@std/expect";
 import waitPort from "wait-port";
 import fs from "node:fs";
 import axios from "axios";
@@ -80,22 +80,24 @@ async function wait() {
 }
 
 async function check(directory: string) {
-  const process = spawn([
-    "./paisa",
-    "--config",
-    path.join(directory, "paisa.yaml"),
-    "--port",
-    port.toString(),
-    "--now",
-    "2022-02-07",
-    "serve",
-  ]);
+  const command = new Deno.Command("./paisa", {
+    args: [
+      "--config",
+      path.join(directory, "paisa.yaml"),
+      "--port",
+      port.toString(),
+      "--now",
+      "2022-02-07",
+      "serve",
+    ],
+  });
+  const child = command.spawn();
   try {
     await wait();
     await verifyApi(directory);
   } finally {
-    process.kill();
-    await process.exited;
+    child.kill("SIGTERM");
+    await child.status;
   }
 }
 

@@ -1,8 +1,9 @@
-import { describe, expect, test } from "bun:test";
-import fs from "fs";
+import { describe, it as test } from "@std/testing/bdd";
+import { expect } from "@std/expect";
+import fs from "node:fs";
 
-import { applyChanges } from "./bulk_edit";
-import type { LedgerFile } from "./utils";
+import { applyChanges } from "./bulk_edit.ts";
+import type { LedgerFile } from "./utils.ts";
 import _ from "lodash";
 
 describe("bulk_editor", () => {

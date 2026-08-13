@@ -1,10 +1,10 @@
 import _ from "lodash";
-import arcticons from "../../fonts/arcticons-info.json";
-import fa6brands from "../../fonts/fa6-brands-info.json";
-import fa6regular from "../../fonts/fa6-regular-info.json";
-import fa6solid from "../../fonts/fa6-solid-info.json";
-import fluentemoji from "../../fonts/fluent-emoji-high-contrast-info.json";
-import mdi from "../../fonts/mdi-info.json";
+import arcticons from "../../fonts/arcticons-info.json" with { type: "json" };
+import fa6brands from "../../fonts/fa6-brands-info.json" with { type: "json" };
+import fa6regular from "../../fonts/fa6-regular-info.json" with { type: "json" };
+import fa6solid from "../../fonts/fa6-solid-info.json" with { type: "json" };
+import fluentemoji from "../../fonts/fluent-emoji-high-contrast-info.json" with { type: "json" };
+import mdi from "../../fonts/mdi-info.json" with { type: "json" };
 import { stemmer } from "stemmer";
 
 const icons = {

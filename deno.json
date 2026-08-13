@@ -29,6 +29,8 @@
     "@formatjs/intl-numberformat": "npm:@formatjs/intl-numberformat@^8.7.0",
     "@fortawesome/fontawesome-free": "npm:@fortawesome/fontawesome-free@^6.0",
     "@happy-dom/global-registrator": "npm:@happy-dom/global-registrator@^17.4.6",
+    "@std/expect": "jsr:@std/expect@^1",
+    "@std/testing/bdd": "jsr:@std/testing@^1/bdd",
     "@iconify/json": "npm:@iconify/json@^2.2.124",
     "@iconify/tools": "npm:@iconify/tools@^3.0.5",
     "@lezer/common": "npm:@lezer/common@^1.2.0",
@@ -55,9 +57,7 @@
     "bulma": "npm:bulma@^0.9.4",
     "bulma-switch": "npm:bulma-switch@^2.0.4",
     "bulma-toast": "npm:bulma-toast@^2.4.2",
-    "bun": "npm:bun-types@^1.0.3",
-    "bun:test": "npm:bun-types@^1.0.3",
-    "bun-types": "npm:bun-types@^1.0.3",
+
     "chroma-js": "npm:chroma-js@^2.4.2",
     "chrono-node": "npm:chrono-node@^2.6.6",
     "clipboard": "npm:clipboard@^2.0.11",
@@ -68,8 +68,8 @@
     "crypto-js": "npm:crypto-js@^4.2.0",
     "d3": "npm:d3@^7.4.0",
     "d3-delaunay": "npm:d3-delaunay@^6.0.2",
-    "d3-path-arrows": "https://github.com/tomshanley/d3-path-arrows/archive/364ac20429d943d5e0eaf85780f5d68197fe2c53.tar.gz",
-    "d3-sankey-circular": "https://github.com/tomshanley/d3-sankey-circular/archive/b19376aa767bf2cc37d4c6ff3a159f545a1566a4.tar.gz",
+    "d3-path-arrows": "npm:d3-path-arrows@^0.4.0",
+    "d3-sankey-circular": "npm:d3-sankey-circular@^0.34.0",
     "daisyui": "npm:daisyui@^4.6",
     "date-picker-svelte": "npm:date-picker-svelte@^2.9.0",
     "dayjs": "npm:dayjs@^1.11.0",
@@ -109,17 +109,13 @@
     "vite": "npm:vite@^5.0.3",
     "vite-plugin-node-polyfills": "npm:vite-plugin-node-polyfills@^0.19.0",
     "wait-port": "npm:wait-port@^1.1.0",
-    "xlsx": "https://cdn.sheetjs.com/xlsx-0.19.3/xlsx-0.19.3.tgz",
+    "xlsx": "npm:xlsx@0.18.5",
     "xlsx-populate": "npm:xlsx-populate@^1.21.0",
     "$lib": "./src/lib",
-    "$lib/icon": "./src/lib/icon.ts",
-    "$lib/spreadsheet": "./src/lib/spreadsheet.ts",
-    "$lib/template_helpers": "./src/lib/template_helpers.ts",
-    "$lib/utils": "./src/lib/utils.ts",
     "$lib/*": "./src/lib/*"
   },
   "compilerOptions": {
-    "types": ["node", "bun-types"],
+    "types": ["node"],
     "checkJs": false,
     "skipLibCheck": true,
     "noImplicitAny": true
@@ -138,10 +134,12 @@
         "no-window-prefix",
         "require-await",
         "no-var",
-        "no-inner-declarations"
+        "no-inner-declarations",
+        "no-sloppy-imports"
       ]
     },
     "exclude": [".svelte-kit/", "web/static/"]
   },
+  "unstable": ["sloppy-imports"],
   "nodeModulesDir": "auto"
 }

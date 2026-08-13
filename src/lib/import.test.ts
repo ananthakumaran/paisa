@@ -1,22 +1,23 @@
-import { describe, expect, test } from "bun:test";
+import { describe, it as test } from "@std/testing/bdd";
+import { expect } from "@std/expect";
 
-import { asRows, parse, render } from "$lib/spreadsheet";
+import { asRows, parse, render } from "./spreadsheet.ts";
 import fs from "node:fs";
-import helpers from "$lib/template_helpers";
+import helpers from "./template_helpers.ts";
 import _ from "lodash";
 import Handlebars from "handlebars";
 import dayjs from "dayjs";
-import customParseFormat from "dayjs/plugin/customParseFormat";
+import customParseFormat from "dayjs/plugin/customParseFormat.js";
 dayjs.extend(customParseFormat);
-import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
+import isSameOrBefore from "dayjs/plugin/isSameOrBefore.js";
 dayjs.extend(isSameOrBefore);
-import utc from "dayjs/plugin/utc";
-import timezone from "dayjs/plugin/timezone"; // dependent on utc plugin
+import utc from "dayjs/plugin/utc.js";
+import timezone from "dayjs/plugin/timezone.js"; // dependent on utc plugin
 dayjs.extend(utc);
 dayjs.extend(timezone);
-import localeData from "dayjs/plugin/localeData";
+import localeData from "dayjs/plugin/localeData.js";
 dayjs.extend(localeData);
-import updateLocale from "dayjs/plugin/updateLocale";
+import updateLocale from "dayjs/plugin/updateLocale.js";
 dayjs.extend(updateLocale);
 
 Handlebars.registerHelper(

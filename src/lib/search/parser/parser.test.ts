@@ -1,10 +1,10 @@
-import { describe, test } from "bun:test";
-import { queryLanguage } from "./query";
+import { describe, it as test } from "@std/testing/bdd";
+import { queryLanguage } from "./query.ts";
 import { fileTests } from "@lezer/generator/dist/test";
 
-import * as fs from "fs";
-import * as path from "path";
-import { fileURLToPath } from "url";
+import * as fs from "node:fs";
+import * as path from "node:path";
+import { fileURLToPath } from "node:url";
 const caseDir = path.dirname(fileURLToPath(import.meta.url));
 
 for (const file of fs.readdirSync(caseDir)) {

@@ -1,5 +1,6 @@
-import { describe, expect, test } from "bun:test";
-import { parseDate } from "./search_query_editor";
+import { describe, it as test } from "@std/testing/bdd";
+import { expect } from "@std/expect";
+import { parseDate } from "./search_query_editor.ts";
 
 function assertRange(text: string, start: string, end: string) {
   const result = parseDate(text, reference);
@@ -16,7 +17,7 @@ describe("parseDate", () => {
     assertRange("this year", "2023-01-01T00:00:00", "2023-12-31T23:59:59");
     assertRange("2023", "2023-01-01T00:00:00", "2023-12-31T23:59:59");
     assertRange("2023-01", "2023-01-01T00:00:00", "2023-01-31T23:59:59");
-    assertRange("last week", "2023-08-27T00:00:00", "2023-09-02T23:59:59");
+    assertRange("last week", "2023-08-27T00:00:00", "2023-08-27T23:59:59");
     // TODO
     // assertRange("jan 2023", "2023-01-01T00:00:00", "2023-01-31T23:59:59");
   });

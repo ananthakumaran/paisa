@@ -1,10 +1,10 @@
-import { describe, test } from "bun:test";
-import { sheetLanguage } from "./language";
+import { describe, it as test } from "@std/testing/bdd";
+import { sheetLanguage } from "./language.ts";
 import { fileTests } from "@lezer/generator/dist/test";
 
-import * as fs from "fs";
-import * as path from "path";
-import { fileURLToPath } from "url";
+import * as fs from "node:fs";
+import * as path from "node:path";
+import { fileURLToPath } from "node:url";
 const caseDir = path.dirname(fileURLToPath(import.meta.url));
 
 const parser = sheetLanguage.parser.configure({

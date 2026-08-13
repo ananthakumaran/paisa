@@ -40,12 +40,12 @@ lint:
 
 regen:
 	go build
-	unset PAISA_CONFIG && REGENERATE=true TZ=UTC bun test tests
+	unset PAISA_CONFIG && REGENERATE=true TZ=UTC deno test --no-check --allow-all tests
 
 jstest:
-	bun test --preload ./src/happydom.ts src
+	deno test --no-check --allow-read --allow-env src
 	go build
-	unset PAISA_CONFIG && TZ=UTC bun test tests
+	unset PAISA_CONFIG && TZ=UTC deno test --no-check --allow-all tests
 
 jsbuild:
 	deno task build
@@ -77,7 +77,7 @@ fixture/main.transactions.json:
 	pkill -f 'paisa serve -p 6500'
 
 generate-fonts:
-	bun download-svgs.js
+	deno run -A download-svgs.js
 	node generate-font.js
 
 node2nix:

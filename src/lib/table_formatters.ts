@@ -5,8 +5,8 @@ import {
   formatPercentage,
   isZero,
   lastName,
-} from "./utils";
-import { iconText } from "./icon";
+} from "$lib/utils";
+import { iconText } from "$lib/icon";
 
 export function indendedAssetAccountName(cell: CellComponent) {
   const account = cell.getValue();

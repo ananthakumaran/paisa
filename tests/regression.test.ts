@@ -1,8 +1,8 @@
 import { spawn } from "bun";
-import path from "path";
+import path from "node:path";
 import { describe, expect, test } from "bun:test";
 import waitPort from "wait-port";
-import fs from "fs";
+import fs from "node:fs";
 import axios from "axios";
 import { diffString } from "json-diff";
 

@@ -32,6 +32,7 @@ import updateLocale from "dayjs/plugin/updateLocale";
 dayjs.extend(updateLocale);
 
 import * as pdfjs from "pdfjs-dist";
+// @ts-ignore: Vite worker ?url import
 import pdfjsWorkerUrl from "pdfjs-dist/build/pdf.worker.js?url";
 
 if (pdfjs.GlobalWorkerOptions) {
@@ -48,7 +49,7 @@ import "@formatjs/intl-numberformat/locale-data/en";
 
 Handlebars.registerHelper(
   _.mapValues(helpers, (helper, name) => {
-    return function (...args: any[]) {
+    return function (this: any, ...args: any[]) {
       try {
         return helper.apply(this, args);
       } catch (e) {
@@ -67,25 +68,25 @@ toast.setDefaults({
 
 globalThis.USER_CONFIG = {} as any;
 
-export const handleError: HandleClientError = async (
+export const handleError: HandleClientError = (
   { error, status, message },
 ) => {
-  let stack = null;
+  let stack: string | undefined = undefined;
   if (error instanceof Error) {
     stack = error.stack;
   }
-  return { message, stack, status, detail: error.toString() };
+  return { message, stack, status, detail: (error as any)?.toString?.() ?? String(error) } as any;
 };
 
 function formatError(error: any) {
-  if (error.stack) {
+  if (error?.stack) {
     return error.stack;
   }
 
-  if (error.message) {
+  if (error?.message) {
     return error.message;
   } else {
-    return error.toString();
+    return String(error);
   }
 }
 
@@ -111,9 +112,9 @@ function displayError(error: any) {
   });
 }
 
-window.addEventListener("unhandledrejection", (event) => {
+globalThis.addEventListener("unhandledrejection", (event: any) => {
   displayError(event.reason);
 });
-window.addEventListener("error", (event) => {
+globalThis.addEventListener("error", (event: any) => {
   displayError(event.error);
 });

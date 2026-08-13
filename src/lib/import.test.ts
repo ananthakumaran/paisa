@@ -1,8 +1,8 @@
 import { describe, expect, test } from "bun:test";
 
-import { asRows, parse, render } from "./spreadsheet";
-import fs from "fs";
-import helpers from "./template_helpers";
+import { asRows, parse, render } from "$lib/spreadsheet";
+import fs from "node:fs";
+import helpers from "$lib/template_helpers";
 import _ from "lodash";
 import Handlebars from "handlebars";
 import dayjs from "dayjs";
@@ -21,7 +21,7 @@ dayjs.extend(updateLocale);
 
 Handlebars.registerHelper(
   _.mapValues(helpers, (helper, name) => {
-    return function (...args: any[]) {
+    return function (this: any, ...args: any[]) {
       try {
         return helper.apply(this, args);
       } catch (e) {
@@ -42,7 +42,7 @@ describe("import", () => {
             files,
             (f) => f != file && f.startsWith(name),
           );
-          if (inputFile.endsWith(".pdf")) {
+          if (!inputFile || inputFile.endsWith(".pdf")) {
             break;
           }
           const input = fs.readFileSync(`fixture/import/${dir}/${inputFile}`);

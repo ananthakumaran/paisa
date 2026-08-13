@@ -1,17 +1,20 @@
 import * as d3 from "d3";
-import { formatCurrencyCrude, tooltip, formatCurrency } from "./utils";
+import { formatCurrency, formatCurrencyCrude, tooltip } from "./utils";
 import _ from "lodash";
 import COLORS from "./colors";
 
 export function renderYearlySpends(
   svgNode: SVGElement,
-  yearlySpends: { [year: string]: { [month: string]: number } }
+  yearlySpends: { [year: string]: { [month: string]: number } },
 ) {
   const BAR_HEIGHT = 20;
   const svg = d3.select(svgNode),
     margin = { top: 15, right: 20, bottom: 20, left: 70 },
     width = svgNode.parentElement.clientWidth - margin.left - margin.right,
-    g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    g = svg.append("g").attr(
+      "transform",
+      "translate(" + margin.left + "," + margin.top + ")",
+    );
 
   const color = COLORS.expenses;
 
@@ -56,14 +59,18 @@ export function renderYearlySpends(
     .attr("data-tippy-content", (d) => {
       return tooltip(
         _.map(d.breakdown, (value, month) => {
-          return [month, [formatCurrency(value), "has-text-right has-text-weight-bold"]];
+          return [month, [
+            formatCurrency(value),
+            "has-text-right has-text-weight-bold",
+          ]];
         }),
-        { total: formatCurrency(d.value), header: d.year }
+        { total: formatCurrency(d.value), header: d.year },
       );
     })
     .attr("x", x(0))
     .attr("y", function (d) {
-      return y(d.year) + (y.bandwidth() - Math.min(y.bandwidth(), BAR_HEIGHT)) / 2;
+      return y(d.year) +
+        (y.bandwidth() - Math.min(y.bandwidth(), BAR_HEIGHT)) / 2;
     })
     .attr("width", function (d) {
       return x(d.value) - x(0);

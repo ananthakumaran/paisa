@@ -33,7 +33,7 @@ async function downloadSVGs(sets) {
       if (set == "arcticons") {
         svgString = svgString.replaceAll(
           'stroke="currentColor"',
-          'stroke-width="3px" stroke="currentColor"'
+          'stroke-width="3px" stroke="currentColor"',
         );
       }
       const basename = `${name}.svg`;
@@ -48,12 +48,25 @@ async function main() {
   console.log("downloading arcticons");
   downloadSVGs(["arcticons"]);
   try {
-    spawnSync(["npx", "oslllo-svg-fixer", "-s", "svg/arcticons", "-d", "svg/arcticons"]);
+    spawnSync([
+      "npx",
+      "oslllo-svg-fixer",
+      "-s",
+      "svg/arcticons",
+      "-d",
+      "svg/arcticons",
+    ]);
   } catch (e) {
     // ignore
   }
   console.log("downloading others");
-  downloadSVGs(["fa6-solid", "fa6-regular", "fa6-brands", "mdi", "fluent-emoji-high-contrast"]);
+  downloadSVGs([
+    "fa6-solid",
+    "fa6-regular",
+    "fa6-brands",
+    "mdi",
+    "fluent-emoji-high-contrast",
+  ]);
 }
 
 main();

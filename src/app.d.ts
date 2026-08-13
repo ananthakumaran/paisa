@@ -6,11 +6,17 @@
 /// <reference lib="webworker" />
 
 declare type Item = import("svelte-dnd-action").Item;
-declare type DndEvent<ItemType = Item> = import("svelte-dnd-action").DndEvent<ItemType>;
+declare type DndEvent<ItemType = Item> = import("svelte-dnd-action").DndEvent<
+  ItemType
+>;
 declare namespace svelteHTML {
   interface HTMLAttributes<T> {
-    "on:consider"?: (event: CustomEvent<DndEvent<ItemType>> & { target: EventTarget & T }) => void;
-    "on:finalize"?: (event: CustomEvent<DndEvent<ItemType>> & { target: EventTarget & T }) => void;
+    "on:consider"?: (
+      event: CustomEvent<DndEvent<ItemType>> & { target: EventTarget & T },
+    ) => void;
+    "on:finalize"?: (
+      event: CustomEvent<DndEvent<ItemType>> & { target: EventTarget & T },
+    ) => void;
   }
 }
 
@@ -72,7 +78,10 @@ declare module "textures" {
 }
 
 declare module "xlsx-populate" {
-  export function fromDataAsync(data: ArrayBuffer, options: { password?: string }): any;
+  export function fromDataAsync(
+    data: ArrayBuffer,
+    options: { password?: string },
+  ): any;
 }
 
 declare module "arima/async" {

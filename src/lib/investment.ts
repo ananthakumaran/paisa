@@ -5,14 +5,14 @@ import {
   formatCurrency,
   formatCurrencyCrude,
   formatFloat,
+  type InvestmentYearlyCard,
+  type Legend,
+  now,
   type Posting,
+  rem,
   secondName,
   skipTicks,
   tooltip,
-  type InvestmentYearlyCard,
-  rem,
-  now,
-  type Legend
 } from "./utils";
 import { generateColorScheme } from "./colors";
 import type dayjs from "dayjs";
@@ -27,12 +27,14 @@ export function renderMonthlyInvestmentTimeline(postings: Posting[]): Legend[] {
   const MAX_BAR_WIDTH = rem(40);
   const svg = d3.select(id),
     margin = { top: rem(15), right: rem(30), bottom: rem(60), left: rem(40) },
-    width =
-      document.getElementById(id.substring(1)).parentElement.clientWidth -
+    width = document.getElementById(id.substring(1)).parentElement.clientWidth -
       margin.left -
       margin.right,
     height = +svg.attr("height") - margin.top - margin.bottom,
-    g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    g = svg.append("g").attr(
+      "transform",
+      "translate(" + margin.left + "," + margin.top + ")",
+    );
 
   const groups = _.chain(postings)
     .map((p) => secondName(p.account))
@@ -43,7 +45,7 @@ export function renderMonthlyInvestmentTimeline(postings: Posting[]): Legend[] {
 
   const defaultValues = _.zipObject(
     groupKeys,
-    _.map(groupKeys, () => 0)
+    _.map(groupKeys, () => 0),
   );
 
   const start = _.min(_.map(postings, (p) => p.date)),
@@ -70,19 +72,19 @@ export function renderMonthlyInvestmentTimeline(postings: Posting[]): Legend[] {
           _.sum(
             _.filter(
               _.map(postings, (p) => p.amount),
-              (a) => a >= 0
-            )
-          )
+              (a) => a >= 0,
+            ),
+          ),
         ],
         [
           key + "-debit",
           _.sum(
             _.filter(
               _.map(postings, (p) => p.amount),
-              (a) => a < 0
-            )
-          )
-        ]
+              (a) => a < 0,
+            ),
+          ),
+        ],
       ])
       .fromPairs()
       .value();
@@ -91,11 +93,11 @@ export function renderMonthlyInvestmentTimeline(postings: Posting[]): Legend[] {
       _.merge(
         {
           month: month.format(timeFormat),
-          postings: postings
+          postings: postings,
         },
         defaultValues,
-        values
-      )
+        values,
+      ),
     );
   });
 
@@ -106,19 +108,19 @@ export function renderMonthlyInvestmentTimeline(postings: Posting[]): Legend[] {
     _.sum(
       _.filter(
         _.map(groupKeys, (k) => p[k]),
-        filter
-      )
+        filter,
+      ),
     );
   x.domain(points.map((p) => p.month));
   y.domain([
     d3.min(
       points,
-      sum((a) => a < 0)
+      sum((a) => a < 0),
     ),
     d3.max(
       points,
-      sum((a) => a > 0)
-    )
+      sum((a) => a > 0),
+    ),
   ]);
 
   const z = generateColorScheme(groups);
@@ -130,7 +132,7 @@ export function renderMonthlyInvestmentTimeline(postings: Posting[]): Legend[] {
       d3
         .axisBottom(x)
         .ticks(5)
-        .tickFormat(skipTicks(30, x, (d) => d.toString()))
+        .tickFormat(skipTicks(30, x, (d) => d.toString())),
     )
     .selectAll("text")
     .attr("y", 10)
@@ -147,8 +149,8 @@ export function renderMonthlyInvestmentTimeline(postings: Posting[]): Legend[] {
     .selectAll("g")
     .data(
       d3.stack().offset(d3.stackOffsetDiverging).keys(groupKeys)(
-        points as { [key: string]: number }[]
-      )
+        points as { [key: string]: number }[],
+      ),
     )
     .enter()
     .append("g")
@@ -168,16 +170,20 @@ export function renderMonthlyInvestmentTimeline(postings: Posting[]): Legend[] {
         _.sortBy(
           postings.map((p) => [
             _.drop(p.account.split(":")).join(":"),
-            [formatCurrency(p.amount), "has-text-weight-bold has-text-right"]
+            [formatCurrency(p.amount), "has-text-weight-bold has-text-right"],
           ]),
-          (r) => r[0]
+          (r) => r[0],
         ),
-        { total: formatCurrency(total), header: postings[0]?.date.format("MMM YYYY") }
+        {
+          total: formatCurrency(total),
+          header: postings[0]?.date.format("MMM YYYY"),
+        },
       );
     })
     .attr("x", function (d) {
       return (
-        x((d.data as any).month) + (x.bandwidth() - Math.min(x.bandwidth(), MAX_BAR_WIDTH)) / 2
+        x((d.data as any).month) +
+        (x.bandwidth() - Math.min(x.bandwidth(), MAX_BAR_WIDTH)) / 2
       );
     })
     .attr("y", function (d) {
@@ -191,20 +197,24 @@ export function renderMonthlyInvestmentTimeline(postings: Posting[]): Legend[] {
   return groups.map((g) => ({
     label: g,
     color: z(g),
-    shape: "square"
+    shape: "square",
   }));
 }
 
-export function renderYearlyInvestmentTimeline(yearlyCards: InvestmentYearlyCard[]): Legend[] {
+export function renderYearlyInvestmentTimeline(
+  yearlyCards: InvestmentYearlyCard[],
+): Legend[] {
   const id = "#d3-yearly-investment-timeline";
   const BAR_HEIGHT = rem(20);
   const svg = d3.select(id),
     margin = { top: rem(15), right: rem(20), bottom: rem(20), left: rem(70) },
-    width =
-      document.getElementById(id.substring(1)).parentElement.clientWidth -
+    width = document.getElementById(id.substring(1)).parentElement.clientWidth -
       margin.left -
       margin.right,
-    g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    g = svg.append("g").attr(
+      "transform",
+      "translate(" + margin.left + "," + margin.top + ")",
+    );
 
   const groups = _.chain(yearlyCards)
     .flatMap((c) => c.postings)
@@ -216,7 +226,7 @@ export function renderYearlyInvestmentTimeline(yearlyCards: InvestmentYearlyCard
 
   const defaultValues = _.zipObject(
     groupKeys,
-    _.map(groupKeys, () => 0)
+    _.map(groupKeys, () => 0),
   );
 
   const start = _.min(_.map(yearlyCards, (c) => c.start_date)),
@@ -245,19 +255,19 @@ export function renderYearlyInvestmentTimeline(yearlyCards: InvestmentYearlyCard
           _.sum(
             _.filter(
               _.map(postings, (p) => p.amount),
-              (a) => a >= 0
-            )
-          )
+              (a) => a >= 0,
+            ),
+          ),
         ],
         [
           key + "-debit",
           _.sum(
             _.filter(
               _.map(postings, (p) => p.amount),
-              (a) => a < 0
-            )
-          )
-        ]
+              (a) => a < 0,
+            ),
+          ),
+        ],
       ])
       .fromPairs()
       .value();
@@ -266,11 +276,11 @@ export function renderYearlyInvestmentTimeline(yearlyCards: InvestmentYearlyCard
       _.merge(
         {
           year: financialYear(card),
-          postings: postings
+          postings: postings,
         },
         defaultValues,
-        values
-      )
+        values,
+      ),
     );
   });
 
@@ -281,19 +291,19 @@ export function renderYearlyInvestmentTimeline(yearlyCards: InvestmentYearlyCard
     _.sum(
       _.filter(
         _.map(groupKeys, (k) => p[k]),
-        filter
-      )
+        filter,
+      ),
     );
   y.domain(points.map((p) => p.year));
   x.domain([
     d3.min(
       points,
-      sum((a) => a < 0)
+      sum((a) => a < 0),
     ),
     d3.max(
       points,
-      sum((a) => a > 0)
-    )
+      sum((a) => a > 0),
+    ),
   ]);
 
   const z = generateColorScheme(groups);
@@ -309,8 +319,8 @@ export function renderYearlyInvestmentTimeline(yearlyCards: InvestmentYearlyCard
     .selectAll("g")
     .data(
       d3.stack().offset(d3.stackOffsetDiverging).keys(groupKeys)(
-        points as { [key: string]: number }[]
-      )
+        points as { [key: string]: number }[],
+      ),
     )
     .enter()
     .append("g")
@@ -336,20 +346,21 @@ export function renderYearlyInvestmentTimeline(yearlyCards: InvestmentYearlyCard
             return [
               [
                 k.replace("-credit", "").replace("-debit", ""),
-                [formatCurrency(total), "has-text-weight-bold has-text-right"]
-              ]
+                [formatCurrency(total), "has-text-weight-bold has-text-right"],
+              ],
             ];
           }),
-          (r) => r[0]
+          (r) => r[0],
         ),
-        { total: formatCurrency(grandTotal), header: d.data.year as any }
+        { total: formatCurrency(grandTotal), header: d.data.year as any },
       );
     })
     .attr("x", function (d) {
       return x(d[0]);
     })
     .attr("y", function (d) {
-      return y((d.data as any).year) + (y.bandwidth() - Math.min(y.bandwidth(), BAR_HEIGHT)) / 2;
+      return y((d.data as any).year) +
+        (y.bandwidth() - Math.min(y.bandwidth(), BAR_HEIGHT)) / 2;
     })
     .attr("width", function (d) {
       return x(d[1]) - x(d[0]);
@@ -359,7 +370,7 @@ export function renderYearlyInvestmentTimeline(yearlyCards: InvestmentYearlyCard
   return groups.map((g) => ({
     label: g,
     color: z(g),
-    shape: "square"
+    shape: "square",
   }));
 }
 
@@ -394,35 +405,49 @@ export function renderYearlyCards(yearlyCards: InvestmentYearlyCard[]) {
   <tbody>
     <tr>
       <td>Gross Salary Income</td>
-      <td class='has-text-right has-text-weight-bold'>${formatCurrency(
-        card.gross_salary_income
-      )}</td>
+      <td class='has-text-right has-text-weight-bold'>${
+        formatCurrency(
+          card.gross_salary_income,
+        )
+      }</td>
     </tr>
     <tr>
       <td>Gross Other Income</td>
-      <td class='has-text-right has-text-weight-bold'>${formatCurrency(
-        card.gross_other_income
-      )}</td>
+      <td class='has-text-right has-text-weight-bold'>${
+        formatCurrency(
+          card.gross_other_income,
+        )
+      }</td>
     </tr>
     <tr>
       <td>Tax</td>
-      <td class='has-text-right has-text-weight-bold'>${formatCurrency(card.net_tax)}</td>
+      <td class='has-text-right has-text-weight-bold'>${
+        formatCurrency(card.net_tax)
+      }</td>
     </tr>
     <tr>
       <td>Net Income</td>
-      <td class='has-text-right has-text-weight-bold'>${formatCurrency(card.net_income)}</td>
+      <td class='has-text-right has-text-weight-bold'>${
+        formatCurrency(card.net_income)
+      }</td>
     </tr>
     <tr>
       <td>Net Expense</td>
-      <td class='has-text-right has-text-weight-bold'>${formatCurrency(card.net_expense)}</td>
+      <td class='has-text-right has-text-weight-bold'>${
+        formatCurrency(card.net_expense)
+      }</td>
     </tr>
     <tr>
       <td>Investment</td>
-      <td class='has-text-right has-text-weight-bold'>${formatCurrency(card.net_investment)}</td>
+      <td class='has-text-right has-text-weight-bold'>${
+        formatCurrency(card.net_investment)
+      }</td>
     </tr>
     <tr>
       <td>Savings Rate</td>
-      <td class='has-text-right has-text-weight-bold'>${formatFloat(card.savings_rate)}</td>
+      <td class='has-text-right has-text-weight-bold'>${
+        formatFloat(card.savings_rate)
+      }</td>
     </tr>
   </tbody>
 </table>

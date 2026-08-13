@@ -9,11 +9,11 @@ import {
   formatFloat,
   type Interest,
   type InterestOverview,
-  tooltip,
-  skipTicks,
-  restName,
+  type Legend,
   rem,
-  type Legend
+  restName,
+  skipTicks,
+  tooltip,
 } from "$lib/utils";
 
 const areaKeys = ["gain", "loss"];
@@ -32,7 +32,9 @@ function renderTable(interest: Interest) {
     return `
 <tr>
   <td>Account</td>
-  <td class='has-text-right has-text-weight-bold'>${restName(interest.account)}</td>
+  <td class='has-text-right has-text-weight-bold'>${
+      restName(interest.account)
+    }</td>
 </tr>
 <tr>
   <td>Loan Drawn</td>
@@ -48,9 +50,11 @@ function renderTable(interest: Interest) {
 </tr>
 <tr>
   <td>Balance</td>
-  <td class='has-text-right'>${formatCurrency(
-    current.drawn_amount + current.interest_amount - current.repaid_amount
-  )}</td>
+  <td class='has-text-right'>${
+      formatCurrency(
+        current.drawn_amount + current.interest_amount - current.repaid_amount,
+      )
+    }</td>
 </tr>
 <tr>
   <td>APR</td>
@@ -66,12 +70,17 @@ export function renderOverview(gains: Interest[]) {
   const id = "#d3-interest-overview";
   const svg = d3.select(id),
     margin = { top: rem(5), right: rem(20), bottom: rem(30), left: rem(150) },
-    width =
-      Math.max(document.getElementById(id.substring(1)).parentElement.clientWidth, 850) -
+    width = Math.max(
+      document.getElementById(id.substring(1)).parentElement.clientWidth,
+      850,
+    ) -
       margin.left -
       margin.right,
     height = gains.length * BAR_HEIGHT * 2,
-    g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    g = svg.append("g").attr(
+      "transform",
+      "translate(" + margin.left + "," + margin.top + ")",
+    );
   svg.attr("height", height + margin.top + margin.bottom);
 
   svg.attr("width", width + margin.left + margin.right);
@@ -93,17 +102,27 @@ export function renderOverview(gains: Interest[]) {
     .paddingOuter(0.6);
 
   const keys = ["balance", "drawn", "repaid", "gain", "loss"];
-  const colors = [COLORS.primary, COLORS.secondary, COLORS.tertiary, COLORS.gain, COLORS.loss];
+  const colors = [
+    COLORS.primary,
+    COLORS.secondary,
+    COLORS.tertiary,
+    COLORS.gain,
+    COLORS.loss,
+  ];
   const z = d3.scaleOrdinal<string>(colors).domain(keys);
 
-  const getDrawnAmount = (g: Interest) => _.last(g.overview_timeline).drawn_amount;
+  const getDrawnAmount = (g: Interest) =>
+    _.last(g.overview_timeline).drawn_amount;
 
-  const getInterestAmount = (g: Interest) => _.last(g.overview_timeline).interest_amount;
-  const getRepaidAmount = (g: Interest) => _.last(g.overview_timeline).repaid_amount;
+  const getInterestAmount = (g: Interest) =>
+    _.last(g.overview_timeline).interest_amount;
+  const getRepaidAmount = (g: Interest) =>
+    _.last(g.overview_timeline).repaid_amount;
 
   const getBalanceAmount = (g: Interest) => {
     const current = _.last(g.overview_timeline);
-    return current.drawn_amount + current.interest_amount - current.repaid_amount;
+    return current.drawn_amount + current.interest_amount -
+      current.repaid_amount;
   };
 
   const maxX = _.chain(gains)
@@ -123,7 +142,7 @@ export function renderOverview(gains: Interest[]) {
     .range([0, aprWidth])
     .domain([
       _.min([_.min(_.map(gains, (g) => g.apr)), 0]),
-      _.max([0, _.max(_.map(gains, (g) => g.apr))])
+      _.max([0, _.max(_.map(gains, (g) => g.apr))]),
     ]);
 
   g.append("line")
@@ -154,7 +173,7 @@ export function renderOverview(gains: Interest[]) {
       d3
         .axisBottom(x)
         .tickSize(-height)
-        .tickFormat(skipTicks(60, x, formatCurrencyCrude))
+        .tickFormat(skipTicks(60, x, formatCurrencyCrude)),
     );
 
   g.append("g")
@@ -164,7 +183,7 @@ export function renderOverview(gains: Interest[]) {
       d3
         .axisBottom(x1)
         .tickSize(-height)
-        .tickFormat(skipTicks(40, x1, (n: number) => formatFloat(n, 1)))
+        .tickFormat(skipTicks(40, x1, (n: number) => formatFloat(n, 1))),
     );
 
   g.append("g").attr("class", "axis y dark").call(d3.axisLeft(y));
@@ -193,7 +212,14 @@ export function renderOverview(gains: Interest[]) {
     .text((g) => formatCurrency(getInterestAmount(g)))
     .attr("dominant-baseline", "hanging")
     .attr("text-anchor", "end")
-    .style("fill", (g) => (getInterestAmount(g) > 0 ? chroma(z("loss")).darken().hex() : "none"))
+    .style(
+      "fill",
+      (
+        g,
+      ) => (getInterestAmount(g) > 0
+        ? chroma(z("loss")).darken().hex()
+        : "none"),
+    )
     .attr("dx", "-3")
     .attr("dy", "3")
     .attr("x", textGroupZero + (textGroupWidth * 2) / 3)
@@ -213,7 +239,14 @@ export function renderOverview(gains: Interest[]) {
     .append("text")
     .text((g) => formatCurrency(getInterestAmount(g)))
     .attr("text-anchor", "end")
-    .style("fill", (g) => (getInterestAmount(g) < 0 ? chroma(z("gain")).darken().hex() : "none"))
+    .style(
+      "fill",
+      (
+        g,
+      ) => (getInterestAmount(g) < 0
+        ? chroma(z("gain")).darken().hex()
+        : "none"),
+    )
     .attr("dx", "-3")
     .attr("dy", "-3")
     .attr("x", textGroupZero + (textGroupWidth * 2) / 3)
@@ -242,8 +275,12 @@ export function renderOverview(gains: Interest[]) {
     .text((g) => formatFloat(g.apr))
     .attr("text-anchor", "end")
     .attr("dominant-baseline", "middle")
-    .style("fill", (g) =>
-      g.apr < 0 ? chroma(z("loss")).darken().hex() : chroma(z("gain")).darken().hex()
+    .style(
+      "fill",
+      (g) =>
+        g.apr < 0
+          ? chroma(z("loss")).darken().hex()
+          : chroma(z("gain")).darken().hex(),
     )
     .attr("x", aprWidth + aprTextWidth)
     .attr("y", (g) => y(restName(g.account)) + y.bandwidth() / 2);
@@ -265,8 +302,8 @@ export function renderOverview(gains: Interest[]) {
           i: "0",
           data: g,
           drawn: getDrawnAmount(g),
-          loss: _.max([getInterestAmount(g), 0])
-        }
+          loss: _.max([getInterestAmount(g), 0]),
+        },
       ] as any),
       d3.stack().keys(["balance", "gain", "repaid"])([
         {
@@ -274,9 +311,9 @@ export function renderOverview(gains: Interest[]) {
           data: g,
           balance: getBalanceAmount(g),
           repaid: getRepaidAmount(g),
-          gain: Math.abs(_.min([getInterestAmount(g), 0]))
-        }
-      ] as any)
+          gain: Math.abs(_.min([getInterestAmount(g), 0])),
+        },
+      ] as any),
     ])
     .enter()
     .append("g")
@@ -324,24 +361,36 @@ export function renderOverview(gains: Interest[]) {
         ["Account", [g.account, "has-text-weight-bold has-text-right"]],
         [
           "Loan Drawn",
-          [formatCurrency(current.drawn_amount), "has-text-weight-bold has-text-right"]
+          [
+            formatCurrency(current.drawn_amount),
+            "has-text-weight-bold has-text-right",
+          ],
         ],
         [
           "Loan Repaid",
-          [formatCurrency(current.repaid_amount), "has-text-weight-bold has-text-right"]
+          [
+            formatCurrency(current.repaid_amount),
+            "has-text-weight-bold has-text-right",
+          ],
         ],
         [
           "Interest",
-          [formatCurrency(current.interest_amount), "has-text-weight-bold has-text-right"]
+          [
+            formatCurrency(current.interest_amount),
+            "has-text-weight-bold has-text-right",
+          ],
         ],
         [
           "Balance",
           [
-            formatCurrency(current.drawn_amount + current.interest_amount - current.repaid_amount),
-            "has-text-weight-bold has-text-right"
-          ]
+            formatCurrency(
+              current.drawn_amount + current.interest_amount -
+                current.repaid_amount,
+            ),
+            "has-text-weight-bold has-text-right",
+          ],
         ],
-        ["APR", [formatFloat(g.apr), "has-text-weight-bold has-text-right"]]
+        ["APR", [formatFloat(g.apr), "has-text-weight-bold has-text-right"]],
       ]);
     })
     .attr("x", 0)
@@ -351,7 +400,10 @@ export function renderOverview(gains: Interest[]) {
 }
 
 export function renderPerAccountOverview(interests: Interest[]) {
-  const dates = _.flatMap(interests, (g) => _.map(g.overview_timeline, (o) => o.date));
+  const dates = _.flatMap(
+    interests,
+    (g) => _.map(g.overview_timeline, (o) => o.date),
+  );
   const start = _.min(dates),
     end = _.max(dates);
 
@@ -389,13 +441,17 @@ export function renderPerAccountOverview(interests: Interest[]) {
 function renderOverviewSmall(
   points: InterestOverview[],
   element: Element,
-  xDomain: [dayjs.Dayjs, dayjs.Dayjs]
+  xDomain: [dayjs.Dayjs, dayjs.Dayjs],
 ) {
   const svg = d3.select(element),
     margin = { top: 5, right: 80, bottom: 20, left: 40 },
-    width = Math.max(element.parentElement.clientWidth, 800) - margin.left - margin.right,
+    width = Math.max(element.parentElement.clientWidth, 800) - margin.left -
+      margin.right,
     height = +svg.attr("height") - margin.top - margin.bottom,
-    g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    g = svg.append("g").attr(
+      "transform",
+      "translate(" + margin.left + "," + margin.top + ")",
+    );
 
   svg.attr("width", width + margin.left + margin.right);
 
@@ -405,7 +461,10 @@ function renderOverviewSmall(
       .range([height, 0])
       .domain([
         0,
-        d3.max<InterestOverview, number>(points, (d) => d.interest_amount + d.drawn_amount)
+        d3.max<InterestOverview, number>(
+          points,
+          (d) => d.interest_amount + d.drawn_amount,
+        ),
       ]),
     z = d3.scaleOrdinal<string>(colors).domain(areaKeys);
 
@@ -425,13 +484,20 @@ function renderOverviewSmall(
   g.append("g")
     .attr("class", "axis y")
     .attr("transform", `translate(${width},0)`)
-    .call(d3.axisRight(y).ticks(5).tickPadding(5).tickFormat(formatCurrencyCrude));
+    .call(
+      d3.axisRight(y).ticks(5).tickPadding(5).tickFormat(formatCurrencyCrude),
+    );
 
   g.append("g")
     .attr("class", "axis y")
-    .call(d3.axisLeft(y).ticks(5).tickSize(-width).tickFormat(formatCurrencyCrude));
+    .call(
+      d3.axisLeft(y).ticks(5).tickSize(-width).tickFormat(formatCurrencyCrude),
+    );
 
-  const layer = g.selectAll(".layer").data([points]).enter().append("g").attr("class", "layer");
+  const layer = g.selectAll(".layer").data([points]).enter().append("g").attr(
+    "class",
+    "layer",
+  );
 
   const clipAboveID = _.uniqueId("clip-above");
   layer
@@ -442,7 +508,7 @@ function renderOverviewSmall(
       "d",
       area(height, (d) => {
         return y(d.repaid_amount - d.interest_amount);
-      })
+      }),
     );
 
   const clipBelowID = _.uniqueId("clip-below");
@@ -454,31 +520,37 @@ function renderOverviewSmall(
       "d",
       area(0, (d) => {
         return y(d.repaid_amount - d.interest_amount);
-      })
+      }),
     );
 
   layer
     .append("path")
-    .attr("clip-path", `url(${new URL("#" + clipAboveID, window.location.toString())})`)
+    .attr(
+      "clip-path",
+      `url(${new URL("#" + clipAboveID, window.location.toString())})`,
+    )
     .style("fill", z("gain"))
     .style("opacity", "0.8")
     .attr(
       "d",
       area(0, (d) => {
         return y(d.repaid_amount);
-      })
+      }),
     );
 
   layer
     .append("path")
-    .attr("clip-path", `url(${new URL("#" + clipBelowID, window.location.toString())})`)
+    .attr(
+      "clip-path",
+      `url(${new URL("#" + clipBelowID, window.location.toString())})`,
+    )
     .style("fill", z("loss"))
     .style("opacity", "0.8")
     .attr(
       "d",
       area(height, (d) => {
         return y(d.repaid_amount);
-      })
+      }),
     );
 
   layer
@@ -491,7 +563,7 @@ function renderOverviewSmall(
         .line<InterestOverview>()
         .curve(d3.curveMonotoneX)
         .x((d) => x(d.date))
-        .y((d) => y(d.drawn_amount))
+        .y((d) => y(d.drawn_amount)),
     );
 
   layer
@@ -505,7 +577,7 @@ function renderOverviewSmall(
         .curve(d3.curveMonotoneX)
         .defined((d) => d.repaid_amount > 0)
         .x((d) => x(d.date))
-        .y((d) => y(d.repaid_amount))
+        .y((d) => y(d.repaid_amount)),
     );
 
   layer
@@ -518,7 +590,7 @@ function renderOverviewSmall(
         .line<InterestOverview>()
         .curve(d3.curveMonotoneX)
         .x((d) => x(d.date))
-        .y((d) => y(d.drawn_amount + d.interest_amount - d.repaid_amount))
+        .y((d) => y(d.drawn_amount + d.interest_amount - d.repaid_amount)),
     );
 }
 
@@ -529,8 +601,8 @@ export function buildLegends(): Legend[] {
         ({
           label: key,
           color: areaScale(key),
-          shape: "square"
-        }) as Legend
+          shape: "square",
+        }) as Legend,
     )
     .concat(
       lineKeys.map(
@@ -538,8 +610,8 @@ export function buildLegends(): Legend[] {
           ({
             label: key,
             color: lineScale(key),
-            shape: "square"
-          }) as Legend
-      )
+            shape: "square",
+          }) as Legend,
+      ),
     );
 }

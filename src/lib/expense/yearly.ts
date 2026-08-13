@@ -2,19 +2,19 @@ import * as d3 from "d3";
 import chroma from "chroma-js";
 import _ from "lodash";
 import {
-  formatFixedWidthFloat,
-  formatCurrency,
-  formatPercentage,
-  formatCurrencyCrude,
-  type Posting,
-  skipTicks,
-  tooltip,
-  secondName,
   financialYear,
   forEachFinancialYear,
+  formatCurrency,
+  formatCurrencyCrude,
   formatCurrencyCrudeWithPrecision,
+  formatFixedWidthFloat,
+  formatPercentage,
+  type Legend,
   now,
-  type Legend
+  type Posting,
+  secondName,
+  skipTicks,
+  tooltip,
 } from "$lib/utils";
 import COLORS, { generateColorScheme } from "$lib/colors";
 import type { Writable } from "svelte/store";
@@ -25,7 +25,7 @@ import type { Dayjs } from "dayjs";
 export function renderCalendar(
   expenses: Posting[],
   z: d3.ScaleOrdinal<string, string, never>,
-  groups: string[]
+  groups: string[],
 ) {
   const id = "#d3-current-year-expense-calendar";
   const alpha = d3.scaleLinear().range([0.3, 1]);
@@ -42,12 +42,12 @@ export function renderCalendar(
     "Sep",
     "Oct",
     "Nov",
-    "Dec"
+    "Dec",
   ];
 
   const months: string[] = _.concat(
     _.drop(ALL_MONTHS, USER_CONFIG.financial_year_starting_month - 1),
-    _.take(ALL_MONTHS, USER_CONFIG.financial_year_starting_month - 1)
+    _.take(ALL_MONTHS, USER_CONFIG.financial_year_starting_month - 1),
   );
   const expensesByMonth: Record<string, Posting[]> = _.chain(months)
     .map((month) => {
@@ -55,14 +55,19 @@ export function renderCalendar(
         month,
         _.filter(
           expenses,
-          (e) => _.includes(groups, expenseGroup(e)) && e.date.format("MMM") == month
-        )
+          (e) =>
+            _.includes(groups, expenseGroup(e)) &&
+            e.date.format("MMM") == month,
+        ),
       ];
     })
     .fromPairs()
     .value();
 
-  const expensesByMonthTotal = _.mapValues(expensesByMonth, (ps) => _.sumBy(ps, (p) => p.amount));
+  const expensesByMonthTotal = _.mapValues(
+    expensesByMonth,
+    (ps) => _.sumBy(ps, (p) => p.amount),
+  );
 
   alpha.domain(d3.extent(_.values(expensesByMonthTotal)));
 
@@ -85,10 +90,10 @@ export function renderCalendar(
         return [
           [iconify(group, { group: "Expenses" })],
           [formatPercentage(amount / total, 1), "has-text-right"],
-          [formatCurrency(amount), "has-text-weight-bold has-text-right"]
+          [formatCurrency(amount), "has-text-weight-bold has-text-right"],
         ];
       }),
-      { total: formatCurrency(total), header: es[0].date.format("MMM YYYY") }
+      { total: formatCurrency(total), header: es[0].date.format("MMM YYYY") },
     );
   };
 
@@ -117,7 +122,11 @@ export function renderCalendar(
     .data((d) => [d])
     .join("div")
     .attr("class", "total is-size-7 has-text-weight-bold")
-    .style("color", (d) => chroma(COLORS.lossText).alpha(alpha(expensesByMonthTotal[d])).hex())
+    .style(
+      "color",
+      (d) =>
+        chroma(COLORS.lossText).alpha(alpha(expensesByMonthTotal[d])).hex(),
+    )
     .text((d) => {
       const total = expensesByMonthTotal[d];
       if (total > 0) {
@@ -153,7 +162,7 @@ export function renderCalendar(
 export function renderYearlyExpensesTimeline(
   postings: Posting[],
   groupsStore: Writable<string[]>,
-  yearStore: Writable<string>
+  yearStore: Writable<string>,
 ) {
   if (_.isEmpty(postings)) {
     return { z: null, legends: [] };
@@ -163,18 +172,20 @@ export function renderYearlyExpensesTimeline(
   const MAX_BAR_WIDTH = 40;
   const svg = d3.select(id),
     margin = { top: 15, right: 30, bottom: 60, left: 40 },
-    width =
-      document.getElementById(id.substring(1)).parentElement.clientWidth -
+    width = document.getElementById(id.substring(1)).parentElement.clientWidth -
       margin.left -
       margin.right,
     height = +svg.attr("height") - margin.top - margin.bottom,
-    g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    g = svg.append("g").attr(
+      "transform",
+      "translate(" + margin.left + "," + margin.top + ")",
+    );
 
   const groups = _.chain(postings).map(expenseGroup).uniq().sort().value();
 
   const defaultValues = _.zipObject(
     groups,
-    _.map(groups, () => 0)
+    _.map(groups, () => 0),
   );
 
   const start = _.min(_.map(postings, (p) => p.date)),
@@ -203,11 +214,11 @@ export function renderYearlyExpensesTimeline(
           timestamp: year,
           fy: financialYear(year),
           postings: postings,
-          trend: {}
+          trend: {},
         },
         defaultValues,
-        values
-      )
+        values,
+      ),
     );
   });
 
@@ -227,16 +238,16 @@ export function renderYearlyExpensesTimeline(
             return [
               [
                 iconify(key, { group: "Expenses" }),
-                [formatCurrency(total), "has-text-weight-bold has-text-right"]
-              ]
+                [formatCurrency(total), "has-text-weight-bold has-text-right"],
+              ],
             ];
           }
           return [];
         }),
         {
           total: formatCurrency(grandTotal),
-          header: financialYear(d.data.timestamp as any)
-        }
+          header: financialYear(d.data.timestamp as any),
+        },
       );
     };
   };
@@ -260,7 +271,7 @@ export function renderYearlyExpensesTimeline(
         d3
           .axisBottom(x)
           .ticks(5)
-          .tickFormat(skipTicks(30, x, (d) => d.toString()))
+          .tickFormat(skipTicks(30, x, (d) => d.toString())),
       )
       .selectAll("text")
       .attr("y", 10)
@@ -269,15 +280,17 @@ export function renderYearlyExpensesTimeline(
       .attr("transform", "rotate(-45)")
       .style("text-anchor", "end");
 
-    yAxis.transition(t).call(d3.axisLeft(y).tickSize(-width).tickFormat(formatCurrencyCrude));
+    yAxis.transition(t).call(
+      d3.axisLeft(y).tickSize(-width).tickFormat(formatCurrencyCrude),
+    );
 
     bars
       .selectAll("g")
       .data(
         d3.stack().offset(d3.stackOffsetDiverging).keys(allowedGroups)(
-          points as { [key: string]: number }[]
+          points as { [key: string]: number }[],
         ),
-        (d: any) => d.key
+        (d: any) => d.key,
       )
       .join(
         (enter) =>
@@ -286,7 +299,10 @@ export function renderYearlyExpensesTimeline(
           }),
         (update) => update.transition(t),
         (exit) =>
-          exit.selectAll("rect").transition(t).attr("y", y.range()[0]).attr("height", 0).remove()
+          exit.selectAll("rect").transition(t).attr("y", y.range()[0]).attr(
+            "height",
+            0,
+          ).remove(),
       )
       .selectAll("rect")
       .data(function (d) {
@@ -304,7 +320,8 @@ export function renderYearlyExpensesTimeline(
             .attr("data-tippy-content", tooltipContent(allowedGroups))
             .attr("x", function (d) {
               return (
-                x((d.data as any).fy) + (x.bandwidth() - Math.min(x.bandwidth(), MAX_BAR_WIDTH)) / 2
+                x((d.data as any).fy) +
+                (x.bandwidth() - Math.min(x.bandwidth(), MAX_BAR_WIDTH)) / 2
               );
             })
             .attr("width", Math.min(x.bandwidth(), MAX_BAR_WIDTH))
@@ -326,7 +343,7 @@ export function renderYearlyExpensesTimeline(
             .attr("height", function (d) {
               return y(d[0]) - y(d[1]);
             }),
-        (exit) => exit.transition(t).remove()
+        (exit) => exit.transition(t).remove(),
       );
   };
 
@@ -347,23 +364,27 @@ export function renderYearlyExpensesTimeline(
           }
 
           render(selectedGroups);
-        }
-      }) as Legend
+        },
+      }) as Legend,
   );
 
   return { z, legends };
 }
 
-export function renderCurrentExpensesBreakdown(z: d3.ScaleOrdinal<string, string, never>) {
+export function renderCurrentExpensesBreakdown(
+  z: d3.ScaleOrdinal<string, string, never>,
+) {
   const id = "#d3-current-year-breakdown";
   const BAR_HEIGHT = 20;
   const svg = d3.select(id),
     margin = { top: 0, right: 160, bottom: 20, left: 100 },
-    width =
-      document.getElementById(id.substring(1)).parentElement.clientWidth -
+    width = document.getElementById(id.substring(1)).parentElement.clientWidth -
       margin.left -
       margin.right,
-    g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    g = svg.append("g").attr(
+      "transform",
+      "translate(" + margin.left + "," + margin.top + ")",
+    );
 
   const x = d3.scaleLinear().range([0, width]);
   const y = d3.scaleBand().paddingInner(0.1).paddingOuter(0);
@@ -404,12 +425,16 @@ export function renderCurrentExpensesBreakdown(z: d3.ScaleOrdinal<string, string
         d3
           .axisBottom(x)
           .tickSize(-height)
-          .tickFormat(skipTicks(60, x, formatCurrencyCrude))
+          .tickFormat(skipTicks(60, x, formatCurrencyCrude)),
       );
 
     yAxis
       .transition(t)
-      .call(d3.axisLeft(y).tickFormat((g) => iconify(g, { group: "Expenses", suffix: true })));
+      .call(
+        d3.axisLeft(y).tickFormat((g) =>
+          iconify(g, { group: "Expenses", suffix: true })
+        ),
+      );
 
     const tooltipContent = (d: Point) => {
       const total = _.sumBy(d.postings, (p) => p.amount);
@@ -423,13 +448,13 @@ export function renderCurrentExpensesBreakdown(z: d3.ScaleOrdinal<string, string
           return [
             month,
             [formatPercentage(amount / total, 1), "has-text-right"],
-            [formatCurrency(amount), "has-text-weight-bold has-text-right"]
+            [formatCurrency(amount), "has-text-weight-bold has-text-right"],
           ];
         }),
         {
           total: formatCurrency(total),
-          header: `${financialYear(d.postings[0].date)} ${d.category}`
-        }
+          header: `${financialYear(d.postings[0].date)} ${d.category}`,
+        },
       );
     };
 
@@ -446,13 +471,13 @@ export function renderCurrentExpensesBreakdown(z: d3.ScaleOrdinal<string, string
             .attr("data-tippy-content", tooltipContent)
             .attr("x", x(0))
             .attr("y", function (d) {
-              return y(d.category) + (y.bandwidth() - Math.min(y.bandwidth(), BAR_HEIGHT)) / 2;
+              return y(d.category) +
+                (y.bandwidth() - Math.min(y.bandwidth(), BAR_HEIGHT)) / 2;
             })
             .attr("width", function (d) {
               return x(d.total);
             })
             .attr("height", y.bandwidth()),
-
         (update) =>
           update
             .attr("fill", function (d) {
@@ -462,18 +487,20 @@ export function renderCurrentExpensesBreakdown(z: d3.ScaleOrdinal<string, string
             .transition(t)
             .attr("x", x(0))
             .attr("y", function (d) {
-              return y(d.category) + (y.bandwidth() - Math.min(y.bandwidth(), BAR_HEIGHT)) / 2;
+              return y(d.category) +
+                (y.bandwidth() - Math.min(y.bandwidth(), BAR_HEIGHT)) / 2;
             })
             .attr("width", function (d) {
               return x(d.total);
             })
             .attr("height", y.bandwidth()),
-
-        (exit) => exit.remove()
+        (exit) => exit.remove(),
       );
 
     const rightLabel = (d: Point) =>
-      `${formatCurrency(d.total)} ${formatFixedWidthFloat((d.total / total) * 100, 6)}%`;
+      `${formatCurrency(d.total)} ${
+        formatFixedWidthFloat((d.total / total) * 100, 6)
+      }%`;
 
     bar
       .selectAll("text")
@@ -503,7 +530,7 @@ export function renderCurrentExpensesBreakdown(z: d3.ScaleOrdinal<string, string
             .attr("y", function (d) {
               return y(d.category) + y.bandwidth() / 2;
             }),
-        (exit) => exit.remove()
+        (exit) => exit.remove(),
       );
 
     return;

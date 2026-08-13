@@ -8,9 +8,9 @@ export function renderBreakdowns(scheduleALEntries: ScheduleALEntry[]) {
     scheduleALEntries.concat([
       {
         section: { code: "", section: "", details: "Total" },
-        amount: _.sumBy(scheduleALEntries, (s) => s.amount)
-      }
-    ])
+        amount: _.sumBy(scheduleALEntries, (s) => s.amount),
+      },
+    ]),
   );
 
   trs.exit().remove();
@@ -22,8 +22,12 @@ export function renderBreakdowns(scheduleALEntries: ScheduleALEntry[]) {
       return `
        <td>${s.section.code}</td>
        <td>${s.section.section}</td>
-       <td class="${s.section.code == "" ? "has-text-weight-bold" : ""}">${s.section.details}</td>
-       <td class='has-text-right has-text-weight-bold'>${formatCurrency(s.amount)}</td>
+       <td class="${
+        s.section.code == "" ? "has-text-weight-bold" : ""
+      }">${s.section.details}</td>
+       <td class='has-text-right has-text-weight-bold'>${
+        formatCurrency(s.amount)
+      }</td>
       `;
     });
 }

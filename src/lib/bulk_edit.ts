@@ -11,7 +11,7 @@ export function applyChanges(
   files: LedgerFile[],
   transactions: Transaction[],
   operation: string,
-  args: any
+  args: any,
 ) {
   let updatedTransactionsCount = 0;
   const transactionsGrouped = _.groupBy(transactions, (t) => t.fileName);
@@ -24,7 +24,10 @@ export function applyChanges(
     const newLines: string[] = [];
     for (const transaction of sortedTransactions) {
       newLines.push(...lines.slice(lastLine, transaction.beginLine - 1));
-      const oldLines = lines.slice(transaction.beginLine - 1, transaction.endLine);
+      const oldLines = lines.slice(
+        transaction.beginLine - 1,
+        transaction.endLine,
+      );
 
       let result: OperationResult;
       switch (operation) {
@@ -46,7 +49,7 @@ export function applyChanges(
 
   return {
     newFiles,
-    updatedTransactionsCount
+    updatedTransactionsCount,
   };
 }
 
@@ -58,21 +61,26 @@ interface RenameAccountArgs {
 function renameAccount(
   text: string,
   transaction: Transaction,
-  args: RenameAccountArgs
+  args: RenameAccountArgs,
 ): OperationResult {
-  const found = _.some(transaction.postings, (p) => p.account === args.oldAccountName);
+  const found = _.some(
+    transaction.postings,
+    (p) => p.account === args.oldAccountName,
+  );
   if (!found) {
     return { updated: false, content: text };
   }
 
   const regex = new RegExp(
-    `^((?:\t|\\s{2})\\s*)(${escapeRegExp(args.oldAccountName)})((?:\t|\\s{2}).*|\\s*)$`
+    `^((?:\t|\\s{2})\\s*)(${
+      escapeRegExp(args.oldAccountName)
+    })((?:\t|\\s{2}).*|\\s*)$`,
   );
   const lines = text.split("\n");
   const content = format(
     _.map(lines, (line) => {
       return line.replace(regex, `$1${args.newAccountName}$3`);
-    }).join("\n")
+    }).join("\n"),
   );
 
   return { updated: true, content };

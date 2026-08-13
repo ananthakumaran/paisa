@@ -13,7 +13,7 @@ const icons = {
   "fa6-regular": fa6regular["codepoints"],
   "fa6-solid": fa6solid["codepoints"],
   "fluent-emoji-high-contrast": fluentemoji["codepoints"],
-  mdi: mdi["codepoints"]
+  mdi: mdi["codepoints"],
 };
 
 export function iconGlyph(symbol: string): string {
@@ -21,7 +21,8 @@ export function iconGlyph(symbol: string): string {
     return String.fromCodePoint(65533);
   }
   const [font, name] = symbol.split(":");
-  const code = (icons as Record<string, Record<string, number>>)[font]?.[name] || 65533;
+  const code =
+    (icons as Record<string, Record<string, number>>)[font]?.[name] || 65533;
   return String.fromCodePoint(code);
 }
 
@@ -60,11 +61,13 @@ const ICON_LOOKUP: IconLookup[] = [
   { symbol: "fa6-solid:plug-circle-bolt", words: ["util"] },
   { symbol: "fa6-solid:carrot", words: ["veget"] },
   { symbol: "fa6-solid:taxi", words: ["transport"] },
-  { symbol: "fa6-solid:money-bill", words: ["cash"] }
+  { symbol: "fa6-solid:money-bill", words: ["cash"] },
 ];
 
 const ICONS: Record<string, string> = _.chain(ICON_LOOKUP)
-  .flatMap((icon) => _.map(icon.words, (word) => [word, iconGlyph(icon.symbol)]))
+  .flatMap((icon) =>
+    _.map(icon.words, (word) => [word, iconGlyph(icon.symbol)])
+  )
   .fromPairs()
   .value();
 
@@ -73,7 +76,9 @@ export function iconText(account: string): string {
     return "";
   }
 
-  const accountConfig = (USER_CONFIG.accounts || []).find((a) => a.name == account);
+  const accountConfig = (USER_CONFIG.accounts || []).find((a) =>
+    a.name == account
+  );
   if (!_.isEmpty(accountConfig?.icon)) {
     return iconGlyph(accountConfig.icon);
   }
@@ -83,8 +88,13 @@ export function iconText(account: string): string {
   return ICONS[part] || iconText(_.dropRight(parts, 1).join(":"));
 }
 
-export function iconify(account: string, options?: { group?: string; suffix?: boolean }) {
-  const icon = options?.group ? iconText(options.group + ":" + account) : iconText(account);
+export function iconify(
+  account: string,
+  options?: { group?: string; suffix?: boolean },
+) {
+  const icon = options?.group
+    ? iconText(options.group + ":" + account)
+    : iconText(account);
   if (icon == "") {
     return account;
   } else {

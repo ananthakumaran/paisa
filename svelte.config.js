@@ -17,9 +17,9 @@ const config = {
       pages: "web/static",
       assets: "web/static",
       out: "web/static",
-      fallback: "index.html"
-    })
-  }
+      fallback: "index.html",
+    }),
+  },
 };
 
 export default config;

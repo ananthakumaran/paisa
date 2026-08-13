@@ -1,21 +1,26 @@
 import _ from "lodash";
 import {
+  dueDateIcon,
   now,
   prefixMinutesSeconds,
-  transactionTotal,
   type Transaction,
   type TransactionSchedule,
   type TransactionSequence,
-  dueDateIcon
+  transactionTotal,
 } from "./utils";
 import dayjs from "dayjs";
-import { parse, type CronExprs } from "@datasert/cronjs-parser";
+import { type CronExprs, parse } from "@datasert/cronjs-parser";
 import { getFutureMatches } from "@datasert/cronjs-matcher";
 import { iconGlyph } from "./icon";
 
 const end = now().add(36, "month");
 
-function zip(schedules: dayjs.Dayjs[], transactions: Transaction[], key: string, amount: number) {
+function zip(
+  schedules: dayjs.Dayjs[],
+  transactions: Transaction[],
+  key: string,
+  amount: number,
+) {
   let si = 0;
   let ti = 0;
   const transactionSchedules: TransactionSchedule[] = [];
@@ -32,7 +37,7 @@ function zip(schedules: dayjs.Dayjs[], transactions: Transaction[], key: string,
         amount,
         scheduled: s1,
         actual: null,
-        transaction: null
+        transaction: null,
       });
       si++;
       continue;
@@ -55,7 +60,7 @@ function zip(schedules: dayjs.Dayjs[], transactions: Transaction[], key: string,
         amount: transactionTotal(t1),
         scheduled: t1.date,
         actual: t1.date,
-        transaction: t1
+        transaction: t1,
       });
       ti++;
     } else if (t1s1diff > t1s2diff) {
@@ -64,7 +69,7 @@ function zip(schedules: dayjs.Dayjs[], transactions: Transaction[], key: string,
         amount,
         scheduled: s1,
         actual: null,
-        transaction: null
+        transaction: null,
       });
       si++;
     } else {
@@ -73,7 +78,7 @@ function zip(schedules: dayjs.Dayjs[], transactions: Transaction[], key: string,
         amount: transactionTotal(t1),
         scheduled: s1,
         actual: t1.date,
-        transaction: t1
+        transaction: t1,
       });
       si++;
       ti++;
@@ -96,7 +101,7 @@ function enrich(ts: TransactionSequence) {
         startAt: start.toISOString(),
         endAt: end.toISOString(),
         matchCount: 1,
-        timezone: dayjs.tz.guess()
+        timezone: dayjs.tz.guess(),
       });
       if (!_.isEmpty(schedules)) {
         periodAvailable = true;
@@ -113,14 +118,14 @@ function enrich(ts: TransactionSequence) {
       startAt: start.toISOString(),
       endAt: end.toISOString(),
       matchCount: 1000,
-      timezone: dayjs.tz.guess()
+      timezone: dayjs.tz.guess(),
     });
 
     ts.schedules = zip(
       _.map(schedules, (s) => dayjs(s)),
       transactions,
       ts.key,
-      amount
+      amount,
     );
   } else {
     const schedules: dayjs.Dayjs[] = _.map(transactions, (t) => t.date);
@@ -132,10 +137,16 @@ function enrich(ts: TransactionSequence) {
     ts.schedules = zip(schedules, transactions, ts.key, amount);
   }
 
-  const [past, future] = _.partition(ts.schedules, (s) => s.scheduled?.isBefore(now()));
+  const [past, future] = _.partition(
+    ts.schedules,
+    (s) => s.scheduled?.isBefore(now()),
+  );
   ts.pastSchedules = past;
   ts.futureSchedules = future;
-  ts.schedulesByMonth = _.groupBy(ts.schedules, (s) => s.scheduled?.format("YYYY-MM") || "NA");
+  ts.schedulesByMonth = _.groupBy(
+    ts.schedules,
+    (s) => s.scheduled?.format("YYYY-MM") || "NA",
+  );
   ts.interval = _.first(future).scheduled.diff(_.last(past).scheduled, "day");
   return ts;
 }
@@ -197,11 +208,15 @@ export function totalRecurring(ts: TransactionSequence) {
   return transactionTotal(lastTransaction);
 }
 
-export function enrichTrantionSequence(transactionSequences: TransactionSequence[]) {
+export function enrichTrantionSequence(
+  transactionSequences: TransactionSequence[],
+) {
   return _.map(transactionSequences, (ts) => enrich(ts));
 }
 
-export function sortTrantionSequence(transactionSequences: TransactionSequence[]) {
+export function sortTrantionSequence(
+  transactionSequences: TransactionSequence[],
+) {
   return _.chain(transactionSequences)
     .sortBy((ts) => {
       return Math.abs(nextUnpaidSchedule(ts).scheduled.diff(now()));

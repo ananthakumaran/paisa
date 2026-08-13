@@ -1,12 +1,12 @@
 import { parser } from "./parser";
-import { LRLanguage, LanguageSupport } from "@codemirror/language";
+import { LanguageSupport, LRLanguage } from "@codemirror/language";
 
 export const queryLanguage = LRLanguage.define({
   name: "query",
   parser: parser.configure({}),
   languageData: {
-    closeBrackets: { brackets: ["[", "(", "/", '"'] }
-  }
+    closeBrackets: { brackets: ["[", "(", "/", '"'] },
+  },
 });
 
 export function queryExtension() {

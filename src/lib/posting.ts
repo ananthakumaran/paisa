@@ -31,6 +31,6 @@ export function change(p: Posting): Change {
     class: changeClass,
     value: changeAmount,
     percentage: changePercentage,
-    days
+    days,
   };
 }

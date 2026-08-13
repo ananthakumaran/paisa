@@ -6,20 +6,20 @@ on:
       - docs/*
       # - master
     tags:
-      - '*'
+      - "*"
 
 jobs:
   publish:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2.4.0
-    - uses: cachix/install-nix-action@v20
-      with:
-        nix_path: nixpkgs=channel:nixos-24.11
-    - name: publish
-      run: make publish
-    - name: Deploy
-      uses: JamesIves/github-pages-deploy-action@4.1.0
-      with:
-        BRANCH: gh-pages
-        FOLDER: site
+      - uses: actions/checkout@v2.4.0
+      - uses: cachix/install-nix-action@v20
+        with:
+          nix_path: nixpkgs=channel:nixos-24.11
+      - name: publish
+        run: make publish
+      - name: Deploy
+        uses: JamesIves/github-pages-deploy-action@4.1.0
+        with:
+          BRANCH: gh-pages
+          FOLDER: site

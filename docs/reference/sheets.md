@@ -7,9 +7,9 @@ status: new
 
 ## Introduction
 
-Sheet is a notepad calculator that computes the answer as you type.
-It has full access to your ledger and can be used to calculate the
-answers for a wide variety of financial questions.
+Sheet is a notepad calculator that computes the answer as you type. It has full
+access to your ledger and can be used to calculate the answers for a wide
+variety of financial questions.
 
 !!! example "Experimental"
 
@@ -19,8 +19,8 @@ answers for a wide variety of financial questions.
 
 #### Calculator
 
-Sheet can act as a normal calculator. The example below shows how to
-calculate the monthly EMI for a home loan.
+Sheet can act as a normal calculator. The example below shows how to calculate
+the monthly EMI for a home loan.
 
 <div class="split-codeview">
 <div class="sheet" markdown>
@@ -32,11 +32,13 @@ finance_amount = price - down_payment
 interest_rate = 8.6%
 term = 30
 
-n = term * 12
-r = interest_rate / 12
+n = term * 12 r = interest_rate / 12
+
 # EMI
+
 monthly_payment = r / (1 - (1 + r) ^ (-n)) * finance_amount
-```
+
+````
 </div>
 <div class="sheet-result sheet-result-1" markdown>
 ```text
@@ -51,7 +53,8 @@ monthly_payment = r / (1 - (1 + r) ^ (-n)) * finance_amount
 0
 # EMI
 24832
-```
+````
+
 </div>
 </div>
 
@@ -75,20 +78,15 @@ years_to_double(10)
 years_to_double(12)
 years_to_double(14)
 ```
+
 </div>
 <div class="sheet-result sheet-result-2" markdown>
 ```text
 # Years to Double
 
+36 18 12 9 7 6 5
 
-36
-18
-12
-9
-7
-6
-5
-```
+````
 </div>
 </div>
 
@@ -127,35 +125,32 @@ liability = cost_basis_negative({account =~ /^Liabilities:Homeloan/})
 
 # Total
 total = immovable + metal + art + vehicle + bank + share + insurance + loan + cash - liability
-```
+````
+
 </div>
 <div class="sheet-result sheet-result-3" markdown>
 ```text
 # Schedule AL
 
-
-
-
 # Immovable
+
 25,00,000
 
 # Movable
-0
-0
-0
-1,21,402
-66,98,880
 
-0
-0
-0
+0 0 0 1,21,402 66,98,880
+
+0 0 0
 
 # Liability
+
 6,21,600
 
 # Total
+
 86,98,682
-```
+
+````
 </div>
 </div>
 
@@ -171,7 +166,7 @@ the number by 100. So `8%` is same as `0.08`.
 100.00
 -100
 8%
-```
+````
 
 #### Operators
 
@@ -187,8 +182,8 @@ Sheet supports the following operators. `^` is the exponentiation operator.
 
 #### Variable
 
-You can define variables using `=` operator. Variables have to be
-defined before they are used.
+You can define variables using `=` operator. Variables have to be defined before
+they are used.
 
 ```sheet
 x = 1
@@ -199,11 +194,10 @@ z = x + y
 
 #### Function
 
-Sheet comes with a set of [built-in functions](#functions). You can also define your
-own functions. Function definition starts with the function name and
-then a list of arguments. The body of the function is a single
-expression. To call a function, use the function name followed by
-arguments.
+Sheet comes with a set of [built-in functions](#functions). You can also define
+your own functions. Function definition starts with the function name and then a
+list of arguments. The body of the function is a single expression. To call a
+function, use the function name followed by arguments.
 
 ```sheet
 sum(a, b) = a + b
@@ -213,13 +207,12 @@ sum(1, 2)
 
 #### Query
 
-Query is a first class citizen in sheet. You can think of a query as a
-list of postings that match the conditions. The query syntax is same
-as the [search syntax](./bulk-edit.md#search) used in postings and transactions pages. It
-has to be enclosed inside a `{}`. Query can be treated as any other
-value, can be passed as an argument, can be assigned to a variable. In
-fact you can combine two queries using `#!sheet AND` and `#!sheet OR`
-operator as well.
+Query is a first class citizen in sheet. You can think of a query as a list of
+postings that match the conditions. The query syntax is same as the
+[search syntax](./bulk-edit.md#search) used in postings and transactions pages.
+It has to be enclosed inside a `{}`. Query can be treated as any other value,
+can be passed as an argument, can be assigned to a variable. In fact you can
+combine two queries using `#!sheet AND` and `#!sheet OR` operator as well.
 
 ```sheet
 query = {account = Expenses:Utilities AND payee =~ /uber/i}
@@ -258,13 +251,10 @@ y = 2
 z = x + y // add x and y
 ```
 
-
-
 ## Functions
 
-You can find the full list of built-in functions here. This list is
-very slim as of now, please start a discussion if you want some
-functions to be added here.
+You can find the full list of built-in functions here. This list is very slim as
+of now, please start a discussion if you want some functions to be added here.
 
 #### `#!typescript cost(q: Posting[] | Query): number`
 
@@ -276,8 +266,8 @@ Returns the sum of the current market value of all the postings.
 
 #### `#!typescript fifo(q: Posting[] | Query): Posting[]`
 
-Returns the list of postings after performing a FIFO adjustment. For
-example, assume you have 3 postings
+Returns the list of postings after performing a FIFO adjustment. For example,
+assume you have 3 postings
 
 ```ledger
 2020/01/01 Buy
@@ -297,12 +287,11 @@ after FIFO adjustment, you will get the following postings
     Assets:Bank:Checking   100 USD
 ```
 
-All your sell postings will be adjusted against the oldest buy
-postings and you will have the remaining buy postings.
-
+All your sell postings will be adjusted against the oldest buy postings and you
+will have the remaining buy postings.
 
 #### `#!typescript negate(q: Posting[] | Query): Posting[]`
 
-Negates the amount and quantity of all the postings. This would be
-useful when you want to do some calculation on liabilities or income
-which are negative in nature.
+Negates the amount and quantity of all the postings. This would be useful when
+you want to do some calculation on liabilities or income which are negative in
+nature.

@@ -4,18 +4,19 @@ description: "Tutorial on how to get started with Paisa, an open source personal
 
 # Tutorial
 
-This tutorial will introduce all the concepts necessary to get
-started. **Paisa** builds on top of the **[ledger](https://ledger-cli.org/)**[^1], a command
-line tool that follows the principles of [plain text accounting](https://plaintextaccounting.org/).
-**ledger** primarily focuses on command line users and doesn't provide
-any graphical user interface. Paisa aims to create a low-friction
-graphical user interface on top of **ledger**, thereby making it
-accessible to a wider range of users.
+This tutorial will introduce all the concepts necessary to get started.
+**Paisa** builds on top of the **[ledger](https://ledger-cli.org/)**[^1], a
+command line tool that follows the principles of
+[plain text accounting](https://plaintextaccounting.org/). **ledger** primarily
+focuses on command line users and doesn't provide any graphical user interface.
+Paisa aims to create a low-friction graphical user interface on top of
+**ledger**, thereby making it accessible to a wider range of users.
 
-As an end user, you should be familiar with the [terms and
-concepts](https://github.com/ledger/ledger/blob/master/doc/GLOSSARY.md) used by **ledger**, which we will cover below. Paisa
-comes with an embedded **ledger** and you are not required to use
-**ledger** via command line unless you want to.
+As an end user, you should be familiar with the
+[terms and concepts](https://github.com/ledger/ledger/blob/master/doc/GLOSSARY.md)
+used by **ledger**, which we will cover below. Paisa comes with an embedded
+**ledger** and you are not required to use **ledger** via command line unless
+you want to.
 
 !!! tip
 
@@ -24,14 +25,13 @@ comes with an embedded **ledger** and you are not required to use
     currency, locale and financial year starting month etc. Check the
     [configuration](../reference/config.md) reference for more details.
 
-
 ## :fontawesome-regular-file-lines: Journal
 
-A [journal](../reference/journal.md) file captures all your financial transactions. A transaction
-may represent a mutual fund purchase, retirement contribution, grocery
-purchase and so on. Paisa creates a journal named `main.ledger`, Let's
-add our first transaction there. To open the editor, go to `Ledger`
-:material-chevron-right: `Editor`
+A [journal](../reference/journal.md) file captures all your financial
+transactions. A transaction may represent a mutual fund purchase, retirement
+contribution, grocery purchase and so on. Paisa creates a journal named
+`main.ledger`, Let's add our first transaction there. To open the editor, go to
+`Ledger` :material-chevron-right: `Editor`
 
 ```ledger
 2022/01/01/*(1)!*/ Salary/*(2)!*/
@@ -47,13 +47,13 @@ add our first transaction there. To open the editor, go to `Ledger`
 6. `Currency`
 
 **ledger** follows the double-entry accounting system. In simple terms, it
-tracks the movement of money from debit account to credit
-account. Here `#!ledger Income:Salary:Acme` is the debit account and
+tracks the movement of money from debit account to credit account. Here
+`#!ledger Income:Salary:Acme` is the debit account and
 `#!ledger Assets:Checking` is the credit account. The date at which the
-transaction took place and a description of the transaction is written
-in the first line followed by the list of credit or debit
-entry. Account [naming conventions](../reference/accounts.md) are explained later. The `:` in the account name
-represents hierarchy.
+transaction took place and a description of the transaction is written in the
+first line followed by the list of credit or debit entry. Account
+[naming conventions](../reference/accounts.md) are explained later. The `:` in
+the account name represents hierarchy.
 
 ```ledger
 2022/01/01 Salary
@@ -69,8 +69,8 @@ represents hierarchy.
     Assets:Checking          100,000 INR
 ```
 
-Let's add few more transactions. As you edit your journal file, the
-balance of the journal will be shown on the right hand side.
+Let's add few more transactions. As you edit your journal file, the balance of
+the journal will be shown on the right hand side.
 
 ```
          300,000 INR  Assets:Checking
@@ -79,11 +79,9 @@ balance of the journal will be shown on the right hand side.
                    0
 ```
 
-You would notice zero balance and a checking account with 3 lakhs and
-an income account with -3 lakhs. Double-entry accounting will always
-results in 0 balance since you have to always enter both the credit
-and debit side.
-
+You would notice zero balance and a checking account with 3 lakhs and an income
+account with -3 lakhs. Double-entry accounting will always results in 0 balance
+since you have to always enter both the credit and debit side.
 
 Let's say your company deducts `#!ledger 12,000 INR` and contributes it to EPF,
 we could represent it as follows
@@ -118,10 +116,9 @@ You can now see the use of `:` hierarchy in the account name.
 
 ## :material-gold: Commodity
 
-So far we have only dealt with INR. **ledger** can handle commodity as
-well. Let's say you are also investing `#!ledger 10,000 INR` in UTI Nifty Index
-Fund and `#!ledger 10,000 INR` in ICICI Nifty Next 50 Index Fund every
-month.
+So far we have only dealt with INR. **ledger** can handle commodity as well.
+Let's say you are also investing `#!ledger 10,000 INR` in UTI Nifty Index Fund
+and `#!ledger 10,000 INR` in ICICI Nifty Next 50 Index Fund every month.
 
 ```ledger
 2018/01/01 Investment
@@ -141,36 +138,38 @@ month.
 ```
 
 Let's consider `#!ledger 148.0865 NIFTY @ 67.5281 INR`. Here `#!ledger
-NIFTY` is the name of the commodity and we have bought `#!ledger
-148.0865` units at `#!ledger 67.5281 INR` per unit.
+NIFTY` is
+the name of the commodity and we have bought `#!ledger
+148.0865` units at
+`#!ledger 67.5281 INR` per unit.
 
-The withdrawal transaction is bit more involved. When you buy a
-commodity, you buy them at a specific price on a specific date called
-lot. When you sell, you usually need to record which lot you are
-selling for taxation purpose, usually FIFO. `#!ledger -100 NIFTY
- {67.5281 INR} [2018/01/01] @ 67.7549 INR` means you are selling
-`#!ledger NIFTY` at price `#!ledger 67.7549 INR` that was bought on
-`#!ledger 2018/01/01` at `#!ledger 67.5281 INR`. The gain or loss
-amount comes from the capital gains account `#!ledger
+The withdrawal transaction is bit more involved. When you buy a commodity, you
+buy them at a specific price on a specific date called lot. When you sell, you
+usually need to record which lot you are selling for taxation purpose, usually
+FIFO. `#!ledger -100 NIFTY
+ {67.5281 INR} [2018/01/01] @ 67.7549 INR` means you
+are selling `#!ledger NIFTY` at price `#!ledger 67.7549 INR` that was bought on
+`#!ledger 2018/01/01` at `#!ledger 67.5281 INR`. The gain or loss amount comes
+from the capital gains account `#!ledger
 Income:CapitalGains:Equity:NIFTY`
 
 Paisa has support for fetching commodity price history from few
-[providers](../reference/commodities.md). Go to `Configuration` page and expand the `Commodities`
-section. You can click the :fontawesome-solid-circle-plus: icon to
-add a new one. Edit the name to `#!ledger NIFTY`. Click the
-:fontawesome-solid-pen-to-square: icon near Price section and select
-the price provider details. Once done, save the configuration and click the
-`Update Prices` from the top right hand side menu. If you had done
-everything correctly, you would see the latest price of the commodity
-under `Assets` :material-chevron-right: `Balance`
+[providers](../reference/commodities.md). Go to `Configuration` page and expand
+the `Commodities` section. You can click the :fontawesome-solid-circle-plus:
+icon to add a new one. Edit the name to `#!ledger NIFTY`. Click the
+:fontawesome-solid-pen-to-square: icon near Price section and select the price
+provider details. Once done, save the configuration and click the
+`Update Prices` from the top right hand side menu. If you had done everything
+correctly, you would see the latest price of the commodity under `Assets`
+:material-chevron-right: `Balance`
 
 ## :fontawesome-solid-hand-holding-dollar: Interest
 
-There are many instruments like EPF, FD, etc that pay interest at
-regular intervals. We can treat it as just another transaction. Any
-income account that has a prefix `#!ledger Income:Interest:` can be
-used as the debit account. It's not mandatory to specify the amount at
-bot side. If you leave one side, **ledger** will deduct it.
+There are many instruments like EPF, FD, etc that pay interest at regular
+intervals. We can treat it as just another transaction. Any income account that
+has a prefix `#!ledger Income:Interest:` can be used as the debit account. It's
+not mandatory to specify the amount at bot side. If you leave one side,
+**ledger** will deduct it.
 
 ```ledger
 2022/03/31 EPF Interest
@@ -196,19 +195,20 @@ sequence in which it looks for the file is described below
 1. Current working directory
 1. `paisa/paisa.yaml` file inside User Documents folder.
 
-If it can't find the configuration file, it will create a default
-configuration file named `paisa/paisa.yaml` inside User Documents
-folder. The default configuration is tuned for Indians, users from
-other countries would have to change the `default_currency` and
-`locale`. Check the [configuration](../reference/config.md) reference for details.
+If it can't find the configuration file, it will create a default configuration
+file named `paisa/paisa.yaml` inside User Documents folder. The default
+configuration is tuned for Indians, users from other countries would have to
+change the `default_currency` and `locale`. Check the
+[configuration](../reference/config.md) reference for details.
 
 ## Update
 
-Paisa fetches the latest price of the commodities only when
-*update* command is used. Make sure to run `paisa update` command
-after you make any changes to your journal file or you want to fetch
-the latest value of the commodities. The update can be performed from
-the UI as well via the dropdown in the top right hand side corner.
+Paisa fetches the latest price of the commodities only when _update_ command is
+used. Make sure to run `paisa update` command after you make any changes to your
+journal file or you want to fetch the latest value of the commodities. The
+update can be performed from the UI as well via the dropdown in the top right
+hand side corner.
 
-[^1]: [hledger](https://hledger.org) and [beancount](https://beancount.github.io/) are also supported, refer
+[^1]: [hledger](https://hledger.org) and
+    [beancount](https://beancount.github.io/) are also supported, refer
     [Ledger CLI](../reference/ledger-cli.md) for more information.

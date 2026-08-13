@@ -13,7 +13,7 @@ export function download(balancedPostings: BalancedPosting[]) {
       ToAccount: balancedPosting.to.account,
       ToQuantity: balancedPosting.to.quantity,
       ToAmount: balancedPosting.to.amount,
-      ToCommodity: balancedPosting.to.commodity
+      ToCommodity: balancedPosting.to.commodity,
     };
   });
 

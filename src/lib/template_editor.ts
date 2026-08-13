@@ -3,11 +3,15 @@ import { handlebars } from "$lib/handlebars_parser";
 import { StreamLanguage, syntaxHighlighting } from "@codemirror/language";
 import { keymap } from "@codemirror/view";
 import { basicSetup, EditorView } from "codemirror";
-import { insertTab, history, undoDepth, redoDepth } from "@codemirror/commands";
-import { linter, lintGutter, type Diagnostic } from "@codemirror/lint";
+import { history, insertTab, redoDepth, undoDepth } from "@codemirror/commands";
+import { type Diagnostic, linter, lintGutter } from "@codemirror/lint";
 import _ from "lodash";
 import { writable } from "svelte/store";
-import { autocompletion, completeFromList, ifIn } from "@codemirror/autocomplete";
+import {
+  autocompletion,
+  completeFromList,
+  ifIn,
+} from "@codemirror/autocomplete";
 import Handlebars from "handlebars";
 import { classHighlighter } from "@lezer/highlight";
 
@@ -24,7 +28,7 @@ const initialEditorState: EditorState = {
   undoDepth: 0,
   redoDepth: 0,
   errors: [],
-  template: null
+  template: null,
 };
 
 export const editorState = writable(initialEditorState);
@@ -34,7 +38,9 @@ function lint(editor: EditorView): Diagnostic[] {
   try {
     Handlebars.parse(doc.toString());
     const compiled = Handlebars.compile(doc.toString(), { noEscape: true });
-    editorState.update((current) => _.assign({}, current, { template: compiled }));
+    editorState.update((current) =>
+      _.assign({}, current, { template: compiled })
+    );
   } catch (e) {
     const lines = e.message.split("\n");
     const match = lines[0].match(/Parse error on line (\d+):/);
@@ -45,8 +51,8 @@ function lint(editor: EditorView): Diagnostic[] {
           message: lines[3],
           severity: "error",
           from: line.from,
-          to: line.to
-        }
+          to: line.to,
+        },
       ];
     }
   }
@@ -69,25 +75,31 @@ export function createEditor(content: string, dom: Element) {
       linter(lint),
       history(),
       autocompletion({
-        override: _.map(autocompletions, (options, node) => ifIn([node], completeFromList(options)))
+        override: _.map(
+          autocompletions,
+          (options, node) => ifIn([node], completeFromList(options)),
+        ),
       }),
       EditorView.updateListener.of((viewUpdate) => {
         editorState.update((current) =>
           _.assign({}, current, {
-            hasUnsavedChanges: current.hasUnsavedChanges || viewUpdate.docChanged,
+            hasUnsavedChanges: current.hasUnsavedChanges ||
+              viewUpdate.docChanged,
             undoDepth: undoDepth(viewUpdate.state),
-            redoDepth: redoDepth(viewUpdate.state)
+            redoDepth: redoDepth(viewUpdate.state),
           })
         );
-      })
+      }),
     ],
     doc: content,
-    parent: dom
+    parent: dom,
   });
 }
 
 export function updateContent(editor: EditorView, content: string) {
   editor.dispatch(
-    editor.state.update({ changes: { from: 0, to: editor.state.doc.length, insert: content } })
+    editor.state.update({
+      changes: { from: 0, to: editor.state.doc.length, insert: content },
+    }),
   );
 }

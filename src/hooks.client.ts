@@ -19,8 +19,8 @@ dayjs.extend(relativeTime, {
     { l: "M", r: 1 },
     { l: "MM", r: 11, d: "month" },
     { l: "y", r: 1 },
-    { l: "yy", d: "year" }
-  ]
+    { l: "yy", d: "year" },
+  ],
 });
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone"; // dependent on utc plugin
@@ -55,19 +55,21 @@ Handlebars.registerHelper(
         console.log("Error in helper", name, args, e);
       }
     };
-  })
+  }),
 );
 
 toast.setDefaults({
   position: "bottom-right",
   dismissible: true,
   pauseOnHover: true,
-  extraClasses: "is-light invertable"
-});
+  extraClasses: "is-light invertable",
+} as any);
 
 globalThis.USER_CONFIG = {} as any;
 
-export const handleError: HandleClientError = async ({ error, status, message }) => {
+export const handleError: HandleClientError = async (
+  { error, status, message },
+) => {
   let stack = null;
   if (error instanceof Error) {
     stack = error.stack;
@@ -98,13 +100,14 @@ const footer = `
 function displayError(error: any) {
   const message = formatError(error);
   toast.toast({
-    message: `<div class="message invertable is-danger"><div class="message-header">Something Went Wrong</div><div class="message-body">${message}${footer}</div></div>`,
+    message:
+      `<div class="message invertable is-danger"><div class="message-header">Something Went Wrong</div><div class="message-body">${message}${footer}</div></div>`,
     type: "is-danger",
     dismissible: true,
     pauseOnHover: true,
     duration: 10000,
     position: "center",
-    animate: { in: "fadeIn", out: "fadeOut" }
+    animate: { in: "fadeIn", out: "fadeOut" },
   });
 }
 

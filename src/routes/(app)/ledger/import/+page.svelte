@@ -8,7 +8,7 @@
     createEditor as createPreviewEditor,
     updateContent as updatePreviewContent
   } from "$lib/editor";
-  import Dropzone from "svelte-file-dropzone/Dropzone.svelte";
+  import Dropzone from "svelte-file-dropzone";
   import { parse, asRows, render as renderJournal } from "$lib/spreadsheet";
   import _ from "lodash";
   import type { EditorView } from "codemirror";

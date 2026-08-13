@@ -426,7 +426,7 @@ export function buildDirectoryTree<T extends File>(files: T[]) {
   const root: Directory = {
     type: "directory",
     name: "",
-    children: []
+    children: [],
   };
 
   for (const file of _.sortBy(files, (f) => f.name)) {
@@ -438,7 +438,7 @@ export function buildDirectoryTree<T extends File>(files: T[]) {
         found = {
           type: "directory",
           name: part,
-          children: []
+          children: [],
         };
         current.children.push(found);
       }
@@ -544,11 +544,20 @@ type RequestOptions = RequestInit & {
 };
 
 export function ajax(
-  route: "/api/config"
-): Promise<{ config: UserConfig; schema: JSONSchema7; now: dayjs.Dayjs; accounts: string[] }>;
-export function ajax(route: "/api/harvest"): Promise<{ harvestables: Record<string, Harvestable> }>;
+  route: "/api/config",
+): Promise<
+  {
+    config: UserConfig;
+    schema: JSONSchema7;
+    now: dayjs.Dayjs;
+    accounts: string[];
+  }
+>;
 export function ajax(
-  route: "/api/capital_gains"
+  route: "/api/harvest",
+): Promise<{ harvestables: Record<string, Harvestable> }>;
+export function ajax(
+  route: "/api/capital_gains",
 ): Promise<{ capital_gains: Record<string, CapitalGain> }>;
 export function ajax(route: "/api/schedule_al"): Promise<{
   schedule_als: Record<string, ScheduleAL>;
@@ -556,20 +565,26 @@ export function ajax(route: "/api/schedule_al"): Promise<{
 export function ajax(route: "/api/diagnosis"): Promise<{ issues: Issue[] }>;
 export function ajax(route: "/api/logs"): Promise<{ logs: Log[] }>;
 export function ajax(
-  route: "/api/investment"
+  route: "/api/investment",
 ): Promise<{ assets: Posting[]; yearly_cards: InvestmentYearlyCard[] }>;
 export function ajax(route: "/api/ledger"): Promise<{ postings: Posting[] }>;
 export function ajax(
-  route: "/api/assets/balance"
+  route: "/api/assets/balance",
 ): Promise<{ asset_breakdowns: Record<string, AssetBreakdown> }>;
-export function ajax(route: "/api/liabilities/repayment"): Promise<{ repayments: Posting[] }>;
 export function ajax(
-  route: "/api/liabilities/balance"
+  route: "/api/liabilities/repayment",
+): Promise<{ repayments: Posting[] }>;
+export function ajax(
+  route: "/api/liabilities/balance",
 ): Promise<{ liability_breakdowns: LiabilityBreakdown[] }>;
-export function ajax(route: "/api/price"): Promise<{ prices: Record<string, Price[]> }>;
-export function ajax(route: "/api/transaction"): Promise<{ transactions: Transaction[] }>;
 export function ajax(
-  route: "/api/transaction/balanced"
+  route: "/api/price",
+): Promise<{ prices: Record<string, Price[]> }>;
+export function ajax(
+  route: "/api/transaction",
+): Promise<{ transactions: Transaction[] }>;
+export function ajax(
+  route: "/api/transaction/balanced",
 ): Promise<{ balancedPostings: BalancedPosting[] }>;
 export function ajax(route: "/api/networth"): Promise<{
   networthTimeline: Networth[];
@@ -594,7 +609,7 @@ export function ajax(route: "/api/dashboard"): Promise<{
 export function ajax(
   route: "/api/gain/:name",
   options?: RequestOptions,
-  params?: Record<string, string>
+  params?: Record<string, string>,
 ): Promise<{
   gain_timeline_breakdown: AccountGain;
   portfolio_allocation: PortfolioAllocation;
@@ -606,7 +621,9 @@ export function ajax(route: "/api/allocation"): Promise<{
   aggregates_timeline: { [key: string]: Aggregate }[];
   allocation_targets: AllocationTarget[];
 }>;
-export function ajax(route: "/api/portfolio_allocation"): Promise<PortfolioAllocation>;
+export function ajax(
+  route: "/api/portfolio_allocation",
+): Promise<PortfolioAllocation>;
 export function ajax(route: "/api/income"): Promise<{
   income_timeline: Income[];
   tax_timeline: Tax[];
@@ -635,56 +652,60 @@ export function ajax(route: "/api/budget"): Promise<{
   availableForBudgeting: number;
 }>;
 
-export function ajax(route: "/api/cash_flow"): Promise<{ cash_flows: CashFlow[] }>;
 export function ajax(
-  route: "/api/income_statement"
+  route: "/api/cash_flow",
+): Promise<{ cash_flows: CashFlow[] }>;
+export function ajax(
+  route: "/api/income_statement",
 ): Promise<{ yearly: Record<string, IncomeStatement> }>;
 
 export function ajax(
-  route: "/api/recurring"
+  route: "/api/recurring",
 ): Promise<{ transaction_sequences: TransactionSequence[] }>;
 
 export function ajax(route: "/api/liabilities/interest"): Promise<{
   interest_timeline_breakdown: Interest[];
 }>;
 
-export function ajax(route: "/api/credit_cards"): Promise<{ creditCards: CreditCardSummary[] }>;
+export function ajax(
+  route: "/api/credit_cards",
+): Promise<{ creditCards: CreditCardSummary[] }>;
 
 export function ajax(
   route: "/api/credit_cards/:account",
   options?: RequestOptions,
-  params?: Record<string, string>
+  params?: Record<string, string>,
 ): Promise<{ creditCard: CreditCardSummary; found: boolean }>;
 
 export function ajax(route: "/api/goals"): Promise<{ goals: GoalSummary[] }>;
 export function ajax(
   route: "/api/goals/retirement/:name",
   options?: RequestOptions,
-  params?: Record<string, string>
+  params?: Record<string, string>,
 ): Promise<RetirementGoalProgress>;
 export function ajax(
   route: "/api/goals/savings/:name",
   options?: RequestOptions,
-  params?: Record<string, string>
+  params?: Record<string, string>,
 ): Promise<SavingsGoalProgress>;
 
 export function ajax(route: "/api/account/tf_idf"): Promise<AccountTfIdf>;
 export function ajax(
   route: "/api/templates",
-  options?: RequestOptions
+  options?: RequestOptions,
 ): Promise<{ templates: ImportTemplate[] }>;
 export function ajax(
   route: "/api/templates/upsert",
-  options?: RequestOptions
+  options?: RequestOptions,
 ): Promise<{ saved: boolean; message?: string; template: ImportTemplate }>;
 export function ajax(
   route: "/api/templates/delete",
-  options?: RequestOptions
+  options?: RequestOptions,
 ): Promise<{ success: boolean; message?: string }>;
 
 export function ajax(
   route: "/api/editor/files",
-  options?: RequestOptions
+  options?: RequestOptions,
 ): Promise<{
   files: LedgerFile[];
   accounts: string[];
@@ -694,22 +715,29 @@ export function ajax(
 
 export function ajax(
   route: "/api/editor/validate",
-  options?: RequestOptions
+  options?: RequestOptions,
 ): Promise<{ errors: LedgerFileError[]; output: string }>;
 
 export function ajax(
   route: "/api/editor/save",
-  options?: RequestOptions
-): Promise<{ errors: LedgerFileError[]; saved: boolean; file: LedgerFile; message: string }>;
+  options?: RequestOptions,
+): Promise<
+  {
+    errors: LedgerFileError[];
+    saved: boolean;
+    file: LedgerFile;
+    message: string;
+  }
+>;
 
 export function ajax(
   route: "/api/editor/file",
-  options?: RequestOptions
+  options?: RequestOptions,
 ): Promise<{ file: LedgerFile }>;
 
 export function ajax(
   route: "/api/editor/file/delete_backups",
-  options?: RequestOptions
+  options?: RequestOptions,
 ): Promise<{ file: LedgerFile }>;
 
 export function ajax(route: "/api/sheets/files"): Promise<{
@@ -719,37 +747,37 @@ export function ajax(route: "/api/sheets/files"): Promise<{
 
 export function ajax(
   route: "/api/sheets/save",
-  options?: RequestOptions
+  options?: RequestOptions,
 ): Promise<{ saved: boolean; file: SheetFile; message: string }>;
 
 export function ajax(
   route: "/api/sheets/file",
-  options?: RequestOptions
+  options?: RequestOptions,
 ): Promise<{ file: SheetFile }>;
 
 export function ajax(
   route: "/api/sheets/file/delete_backups",
-  options?: RequestOptions
+  options?: RequestOptions,
 ): Promise<{ file: SheetFile }>;
 
 export function ajax(
   route: "/api/price/delete",
-  options?: RequestOptions
+  options?: RequestOptions,
 ): Promise<{ success: boolean; message: string }>;
 
 export function ajax(
   route: "/api/sync",
-  options?: RequestOptions
+  options?: RequestOptions,
 ): Promise<{ success: boolean; message: string }>;
 export function ajax(
   route: "/api/price/providers",
-  options?: RequestOptions
+  options?: RequestOptions,
 ): Promise<{ providers: PriceProvider[] }>;
 
 export function ajax(
   route: "/api/price/providers/delete/:provider",
   options?: RequestOptions,
-  params?: Record<string, string>
+  params?: Record<string, string>,
 ): Promise<{
   gain_timeline_breakdown: AccountGain;
   portfolio_allocation: PortfolioAllocation;
@@ -758,21 +786,26 @@ export function ajax(
 
 export function ajax(
   route: "/api/price/autocomplete",
-  options?: RequestOptions
+  options?: RequestOptions,
 ): Promise<{ completions: AutoCompleteItem[] }>;
-export function ajax(route: "/api/init", options?: RequestOptions): Promise<any>;
+export function ajax(
+  route: "/api/init",
+  options?: RequestOptions,
+): Promise<any>;
 
 export function ajax(
   route: "/api/config",
-  options?: RequestOptions
+  options?: RequestOptions,
 ): Promise<{ success: boolean; error?: string }>;
 
-export function ajax(route: "/api/ping"): Promise<{ success: boolean; error?: string }>;
+export function ajax(
+  route: "/api/ping",
+): Promise<{ success: boolean; error?: string }>;
 
 export async function ajax(
   route: string,
   options?: RequestOptions,
-  params?: Record<string, string>
+  params?: Record<string, string>,
 ) {
   const background = options?.background;
   if (!background) {
@@ -788,7 +821,7 @@ export async function ajax(
   options = options || {};
 
   options.headers = {
-    "Content-Type": "application/json"
+    "Content-Type": "application/json",
   };
 
   const token = localStorage.getItem(tokenKey);
@@ -812,9 +845,10 @@ export async function ajax(
     if (
       _.isString(value) &&
       /Date|date|time|now/.test(key) &&
-      /^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(.[0-9]+)?(Z|[+-][0-9]{2}:[0-9]{2})$/.test(
-        value
-      )
+      /^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(.[0-9]+)?(Z|[+-][0-9]{2}:[0-9]{2})$/
+        .test(
+          value,
+        )
     ) {
       return dayjs(value);
     }
@@ -855,7 +889,7 @@ function normalize(value: number) {
 export function configUpdated() {
   dayjs.locale("en");
   dayjs.updateLocale("en", {
-    weekStart: USER_CONFIG.week_starting_day
+    weekStart: USER_CONFIG.week_starting_day,
   });
 }
 
@@ -886,8 +920,8 @@ export function formatCurrency(value: number, precision: number = null) {
   return unicodeMinus(
     value.toLocaleString(USER_CONFIG.locale, {
       minimumFractionDigits: precision,
-      maximumFractionDigits: precision
-    })
+      maximumFractionDigits: precision,
+    }),
   );
 }
 
@@ -895,11 +929,14 @@ export function formatCurrencyCrude(value: number) {
   return formatCurrencyCrudeWithPrecision(value, -1);
 }
 
-export function formatCurrencyCrudeWithPrecision(value: number, precision: number) {
+export function formatCurrencyCrudeWithPrecision(
+  value: number,
+  precision: number,
+) {
   value = normalize(value);
 
   const options: Intl.NumberFormatOptions = {
-    notation: "compact"
+    notation: "compact",
   };
 
   if (precision < 0) {
@@ -918,8 +955,8 @@ export function formatFloat(value: number, precision = 2) {
   return unicodeMinus(
     value.toLocaleString(USER_CONFIG.locale, {
       minimumFractionDigits: precision,
-      maximumFractionDigits: precision
-    })
+      maximumFractionDigits: precision,
+    }),
   );
 }
 
@@ -928,8 +965,8 @@ export function formatFloatUptoPrecision(value: number, precision = 2) {
 
   return unicodeMinus(
     value.toLocaleString(USER_CONFIG.locale, {
-      maximumFractionDigits: precision
-    })
+      maximumFractionDigits: precision,
+    }),
   );
 }
 
@@ -939,19 +976,23 @@ export function formatPercentage(value: number, precision = 0) {
   return unicodeMinus(
     value.toLocaleString(USER_CONFIG.locale, {
       style: "percent",
-      minimumFractionDigits: precision
-    })
+      minimumFractionDigits: precision,
+    }),
   );
 }
 
-export function formatFixedWidthFloat(value: number, width: number, precision = 2) {
+export function formatFixedWidthFloat(
+  value: number,
+  width: number,
+  precision = 2,
+) {
   value = normalize(value);
 
   const formatted = unicodeMinus(
     value.toLocaleString(USER_CONFIG.locale, {
       minimumFractionDigits: precision,
-      maximumFractionDigits: precision
-    })
+      maximumFractionDigits: precision,
+    }),
   );
 
   if (formatted.length < width) {
@@ -963,7 +1004,7 @@ export function formatFixedWidthFloat(value: number, width: number, precision = 
 export function forEachMonth(
   start: dayjs.Dayjs,
   end: dayjs.Dayjs,
-  cb: (current: dayjs.Dayjs) => any
+  cb: (current: dayjs.Dayjs) => any,
 ) {
   let current = start.startOf("month");
   while (current.isSameOrBefore(end, "month")) {
@@ -975,7 +1016,7 @@ export function forEachMonth(
 export function forEachYear(
   start: dayjs.Dayjs,
   end: dayjs.Dayjs,
-  cb: (current: dayjs.Dayjs) => any
+  cb: (current: dayjs.Dayjs) => any,
 ) {
   let current = start;
   while (current.isSameOrBefore(end, "year")) {
@@ -987,7 +1028,7 @@ export function forEachYear(
 export function forEachFinancialYear(
   start: dayjs.Dayjs,
   end: dayjs.Dayjs,
-  cb?: (current: dayjs.Dayjs) => any
+  cb?: (current: dayjs.Dayjs) => any,
 ) {
   let current = beginningOfFinancialYear(start);
   const years: dayjs.Dayjs[] = [];
@@ -1006,9 +1047,15 @@ function beginningOfFinancialYear(date: dayjs.Dayjs) {
   if (date.month() + 1 < USER_CONFIG.financial_year_starting_month) {
     return date
       .add(-1, "year")
-      .add(USER_CONFIG.financial_year_starting_month - date.month() - 1, "month");
+      .add(
+        USER_CONFIG.financial_year_starting_month - date.month() - 1,
+        "month",
+      );
   } else {
-    return date.add(-(date.month() + 1 - USER_CONFIG.financial_year_starting_month), "month");
+    return date.add(
+      -(date.month() + 1 - USER_CONFIG.financial_year_starting_month),
+      "month",
+    );
   }
 }
 
@@ -1044,7 +1091,7 @@ export function skipTicks<Domain>(
   minWidth: number,
   scale: d3.AxisScale<Domain>,
   cb: (data: d3.AxisDomain, index: number) => string,
-  points?: number
+  points?: number,
 ) {
   const range = scale.range();
   const width = Math.abs(range[1] - range[0]);
@@ -1063,7 +1110,9 @@ export function rainbowScale(keys: string[]) {
     .scaleLinear()
     .domain([0, _.size(keys) - 1])
     .range([0, 0.9]);
-  return d3.scaleOrdinal(_.map(keys, (_value, i) => d3.interpolateRainbow(x(i)))).domain(keys);
+  return d3.scaleOrdinal(
+    _.map(keys, (_value, i) => d3.interpolateRainbow(x(i))),
+  ).domain(keys);
 }
 
 export function darkenOrLighten(backgroundColor: string, intensity = 2) {
@@ -1081,12 +1130,12 @@ export function tooltip(
   options: {
     header?: string;
     total?: string;
-  } = {}
+  } = {},
 ) {
   if (options.total && rows.length > 0) {
     const totalRow: Array<string | string[]> = [
       ["Total", "has-text-weight-bold"],
-      [options.total, "has-text-weight-bold has-text-right"]
+      [options.total, "has-text-weight-bold has-text-right"],
     ];
 
     for (let i = 2; i < rows[0].length; i++) {
@@ -1098,7 +1147,11 @@ export function tooltip(
 
   if (options.header && rows.length > 0) {
     const headerRow: Array<string | string[]> = [
-      [options.header, "has-text-weight-bold has-text-centered", rows[0].length.toString()]
+      [
+        options.header,
+        "has-text-weight-bold has-text-centered",
+        rows[0].length.toString(),
+      ],
     ];
     rows.unshift(headerRow);
   }
@@ -1142,13 +1195,17 @@ export function financialYear(date: dayjs.Dayjs) {
   }
 
   if (date.month() < USER_CONFIG.financial_year_starting_month - 1) {
-    return `${date.year() - 1} - ${(date.year() % 100).toLocaleString("en-US", {
-      minimumIntegerDigits: 2
-    })}`;
+    return `${date.year() - 1} - ${
+      (date.year() % 100).toLocaleString("en-US", {
+        minimumIntegerDigits: 2,
+      })
+    }`;
   } else {
-    return `${date.year()} - ${((date.year() + 1) % 100).toLocaleString("en-US", {
-      minimumIntegerDigits: 2
-    })}`;
+    return `${date.year()} - ${
+      ((date.year() + 1) % 100).toLocaleString("en-US", {
+        minimumIntegerDigits: 2,
+      })
+    }`;
   }
 }
 
@@ -1157,9 +1214,9 @@ export function helpUrl(section: string) {
 }
 
 export function postingUrl(posting: Posting) {
-  return `/ledger/editor/${encodeURIComponent(posting.file_name)}#${
-    posting.transaction_begin_line
-  }`;
+  return `/ledger/editor/${
+    encodeURIComponent(posting.file_name)
+  }#${posting.transaction_begin_line}`;
 }
 
 const storageKey = "theme-preference";
@@ -1168,7 +1225,9 @@ export function getColorPreference() {
   if (localStorage.getItem(storageKey)) {
     return localStorage.getItem(storageKey);
   } else {
-    return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    return window.matchMedia("(prefers-color-scheme: dark)").matches
+      ? "dark"
+      : "light";
   }
 }
 
@@ -1221,8 +1280,13 @@ export function svgTruncate(width: number) {
 
 export function sumPostings(postings: Posting[]) {
   return postings.reduce(
-    (sum, p) => (p.account.startsWith("Income:CapitalGains") ? sum + -p.amount : sum + p.amount),
-    0
+    (
+      sum,
+      p,
+    ) => (p.account.startsWith("Income:CapitalGains")
+      ? sum + -p.amount
+      : sum + p.amount),
+    0,
   );
 }
 
@@ -1234,7 +1298,10 @@ export function formatTextAsHtml(text: string) {
   return `<p>${_.trim(text).replaceAll("\n", "<br />")}</p>`;
 }
 
-export function groupSumBy(postings: Posting[], groupBy: _.ValueIteratee<Posting>) {
+export function groupSumBy(
+  postings: Posting[],
+  groupBy: _.ValueIteratee<Posting>,
+) {
   return _.chain(postings)
     .groupBy(groupBy)
     .mapValues((ps) => _.sumBy(ps, (p) => p.amount))
@@ -1250,7 +1317,7 @@ export function asTransaction(p: Posting): Transaction {
     endLine: p.transaction_end_line,
     fileName: p.file_name,
     note: p.transaction_note,
-    postings: [p]
+    postings: [p],
   };
 }
 
@@ -1287,7 +1354,10 @@ export function dueDateIcon(dueDate: dayjs.Dayjs, clearedDate: dayjs.Dayjs) {
   return { icon, color, svgColor, glyph };
 }
 
-export function buildTree<I>(items: I[], accountAccessor: (item: I) => string): I[] {
+export function buildTree<I>(
+  items: I[],
+  accountAccessor: (item: I) => string,
+): I[] {
   const result: I[] = [];
 
   const sorted = _.sortBy(items, accountAccessor);
@@ -1298,7 +1368,9 @@ export function buildTree<I>(items: I[], accountAccessor: (item: I) => string): 
     let current = result;
     for (let i = 0; i < parts.length; i++) {
       const part = parts[i];
-      let found: any = current.find((c) => accountAccessor(c).split(":")[i] === part);
+      let found: any = current.find((c) =>
+        accountAccessor(c).split(":")[i] === part
+      );
       if (!found) {
         found = { ...item };
         current.push(found);

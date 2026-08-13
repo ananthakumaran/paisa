@@ -3,21 +3,26 @@ import type { Dayjs } from "dayjs";
 import chroma from "chroma-js";
 import _ from "lodash";
 import {
+  firstName,
   forEachMonth,
-  formatFixedWidthFloat,
   formatCurrency,
   formatCurrencyCrude,
+  formatFixedWidthFloat,
+  type Legend,
+  monthDays,
   type Posting,
+  rem,
+  restName,
   skipTicks,
   tooltip,
-  restName,
-  firstName,
-  monthDays,
-  rem,
-  type Legend
 } from "$lib/utils";
 import COLORS, { generateColorScheme, white } from "$lib/colors";
-import { get, type Readable, type Unsubscriber, type Writable } from "svelte/store";
+import {
+  get,
+  type Readable,
+  type Unsubscriber,
+  type Writable,
+} from "svelte/store";
 import { iconify } from "$lib/icon";
 import { byExpenseGroup, expenseGroup, pieData } from "$lib/expense";
 
@@ -25,7 +30,7 @@ export function renderCalendar(
   month: string,
   expenses: Posting[],
   z: d3.ScaleOrdinal<string, string, never>,
-  groups: string[]
+  groups: string[],
 ) {
   const id = "#d3-current-month-expense-calendar";
 
@@ -35,11 +40,14 @@ export function renderCalendar(
   _.each(days, (d) => {
     expensesByDay[d.format("YYYY-MM-DD")] = _.filter(
       expenses,
-      (e) => e.date.isSame(d, "day") && _.includes(groups, expenseGroup(e))
+      (e) => e.date.isSame(d, "day") && _.includes(groups, expenseGroup(e)),
     );
   });
 
-  const expensesByDayTotal = _.mapValues(expensesByDay, (ps) => _.sumBy(ps, (p) => p.amount));
+  const expensesByDayTotal = _.mapValues(
+    expensesByDay,
+    (ps) => _.sumBy(ps, (p) => p.amount),
+  );
 
   alpha.domain(d3.extent(_.values(expensesByDayTotal)));
 
@@ -57,10 +65,13 @@ export function renderCalendar(
         return [
           [iconify(restName(p.account), { group: firstName(p.account) })],
           [p.payee, "is-clipped"],
-          [formatCurrency(p.amount), "has-text-weight-bold has-text-right"]
+          [formatCurrency(p.amount), "has-text-weight-bold has-text-right"],
         ];
       }),
-      { total: formatCurrency(total), header: es[0].date.format("DD MMM YYYY") }
+      {
+        total: formatCurrency(total),
+        header: es[0].date.format("DD MMM YYYY"),
+      },
     );
   };
 
@@ -69,8 +80,10 @@ export function renderCalendar(
     .attr("class", "date p-1")
     .style("position", "relative")
     .attr("data-tippy-content", tooltipContent)
-    .style("visibility", (d) =>
-      d.isBefore(monthStart) || d.isAfter(monthEnd) ? "hidden" : "visible"
+    .style(
+      "visibility",
+      (d) =>
+        d.isBefore(monthStart) || d.isAfter(monthEnd) ? "hidden" : "visible",
     );
 
   dayDiv
@@ -91,8 +104,7 @@ export function renderCalendar(
     .style("color", (d) =>
       chroma(COLORS.lossText)
         .alpha(alpha(expensesByDayTotal[d.format("YYYY-MM-DD")]))
-        .hex()
-    )
+        .hex())
     .text((d) => {
       const total = expensesByDayTotal[d.format("YYYY-MM-DD")];
       if (total > 0) {
@@ -132,7 +144,7 @@ export function renderMonthlyExpensesTimeline(
   postings: Posting[],
   groupsStore: Writable<string[]>,
   monthStore: Writable<string>,
-  dateRangeStore: Readable<{ from: Dayjs; to: Dayjs }>
+  dateRangeStore: Readable<{ from: Dayjs; to: Dayjs }>,
 ): {
   z: d3.ScaleOrdinal<string, string, never>;
   destroy: Unsubscriber;
@@ -143,18 +155,20 @@ export function renderMonthlyExpensesTimeline(
   const MAX_BAR_WIDTH = rem(40);
   const svg = d3.select(id),
     margin = { top: rem(15), right: rem(30), bottom: rem(60), left: rem(40) },
-    width =
-      document.getElementById(id.substring(1)).parentElement.clientWidth -
+    width = document.getElementById(id.substring(1)).parentElement.clientWidth -
       margin.left -
       margin.right,
     height = +svg.attr("height") - margin.top - margin.bottom,
-    g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    g = svg.append("g").attr(
+      "transform",
+      "translate(" + margin.left + "," + margin.top + ")",
+    );
 
   const groups = _.chain(postings).map(expenseGroup).uniq().sort().value();
 
   const defaultValues = _.zipObject(
     groups,
-    _.map(groups, () => 0)
+    _.map(groups, () => 0),
   );
 
   const z = generateColorScheme(groups);
@@ -167,7 +181,7 @@ export function renderMonthlyExpensesTimeline(
       destroy: () => {
         // void
       },
-      legends: []
+      legends: [],
     };
   }
 
@@ -219,11 +233,11 @@ export function renderMonthlyExpensesTimeline(
           timestamp: month,
           month: month.format(timeFormat),
           postings: postings,
-          trend: {}
+          trend: {},
         },
         defaultValues,
-        values
-      )
+        values,
+      ),
     );
   });
 
@@ -241,13 +255,16 @@ export function renderMonthlyExpensesTimeline(
             return [
               [
                 iconify(key, { group: "Expenses" }),
-                [formatCurrency(total), "has-text-weight-bold has-text-right"]
-              ]
+                [formatCurrency(total), "has-text-weight-bold has-text-right"],
+              ],
             ];
           }
           return [];
         }),
-        { total: formatCurrency(grandTotal), header: (d.data.timestamp as any).format("MMM YYYY") }
+        {
+          total: formatCurrency(grandTotal),
+          header: (d.data.timestamp as any).format("MMM YYYY"),
+        },
       );
     };
   };
@@ -273,11 +290,16 @@ export function renderMonthlyExpensesTimeline(
 
   let firstRender = true;
 
-  const render = (allowedGroups: string[], dateRange: { from: Dayjs; to: Dayjs }) => {
+  const render = (
+    allowedGroups: string[],
+    dateRange: { from: Dayjs; to: Dayjs },
+  ) => {
     groupsStore.set(allowedGroups);
     const allowedPoints = _.filter(
       points,
-      (p) => p.timestamp.isSameOrBefore(dateRange.to) && p.timestamp.isSameOrAfter(dateRange.from)
+      (p) =>
+        p.timestamp.isSameOrBefore(dateRange.to) &&
+        p.timestamp.isSameOrAfter(dateRange.from),
     );
     const sum = (p: Point) => _.sum(_.map(allowedGroups, (k) => p[k]));
     x.domain(allowedPoints.map((p) => p.month));
@@ -292,7 +314,7 @@ export function renderMonthlyExpensesTimeline(
         d3
           .axisBottom(x)
           .ticks(5)
-          .tickFormat(skipTicks(30, x, (d) => d.toString()))
+          .tickFormat(skipTicks(30, x, (d) => d.toString())),
       )
       .selectAll("text")
       .attr("y", 10)
@@ -301,7 +323,9 @@ export function renderMonthlyExpensesTimeline(
       .attr("transform", "rotate(-45)")
       .style("text-anchor", "end");
 
-    yAxis.transition(t).call(d3.axisLeft(y).tickSize(-width).tickFormat(formatCurrencyCrude));
+    yAxis.transition(t).call(
+      d3.axisLeft(y).tickSize(-width).tickFormat(formatCurrencyCrude),
+    );
 
     const path = d3
       .line<Point>()
@@ -324,9 +348,9 @@ export function renderMonthlyExpensesTimeline(
       .selectAll("g")
       .data(
         d3.stack().offset(d3.stackOffsetDiverging).keys(allowedGroups)(
-          allowedPoints as { [key: string]: number }[]
+          allowedPoints as { [key: string]: number }[],
         ),
-        (d: any) => d.key
+        (d: any) => d.key,
       )
       .join(
         (enter) =>
@@ -335,12 +359,15 @@ export function renderMonthlyExpensesTimeline(
           }),
         (update) => update.transition(t),
         (exit) =>
-          exit.selectAll("rect").transition(t).attr("y", y.range()[0]).attr("height", 0).remove()
+          exit.selectAll("rect").transition(t).attr("y", y.range()[0]).attr(
+            "height",
+            0,
+          ).remove(),
       )
       .selectAll("rect")
       .data(
         (d) => d,
-        (d: any) => d.data.timestamp.format("YYYY-MM")
+        (d: any) => d.data.timestamp.format("YYYY-MM"),
       )
       .join(
         (enter) =>
@@ -384,14 +411,16 @@ export function renderMonthlyExpensesTimeline(
             .attr("height", function (d) {
               return y(d[0]) - y(d[1]);
             }),
-        (exit) => exit.remove()
+        (exit) => exit.remove(),
       );
   };
 
   let selectedGroups = groups;
   render(selectedGroups, get(dateRangeStore));
 
-  const destroy = dateRangeStore.subscribe((dateRange) => render(get(groupsStore), dateRange));
+  const destroy = dateRangeStore.subscribe((dateRange) =>
+    render(get(groupsStore), dateRange)
+  );
 
   const legends = groups.map(
     (group) =>
@@ -407,24 +436,28 @@ export function renderMonthlyExpensesTimeline(
           }
 
           render(selectedGroups, get(dateRangeStore));
-        }
-      }) as Legend
+        },
+      }) as Legend,
   );
 
   return { z: z, destroy: destroy, legends };
 }
 
-export function renderCurrentExpensesBreakdown(z: d3.ScaleOrdinal<string, string, never>) {
+export function renderCurrentExpensesBreakdown(
+  z: d3.ScaleOrdinal<string, string, never>,
+) {
   const id = "#d3-current-month-breakdown";
   const BAR_HEIGHT = rem(20);
   const TEXT_WIDTH = rem(135);
   const svg = d3.select(id),
     margin = { top: 0, right: rem(160), bottom: rem(20), left: rem(100) },
-    width =
-      document.getElementById(id.substring(1)).parentElement.clientWidth -
+    width = document.getElementById(id.substring(1)).parentElement.clientWidth -
       margin.left -
       margin.right,
-    g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    g = svg.append("g").attr(
+      "transform",
+      "translate(" + margin.left + "," + margin.top + ")",
+    );
 
   const x = d3.scaleLinear().range([0, width]);
   const y = d3.scaleBand().paddingInner(0.1).paddingOuter(0);
@@ -466,12 +499,16 @@ export function renderCurrentExpensesBreakdown(z: d3.ScaleOrdinal<string, string
         d3
           .axisBottom(x)
           .tickSize(-height)
-          .tickFormat(skipTicks(60, x, formatCurrencyCrude))
+          .tickFormat(skipTicks(60, x, formatCurrencyCrude)),
       );
 
     yAxis
       .transition(t)
-      .call(d3.axisLeft(y).tickFormat((g) => iconify(g, { group: "Expenses", suffix: true })));
+      .call(
+        d3.axisLeft(y).tickFormat((g) =>
+          iconify(g, { group: "Expenses", suffix: true })
+        ),
+      );
 
     const tooltipContent = (d: Point) => {
       const total = _.sumBy(d.postings, (p) => p.amount);
@@ -480,13 +517,13 @@ export function renderCurrentExpensesBreakdown(z: d3.ScaleOrdinal<string, string
           return [
             p.date.format("DD MMM YYYY"),
             [p.payee, "is-clipped"],
-            [formatCurrency(p.amount), "has-text-weight-bold has-text-right"]
+            [formatCurrency(p.amount), "has-text-weight-bold has-text-right"],
           ];
         }),
         {
           total: formatCurrency(total),
-          header: `${d.postings[0].date.format("MMM YYYY")} ${d.category}`
-        }
+          header: `${d.postings[0].date.format("MMM YYYY")} ${d.category}`,
+        },
       );
     };
 
@@ -503,13 +540,13 @@ export function renderCurrentExpensesBreakdown(z: d3.ScaleOrdinal<string, string
             .attr("data-tippy-content", tooltipContent)
             .attr("x", x(0))
             .attr("y", function (d) {
-              return y(d.category) + (y.bandwidth() - Math.min(y.bandwidth(), BAR_HEIGHT)) / 2;
+              return y(d.category) +
+                (y.bandwidth() - Math.min(y.bandwidth(), BAR_HEIGHT)) / 2;
             })
             .attr("width", function (d) {
               return x(d.total);
             })
             .attr("height", y.bandwidth()),
-
         (update) =>
           update
             .attr("fill", function (d) {
@@ -519,18 +556,20 @@ export function renderCurrentExpensesBreakdown(z: d3.ScaleOrdinal<string, string
             .transition(t)
             .attr("x", x(0))
             .attr("y", function (d) {
-              return y(d.category) + (y.bandwidth() - Math.min(y.bandwidth(), BAR_HEIGHT)) / 2;
+              return y(d.category) +
+                (y.bandwidth() - Math.min(y.bandwidth(), BAR_HEIGHT)) / 2;
             })
             .attr("width", function (d) {
               return x(d.total);
             })
             .attr("height", y.bandwidth()),
-
-        (exit) => exit.remove()
+        (exit) => exit.remove(),
       );
 
     const rightLabel = (d: Point) =>
-      `${formatCurrency(d.total)} ${formatFixedWidthFloat((d.total / total) * 100, 6)}%`;
+      `${formatCurrency(d.total)} ${
+        formatFixedWidthFloat((d.total / total) * 100, 6)
+      }%`;
 
     bar
       .selectAll("text")
@@ -560,7 +599,7 @@ export function renderCurrentExpensesBreakdown(z: d3.ScaleOrdinal<string, string
             .attr("y", function (d) {
               return y(d.category) + y.bandwidth() / 2;
             }),
-        (exit) => exit.remove()
+        (exit) => exit.remove(),
       );
 
     return;

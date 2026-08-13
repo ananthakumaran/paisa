@@ -1,14 +1,14 @@
 import {
-  type Graph,
-  type Node,
-  formatCurrencyCrude,
-  restName,
   type CashFlow,
-  skipTicks,
+  formatCurrencyCrude,
+  type Graph,
   lastName,
+  type Legend,
+  type Node,
   parentName,
   rem,
-  type Legend
+  restName,
+  skipTicks,
 } from "$lib/utils";
 import * as d3 from "d3";
 import { sankeyCircular, sankeyJustify } from "d3-sankey-circular";
@@ -27,8 +27,8 @@ export function renderMonthlyFlow(
   id: string,
   options = {
     rotate: true,
-    balance: 0
-  }
+    balance: 0,
+  },
 ) {
   const MAX_BAR_WIDTH = rem(20);
   const svg = d3.select(id),
@@ -36,14 +36,16 @@ export function renderMonthlyFlow(
       top: rem(15),
       right: rem(30),
       bottom: options.rotate ? rem(50) : rem(20),
-      left: rem(40)
+      left: rem(40),
     },
-    width =
-      document.getElementById(id.substring(1)).parentElement.clientWidth -
+    width = document.getElementById(id.substring(1)).parentElement.clientWidth -
       margin.left -
       margin.right,
     height = +svg.attr("height") - margin.top - margin.bottom,
-    g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    g = svg.append("g").attr(
+      "transform",
+      "translate(" + margin.left + "," + margin.top + ")",
+    );
 
   const texture = textures
     .lines()
@@ -60,17 +62,21 @@ export function renderMonthlyFlow(
     COLORS.expenses,
     COLORS.liabilities,
     COLORS.expenses,
-    COLORS.assets
+    COLORS.assets,
   ];
 
   const lineKeys = ["balance"];
-  const lineScale = d3.scaleOrdinal<string>().domain(lineKeys).range([COLORS.primary]);
+  const lineScale = d3.scaleOrdinal<string>().domain(lineKeys).range([
+    COLORS.primary,
+  ]);
 
   const x = d3.scaleBand().range([0, width]).paddingInner(0.1),
     y = d3.scaleLinear().range([height, 0]),
     z = d3.scaleOrdinal<string>(colors).domain(areaKeys);
 
-  const x1 = d3.scaleBand().domain(["0", "1"]).paddingInner(0.1).paddingOuter(0.1);
+  const x1 = d3.scaleBand().domain(["0", "1"]).paddingInner(0.1).paddingOuter(
+    0.1,
+  );
 
   const xAxis = g
     .append("g")
@@ -93,12 +99,13 @@ export function renderMonthlyFlow(
 
   const renderer = function (cashFlows: CashFlow[]) {
     const positions = _.flatMap(cashFlows, (c) => [
-      c.income + (c.investment < 0 ? -c.investment : 0) + (c.liabilities > 0 ? c.liabilities : 0),
+      c.income + (c.investment < 0 ? -c.investment : 0) +
+      (c.liabilities > 0 ? c.liabilities : 0),
       c.expenses +
-        c.tax +
-        (c.investment > 0 ? c.investment : 0) +
-        (c.liabilities < 0 ? -c.liabilities : 0),
-      c.balance
+      c.tax +
+      (c.investment > 0 ? c.investment : 0) +
+      (c.liabilities < 0 ? -c.liabilities : 0),
+      c.balance,
     ]);
     positions.push(0);
 
@@ -115,7 +122,7 @@ export function renderMonthlyFlow(
         d3
           .axisBottom(x)
           .ticks(5)
-          .tickFormat(skipTicks(30, x, (d) => d.toString()))
+          .tickFormat(skipTicks(30, x, (d) => d.toString())),
       )
       .selectAll("text")
       .attr("y", 10)
@@ -126,7 +133,9 @@ export function renderMonthlyFlow(
       axis.attr("transform", "rotate(-45)").style("text-anchor", "end");
     }
 
-    yAxis.transition(t).call(d3.axisLeft(y).tickSize(-width).tickFormat(formatCurrencyCrude));
+    yAxis.transition(t).call(
+      d3.axisLeft(y).tickSize(-width).tickFormat(formatCurrencyCrude),
+    );
 
     const gbars = groups
       .selectAll("g.group")
@@ -136,12 +145,14 @@ export function renderMonthlyFlow(
           enter
             .append("g")
             .attr("class", "group")
-            .attr("transform", (c) => `translate(${x(c.date.format("MMM YYYY"))},0)`),
+            .attr("transform", (c) =>
+              `translate(${x(c.date.format("MMM YYYY"))},0)`),
         (update) =>
           update
             .transition(t)
-            .attr("transform", (c) => `translate(${x(c.date.format("MMM YYYY"))},0)`),
-        (exit) => exit.remove()
+            .attr("transform", (c) =>
+              `translate(${x(c.date.format("MMM YYYY"))},0)`),
+        (exit) => exit.remove(),
       );
 
     gbars
@@ -153,8 +164,8 @@ export function renderMonthlyFlow(
             data: c,
             income: c.income,
             liabilities: c.liabilities > 0 ? c.liabilities : 0,
-            investment: c.investment < 0 ? -c.investment : 0
-          }
+            investment: c.investment < 0 ? -c.investment : 0,
+          },
         ] as any),
         d3.stack().keys(["expenses", "tax", "investment", "liabilities"])([
           {
@@ -163,9 +174,9 @@ export function renderMonthlyFlow(
             expenses: c.expenses,
             tax: c.tax,
             investment: c.investment > 0 ? c.investment : 0,
-            liabilities: c.liabilities < 0 ? -c.liabilities : 0
-          }
-        ] as any)
+            liabilities: c.liabilities < 0 ? -c.liabilities : 0,
+          },
+        ] as any),
       ])
       .join("g")
       .selectAll("rect")
@@ -185,14 +196,16 @@ export function renderMonthlyFlow(
             .attr("fill-opacity", 0.6)
             .attr("x", (d: any) =>
               d[0].data.i === "0"
-                ? x1(d[0].data.i) + x1.bandwidth() - Math.min(x1.bandwidth(), MAX_BAR_WIDTH)
-                : x1(d[0].data.i)
-            )
+                ? x1(d[0].data.i) + x1.bandwidth() -
+                  Math.min(x1.bandwidth(), MAX_BAR_WIDTH)
+                : x1(d[0].data.i))
             .attr("width", Math.min(x1.bandwidth(), MAX_BAR_WIDTH))
             .attr("y", y.range()[0])
             .transition(t)
-            .attr("y", (d: any) => y(d[0][1]))
-            .attr("height", (d: any) => y(d[0][0]) - y(d[0][1])),
+            .attr("y", (d: any) =>
+              y(d[0][1]))
+            .attr("height", (d: any) =>
+              y(d[0][0]) - y(d[0][1])),
         (update) =>
           update
             .transition(t)
@@ -202,16 +215,17 @@ export function renderMonthlyFlow(
               }
               return z(d.key);
             })
-
             .attr("x", (d: any) =>
               d[0].data.i === "0"
-                ? x1(d[0].data.i) + x1.bandwidth() - Math.min(x1.bandwidth(), MAX_BAR_WIDTH)
-                : x1(d[0].data.i)
-            )
-            .attr("y", (d: any) => y(d[0][1]))
-            .attr("height", (d: any) => y(d[0][0]) - y(d[0][1]))
+                ? x1(d[0].data.i) + x1.bandwidth() -
+                  Math.min(x1.bandwidth(), MAX_BAR_WIDTH)
+                : x1(d[0].data.i))
+            .attr("y", (d: any) =>
+              y(d[0][1]))
+            .attr("height", (d: any) =>
+              y(d[0][0]) - y(d[0][1]))
             .attr("width", Math.min(x1.bandwidth(), MAX_BAR_WIDTH)),
-        (exit) => exit.remove()
+        (exit) => exit.remove(),
       );
 
     line.attr(
@@ -220,7 +234,7 @@ export function renderMonthlyFlow(
         .line<CashFlow>()
         .curve(d3.curveMonotoneX)
         .x((c) => x(c.date.format("MMM YYYY")) + x.bandwidth() / 2)
-        .y((c) => y(c.balance))(cashFlows)
+        .y((c) => y(c.balance))(cashFlows),
     );
 
     tooltipRects
@@ -231,15 +245,36 @@ export function renderMonthlyFlow(
       .attr("data-tippy-content", (c: CashFlow) => {
         return tooltip(
           [
-            ["Income", [formatCurrency(c.income), "has-text-weight-bold has-text-right"]],
-            ["Liabilities", [formatCurrency(c.liabilities), "has-text-weight-bold has-text-right"]],
-            ["Expenses", [formatCurrency(c.expenses), "has-text-weight-bold has-text-right"]],
-            ["Tax", [formatCurrency(c.tax), "has-text-weight-bold has-text-right"]],
-            ["Investment", [formatCurrency(c.investment), "has-text-weight-bold has-text-right"]],
-            ["Checking", [formatCurrency(c.checking), "has-text-weight-bold has-text-right"]],
-            ["Checking Balance", [formatCurrency(c.balance), "has-text-weight-bold has-text-right"]]
+            ["Income", [
+              formatCurrency(c.income),
+              "has-text-weight-bold has-text-right",
+            ]],
+            ["Liabilities", [
+              formatCurrency(c.liabilities),
+              "has-text-weight-bold has-text-right",
+            ]],
+            ["Expenses", [
+              formatCurrency(c.expenses),
+              "has-text-weight-bold has-text-right",
+            ]],
+            ["Tax", [
+              formatCurrency(c.tax),
+              "has-text-weight-bold has-text-right",
+            ]],
+            ["Investment", [
+              formatCurrency(c.investment),
+              "has-text-weight-bold has-text-right",
+            ]],
+            ["Checking", [
+              formatCurrency(c.checking),
+              "has-text-weight-bold has-text-right",
+            ]],
+            ["Checking Balance", [
+              formatCurrency(c.balance),
+              "has-text-weight-bold has-text-right",
+            ]],
           ],
-          { header: c.date.format("MMM YYYY") }
+          { header: c.date.format("MMM YYYY") },
         );
       })
       .attr("x", (c) => x(c.date.format("MMM YYYY")))
@@ -251,21 +286,21 @@ export function renderMonthlyFlow(
   const legends: Legend[] = _.map(_.without(areaKeys, "tax"), (k) => ({
     label: k,
     color: z(k),
-    shape: "square"
+    shape: "square",
   }));
 
   legends.push({
     label: "tax",
     color: z("tax"),
     shape: "square",
-    texture: texture
+    texture: texture,
   });
 
   legends.unshift({
-    label:
-      "Checking Balance\n" + (options.balance > 0 ? " " + formatCurrency(options.balance) : ""),
+    label: "Checking Balance\n" +
+      (options.balance > 0 ? " " + formatCurrency(options.balance) : ""),
     color: lineScale("balance"),
-    shape: "line"
+    shape: "line",
   });
 
   return { renderer, legends };
@@ -274,9 +309,16 @@ export function renderMonthlyFlow(
 export function renderFlow(graph: Graph) {
   const id = "#d3-expense-flow";
   const svg = d3.select(id);
-  const margin = { top: rem(60), right: rem(20), bottom: rem(40), left: rem(20) },
-    width =
-      Math.max(document.getElementById(id.substring(1)).parentElement.clientWidth, 1000) -
+  const margin = {
+      top: rem(60),
+      right: rem(20),
+      bottom: rem(40),
+      left: rem(20),
+    },
+    width = Math.max(
+      document.getElementById(id.substring(1)).parentElement.clientWidth,
+      1000,
+    ) -
       margin.left -
       margin.right,
     height = +svg.attr("height") - margin.top - margin.bottom;
@@ -342,9 +384,11 @@ export function renderFlow(graph: Graph) {
     .attr("data-tippy-content", (d: any) =>
       tooltip([
         ["Account", iconify(d.name)],
-        ["Total", [formatCurrency(d.value), "has-text-right has-text-weight-bold"]]
-      ])
-    );
+        ["Total", [
+          formatCurrency(d.value),
+          "has-text-right has-text-weight-bold",
+        ]],
+      ]));
 
   node
     .append("text")
@@ -389,9 +433,11 @@ export function renderFlow(graph: Graph) {
       tooltip([
         ["Debit Account", iconify(d.source.name)],
         ["Credit Account", iconify(d.target.name)],
-        ["Total", [formatCurrency(d.value), "has-text-right has-text-weight-bold"]]
-      ])
-    );
+        ["Total", [
+          formatCurrency(d.value),
+          "has-text-right has-text-weight-bold",
+        ]],
+      ]));
 
   const arrows = pathArrows()
     .arrowLength(10)
@@ -399,12 +445,14 @@ export function renderFlow(graph: Graph) {
     .arrowHeadSize(3)
     .path((link: any) => link.path);
 
-  linkG.data(sankeyLinks).enter().append("g").attr("class", "g-arrow").call(arrows);
+  linkG.data(sankeyLinks).enter().append("g").attr("class", "g-arrow").call(
+    arrows,
+  );
 
   const legends: Legend[] = _.map(accounts, (k) => ({
     label: k,
     color: color(k),
-    shape: "square"
+    shape: "square",
   }));
   return legends;
 }

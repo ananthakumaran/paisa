@@ -44,7 +44,7 @@ const COLUMN_REFS = _.chain(_.range(65, 90))
 export function render(
   rows: Array<Record<string, any>>,
   template: Handlebars.TemplateDelegate,
-  options: { reverse?: boolean; trim?: boolean } = {}
+  options: { reverse?: boolean; trim?: boolean } = {},
 ) {
   const output: string[] = [];
   _.each(rows, (row) => {
@@ -77,7 +77,15 @@ function parseCSV(file: File): Promise<Result> {
       error: function (error) {
         reject(error);
       },
-      delimitersToGuess: [",", "\t", "|", ";", Papa.RECORD_SEP, Papa.UNIT_SEP, "^"]
+      delimitersToGuess: [
+        ",",
+        "\t",
+        "|",
+        ";",
+        Papa.RECORD_SEP,
+        Papa.UNIT_SEP,
+        "^",
+      ],
     });
   });
 }
@@ -86,16 +94,19 @@ async function parseXLSX(file: File): Promise<Result> {
   const buffer = await readFile(file);
   try {
     const sheet = XLSX.read(buffer, { type: "binary" });
-    const json = XLSX.utils.sheet_to_json<string[]>(sheet.Sheets[sheet.SheetNames[0]], {
-      header: 1,
-      blankrows: false,
-      rawNumbers: false
-    });
+    const json = XLSX.utils.sheet_to_json<string[]>(
+      sheet.Sheets[sheet.SheetNames[0]],
+      {
+        header: 1,
+        blankrows: false,
+        rawNumbers: false,
+      },
+    );
     return { data: json };
   } catch (e) {
     if (/password-protected/.test(e.message)) {
       const password = prompt(
-        "Please enter the password to open this XLSX file. Press cancel to exit."
+        "Please enter the password to open this XLSX file. Press cancel to exit.",
       );
       if (password === null) {
         return { data: [], error: "Password required." };

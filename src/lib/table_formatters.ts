@@ -1,11 +1,17 @@
 import { type CellComponent } from "tabulator-tables";
-import { formatCurrency, formatFloat, formatPercentage, isZero, lastName } from "./utils";
+import {
+  formatCurrency,
+  formatFloat,
+  formatPercentage,
+  isZero,
+  lastName,
+} from "./utils";
 import { iconText } from "./icon";
 
 export function indendedAssetAccountName(cell: CellComponent) {
   const account = cell.getValue();
   let children = "";
-  const data = cell.getData();
+  const data = cell.getData() as Record<string, any>;
   if ((data._children?.length || 0) > 0) {
     children = `(${data._children?.length})`;
   }
@@ -21,7 +27,7 @@ export function indendedAssetAccountName(cell: CellComponent) {
 export function indendedLiabilityAccountName(cell: CellComponent) {
   const account = cell.getValue();
   let children = "";
-  const data = cell.getData();
+  const data = cell.getData() as Record<string, any>;
   if ((data._children?.length || 0) > 0) {
     children = `(${data._children?.length})`;
   }
@@ -63,19 +69,25 @@ export function nonZeroFloatChange(cell: CellComponent) {
   const value = cell.getValue();
   return isZero(value)
     ? ""
-    : `<span class="${calculateChangeClass(value)}">${formatFloat(value)}</span>`;
+    : `<span class="${calculateChangeClass(value)}">${
+      formatFloat(value)
+    }</span>`;
 }
 
 export function nonZeroPercentageChange(cell: CellComponent) {
   const value = cell.getValue();
   return isZero(value)
     ? ""
-    : `<span class="${calculateChangeClass(value)}">${formatPercentage(value, 2)}</span>`;
+    : `<span class="${calculateChangeClass(value)}">${
+      formatPercentage(value, 2)
+    }</span>`;
 }
 
 export function formatCurrencyChange(cell: CellComponent) {
   const value = cell.getValue();
   return isZero(value)
     ? ""
-    : `<span class="${calculateChangeClass(value)}">${formatCurrency(value)}</span>`;
+    : `<span class="${calculateChangeClass(value)}">${
+      formatCurrency(value)
+    }</span>`;
 }

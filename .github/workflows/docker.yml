@@ -4,7 +4,7 @@ on:
     branches:
       - ci/docker-*
     tags:
-      - '*'
+      - "*"
 jobs:
   docker:
     name: Push Docker image to Docker Hub

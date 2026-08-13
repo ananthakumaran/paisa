@@ -2,12 +2,11 @@
 description: "How to install Paisa, an open source personal finance manager"
 ---
 
-
 # Installation
 
 Paisa is available in two formats: a **Desktop Application** and a **CLI**
-(Command Line Interface). Both provide the same list of features, with
-the primary difference being how the user interface is launched.
+(Command Line Interface). Both provide the same list of features, with the
+primary difference being how the user interface is launched.
 
 ## Desktop Application
 
@@ -108,9 +107,8 @@ the primary difference being how the user interface is launched.
 
 ## CLI Quick Start
 
-Paisa will store all your journals, configuration files, and other
-related files in a folder named `paisa` which will be located in your
-`Documents` folder.
+Paisa will store all your journals, configuration files, and other related files
+in a folder named `paisa` which will be located in your `Documents` folder.
 
 === "Linux"
 
@@ -130,15 +128,16 @@ related files in a folder named `paisa` which will be located in your
     PS C:\Users\john> .\paisa.exe serve
     ```
 
-Go to [http://localhost:7500](http://localhost:7500). Read the [tutorial](./tutorial.md) to learn
-more.
+Go to [http://localhost:7500](http://localhost:7500). Read the
+[tutorial](./tutorial.md) to learn more.
 
 ## Docker
 
-Paisa CLI is available on [dockerhub](https://hub.docker.com/r/ananthakumaran/paisa). The default image only
-supports ledger. `paisa:<version>-hledger`,
-`paisa:<version>-beancount` or `paisa:<version>-all` image variants
-can be used if you want to use paisa with others.
+Paisa CLI is available on
+[dockerhub](https://hub.docker.com/r/ananthakumaran/paisa). The default image
+only supports ledger. `paisa:<version>-hledger`, `paisa:<version>-beancount` or
+`paisa:<version>-all` image variants can be used if you want to use paisa with
+others.
 
 === "Linux"
 
@@ -170,13 +169,13 @@ Paisa CLI is available as a nix flake.
     # nix profile install github:ananthakumaran/paisa
     ```
 
-[^1]: I offer Paisa as a free app, and I don't generate any revenue
-      from it. Code signing would require me to pay $99 for Mac and
-      approximately $300 for Windows each and every year to get the
-      necessary certificates. I can't justify spending that much for
-      an app that doesn't generate any income. Unfortunately, as a
-      result, you would have to jump through hoops to get it working.
+[^1]: I offer Paisa as a free app, and I don't generate any revenue from it.
+    Code signing would require me to pay $99 for Mac and approximately $300 for
+    Windows each and every year to get the necessary certificates. I can't
+    justify spending that much for an app that doesn't generate any income.
+    Unfortunately, as a result, you would have to jump through hoops to get it
+    working.
 
-[^2]: As the name implies, these are third party hosting solutions
-    operated by independent companies. I may receive affiliate
-    compensation for linking to their websites.
+[^2]: As the name implies, these are third party hosting solutions operated by
+    independent companies. I may receive affiliate compensation for linking to
+    their websites.

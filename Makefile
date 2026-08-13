@@ -2,20 +2,20 @@
 .PHONY: fixture/main.transactions.json
 
 develop:
-	./node_modules/.bin/concurrently --names "GO,JS" -c "auto" "make serve" "npm run dev"
+	deno run -A npm:concurrently --names "GO,JS" -c "auto" "make serve" "deno task dev"
 
 serve:
-	./node_modules/.bin/nodemon --signal SIGTERM --delay 2000ms --watch '.' --ext go,json --exec 'go run . serve || exit 1'
+	deno run -A npm:nodemon --signal SIGTERM --delay 2000ms --watch '.' --ext go,json --exec 'go run . serve || exit 1'
 
 debug:
-	./node_modules/.bin/concurrently --names "GO,JS" -c "auto" "make serve-now" "npm run dev"
+	deno run -A npm:concurrently --names "GO,JS" -c "auto" "make serve-now" "deno task dev"
 
 serve-now:
-	./node_modules/.bin/nodemon --signal SIGTERM --delay 2000ms --watch '.' --ext go,json --exec 'TZ=UTC go run . serve --now 2022-02-07 || exit 1'
+	deno run -A npm:nodemon --signal SIGTERM --delay 2000ms --watch '.' --ext go,json --exec 'TZ=UTC go run . serve --now 2022-02-07 || exit 1'
 
 
 watch:
-	npm run "build:watch"
+	deno task build:watch
 docs:
 	mkdocs serve -a 0.0.0.0:8000
 
@@ -26,11 +26,11 @@ publish:
 	nix develop --command bash -c 'mkdocs build'
 
 parser:
-	npm run parser-build-debug
+	deno task parser-build-debug
 
 lint:
-	./node_modules/.bin/prettier --check src
-	npm run check
+	deno task lint
+	deno task check
 	test -z $$(gofmt -l .)
 
 regen:
@@ -43,7 +43,7 @@ jstest:
 	unset PAISA_CONFIG && TZ=UTC bun test tests
 
 jsbuild:
-	npm run build
+	deno task build
 
 test: jsbuild jstest
 	go test ./...
@@ -59,7 +59,7 @@ deploy:
 	fly scale count 1 --region lax --yes
 
 install:
-	npm run build
+	deno task build
 	go build
 	go install
 

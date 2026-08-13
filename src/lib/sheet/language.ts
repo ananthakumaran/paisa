@@ -1,6 +1,6 @@
 import { parser } from "./parser";
 import { parser as searchQueryParser } from "../search/parser/parser";
-import { LRLanguage, LanguageSupport } from "@codemirror/language";
+import { LanguageSupport, LRLanguage } from "@codemirror/language";
 import { parseMixed } from "@lezer/common";
 
 export const sheetLanguage = LRLanguage.define({
@@ -12,11 +12,11 @@ export const sheetLanguage = LRLanguage.define({
       }
       return null;
     }),
-    dialect: "comment"
+    dialect: "comment",
   }),
   languageData: {
-    closeBrackets: { brackets: ["[", "(", '"', "`", "{"] }
-  }
+    closeBrackets: { brackets: ["[", "(", '"', "`", "{"] },
+  },
 });
 
 export function sheetExtension() {

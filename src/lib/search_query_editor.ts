@@ -1,13 +1,17 @@
 import type { Transaction } from "$lib/utils";
 import {
-  CompletionContext,
   autocompletion,
   closeBrackets,
   completeFromList,
-  ifIn
+  CompletionContext,
+  ifIn,
 } from "@codemirror/autocomplete";
-import { bracketMatching, syntaxHighlighting, syntaxTree } from "@codemirror/language";
-import { linter, type Diagnostic } from "@codemirror/lint";
+import {
+  bracketMatching,
+  syntaxHighlighting,
+  syntaxTree,
+} from "@codemirror/language";
+import { type Diagnostic, linter } from "@codemirror/lint";
 import type { EditorState } from "@codemirror/state";
 import { placeholder } from "@codemirror/view";
 import type { SyntaxNode } from "@lezer/common";
@@ -111,8 +115,8 @@ class DateValueAST extends AST {
           from: this.node.from,
           to: this.node.to,
           severity: "error",
-          message: `Invalid date`
-        }
+          message: `Invalid date`,
+        },
       ];
     }
     return [];
@@ -174,13 +178,16 @@ class ConditionAST extends AST {
     const diagnostics: Diagnostic[] = [];
 
     const allowed: number[] =
-      allowedCombinations[this.property.childId.toString()][this.operator.value] || [];
+      allowedCombinations[this.property.childId.toString()][
+        this.operator.value
+      ] || [];
     if (!allowed.includes(this.value.value.id)) {
       diagnostics.push({
         from: this.node.from,
         to: this.node.to,
         severity: "error",
-        message: `${this.property.value} cannot be used with ${this.operator.value} and ${this.value.value.type}`
+        message:
+          `${this.property.value} cannot be used with ${this.operator.value} and ${this.value.value.type}`,
       });
     }
 
@@ -188,7 +195,11 @@ class ConditionAST extends AST {
   }
 
   evaluate(): TransactionPredicate {
-    return conditionFilter(this.property.childId, this.operator.value, this.value.value.value);
+    return conditionFilter(
+      this.property.childId,
+      this.operator.value,
+      this.value.value.value,
+    );
   }
 }
 
@@ -363,7 +374,7 @@ interface QueryEditorEditorState {
 }
 
 const initialEditorState: QueryEditorEditorState = {
-  predicate: () => true
+  predicate: () => true,
 };
 
 export const editorState = writable(initialEditorState);
@@ -371,45 +382,45 @@ export const editorState = writable(initialEditorState);
 const allowedCombinations: Record<string, Record<string, [number]>> = {
   [Terms.Account]: {
     "=": [Terms.String],
-    "=~": [Terms.RegExp]
+    "=~": [Terms.RegExp],
   },
   [Terms.Commodity]: {
     "=": [Terms.String],
-    "=~": [Terms.RegExp]
+    "=~": [Terms.RegExp],
   },
   [Terms.Amount]: {
     "=": [Terms.Number],
     ">": [Terms.Number],
     "<": [Terms.Number],
     ">=": [Terms.Number],
-    "<=": [Terms.Number]
+    "<=": [Terms.Number],
   },
   [Terms.Total]: {
     "=": [Terms.Number],
     ">": [Terms.Number],
     "<": [Terms.Number],
     ">=": [Terms.Number],
-    "<=": [Terms.Number]
+    "<=": [Terms.Number],
   },
   [Terms.Date]: {
     "=": [Terms.DateValue],
     ">": [Terms.DateValue],
     "<": [Terms.DateValue],
     ">=": [Terms.DateValue],
-    "<=": [Terms.DateValue]
+    "<=": [Terms.DateValue],
   },
   [Terms.Payee]: {
     "=": [Terms.String],
-    "=~": [Terms.RegExp]
+    "=~": [Terms.RegExp],
   },
   [Terms.Filename]: {
     "=": [Terms.String],
-    "=~": [Terms.RegExp]
+    "=~": [Terms.RegExp],
   },
   [Terms.Note]: {
     "=": [Terms.String],
-    "=~": [Terms.RegExp]
-  }
+    "=~": [Terms.RegExp],
+  },
 };
 
 function lint(editor: EditorView): Diagnostic[] {
@@ -423,7 +434,7 @@ function lint(editor: EditorView): Diagnostic[] {
         from: node.from,
         to: node.to,
         severity: "error",
-        message: "Invalid syntax"
+        message: "Invalid syntax",
       });
     }
   });
@@ -433,7 +444,9 @@ function lint(editor: EditorView): Diagnostic[] {
     diagnostics.push(...ast.validate());
 
     if (diagnostics.length === 0) {
-      editorState.update((current) => _.assign({}, current, { predicate: ast.evaluate() }));
+      editorState.update((current) =>
+        _.assign({}, current, { predicate: ast.evaluate() })
+      );
     }
   }
 
@@ -467,15 +480,20 @@ function notFilter(...filters: TransactionPredicate[]): TransactionPredicate {
 function conditionFilter(
   property: number,
   operator: string,
-  expected: string | number | RegExp | { start: dayjs.Dayjs; end: dayjs.Dayjs }
+  expected: string | number | RegExp | { start: dayjs.Dayjs; end: dayjs.Dayjs },
 ) {
   return (transaction: Transaction) => {
     const operatorFn = getOperator(operator);
-    return _.some(getProperty(transaction, property), (actual) => operatorFn(actual, expected));
+    return _.some(
+      getProperty(transaction, property),
+      (actual) => operatorFn(actual, expected),
+    );
   };
 }
 
-function getOperator(operator: string): (actual: any, expected: any) => boolean {
+function getOperator(
+  operator: string,
+): (actual: any, expected: any) => boolean {
   return (actual: any, expected: any) => {
     switch (operator) {
       case "=":
@@ -488,9 +506,13 @@ function getOperator(operator: string): (actual: any, expected: any) => boolean 
         }
 
         if (typeof actual === "object") {
-          const expectedDate = expected as { start: dayjs.Dayjs; end: dayjs.Dayjs };
+          const expectedDate = expected as {
+            start: dayjs.Dayjs;
+            end: dayjs.Dayjs;
+          };
           return (
-            actual.isSameOrAfter(expectedDate.start) && actual.isSameOrBefore(expectedDate.end)
+            actual.isSameOrAfter(expectedDate.start) &&
+            actual.isSameOrBefore(expectedDate.end)
           );
         }
 
@@ -531,7 +553,7 @@ function getOperator(operator: string): (actual: any, expected: any) => boolean 
 
 function getProperty(
   transaction: Transaction,
-  property: number
+  property: number,
 ): Array<string | number | dayjs.Dayjs> {
   switch (property) {
     case Terms.Date:
@@ -546,12 +568,17 @@ function getProperty(
       return transaction.postings.map((posting) => posting.amount);
     case Terms.Total:
       return [
-        _.sumBy(transaction.postings, (posting) => (posting.amount > 0 ? posting.amount : 0))
+        _.sumBy(
+          transaction.postings,
+          (posting) => (posting.amount > 0 ? posting.amount : 0),
+        ),
       ];
     case Terms.Filename:
       return [transaction.fileName];
     case Terms.Note:
-      return [transaction.note].concat(transaction.postings.map((posting) => posting.note));
+      return [transaction.note].concat(
+        transaction.postings.map((posting) => posting.note),
+      );
   }
 }
 
@@ -560,7 +587,7 @@ export function parseDate(value: string, reference = new Date()): DateRange {
     const date = dayjs(value, "YYYY");
     return {
       start: date.startOf("year"),
-      end: date.endOf("year")
+      end: date.endOf("year"),
     };
   }
 
@@ -568,7 +595,7 @@ export function parseDate(value: string, reference = new Date()): DateRange {
     const date = dayjs(value.replaceAll(/[/-]/g, " "), "YYYY MM");
     return {
       start: date.startOf("month"),
-      end: date.endOf("month")
+      end: date.endOf("month"),
     };
   }
 
@@ -583,11 +610,15 @@ export function parseDate(value: string, reference = new Date()): DateRange {
 
   return {
     start: start,
-    end: end
+    end: end,
   };
 }
 
-function adjustInterval(text: string, parsed: chrono.ParsedComponents, direction: "start" | "end") {
+function adjustInterval(
+  text: string,
+  parsed: chrono.ParsedComponents,
+  direction: "start" | "end",
+) {
   let interval: dayjs.OpUnitType = "day";
   if (parsed.isCertain("day")) {
     interval = "day";
@@ -634,7 +665,7 @@ function assertUnreachable(_x: never): never {
 export function createEditor(
   content: string,
   dom: Element,
-  autocomplete: Record<string, string[]>
+  autocomplete: Record<string, string[]>,
 ) {
   const autocompletions: Record<string, string[]> = {
     UnQuoted: [
@@ -648,8 +679,8 @@ export function createEditor(
       "total",
       "AND",
       "OR",
-      "NOT"
-    ]
+      "NOT",
+    ],
   };
 
   const completions = _.chain(autocomplete)
@@ -666,8 +697,8 @@ export function createEditor(
       closeBrackets(),
       EditorView.theme({
         "&": {
-          fontSize: "14px"
-        }
+          fontSize: "14px",
+        },
       }),
       EditorView.contentAttributes.of({ "data-enable-grammarly": "false" }),
       queryExtension(),
@@ -676,21 +707,26 @@ export function createEditor(
         override: [
           (context: CompletionContext) => {
             for (const [key, completionSource] of Object.entries(completions)) {
-              if (context.matchBefore(new RegExp(`${key}\\s*=[~]?\\s*[^ ]*$`))) {
+              if (
+                context.matchBefore(new RegExp(`${key}\\s*=[~]?\\s*[^ ]*$`))
+              ) {
                 return completionSource(context);
               }
             }
 
             return null;
           },
-          ..._.map(autocompletions, (options, node) => ifIn([node], completeFromList(options)))
-        ]
+          ..._.map(
+            autocompletions,
+            (options, node) => ifIn([node], completeFromList(options)),
+          ),
+        ],
       }),
       placeholder(
-        "(account = Expenses:Utilities OR payee =~ /Pacific Gas & Electric/i) AND [2023-04]"
-      )
+        "(account = Expenses:Utilities OR payee =~ /Pacific Gas & Electric/i) AND [2023-04]",
+      ),
     ],
     doc: content,
-    parent: dom
+    parent: dom,
   });
 }

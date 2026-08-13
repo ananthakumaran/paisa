@@ -4,9 +4,11 @@ import _ from "lodash";
 
 const KEYWORDS = /^(?:[#/](?:if|with|true|false|unless|each)|(?:else if|else))/;
 const HELPERS = new RegExp(
-  `^(?:(?:${_.keys(helpers)
-    .sort((a, b) => b.length - a.length)
-    .join("|")}))`
+  `^(?:(?:${
+    _.keys(helpers)
+      .sort((a, b) => b.length - a.length)
+      .join("|")
+  }))`,
 ); //;
 const NAMES = /^(?:ROW|SHEET)/;
 const COLUMN = /^(?:\.[A-Z]|[A-Z] |\.[0-9]+)/;
@@ -54,5 +56,5 @@ export const handlebars: StreamParser<HandlebarsState> = {
     if (_.includes(["(", ")", "{", "}"], ch)) {
       return "bracket";
     }
-  }
+  },
 };

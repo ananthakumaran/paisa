@@ -4,13 +4,13 @@ import {
   forEachMonth,
   formatCurrency,
   formatCurrencyCrude,
+  type Legend,
+  now,
   type Posting,
+  rem,
   restName,
   skipTicks,
   tooltip,
-  rem,
-  now,
-  type Legend
 } from "./utils";
 import { generateColorScheme } from "./colors";
 import { iconify } from "./icon";
@@ -22,12 +22,14 @@ export function renderMonthlyRepaymentTimeline(postings: Posting[]): Legend[] {
   const MAX_BAR_WIDTH = rem(40);
   const svg = d3.select(id),
     margin = { top: rem(20), right: rem(30), bottom: rem(60), left: rem(40) },
-    width =
-      document.getElementById(id.substring(1)).parentElement.clientWidth -
+    width = document.getElementById(id.substring(1)).parentElement.clientWidth -
       margin.left -
       margin.right,
     height = +svg.attr("height") - margin.top - margin.bottom,
-    g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    g = svg.append("g").attr(
+      "transform",
+      "translate(" + margin.left + "," + margin.top + ")",
+    );
 
   const groups = _.chain(postings)
     .map((p) => restName(p.account))
@@ -37,7 +39,7 @@ export function renderMonthlyRepaymentTimeline(postings: Posting[]): Legend[] {
 
   const defaultValues = _.zipObject(
     groups,
-    _.map(groups, () => 0)
+    _.map(groups, () => 0),
   );
 
   const start = _.min(_.map(postings, (p) => p.date)),
@@ -62,11 +64,11 @@ export function renderMonthlyRepaymentTimeline(postings: Posting[]): Legend[] {
       _.merge(
         {
           month: month.format(timeFormat),
-          postings: postings
+          postings: postings,
         },
         defaultValues,
-        values
-      )
+        values,
+      ),
     );
   });
 
@@ -74,7 +76,10 @@ export function renderMonthlyRepaymentTimeline(postings: Posting[]): Legend[] {
   const y = d3.scaleLinear().range([height, 0]);
 
   x.domain(points.map((p) => p.month));
-  y.domain([0, d3.max(points, (p: Point) => _.sum(_.map(groups, (k) => p[k])))]);
+  y.domain([
+    0,
+    d3.max(points, (p: Point) => _.sum(_.map(groups, (k) => p[k]))),
+  ]);
 
   const z = generateColorScheme(groups);
 
@@ -85,7 +90,7 @@ export function renderMonthlyRepaymentTimeline(postings: Posting[]): Legend[] {
       d3
         .axisBottom(x)
         .ticks(5)
-        .tickFormat(skipTicks(30, x, (d) => d.toString()))
+        .tickFormat(skipTicks(30, x, (d) => d.toString())),
     )
     .selectAll("text")
     .attr("y", 10)
@@ -101,7 +106,9 @@ export function renderMonthlyRepaymentTimeline(postings: Posting[]): Legend[] {
   g.append("g")
     .selectAll("g")
     .data(
-      d3.stack().offset(d3.stackOffsetDiverging).keys(groups)(points as { [key: string]: number }[])
+      d3.stack().offset(d3.stackOffsetDiverging).keys(groups)(
+        points as { [key: string]: number }[],
+      ),
     )
     .enter()
     .append("g")
@@ -121,16 +128,17 @@ export function renderMonthlyRepaymentTimeline(postings: Posting[]): Legend[] {
         _.sortBy(
           postings.map((p) => [
             _.drop(p.account.split(":")).join(":"),
-            [formatCurrency(p.amount), "has-text-weight-bold has-text-right"]
+            [formatCurrency(p.amount), "has-text-weight-bold has-text-right"],
           ]),
-          (r) => r[0]
+          (r) => r[0],
         ),
-        { total: formatCurrency(total) }
+        { total: formatCurrency(total) },
       );
     })
     .attr("x", function (d) {
       return (
-        x((d.data as any).month) + (x.bandwidth() - Math.min(x.bandwidth(), MAX_BAR_WIDTH)) / 2
+        x((d.data as any).month) +
+        (x.bandwidth() - Math.min(x.bandwidth(), MAX_BAR_WIDTH)) / 2
       );
     })
     .attr("y", function (d) {
@@ -144,6 +152,6 @@ export function renderMonthlyRepaymentTimeline(postings: Posting[]): Legend[] {
   return _.map(groups, (group) => ({
     label: iconify(group, { group: "Liabilities" }),
     color: z(group),
-    shape: "square"
+    shape: "square",
   }));
 }

@@ -1,11 +1,11 @@
 import * as d3 from "d3";
 import {
+  firstNames,
   formatCurrency,
   formatCurrencyCrude,
-  tooltip,
   type IncomeStatement,
   rem,
-  firstNames
+  tooltip,
 } from "./utils";
 import COLORS from "./colors";
 import _ from "lodash";
@@ -18,16 +18,23 @@ export function renderIncomeStatement(element: Element) {
 
   const svg = d3.select(element),
     margin = { top: rem(20), right: rem(20), bottom: rem(10), left: rem(110) },
-    width = Math.max(element.parentElement.clientWidth, 600) - margin.left - margin.right,
-    g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    width = Math.max(element.parentElement.clientWidth, 600) - margin.left -
+      margin.right,
+    g = svg.append("g").attr(
+      "transform",
+      "translate(" + margin.left + "," + margin.top + ")",
+    );
 
   const height = BAR_HEIGHT * BARS;
   svg
     .attr("height", height + margin.top + margin.bottom)
     .attr("width", width + margin.left + margin.right);
 
-  const sum = (object: Record<string, number>) => Object.values(object).reduce((a, b) => a + b, 0);
-  const y = d3.scaleBand().range([height, 0]).paddingInner(0.4).paddingOuter(0.6);
+  const sum = (object: Record<string, number>) =>
+    Object.values(object).reduce((a, b) => a + b, 0);
+  const y = d3.scaleBand().range([height, 0]).paddingInner(0.4).paddingOuter(
+    0.6,
+  );
   const x = d3.scaleLinear().range([0, width]);
 
   const xAxis = g
@@ -98,7 +105,7 @@ export function renderIncomeStatement(element: Element) {
         color: COLORS.income,
         value: income,
         breakdown: statement.income,
-        multiplier: -1
+        multiplier: -1,
       },
       {
         label: "Tax",
@@ -107,7 +114,7 @@ export function renderIncomeStatement(element: Element) {
         color: COLORS.expenses,
         value: tax,
         breakdown: statement.tax,
-        multiplier: -1
+        multiplier: -1,
       },
       {
         label: "Interest",
@@ -116,7 +123,7 @@ export function renderIncomeStatement(element: Element) {
         color: COLORS.income,
         value: interest,
         breakdown: statement.interest,
-        multiplier: -1
+        multiplier: -1,
       },
       {
         label: "Gain / Loss",
@@ -125,7 +132,7 @@ export function renderIncomeStatement(element: Element) {
         color: pnl > 0 ? COLORS.gain : COLORS.loss,
         value: pnl,
         breakdown: statement.pnl,
-        multiplier: 1
+        multiplier: 1,
       },
       {
         label: "Equity",
@@ -134,7 +141,7 @@ export function renderIncomeStatement(element: Element) {
         color: COLORS.equity,
         value: equity,
         breakdown: statement.equity,
-        multiplier: -1
+        multiplier: -1,
       },
       {
         label: "Liabilities",
@@ -143,7 +150,7 @@ export function renderIncomeStatement(element: Element) {
         color: COLORS.liabilities,
         value: liabilities,
         breakdown: statement.liabilities,
-        multiplier: -1
+        multiplier: -1,
       },
       {
         label: "Expenses",
@@ -152,8 +159,8 @@ export function renderIncomeStatement(element: Element) {
         color: COLORS.expenses,
         value: expenses,
         breakdown: statement.expenses,
-        multiplier: -1
-      }
+        multiplier: -1,
+      },
     ];
 
     interface Line {
@@ -165,7 +172,12 @@ export function renderIncomeStatement(element: Element) {
     }
 
     const lines: Line[] = [
-      { label: "Income", value: incomeStart, anchor: "start", icon: "fa6-solid:caret-down" },
+      {
+        label: "Income",
+        value: incomeStart,
+        anchor: "start",
+        icon: "fa6-solid:caret-down",
+      },
       { label: "Tax", value: taxStart, anchor: "end" },
       { label: "Interest", value: interestStart, anchor: "end" },
       { label: "Gain / Loss", value: pnlStart, anchor: "end" },
@@ -177,8 +189,8 @@ export function renderIncomeStatement(element: Element) {
         value: expensesEnd,
         down: true,
         anchor: "end",
-        icon: "fa6-solid:caret-up"
-      }
+        icon: "fa6-solid:caret-up",
+      },
     ];
 
     y.domain(bars.map((d) => d.label).reverse());
@@ -191,16 +203,21 @@ export function renderIncomeStatement(element: Element) {
         equityStart,
         liabilitiesStart,
         expensesStart,
-        expensesEnd
-      ])
+        expensesEnd,
+      ]),
     );
 
-    xAxis.transition(t).call(d3.axisTop(x).tickSize(height).tickFormat(formatCurrencyCrude));
+    xAxis.transition(t).call(
+      d3.axisTop(x).tickSize(height).tickFormat(formatCurrencyCrude),
+    );
     yAxis.transition(t).call(d3.axisLeft(y).tickSize(-width).tickPadding(10));
 
     garrows.selectAll("g").remove();
     t.on("end", () => {
-      garrows.selectAll("g").data(bars).join("g").attr("class", "g-arrow is-light").call(arrows);
+      garrows.selectAll("g").data(bars).join("g").attr(
+        "class",
+        "g-arrow is-light",
+      ).call(arrows);
     });
 
     gbars
@@ -221,9 +238,12 @@ export function renderIncomeStatement(element: Element) {
         return tooltip(
           _.map(secondLevelBreakdown, (value, label) => [
             iconify(label),
-            [formatCurrency(value * d.multiplier), "has-text-right has-text-weight-bold"]
+            [
+              formatCurrency(value * d.multiplier),
+              "has-text-right has-text-weight-bold",
+            ],
           ]),
-          { header: d.label, total: formatCurrency(d.value) }
+          { header: d.label, total: formatCurrency(d.value) },
         );
       })
       .transition(t)
@@ -234,7 +254,8 @@ export function renderIncomeStatement(element: Element) {
         return x(d.start);
       })
       .attr("y", function (d) {
-        return y(d.label) + (y.bandwidth() - Math.min(y.bandwidth(), BAR_HEIGHT)) / 2;
+        return y(d.label) +
+          (y.bandwidth() - Math.min(y.bandwidth(), BAR_HEIGHT)) / 2;
       })
       .attr("width", function (d) {
         if (d.value < 0) {

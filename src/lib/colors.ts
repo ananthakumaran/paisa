@@ -18,7 +18,7 @@ const MaterialUI = {
     a100: "#ff8a80",
     a200: "#ff5252",
     a400: "#ff1744",
-    a700: "#d50000"
+    a700: "#d50000",
   },
   pink: {
     "50": "#fce4ec",
@@ -34,7 +34,7 @@ const MaterialUI = {
     a100: "#ff80ab",
     a200: "#ff4081",
     a400: "#f50057",
-    a700: "#c51162"
+    a700: "#c51162",
   },
   purple: {
     "50": "#f3e5f5",
@@ -50,7 +50,7 @@ const MaterialUI = {
     a100: "#ea80fc",
     a200: "#e040fb",
     a400: "#d500f9",
-    a700: "#aa00ff"
+    a700: "#aa00ff",
   },
   deeppurple: {
     "50": "#ede7f6",
@@ -66,7 +66,7 @@ const MaterialUI = {
     a100: "#b388ff",
     a200: "#7c4dff",
     a400: "#651fff",
-    a700: "#6200ea"
+    a700: "#6200ea",
   },
   indigo: {
     "50": "#e8eaf6",
@@ -82,7 +82,7 @@ const MaterialUI = {
     a100: "#8c9eff",
     a200: "#536dfe",
     a400: "#3d5afe",
-    a700: "#304ffe"
+    a700: "#304ffe",
   },
   blue: {
     "50": "#e3f2fd",
@@ -98,7 +98,7 @@ const MaterialUI = {
     a100: "#82b1ff",
     a200: "#448aff",
     a400: "#2979ff",
-    a700: "#2962ff"
+    a700: "#2962ff",
   },
   lightblue: {
     "50": "#e1f5fe",
@@ -114,7 +114,7 @@ const MaterialUI = {
     a100: "#80d8ff",
     a200: "#40c4ff",
     a400: "#00b0ff",
-    a700: "#0091ea"
+    a700: "#0091ea",
   },
   cyan: {
     "50": "#e0f7fa",
@@ -130,7 +130,7 @@ const MaterialUI = {
     a100: "#84ffff",
     a200: "#18ffff",
     a400: "#00e5ff",
-    a700: "#00b8d4"
+    a700: "#00b8d4",
   },
   teal: {
     "50": "#e0f2f1",
@@ -146,7 +146,7 @@ const MaterialUI = {
     a100: "#a7ffeb",
     a200: "#64ffda",
     a400: "#1de9b6",
-    a700: "#00bfa5"
+    a700: "#00bfa5",
   },
   green: {
     "50": "#e8f5e9",
@@ -162,7 +162,7 @@ const MaterialUI = {
     a100: "#b9f6ca",
     a200: "#69f0ae",
     a400: "#00e676",
-    a700: "#00c853"
+    a700: "#00c853",
   },
   lightgreen: {
     "50": "#f1f8e9",
@@ -178,7 +178,7 @@ const MaterialUI = {
     a100: "#ccff90",
     a200: "#b2ff59",
     a400: "#76ff03",
-    a700: "#64dd17"
+    a700: "#64dd17",
   },
   lime: {
     "50": "#f9fbe7",
@@ -194,7 +194,7 @@ const MaterialUI = {
     a100: "#f4ff81",
     a200: "#eeff41",
     a400: "#c6ff00",
-    a700: "#aeea00"
+    a700: "#aeea00",
   },
   yellow: {
     "50": "#fffde7",
@@ -210,7 +210,7 @@ const MaterialUI = {
     a100: "#ffff8d",
     a200: "#ffff00",
     a400: "#ffea00",
-    a700: "#ffd600"
+    a700: "#ffd600",
   },
   amber: {
     "50": "#fff8e1",
@@ -226,7 +226,7 @@ const MaterialUI = {
     a100: "#ffe57f",
     a200: "#ffd740",
     a400: "#ffc400",
-    a700: "#ffab00"
+    a700: "#ffab00",
   },
   orange: {
     "50": "#fff3e0",
@@ -242,7 +242,7 @@ const MaterialUI = {
     a100: "#ffd180",
     a200: "#ffab40",
     a400: "#ff9100",
-    a700: "#ff6d00"
+    a700: "#ff6d00",
   },
   deeporange: {
     "50": "#fbe9e7",
@@ -258,7 +258,7 @@ const MaterialUI = {
     a100: "#ff9e80",
     a200: "#ff6e40",
     a400: "#ff3d00",
-    a700: "#dd2c00"
+    a700: "#dd2c00",
   },
   brown: {
     "50": "#efebe9",
@@ -270,7 +270,7 @@ const MaterialUI = {
     "600": "#6d4c41",
     "700": "#5d4037",
     "800": "#4e342e",
-    "900": "#3e2723"
+    "900": "#3e2723",
   },
   grey: {
     "50": "#fafafa",
@@ -282,7 +282,7 @@ const MaterialUI = {
     "600": "#757575",
     "700": "#616161",
     "800": "#424242",
-    "900": "#212121"
+    "900": "#212121",
   },
   bluegrey: {
     "50": "#eceff1",
@@ -294,8 +294,8 @@ const MaterialUI = {
     "600": "#546e7a",
     "700": "#455a64",
     "800": "#37474f",
-    "900": "#263238"
-  }
+    "900": "#263238",
+  },
 };
 
 const COLORS = {
@@ -318,7 +318,7 @@ const COLORS = {
   expenses: MaterialUI.red.a400,
   income: MaterialUI.lime.a700,
   liabilities: MaterialUI.amber.a700,
-  equity: MaterialUI.purple.a400
+  equity: MaterialUI.purple.a400,
 };
 export default COLORS;
 
@@ -327,7 +327,10 @@ export function generateColorScheme(domain: string[]) {
   const n = domain.length;
 
   if (_.every(domain, (d) => _.has(COLORS, d.toLowerCase()))) {
-    colors = _.map(domain, (d) => (COLORS as Record<string, string>)[d.toLowerCase()]);
+    colors = _.map(
+      domain,
+      (d) => (COLORS as Record<string, string>)[d.toLowerCase()],
+    );
   } else {
     if (n <= 12) {
       colors = {
@@ -337,8 +340,25 @@ export function generateColorScheme(domain: string[]) {
         4: ["#66c2a5", "#fc8d62", "#8da0cb", "#e78ac3"],
         5: ["#66c2a5", "#fc8d62", "#8da0cb", "#e78ac3", "#a6d854"],
         6: ["#4e79a7", "#f28e2c", "#e15759", "#76b7b2", "#59a14f", "#edc949"],
-        7: ["#4e79a7", "#f28e2c", "#e15759", "#76b7b2", "#59a14f", "#edc949", "#af7aa1"],
-        8: ["#4e79a7", "#f28e2c", "#e15759", "#76b7b2", "#59a14f", "#edc949", "#af7aa1", "#ff9da7"],
+        7: [
+          "#4e79a7",
+          "#f28e2c",
+          "#e15759",
+          "#76b7b2",
+          "#59a14f",
+          "#edc949",
+          "#af7aa1",
+        ],
+        8: [
+          "#4e79a7",
+          "#f28e2c",
+          "#e15759",
+          "#76b7b2",
+          "#59a14f",
+          "#edc949",
+          "#af7aa1",
+          "#ff9da7",
+        ],
         9: [
           "#4e79a7",
           "#f28e2c",
@@ -348,7 +368,7 @@ export function generateColorScheme(domain: string[]) {
           "#edc949",
           "#af7aa1",
           "#ff9da7",
-          "#9c755f"
+          "#9c755f",
         ],
         10: [
           "#4e79a7",
@@ -360,7 +380,7 @@ export function generateColorScheme(domain: string[]) {
           "#af7aa1",
           "#ff9da7",
           "#9c755f",
-          "#bab0ab"
+          "#bab0ab",
         ],
         11: [
           "#8dd3c7",
@@ -373,7 +393,7 @@ export function generateColorScheme(domain: string[]) {
           "#fccde5",
           "#d9d9d9",
           "#bc80bd",
-          "#ccebc5"
+          "#ccebc5",
         ],
         12: [
           "#8dd3c7",
@@ -387,8 +407,8 @@ export function generateColorScheme(domain: string[]) {
           "#d9d9d9",
           "#bc80bd",
           "#ccebc5",
-          "#ffed6f"
-        ]
+          "#ffed6f",
+        ],
       }[n];
     } else {
       const z = d3
@@ -403,7 +423,9 @@ export function generateColorScheme(domain: string[]) {
 }
 
 export function genericBarColor() {
-  return getColorPreference() == "dark" ? "hsl(215, 18%, 15%)" : "hsl(0, 0%, 91%)";
+  return getColorPreference() == "dark"
+    ? "hsl(215, 18%, 15%)"
+    : "hsl(0, 0%, 91%)";
 }
 
 const OPACITY: Record<string, Record<string, number>> = {
@@ -411,14 +433,14 @@ const OPACITY: Record<string, Record<string, number>> = {
     assets: 0.6,
     expenses: 0.5,
     income: 0.6,
-    liabilities: 0.6
+    liabilities: 0.6,
   },
   light: {
     assets: 0.8,
     expenses: 0.7,
     income: 1,
-    liabilities: 1
-  }
+    liabilities: 1,
+  },
 };
 
 export function accountColorStyle(account: string) {
@@ -426,7 +448,12 @@ export function accountColorStyle(account: string) {
   const opacity = OPACITY[getColorPreference()]?.[normalized] || 1.0;
   let color = "hsl(0, 0%, 48%)";
 
-  if (_.includes(["assets", "expenses", "income", "liabilities", "equity"], normalized)) {
+  if (
+    _.includes(
+      ["assets", "expenses", "income", "liabilities", "equity"],
+      normalized,
+    )
+  ) {
     color = (COLORS as Record<string, string>)[normalized];
   }
 
@@ -434,5 +461,7 @@ export function accountColorStyle(account: string) {
 }
 
 export function white() {
-  return getColorPreference() == "dark" ? "hsl(215, 18%, 10%)" : "hsl(0, 0%, 95%)";
+  return getColorPreference() == "dark"
+    ? "hsl(215, 18%, 10%)"
+    : "hsl(0, 0%, 95%)";
 }

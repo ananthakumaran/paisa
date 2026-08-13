@@ -9,6 +9,7 @@ pkgs.mkShell {
     pkgs.nodejs_22
     pkgs.libuuid
     pkgs.bun
+    pkgs.deno
     pkgs.node2nix
     # pkgs.pkgsCross.mingwW64.buildPackages.gcc
 

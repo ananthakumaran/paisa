@@ -5,13 +5,13 @@ import {
   formatCurrency,
   formatCurrencyCrude,
   type Income,
+  type IncomeYearlyCard,
+  type Legend,
   type Posting,
   restName,
   secondName,
   skipTicks,
   tooltip,
-  type IncomeYearlyCard,
-  type Legend
 } from "./utils";
 import { generateColorScheme } from "./colors";
 
@@ -19,16 +19,22 @@ export function renderMonthlyInvestmentTimeline(incomes: Income[]): Legend[] {
   return renderIncomeTimeline(incomes, "#d3-income-timeline", "MMM-YYYY");
 }
 
-function renderIncomeTimeline(incomes: Income[], id: string, timeFormat: string): Legend[] {
+function renderIncomeTimeline(
+  incomes: Income[],
+  id: string,
+  timeFormat: string,
+): Legend[] {
   const MAX_BAR_WIDTH = 40;
   const svg = d3.select(id),
     margin = { top: 20, right: 30, bottom: 80, left: 40 },
-    width =
-      document.getElementById(id.substring(1)).parentElement.clientWidth -
+    width = document.getElementById(id.substring(1)).parentElement.clientWidth -
       margin.left -
       margin.right,
     height = +svg.attr("height") - margin.top - margin.bottom,
-    g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    g = svg.append("g").attr(
+      "transform",
+      "translate(" + margin.left + "," + margin.top + ")",
+    );
 
   const postings = _.flatMap(incomes, (i) => i.postings);
   const groupKeys = _.chain(postings)
@@ -48,7 +54,7 @@ function renderIncomeTimeline(incomes: Income[], id: string, timeFormat: string)
 
   const defaultValues = _.zipObject(
     groupKeys,
-    _.map(groupKeys, () => 0)
+    _.map(groupKeys, () => 0),
   );
 
   interface Point {
@@ -69,10 +75,10 @@ function renderIncomeTimeline(incomes: Income[], id: string, timeFormat: string)
       {
         month: i.date.format(timeFormat),
         date: i.date,
-        postings: i.postings
+        postings: i.postings,
       },
       defaultValues,
-      values
+      values,
     );
   });
 
@@ -83,19 +89,19 @@ function renderIncomeTimeline(incomes: Income[], id: string, timeFormat: string)
     _.sum(
       _.filter(
         _.map(groupKeys, (k) => p[k]),
-        filter
-      )
+        filter,
+      ),
     );
   x.domain(points.map((p) => p.month));
   y.domain([
     d3.min(
       points,
-      sum((a) => a < 0)
+      sum((a) => a < 0),
     ),
     d3.max(
       points,
-      sum((a) => a > 0)
-    )
+      sum((a) => a > 0),
+    ),
   ]);
 
   const z = generateColorScheme(groupKeys);
@@ -107,7 +113,7 @@ function renderIncomeTimeline(incomes: Income[], id: string, timeFormat: string)
       d3
         .axisBottom(x)
         .ticks(5)
-        .tickFormat(skipTicks(30, x, (d) => d.toString()))
+        .tickFormat(skipTicks(30, x, (d) => d.toString())),
     )
     .selectAll("text")
     .attr("y", 10)
@@ -124,8 +130,8 @@ function renderIncomeTimeline(incomes: Income[], id: string, timeFormat: string)
     .selectAll("g")
     .data(
       d3.stack().offset(d3.stackOffsetDiverging).keys(groupKeys)(
-        points as { [key: string]: number }[]
-      )
+        points as { [key: string]: number }[],
+      ),
     )
     .enter()
     .append("g")
@@ -145,16 +151,17 @@ function renderIncomeTimeline(incomes: Income[], id: string, timeFormat: string)
         _.sortBy(
           postings.map((p) => [
             restName(p.account),
-            [formatCurrency(-p.amount), "has-text-weight-bold has-text-right"]
+            [formatCurrency(-p.amount), "has-text-weight-bold has-text-right"],
           ]),
-          (r) => r[0]
+          (r) => r[0],
         ),
-        { total: formatCurrency(total) }
+        { total: formatCurrency(total) },
       );
     })
     .attr("x", function (d) {
       return (
-        x((d.data as any).month) + (x.bandwidth() - Math.min(x.bandwidth(), MAX_BAR_WIDTH)) / 2
+        x((d.data as any).month) +
+        (x.bandwidth() - Math.min(x.bandwidth(), MAX_BAR_WIDTH)) / 2
       );
     })
     .attr("y", function (d) {
@@ -169,7 +176,7 @@ function renderIncomeTimeline(incomes: Income[], id: string, timeFormat: string)
     return {
       label: groupTotal[k],
       color: z(k),
-      shape: "square"
+      shape: "square",
     };
   });
 }
@@ -178,16 +185,20 @@ function financialYear(card: IncomeYearlyCard) {
   return `${card.start_date.format("YYYY")} - ${card.end_date.format("YY")}`;
 }
 
-export function renderYearlyIncomeTimeline(yearlyCards: IncomeYearlyCard[]): Legend[] {
+export function renderYearlyIncomeTimeline(
+  yearlyCards: IncomeYearlyCard[],
+): Legend[] {
   const id = "#d3-yearly-income-timeline";
   const BAR_HEIGHT = 20;
   const svg = d3.select(id),
     margin = { top: 15, right: 20, bottom: 20, left: 70 },
-    width =
-      document.getElementById(id.substring(1)).parentElement.clientWidth -
+    width = document.getElementById(id.substring(1)).parentElement.clientWidth -
       margin.left -
       margin.right,
-    g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    g = svg.append("g").attr(
+      "transform",
+      "translate(" + margin.left + "," + margin.top + ")",
+    );
 
   const groups = _.chain(yearlyCards)
     .flatMap((c) => c.postings)
@@ -198,7 +209,7 @@ export function renderYearlyIncomeTimeline(yearlyCards: IncomeYearlyCard[]): Leg
 
   const defaultValues = _.zipObject(
     groups,
-    _.map(groups, () => 0)
+    _.map(groups, () => 0),
   );
 
   const start = _.min(_.map(yearlyCards, (c) => c.start_date)),
@@ -229,11 +240,11 @@ export function renderYearlyIncomeTimeline(yearlyCards: IncomeYearlyCard[]): Leg
       _.merge(
         {
           year: financialYear(card),
-          postings: postings
+          postings: postings,
         },
         defaultValues,
-        values
-      )
+        values,
+      ),
     );
   });
 
@@ -241,7 +252,10 @@ export function renderYearlyIncomeTimeline(yearlyCards: IncomeYearlyCard[]): Leg
   const y = d3.scaleBand().range([height, 0]).paddingInner(0.1).paddingOuter(0);
 
   y.domain(points.map((p) => p.year));
-  x.domain([0, d3.max(points, (p: Point) => _.sum(_.map(groups, (k) => p[k])))]);
+  x.domain([
+    0,
+    d3.max(points, (p: Point) => _.sum(_.map(groups, (k) => p[k]))),
+  ]);
 
   const z = generateColorScheme(groups);
 
@@ -255,7 +269,9 @@ export function renderYearlyIncomeTimeline(yearlyCards: IncomeYearlyCard[]): Leg
   g.append("g")
     .selectAll("g")
     .data(
-      d3.stack().offset(d3.stackOffsetDiverging).keys(groups)(points as { [key: string]: number }[])
+      d3.stack().offset(d3.stackOffsetDiverging).keys(groups)(
+        points as { [key: string]: number }[],
+      ),
     )
     .enter()
     .append("g")
@@ -278,18 +294,22 @@ export function renderYearlyIncomeTimeline(yearlyCards: IncomeYearlyCard[]): Leg
               return [];
             }
             grandTotal += total;
-            return [[k, [formatCurrency(total), "has-text-weight-bold has-text-right"]]];
+            return [[k, [
+              formatCurrency(total),
+              "has-text-weight-bold has-text-right",
+            ]]];
           }),
-          (r) => r[0]
+          (r) => r[0],
         ),
-        { total: formatCurrency(grandTotal) }
+        { total: formatCurrency(grandTotal) },
       );
     })
     .attr("x", function (d) {
       return x(d[0]);
     })
     .attr("y", function (d) {
-      return y((d.data as any).year) + (y.bandwidth() - Math.min(y.bandwidth(), BAR_HEIGHT)) / 2;
+      return y((d.data as any).year) +
+        (y.bandwidth() - Math.min(y.bandwidth(), BAR_HEIGHT)) / 2;
     })
     .attr("width", function (d) {
       return x(d[1]) - x(d[0]);
@@ -299,7 +319,7 @@ export function renderYearlyIncomeTimeline(yearlyCards: IncomeYearlyCard[]): Leg
   return _.map(groups, (k) => ({
     label: k,
     color: z(k),
-    shape: "square"
+    shape: "square",
   }));
 }
 
@@ -307,17 +327,19 @@ export function renderYearlyTimelineOf(
   label: string,
   key: "net_tax" | "net_income",
   color: string,
-  yearlyCards: IncomeYearlyCard[]
+  yearlyCards: IncomeYearlyCard[],
 ): Legend[] {
   const id = `#d3-yearly-${key}-timeline`;
   const BAR_HEIGHT = 20;
   const svg = d3.select(id),
     margin = { top: 15, right: 20, bottom: 20, left: 70 },
-    width =
-      document.getElementById(id.substring(1)).parentElement.clientWidth -
+    width = document.getElementById(id.substring(1)).parentElement.clientWidth -
       margin.left -
       margin.right,
-    g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    g = svg.append("g").attr(
+      "transform",
+      "translate(" + margin.left + "," + margin.top + ")",
+    );
 
   const colorKeys = [label];
   const colorScale = d3.scaleOrdinal<string>().domain(colorKeys).range([color]);
@@ -340,7 +362,7 @@ export function renderYearlyTimelineOf(
   const points: Point[] = _.map(yearlyCards, (card) => {
     return {
       year: financialYear(card),
-      value: card[key]
+      value: card[key],
     };
   });
 
@@ -363,11 +385,15 @@ export function renderYearlyTimelineOf(
     .join("rect")
     .attr("fill", color)
     .attr("data-tippy-content", (d) => {
-      return tooltip([[label, [formatCurrency(d.value), "has-text-weight-bold has-text-right"]]]);
+      return tooltip([[label, [
+        formatCurrency(d.value),
+        "has-text-weight-bold has-text-right",
+      ]]]);
     })
     .attr("x", x(0))
     .attr("y", function (d) {
-      return y(d.year) + (y.bandwidth() - Math.min(y.bandwidth(), BAR_HEIGHT)) / 2;
+      return y(d.year) +
+        (y.bandwidth() - Math.min(y.bandwidth(), BAR_HEIGHT)) / 2;
     })
     .attr("width", function (d) {
       return x(d.value) - x(0);
@@ -377,7 +403,7 @@ export function renderYearlyTimelineOf(
   return _.map(colorKeys, (k) => ({
     label: k,
     color: colorScale(k),
-    shape: "square"
+    shape: "square",
   }));
 }
 

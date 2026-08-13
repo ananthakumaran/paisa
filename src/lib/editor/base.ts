@@ -12,7 +12,7 @@ import {
   highlightActiveLineGutter,
   highlightSpecialChars,
   keymap,
-  lineNumbers
+  lineNumbers,
 } from "@codemirror/view";
 
 export const basicSetup: Extension = [
@@ -31,6 +31,6 @@ export const basicSetup: Extension = [
     ...searchKeymap,
     ...historyKeymap,
     ...completionKeymap,
-    ...lintKeymap
-  ])
+    ...lintKeymap,
+  ]),
 ];

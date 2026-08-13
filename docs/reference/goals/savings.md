@@ -4,8 +4,8 @@ description: "How to configure your savings goal in Paisa"
 
 # Savings
 
-Savings represents a general financial objective that you want to
-achieve, like buying a car, or a house, or a vacation.
+Savings represents a general financial objective that you want to achieve, like
+buying a car, or a house, or a vacation.
 
 ```yaml
 goals:
@@ -18,15 +18,13 @@ goals:
         - Assets:Debt:*
 ```
 
-Specify the target amount, and the accounts that you keep the money
-in.
+Specify the target amount, and the accounts that you keep the money in.
 
 ### Forecast
 
-When you save towards an objective, you will have a target date in
-mind. In the below config, you are specifying the target date and
-rate. Paisa will calculate the monthly contribution required to
-achieve the goal.
+When you save towards an objective, you will have a target date in mind. In the
+below config, you are specifying the target date and rate. Paisa will calculate
+the monthly contribution required to achieve the goal.
 
 ```yaml hl_lines="5-6"
 goals:
@@ -41,10 +39,9 @@ goals:
         - Assets:Debt:*
 ```
 
-If on the other hand, you know how much you can afford to save every
-month, but want to know when the goal will be achieved, you can
-specify the payment per period and the rate. Paisa will calculate the
-target date.
+If on the other hand, you know how much you can afford to save every month, but
+want to know when the goal will be achieved, you can specify the payment per
+period and the rate. Paisa will calculate the target date.
 
 ```yaml hl_lines="5-6"
 goals:
@@ -61,8 +58,8 @@ goals:
 
 ### Math
 
-This section will give some rough idea of how the calculations are
-done. You can skip this section if you are not interested in the math.
+This section will give some rough idea of how the calculations are done. You can
+skip this section if you are not interested in the math.
 
 <math xmlns="http://www.w3.org/1998/Math/MathML" display="block" class="tml-display" style="display:block math;">
   <semantics>
@@ -132,12 +129,14 @@ done. You can skip this section if you are not interested in the math.
 Where
 
 | Variable | Description        | Paisa                                            |
-|----------|--------------------|--------------------------------------------------|
+| -------- | ------------------ | ------------------------------------------------ |
 | FV       | Future Value       | `target`                                         |
 | PV       | Present Value      | Current Savings                                  |
 | PMT      | Payment per period | `payment_per_period` / Monthly Investment needed |
 | RATE     | Rate of return     | `rate`                                           |
 | NPER     | Number of periods  | `target_date`                                    |
 
-Out of the 5 variables, if you know any 4, the 5<sup>th</sup> can be calculated by
-solving the equation. You can refer the [blog post](https://ciju.in/posts/understanding-financial-functions-excel-sheets) for more details.
+Out of the 5 variables, if you know any 4, the 5<sup>th</sup> can be calculated
+by solving the equation. You can refer the
+[blog post](https://ciju.in/posts/understanding-financial-functions-excel-sheets)
+for more details.

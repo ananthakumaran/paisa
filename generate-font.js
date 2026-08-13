@@ -20,7 +20,7 @@ const options = {
     fontStyle: "normal",
     fixedWidth: true,
     centerHorizontally: true,
-    centerVertically: true
+    centerVertically: true,
   },
   useNameAsUnicode: false,
   symbolNameDelimiter: "-",
@@ -33,7 +33,7 @@ const options = {
   },
   startUnicode: 0xf0000,
   outSVGReact: false,
-  generateInfoData: true
+  generateInfoData: true,
 };
 
 async function createFont(font) {
@@ -46,7 +46,11 @@ async function createFont(font) {
   await createWOFF2(options, ttf);
 
   if (options.generateInfoData) {
-    writeFileSync(`fonts/${font}-info.json`, JSON.stringify({ codepoints: infoData }), "utf8");
+    writeFileSync(
+      `fonts/${font}-info.json`,
+      JSON.stringify({ codepoints: infoData }),
+      "utf8",
+    );
 
     const min = _.min(Object.values(infoData));
     const max = _.max(Object.values(infoData));
@@ -57,7 +61,9 @@ async function createFont(font) {
   font-style: normal;
   font-weight: 900;
   src: url("../fonts/${font}.woff2") format("woff2");
-  unicode-range: U+${min.toString(16).toUpperCase()}-${max.toString(16).toUpperCase()};
+  unicode-range: U+${min.toString(16).toUpperCase()}-${
+      max.toString(16).toUpperCase()
+    };
   font-display: block;
 }
 `;
@@ -78,7 +84,7 @@ const fonts = [
   "fa6-regular",
   "fa6-brands",
   "mdi",
-  "fluent-emoji-high-contrast"
+  "fluent-emoji-high-contrast",
 ];
 
 createFonts(fonts);

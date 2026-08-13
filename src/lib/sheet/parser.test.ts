@@ -9,7 +9,7 @@ const caseDir = path.dirname(fileURLToPath(import.meta.url));
 
 const parser = sheetLanguage.parser.configure({
   strict: false,
-  dialect: "comment"
+  dialect: "comment",
 });
 
 for (const file of fs.readdirSync(caseDir)) {
@@ -17,7 +17,13 @@ for (const file of fs.readdirSync(caseDir)) {
 
   const name = /^[^.]*/.exec(file)[0];
   describe(name, () => {
-    for (const { name, run } of fileTests(fs.readFileSync(path.join(caseDir, file), "utf8"), file))
+    for (
+      const { name, run } of fileTests(
+        fs.readFileSync(path.join(caseDir, file), "utf8"),
+        file,
+      )
+    ) {
       test(name, () => run(parser));
+    }
   });
 }

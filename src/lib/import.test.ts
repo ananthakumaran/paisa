@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
 
-import { parse, render, asRows } from "./spreadsheet";
+import { asRows, parse, render } from "./spreadsheet";
 import fs from "fs";
 import helpers from "./template_helpers";
 import _ from "lodash";
@@ -28,7 +28,7 @@ Handlebars.registerHelper(
         console.log("Error in helper", name, args, e);
       }
     };
-  })
+  }),
 );
 
 describe("import", () => {
@@ -38,18 +38,22 @@ describe("import", () => {
       for (const file of files) {
         const [name, extension] = file.split(".");
         if (extension === "ledger") {
-          const inputFile = _.find(files, (f) => f != file && f.startsWith(name));
+          const inputFile = _.find(
+            files,
+            (f) => f != file && f.startsWith(name),
+          );
           if (inputFile.endsWith(".pdf")) {
             break;
           }
           const input = fs.readFileSync(`fixture/import/${dir}/${inputFile}`);
-          const output = fs.readFileSync(`fixture/import/${dir}/${file}`).toString();
+          const output = fs.readFileSync(`fixture/import/${dir}/${file}`)
+            .toString();
           const template = fs
             .readFileSync(`internal/model/template/templates/${dir}.handlebars`)
             .toString();
 
           const compiled = Handlebars.compile(template);
-          const result = await parse(new File([input], inputFile));
+          const result = await parse(new File([input as any], inputFile));
           const rows = asRows(result);
 
           const actual = render(rows, compiled, { trim: true });

@@ -9,14 +9,20 @@ function cost(env: Environment, q: PostingsOrQuery): BigNumber {
   assertType("Postings", q);
 
   const ps = toPostings(env, q);
-  return ps.reduce((acc, p) => acc.plus(new BigNumber(p.amount)), new BigNumber(0));
+  return ps.reduce(
+    (acc, p) => acc.plus(new BigNumber(p.amount)),
+    new BigNumber(0),
+  );
 }
 
 function balance(env: Environment, q: PostingsOrQuery): BigNumber {
   assertType("Postings", q);
 
   const ps = toPostings(env, q);
-  return ps.reduce((acc, p) => acc.plus(new BigNumber(p.market_amount)), new BigNumber(0));
+  return ps.reduce(
+    (acc, p) => acc.plus(new BigNumber(p.market_amount)),
+    new BigNumber(0),
+  );
 }
 
 function negate(env: Environment, q: PostingsOrQuery): Posting[] {
@@ -57,7 +63,7 @@ function fifo(env: Environment, q: PostingsOrQuery): Posting[] {
                 ...a,
                 quantity: diff,
                 amount: diff * price,
-                market_amount: diff * marketPrice
+                market_amount: diff * marketPrice,
               });
               quantity = 0;
             } else {

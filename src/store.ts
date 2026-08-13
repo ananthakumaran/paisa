@@ -1,8 +1,13 @@
-import { writable, derived, get } from "svelte/store";
+import { derived, get, writable } from "svelte/store";
 import * as d3 from "d3";
 
 import dayjs from "dayjs";
-import type { AccountTfIdf, LedgerFileError, SheetFileError, SheetLineResult } from "$lib/utils";
+import type {
+  AccountTfIdf,
+  LedgerFileError,
+  SheetFileError,
+  SheetLineResult,
+} from "$lib/utils";
 import _ from "lodash";
 
 export function now() {
@@ -25,7 +30,7 @@ export const initialEditorState: EditorState = {
   undoDepth: 0,
   redoDepth: 0,
   errors: [],
-  output: ""
+  output: "",
 };
 
 interface SheetEditorState {
@@ -49,7 +54,7 @@ export const initialSheetEditorState: SheetEditorState = {
   pendingEval: false,
   evalDuration: 0,
   errors: [],
-  results: []
+  results: [],
 };
 
 export const editorState = writable(initialEditorState);
@@ -70,10 +75,10 @@ export const dateRange = derived(
     } else {
       return {
         from: $dateMax.subtract($dateRangeOption, "year"),
-        to: $dateMax
+        to: $dateMax,
       };
     }
-  }
+  },
 );
 
 export const theme = writable("light");
@@ -95,10 +100,10 @@ export const delayedLoading = derived(
       () => {
         return set($l);
       },
-      $l ? DELAY : DEBOUNCE_DELAY
+      $l ? DELAY : DEBOUNCE_DELAY,
     );
   },
-  false
+  false,
 );
 
 let swithcTimeoutId: NodeJS.Timeout;
@@ -117,7 +122,7 @@ export const delayedUnLoading = derived(
       }, DEBOUNCE_DELAY);
     }
   },
-  false
+  false,
 );
 
 export const willClearTippy = writable(0);
@@ -135,11 +140,15 @@ export function setAllowedDateRange(dates: dayjs.Dayjs[]) {
 export const willRefresh = writable(0);
 export function refresh() {
   if (get(editorState).hasUnsavedChanges) {
-    const confirmed = confirm("You have unsaved changes. Are you sure you want to leave?");
+    const confirmed = confirm(
+      "You have unsaved changes. Are you sure you want to leave?",
+    );
     if (!confirmed) {
       return false;
     } else {
-      editorState.update((current) => _.assign({}, current, { hasUnsavedChanges: false }));
+      editorState.update((current) =>
+        _.assign({}, current, { hasUnsavedChanges: false })
+      );
     }
   }
   willRefresh.update((n) => n + 1);

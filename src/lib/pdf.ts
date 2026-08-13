@@ -60,7 +60,7 @@ export async function pdf2array(data: ArrayBuffer): Promise<string[][]> {
   const loader = pdfjs.getDocument(data);
   loader.onPassword = (cb: any) => {
     const password = prompt(
-      "Please enter the password to open this PDF file. Press cancel to exit."
+      "Please enter the password to open this PDF file. Press cancel to exit.",
     );
     if (password === null) {
       throw new Error("Password required.");
@@ -90,7 +90,7 @@ export async function pdf2array(data: ArrayBuffer): Promise<string[][]> {
         return {
           ...item,
           x: left,
-          y: top
+          y: top,
         };
       });
 
@@ -101,7 +101,10 @@ export async function pdf2array(data: ArrayBuffer): Promise<string[][]> {
 
     // Find the minimum height of any element. We will use this to determine the
     // tolerance for deciding if two items are on the same line or not.
-    const minHeight = Math.max(Math.min(...items.map((item) => item.height)), 0.001);
+    const minHeight = Math.max(
+      Math.min(...items.map((item) => item.height)),
+      0.001,
+    );
     const yTolerance = minHeight / 2;
 
     // Sort the items by x and y positions
@@ -133,7 +136,7 @@ export async function pdf2array(data: ArrayBuffer): Promise<string[][]> {
           rowNumber: rows.length,
           y: item.y,
           xs: [item.x],
-          items: [item]
+          items: [item],
         };
       } else {
         // Else add to the current row

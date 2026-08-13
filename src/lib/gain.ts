@@ -9,16 +9,16 @@ import {
   formatCurrency,
   formatCurrencyCrude,
   formatFloat,
+  type Gain,
+  type Legend,
+  type Networth,
   now,
+  type Posting,
   rem,
   restName,
   skipTicks,
   svgUrl,
   tooltip,
-  type Gain,
-  type Legend,
-  type Networth,
-  type Posting
 } from "./utils";
 
 const areaKeys = ["gain", "loss"];
@@ -36,12 +36,17 @@ export function renderOverview(gains: Gain[]) {
   const id = "#d3-gain-overview";
   const svg = d3.select(id),
     margin = { top: rem(25), right: rem(20), bottom: rem(10), left: rem(150) },
-    width =
-      Math.max(document.getElementById(id.substring(1)).parentElement.clientWidth, 1000) -
+    width = Math.max(
+      document.getElementById(id.substring(1)).parentElement.clientWidth,
+      1000,
+    ) -
       margin.left -
       margin.right,
     height = gains.length * BAR_HEIGHT * 2,
-    g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    g = svg.append("g").attr(
+      "transform",
+      "translate(" + margin.left + "," + margin.top + ")",
+    );
   svg.attr("height", height + margin.top + margin.bottom);
 
   svg.attr("width", width + margin.left + margin.right);
@@ -63,7 +68,13 @@ export function renderOverview(gains: Gain[]) {
     .paddingOuter(0.6);
 
   const keys = ["balance", "investment", "withdrawal", "gain", "loss"];
-  const colors = [COLORS.primary, COLORS.secondary, COLORS.tertiary, COLORS.gain, COLORS.loss];
+  const colors = [
+    COLORS.primary,
+    COLORS.secondary,
+    COLORS.tertiary,
+    COLORS.gain,
+    COLORS.loss,
+  ];
   const z = d3.scaleOrdinal<string>(colors).domain(keys);
 
   const getInvestmentAmount = (g: Gain) => g.networth.investmentAmount;
@@ -90,7 +101,7 @@ export function renderOverview(gains: Gain[]) {
     .range([0, xirrWidth])
     .domain([
       _.min([_.min(_.map(gains, (g) => g.xirr)), 0]),
-      _.max([0, _.max(_.map(gains, (g) => g.xirr))])
+      _.max([0, _.max(_.map(gains, (g) => g.xirr))]),
     ]);
 
   g.append("line")
@@ -122,7 +133,7 @@ export function renderOverview(gains: Gain[]) {
       d3
         .axisBottom(x)
         .tickSize(-height)
-        .tickFormat(skipTicks(60, x, formatCurrencyCrude))
+        .tickFormat(skipTicks(60, x, formatCurrencyCrude)),
     );
 
   g.append("g")
@@ -132,7 +143,7 @@ export function renderOverview(gains: Gain[]) {
       d3
         .axisBottom(x1)
         .tickSize(-height)
-        .tickFormat(skipTicks(40, x1, (n: number) => formatFloat(n, 1)))
+        .tickFormat(skipTicks(40, x1, (n: number) => formatFloat(n, 1))),
     );
 
   g.append("g").attr("class", "axis y dark link").call(d3.axisLeft(y));
@@ -154,7 +165,10 @@ export function renderOverview(gains: Gain[]) {
     .text((g) => formatCurrency(getInvestmentAmount(g)))
     .attr("dominant-baseline", "hanging")
     .attr("text-anchor", "end")
-    .style("fill", (g) => (getInvestmentAmount(g) > 0 ? z("investment") : "none"))
+    .style(
+      "fill",
+      (g) => (getInvestmentAmount(g) > 0 ? z("investment") : "none"),
+    )
     .attr("dx", "-3")
     .attr("dy", "3")
     .attr("x", textGroupZero + textGroupWidth / 3)
@@ -165,7 +179,10 @@ export function renderOverview(gains: Gain[]) {
     .text((g) => formatCurrency(getGainAmount(g)))
     .attr("dominant-baseline", "hanging")
     .attr("text-anchor", "end")
-    .style("fill", (g) => (getGainAmount(g) > 0 ? chroma(z("gain")).darken().hex() : "none"))
+    .style(
+      "fill",
+      (g) => (getGainAmount(g) > 0 ? chroma(z("gain")).darken().hex() : "none"),
+    )
     .attr("dx", "-3")
     .attr("dy", "3")
     .attr("x", textGroupZero + (textGroupWidth * 2) / 3)
@@ -185,7 +202,10 @@ export function renderOverview(gains: Gain[]) {
     .append("text")
     .text((g) => formatCurrency(getGainAmount(g)))
     .attr("text-anchor", "end")
-    .style("fill", (g) => (getGainAmount(g) < 0 ? chroma(z("loss")).darken().hex() : "none"))
+    .style(
+      "fill",
+      (g) => (getGainAmount(g) < 0 ? chroma(z("loss")).darken().hex() : "none"),
+    )
     .attr("dx", "-3")
     .attr("dy", "-3")
     .attr("x", textGroupZero + (textGroupWidth * 2) / 3)
@@ -195,7 +215,10 @@ export function renderOverview(gains: Gain[]) {
     .append("text")
     .text((g) => formatCurrency(getWithdrawalAmount(g)))
     .attr("text-anchor", "end")
-    .style("fill", (g) => (getWithdrawalAmount(g) > 0 ? z("withdrawal") : "none"))
+    .style(
+      "fill",
+      (g) => (getWithdrawalAmount(g) > 0 ? z("withdrawal") : "none"),
+    )
     .attr("dx", "-3")
     .attr("dy", "-3")
     .attr("x", textGroupZero + textGroupWidth)
@@ -214,8 +237,12 @@ export function renderOverview(gains: Gain[]) {
     .text((g) => formatFloat(g.xirr))
     .attr("text-anchor", "end")
     .attr("dominant-baseline", "middle")
-    .style("fill", (g) =>
-      g.xirr < 0 ? chroma(z("loss")).darken().hex() : chroma(z("gain")).darken().hex()
+    .style(
+      "fill",
+      (g) =>
+        g.xirr < 0
+          ? chroma(z("loss")).darken().hex()
+          : chroma(z("gain")).darken().hex(),
     )
     .attr("x", xirrWidth + xirrTextWidth)
     .attr("y", (g) => y(restName(g.account)) + y.bandwidth() / 2);
@@ -237,8 +264,8 @@ export function renderOverview(gains: Gain[]) {
           i: "0",
           data: g,
           investment: getInvestmentAmount(g),
-          gain: _.max([getGainAmount(g), 0])
-        }
+          gain: _.max([getGainAmount(g), 0]),
+        },
       ] as any),
       d3.stack().keys(["balance", "loss", "withdrawal"])([
         {
@@ -246,9 +273,9 @@ export function renderOverview(gains: Gain[]) {
           data: g,
           balance: getBalanceAmount(g),
           withdrawal: getWithdrawalAmount(g),
-          loss: Math.abs(_.min([getGainAmount(g), 0]))
-        }
-      ] as any)
+          loss: Math.abs(_.min([getGainAmount(g), 0])),
+        },
+      ] as any),
     ])
     .enter()
     .append("g")
@@ -296,15 +323,27 @@ export function renderOverview(gains: Gain[]) {
         ["Account", [g.account, "has-text-weight-bold has-text-right"]],
         [
           "Investment",
-          [formatCurrency(current.investmentAmount), "has-text-weight-bold has-text-right"]
+          [
+            formatCurrency(current.investmentAmount),
+            "has-text-weight-bold has-text-right",
+          ],
         ],
         [
           "Withdrawal",
-          [formatCurrency(current.withdrawalAmount), "has-text-weight-bold has-text-right"]
+          [
+            formatCurrency(current.withdrawalAmount),
+            "has-text-weight-bold has-text-right",
+          ],
         ],
-        ["Gain", [formatCurrency(current.gainAmount), "has-text-weight-bold has-text-right"]],
-        ["Balance", [formatCurrency(current.balanceAmount), "has-text-weight-bold has-text-right"]],
-        ["XIRR", [formatFloat(g.xirr), "has-text-weight-bold has-text-right"]]
+        ["Gain", [
+          formatCurrency(current.gainAmount),
+          "has-text-weight-bold has-text-right",
+        ]],
+        ["Balance", [
+          formatCurrency(current.balanceAmount),
+          "has-text-weight-bold has-text-right",
+        ]],
+        ["XIRR", [formatFloat(g.xirr), "has-text-weight-bold has-text-right"]],
       ]);
     })
     .attr("x", 0)
@@ -313,7 +352,11 @@ export function renderOverview(gains: Gain[]) {
     .attr("width", width);
 }
 
-export function renderAccountOverview(points: Networth[], postings: Posting[], id: string) {
+export function renderAccountOverview(
+  points: Networth[],
+  postings: Posting[],
+  id: string,
+) {
   const start = _.min(_.map(points, (p) => p.date)),
     end = now();
 
@@ -323,7 +366,10 @@ export function renderAccountOverview(points: Networth[], postings: Posting[], i
     margin = { top: 5, right: 50, bottom: 20, left: 40 },
     width = element.parentElement.clientWidth - margin.left - margin.right,
     height = +svg.attr("height") - margin.top - margin.bottom,
-    g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    g = svg.append("g").attr(
+      "transform",
+      "translate(" + margin.left + "," + margin.top + ")",
+    );
 
   const areaKeys = ["gain", "loss"];
   const colors = [COLORS.gain, COLORS.loss];
@@ -334,7 +380,10 @@ export function renderAccountOverview(points: Networth[], postings: Posting[], i
     .domain(lineKeys)
     .range([COLORS.primary, COLORS.secondary]);
 
-  const positions = _.flatMap(points, (p) => [p.balanceAmount, p.netInvestmentAmount]);
+  const positions = _.flatMap(
+    points,
+    (p) => [p.balanceAmount, p.netInvestmentAmount],
+  );
   positions.push(0);
 
   const x = d3.scaleTime().range([0, width]).domain([start, end]),
@@ -357,11 +406,15 @@ export function renderAccountOverview(points: Networth[], postings: Posting[], i
   g.append("g")
     .attr("class", "axis y")
     .attr("transform", `translate(${width},0)`)
-    .call(d3.axisRight(y).ticks(5).tickPadding(5).tickFormat(formatCurrencyCrude));
+    .call(
+      d3.axisRight(y).ticks(5).tickPadding(5).tickFormat(formatCurrencyCrude),
+    );
 
   g.append("g")
     .attr("class", "axis y")
-    .call(d3.axisLeft(y).ticks(5).tickSize(-width).tickFormat(formatCurrencyCrude));
+    .call(
+      d3.axisLeft(y).ticks(5).tickSize(-width).tickFormat(formatCurrencyCrude),
+    );
 
   const postingsG = g.append("g").attr("class", "postings");
 
@@ -373,18 +426,29 @@ export function renderAccountOverview(points: Networth[], postings: Posting[], i
       return tooltip(
         [
           ["Date", p.date.format("DD MMM YYYY")],
-          ["Amount", [formatCurrency(p.amount), "has-text-weight-bold has-text-right"]]
+          ["Amount", [
+            formatCurrency(p.amount),
+            "has-text-weight-bold has-text-right",
+          ]],
         ],
-        { header: p.payee }
+        { header: p.payee },
       );
     })
     .attr("cx", (d) => x(d.date))
     .attr("cy", height + 3)
     .attr("r", 3)
     .attr("opacity", 0.5)
-    .attr("fill", (d) => (d.amount >= 0 ? typeScale("investment") : typeScale("withdrawal")));
+    .attr(
+      "fill",
+      (
+        d,
+      ) => (d.amount >= 0 ? typeScale("investment") : typeScale("withdrawal")),
+    );
 
-  const layer = g.selectAll(".layer").data([points]).enter().append("g").attr("class", "layer");
+  const layer = g.selectAll(".layer").data([points]).enter().append("g").attr(
+    "class",
+    "layer",
+  );
 
   const clipAboveID = _.uniqueId("clip-above");
   layer
@@ -395,7 +459,7 @@ export function renderAccountOverview(points: Networth[], postings: Posting[], i
       "d",
       area(height, (d) => {
         return y(d.gainAmount + d.investmentAmount - d.withdrawalAmount);
-      })
+      }),
     );
 
   const clipBelowID = _.uniqueId("clip-below");
@@ -407,7 +471,7 @@ export function renderAccountOverview(points: Networth[], postings: Posting[], i
       "d",
       area(0, (d) => {
         return y(d.gainAmount + d.investmentAmount - d.withdrawalAmount);
-      })
+      }),
     );
 
   layer
@@ -419,7 +483,7 @@ export function renderAccountOverview(points: Networth[], postings: Posting[], i
       "d",
       area(0, (d) => {
         return y(d.investmentAmount - d.withdrawalAmount);
-      })
+      }),
     );
 
   layer
@@ -431,7 +495,7 @@ export function renderAccountOverview(points: Networth[], postings: Posting[], i
       "d",
       area(height, (d) => {
         return y(d.investmentAmount - d.withdrawalAmount);
-      })
+      }),
     );
 
   layer
@@ -445,7 +509,7 @@ export function renderAccountOverview(points: Networth[], postings: Posting[], i
         .line<Networth>()
         .curve(d3.curveMonotoneX)
         .x((d) => x(d.date))
-        .y((d) => y(d.netInvestmentAmount))
+        .y((d) => y(d.netInvestmentAmount)),
     );
 
   layer
@@ -459,35 +523,46 @@ export function renderAccountOverview(points: Networth[], postings: Posting[], i
         .line<Networth>()
         .curve(d3.curveMonotoneX)
         .x((d) => x(d.date))
-        .y((d) => y(d.balanceAmount))
+        .y((d) => y(d.balanceAmount)),
     );
 
-  const hoverCircle = layer.append("circle").attr("r", "3").attr("fill", "none");
-  const t = tippy(hoverCircle.node(), { theme: "light", delay: 0, allowHTML: true });
+  const hoverCircle = layer.append("circle").attr("r", "3").attr(
+    "fill",
+    "none",
+  );
+  const t = tippy(hoverCircle.node(), {
+    theme: "light",
+    delay: 0,
+    allowHTML: true,
+  });
 
   const balanceVoronoiPoints: Delaunay.Point[] = _.map(points, (d) => [
     x(d.date),
-    y(d.balanceAmount)
+    y(d.balanceAmount),
   ]);
   const investmentVoronoiPoints: Delaunay.Point[] = _.map(points, (d) => [
     x(d.date),
-    y(d.netInvestmentAmount)
+    y(d.netInvestmentAmount),
   ]);
-  const voronoi = Delaunay.from(balanceVoronoiPoints.concat(investmentVoronoiPoints)).voronoi([
+  const voronoi = Delaunay.from(
+    balanceVoronoiPoints.concat(investmentVoronoiPoints),
+  ).voronoi([
     0,
     0,
     width,
-    height
+    height,
   ]);
 
   layer
     .append("g")
     .selectAll("path")
     .data(
-      points.map((p) => ["balance", p]).concat(points.map((p) => ["investment", p])) as [
+      points.map((p) => ["balance", p]).concat(
+        points.map((p) => ["investment", p]),
+      ) as [
         string,
-        Networth
-      ][]
+        Networth,
+      ][],
     )
     .enter()
     .append("path")
@@ -499,20 +574,32 @@ export function renderAccountOverview(points: Networth[], postings: Posting[], i
     .on("mouseover", (_, [pointType, d]) => {
       hoverCircle
         .attr("cx", x(d.date))
-        .attr("cy", y(pointType == "balance" ? d.balanceAmount : d.netInvestmentAmount))
+        .attr(
+          "cy",
+          y(pointType == "balance" ? d.balanceAmount : d.netInvestmentAmount),
+        )
         .attr("fill", lineScale(pointType));
 
       t.setProps({
         placement: pointType == "balance" ? "top" : "bottom",
         content: tooltip([
           ["Date", d.date.format("DD MMM YYYY")],
-          ["Balance", [formatCurrency(d.balanceAmount), "has-text-weight-bold has-text-right"]],
+          ["Balance", [
+            formatCurrency(d.balanceAmount),
+            "has-text-weight-bold has-text-right",
+          ]],
           [
             "Net Investment",
-            [formatCurrency(d.netInvestmentAmount), "has-text-weight-bold has-text-right"]
+            [
+              formatCurrency(d.netInvestmentAmount),
+              "has-text-weight-bold has-text-right",
+            ],
           ],
-          ["Gain / Loss", [formatCurrency(d.gainAmount), "has-text-weight-bold has-text-right"]]
-        ])
+          ["Gain / Loss", [
+            formatCurrency(d.gainAmount),
+            "has-text-weight-bold has-text-right",
+          ]],
+        ]),
       });
       t.show();
     })
@@ -532,7 +619,7 @@ export function buildLegends(): Legend[] {
       return {
         label: key,
         color: typeScale(key),
-        shape: "square"
+        shape: "square",
       } as Legend;
     })
     .concat(
@@ -540,8 +627,8 @@ export function buildLegends(): Legend[] {
         return {
           label: key,
           color: areaScale(key),
-          shape: "square"
+          shape: "square",
         } as Legend;
-      })
+      }),
     );
 }

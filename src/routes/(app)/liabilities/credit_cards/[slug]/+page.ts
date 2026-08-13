@@ -2,6 +2,6 @@ import type { PageLoad } from "./$types";
 
 export const load = (async ({ params }) => {
   return {
-    account: params.slug
+    account: params.slug,
   };
 }) satisfies PageLoad;

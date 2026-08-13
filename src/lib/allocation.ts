@@ -4,24 +4,24 @@ import _ from "lodash";
 import {
   type Aggregate,
   type AllocationTarget,
+  darkenOrLighten,
   formatCurrency,
   formatFloat,
   lastName,
-  parentName,
-  secondName,
-  tooltip,
-  skipTicks,
-  rem,
-  now,
   type Legend,
-  darkenOrLighten
+  now,
+  parentName,
+  rem,
+  secondName,
+  skipTicks,
+  tooltip,
 } from "./utils";
 import COLORS, { generateColorScheme } from "./colors";
 import chroma from "chroma-js";
 
 export function renderAllocationTarget(
   allocationTargets: AllocationTarget[],
-  color: d3.ScaleOrdinal<string, string>
+  color: d3.ScaleOrdinal<string, string>,
 ) {
   const id = "#d3-allocation-target";
 
@@ -32,10 +32,16 @@ export function renderAllocationTarget(
   const BAR_HEIGHT = rem(25);
   const svg = d3.select(id),
     margin = { top: rem(20), right: rem(20), bottom: rem(10), left: rem(150) },
-    fullWidth = Math.max(document.getElementById(id.substring(1)).parentElement.clientWidth, 1000),
+    fullWidth = Math.max(
+      document.getElementById(id.substring(1)).parentElement.clientWidth,
+      1000,
+    ),
     width = fullWidth - margin.left - margin.right,
     height = allocationTargets.length * BAR_HEIGHT * 2,
-    g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    g = svg.append("g").attr(
+      "transform",
+      "translate(" + margin.left + "," + margin.top + ")",
+    );
   svg.attr("height", height + margin.top + margin.bottom);
 
   svg.attr("width", fullWidth);
@@ -71,7 +77,10 @@ export function renderAllocationTarget(
   const textGroupMargin = rem(20);
   const textGroupZero = targetWidth + targetMargin;
 
-  const x = d3.scaleLinear().range([textGroupZero + textGroupWidth + textGroupMargin, width]);
+  const x = d3.scaleLinear().range([
+    textGroupZero + textGroupWidth + textGroupMargin,
+    width,
+  ]);
   x.domain([0, maxX]);
   const x1 = d3.scaleLinear().range([0, targetWidth]).domain([0, maxX]);
 
@@ -86,7 +95,6 @@ export function renderAllocationTarget(
     .classed("svg-text-grey", true)
     .text("Target")
     .attr("text-anchor", "end")
-
     .attr("x", textGroupZero + (textGroupWidth * 1) / 3)
     .attr("y", -5);
 
@@ -111,7 +119,7 @@ export function renderAllocationTarget(
       d3
         .axisBottom(x1)
         .tickSize(-height)
-        .tickFormat(skipTicks(40, x, (n: number) => formatFloat(n, 0)))
+        .tickFormat(skipTicks(40, x, (n: number) => formatFloat(n, 0))),
     );
 
   g.append("g").attr("class", "axis y dark").call(d3.axisLeft(y));
@@ -158,8 +166,7 @@ export function renderAllocationTarget(
     .style("fill", (t) =>
       chroma(z1(Math.abs(t.current - t.target)))
         .darken()
-        .hex()
-    )
+        .hex())
     .attr("x", textGroupZero + (textGroupWidth * 3) / 3)
     .attr("y", (t) => y(t.name) + y.bandwidth() / 2);
 
@@ -193,7 +200,9 @@ export function renderAllocationTarget(
     .append("polygon")
     .attr(
       "transform",
-      (d) => "translate(" + x1(d.target) + "," + (y(d.name) + y.bandwidth() / 8) + ")"
+      (d) =>
+        "translate(" + x1(d.target) + "," + (y(d.name) + y.bandwidth() / 8) +
+        ")",
     )
     .attr("points", "0 0, 0 15, 20 6")
     .attr("fill", z("target"));
@@ -218,22 +227,27 @@ export function renderAllocationTarget(
     .style("height", y1.bandwidth() * 2 + "px")
     .each(function (t) {
       renderPartition(this, t.aggregates, d3.treemap(), color, {
-        margin: { top: 0, right: 0, bottom: 0, left: 0 }
+        margin: { top: 0, right: 0, bottom: 0, left: 0 },
       });
     });
 }
 
 export function renderAllocation(
   aggregates: Record<string, Aggregate>,
-  color: d3.ScaleOrdinal<string, string>
+  color: d3.ScaleOrdinal<string, string>,
 ) {
   renderPartition(
     document.getElementById("d3-allocation-category"),
     aggregates,
     d3.partition(),
-    color
+    color,
   );
-  renderPartition(document.getElementById("d3-allocation-value"), aggregates, d3.treemap(), color);
+  renderPartition(
+    document.getElementById("d3-allocation-value"),
+    aggregates,
+    d3.treemap(),
+    color,
+  );
 }
 
 function renderPartition(
@@ -241,7 +255,7 @@ function renderPartition(
   aggregates: Record<string, Aggregate>,
   hierarchy: any,
   color: d3.ScaleOrdinal<string, string>,
-  options = { margin: { top: 0, right: 20, bottom: 0, left: 0 } }
+  options = { margin: { top: 0, right: 20, bottom: 0, left: 0 } },
 ) {
   if (_.isEmpty(aggregates)) {
     return;
@@ -250,7 +264,8 @@ function renderPartition(
   const div = d3.select(element),
     margin = options.margin,
     width = element.parentElement.clientWidth - margin.left - margin.right,
-    height = +div.style("height").replace("px", "") - margin.top - margin.bottom;
+    height = +div.style("height").replace("px", "") - margin.top -
+      margin.bottom;
 
   const percent = (d: d3.HierarchyNode<Aggregate>) => {
     return formatFloat((d.value / root.value) * 100) + "%";
@@ -280,8 +295,11 @@ function renderPartition(
     .attr("data-tippy-content", (d) => {
       return tooltip([
         ["Account", [d.id, "has-text-right"]],
-        ["Market Value", [formatCurrency(d.value), "has-text-weight-bold has-text-right"]],
-        ["Percentage", [percent(d), "has-text-weight-bold has-text-right"]]
+        ["Market Value", [
+          formatCurrency(d.value),
+          "has-text-weight-bold has-text-right",
+        ]],
+        ["Percentage", [percent(d), "has-text-weight-bold has-text-right"]],
       ]);
     })
     .style("top", (d: any) => d.y0 + "px")
@@ -304,7 +322,7 @@ function renderPartition(
 }
 
 export function renderAllocationTimeline(
-  aggregatesTimeline: { [key: string]: Aggregate }[]
+  aggregatesTimeline: { [key: string]: Aggregate }[],
 ): Legend[] {
   const timeline = _.map(aggregatesTimeline, (aggregates) => {
     return _.chain(aggregates)
@@ -316,7 +334,7 @@ export function renderAllocationTimeline(
           date: aggregates[0].date,
           account: group,
           market_amount: _.sum(_.map(aggregates, (a) => a.market_amount)),
-          timestamp: aggregates[0].date
+          timestamp: aggregates[0].date,
         };
       })
       .value();
@@ -329,7 +347,7 @@ export function renderAllocationTimeline(
 
   const defaultValues = _.zipObject(
     assets,
-    _.map(assets, () => 0)
+    _.map(assets, () => 0),
   );
   const start = timeline[0]?.[0]?.timestamp,
     end = now();
@@ -348,39 +366,50 @@ export function renderAllocationTimeline(
     if (total == 0) {
       return;
     }
-    const kvs = _.map(aggregates, (a) => [a.account, (a.market_amount / total) * 100]);
+    const kvs = _.map(
+      aggregates,
+      (a) => [a.account, (a.market_amount / total) * 100],
+    );
     points.push(
       _.merge(
         {
-          date: aggregates[0].timestamp
+          date: aggregates[0].timestamp,
         },
         defaultValues,
-        _.fromPairs(kvs)
-      )
+        _.fromPairs(kvs),
+      ),
     );
   });
 
   const svg = d3.select("#d3-allocation-timeline"),
     margin = { top: 40, right: 60, bottom: 20, left: 35 },
-    width =
-      document.getElementById("d3-allocation-timeline").parentElement.clientWidth -
+    width = document.getElementById("d3-allocation-timeline").parentElement
+      .clientWidth -
       margin.left -
       margin.right,
     height = +svg.attr("height") - margin.top - margin.bottom,
-    g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    g = svg.append("g").attr(
+      "transform",
+      "translate(" + margin.left + "," + margin.top + ")",
+    );
 
   const x = d3.scaleTime().range([0, width]).domain([start, end]),
     y = d3
       .scaleLinear()
       .range([height, 0])
-      .domain([0, d3.max(d3.map(points, (p) => d3.max(_.values(_.omit(p, "date")))))]),
+      .domain([
+        0,
+        d3.max(d3.map(points, (p) => d3.max(_.values(_.omit(p, "date"))))),
+      ]),
     z = generateColorScheme(assets);
 
   const line = (group: string) =>
     d3
       .line<Point>()
       .curve(d3.curveLinear)
-      .defined((p, i) => (p[group] as number) > 0 || (points[i + 1]?.[group] as number) > 0)
+      .defined((p, i) =>
+        (p[group] as number) > 0 || (points[i + 1]?.[group] as number) > 0
+      )
       .x((p) => x(p.date))
       .y((p) => y(p[group]));
 
@@ -395,14 +424,17 @@ export function renderAllocationTimeline(
       d3
         .axisLeft(y)
         .tickSize(-width)
-        .tickFormat((y) => `${y}%`)
+        .tickFormat((y) => `${y}%`),
     );
   g.append("g")
     .attr("class", "axis y")
     .attr("transform", `translate(${width},0)`)
     .call(d3.axisRight(y).tickFormat((y) => `${y}%`));
 
-  const layer = g.selectAll(".layer").data(assets).enter().append("g").attr("class", "layer");
+  const layer = g.selectAll(".layer").data(assets).enter().append("g").attr(
+    "class",
+    "layer",
+  );
 
   layer
     .append("path")
@@ -415,7 +447,7 @@ export function renderAllocationTimeline(
     return {
       label: a,
       color: z(a),
-      shape: "square"
+      shape: "square",
     };
   });
 }

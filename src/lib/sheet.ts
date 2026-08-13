@@ -1,14 +1,14 @@
 import {
-  CompletionContext,
   autocompletion,
   closeBrackets,
   completeFromList,
-  ifIn
+  CompletionContext,
+  ifIn,
 } from "@codemirror/autocomplete";
 import { history, redoDepth, undoDepth } from "@codemirror/commands";
 import { bracketMatching, syntaxTree } from "@codemirror/language";
-import { lintGutter, linter, type Diagnostic } from "@codemirror/lint";
-import { keymap, type KeyBinding } from "@codemirror/view";
+import { type Diagnostic, linter, lintGutter } from "@codemirror/lint";
+import { type KeyBinding, keymap } from "@codemirror/view";
 import { EditorView } from "codemirror";
 import _ from "lodash";
 import { initialSheetEditorState, sheetEditorState } from "../store";
@@ -18,7 +18,7 @@ import { schedulePlugin } from "./transaction_tag";
 export { sheetEditorState } from "../store";
 import { functions } from "./sheet/functions";
 
-import { Environment, buildAST } from "./sheet/interpreter";
+import { buildAST, Environment } from "./sheet/interpreter";
 import type { Posting } from "./utils";
 
 let latestIdentifiers: string[] = [];
@@ -27,7 +27,9 @@ function completeIdentifier(context: CompletionContext) {
   return ifIn(["Identifier"], completeFromList(latestIdentifiers))(context);
 }
 
-const skipCommentParser = sheetLanguage.parser.configure({ dialect: "skip_comment" });
+const skipCommentParser = sheetLanguage.parser.configure({
+  dialect: "skip_comment",
+});
 
 function lint(env: Environment) {
   latestIdentifiers = [];
@@ -42,7 +44,7 @@ function lint(env: Environment) {
           from: node.from,
           to: node.to,
           severity: "error",
-          message: "Invalid syntax"
+          message: "Invalid syntax",
         });
       }
     });
@@ -63,7 +65,7 @@ function lint(env: Environment) {
             const endTime = performance.now();
             return _.assign({}, current, {
               pendingEval: false,
-              evalDuration: endTime - startTime
+              evalDuration: endTime - startTime,
             });
           }
           const envCopy = env.clone();
@@ -77,7 +79,7 @@ function lint(env: Environment) {
         return _.assign({}, current, {
           pendingEval: false,
           evalDuration: endTime - startTime,
-          results
+          results,
         });
       });
     }
@@ -93,7 +95,7 @@ export function createEditor(
   opts: {
     keybindings?: readonly KeyBinding[];
     autocomplete?: Record<string, string[]>;
-  }
+  },
 ) {
   const env = new Environment();
   env.scope = functions;
@@ -115,8 +117,8 @@ export function createEditor(
       "total",
       "AND",
       "OR",
-      "NOT"
-    ]
+      "NOT",
+    ],
   };
 
   const completions = _.chain(opts.autocomplete || {})
@@ -140,7 +142,7 @@ export function createEditor(
           }
 
           return false;
-        }
+        },
       }),
       lintGutter(),
       history(),
@@ -149,19 +151,26 @@ export function createEditor(
           completeIdentifier,
           (context: CompletionContext) => {
             for (const [key, completionSource] of Object.entries(completions)) {
-              if (context.matchBefore(new RegExp(`${key}\\s*=[~]?\\s*[^ ]*$`))) {
+              if (
+                context.matchBefore(new RegExp(`${key}\\s*=[~]?\\s*[^ ]*$`))
+              ) {
                 return completionSource(context);
               }
             }
 
             return null;
           },
-          ..._.map(autocompletions, (options, node) => ifIn([node], completeFromList(options)))
-        ]
+          ..._.map(
+            autocompletions,
+            (options, node) => ifIn([node], completeFromList(options)),
+          ),
+        ],
       }),
       EditorView.updateListener.of((viewUpdate) => {
         const doc = viewUpdate.state.doc.toString();
-        const currentLine = viewUpdate.state.doc.lineAt(viewUpdate.state.selection.main.head);
+        const currentLine = viewUpdate.state.doc.lineAt(
+          viewUpdate.state.selection.main.head,
+        );
         sheetEditorState.update((current) => {
           let pendingEval = current.pendingEval;
           if (current.doc !== doc) {
@@ -172,15 +181,16 @@ export function createEditor(
             pendingEval,
             doc,
             currentLine: currentLine.number,
-            hasUnsavedChanges: current.hasUnsavedChanges || viewUpdate.docChanged,
+            hasUnsavedChanges: current.hasUnsavedChanges ||
+              viewUpdate.docChanged,
             undoDepth: undoDepth(viewUpdate.state),
-            redoDepth: redoDepth(viewUpdate.state)
+            redoDepth: redoDepth(viewUpdate.state),
           });
         });
       }),
-      schedulePlugin
+      schedulePlugin,
     ],
     doc: content,
-    parent: dom
+    parent: dom,
   });
 }

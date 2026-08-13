@@ -1,22 +1,22 @@
 import * as d3 from "d3";
 import _ from "lodash";
 import {
+  type CommodityBreakdown,
+  darkenOrLighten,
   formatCurrency,
   formatFloat,
-  tooltip,
-  skipTicks,
-  type PortfolioAggregate,
-  type CommodityBreakdown,
   getColorPreference,
-  rem,
-  svgTruncate,
   type Legend,
-  darkenOrLighten
+  type PortfolioAggregate,
+  rem,
+  skipTicks,
+  svgTruncate,
+  tooltip,
 } from "./utils";
 
 export function filterCommodityBreakdowns(
   portfolioAggregates: PortfolioAggregate[],
-  commodities: string[]
+  commodities: string[],
 ): PortfolioAggregate[] {
   let pas = _.flatMap(_.cloneDeep(portfolioAggregates), (pa) => {
     const breakdowns = _.filter(pa.breakdowns, (b) => {
@@ -46,8 +46,8 @@ export function renderPortfolioBreakdown(
   portfolioAggregates: PortfolioAggregate[],
   options: { small?: boolean; z?: any } = {
     small: false,
-    z: null
-  }
+    z: null,
+  },
 ): {
   legends: Legend[];
   renderer: (portfolioAggregates: PortfolioAggregate[], color: any) => void;
@@ -56,13 +56,15 @@ export function renderPortfolioBreakdown(
   const BAR_HEIGHT = rem(25);
   const svg = d3.select(id),
     margin = { top: rem(20), right: 0, bottom: rem(10), left: rem(20) },
-    fullWidth =
-      Math.max(
-        document.getElementById(id.substring(1)).parentElement.clientWidth,
-        small ? 320 : 800
-      ) - 2,
+    fullWidth = Math.max(
+      document.getElementById(id.substring(1)).parentElement.clientWidth,
+      small ? 320 : 800,
+    ) - 2,
     width = fullWidth - margin.left - margin.right,
-    g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    g = svg.append("g").attr(
+      "transform",
+      "translate(" + margin.left + "," + margin.top + ")",
+    );
 
   svg.attr("width", fullWidth);
 
@@ -74,7 +76,10 @@ export function renderPortfolioBreakdown(
   const textGroupMargin = rem(20);
   const textGroupZero = targetWidth + targetMargin;
 
-  const x = d3.scaleLinear().range([textGroupZero + textGroupWidth + textGroupMargin, width]);
+  const x = d3.scaleLinear().range([
+    textGroupZero + textGroupWidth + textGroupMargin,
+    width,
+  ]);
   const x1 = d3.scaleLinear().range([0, targetWidth]);
 
   const groups = _.chain(portfolioAggregates)
@@ -115,8 +120,8 @@ export function renderPortfolioBreakdown(
 
   let z: any;
   if (!_.isEmpty(groups)) {
-    const range =
-      options.z || (getColorPreference() == "dark" ? d3.schemeCategory10 : d3.schemePastel2);
+    const range = options.z ||
+      (getColorPreference() == "dark" ? d3.schemeCategory10 : d3.schemePastel2);
 
     z = d3.scaleOrdinal<string>().domain(groups).range(range);
   }
@@ -126,12 +131,12 @@ export function renderPortfolioBreakdown(
       return {
         label: g,
         color: z ? z(g) : "",
-        shape: "square"
+        shape: "square",
       };
     }),
     renderer: (
       portfolioAggregates: PortfolioAggregate[],
-      color: d3.ScaleOrdinal<string, string>
+      color: d3.ScaleOrdinal<string, string>,
     ) => {
       if (_.isEmpty(portfolioAggregates)) {
         treemap.style("display", "none");
@@ -186,7 +191,7 @@ export function renderPortfolioBreakdown(
             .attr("width", function (d) {
               return x1(d.percentage);
             }),
-        (exit) => exit.transition(t).attr("width", 0).remove()
+        (exit) => exit.transition(t).attr("width", 0).remove(),
       );
 
       lineg
@@ -203,14 +208,17 @@ export function renderPortfolioBreakdown(
           d3
             .axisTop(x1)
             .tickSize(height)
-            .tickFormat(skipTicks(40, x1, (n: number) => formatFloat(n, 1)))
+            .tickFormat(skipTicks(40, x1, (n: number) => formatFloat(n, 1))),
         );
 
       const labelGroup = labelGroupg
         .selectAll("g")
         .data(portfolioAggregates, (d: any) => d.percentage.toString());
 
-      const labelGroupEnter = labelGroup.enter().append("g").attr("class", "inline-text");
+      const labelGroupEnter = labelGroup.enter().append("g").attr(
+        "class",
+        "inline-text",
+      );
 
       labelGroupEnter
         .append("text")
@@ -227,7 +235,10 @@ export function renderPortfolioBreakdown(
         .selectAll("g")
         .data(portfolioAggregates, (d: any) => d.percentage.toString());
 
-      const textGroupEnter = textGroup.enter().append("g").attr("class", "inline-text");
+      const textGroupEnter = textGroup.enter().append("g").attr(
+        "class",
+        "inline-text",
+      );
 
       textGroupEnter
         .append("line")
@@ -281,7 +292,7 @@ export function renderPortfolioBreakdown(
             renderPartition(this, pa, d3.treemap(), color, partitionWidth);
           });
       }
-    }
+    },
   };
 }
 
@@ -290,7 +301,7 @@ function renderPartition(
   pa: PortfolioAggregate,
   hierarchy: any,
   color: d3.ScaleOrdinal<string, string>,
-  clientWidth: number
+  clientWidth: number,
 ) {
   if (_.isEmpty(pa.breakdowns)) {
     return;
@@ -302,7 +313,7 @@ function renderPartition(
     security_type: "",
     percentage: 0,
     commodity_name: "root",
-    amount: pa.amount
+    amount: pa.amount,
   };
 
   pa.breakdowns.unshift(rootBreakdown);
@@ -315,7 +326,8 @@ function renderPartition(
   const div = d3.select(element),
     margin = { top: 0, right: 0, bottom: 0, left: 20 },
     width = clientWidth - margin.left - margin.right,
-    height = +div.style("height").replace("px", "") - margin.top - margin.bottom;
+    height = +div.style("height").replace("px", "") - margin.top -
+      margin.bottom;
 
   const percent = (d: d3.HierarchyNode<CommodityBreakdown>) => {
     return formatFloat((d.value / root.value) * 100) + "%";
@@ -345,9 +357,15 @@ function renderPartition(
       const breakdown = byName[d.id];
       return tooltip([
         ["Commodity", [breakdown.commodity_name, "has-text-right"]],
-        ["Security Count", [breakdown.security_id.split(",").length.toString(), "has-text-right"]],
-        ["Amount", [formatCurrency(breakdown.amount), "has-text-weight-bold has-text-right"]],
-        ["Percentage", [percent(d), "has-text-weight-bold has-text-right"]]
+        ["Security Count", [
+          breakdown.security_id.split(",").length.toString(),
+          "has-text-right",
+        ]],
+        ["Amount", [
+          formatCurrency(breakdown.amount),
+          "has-text-weight-bold has-text-right",
+        ]],
+        ["Percentage", [percent(d), "has-text-weight-bold has-text-right"]],
       ]);
     })
     .style("top", (d: any) => d.y0 + "px")
@@ -359,7 +377,7 @@ function renderPartition(
     .selectAll("p")
     .data(
       (d) => d,
-      (d: any) => d.id
+      (d: any) => d.id,
     )
     .join("p")
     .style("font-size", ".7rem")
@@ -370,7 +388,7 @@ function renderPartition(
 function formatName(name: string): string {
   const clean = name.replaceAll(
     /([#]|[*]|EQ - |\bINC\b|\bCorp\b|\bInc\b|\bLTD\b|\bLtd\b|\bLt\b|\bLimited\b|\bLIMITED\b|\(.*\)|[., ]+$)/g,
-    ""
+    "",
   );
 
   if (clean == name) {

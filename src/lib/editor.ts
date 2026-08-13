@@ -1,19 +1,19 @@
 import { ajax } from "$lib/utils";
 import { ledger } from "$lib/parser";
 import { StreamLanguage } from "@codemirror/language";
-import { keymap, type KeyBinding } from "@codemirror/view";
+import { type KeyBinding, keymap } from "@codemirror/view";
 import { EditorState as State } from "@codemirror/state";
 import { EditorView } from "codemirror";
 import { basicSetup } from "./editor/base";
-import { history, undoDepth, redoDepth } from "@codemirror/commands";
-import { linter, lintGutter, type Diagnostic } from "@codemirror/lint";
+import { history, redoDepth, undoDepth } from "@codemirror/commands";
+import { type Diagnostic, linter, lintGutter } from "@codemirror/lint";
 import _ from "lodash";
 import { editorState, initialEditorState } from "../store";
 import {
-  CompletionContext,
   autocompletion,
   completeFromList,
-  ifIn
+  CompletionContext,
+  ifIn,
 } from "@codemirror/autocomplete";
 import { MergeView } from "@codemirror/merge";
 import { schedulePlugin } from "./transaction_tag";
@@ -26,7 +26,7 @@ async function lint(editor: EditorView): Promise<Diagnostic[]> {
   const response = await ajax("/api/editor/validate", {
     method: "POST",
     body: JSON.stringify({ name: "", content: editor.state.doc.toString() }),
-    background: true
+    background: true,
   });
 
   editorState.update((current) =>
@@ -40,25 +40,29 @@ async function lint(editor: EditorView): Promise<Diagnostic[]> {
       message: error.message,
       severity: "error",
       from: lineFrom.from,
-      to: lineTo.to
+      to: lineTo.to,
     };
   });
 }
 
-export function createDiffEditor(oldContent: string, newContent: string, dom: Element) {
+export function createDiffEditor(
+  oldContent: string,
+  newContent: string,
+  dom: Element,
+) {
   const extensions = [
     basicSetup,
     State.readOnly.of(true),
     StreamLanguage.define(ledger),
     EditorView.contentAttributes.of({ "data-enable-grammarly": "false" }),
     lintGutter(),
-    linter(lint)
+    linter(lint),
   ];
   return new MergeView({
     a: { extensions: extensions, doc: oldContent },
     b: { extensions: extensions, doc: newContent },
     parent: dom,
-    collapseUnchanged: {}
+    collapseUnchanged: {},
   });
 }
 
@@ -69,7 +73,7 @@ export function createEditor(
     autocompletions?: Record<string, string[]>;
     readonly?: boolean;
     keybindings?: readonly KeyBinding[];
-  }
+  },
 ) {
   editorState.set(initialEditorState);
 
@@ -87,46 +91,55 @@ export function createEditor(
         override: [
           (context: CompletionContext) => {
             if (context.matchBefore(/^20$/)) {
-              return completeFromList([dayjs().format("YYYY/MM/DD") + " "])(context);
+              return completeFromList([dayjs().format("YYYY/MM/DD") + " "])(
+                context,
+              );
             }
             return null;
           },
-          ..._.map(opts.autocompletions || [], (options: string[], node) =>
-            ifIn([node], completeFromList(options))
-          )
-        ]
+          ..._.map(
+            opts.autocompletions || [],
+            (options: string[], node) =>
+              ifIn([node], completeFromList(options)),
+          ),
+        ],
       }),
       EditorView.updateListener.of((viewUpdate) => {
         editorState.update((current) =>
           _.assign({}, current, {
-            hasUnsavedChanges: current.hasUnsavedChanges || viewUpdate.docChanged,
+            hasUnsavedChanges: current.hasUnsavedChanges ||
+              viewUpdate.docChanged,
             undoDepth: undoDepth(viewUpdate.state),
-            redoDepth: redoDepth(viewUpdate.state)
+            redoDepth: redoDepth(viewUpdate.state),
           })
         );
       }),
-      schedulePlugin
+      schedulePlugin,
     ],
     doc: content,
-    parent: dom
+    parent: dom,
   });
 }
 
 export function moveToEnd(editor: EditorView) {
   editor.dispatch(
     editor.state.update({
-      effects: EditorView.scrollIntoView(editor.state.doc.length, { y: "end" })
-    })
+      effects: EditorView.scrollIntoView(editor.state.doc.length, { y: "end" }),
+    }),
   );
 }
 
-export function moveToLine(editor: EditorView, lineNumber: number, cursor = false) {
+export function moveToLine(
+  editor: EditorView,
+  lineNumber: number,
+  cursor = false,
+) {
   try {
     const line = editor.state.doc.line(lineNumber);
     editor.dispatch(
       editor.state.update({
-        effects: EditorView.scrollIntoView(line.from, { y: "center" })
-      })
+        effects: EditorView.scrollIntoView(line.from, { y: "center" }),
+      }),
     );
 
     if (cursor) {
@@ -143,7 +156,9 @@ export function updateContent(editor: EditorView, content: string) {
   const lineNumber = line.number;
   const column = head - line.from;
   editor.dispatch(
-    editor.state.update({ changes: { from: 0, to: editor.state.doc.length, insert: content } })
+    editor.state.update({
+      changes: { from: 0, to: editor.state.doc.length, insert: content },
+    }),
   );
 
   const newLine = editor.state.doc.line(lineNumber);
@@ -163,7 +178,7 @@ export function focus(editor: EditorView, retry = 5) {
             // ignore
           }
         },
-        (5 - retry) * 100 + 100
+        (5 - retry) * 100 + 100,
       );
     }
   }

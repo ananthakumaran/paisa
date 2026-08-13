@@ -7,13 +7,16 @@ import { scheduleIcon } from "./transaction_sequence";
 export function renderRecurring(
   element: Element,
   transactionSequence: TransactionSequence,
-  showPage: (pageIndex: number) => void
+  showPage: (pageIndex: number) => void,
 ) {
   const svg = d3.select(element).select("svg"),
     margin = { top: 20, right: 40, bottom: 20, left: 30 },
     width = element.parentElement.clientWidth - margin.left - margin.right,
     height = +svg.attr("height") - margin.top - margin.bottom,
-    g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    g = svg.append("g").attr(
+      "transform",
+      "translate(" + margin.left + "," + margin.top + ")",
+    );
 
   let schedules = _.takeRight(transactionSequence.pastSchedules, 3);
   schedules = schedules.concat(_.take(transactionSequence.futureSchedules, 1));
@@ -29,7 +32,14 @@ export function renderRecurring(
       d3
         .axisBottom(x)
         .tickValues(dates)
-        .tickFormat(skipTicks(50, x, (d: any) => dayjs(d).format("DD MMM YY"), dates.length))
+        .tickFormat(
+          skipTicks(
+            50,
+            x,
+            (d: any) => dayjs(d).format("DD MMM YY"),
+            dates.length,
+          ),
+        ),
     );
 
   g.append("g")
@@ -44,7 +54,12 @@ export function renderRecurring(
     .style("cursor", (d) => (d.transaction ? "pointer" : "default"))
     .on("click", (_event, d) => {
       if (d.transaction) {
-        showPage(_.findIndex(transactionSequence.transactions, (t) => t.id === d.transaction.id));
+        showPage(
+          _.findIndex(
+            transactionSequence.transactions,
+            (t) => t.id === d.transaction.id,
+          ),
+        );
       }
     })
     .text((d) => scheduleIcon(d).glyph);

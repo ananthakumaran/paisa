@@ -16,5 +16,5 @@ export const queryHighlighting = styleTags({
   Payee: t.special(t.variableName),
   "( )": t.paren,
   "[ ]": t.squareBracket,
-  "= =~ < > <= >=": t.operator
+  "= =~ < > <= >=": t.operator,
 });

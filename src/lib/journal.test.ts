@@ -8,6 +8,8 @@ function readFixture(name: string) {
 
 describe("journal", () => {
   test("format", () => {
-    expect(format(readFixture("unformatted.ledger"))).toBe(readFixture("formatted.ledger"));
+    expect(format(readFixture("unformatted.ledger"))).toBe(
+      readFixture("formatted.ledger"),
+    );
   });
 });

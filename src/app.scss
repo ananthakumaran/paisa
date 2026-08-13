@@ -3,7 +3,8 @@
 $body-size: 14px;
 
 $family-sans-serif: "Roboto Flex Variable", sans-serif;
-$family-sans-serif-icon: "Roboto Flex Variable", sans-serif, "arcticons", "fa6-brands",
+$family-sans-serif-icon: "Roboto Flex Variable", sans-serif, "arcticons",
+  "fa6-brands",
   "fa6-regular", "fa6-solid", "fluent-emoji-high-contrast", "mdi";
 $family-monospace: "Roboto Mono Variable", monospace;
 
@@ -25,7 +26,8 @@ $menu-item-hover-background-color: $link-light;
 $menu-item-active-color: $link-dark;
 $menu-item-active-background-color: $link-light;
 
-$editor-full-height: calc(100vh - 45.5px - 7px - 15.75px - 21px - 57.75px - 10.5px - 10.5px);
+$editor-full-height: calc(100vh - 45.5px - 7px - 15.75px - 21px - 57.75px -
+  10.5px - 10.5px);
 
 @import "bulma/bulma.sass";
 @import "bulma-switch/src/sass/index.sass";
@@ -83,13 +85,16 @@ $footerActiveColor: #d00;
       $color-light: nth($components, 3);
       @if length($components) >= 4 {
         $color-dark: nth($components, 4);
-      } @else {
+      }
+      @else {
         $color-luminance: colorLuminance($color);
         $darken-percentage: $color-luminance * 70%;
         $desaturate-percentage: $color-luminance * 30%;
-        $color-dark: desaturate(darken($color, $darken-percentage), $desaturate-percentage);
+        $color-dark: desaturate(darken($color, $darken-percentage),
+          $desaturate-percentage);
       }
-    } @else {
+    }
+    @else {
       $color-lightning: max((100% - lightness($color)) - 2%, 0%);
       $color-light: lighten($color, $color-lightning);
     }
@@ -807,8 +812,7 @@ nav.level.grid-2 {
   border-left: 1px solid $grey-lighter;
 }
 
-.sheet-editor .cm-editor {
-}
+.sheet-editor .cm-editor {}
 
 .preview-editor {
   min-height: 35px;

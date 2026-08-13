@@ -1,5 +1,5 @@
 import * as d3 from "d3";
-import { darkLightColor, type AccountBudget } from "./utils";
+import { type AccountBudget, darkLightColor } from "./utils";
 import _ from "lodash";
 import COLORS from "./colors";
 import chroma from "chroma-js";
@@ -15,10 +15,13 @@ export function renderBudget(element: Element, accountBudget: AccountBudget) {
     0,
     accountBudget.forecast,
     accountBudget.actual,
-    accountBudget.actual - accountBudget.rollover
+    accountBudget.actual - accountBudget.rollover,
   ]);
   const x = d3.scaleLinear().domain([0, max]).range([0, width]);
-  const g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+  const g = svg.append("g").attr(
+    "transform",
+    "translate(" + margin.left + "," + margin.top + ")",
+  );
 
   const gainColor = darkLightColor(COLORS.success, COLORS.gain);
   const texture = textures
@@ -51,10 +54,12 @@ export function renderBudget(element: Element, accountBudget: AccountBudget) {
   let green = 0;
   let red = 0;
 
-  if (accountBudget.rollover > 0 && accountBudget.actual > accountBudget.forecast) {
+  if (
+    accountBudget.rollover > 0 && accountBudget.actual > accountBudget.forecast
+  ) {
     const rolloverUsed = _.min([
       accountBudget.actual - accountBudget.forecast,
-      accountBudget.rollover
+      accountBudget.rollover,
     ]);
     yellow = rolloverUsed;
   }

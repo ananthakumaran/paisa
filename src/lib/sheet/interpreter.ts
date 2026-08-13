@@ -2,11 +2,16 @@ import type { SyntaxNode } from "@lezer/common";
 import * as Terms from "./parser.terms";
 import type { EditorState } from "@codemirror/state";
 import { BigNumber } from "bignumber.js";
-import { asTransaction, formatCurrency, type Posting, type SheetLineResult } from "$lib/utils";
+import {
+  asTransaction,
+  formatCurrency,
+  type Posting,
+  type SheetLineResult,
+} from "$lib/utils";
 import {
   buildAST as buildSearchAST,
   QueryAST,
-  type TransactionPredicate
+  type TransactionPredicate,
 } from "$lib/search_query_editor";
 import { type Diagnostic } from "@codemirror/lint";
 
@@ -89,7 +94,9 @@ class NumberAST extends AST {
   readonly value: BigNumber;
   constructor(node: SyntaxNode, state: EditorState) {
     super(node);
-    this.value = new BigNumber(state.sliceDoc(node.from, node.to).replaceAll(",", ""));
+    this.value = new BigNumber(
+      state.sliceDoc(node.from, node.to).replaceAll(",", ""),
+    );
   }
 
   evaluate(): any {
@@ -106,7 +113,7 @@ class PercentAST extends AST {
   constructor(node: SyntaxNode, state: EditorState) {
     super(node);
     this.value = new BigNumber(
-      state.sliceDoc(node.from, node.to).replaceAll(/[%,]/g, "")
+      state.sliceDoc(node.from, node.to).replaceAll(/[%,]/g, ""),
     ).dividedBy(new BigNumber(100));
   }
 
@@ -177,7 +184,7 @@ class BinaryExpressionAST extends AST {
     this.left = new ExpressionAST(node.firstChild, state);
     this.operator = state.sliceDoc(
       node.firstChild.nextSibling.from,
-      node.firstChild.nextSibling.to
+      node.firstChild.nextSibling.to,
     );
     this.right = new ExpressionAST(node.lastChild, state);
   }
@@ -231,7 +238,7 @@ class FunctionCallAST extends AST {
     super(node);
     this.identifier = state.sliceDoc(node.firstChild.from, node.firstChild.to);
     this.arguments = childrens(node.firstChild.nextSibling).map(
-      (node) => new ExpressionAST(node, state)
+      (node) => new ExpressionAST(node, state),
     );
   }
 
@@ -393,7 +400,11 @@ class FunctionDefinitionAST extends AST {
 class LineAST extends AST {
   readonly lineNumber: number;
   readonly valueId: number;
-  readonly value: ExpressionAST | AssignmentAST | FunctionDefinitionAST | HeaderAST;
+  readonly value:
+    | ExpressionAST
+    | AssignmentAST
+    | FunctionDefinitionAST
+    | HeaderAST;
   constructor(node: SyntaxNode, state: EditorState) {
     super(node);
     this.lineNumber = state.doc.lineAt(node.from).number;
@@ -465,7 +476,13 @@ class SheetAST extends AST {
       }
       try {
         const resultObject = line.evaluate(env);
-        results.push({ line: line.lineNumber, error: false, ...resultObject } as SheetLineResult);
+        results.push(
+          {
+            line: line.lineNumber,
+            error: false,
+            ...resultObject,
+          } as SheetLineResult,
+        );
         lastLineNumber++;
       } catch (e) {
         results.push({ line: line.lineNumber, error: true, result: e.message });

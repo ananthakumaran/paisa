@@ -7,11 +7,11 @@ import {
   formatCurrency,
   formatCurrencyCrude,
   isMobile,
+  type Legend,
+  type Networth,
   now,
   svgUrl,
   tooltip,
-  type Legend,
-  type Networth
 } from "./utils";
 
 function networth(d: Networth) {
@@ -24,7 +24,7 @@ function investment(d: Networth) {
 
 export function renderNetworth(
   points: Networth[],
-  element: Element
+  element: Element,
 ): { destroy: () => void; legends: Legend[] } {
   const start = _.min(_.map(points, (p) => p.date)),
     end = now();
@@ -35,9 +35,13 @@ export function renderNetworth(
 
   const right = isMobile() ? 10 : 80,
     margin = { top: 15, right: right, bottom: 20, left: 40 },
-    width = Math.max(element.parentElement.clientWidth, 800) - margin.left - margin.right,
+    width = Math.max(element.parentElement.clientWidth, 800) - margin.left -
+      margin.right,
     height = +svg.attr("height") - margin.top - margin.bottom,
-    g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    g = svg.append("g").attr(
+      "transform",
+      "translate(" + margin.left + "," + margin.top + ")",
+    );
 
   svg.attr("width", width + margin.left + margin.right);
 
@@ -53,7 +57,7 @@ export function renderNetworth(
 
   const positions = _.flatMap(points, (p) => [
     p.gainAmount + p.investmentAmount - p.withdrawalAmount,
-    p.investmentAmount - p.withdrawalAmount
+    p.investmentAmount - p.withdrawalAmount,
   ]);
   positions.push(0);
 
@@ -85,7 +89,10 @@ export function renderNetworth(
     .attr("class", "axis y")
     .call(d3.axisLeft(y).tickSize(-width).tickFormat(formatCurrencyCrude));
 
-  const layer = g.selectAll(".layer").data([points]).enter().append("g").attr("class", "layer");
+  const layer = g.selectAll(".layer").data([points]).enter().append("g").attr(
+    "class",
+    "layer",
+  );
 
   const clipAboveID = _.uniqueId("clip-above");
   layer
@@ -96,7 +103,7 @@ export function renderNetworth(
       "d",
       area(height, (d) => {
         return y(d.gainAmount + d.investmentAmount - d.withdrawalAmount);
-      })
+      }),
     );
 
   const clipBelowID = _.uniqueId("clip-below");
@@ -108,7 +115,7 @@ export function renderNetworth(
       "d",
       area(0, (d) => {
         return y(d.gainAmount + d.investmentAmount - d.withdrawalAmount);
-      })
+      }),
     );
 
   layer
@@ -120,7 +127,7 @@ export function renderNetworth(
       "d",
       area(0, (d) => {
         return y(d.investmentAmount - d.withdrawalAmount);
-      })
+      }),
     );
 
   layer
@@ -132,7 +139,7 @@ export function renderNetworth(
       "d",
       area(height, (d) => {
         return y(d.investmentAmount - d.withdrawalAmount);
-      })
+      }),
     );
 
   layer
@@ -146,7 +153,7 @@ export function renderNetworth(
         .line<Networth>()
         .curve(d3.curveMonotoneX)
         .x((d) => x(d.date))
-        .y((d) => y(investment(d)))
+        .y((d) => y(investment(d))),
     );
 
   layer
@@ -160,32 +167,46 @@ export function renderNetworth(
         .line<Networth>()
         .curve(d3.curveMonotoneX)
         .x((d) => x(d.date))
-        .y((d) => y(networth(d)))
+        .y((d) => y(networth(d))),
     );
 
-  const hoverCircle = layer.append("circle").attr("r", "3").attr("fill", "none");
-  const t = tippy(hoverCircle.node(), { theme: "light", delay: 0, allowHTML: true });
+  const hoverCircle = layer.append("circle").attr("r", "3").attr(
+    "fill",
+    "none",
+  );
+  const t = tippy(hoverCircle.node(), {
+    theme: "light",
+    delay: 0,
+    allowHTML: true,
+  });
 
-  const networthVoronoiPoints: Delaunay.Point[] = _.map(points, (d) => [x(d.date), y(networth(d))]);
+  const networthVoronoiPoints: Delaunay.Point[] = _.map(
+    points,
+    (d) => [x(d.date), y(networth(d))],
+  );
   const investmentVoronoiPoints: Delaunay.Point[] = _.map(points, (d) => [
     x(d.date),
-    y(investment(d))
+    y(investment(d)),
   ]);
-  const voronoi = Delaunay.from(networthVoronoiPoints.concat(investmentVoronoiPoints)).voronoi([
+  const voronoi = Delaunay.from(
+    networthVoronoiPoints.concat(investmentVoronoiPoints),
+  ).voronoi([
     0,
     0,
     width,
-    height
+    height,
   ]);
 
   layer
     .append("g")
     .selectAll("path")
     .data(
-      points.map((p) => ["networth", p]).concat(points.map((p) => ["investment", p])) as [
+      points.map((p) => ["networth", p]).concat(
+        points.map((p) => ["investment", p]),
+      ) as [
         string,
-        Networth
-      ][]
+        Networth,
+      ][],
     )
     .enter()
     .append("path")
@@ -204,13 +225,22 @@ export function renderNetworth(
         placement: pointType == "networth" ? "top" : "bottom",
         content: tooltip([
           ["Date", d.date.format("DD MMM YYYY")],
-          ["Net Worth", [formatCurrency(networth(d)), "has-text-weight-bold has-text-right"]],
+          ["Net Worth", [
+            formatCurrency(networth(d)),
+            "has-text-weight-bold has-text-right",
+          ]],
           [
             "Net Investment",
-            [formatCurrency(investment(d)), "has-text-weight-bold has-text-right"]
+            [
+              formatCurrency(investment(d)),
+              "has-text-weight-bold has-text-right",
+            ],
           ],
-          ["Gain / Loss", [formatCurrency(d.gainAmount), "has-text-weight-bold has-text-right"]]
-        ])
+          ["Gain / Loss", [
+            formatCurrency(d.gainAmount),
+            "has-text-weight-bold has-text-right",
+          ]],
+        ]),
       });
       t.show();
     })
@@ -223,23 +253,23 @@ export function renderNetworth(
     {
       label: "Net Worth",
       color: lineScale("networth"),
-      shape: "line"
+      shape: "line",
     },
     {
       label: "Net Investment",
       color: lineScale("investment"),
-      shape: "line"
+      shape: "line",
     },
     {
       label: "Gain",
       color: areaScale("gain"),
-      shape: "square"
+      shape: "square",
     },
     {
       label: "Loss",
       color: areaScale("loss"),
-      shape: "square"
-    }
+      shape: "square",
+    },
   ];
 
   const destroy = () => {

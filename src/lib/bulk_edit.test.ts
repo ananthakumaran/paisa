@@ -7,7 +7,9 @@ import _ from "lodash";
 
 describe("bulk_editor", () => {
   const before = fs.readFileSync("fixture/main.ledger");
-  const transactions = JSON.parse(fs.readFileSync("fixture/main.transactions.json").toString());
+  const transactions = JSON.parse(
+    fs.readFileSync("fixture/main.transactions.json").toString(),
+  );
   fs.readdirSync("fixture/bulk_edit").forEach((dir) => {
     test(dir, () => {
       const files = fs.readdirSync(`fixture/bulk_edit/${dir}`);
@@ -15,17 +17,19 @@ describe("bulk_editor", () => {
         const [name, extension] = file.split(".");
         if (extension === "ledger") {
           const args = JSON.parse(
-            fs.readFileSync(`fixture/bulk_edit/${dir}/${name}.json`).toString()
+            fs.readFileSync(`fixture/bulk_edit/${dir}/${name}.json`).toString(),
           );
-          const after = fs.readFileSync(`fixture/bulk_edit/${dir}/${name}.ledger`).toString();
+          const after = fs.readFileSync(
+            `fixture/bulk_edit/${dir}/${name}.ledger`,
+          ).toString();
           const ledgerFile: LedgerFile = {
             type: "file",
             name: "main.ledger",
             content: before.toString(),
-            versions: []
+            versions: [],
           };
           const {
-            newFiles: [newLedgerFile]
+            newFiles: [newLedgerFile],
           } = applyChanges([ledgerFile], transactions, dir, args);
           expect(_.trim(newLedgerFile.content)).toBe(_.trim(after.toString()));
         }

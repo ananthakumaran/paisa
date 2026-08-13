@@ -2,7 +2,13 @@ import * as d3 from "d3";
 import dayjs from "dayjs";
 import _, { round } from "lodash";
 import COLORS from "./colors";
-import { formatCurrency, formatFloat, restName, tooltip, type Harvestable } from "./utils";
+import {
+  formatCurrency,
+  formatFloat,
+  type Harvestable,
+  restName,
+  tooltip,
+} from "./utils";
 
 export function renderHarvestables(harvestables: Harvestable[]) {
   const id = "#d3-harvestables";
@@ -10,7 +16,12 @@ export function renderHarvestables(harvestables: Harvestable[]) {
 
   const card = root
     .selectAll("div.column")
-    .data(_.filter(harvestables, (harvestable) => harvestable.harvestable_units > 0))
+    .data(
+      _.filter(
+        harvestables,
+        (harvestable) => harvestable.harvestable_units > 0,
+      ),
+    )
     .enter()
     .append("div")
     .attr("class", "column is-12")
@@ -45,14 +56,18 @@ export function renderHarvestables(harvestables: Harvestable[]) {
         .on("input", (event) => {
           const [units, amount, taxableGain] = unitsRequiredFromAmount(
             h,
-            parseInt(event.srcElement.value)
+            parseInt(event.srcElement.value),
           );
 
           unitsSpan.text(formatFloat(units));
-          (taxableGainInput.node() as HTMLInputElement).value = round(taxableGain).toString();
+          (taxableGainInput.node() as HTMLInputElement).value = round(
+            taxableGain,
+          ).toString();
           event.srcElement.value = round(amount);
         });
-      self.append("span").html("&nbsp; and your <b>taxable</b> gain would be ₹");
+      self.append("span").html(
+        "&nbsp; and your <b>taxable</b> gain would be ₹",
+      );
       const taxableGainInput = self
         .append("input")
         .attr("class", "input is-small adjustable-input")
@@ -62,11 +77,12 @@ export function renderHarvestables(harvestables: Harvestable[]) {
         .on("input", (event) => {
           const [units, amount, taxableGain] = unitsRequiredFromGain(
             h,
-            parseInt(event.srcElement.value)
+            parseInt(event.srcElement.value),
           );
           unitsSpan.text(formatFloat(units));
           event.srcElement.value = round(taxableGain);
-          (amountInput.node() as HTMLInputElement).value = round(amount).toString();
+          (amountInput.node() as HTMLInputElement).value = round(amount)
+            .toString();
         });
     });
 
@@ -74,7 +90,9 @@ export function renderHarvestables(harvestables: Harvestable[]) {
     .append("span")
     .attr("class", "card-header-icon")
     .text(
-      (harvestable) => "price as on " + dayjs(harvestable.current_unit_date).format("DD MMM YYYY")
+      (harvestable) =>
+        "price as on " +
+        dayjs(harvestable.current_unit_date).format("DD MMM YYYY"),
     );
 
   const content = card
@@ -95,13 +113,17 @@ export function renderHarvestables(harvestables: Harvestable[]) {
   <tbody>
     <tr>
       <td>Balance Units</td>
-      <td class='has-text-right has-text-weight-bold'>${formatFloat(h.total_units)}</td>
+      <td class='has-text-right has-text-weight-bold'>${
+      formatFloat(h.total_units)
+    }</td>
     </tr>
     <tr>
       <td>Harvestable Units</td>
-      <td class='has-text-right has-text-weight-bold has-text-success'>${formatFloat(
-        h.harvestable_units
-      )}</td>
+      <td class='has-text-right has-text-weight-bold has-text-success'>${
+      formatFloat(
+        h.harvestable_units,
+      )
+    }</td>
     </tr>
     <tr>
       <td>Tax Category</td>
@@ -109,17 +131,23 @@ export function renderHarvestables(harvestables: Harvestable[]) {
     </tr>
     <tr>
       <td>Current Unit Price</td>
-      <td class='has-text-right has-text-weight-bold'>${formatFloat(h.current_unit_price)}</td>
+      <td class='has-text-right has-text-weight-bold'>${
+      formatFloat(h.current_unit_price)
+    }</td>
     </tr>
     <tr>
       <td>Unrealized Gain / Loss</td>
-      <td class='has-text-right has-text-weight-bold'>${formatCurrency(h.unrealized_gain)}</td>
+      <td class='has-text-right has-text-weight-bold'>${
+      formatCurrency(h.unrealized_gain)
+    }</td>
     </tr>
     <tr>
       <td>Taxable Unrealized Gain / Loss</td>
-      <td class='has-text-right has-text-weight-bold'>${formatCurrency(
-        h.taxable_unrealized_gain
-      )}</td>
+      <td class='has-text-right has-text-weight-bold'>${
+      formatCurrency(
+        h.taxable_unrealized_gain,
+      )
+    }</td>
     </tr>
   </tbody>
 </table>
@@ -162,16 +190,28 @@ export function renderHarvestables(harvestables: Harvestable[]) {
     .html((breakdown) => {
       return `
 <tr>
-  <td style="white-space: nowrap">${dayjs(breakdown.purchase_date).format("DD MMM YYYY")}</td>
+  <td style="white-space: nowrap">${
+        dayjs(breakdown.purchase_date).format("DD MMM YYYY")
+      }</td>
   <td class='has-text-right'>${formatFloat(breakdown.units)}</td>
   <td class='has-text-right'>${formatCurrency(breakdown.purchase_price)}</td>
   <td class='has-text-right'>${formatFloat(breakdown.purchase_unit_price)}</td>
   <td class='has-text-right'>${formatCurrency(breakdown.current_price)}</td>
-  <td class='has-text-right has-text-weight-bold'>${formatCurrency(breakdown.tax.gain)}</td>
-  <td class='has-text-right has-text-weight-bold'>${formatCurrency(breakdown.tax.taxable)}</td>
-  <td class='has-text-right has-text-weight-bold'>${formatCurrency(breakdown.tax.short_term)}</td>
-  <td class='has-text-right has-text-weight-bold'>${formatCurrency(breakdown.tax.long_term)}</td>
-  <td class='has-text-right has-text-weight-bold'>${formatCurrency(breakdown.tax.slab)}</td>
+  <td class='has-text-right has-text-weight-bold'>${
+        formatCurrency(breakdown.tax.gain)
+      }</td>
+  <td class='has-text-right has-text-weight-bold'>${
+        formatCurrency(breakdown.tax.taxable)
+      }</td>
+  <td class='has-text-right has-text-weight-bold'>${
+        formatCurrency(breakdown.tax.short_term)
+      }</td>
+  <td class='has-text-right has-text-weight-bold'>${
+        formatCurrency(breakdown.tax.long_term)
+      }</td>
+  <td class='has-text-right has-text-weight-bold'>${
+        formatCurrency(breakdown.tax.slab)
+      }</td>
 </tr>
 `;
     });
@@ -179,7 +219,7 @@ export function renderHarvestables(harvestables: Harvestable[]) {
 
 function unitsRequiredFromGain(
   harvestable: Harvestable,
-  taxableGain: number
+  taxableGain: number,
 ): [number, number, number] {
   let gain = 0;
   let amount = 0;
@@ -192,7 +232,8 @@ function unitsRequiredFromGain(
       units += breakdown.units;
       amount += breakdown.current_price;
     } else {
-      const u = ((taxableGain - gain) * breakdown.units) / breakdown.tax.taxable;
+      const u = ((taxableGain - gain) * breakdown.units) /
+        breakdown.tax.taxable;
       units += u;
       amount += u * harvestable.current_unit_price;
       gain = taxableGain;
@@ -203,7 +244,7 @@ function unitsRequiredFromGain(
 
 function unitsRequiredFromAmount(
   harvestable: Harvestable,
-  expectedAmount: number
+  expectedAmount: number,
 ): [number, number, number] {
   let gain = 0;
   let amount = 0;
@@ -232,36 +273,48 @@ function renderSingleBar(harvestable: Harvestable) {
   const height = 20;
   const margin = { top: 20, right: 0, bottom: 20, left: 0 },
     width = selection.node().clientWidth - margin.left - margin.right,
-    g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    g = svg.append("g").attr(
+      "transform",
+      "translate(" + margin.left + "," + margin.top + ")",
+    );
 
   svg
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom);
 
-  const x = d3.scaleLinear().range([0, width]).domain([0, harvestable.total_units]);
+  const x = d3.scaleLinear().range([0, width]).domain([
+    0,
+    harvestable.total_units,
+  ]);
 
-  const non_harvestable_units = harvestable.total_units - harvestable.harvestable_units;
+  const non_harvestable_units = harvestable.total_units -
+    harvestable.harvestable_units;
 
   g.attr("data-tippy-content", () => {
     return tooltip([
       [
         ["Type", "has-text-weight-bold"],
         ["Units", "has-text-weight-bold has-text-right"],
-        ["Percentage", "has-text-weight-bold has-text-right"]
+        ["Percentage", "has-text-weight-bold has-text-right"],
       ],
       [
         "Harvestable",
         [formatFloat(harvestable.harvestable_units), "has-text-right"],
         [
-          formatFloat((harvestable.harvestable_units / harvestable.total_units) * 100),
-          "has-text-right"
-        ]
+          formatFloat(
+            (harvestable.harvestable_units / harvestable.total_units) * 100,
+          ),
+          "has-text-right",
+        ],
       ],
       [
         "Non Harvestable",
         [formatFloat(non_harvestable_units), "has-text-right"],
-        [formatFloat((non_harvestable_units / harvestable.total_units) * 100), "has-text-right"]
-      ]
+        [
+          formatFloat((non_harvestable_units / harvestable.total_units) * 100),
+          "has-text-right",
+        ],
+      ],
     ]);
   });
 
@@ -271,8 +324,8 @@ function renderSingleBar(harvestable: Harvestable) {
       {
         start: harvestable.harvestable_units,
         end: harvestable.total_units,
-        color: COLORS.tertiary
-      }
+        color: COLORS.tertiary,
+      },
     ])
     .join("rect")
     .attr("fill", (d) => d.color)

@@ -4,13 +4,13 @@ import _, { first, last, takeRight } from "lodash";
 import tippy, { type Placement } from "tippy.js";
 import COLORS from "./colors";
 import {
+  type Forecast,
   formatCurrency,
   formatCurrencyCrude,
   formatFloat,
-  tooltip,
-  type Forecast,
   type Point,
-  rem
+  rem,
+  tooltip,
 } from "./utils";
 
 export function renderProgress(
@@ -18,7 +18,7 @@ export function renderProgress(
   predictions: Forecast[],
   breakPoints: Point[],
   element: Element,
-  { targetSavings }: { targetSavings: number }
+  { targetSavings }: { targetSavings: number },
 ) {
   const start = first(points).date,
     end = (last(predictions) || last(points)).date;
@@ -26,9 +26,13 @@ export function renderProgress(
 
   const svg = d3.select(element),
     margin = { top: rem(40), right: rem(80), bottom: rem(20), left: rem(40) },
-    width = Math.max(element.parentElement.clientWidth, 1000) - margin.left - margin.right,
+    width = Math.max(element.parentElement.clientWidth, 1000) - margin.left -
+      margin.right,
     height = +svg.attr("height") - margin.top - margin.bottom,
-    g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    g = svg.append("g").attr(
+      "transform",
+      "translate(" + margin.left + "," + margin.top + ")",
+    );
 
   svg.attr("width", width + margin.left + margin.right);
 
@@ -67,7 +71,7 @@ export function renderProgress(
         .line<Point>()
         .curve(d3.curveMonotoneX)
         .x((d) => x(d.date))
-        .y((d) => y(d.value))(points)
+        .y((d) => y(d.value))(points),
     );
 
   g.append("path")
@@ -79,7 +83,7 @@ export function renderProgress(
         .line<Point>()
         .curve(d3.curveMonotoneX)
         .x((d) => x(d.date))
-        .y((d) => y(d.value))(takeRight(points, 1).concat(predictions))
+        .y((d) => y(d.value))(takeRight(points, 1).concat(predictions)),
     );
 
   g.append("path")
@@ -92,7 +96,7 @@ export function renderProgress(
         .curve(d3.curveMonotoneX)
         .x((d) => x(d.date))
         .y0((d) => y(d.value - d.error / 2))
-        .y1((d) => y(d.value + d.error / 2))(predictions)
+        .y1((d) => y(d.value + d.error / 2))(predictions),
     );
 
   g.append("g")
@@ -103,7 +107,10 @@ export function renderProgress(
     .style("pointer-events", "none")
     .attr("fill", COLORS.tertiary)
     .attr("class", "axis x")
-    .attr("data-tippy-placement", (_d, i) => ["top-end", "top", "bottom", "top-start"][i])
+    .attr(
+      "data-tippy-placement",
+      (_d, i) => ["top-end", "top", "bottom", "top-start"][i],
+    )
     .attr("data-tippy-content", (d, i) => {
       return `
 <div class='has-text-centered'>${formatCurrencyCrude(d.value)} (${
@@ -114,13 +121,20 @@ export function renderProgress(
     .attr("cx", (p) => x(p.date))
     .attr("cy", (p) => y(p.value));
 
-  const voronoiPoints: Delaunay.Point[] = _.map(points.concat(predictions), (p) => [
-    x(p.date),
-    y(p.value)
-  ]);
+  const voronoiPoints: Delaunay.Point[] = _.map(
+    points.concat(predictions),
+    (p) => [
+      x(p.date),
+      y(p.value),
+    ],
+  );
   const voronoi = Delaunay.from(voronoiPoints).voronoi([0, 0, width, height]);
   const hoverCircle = g.append("circle").attr("r", "3").attr("fill", "none");
-  const t = tippy(hoverCircle.node(), { theme: "light", delay: 0, allowHTML: true });
+  const t = tippy(hoverCircle.node(), {
+    theme: "light",
+    delay: 0,
+    allowHTML: true,
+  });
 
   g.append("g")
     .selectAll("path")
@@ -133,21 +147,27 @@ export function renderProgress(
       return voronoi.renderCell(i);
     })
     .on("mouseover", (_, d) => {
-      hoverCircle.attr("cx", x(d.date)).attr("cy", y(d.value)).attr("fill", COLORS.tertiary);
+      hoverCircle.attr("cx", x(d.date)).attr("cy", y(d.value)).attr(
+        "fill",
+        COLORS.tertiary,
+      );
 
       t.setProps({
         placement: "top",
         content: tooltip([
           ["Date", d.date.format("DD MMM YYYY")],
-          ["Savings", [formatCurrency(d.value), "has-text-weight-bold has-text-right"]],
+          ["Savings", [
+            formatCurrency(d.value),
+            "has-text-weight-bold has-text-right",
+          ]],
           [
             "",
             [
               formatFloat((d.value / targetSavings) * 100) + "%",
-              "has-text-weight-bold has-text-right"
-            ]
-          ]
-        ])
+              "has-text-weight-bold has-text-right",
+            ],
+          ],
+        ]),
       });
       t.show();
     })
@@ -162,7 +182,9 @@ export function renderProgress(
       if (!_.isEmpty(content)) {
         instance.setContent(content);
         instance.setProps({
-          placement: instance.reference.getAttribute("data-tippy-placement") as Placement
+          placement: instance.reference.getAttribute(
+            "data-tippy-placement",
+          ) as Placement,
         });
       } else {
         return false;
@@ -170,7 +192,7 @@ export function renderProgress(
     },
     hideOnClick: false,
     allowHTML: true,
-    appendTo: element.parentElement
+    appendTo: element.parentElement,
   });
 
   instances.forEach((i) => i.show());

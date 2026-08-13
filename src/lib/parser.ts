@@ -30,7 +30,7 @@ export const ledger: StreamParser<State> = {
       inInclude: false,
       inPrice: false,
       inCommodityDirective: false,
-      inAccountDirective: false
+      inAccountDirective: false,
     };
   },
   token: function (stream: StringStream, state: State) {
@@ -147,5 +147,5 @@ export const ledger: StreamParser<State> = {
     }
 
     stream.next();
-  }
+  },
 };

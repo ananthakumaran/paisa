@@ -15,7 +15,7 @@ import {
   rem,
   skipTicks,
   sumPostings,
-  tooltip
+  tooltip,
 } from "./utils";
 import dayjs from "dayjs";
 import * as financial from "financial";
@@ -28,7 +28,7 @@ export function solvePMTOrNper(
   rate: number,
   pv: number,
   pmt: number,
-  targetDate: string
+  targetDate: string,
 ) {
   const empty = { pmt: 0, targetDate: "" };
 
@@ -60,7 +60,7 @@ export function project(
   rate: number,
   targetDate: dayjs.Dayjs,
   pmt: number,
-  pv: number
+  pv: number,
 ): Forecast[] {
   rate = rate / (100 * 12);
   const today = now().startOf("month");
@@ -81,7 +81,13 @@ export function project(
   const points: Forecast[] = [];
   let current = today.add(1, "month");
   while (current.isSameOrBefore(targetDate, "day")) {
-    const value = financial.fv(rate, current.diff(today, "months"), -pmt, -pv, WHEN);
+    const value = financial.fv(
+      rate,
+      current.diff(today, "months"),
+      -pmt,
+      -pv,
+      WHEN,
+    );
     points.push({ date: current, value, error: 0 });
     current = current.add(1, "month");
   }
@@ -89,10 +95,14 @@ export function project(
   return points;
 }
 
-export function forecast(points: Point[], target: number, ARIMA: typeof Arima): Forecast[] {
+export function forecast(
+  points: Point[],
+  target: number,
+  ARIMA: typeof Arima,
+): Forecast[] {
   const configs = [
     { p: 3, d: 0, q: 1, s: 0, verbose: false },
-    { p: 2, d: 0, q: 1, s: 0, verbose: false }
+    { p: 2, d: 0, q: 1, s: 0, verbose: false },
   ];
 
   for (const config of configs) {
@@ -108,7 +118,7 @@ function doForecast(
   config: object,
   points: Point[],
   target: number,
-  ARIMA: typeof Arima
+  ARIMA: typeof Arima,
 ): Forecast[] {
   const values = points.map((p) => p.value);
   const arima = new ARIMA(config).train(values);
@@ -125,7 +135,11 @@ function doForecast(
       let start = last(points).date;
       while (!isEmpty(predictions)) {
         start = start.add(1, "day");
-        const point = { date: start, value: predictions.shift(), error: Math.sqrt(errors.shift()) };
+        const point = {
+          date: start,
+          value: predictions.shift(),
+          error: Math.sqrt(errors.shift()),
+        };
         if (
           point.value > 1e20 ||
           point.value < -1e20 ||
@@ -162,7 +176,7 @@ export function renderProgress(
   predictions: Forecast[],
   breakPoints: Point[],
   element: Element,
-  { targetSavings }: { targetSavings: number }
+  { targetSavings }: { targetSavings: number },
 ) {
   const start = first(points).date,
     end = (last(predictions) || last(points)).date;
@@ -170,9 +184,13 @@ export function renderProgress(
 
   const svg = d3.select(element),
     margin = { top: rem(40), right: rem(80), bottom: rem(20), left: rem(40) },
-    width = Math.max(element.parentElement.clientWidth, 1000) - margin.left - margin.right,
+    width = Math.max(element.parentElement.clientWidth, 1000) - margin.left -
+      margin.right,
     height = +svg.attr("height") - margin.top - margin.bottom,
-    g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    g = svg.append("g").attr(
+      "transform",
+      "translate(" + margin.left + "," + margin.top + ")",
+    );
 
   svg.attr("width", width + margin.left + margin.right);
 
@@ -211,7 +229,7 @@ export function renderProgress(
         .line<Point>()
         .curve(d3.curveMonotoneX)
         .x((d) => x(d.date))
-        .y((d) => y(d.value))(points)
+        .y((d) => y(d.value))(points),
     );
 
   g.append("path")
@@ -223,7 +241,7 @@ export function renderProgress(
         .line<Point>()
         .curve(d3.curveMonotoneX)
         .x((d) => x(d.date))
-        .y((d) => y(d.value))(takeRight(points, 1).concat(predictions))
+        .y((d) => y(d.value))(takeRight(points, 1).concat(predictions)),
     );
 
   g.append("path")
@@ -236,7 +254,7 @@ export function renderProgress(
         .curve(d3.curveMonotoneX)
         .x((d) => x(d.date))
         .y0((d) => y(d.value - d.error / 2))
-        .y1((d) => y(d.value + d.error / 2))(predictions)
+        .y1((d) => y(d.value + d.error / 2))(predictions),
     );
 
   g.append("g")
@@ -250,13 +268,20 @@ export function renderProgress(
     .attr("cx", (p) => x(p.date))
     .attr("cy", (p) => y(p.value));
 
-  const voronoiPoints: Delaunay.Point[] = _.map(points.concat(predictions), (p) => [
-    x(p.date),
-    y(p.value)
-  ]);
+  const voronoiPoints: Delaunay.Point[] = _.map(
+    points.concat(predictions),
+    (p) => [
+      x(p.date),
+      y(p.value),
+    ],
+  );
   const voronoi = Delaunay.from(voronoiPoints).voronoi([0, 0, width, height]);
   const hoverCircle = g.append("circle").attr("r", "3").attr("fill", "none");
-  const t = tippy(hoverCircle.node(), { theme: "light", delay: 0, allowHTML: true });
+  const t = tippy(hoverCircle.node(), {
+    theme: "light",
+    delay: 0,
+    allowHTML: true,
+  });
 
   g.append("g")
     .selectAll("path")
@@ -269,21 +294,27 @@ export function renderProgress(
       return voronoi.renderCell(i);
     })
     .on("mouseover", (_, d) => {
-      hoverCircle.attr("cx", x(d.date)).attr("cy", y(d.value)).attr("fill", COLORS.tertiary);
+      hoverCircle.attr("cx", x(d.date)).attr("cy", y(d.value)).attr(
+        "fill",
+        COLORS.tertiary,
+      );
 
       t.setProps({
         placement: "top",
         content: tooltip([
           ["Date", d.date.format("DD MMM YYYY")],
-          ["Savings", [formatCurrency(d.value), "has-text-weight-bold has-text-right"]],
+          ["Savings", [
+            formatCurrency(d.value),
+            "has-text-weight-bold has-text-right",
+          ]],
           [
             "",
             [
               formatFloat((d.value / targetSavings) * 100) + "%",
-              "has-text-weight-bold has-text-right"
-            ]
-          ]
-        ])
+              "has-text-weight-bold has-text-right",
+            ],
+          ],
+        ]),
       });
       t.show();
     })
@@ -297,14 +328,21 @@ export function renderProgress(
   };
 }
 
-export function renderInvestmentTimeline(postings: Posting[], element: Element, pmt: number) {
+export function renderInvestmentTimeline(
+  postings: Posting[],
+  element: Element,
+  pmt: number,
+) {
   const timeFormat = "MMM YYYY";
   const MAX_BAR_WIDTH = 40;
   const svg = d3.select(element),
     margin = { top: 10, right: 50, bottom: 50, left: 40 },
     width = element.parentElement.clientWidth - margin.left - margin.right,
     height = +svg.attr("height") - margin.top - margin.bottom,
-    g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    g = svg.append("g").attr(
+      "transform",
+      "translate(" + margin.left + "," + margin.top + ")",
+    );
 
   const groupKeys = _.chain(postings)
     .map((p) => p.account)
@@ -314,7 +352,7 @@ export function renderInvestmentTimeline(postings: Posting[], element: Element, 
 
   const defaultValues = _.zipObject(
     groupKeys,
-    _.map(groupKeys, () => 0)
+    _.map(groupKeys, () => 0),
   );
 
   interface Point {
@@ -349,10 +387,10 @@ export function renderInvestmentTimeline(postings: Posting[], element: Element, 
         month,
         total,
         date: dayjs(month, timeFormat),
-        postings: ps
+        postings: ps,
       },
       defaultValues,
-      values
+      values,
     );
 
     points.push(point);
@@ -375,7 +413,7 @@ export function renderInvestmentTimeline(postings: Posting[], element: Element, 
       d3
         .axisBottom(x)
         .ticks(5)
-        .tickFormat(skipTicks(30, x, (d) => d.toString()))
+        .tickFormat(skipTicks(30, x, (d) => d.toString())),
     )
     .selectAll("text")
     .attr("y", 10)
@@ -424,15 +462,16 @@ export function renderInvestmentTimeline(postings: Posting[], element: Element, 
         _.sortBy(
           _.map(group, (amount, account) => [
             iconify(account),
-            [formatCurrency(amount), "has-text-weight-bold has-text-right"]
+            [formatCurrency(amount), "has-text-weight-bold has-text-right"],
           ]),
-          (r) => r[0]
+          (r) => r[0],
         ),
-        { total: formatCurrency(p.total) }
+        { total: formatCurrency(p.total) },
       );
     })
     .attr("x", function (p) {
-      return x(p.month) + (x.bandwidth() - Math.min(x.bandwidth(), MAX_BAR_WIDTH)) / 2;
+      return x(p.month) +
+        (x.bandwidth() - Math.min(x.bandwidth(), MAX_BAR_WIDTH)) / 2;
     })
     .attr("y", function (p) {
       return p.total <= 0 ? y(0) : y(p.total);

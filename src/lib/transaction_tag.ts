@@ -1,13 +1,13 @@
 import dayjs from "dayjs";
 import { parse } from "@datasert/cronjs-parser";
 import { getFutureMatches } from "@datasert/cronjs-matcher";
-import { WidgetType, MatchDecorator } from "@codemirror/view";
+import { MatchDecorator, WidgetType } from "@codemirror/view";
 import {
+  Decoration,
   type DecorationSet,
-  ViewUpdate,
-  ViewPlugin,
   EditorView,
-  Decoration
+  ViewPlugin,
+  ViewUpdate,
 } from "@codemirror/view";
 import _ from "lodash";
 import { prefixMinutesSeconds } from "./utils";
@@ -24,10 +24,12 @@ class SchedulePreview extends WidgetType {
   toDOM() {
     let text = "";
     try {
-      const cron = parse(prefixMinutesSeconds(this.period), { hasSeconds: false });
+      const cron = parse(prefixMinutesSeconds(this.period), {
+        hasSeconds: false,
+      });
       const schedules = getFutureMatches(cron, {
         matchCount: 3,
-        timezone: dayjs.tz.guess()
+        timezone: dayjs.tz.guess(),
       });
       text = _.chain(schedules)
         .map((schedule) => dayjs(schedule).format("DD MMM YYYY"))
@@ -55,7 +57,7 @@ const periodDecorator = new MatchDecorator({
       end = to;
     const preview = new SchedulePreview(period);
     add(start, end, Decoration.widget({ widget: preview, side: 1 }));
-  }
+  },
 });
 
 export const schedulePlugin = ViewPlugin.fromClass(
@@ -72,5 +74,5 @@ export const schedulePlugin = ViewPlugin.fromClass(
       }
     }
   },
-  { decorations: (v) => v.decorations }
+  { decorations: (v) => v.decorations },
 );

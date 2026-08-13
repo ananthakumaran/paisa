@@ -24,11 +24,11 @@ async function recordAndVerify(dir: string, route: string, name: string) {
   if (fs.existsSync(filename) && process.env["REGENERATE"] !== "true") {
     const current = JSON.parse(fs.readFileSync(filename).toString());
     const diff = diffString(data, current, {
-      excludeKeys: ["id", "transaction_id", "endLine", "transaction_end_line"]
+      excludeKeys: ["id", "transaction_id", "endLine", "transaction_end_line"],
     });
 
     if (diff != "") {
-      expect().fail(diff);
+      expect(diff).toBe("");
     }
   }
   fs.writeFileSync(filename, JSON.stringify(data, null, 2));
@@ -36,7 +36,7 @@ async function recordAndVerify(dir: string, route: string, name: string) {
 
 async function verifyApi(dir: string) {
   const {
-    data: { success }
+    data: { success },
   } = await axios.post("/api/sync", { journal: true });
   expect(success).toBe(true);
 
@@ -52,8 +52,16 @@ async function verifyApi(dir: string) {
   await recordAndVerify(dir, "/api/gain", "gain");
   await recordAndVerify(dir, "/api/allocation", "allocation");
   await recordAndVerify(dir, "/api/liabilities/balance", "liabilities_balance");
-  await recordAndVerify(dir, "/api/liabilities/repayment", "liabilities_repayment");
-  await recordAndVerify(dir, "/api/liabilities/interest", "liabilities_interest");
+  await recordAndVerify(
+    dir,
+    "/api/liabilities/repayment",
+    "liabilities_repayment",
+  );
+  await recordAndVerify(
+    dir,
+    "/api/liabilities/interest",
+    "liabilities_interest",
+  );
   await recordAndVerify(dir, "/api/income", "income");
   await recordAndVerify(dir, "/api/transaction", "transaction");
   await recordAndVerify(dir, "/api/editor/files", "files");
@@ -80,7 +88,7 @@ async function check(directory: string) {
     port.toString(),
     "--now",
     "2022-02-07",
-    "serve"
+    "serve",
   ]);
   try {
     await wait();

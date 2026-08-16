@@ -20,7 +20,7 @@
           inherit version;
           src = ./.;
 
-          nativeBuildInputs = [ pkgs.nodejs_22 ];
+          nativeBuildInputs = [ pkgs.nodejs_24 ];
           npmDepsHash = "sha256-kG8oqDf7ZkbcXGwbNNMNjzIQMU4ec3lSQeXYxwkh1wo=";
           npmBuildScript = "build";
           npmInstallFlags = [ "--ignore-scripts" ];
@@ -45,7 +45,7 @@
 
           src = ./.;
 
-          nativeBuildInputs = [ pkgs.nodejs_22 ];
+          nativeBuildInputs = [ pkgs.nodejs_24 ];
 
           vendorHash = "sha256-5jrxI+zSKbopGs5GmGVyqQcMHNZJbCsiFEH/LPXWxpk=";
 

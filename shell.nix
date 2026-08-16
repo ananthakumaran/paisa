@@ -6,7 +6,7 @@ pkgs.mkShell {
     pkgs.gotools
     pkgs.gopls
     pkgs.sqlite
-    pkgs.nodejs_22
+    pkgs.nodejs_24
     pkgs.libuuid
     pkgs.bun
     # pkgs.pkgsCross.mingwW64.buildPackages.gcc

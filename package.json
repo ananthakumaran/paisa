@@ -1,6 +1,6 @@
 {
   "name": "paisa",
-  "version": "0.0.1",
+  "version": "0.7.5",
   "private": true,
   "scripts": {
     "parser-build": "lezer-generator src/lib/sheet/language.grammar -o src/lib/sheet/parser && lezer-generator src/lib/search/parser/query.grammar -o src/lib/search/parser/parser",

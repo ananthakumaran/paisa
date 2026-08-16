@@ -17,7 +17,7 @@ jobs:
         nix_path: nixpkgs=channel:nixos-24.11
     - uses: actions/setup-node@v3
       with:
-        node-version: 22
+        node-version: 24
         cache: npm
     - uses: actions/setup-go@v4
       with:

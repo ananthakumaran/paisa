@@ -1,4 +1,4 @@
-FROM node:22-alpine3.21 AS web
+FROM node:24-alpine3.21 AS web
 WORKDIR /usr/src/paisa
 COPY package.json package-lock.json* ./
 RUN npm install

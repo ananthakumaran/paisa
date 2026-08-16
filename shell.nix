@@ -2,14 +2,13 @@
 
 pkgs.mkShell {
   nativeBuildInputs = [
-    pkgs.go_1_24
+    pkgs.go_1_26
     pkgs.gotools
     pkgs.gopls
     pkgs.sqlite
     pkgs.nodejs_22
     pkgs.libuuid
     pkgs.bun
-    pkgs.node2nix
     # pkgs.pkgsCross.mingwW64.buildPackages.gcc
 
     pkgs.python312Packages.mkdocs-material
@@ -18,7 +17,7 @@ pkgs.mkShell {
     # test
     pkgs.ledger
     hledger.hledger
-  ] ++ (pkgs.lib.optional pkgs.stdenv.isLinux pkgs.wails);
+  ] ++ (pkgs.lib.optional pkgs.stdenv.hostPlatform.isLinux pkgs.wails);
 
   shellHook = ''
     export CGO_ENABLED=1

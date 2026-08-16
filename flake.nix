@@ -6,14 +6,33 @@
     "github:NixOS/nixpkgs/ebe4301cbd8f81c4f8d3244b3632338bbeb6d49c";
 
   outputs = { self, nixpkgs, flake-utils, hledger-pkgs }:
-    flake-utils.lib.eachDefaultSystem (system:
+    flake-utils.lib.eachSystem [
+      "x86_64-linux"
+      "aarch64-linux"
+      "aarch64-darwin"
+    ] (system:
       let
         pkgs = nixpkgs.legacyPackages.${system};
+        version = "0.7.5";
         hledger = hledger-pkgs.legacyPackages.${system};
-        nodeDependencies = (pkgs.callPackage ./flake/override.nix {
-          nodejs = pkgs.nodejs_22;
-        }).nodeDependencies;
+        frontend = pkgs.buildNpmPackage {
+          pname = "paisa-frontend";
+          inherit version;
+          src = ./.;
+
+          nativeBuildInputs = [ pkgs.nodejs_22 ];
+          npmDepsHash = "sha256-kG8oqDf7ZkbcXGwbNNMNjzIQMU4ec3lSQeXYxwkh1wo=";
+          npmBuildScript = "build";
+          npmInstallFlags = [ "--ignore-scripts" ];
+          npmRebuildFlags = [ "--ignore-scripts" ];
+
+          installPhase = ''
+            mkdir -p $out
+            cp -r web/static $out/
+          '';
+        };
       in {
+        packages.frontend = frontend;
         devShells.default = import ./shell.nix {
           inherit pkgs;
           inherit hledger;
@@ -22,7 +41,7 @@
         packages.default = pkgs.buildGoModule {
           pname = "paisa-cli";
           meta.mainProgram = "paisa";
-          version = "0.7.5";
+          inherit version;
 
           src = ./.;
 
@@ -39,9 +58,7 @@
           subPackages = [ "." ];
 
           preConfigure = ''
-            ln -s ${nodeDependencies}/lib/node_modules ./node_modules
-            export PATH="${nodeDependencies}/.bin:$PATH"
-            npm run build
+            cp -r ${frontend}/static web/static
           '';
 
         };

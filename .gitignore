@@ -18,7 +18,6 @@ vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 *.test
 docs/lexer/__pycache__/
-bun.lockb
 svg/*
 fonts/*
 !fonts/*.woff2

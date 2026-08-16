@@ -1,4 +1,5 @@
-import { describe, expect, test } from "bun:test";
+import assert from "node:assert/strict";
+import { describe, test } from "node:test";
 import { format } from "./journal";
 import fs from "fs";
 
@@ -8,6 +9,6 @@ function readFixture(name: string) {
 
 describe("journal", () => {
   test("format", () => {
-    expect(format(readFixture("unformatted.ledger"))).toBe(readFixture("formatted.ledger"));
+    assert.strictEqual(format(readFixture("unformatted.ledger")), readFixture("formatted.ledger"));
   });
 });

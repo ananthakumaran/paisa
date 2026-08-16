@@ -21,7 +21,7 @@
           src = ./.;
 
           nativeBuildInputs = [ pkgs.nodejs_24 ];
-          npmDepsHash = "sha256-kG8oqDf7ZkbcXGwbNNMNjzIQMU4ec3lSQeXYxwkh1wo=";
+          npmDepsHash = "sha256-481E+4KVeZwSTeZxCYmxaurR5ndHQzJeqxEYhjZiZLs=";
           npmBuildScript = "build";
           npmInstallFlags = [ "--ignore-scripts" ];
           npmRebuildFlags = [ "--ignore-scripts" ];

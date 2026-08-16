@@ -1,5 +1,4 @@
 /// <reference types="@sveltejs/kit" />
-// https://github.com/oven-sh/bun/issues/5134
 /// <reference lib="dom" />
 /// <reference lib="dom.iterable" />
 /// <reference lib="esnext" />

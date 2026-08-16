@@ -1,6 +1,8 @@
-import { spawn } from "bun";
+import assert from "node:assert/strict";
+import { spawn } from "node:child_process";
+import { once } from "node:events";
 import path from "path";
-import { describe, expect, test } from "bun:test";
+import { describe, test } from "node:test";
 import waitPort from "wait-port";
 import fs from "fs";
 import axios from "axios";
@@ -28,7 +30,7 @@ async function recordAndVerify(dir: string, route: string, name: string) {
     });
 
     if (diff != "") {
-      expect().fail(diff);
+      assert.fail(diff);
     }
   }
   fs.writeFileSync(filename, JSON.stringify(data, null, 2));
@@ -38,7 +40,7 @@ async function verifyApi(dir: string) {
   const {
     data: { success }
   } = await axios.post("/api/sync", { journal: true });
-  expect(success).toBe(true);
+  assert.strictEqual(success, true);
 
   await recordAndVerify(dir, "/api/dashboard", "dashboard");
   await recordAndVerify(dir, "/api/cash_flow", "cash_flow");
@@ -72,8 +74,7 @@ async function wait() {
 }
 
 async function check(directory: string) {
-  const process = spawn([
-    "./paisa",
+  const child = spawn("./paisa", [
     "--config",
     path.join(directory, "paisa.yaml"),
     "--port",
@@ -86,8 +87,10 @@ async function check(directory: string) {
     await wait();
     await verifyApi(directory);
   } finally {
-    process.kill();
-    await process.exited;
+    if (child.exitCode === null) {
+      child.kill();
+      await once(child, "exit");
+    }
   }
 }
 

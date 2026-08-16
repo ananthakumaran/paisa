@@ -1,4 +1,4 @@
-import { describe, test } from "bun:test";
+import { describe, test } from "node:test";
 import { queryLanguage } from "./query";
 import { fileTests } from "@lezer/generator/dist/test";
 

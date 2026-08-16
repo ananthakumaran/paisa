@@ -1,10 +1,11 @@
-import { describe, expect, test } from "bun:test";
+import assert from "node:assert/strict";
+import { describe, test } from "node:test";
 import { parseDate } from "./search_query_editor";
 
 function assertRange(text: string, start: string, end: string) {
   const result = parseDate(text, reference);
-  expect(result.start.format("YYYY-MM-DDTHH:mm:ss")).toEqual(start);
-  expect(result.end.format("YYYY-MM-DDTHH:mm:ss")).toEqual(end);
+  assert.strictEqual(result.start.format("YYYY-MM-DDTHH:mm:ss"), start);
+  assert.strictEqual(result.end.format("YYYY-MM-DDTHH:mm:ss"), end);
 }
 
 const reference = new Date("2023-09-03");

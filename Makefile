@@ -35,12 +35,12 @@ lint:
 
 regen:
 	go build
-	unset PAISA_CONFIG && REGENERATE=true TZ=UTC bun test tests
+	unset PAISA_CONFIG && REGENERATE=true TZ=UTC node --import=tsx --test-concurrency=1 --test $$(find tests -name '*.test.ts' -print)
 
 jstest:
-	bun test --preload ./src/happydom.ts src
+	node --import=tsx --import ./src/happydom.ts --test-concurrency=1 --test $$(find src -name '*.test.ts' -print)
 	go build
-	unset PAISA_CONFIG && TZ=UTC bun test tests
+	unset PAISA_CONFIG && TZ=UTC node --import=tsx --test-concurrency=1 --test $$(find tests -name '*.test.ts' -print)
 
 jsbuild:
 	npm run build
@@ -72,6 +72,6 @@ fixture/main.transactions.json:
 	pkill -f 'paisa serve -p 6500'
 
 generate-fonts:
-	bun download-svgs.js
+	node --import=tsx download-svgs.js
 	node generate-font.js
 

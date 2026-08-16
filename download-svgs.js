@@ -1,4 +1,4 @@
-import { spawnSync } from "bun";
+import { spawnSync } from "node:child_process";
 import { join } from "path";
 import { mkdirSync, readFileSync, rmdirSync, writeFileSync } from "fs";
 import { locate } from "@iconify/json";
@@ -48,7 +48,14 @@ async function main() {
   console.log("downloading arcticons");
   downloadSVGs(["arcticons"]);
   try {
-    spawnSync(["npx", "oslllo-svg-fixer", "-s", "svg/arcticons", "-d", "svg/arcticons"]);
+    const result = spawnSync(
+      "npx",
+      ["oslllo-svg-fixer", "-s", "svg/arcticons", "-d", "svg/arcticons"],
+      { stdio: "inherit" }
+    );
+    if (result.error) {
+      throw result.error;
+    }
   } catch (e) {
     // ignore
   }

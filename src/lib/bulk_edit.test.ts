@@ -1,4 +1,5 @@
-import { describe, expect, test } from "bun:test";
+import assert from "node:assert/strict";
+import { describe, test } from "node:test";
 import fs from "fs";
 
 import { applyChanges } from "./bulk_edit";
@@ -27,7 +28,7 @@ describe("bulk_editor", () => {
           const {
             newFiles: [newLedgerFile]
           } = applyChanges([ledgerFile], transactions, dir, args);
-          expect(_.trim(newLedgerFile.content)).toBe(_.trim(after.toString()));
+          assert.strictEqual(_.trim(newLedgerFile.content), _.trim(after.toString()));
         }
       }
     });

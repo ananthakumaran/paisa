@@ -1,4 +1,5 @@
-import { describe, expect, test } from "bun:test";
+import assert from "node:assert/strict";
+import { describe, test } from "node:test";
 
 import { parse, render, asRows } from "./spreadsheet";
 import fs from "fs";
@@ -54,7 +55,7 @@ describe("import", () => {
 
           const actual = render(rows, compiled, { trim: true });
 
-          expect(actual).toBe(_.trim(output));
+          assert.strictEqual(actual, _.trim(output));
         }
       }
     });
@@ -63,9 +64,9 @@ describe("import", () => {
 
 describe("template helpers", () => {
   test("acronym", () => {
-    expect(helpers.acronym("Foo Bar baz")).toBe("FBB");
-    expect(helpers.acronym("foo   the bar")).toBe("FB");
-    expect(helpers.acronym("Motital S & P 500")).toBe("MSP");
-    expect(helpers.acronym("Axis Liquid Growth Direct Plan")).toBe("AL");
+    assert.strictEqual(helpers.acronym("Foo Bar baz"), "FBB");
+    assert.strictEqual(helpers.acronym("foo   the bar"), "FB");
+    assert.strictEqual(helpers.acronym("Motital S & P 500"), "MSP");
+    assert.strictEqual(helpers.acronym("Axis Liquid Growth Direct Plan"), "AL");
   });
 });

@@ -1,4 +1,4 @@
-import { describe, test } from "bun:test";
+import { describe, test } from "node:test";
 import { sheetLanguage } from "./language";
 import { fileTests } from "@lezer/generator/dist/test";
 

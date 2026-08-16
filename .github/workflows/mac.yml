@@ -24,8 +24,8 @@ jobs:
         brew tap-new --no-git paisa/local
         cp ledger.rb "$(brew --repository)/Library/Taps/paisa/homebrew-local/Formula/ledger.rb"
         brew install --build-from-source --verbose paisa/local/ledger
+        "$(brew --prefix ledger)/bin/ledger" --version
         cp "$(brew --prefix ledger)/bin/ledger" internal/binary/ledger
-        internal/binary/ledger --version
         npm install
         npm run build
         go build

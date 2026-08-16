@@ -1,5 +1,9 @@
 # CHANGELOG
 
+### 0.7.5 (2025-12-02)
+
+* Build fixes
+
 ### 0.7.4 (2025-02-23)
 * Update price data domain
 * Fix NixOS build

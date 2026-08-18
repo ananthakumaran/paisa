@@ -816,7 +816,8 @@ export async function ajax(
         value
       )
     ) {
-      return dayjs(value);
+      // Strip the timezone offset so dayjs parses it as local midnight
+      return dayjs(value.substring(0, 19));
     }
     return value;
   });

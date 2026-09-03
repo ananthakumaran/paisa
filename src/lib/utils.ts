@@ -10,6 +10,9 @@ import { error } from "@sveltejs/kit";
 import { goto } from "$app/navigation";
 import chroma from "chroma-js";
 import { iconGlyph } from "./icon";
+import { fitTooltipRows } from "./tooltip";
+
+export { fitTooltipRows } from "./tooltip";
 
 export interface AutoCompleteItem {
   label: string;
@@ -1083,6 +1086,8 @@ export function tooltip(
     total?: string;
   } = {}
 ) {
+  rows = fitTooltipRows(rows, options);
+
   if (options.total && rows.length > 0) {
     const totalRow: Array<string | string[]> = [
       ["Total", "has-text-weight-bold"],

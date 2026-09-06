@@ -6,6 +6,8 @@ import (
 	"io"
 	"math/rand"
 	"net/http"
+	"net/http/cookiejar"
+	"strings"
 	"sync"
 	"time"
 
@@ -49,6 +51,109 @@ func selectAgent() {
 	agent.name = UserAgents[rand.Intn(len(UserAgents))]
 }
 
+// Yahoo rejects requests that do not carry a session cookie along with a
+// matching crumb. Fetching the cookie first and then the crumb mirrors what a
+// browser does; without it the API replies with 401 "Invalid Cookie" or a plain
+// text "Edge: Too Many Requests" body.
+var (
+	yahooCookieURL = "https://fc.yahoo.com"
+	yahooCrumbURL  = "https://query1.finance.yahoo.com/v1/test/getcrumb"
+	yahooChartURL  = "https://query2.finance.yahoo.com/v8/finance/chart/%s"
+)
+
+type yahooSession struct {
+	mutex  sync.Mutex
+	client *http.Client
+	crumb  string
+}
+
+var session yahooSession
+
+// httpClient returns a http.Client backed by a cookie jar, so that the session
+// cookie obtained while fetching the crumb is sent along with every subsequent
+// request.
+func (s *yahooSession) httpClient() (*http.Client, error) {
+	if s.client == nil {
+		jar, err := cookiejar.New(nil)
+		if err != nil {
+			return nil, err
+		}
+		s.client = &http.Client{Jar: jar, Timeout: 30 * time.Second}
+	}
+	return s.client, nil
+}
+
+func (s *yahooSession) get(url string) (*http.Response, error) {
+	client, err := s.httpClient()
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	agent.Do(func() { selectAgent() })
+	req.Header.Add("User-Agent", agent.name)
+
+	return client.Do(req)
+}
+
+// getCrumb returns the cached crumb, fetching a new one when the cache is empty
+// or when a refresh is requested. The crumb is tied to the session cookie held
+// by the cookie jar, so both are obtained together and reused for every ticker
+// of a sync.
+func (s *yahooSession) getCrumb(refresh bool) (string, error) {
+	s.mutex.Lock()
+	defer s.mutex.Unlock()
+
+	if s.crumb != "" && !refresh {
+		return s.crumb, nil
+	}
+
+	// Seeds the session cookie. Yahoo answers with 404 here, the body is
+	// irrelevant, only the Set-Cookie header matters.
+	resp, err := s.get(yahooCookieURL)
+	if err != nil {
+		return "", fmt.Errorf("failed to fetch yahoo session cookie: %w", err)
+	}
+	resp.Body.Close()
+
+	resp, err = s.get(yahooCrumbURL)
+	if err != nil {
+		return "", fmt.Errorf("failed to fetch yahoo crumb: %w", err)
+	}
+	defer resp.Body.Close()
+
+	respBytes, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return "", err
+	}
+
+	if resp.StatusCode != http.StatusOK {
+		return "", fmt.Errorf("failed to fetch yahoo crumb, status %d: %s", resp.StatusCode, summarize(respBytes))
+	}
+
+	crumb := strings.TrimSpace(string(respBytes))
+	if crumb == "" || strings.ContainsAny(crumb, "{<") {
+		return "", fmt.Errorf("received an unexpected yahoo crumb: %s", summarize(respBytes))
+	}
+
+	s.crumb = crumb
+	return s.crumb, nil
+}
+
+// summarize trims a response body so that it can be embedded in an error
+// message without flooding the log.
+func summarize(body []byte) string {
+	text := strings.TrimSpace(string(body))
+	if len(text) > 200 {
+		return text[:200] + "..."
+	}
+	return text
+}
+
 type Quote struct {
 	Close []float64
 }
@@ -67,8 +172,18 @@ type Result struct {
 	Meta       Meta
 }
 
+type ResponseError struct {
+	Code        string
+	Description string
+}
+
+func (e *ResponseError) Error() string {
+	return fmt.Sprintf("%s: %s", e.Code, e.Description)
+}
+
 type Chart struct {
 	Result []Result
+	Error  *ResponseError
 }
 type Response struct {
 	Chart Chart
@@ -90,19 +205,27 @@ func GetHistory(ticker string, commodityName string) ([]*price.Price, error) {
 		return nil, err
 	}
 
+	result, err := firstResult(response, ticker)
+	if err != nil {
+		return nil, err
+	}
+
 	var prices []*price.Price
-	result := response.Chart.Result[0]
 	needExchangePrice := false
 	var exchangePrice *btree.BTree
 
 	if !utils.IsCurrency(result.Meta.Currency) {
 		needExchangePrice = true
-		exchangeResponse, err := getTicker(fmt.Sprintf("%s%s=X", result.Meta.Currency, config.DefaultCurrency()))
+		exchangeTicker := fmt.Sprintf("%s%s=X", result.Meta.Currency, config.DefaultCurrency())
+		exchangeResponse, err := getTicker(exchangeTicker)
 		if err != nil {
 			return nil, err
 		}
 
-		exchangeResult := exchangeResponse.Chart.Result[0]
+		exchangeResult, err := firstResult(exchangeResponse, exchangeTicker)
+		if err != nil {
+			return nil, err
+		}
 
 		exchangePrice = btree.New(2)
 		for i, t := range exchangeResult.Timestamp {
@@ -126,17 +249,67 @@ func GetHistory(ticker string, commodityName string) ([]*price.Price, error) {
 	return prices, nil
 }
 
+// firstResult validates that the response actually carries a usable series.
+// Yahoo returns an empty result for delisted or misspelled tickers, and
+// indexing into it blindly used to panic and take the whole sync down.
+func firstResult(response *Response, ticker string) (*Result, error) {
+	if len(response.Chart.Result) == 0 {
+		if response.Chart.Error != nil {
+			return nil, fmt.Errorf("yahoo returned no data for %s, %s", ticker, response.Chart.Error.Error())
+		}
+		return nil, fmt.Errorf("yahoo returned no data for %s", ticker)
+	}
+
+	result := response.Chart.Result[0]
+	if len(result.Indicators.Quote) == 0 || len(result.Indicators.Quote[0].Close) == 0 {
+		return nil, fmt.Errorf("yahoo returned no price quotes for %s", ticker)
+	}
+
+	return &result, nil
+}
+
+type statusError struct {
+	StatusCode int
+	Body       string
+}
+
+func (e *statusError) Error() string {
+	return fmt.Sprintf("yahoo request failed with status %d: %s", e.StatusCode, e.Body)
+}
+
+// retryable reports whether the request was turned down because the session
+// went stale, in which case a fresh cookie and crumb are worth a try.
+func retryable(err error) bool {
+	statusErr, ok := err.(*statusError)
+	if !ok {
+		return false
+	}
+
+	switch statusErr.StatusCode {
+	case http.StatusUnauthorized, http.StatusForbidden, http.StatusTooManyRequests:
+		return true
+	}
+	return false
+}
+
 func getTicker(ticker string) (*Response, error) {
-	url := fmt.Sprintf("https://query2.finance.yahoo.com/v8/finance/chart/%s?interval=1d&range=50y", ticker)
-	req, err := http.NewRequest("GET", url, nil)
+	response, err := fetchTicker(ticker, false)
+	if err != nil && retryable(err) {
+		log.WithError(err).Info("Refreshing Yahoo crumb and retrying")
+		return fetchTicker(ticker, true)
+	}
+
+	return response, err
+}
+
+func fetchTicker(ticker string, refreshCrumb bool) (*Response, error) {
+	crumb, err := session.getCrumb(refreshCrumb)
 	if err != nil {
 		return nil, err
 	}
 
-	agent.Do(func() { selectAgent() })
-	req.Header.Add("User-Agent", agent.name)
-
-	resp, err := http.DefaultClient.Do(req)
+	url := fmt.Sprintf(yahooChartURL, ticker) + fmt.Sprintf("?interval=1d&range=50y&crumb=%s", crumb)
+	resp, err := session.get(url)
 	if err != nil {
 		return nil, err
 	}
@@ -148,9 +321,20 @@ func getTicker(ticker string) (*Response, error) {
 	}
 
 	var response Response
+
+	// A rejected request may carry a plain text body such as
+	// "Edge: Too Many Requests", so the status is checked before the body is
+	// treated as JSON.
+	if resp.StatusCode != http.StatusOK {
+		if err := json.Unmarshal(respBytes, &response); err == nil && response.Chart.Error != nil {
+			return nil, fmt.Errorf("yahoo request for %s failed, %s", ticker, response.Chart.Error.Error())
+		}
+		return nil, &statusError{StatusCode: resp.StatusCode, Body: summarize(respBytes)}
+	}
+
 	err = json.Unmarshal(respBytes, &response)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to parse yahoo response for %s: %w", ticker, err)
 	}
 
 	return &response, nil

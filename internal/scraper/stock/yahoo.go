@@ -83,6 +83,33 @@ func (p ExchangePrice) Less(o btree.Item) bool {
 	return p.Timestamp < (o.(ExchangePrice).Timestamp)
 }
 
+func normalizeYahooCurrency(currency string) (string, float64) {
+	switch currency {
+	case "GBp", "GBX":
+		return "GBP", 0.01
+	default:
+		return currency, 1
+	}
+}
+
+func normalizeYahooPrice(value float64, currency string) (float64, string) {
+	currency, scale := normalizeYahooCurrency(currency)
+	return value * scale, currency
+}
+
+func exchangeRateAt(exchangePrice *btree.BTree, timestamp int64) (float64, error) {
+	if exchangePrice == nil {
+		return 0, fmt.Errorf("exchange price not found for timestamp %d", timestamp)
+	}
+
+	price := utils.BTreeDescendFirstLessOrEqual(exchangePrice, ExchangePrice{Timestamp: timestamp})
+	if price.Timestamp == 0 || price.Close == 0 {
+		return 0, fmt.Errorf("exchange price not found for timestamp %d", timestamp)
+	}
+
+	return price.Close, nil
+}
+
 func GetHistory(ticker string, commodityName string) ([]*price.Price, error) {
 	log.Info("Fetching stock price history from Yahoo")
 	response, err := getTicker(ticker)
@@ -91,32 +118,65 @@ func GetHistory(ticker string, commodityName string) ([]*price.Price, error) {
 	}
 
 	var prices []*price.Price
+	if len(response.Chart.Result) == 0 {
+		return nil, fmt.Errorf("missing yahoo chart result")
+	}
+
 	result := response.Chart.Result[0]
+	if len(result.Indicators.Quote) == 0 {
+		return nil, fmt.Errorf("missing yahoo quote data")
+	}
+
+	quoteCurrency, _ := normalizeYahooCurrency(result.Meta.Currency)
 	needExchangePrice := false
 	var exchangePrice *btree.BTree
 
-	if !utils.IsCurrency(result.Meta.Currency) {
+	if !utils.IsCurrency(quoteCurrency) {
 		needExchangePrice = true
-		exchangeResponse, err := getTicker(fmt.Sprintf("%s%s=X", result.Meta.Currency, config.DefaultCurrency()))
+		exchangeResponse, err := getTicker(fmt.Sprintf("%s%s=X", quoteCurrency, config.DefaultCurrency()))
 		if err != nil {
 			return nil, err
 		}
 
+		if len(exchangeResponse.Chart.Result) == 0 {
+			return nil, fmt.Errorf("missing yahoo exchange chart result")
+		}
+
 		exchangeResult := exchangeResponse.Chart.Result[0]
+		if len(exchangeResult.Indicators.Quote) == 0 {
+			return nil, fmt.Errorf("missing yahoo exchange quote data")
+		}
 
 		exchangePrice = btree.New(2)
+		exchangeCloses := exchangeResult.Indicators.Quote[0].Close
 		for i, t := range exchangeResult.Timestamp {
-			exchangePrice.ReplaceOrInsert(ExchangePrice{Timestamp: t, Close: exchangeResult.Indicators.Quote[0].Close[i]})
+			if i >= len(exchangeCloses) {
+				return nil, fmt.Errorf("missing yahoo exchange close price for timestamp %d", t)
+			}
+
+			close := exchangeCloses[i]
+			if close == 0 {
+				continue
+			}
+			exchangePrice.ReplaceOrInsert(ExchangePrice{Timestamp: t, Close: close})
 		}
 	}
 
+	closes := result.Indicators.Quote[0].Close
 	for i, timestamp := range result.Timestamp {
+		if i >= len(closes) {
+			return nil, fmt.Errorf("missing yahoo close price for timestamp %d", timestamp)
+		}
+
 		date := time.Unix(timestamp, 0)
-		value := result.Indicators.Quote[0].Close[i]
+		value, _ := normalizeYahooPrice(closes[i], result.Meta.Currency)
 
 		if needExchangePrice {
-			exchangePrice := utils.BTreeDescendFirstLessOrEqual(exchangePrice, ExchangePrice{Timestamp: timestamp})
-			value = value * exchangePrice.Close
+			rate, err := exchangeRateAt(exchangePrice, timestamp)
+			if err != nil {
+				return nil, err
+			}
+			value = value * rate
 		}
 
 		price := price.Price{Date: date, CommodityType: config.Stock, CommodityID: ticker, CommodityName: commodityName, Value: decimal.NewFromFloat(value)}

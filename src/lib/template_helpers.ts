@@ -1,4 +1,5 @@
 import dayjs from "dayjs";
+import { BigNumber } from "bignumber.js";
 import _ from "lodash";
 import { get } from "svelte/store";
 import { accountTfIdf } from "../store";
@@ -95,6 +96,13 @@ function parseAmount(str: string | number) {
   }
 }
 
+function negateAmount(value: string | number) {
+  const amount = _.isNumber(value) ? value.toString() : scrubAmount(value);
+  if (amount) {
+    return new BigNumber(amount).negated().toFixed();
+  }
+}
+
 export default {
   eq: (a: any, b: any) => a === b,
   ne: (a: any, b: any) => a !== b,
@@ -103,7 +111,7 @@ export default {
   gt: (a: string | number, b: string | number) => parseAmount(a) > parseAmount(b),
   lte: (a: string | number, b: string | number) => parseAmount(a) <= parseAmount(b),
   lt: (a: string | number, b: string | number) => parseAmount(a) < parseAmount(b),
-  negate: (value: string) => parseAmount(value) * -1,
+  negate: negateAmount,
   round(str: string, options: any) {
     return _.round(parseAmount(str), options.hash.precision || 0);
   },

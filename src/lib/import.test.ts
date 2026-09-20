@@ -69,4 +69,14 @@ describe("template helpers", () => {
     assert.strictEqual(helpers.acronym("Motital S & P 500"), "MSP");
     assert.strictEqual(helpers.acronym("Axis Liquid Growth Direct Plan"), "AL");
   });
+
+  test("negate preserves decimal notation", () => {
+    assert.strictEqual(helpers.negate("0.00000001"), "-0.00000001");
+    assert.strictEqual(helpers.negate(0.00000001), "-0.00000001");
+    assert.strictEqual(helpers.negate("-0.00000001"), "0.00000001");
+    assert.strictEqual(helpers.negate("₹ 1,234.56"), "-1234.56");
+    assert.strictEqual(helpers.negate("(1,234.56)"), "1234.56");
+    assert.strictEqual(helpers.negate(0), "0");
+    assert.strictEqual(Handlebars.compile('{{negate "0.00000001"}}')({}), "-0.00000001");
+  });
 });

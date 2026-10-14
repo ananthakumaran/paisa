@@ -1077,6 +1077,9 @@ export function darkenOrLighten(backgroundColor: string, intensity = 2) {
   return chroma(backgroundColor).brighten(intensity).hex();
 }
 
+const TOOLTIP_ROW_HEIGHT = 24;
+const TOOLTIP_VERTICAL_SPACING = 32;
+
 export function tooltip(
   rows: Array<Array<string | string[]>>,
   options: {
@@ -1084,27 +1087,61 @@ export function tooltip(
     total?: string;
   } = {}
 ) {
-  if (options.total && rows.length > 0) {
+  const total = options.total;
+  const header = options.header;
+  const hasTotal = total !== undefined;
+  const hasHeader = Boolean(header);
+  const columnCount = Math.max(2, rows[0]?.length ?? 2);
+  const maxRows =
+    typeof window === "undefined"
+      ? Infinity
+      : Math.max(
+          2,
+          Math.floor((window.innerHeight / 2 - TOOLTIP_VERTICAL_SPACING) / TOOLTIP_ROW_HEIGHT)
+        );
+  const willTruncate = hasTotal && rows.length + (hasHeader ? 1 : 0) + 1 > maxRows;
+  const showHeader = hasHeader && (!willTruncate || maxRows >= 3);
+  let tooltipRows = rows;
+
+  if (willTruncate) {
+    // Tippy can flip above or below the cursor, so fit within the half of the
+    // viewport available on the chosen side. The row estimate matches the
+    // narrow table's line height and cell padding.
+    const detailsToKeep = Math.max(0, maxRows - (showHeader ? 1 : 0) - 2);
+    const omittedCount = rows.length - detailsToKeep;
+    const omittedRow: Array<string | string[]> = [
+      [
+        `${omittedCount} earlier rows omitted`,
+        "has-text-grey has-text-centered",
+        columnCount.toString()
+      ]
+    ];
+    tooltipRows = [...omittedRow, ...(detailsToKeep > 0 ? rows.slice(-detailsToKeep) : [])];
+  }
+
+  const tableRows = [...tooltipRows];
+
+  if (total !== undefined) {
     const totalRow: Array<string | string[]> = [
       ["Total", "has-text-weight-bold"],
-      [options.total, "has-text-weight-bold has-text-right"]
+      [total, "has-text-weight-bold has-text-right"]
     ];
 
-    for (let i = 2; i < rows[0].length; i++) {
+    for (let i = 2; i < columnCount; i++) {
       totalRow.unshift("");
     }
 
-    rows.push(totalRow);
+    tableRows.push(totalRow);
   }
 
-  if (options.header && rows.length > 0) {
+  if (showHeader && header !== undefined && tableRows.length > 0) {
     const headerRow: Array<string | string[]> = [
-      [options.header, "has-text-weight-bold has-text-centered", rows[0].length.toString()]
+      [header, "has-text-weight-bold has-text-centered", columnCount.toString()]
     ];
-    rows.unshift(headerRow);
+    tableRows.unshift(headerRow);
   }
 
-  const trs = rows
+  const trs = tableRows
     .map((r) => {
       const cells = r
         .map((c) => {

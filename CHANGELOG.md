@@ -1,10 +1,11 @@
 # CHANGELOG
 
-### Unreleased
+### 0.7.7 (2026-10-18)
 
 * Allow configuring the server bind host.
 * Ignore null Yahoo prices instead of treating them as zero.
 * Show relative file paths and line ranges in Ledger sync errors.
+* Add separate Intel and Apple Silicon macOS builds.
 
 ### 0.7.6 (2026-09-06)
 

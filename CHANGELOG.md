@@ -1,5 +1,11 @@
 # CHANGELOG
 
+### Unreleased
+
+* Allow configuring the server bind host.
+* Ignore null Yahoo prices instead of treating them as zero.
+* Show relative file paths and line ranges in Ledger sync errors.
+
 ### 0.7.6 (2026-09-06)
 
 * Include transaction id in the export

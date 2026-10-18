@@ -2,9 +2,10 @@ package server
 
 import (
 	"crypto/subtle"
-	"fmt"
 	"io"
+	"net"
 	"net/http"
+	"strconv"
 	"strings"
 	"time"
 
@@ -382,11 +383,16 @@ func Build(db *gorm.DB, enableCompression bool) *gin.Engine {
 	return router
 }
 
-func Listen(db *gorm.DB, port int) {
+func Listen(db *gorm.DB, host string, port int) {
 	router := Build(db, true)
+	address := net.JoinHostPort(host, strconv.Itoa(port))
 
-	log.Infof("Listening on http://localhost:%d", port)
-	err := router.Run(fmt.Sprintf(":%d", port))
+	displayHost := host
+	if displayHost == "" {
+		displayHost = "localhost"
+	}
+	log.Infof("Listening on http://%s", net.JoinHostPort(displayHost, strconv.Itoa(port)))
+	err := router.Run(address)
 	if err != nil {
 		log.Fatal(err)
 	}

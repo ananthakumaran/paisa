@@ -67,6 +67,46 @@ type Result struct {
 	Meta       Meta
 }
 
+// UnmarshalJSON drops missing closes and their timestamps at the Yahoo boundary.
+func (r *Result) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Timestamp  []int64
+		Meta       Meta
+		Indicators struct {
+			Quote []struct {
+				Close []*float64
+			}
+		}
+	}
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	*r = Result{
+		Meta:       raw.Meta,
+		Timestamp:  make([]int64, 0, len(raw.Timestamp)),
+		Indicators: Indicators{Quote: make([]Quote, len(raw.Indicators.Quote))},
+	}
+	for i, timestamp := range raw.Timestamp {
+		missing := false
+		for _, quote := range raw.Indicators.Quote {
+			if quote.Close[i] == nil {
+				missing = true
+				break
+			}
+		}
+		if missing {
+			continue
+		}
+
+		r.Timestamp = append(r.Timestamp, timestamp)
+		for j, quote := range raw.Indicators.Quote {
+			r.Indicators.Quote[j].Close = append(r.Indicators.Quote[j].Close, *quote.Close[i])
+		}
+	}
+	return nil
+}
+
 type Chart struct {
 	Result []Result
 }

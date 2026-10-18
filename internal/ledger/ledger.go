@@ -27,10 +27,22 @@ import (
 )
 
 type LedgerFileError struct {
+	FileName string `json:"file_name,omitempty"`
 	LineFrom uint64 `json:"line_from"`
 	LineTo   uint64 `json:"line_to"`
 	Error    string `json:"error"`
 	Message  string `json:"message"`
+}
+
+func (e LedgerFileError) String() string {
+	if e.FileName == "" {
+		return e.Message
+	}
+	location := fmt.Sprintf("%s:%d", e.FileName, e.LineFrom)
+	if e.LineTo > e.LineFrom {
+		location += fmt.Sprintf("-%d", e.LineTo)
+	}
+	return location + "\n" + e.Message
 }
 
 type Ledger interface {
@@ -74,15 +86,32 @@ func (LedgerCLI) ValidateFile(journalPath string) ([]LedgerFileError, string, er
 		return errors, utils.Dos2Unix(output.String()), nil
 	}
 
-	re := regexp.MustCompile(`(?m)While parsing file "[^"]+", line ([0-9]+):\s*\n(?:(?:While|>).*\n)*((?:.*\n)*?Error: .*\n)`)
+	return parseLedgerErrors(utils.Dos2Unix(error.String()), journalPath), "", err
+}
 
-	matches := re.FindAllStringSubmatch(utils.Dos2Unix(error.String()), -1)
+func parseLedgerErrors(output string, journalPath string) []LedgerFileError {
+	errors := []LedgerFileError{}
+	journalDir, dirErr := filepath.Abs(filepath.Dir(journalPath))
+	re := regexp.MustCompile(`(?m)While parsing file "([^"]+)", line ([0-9]+):\s*\n(?:(?:While|>).*\n)*((?:.*\n)*?Error: .*\n)`)
+	transactionRE := regexp.MustCompile(`While balancing transaction from "([^"]+)", lines ([0-9]+)-([0-9]+):`)
 
-	for _, match := range matches {
-		line, _ := strconv.ParseUint(match[1], 10, 64)
-		errors = append(errors, LedgerFileError{LineFrom: line, LineTo: line, Message: match[2]})
+	for _, match := range re.FindAllStringSubmatch(output, -1) {
+		fileName := match[1]
+		lineFrom, _ := strconv.ParseUint(match[2], 10, 64)
+		lineTo := lineFrom
+		if transaction := transactionRE.FindStringSubmatch(match[0]); transaction != nil {
+			fileName = transaction[1]
+			lineFrom, _ = strconv.ParseUint(transaction[2], 10, 64)
+			lineTo, _ = strconv.ParseUint(transaction[3], 10, 64)
+		}
+		if dirErr == nil && filepath.IsAbs(fileName) {
+			if relativePath, err := filepath.Rel(journalDir, fileName); err == nil {
+				fileName = relativePath
+			}
+		}
+		errors = append(errors, LedgerFileError{FileName: fileName, LineFrom: lineFrom, LineTo: lineTo, Message: match[3]})
 	}
-	return errors, "", err
+	return errors
 }
 
 func (LedgerCLI) Parse(journalPath string, _prices []price.Price) ([]*posting.Posting, error) {

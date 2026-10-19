@@ -10,6 +10,7 @@ import { error } from "@sveltejs/kit";
 import { goto } from "$app/navigation";
 import chroma from "chroma-js";
 import { iconGlyph } from "./icon";
+export { tooltip } from "./tooltip";
 
 export interface AutoCompleteItem {
   label: string;
@@ -1075,54 +1076,6 @@ export function darkenOrLighten(backgroundColor: string, intensity = 2) {
     return chroma(backgroundColor).darken(intensity).hex();
   }
   return chroma(backgroundColor).brighten(intensity).hex();
-}
-
-export function tooltip(
-  rows: Array<Array<string | string[]>>,
-  options: {
-    header?: string;
-    total?: string;
-  } = {}
-) {
-  if (options.total && rows.length > 0) {
-    const totalRow: Array<string | string[]> = [
-      ["Total", "has-text-weight-bold"],
-      [options.total, "has-text-weight-bold has-text-right"]
-    ];
-
-    for (let i = 2; i < rows[0].length; i++) {
-      totalRow.unshift("");
-    }
-
-    rows.push(totalRow);
-  }
-
-  if (options.header && rows.length > 0) {
-    const headerRow: Array<string | string[]> = [
-      [options.header, "has-text-weight-bold has-text-centered", rows[0].length.toString()]
-    ];
-    rows.unshift(headerRow);
-  }
-
-  const trs = rows
-    .map((r) => {
-      const cells = r
-        .map((c) => {
-          if (typeof c == "string") {
-            return `<td>${c}</td>`;
-          } else {
-            if (c.length == 3) {
-              return `<td class='${c[1]}' colspan='${c[2]}'>${c[0]}</td>`;
-            }
-            return `<td class='${c[1]}'>${c[0]}</td>`;
-          }
-        })
-        .join("\n");
-
-      return `<tr>${cells}</tr>`;
-    })
-    .join("\n");
-  return `<table class='table is-narrow is-size-7 popup-table'><tbody>${trs}</tbody></table>`;
 }
 
 export function isMobile() {

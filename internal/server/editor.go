@@ -49,15 +49,23 @@ func GetFiles(db *gorm.DB) gin.H {
 func GetFile(file LedgerFile) gin.H {
 	path := config.GetJournalPath()
 	dir := filepath.Dir(path)
-	return gin.H{"file": readLedgerFile(dir, filepath.Join(dir, file.Name))}
+	filePath, err := utils.BuildSubPath(dir, file.Name)
+	if err != nil {
+		return gin.H{"message": "Invalid file name"}
+	}
+	return gin.H{"file": readLedgerFile(dir, filePath)}
 }
 
 func DeleteBackups(file LedgerFile) gin.H {
 	path := config.GetJournalPath()
 	dir := filepath.Dir(path)
+	filePath, err := utils.BuildSubPath(dir, file.Name)
+	if err != nil {
+		return gin.H{"message": "Invalid file name"}
+	}
 
 	if !config.GetConfig().Readonly {
-		versions, _ := filepath.Glob(filepath.Join(dir, file.Name+".backup.*"))
+		versions := utils.Glob(filePath, ".backup.*")
 		for _, version := range versions {
 			err := os.Remove(version)
 			if err != nil {
@@ -66,7 +74,7 @@ func DeleteBackups(file LedgerFile) gin.H {
 		}
 	}
 
-	return gin.H{"file": readLedgerFileWithVersions(dir, filepath.Join(dir, file.Name))}
+	return gin.H{"file": readLedgerFileWithVersions(dir, filePath)}
 }
 
 func SaveFile(db *gorm.DB, file LedgerFile) gin.H {
@@ -175,7 +183,7 @@ func readLedgerFileWithVersions(dir string, path string) *LedgerFile {
 		log.Fatal(err)
 	}
 
-	versions, _ := filepath.Glob(filepath.Join(filepath.Dir(path), filepath.Base(path)+".backup.*"))
+	versions := utils.Glob(path, ".backup.*")
 	versionPaths := lo.Map(versions, func(path string, _ int) string {
 		name, err := filepath.Rel(dir, path)
 		if err != nil {

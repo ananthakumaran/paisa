@@ -49,7 +49,13 @@ func getRetirementDetail(db *gorm.DB, conf config.RetirementGoal) gin.H {
 	savingsWithCapitalGains := accounting.FilterByGlob(query.Init(db).Like("Assets:%", "Income:CapitalGains:%").All(), conf.Savings)
 	savingsWithCapitalGains = service.PopulateMarketPrice(db, savingsWithCapitalGains)
 	savingsTotal := accounting.CurrentBalance(savings)
-	investmentTotal := accounting.CostBalance(savings)
+	investmentPostings := make([]posting.Posting, 0, len(savings))
+	for _, p := range savings {
+		if !service.IsInterest(db, p) {
+			investmentPostings = append(investmentPostings, p)
+		}
+	}
+	investmentTotal := accounting.CostBalance(investmentPostings)
 	gainsTotal := savingsTotal.Sub(investmentTotal)
 
 	yearlyExpenses := decimal.NewFromFloat(conf.YearlyExpenses)

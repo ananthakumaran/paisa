@@ -1,5 +1,10 @@
 # CHANGELOG
 
+### 0.7.8 (2026-10-21)
+
+* Fix path traversal allowing file reads and backup deletion outside the ledger and sheet directories ([#420](https://github.com/ananthakumaran/paisa/issues/420)).
+* Treat filenames literally when finding and deleting backups.
+
 ### 0.7.7 (2026-10-18)
 
 * Allow configuring the server bind host.

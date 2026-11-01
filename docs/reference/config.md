@@ -224,7 +224,7 @@ commodities:
     # Required, ENUM: mutualfund, stock, nps, unknown
     type: mutualfund
     price:
-      # Required, ENUM: in-mfapi, com-yahoo, com-purifiedbytes-nps, co-alphavantage
+      # Required, ENUM: in-mfapi, com-yahoo, com-purifiedbytes-nps, com-purifiedbytes-metal, co-alphavantage, com-allratestoday
       provider: in-mfapi
       # differs based on provider
       code: 145552

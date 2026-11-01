@@ -186,7 +186,8 @@
                     "com-yahoo",
                     "com-purifiedbytes-nps",
                     "com-purifiedbytes-metal",
-                    "co-alphavantage"
+                    "co-alphavantage",
+                    "com-allratestoday"
                   ],
                   "type": "string"
                 }

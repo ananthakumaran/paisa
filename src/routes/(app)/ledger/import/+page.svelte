@@ -9,7 +9,7 @@
     updateContent as updatePreviewContent
   } from "$lib/editor";
   import Dropzone from "svelte-file-dropzone/Dropzone.svelte";
-  import { parse, asRows, render as renderJournal } from "$lib/spreadsheet";
+  import { parse, asRows, columnName, render as renderJournal } from "$lib/spreadsheet";
   import _ from "lodash";
   import type { EditorView } from "codemirror";
   import { onMount } from "svelte";
@@ -406,7 +406,7 @@
                 <tr>
                   <th />
                   {#each _.range(0, columnCount) as ci}
-                    <th class="has-background-light">{String.fromCharCode(65 + ci)}</th>
+                    <th class="has-background-light">{columnName(ci)}</th>
                   {/each}
                 </tr>
               </thead>

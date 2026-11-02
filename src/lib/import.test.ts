@@ -6,6 +6,7 @@ import fs from "fs";
 import helpers from "./template_helpers";
 import _ from "lodash";
 import Handlebars from "handlebars";
+import * as XLSX from "xlsx";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 dayjs.extend(customParseFormat);
@@ -208,4 +209,69 @@ describe("numeric template helpers", () => {
       ].join("\n")
     );
   });
+});
+
+describe("spreadsheet columns beyond Z (#276)", () => {
+  test("maps multi-letter columns without changing row indices", () => {
+    const rows = asRows({ data: [Array.from({ length: 703 }, (_, i) => `cell-${i + 1}`)] });
+    for (const [column, expected] of [
+      ["A", "cell-1"],
+      ["Z", "cell-26"],
+      ["AA", "cell-27"],
+      ["AB", "cell-28"],
+      ["AZ", "cell-52"],
+      ["BA", "cell-53"],
+      ["ZZ", "cell-702"],
+      ["AAA", "cell-703"]
+    ]) {
+      assert.strictEqual(rows[0][column], expected);
+    }
+    assert.strictEqual(rows[0].index, 0);
+    assert.strictEqual(rows[0]["["], undefined);
+  });
+
+  test("renders cell values and bare column references after Z", () => {
+    const rows = asRows({ data: [Array.from({ length: 28 }, (_, i) => `cell-${i + 1}`)] });
+    const template = Handlebars.compile("{{ROW.Z}}|{{ROW.AA}}|{{ROW.AB}}|{{Z}}|{{AA}}|{{AB}}");
+    assert.strictEqual(render(rows, template), "cell-26|cell-27|cell-28|Z|AA|AB");
+  });
+
+  test("textRange crosses Z and AA", () => {
+    const rows = asRows({ data: [Array.from({ length: 28 }, (_, i) => `cell-${i + 1}`)] });
+    const template = Handlebars.compile('{{textRange Z AB separator="|"}}');
+    assert.strictEqual(render(rows, template), "cell-26|cell-27|cell-28");
+  });
+
+  test("column references are available even on shorter rows", () => {
+    const rows = asRows({
+      data: [["header"], Array.from({ length: 28 }, (_, i) => `cell-${i + 1}`)]
+    });
+    const template = Handlebars.compile(
+      "{{#if (eq ROW.index 0)}}{{findBelow AA}}|{{findBelow AB}}{{/if}}"
+    );
+    assert.strictEqual(render(rows, template), "cell-27|cell-28");
+    assert.strictEqual(
+      render(asRows({ data: [["header"]] }), Handlebars.compile("{{A}}|{{Y}}|{{Z}}")),
+      "A|Y|Z"
+    );
+  });
+
+  for (const extension of ["csv", "xlsx"]) {
+    test(`imports ${extension} cells after Z into a template`, async () => {
+      const cells = Array.from({ length: 28 }, (_, i) => `cell-${i + 1}`);
+      let input: string | ArrayBuffer;
+      if (extension === "xlsx") {
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, XLSX.utils.aoa_to_sheet([cells]), "Sheet1");
+        input = XLSX.write(workbook, { type: "array", bookType: "xlsx" });
+      } else {
+        input = cells.join(",");
+      }
+      const result = await parse(new File([input], `wide.${extension}`));
+      assert.strictEqual(
+        render(asRows(result), Handlebars.compile("{{ROW.Z}}|{{ROW.AA}}|{{ROW.AB}}")),
+        "cell-26|cell-27|cell-28"
+      );
+    });
+  }
 });

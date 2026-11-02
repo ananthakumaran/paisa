@@ -70,7 +70,8 @@ display_precision: 0
 # OPTIONAL, DEFAULT: 52
 amount_alignment_column: 52
 
-# The locale used to format numbers. The list of locales supported
+# The locale used to format numbers and parse amounts in import templates.
+# The list of locales supported
 # depends on your browser. It's known to work well with en-US and en-IN.
 #
 # OPTIONAL, DEFAULT: en-IN

@@ -25,3 +25,4 @@ fonts/*
 !fonts/*.scss
 /result
 brand/*.png
+.pi

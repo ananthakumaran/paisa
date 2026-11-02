@@ -170,37 +170,41 @@ Returns true if all the arguments are true.
 
 Returns true if any of the arguments are true.
 
-#### `#!typescript gte(a: string | number, b: string | number): boolean`
+#### `#!typescript gte(a: string | number | Amount, b: string | number | Amount): boolean`
 
 Checks if a is greater than or equal to b.
 
-#### `#!typescript gt(a: string | number, b: string | number): boolean`
+#### `#!typescript gt(a: string | number | Amount, b: string | number | Amount): boolean`
 
 Checks if a is greater than b.
 
-#### `#!typescript lte(a: string | number, b: string | number): boolean`
+#### `#!typescript lte(a: string | number | Amount, b: string | number | Amount): boolean`
 
 Checks if a is less than or equal to b.
 
-#### `#!typescript lt(a: string | number, b: string | number): boolean`
+#### `#!typescript lt(a: string | number | Amount, b: string | number | Amount): boolean`
 
 Checks if a is less than b.
 
-#### `#!typescript negate(value: string | number): number`
+#### `#!typescript negate(value: string | number | Amount): Amount | ""`
 
-Negates the given value. For example, `negate("123.45")` will return
-`-123.45`
+Negates the given value. For example, with `locale: en-US`,
+`negate("123.45")` renders `-123.45`. Blank or unparseable input
+renders nothing.
 
-#### `#!typescript amount(str: string, {default?: string}): string`
+#### `#!typescript amount(value: string | number | Amount, {default?: string | number}): Amount | string | number`
 
-Converts the given string to a valid amount. If the string is blank,
-the default value is used. Examples `(0.9534)` to `-0.9534`, `₹
-1,234.56` to `1234.56`
+Converts the given value to an amount. If it is blank or unparseable,
+the default value is used, or nothing is rendered if no default is set.
+With `locale: en-US`, examples include `(0.9534)` to `-0.9534`
+and `₹ 1,234.56` to `1234.56`. Fractional trailing zeros are preserved.
 
-#### `#!typescript round(str: string, {precision?: number}): number`
+#### `#!typescript round(value: string | number | Amount, {precision?: number}): Amount | ""`
 
 Rounds the given value to the given precision. If precision is not
-set, defaults to `0`
+set, defaults to `0`.
+Ties round towards positive infinity (for example, `-1.5` rounds to
+`-1`). Blank or unparseable input renders nothing.
 
 #### `#!typescript isDate(str: string, format: string): boolean`
 

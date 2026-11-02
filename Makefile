@@ -1,5 +1,6 @@
 .PHONY: docs
 .PHONY: fixture/main.transactions.json
+.PHONY: jstest integrationtest jsbuild test
 
 develop:
 	./node_modules/.bin/concurrently --names "GO,JS" -c "auto" "make serve" "npm run dev"
@@ -39,13 +40,15 @@ regen:
 
 jstest:
 	node --import=tsx --import ./src/happydom.ts --test-concurrency=1 --test $$(find src -name '*.test.ts' -print)
+
+integrationtest:
 	go build
 	unset PAISA_CONFIG && TZ=UTC node --import=tsx --test-concurrency=1 --test $$(find tests -name '*.test.ts' -print)
 
 jsbuild:
 	npm run build
 
-test: jsbuild jstest
+test: jsbuild jstest integrationtest
 	go test ./...
 
 windows:

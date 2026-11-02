@@ -848,7 +848,6 @@ func buildHLedgerPostings(p HLedgerPosting, t HLedgerTransaction, pricesTree map
 				forecast = true
 			}
 		}
-		break
 	}
 
 	for _, tag := range p.Tags {
@@ -859,7 +858,6 @@ func buildHLedgerPostings(p HLedgerPosting, t HLedgerTransaction, pricesTree map
 		if len(tag) == 2 && tag[0] == "Period" {
 			tagPeriod = tag[1]
 		}
-		break
 	}
 
 	dir := filepath.Dir(config.GetJournalPath())

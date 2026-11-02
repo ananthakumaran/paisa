@@ -33,7 +33,7 @@
     "2022-01": [
       {
         "id": 4,
-        "transaction_id": "67f44c92-c138-550d-9ae2-84034aca39d3",
+        "transaction_id": "01823a64-c42a-5380-8e14-1c4d8be72f57",
         "date": "2022-01-03T00:00:00Z",
         "payee": "Rent",
         "account": "Expenses:Rent",
@@ -54,7 +54,7 @@
       },
       {
         "id": 16,
-        "transaction_id": "13751d3a-ebfe-5de8-aca5-8870bc86ff9d",
+        "transaction_id": "14447dea-6f63-5c6b-8bd9-0a781dd04c62",
         "date": "2022-01-11T00:00:00Z",
         "payee": "Multi Currency Debit",
         "account": "Expenses:Charges",
@@ -91,13 +91,13 @@
   "transactionSequences": [],
   "transactions": [
     {
-      "id": "6c08d472-cc1e-5b12-8838-03a21e3d8964",
+      "id": "47401a0a-4e6a-51cb-bb14-df103a1f73cb",
       "date": "2022-01-31T00:00:00Z",
       "payee": "Interest",
       "postings": [
         {
           "id": 21,
-          "transaction_id": "6c08d472-cc1e-5b12-8838-03a21e3d8964",
+          "transaction_id": "47401a0a-4e6a-51cb-bb14-df103a1f73cb",
           "date": "2022-01-31T00:00:00Z",
           "payee": "Interest",
           "account": "Assets:Checking",
@@ -118,7 +118,7 @@
         },
         {
           "id": 20,
-          "transaction_id": "6c08d472-cc1e-5b12-8838-03a21e3d8964",
+          "transaction_id": "47401a0a-4e6a-51cb-bb14-df103a1f73cb",
           "date": "2022-01-31T00:00:00Z",
           "payee": "Interest",
           "account": "Income:Interest:Checking",
@@ -146,13 +146,13 @@
       "note": " Global note\n :interest:"
     },
     {
-      "id": "13751d3a-ebfe-5de8-aca5-8870bc86ff9d",
+      "id": "14447dea-6f63-5c6b-8bd9-0a781dd04c62",
       "date": "2022-01-11T00:00:00Z",
       "payee": "Multi Currency Debit",
       "postings": [
         {
           "id": 17,
-          "transaction_id": "13751d3a-ebfe-5de8-aca5-8870bc86ff9d",
+          "transaction_id": "14447dea-6f63-5c6b-8bd9-0a781dd04c62",
           "date": "2022-01-11T00:00:00Z",
           "payee": "Multi Currency Debit",
           "account": "Assets:Dollar",
@@ -173,7 +173,7 @@
         },
         {
           "id": 16,
-          "transaction_id": "13751d3a-ebfe-5de8-aca5-8870bc86ff9d",
+          "transaction_id": "14447dea-6f63-5c6b-8bd9-0a781dd04c62",
           "date": "2022-01-11T00:00:00Z",
           "payee": "Multi Currency Debit",
           "account": "Expenses:Charges",
@@ -194,7 +194,7 @@
         },
         {
           "id": 19,
-          "transaction_id": "13751d3a-ebfe-5de8-aca5-8870bc86ff9d",
+          "transaction_id": "14447dea-6f63-5c6b-8bd9-0a781dd04c62",
           "date": "2022-01-11T00:00:00Z",
           "payee": "Multi Currency Debit",
           "account": "Assets:Checking",
@@ -215,7 +215,7 @@
         },
         {
           "id": 18,
-          "transaction_id": "13751d3a-ebfe-5de8-aca5-8870bc86ff9d",
+          "transaction_id": "14447dea-6f63-5c6b-8bd9-0a781dd04c62",
           "date": "2022-01-11T00:00:00Z",
           "payee": "Multi Currency Debit",
           "account": "Assets:Checking",
@@ -243,13 +243,13 @@
       "note": ""
     },
     {
-      "id": "b2e50492-9dc7-5845-8ed9-9f4590b301a8",
+      "id": "70f61b87-5515-5fb5-aaf5-53e4ba124598",
       "date": "2022-01-10T00:00:00Z",
       "payee": "Sell",
       "postings": [
         {
           "id": 15,
-          "transaction_id": "b2e50492-9dc7-5845-8ed9-9f4590b301a8",
+          "transaction_id": "70f61b87-5515-5fb5-aaf5-53e4ba124598",
           "date": "2022-01-10T00:00:00Z",
           "payee": "Sell",
           "account": "Assets:Checking",
@@ -270,7 +270,7 @@
         },
         {
           "id": 14,
-          "transaction_id": "b2e50492-9dc7-5845-8ed9-9f4590b301a8",
+          "transaction_id": "70f61b87-5515-5fb5-aaf5-53e4ba124598",
           "date": "2022-01-10T00:00:00Z",
           "payee": "Sell",
           "account": "Income:CapitalGains:Equity:AAPL",
@@ -291,7 +291,7 @@
         },
         {
           "id": 13,
-          "transaction_id": "b2e50492-9dc7-5845-8ed9-9f4590b301a8",
+          "transaction_id": "70f61b87-5515-5fb5-aaf5-53e4ba124598",
           "date": "2022-01-10T00:00:00Z",
           "payee": "Sell",
           "account": "Assets:Equity:AAPL",
@@ -319,13 +319,13 @@
       "note": ""
     },
     {
-      "id": "608fccf0-e80c-570e-87df-63a9a959c59a",
+      "id": "06475670-5312-592b-9fca-c0bc4edae879",
       "date": "2022-01-09T00:00:00Z",
       "payee": "Buy Apple",
       "postings": [
         {
           "id": 11,
-          "transaction_id": "608fccf0-e80c-570e-87df-63a9a959c59a",
+          "transaction_id": "06475670-5312-592b-9fca-c0bc4edae879",
           "date": "2022-01-09T00:00:00Z",
           "payee": "Buy Apple",
           "account": "Assets:Equity:AAPL",
@@ -346,7 +346,7 @@
         },
         {
           "id": 12,
-          "transaction_id": "608fccf0-e80c-570e-87df-63a9a959c59a",
+          "transaction_id": "06475670-5312-592b-9fca-c0bc4edae879",
           "date": "2022-01-09T00:00:00Z",
           "payee": "Buy Apple",
           "account": "Assets:Checking",
@@ -374,13 +374,13 @@
       "note": ""
     },
     {
-      "id": "c4ee69cc-e6bc-56a4-b573-e5519afb2a45",
+      "id": "9c7d8710-1414-5b5f-95ff-efb6cae68f70",
       "date": "2022-01-08T00:00:00Z",
       "payee": "Buy ABNB",
       "postings": [
         {
           "id": 9,
-          "transaction_id": "c4ee69cc-e6bc-56a4-b573-e5519afb2a45",
+          "transaction_id": "9c7d8710-1414-5b5f-95ff-efb6cae68f70",
           "date": "2022-01-08T00:00:00Z",
           "payee": "Buy ABNB",
           "account": "Assets:Equity:ABNB",
@@ -401,7 +401,7 @@
         },
         {
           "id": 10,
-          "transaction_id": "c4ee69cc-e6bc-56a4-b573-e5519afb2a45",
+          "transaction_id": "9c7d8710-1414-5b5f-95ff-efb6cae68f70",
           "date": "2022-01-08T00:00:00Z",
           "payee": "Buy ABNB",
           "account": "Assets:Checking",
@@ -429,13 +429,13 @@
       "note": ""
     },
     {
-      "id": "928a326f-93b5-5967-96e8-fe18ad9bf45f",
+      "id": "da653d7b-3378-5558-8785-3816deb61763",
       "date": "2022-01-07T00:00:00Z",
       "payee": "Investment",
       "postings": [
         {
           "id": 8,
-          "transaction_id": "928a326f-93b5-5967-96e8-fe18ad9bf45f",
+          "transaction_id": "da653d7b-3378-5558-8785-3816deb61763",
           "date": "2022-01-07T00:00:00Z",
           "payee": "Investment",
           "account": "Assets:Equity:NIFTY",
@@ -456,7 +456,7 @@
         },
         {
           "id": 7,
-          "transaction_id": "928a326f-93b5-5967-96e8-fe18ad9bf45f",
+          "transaction_id": "da653d7b-3378-5558-8785-3816deb61763",
           "date": "2022-01-07T00:00:00Z",
           "payee": "Investment",
           "account": "Assets:Checking",
@@ -484,13 +484,13 @@
       "note": ""
     },
     {
-      "id": "9ac83c1f-ba46-515b-8e19-3ca8ab332eab",
+      "id": "7f3025cd-dbf3-56c5-b59e-03ff8251ddaa",
       "date": "2022-01-06T00:00:00Z",
       "payee": "Bonus",
       "postings": [
         {
           "id": 6,
-          "transaction_id": "9ac83c1f-ba46-515b-8e19-3ca8ab332eab",
+          "transaction_id": "7f3025cd-dbf3-56c5-b59e-03ff8251ddaa",
           "date": "2022-01-06T00:00:00Z",
           "payee": "Bonus",
           "account": "Assets:Checking",
@@ -511,7 +511,7 @@
         },
         {
           "id": 5,
-          "transaction_id": "9ac83c1f-ba46-515b-8e19-3ca8ab332eab",
+          "transaction_id": "7f3025cd-dbf3-56c5-b59e-03ff8251ddaa",
           "date": "2022-01-06T00:00:00Z",
           "payee": "Bonus",
           "account": "Income:Salary:Acme",
@@ -539,13 +539,13 @@
       "note": ""
     },
     {
-      "id": "67f44c92-c138-550d-9ae2-84034aca39d3",
+      "id": "01823a64-c42a-5380-8e14-1c4d8be72f57",
       "date": "2022-01-03T00:00:00Z",
       "payee": "Rent",
       "postings": [
         {
           "id": 4,
-          "transaction_id": "67f44c92-c138-550d-9ae2-84034aca39d3",
+          "transaction_id": "01823a64-c42a-5380-8e14-1c4d8be72f57",
           "date": "2022-01-03T00:00:00Z",
           "payee": "Rent",
           "account": "Expenses:Rent",
@@ -566,7 +566,7 @@
         },
         {
           "id": 3,
-          "transaction_id": "67f44c92-c138-550d-9ae2-84034aca39d3",
+          "transaction_id": "01823a64-c42a-5380-8e14-1c4d8be72f57",
           "date": "2022-01-03T00:00:00Z",
           "payee": "Rent",
           "account": "Assets:Checking",
@@ -594,13 +594,13 @@
       "note": ""
     },
     {
-      "id": "d84b6999-200b-5b90-9a3e-f94dc8a177da",
+      "id": "ded46442-eb3c-59a5-844a-dee56c6a9ffe",
       "date": "2022-01-01T00:00:00Z",
       "payee": "Salary",
       "postings": [
         {
           "id": 2,
-          "transaction_id": "d84b6999-200b-5b90-9a3e-f94dc8a177da",
+          "transaction_id": "ded46442-eb3c-59a5-844a-dee56c6a9ffe",
           "date": "2022-01-01T00:00:00Z",
           "payee": "Salary",
           "account": "Assets:Checking",
@@ -621,7 +621,7 @@
         },
         {
           "id": 1,
-          "transaction_id": "d84b6999-200b-5b90-9a3e-f94dc8a177da",
+          "transaction_id": "ded46442-eb3c-59a5-844a-dee56c6a9ffe",
           "date": "2022-01-01T00:00:00Z",
           "payee": "Salary",
           "account": "Income:Salary:Acme",

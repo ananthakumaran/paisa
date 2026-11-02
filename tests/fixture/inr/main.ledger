@@ -1,4 +1,4 @@
-commodity INR 9,99,99,999.00
+include journals/2022/bank.ledger
 
 P 2022/01/07 00:00:00 NIFTY 100 INR
 P 2022/02/07 00:00:00 NIFTY 100.273 INR

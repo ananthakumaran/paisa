@@ -77,6 +77,27 @@ async function verifyApi(dir: string) {
   await recordAndVerify(dir, "/api/price", "price");
   await recordAndVerify(dir, "/api/diagnosis", "diagnosis");
   await recordAndVerify(dir, "/api/config", "config");
+
+  const {
+    data: { files }
+  } = await axios.get("/api/editor/files");
+  for (const file of files) {
+    const { data } = await axios.post("/api/editor/validate", file);
+    assert.deepStrictEqual(data.errors, [], `Validation failed for ${file.name}`);
+  }
+
+  const mainFile = files.find((file) => file.name === path.basename(config.journal_path));
+  const { data: unnamed } = await axios.post("/api/editor/validate", { ...mainFile, name: "" });
+  assert.deepStrictEqual(
+    unnamed.errors,
+    [],
+    "Unnamed previews must use the main journal directory"
+  );
+
+  for (const name of [`../outside${extension}`, `nested/../../outside${extension}`, "."]) {
+    const { data } = await axios.post("/api/editor/validate", { name, content: "" });
+    assert.strictEqual(data.errors[0].message, "Invalid file name");
+  }
 }
 
 async function wait() {

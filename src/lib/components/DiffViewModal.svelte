@@ -36,7 +36,8 @@
       editor = createDiffEditor(
         changedOldFiles[selectedFileIndex].content,
         changedNewFiles[selectedFileIndex].content,
-        editorDom
+        editorDom,
+        changedNewFiles[selectedFileIndex].name
       );
     }
   }

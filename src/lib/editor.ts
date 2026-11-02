@@ -21,11 +21,11 @@ import dayjs from "dayjs";
 
 export { editorState } from "../store";
 
-async function lint(editor: EditorView): Promise<Diagnostic[]> {
+async function lint(editor: EditorView, name = ""): Promise<Diagnostic[]> {
   const doc = editor.state.doc;
   const response = await ajax("/api/editor/validate", {
     method: "POST",
-    body: JSON.stringify({ name: "", content: editor.state.doc.toString() }),
+    body: JSON.stringify({ name, content: editor.state.doc.toString() }),
     background: true
   });
 
@@ -45,14 +45,14 @@ async function lint(editor: EditorView): Promise<Diagnostic[]> {
   });
 }
 
-export function createDiffEditor(oldContent: string, newContent: string, dom: Element) {
+export function createDiffEditor(oldContent: string, newContent: string, dom: Element, name = "") {
   const extensions = [
     basicSetup,
     State.readOnly.of(true),
     StreamLanguage.define(ledger),
     EditorView.contentAttributes.of({ "data-enable-grammarly": "false" }),
     lintGutter(),
-    linter(lint)
+    linter((editor) => lint(editor, name))
   ];
   return new MergeView({
     a: { extensions: extensions, doc: oldContent },
@@ -66,6 +66,7 @@ export function createEditor(
   content: string,
   dom: Element,
   opts: {
+    name?: string;
     autocompletions?: Record<string, string[]>;
     readonly?: boolean;
     keybindings?: readonly KeyBinding[];
@@ -81,7 +82,7 @@ export function createEditor(
       EditorView.contentAttributes.of({ "data-enable-grammarly": "false" }),
       StreamLanguage.define(ledger),
       lintGutter(),
-      linter(lint),
+      linter((editor) => lint(editor, opts.name)),
       history(),
       autocompletion({
         override: [

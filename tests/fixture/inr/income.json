@@ -5,7 +5,7 @@
       "postings": [
         {
           "id": 1,
-          "transaction_id": "d84b6999-200b-5b90-9a3e-f94dc8a177da",
+          "transaction_id": "ded46442-eb3c-59a5-844a-dee56c6a9ffe",
           "date": "2022-01-01T00:00:00Z",
           "payee": "Salary",
           "account": "Income:Salary:Acme",
@@ -26,7 +26,7 @@
         },
         {
           "id": 5,
-          "transaction_id": "9ac83c1f-ba46-515b-8e19-3ca8ab332eab",
+          "transaction_id": "7f3025cd-dbf3-56c5-b59e-03ff8251ddaa",
           "date": "2022-01-06T00:00:00Z",
           "payee": "Bonus",
           "account": "Income:Salary:Acme",
@@ -47,7 +47,7 @@
         },
         {
           "id": 14,
-          "transaction_id": "b2e50492-9dc7-5845-8ed9-9f4590b301a8",
+          "transaction_id": "70f61b87-5515-5fb5-aaf5-53e4ba124598",
           "date": "2022-01-10T00:00:00Z",
           "payee": "Sell",
           "account": "Income:CapitalGains:Equity:AAPL",
@@ -68,7 +68,7 @@
         },
         {
           "id": 20,
-          "transaction_id": "6c08d472-cc1e-5b12-8838-03a21e3d8964",
+          "transaction_id": "47401a0a-4e6a-51cb-bb14-df103a1f73cb",
           "date": "2022-01-31T00:00:00Z",
           "payee": "Interest",
           "account": "Income:Interest:Checking",
@@ -102,7 +102,7 @@
       "postings": [
         {
           "id": 1,
-          "transaction_id": "d84b6999-200b-5b90-9a3e-f94dc8a177da",
+          "transaction_id": "ded46442-eb3c-59a5-844a-dee56c6a9ffe",
           "date": "2022-01-01T00:00:00Z",
           "payee": "Salary",
           "account": "Income:Salary:Acme",
@@ -123,7 +123,7 @@
         },
         {
           "id": 5,
-          "transaction_id": "9ac83c1f-ba46-515b-8e19-3ca8ab332eab",
+          "transaction_id": "7f3025cd-dbf3-56c5-b59e-03ff8251ddaa",
           "date": "2022-01-06T00:00:00Z",
           "payee": "Bonus",
           "account": "Income:Salary:Acme",
@@ -144,7 +144,7 @@
         },
         {
           "id": 14,
-          "transaction_id": "b2e50492-9dc7-5845-8ed9-9f4590b301a8",
+          "transaction_id": "70f61b87-5515-5fb5-aaf5-53e4ba124598",
           "date": "2022-01-10T00:00:00Z",
           "payee": "Sell",
           "account": "Income:CapitalGains:Equity:AAPL",
@@ -165,7 +165,7 @@
         },
         {
           "id": 20,
-          "transaction_id": "6c08d472-cc1e-5b12-8838-03a21e3d8964",
+          "transaction_id": "47401a0a-4e6a-51cb-bb14-df103a1f73cb",
           "date": "2022-01-31T00:00:00Z",
           "payee": "Interest",
           "account": "Income:Interest:Checking",

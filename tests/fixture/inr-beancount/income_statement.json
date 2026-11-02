@@ -11,13 +11,12 @@
         "Income:Interest:Checking": -1000
       },
       "equity": {
-        "Equity:OpeningBalances": -1072
+        "Equity:OpeningBalances": -1072.7
       },
       "pnl": {
-        "Assets:Checking": -60.58866180237056,
-        "Assets:Coinbase:BTC": 1e-8,
-        "Assets:Equity:AAPL": 27,
-        "Assets:Equity:ABNB": -7963.002752,
+        "Assets:Coinbase:BTC": -0.03440666277056,
+        "Assets:Equity:AAPL": 27.3,
+        "Assets:Equity:ABNB": -8024.5570071296,
         "Assets:Equity:NIFTY": 218.4
       },
       "liabilities": {},

@@ -11,8 +11,8 @@ include "journals/*/*.beancount"
 1970-01-01 open Assets:Dollar
 1970-01-01 open Equity:OpeningBalances
 
-1970-01-01 commodity AAPL
-1970-01-01 commodity ABNB
+1970-01-01 commodity ABC1DE ; Regression #289: embedded digit
+1970-01-01 commodity EFG123 ; Regression #289: trailing digits
 1970-01-01 commodity INR
 1970-01-01 commodity NIFTY
 1970-01-01 commodity USD
@@ -38,15 +38,15 @@ include "journals/*/*.beancount"
   Assets:Equity:NIFTY                          800 NIFTY {100 INR}
 
 2022-01-08 txn "Buy ABNB"
-  Assets:Equity:ABNB                          0.76 ABNB {131.27 USD}
+  Assets:Equity:ABNB                          0.76 EFG123 {131.27 USD}
   Assets:Checking
 
 2022-01-09 txn "Buy Apple"
-  Assets:Equity:AAPL                           100 AAPL {100 INR}
+  Assets:Equity:AAPL                           100 ABC1DE {100 INR}
   Assets:Checking
 
 2022-01-10 txn "Sell"
-  Assets:Equity:AAPL                          -100 AAPL {100 INR} @ 100.273 INR
+  Assets:Equity:AAPL                          -100 ABC1DE {100 INR} @ 100.273 INR
   Income:CapitalGains:Equity:AAPL            -27.3 INR
   Assets:Checking                          10027.3 INR
 

@@ -133,7 +133,7 @@
         {
           "source": 1,
           "target": 8,
-          "value": 7963.762752
+          "value": 8025.3170071296
         },
         {
           "source": 1,
@@ -148,7 +148,7 @@
         {
           "source": 2,
           "target": 1,
-          "value": 121027
+          "value": 121027.3
         },
         {
           "source": 3,
@@ -178,22 +178,22 @@
         {
           "source": 10,
           "target": 2,
-          "value": 27
+          "value": 27.3
         },
         {
           "source": 11,
           "target": 10,
-          "value": 27
+          "value": 27.3
         },
         {
           "source": 12,
           "target": 11,
-          "value": 27
+          "value": 27.3
         },
         {
           "source": 16,
           "target": 1,
-          "value": 1072
+          "value": 1072.7
         },
         {
           "source": 17,
@@ -301,13 +301,13 @@
         },
         {
           "id": 14,
-          "transaction_id": "3b252f03f4e42a4cd3861e6b3dc6b8f1",
+          "transaction_id": "965dc0f23f130ad01313877822433f59",
           "date": "2022-01-10T00:00:00Z",
           "payee": "Sell",
           "account": "Income:CapitalGains:Equity:AAPL",
           "commodity": "INR",
           "quantity": -27.3,
-          "amount": -27,
+          "amount": -27.3,
           "status": "cleared",
           "tag_recurring": "",
           "tag_period": "",
@@ -368,13 +368,13 @@
         },
         {
           "id": 9,
-          "transaction_id": "c50a3b3ee30033764df6b4a179e09f8d",
+          "transaction_id": "11b12fe5419800a9dfbb3d0c4c52904e",
           "date": "2022-01-08T00:00:00Z",
           "payee": "Buy ABNB",
           "account": "Assets:Equity:ABNB",
-          "commodity": "ABNB",
+          "commodity": "EFG123",
           "quantity": 0.76,
-          "amount": 7963.762752,
+          "amount": 8025.3170071296,
           "status": "cleared",
           "tag_recurring": "",
           "tag_period": "",
@@ -389,11 +389,11 @@
         },
         {
           "id": 11,
-          "transaction_id": "bb27c9f651527e62d2528e13b9fb7c8b",
+          "transaction_id": "091a88b941c6e560e8599df6e7d0c896",
           "date": "2022-01-09T00:00:00Z",
           "payee": "Buy Apple",
           "account": "Assets:Equity:AAPL",
-          "commodity": "AAPL",
+          "commodity": "ABC1DE",
           "quantity": 100,
           "amount": 10000,
           "status": "cleared",
@@ -410,11 +410,11 @@
         },
         {
           "id": 13,
-          "transaction_id": "3b252f03f4e42a4cd3861e6b3dc6b8f1",
+          "transaction_id": "965dc0f23f130ad01313877822433f59",
           "date": "2022-01-10T00:00:00Z",
           "payee": "Sell",
           "account": "Assets:Equity:AAPL",
-          "commodity": "AAPL",
+          "commodity": "ABC1DE",
           "quantity": -100,
           "amount": -10000,
           "status": "cleared",
@@ -458,7 +458,7 @@
           "account": "Assets:Coinbase:BTC",
           "commodity": "BTC",
           "quantity": 1e-8,
-          "amount": 0,
+          "amount": 0.03440667277056,
           "status": "cleared",
           "tag_recurring": "",
           "tag_period": "",
@@ -568,13 +568,13 @@
         },
         {
           "id": 14,
-          "transaction_id": "3b252f03f4e42a4cd3861e6b3dc6b8f1",
+          "transaction_id": "965dc0f23f130ad01313877822433f59",
           "date": "2022-01-10T00:00:00Z",
           "payee": "Sell",
           "account": "Income:CapitalGains:Equity:AAPL",
           "commodity": "INR",
           "quantity": -27.3,
-          "amount": -27,
+          "amount": -27.3,
           "status": "cleared",
           "tag_recurring": "",
           "tag_period": "",
@@ -635,13 +635,13 @@
         },
         {
           "id": 9,
-          "transaction_id": "c50a3b3ee30033764df6b4a179e09f8d",
+          "transaction_id": "11b12fe5419800a9dfbb3d0c4c52904e",
           "date": "2022-01-08T00:00:00Z",
           "payee": "Buy ABNB",
           "account": "Assets:Equity:ABNB",
-          "commodity": "ABNB",
+          "commodity": "EFG123",
           "quantity": 0.76,
-          "amount": 7963.762752,
+          "amount": 8025.3170071296,
           "status": "cleared",
           "tag_recurring": "",
           "tag_period": "",
@@ -656,11 +656,11 @@
         },
         {
           "id": 11,
-          "transaction_id": "bb27c9f651527e62d2528e13b9fb7c8b",
+          "transaction_id": "091a88b941c6e560e8599df6e7d0c896",
           "date": "2022-01-09T00:00:00Z",
           "payee": "Buy Apple",
           "account": "Assets:Equity:AAPL",
-          "commodity": "AAPL",
+          "commodity": "ABC1DE",
           "quantity": 100,
           "amount": 10000,
           "status": "cleared",
@@ -677,11 +677,11 @@
         },
         {
           "id": 13,
-          "transaction_id": "3b252f03f4e42a4cd3861e6b3dc6b8f1",
+          "transaction_id": "965dc0f23f130ad01313877822433f59",
           "date": "2022-01-10T00:00:00Z",
           "payee": "Sell",
           "account": "Assets:Equity:AAPL",
-          "commodity": "AAPL",
+          "commodity": "ABC1DE",
           "quantity": -100,
           "amount": -10000,
           "status": "cleared",
@@ -725,7 +725,7 @@
           "account": "Assets:Coinbase:BTC",
           "commodity": "BTC",
           "quantity": 1e-8,
-          "amount": 0,
+          "amount": 0.03440667277056,
           "status": "cleared",
           "tag_recurring": "",
           "tag_period": "",

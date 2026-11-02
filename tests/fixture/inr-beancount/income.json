@@ -47,13 +47,13 @@
         },
         {
           "id": 14,
-          "transaction_id": "3b252f03f4e42a4cd3861e6b3dc6b8f1",
+          "transaction_id": "965dc0f23f130ad01313877822433f59",
           "date": "2022-01-10T00:00:00Z",
           "payee": "Sell",
           "account": "Income:CapitalGains:Equity:AAPL",
           "commodity": "INR",
           "quantity": -27.3,
-          "amount": -27,
+          "amount": -27.3,
           "status": "cleared",
           "tag_recurring": "",
           "tag_period": "",
@@ -144,13 +144,13 @@
         },
         {
           "id": 14,
-          "transaction_id": "3b252f03f4e42a4cd3861e6b3dc6b8f1",
+          "transaction_id": "965dc0f23f130ad01313877822433f59",
           "date": "2022-01-10T00:00:00Z",
           "payee": "Sell",
           "account": "Income:CapitalGains:Equity:AAPL",
           "commodity": "INR",
           "quantity": -27.3,
-          "amount": -27,
+          "amount": -27.3,
           "status": "cleared",
           "tag_recurring": "",
           "tag_period": "",
@@ -185,9 +185,9 @@
           "balance": 0
         }
       ],
-      "gross_income": 121027,
+      "gross_income": 121027.3,
       "net_tax": 0,
-      "net_income": 121027
+      "net_income": 121027.3
     }
   ]
 }

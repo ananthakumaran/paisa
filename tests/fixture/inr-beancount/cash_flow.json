@@ -2,13 +2,13 @@
   "cash_flows": [
     {
       "date": "2022-01-01T00:00:00Z",
-      "income": 121027,
+      "income": 121027.3,
       "expenses": 20100,
       "liabilities": 0,
-      "investment": 88768.183232,
+      "investment": 88829.77189380238,
       "tax": 0,
-      "checking": 13230.816768,
-      "balance": 13230.816768
+      "checking": 13170.22810619763,
+      "balance": 13170.22810619763
     },
     {
       "date": "2022-02-01T00:00:00Z",
@@ -18,7 +18,7 @@
       "investment": 0,
       "tax": 0,
       "checking": 0,
-      "balance": 13230.816768
+      "balance": 13170.22810619763
     }
   ]
 }

@@ -33,6 +33,7 @@ async function recordAndVerify(dir: string, route: string, name: string) {
     if (diff != "") {
       assert.fail(diff);
     }
+    return;
   }
   fs.writeFileSync(filename, JSON.stringify(data, null, 2));
 }
@@ -71,6 +72,7 @@ async function verifyApi(dir: string) {
   await recordAndVerify(dir, "/api/liabilities/balance", "liabilities_balance");
   await recordAndVerify(dir, "/api/liabilities/repayment", "liabilities_repayment");
   await recordAndVerify(dir, "/api/liabilities/interest", "liabilities_interest");
+  await recordAndVerify(dir, "/api/credit_cards", "credit_cards");
   await recordAndVerify(dir, "/api/income", "income");
   await recordAndVerify(dir, "/api/transaction", "transaction");
   await recordAndVerify(dir, "/api/editor/files", "files");

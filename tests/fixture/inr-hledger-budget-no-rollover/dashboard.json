@@ -1,0 +1,213 @@
+{
+  "budget": {
+    "availableForBudgeting": 1500,
+    "budgetsByMonth": {
+      "2022-02": {
+        "date": "2022-02-01T00:00:00Z",
+        "accounts": [
+          {
+            "account": "Expenses:Rent",
+            "forecast": 1000,
+            "actual": 200,
+            "rollover": 0,
+            "available": 800,
+            "date": "2022-02-01T00:00:00Z",
+            "expenses": [
+              {
+                "id": 51,
+                "transaction_id": "2",
+                "date": "2022-02-03T00:00:00Z",
+                "payee": "Rent",
+                "account": "Expenses:Rent",
+                "commodity": "INR",
+                "quantity": 200,
+                "amount": 200,
+                "status": "unmarked",
+                "tag_recurring": "",
+                "tag_period": "",
+                "transaction_begin_line": 6,
+                "transaction_end_line": 9,
+                "file_name": "main.ledger",
+                "forecast": false,
+                "note": "",
+                "transaction_note": "",
+                "market_amount": 0,
+                "balance": 0
+              }
+            ]
+          }
+        ],
+        "availableThisMonth": 800,
+        "endOfMonthBalance": 1500,
+        "forecast": 1000
+      }
+    },
+    "checkingBalance": 2300
+  },
+  "cashFlows": [
+    {
+      "date": "2022-02-01T00:00:00Z",
+      "income": 2500,
+      "expenses": 200,
+      "liabilities": 0,
+      "investment": 0,
+      "tax": 0,
+      "checking": 2300,
+      "balance": 2300
+    }
+  ],
+  "checkingBalances": {
+    "asset_breakdowns": {}
+  },
+  "expenses": {
+    "2022-02": [
+      {
+        "id": 51,
+        "transaction_id": "2",
+        "date": "2022-02-03T00:00:00Z",
+        "payee": "Rent",
+        "account": "Expenses:Rent",
+        "commodity": "INR",
+        "quantity": 200,
+        "amount": 200,
+        "status": "unmarked",
+        "tag_recurring": "",
+        "tag_period": "",
+        "transaction_begin_line": 6,
+        "transaction_end_line": 9,
+        "file_name": "main.ledger",
+        "forecast": false,
+        "note": "",
+        "transaction_note": "",
+        "market_amount": 0,
+        "balance": 0
+      }
+    ]
+  },
+  "goalSummaries": [],
+  "networth": {
+    "networth": {
+      "date": "2022-02-07T23:59:59.999999999Z",
+      "investmentAmount": 2500,
+      "withdrawalAmount": 200,
+      "gainAmount": 0,
+      "balanceAmount": 2300,
+      "balanceUnits": 0,
+      "netInvestmentAmount": 2300
+    },
+    "xirr": 0
+  },
+  "transactionSequences": [],
+  "transactions": [
+    {
+      "id": "2",
+      "date": "2022-02-03T00:00:00Z",
+      "payee": "Rent",
+      "postings": [
+        {
+          "id": 51,
+          "transaction_id": "2",
+          "date": "2022-02-03T00:00:00Z",
+          "payee": "Rent",
+          "account": "Expenses:Rent",
+          "commodity": "INR",
+          "quantity": 200,
+          "amount": 200,
+          "status": "unmarked",
+          "tag_recurring": "",
+          "tag_period": "",
+          "transaction_begin_line": 6,
+          "transaction_end_line": 9,
+          "file_name": "main.ledger",
+          "forecast": false,
+          "note": "",
+          "transaction_note": "",
+          "market_amount": 0,
+          "balance": 0
+        },
+        {
+          "id": 52,
+          "transaction_id": "2",
+          "date": "2022-02-03T00:00:00Z",
+          "payee": "Rent",
+          "account": "Assets:Checking",
+          "commodity": "INR",
+          "quantity": -200,
+          "amount": -200,
+          "status": "unmarked",
+          "tag_recurring": "",
+          "tag_period": "",
+          "transaction_begin_line": 6,
+          "transaction_end_line": 9,
+          "file_name": "main.ledger",
+          "forecast": false,
+          "note": "",
+          "transaction_note": "",
+          "market_amount": 0,
+          "balance": 0
+        }
+      ],
+      "tag_recurring": "",
+      "tag_period": "",
+      "beginLine": 6,
+      "endLine": 9,
+      "fileName": "main.ledger",
+      "note": ""
+    },
+    {
+      "id": "1",
+      "date": "2022-02-01T00:00:00Z",
+      "payee": "Salary",
+      "postings": [
+        {
+          "id": 50,
+          "transaction_id": "1",
+          "date": "2022-02-01T00:00:00Z",
+          "payee": "Salary",
+          "account": "Assets:Checking",
+          "commodity": "INR",
+          "quantity": 2500,
+          "amount": 2500,
+          "status": "unmarked",
+          "tag_recurring": "",
+          "tag_period": "",
+          "transaction_begin_line": 2,
+          "transaction_end_line": 5,
+          "file_name": "main.ledger",
+          "forecast": false,
+          "note": "",
+          "transaction_note": "",
+          "market_amount": 0,
+          "balance": 0
+        },
+        {
+          "id": 49,
+          "transaction_id": "1",
+          "date": "2022-02-01T00:00:00Z",
+          "payee": "Salary",
+          "account": "Income:Salary:Acme",
+          "commodity": "INR",
+          "quantity": -2500,
+          "amount": -2500,
+          "status": "unmarked",
+          "tag_recurring": "",
+          "tag_period": "",
+          "transaction_begin_line": 2,
+          "transaction_end_line": 5,
+          "file_name": "main.ledger",
+          "forecast": false,
+          "note": "",
+          "transaction_note": "",
+          "market_amount": 0,
+          "balance": 0
+        }
+      ],
+      "tag_recurring": "",
+      "tag_period": "",
+      "beginLine": 2,
+      "endLine": 5,
+      "fileName": "main.ledger",
+      "note": ""
+    }
+  ]
+}

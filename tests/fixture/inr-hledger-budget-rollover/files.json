@@ -1,0 +1,23 @@
+{
+  "accounts": [
+    "Income:Salary:Acme",
+    "Assets:Checking",
+    "Expenses:Rent"
+  ],
+  "commodities": [
+    "INR"
+  ],
+  "files": [
+    {
+      "name": "main.ledger",
+      "content": "; Regression #422: February's unspent budget must only be reserved once.\n2022-02-01 Salary\n    Income:Salary:Acme  -2500 INR\n    Assets:Checking     2500 INR\n\n2022-02-03 Rent\n    Expenses:Rent        200 INR\n    Assets:Checking     -200 INR\n\n~ every month from 2022-02-01 to 2022-04-01  RentBudget\n    Expenses:Rent       1000 INR\n    Assets:Checking    -1000 INR\n",
+      "versions": [],
+      "operation": ""
+    }
+  ],
+  "payees": [
+    "Salary",
+    "Rent",
+    "RentBudget"
+  ]
+}

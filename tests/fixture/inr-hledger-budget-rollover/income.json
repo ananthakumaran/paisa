@@ -1,0 +1,63 @@
+{
+  "income_timeline": [
+    {
+      "date": "2022-02-01T00:00:00Z",
+      "postings": [
+        {
+          "id": 49,
+          "transaction_id": "1",
+          "date": "2022-02-01T00:00:00Z",
+          "payee": "Salary",
+          "account": "Income:Salary:Acme",
+          "commodity": "INR",
+          "quantity": -2500,
+          "amount": -2500,
+          "status": "unmarked",
+          "tag_recurring": "",
+          "tag_period": "",
+          "transaction_begin_line": 2,
+          "transaction_end_line": 5,
+          "file_name": "main.ledger",
+          "forecast": false,
+          "note": "",
+          "transaction_note": "",
+          "market_amount": 0,
+          "balance": 0
+        }
+      ]
+    }
+  ],
+  "tax_timeline": [],
+  "yearly_cards": [
+    {
+      "start_date": "2021-04-01T00:00:00Z",
+      "end_date": "2022-03-31T23:59:59.999999999Z",
+      "postings": [
+        {
+          "id": 49,
+          "transaction_id": "1",
+          "date": "2022-02-01T00:00:00Z",
+          "payee": "Salary",
+          "account": "Income:Salary:Acme",
+          "commodity": "INR",
+          "quantity": -2500,
+          "amount": -2500,
+          "status": "unmarked",
+          "tag_recurring": "",
+          "tag_period": "",
+          "transaction_begin_line": 2,
+          "transaction_end_line": 5,
+          "file_name": "main.ledger",
+          "forecast": false,
+          "note": "",
+          "transaction_note": "",
+          "market_amount": 0,
+          "balance": 0
+        }
+      ],
+      "gross_income": 2500,
+      "net_tax": 0,
+      "net_income": 2500
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+; Regression #422: February's unspent budget must only be reserved once.
+2022-02-01 Salary
+    Income:Salary:Acme  -2500 INR
+    Assets:Checking     2500 INR
+
+2022-02-03 Rent
+    Expenses:Rent        200 INR
+    Assets:Checking     -200 INR
+
+~ every month from 2022-02-01 to 2022-04-01  RentBudget
+    Expenses:Rent       1000 INR
+    Assets:Checking    -1000 INR

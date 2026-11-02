@@ -1,0 +1,68 @@
+{
+  "networthTimeline": [
+    {
+      "date": "2022-02-01T00:00:00Z",
+      "investmentAmount": 2500,
+      "withdrawalAmount": 0,
+      "gainAmount": 0,
+      "balanceAmount": 2500,
+      "balanceUnits": 0,
+      "netInvestmentAmount": 2500
+    },
+    {
+      "date": "2022-02-02T00:00:00Z",
+      "investmentAmount": 2500,
+      "withdrawalAmount": 0,
+      "gainAmount": 0,
+      "balanceAmount": 2500,
+      "balanceUnits": 0,
+      "netInvestmentAmount": 2500
+    },
+    {
+      "date": "2022-02-03T00:00:00Z",
+      "investmentAmount": 2500,
+      "withdrawalAmount": 200,
+      "gainAmount": 0,
+      "balanceAmount": 2300,
+      "balanceUnits": 0,
+      "netInvestmentAmount": 2300
+    },
+    {
+      "date": "2022-02-04T00:00:00Z",
+      "investmentAmount": 2500,
+      "withdrawalAmount": 200,
+      "gainAmount": 0,
+      "balanceAmount": 2300,
+      "balanceUnits": 0,
+      "netInvestmentAmount": 2300
+    },
+    {
+      "date": "2022-02-05T00:00:00Z",
+      "investmentAmount": 2500,
+      "withdrawalAmount": 200,
+      "gainAmount": 0,
+      "balanceAmount": 2300,
+      "balanceUnits": 0,
+      "netInvestmentAmount": 2300
+    },
+    {
+      "date": "2022-02-06T00:00:00Z",
+      "investmentAmount": 2500,
+      "withdrawalAmount": 200,
+      "gainAmount": 0,
+      "balanceAmount": 2300,
+      "balanceUnits": 0,
+      "netInvestmentAmount": 2300
+    },
+    {
+      "date": "2022-02-07T00:00:00Z",
+      "investmentAmount": 2500,
+      "withdrawalAmount": 200,
+      "gainAmount": 0,
+      "balanceAmount": 2300,
+      "balanceUnits": 0,
+      "netInvestmentAmount": 2300
+    }
+  ],
+  "xirr": 0
+}

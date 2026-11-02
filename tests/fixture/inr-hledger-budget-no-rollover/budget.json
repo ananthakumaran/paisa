@@ -1,0 +1,62 @@
+{
+  "availableForBudgeting": 500,
+  "budgetsByMonth": {
+    "2022-02": {
+      "date": "2022-02-01T00:00:00Z",
+      "accounts": [
+        {
+          "account": "Expenses:Rent",
+          "forecast": 1000,
+          "actual": 200,
+          "rollover": 0,
+          "available": 800,
+          "date": "2022-02-01T00:00:00Z",
+          "expenses": [
+            {
+              "id": 51,
+              "transaction_id": "2",
+              "date": "2022-02-03T00:00:00Z",
+              "payee": "Rent",
+              "account": "Expenses:Rent",
+              "commodity": "INR",
+              "quantity": 200,
+              "amount": 200,
+              "status": "unmarked",
+              "tag_recurring": "",
+              "tag_period": "",
+              "transaction_begin_line": 6,
+              "transaction_end_line": 9,
+              "file_name": "main.ledger",
+              "forecast": false,
+              "note": "",
+              "transaction_note": "",
+              "market_amount": 0,
+              "balance": 0
+            }
+          ]
+        }
+      ],
+      "availableThisMonth": 800,
+      "endOfMonthBalance": 1500,
+      "forecast": 1000
+    },
+    "2022-03": {
+      "date": "2022-03-01T00:00:00Z",
+      "accounts": [
+        {
+          "account": "Expenses:Rent",
+          "forecast": 1000,
+          "actual": 0,
+          "rollover": 0,
+          "available": 1000,
+          "date": "2022-03-01T00:00:00Z",
+          "expenses": []
+        }
+      ],
+      "availableThisMonth": 1000,
+      "endOfMonthBalance": 500,
+      "forecast": 1000
+    }
+  },
+  "checkingBalance": 2300
+}

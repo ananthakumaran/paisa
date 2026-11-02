@@ -1,0 +1,190 @@
+{
+  "expenses": [
+    {
+      "id": 51,
+      "transaction_id": "2",
+      "date": "2022-02-03T00:00:00Z",
+      "payee": "Rent",
+      "account": "Expenses:Rent",
+      "commodity": "INR",
+      "quantity": 200,
+      "amount": 200,
+      "status": "unmarked",
+      "tag_recurring": "",
+      "tag_period": "",
+      "transaction_begin_line": 6,
+      "transaction_end_line": 9,
+      "file_name": "main.ledger",
+      "forecast": false,
+      "note": "",
+      "transaction_note": "",
+      "market_amount": 0,
+      "balance": 0
+    }
+  ],
+  "graph": {
+    "2021 - 22": {
+      "nodes": [
+        {
+          "id": 1,
+          "name": "Assets:Checking"
+        },
+        {
+          "id": 5,
+          "name": "Expenses"
+        },
+        {
+          "id": 6,
+          "name": "Expenses:Rent"
+        },
+        {
+          "id": 2,
+          "name": "Income"
+        },
+        {
+          "id": 3,
+          "name": "Income:Salary"
+        },
+        {
+          "id": 4,
+          "name": "Income:Salary:Acme"
+        }
+      ],
+      "links": [
+        {
+          "source": 1,
+          "target": 5,
+          "value": 200
+        },
+        {
+          "source": 2,
+          "target": 1,
+          "value": 2500
+        },
+        {
+          "source": 3,
+          "target": 2,
+          "value": 2500
+        },
+        {
+          "source": 4,
+          "target": 3,
+          "value": 2500
+        },
+        {
+          "source": 5,
+          "target": 6,
+          "value": 200
+        }
+      ]
+    }
+  },
+  "month_wise": {
+    "expenses": {
+      "2022-02": [
+        {
+          "id": 51,
+          "transaction_id": "2",
+          "date": "2022-02-03T00:00:00Z",
+          "payee": "Rent",
+          "account": "Expenses:Rent",
+          "commodity": "INR",
+          "quantity": 200,
+          "amount": 200,
+          "status": "unmarked",
+          "tag_recurring": "",
+          "tag_period": "",
+          "transaction_begin_line": 6,
+          "transaction_end_line": 9,
+          "file_name": "main.ledger",
+          "forecast": false,
+          "note": "",
+          "transaction_note": "",
+          "market_amount": 0,
+          "balance": 0
+        }
+      ]
+    },
+    "incomes": {
+      "2022-02": [
+        {
+          "id": 49,
+          "transaction_id": "1",
+          "date": "2022-02-01T00:00:00Z",
+          "payee": "Salary",
+          "account": "Income:Salary:Acme",
+          "commodity": "INR",
+          "quantity": -2500,
+          "amount": -2500,
+          "status": "unmarked",
+          "tag_recurring": "",
+          "tag_period": "",
+          "transaction_begin_line": 2,
+          "transaction_end_line": 5,
+          "file_name": "main.ledger",
+          "forecast": false,
+          "note": "",
+          "transaction_note": "",
+          "market_amount": 0,
+          "balance": 0
+        }
+      ]
+    },
+    "investments": {},
+    "taxes": {}
+  },
+  "year_wise": {
+    "expenses": {
+      "2021 - 22": [
+        {
+          "id": 51,
+          "transaction_id": "2",
+          "date": "2022-02-03T00:00:00Z",
+          "payee": "Rent",
+          "account": "Expenses:Rent",
+          "commodity": "INR",
+          "quantity": 200,
+          "amount": 200,
+          "status": "unmarked",
+          "tag_recurring": "",
+          "tag_period": "",
+          "transaction_begin_line": 6,
+          "transaction_end_line": 9,
+          "file_name": "main.ledger",
+          "forecast": false,
+          "note": "",
+          "transaction_note": "",
+          "market_amount": 0,
+          "balance": 0
+        }
+      ]
+    },
+    "incomes": {
+      "2021 - 22": [
+        {
+          "id": 49,
+          "transaction_id": "1",
+          "date": "2022-02-01T00:00:00Z",
+          "payee": "Salary",
+          "account": "Income:Salary:Acme",
+          "commodity": "INR",
+          "quantity": -2500,
+          "amount": -2500,
+          "status": "unmarked",
+          "tag_recurring": "",
+          "tag_period": "",
+          "transaction_begin_line": 2,
+          "transaction_end_line": 5,
+          "file_name": "main.ledger",
+          "forecast": false,
+          "note": "",
+          "transaction_note": "",
+          "market_amount": 0,
+          "balance": 0
+        }
+      ]
+    },
+    "investments": {},
+    "taxes": {}
+  }
+}

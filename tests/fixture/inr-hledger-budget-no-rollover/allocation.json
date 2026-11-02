@@ -1,0 +1,66 @@
+{
+  "aggregates": {
+    "Assets": {
+      "date": "0001-01-01T00:00:00Z",
+      "account": "Assets",
+      "market_amount": 0
+    },
+    "Assets:Checking": {
+      "date": "2022-02-07T23:59:59.999999999Z",
+      "account": "Assets:Checking",
+      "market_amount": 2300
+    }
+  },
+  "aggregates_timeline": [
+    {
+      "Assets:Checking": {
+        "date": "2022-02-01T00:00:00Z",
+        "account": "Assets:Checking",
+        "market_amount": 2500
+      }
+    },
+    {
+      "Assets:Checking": {
+        "date": "2022-02-02T00:00:00Z",
+        "account": "Assets:Checking",
+        "market_amount": 2500
+      }
+    },
+    {
+      "Assets:Checking": {
+        "date": "2022-02-03T00:00:00Z",
+        "account": "Assets:Checking",
+        "market_amount": 2300
+      }
+    },
+    {
+      "Assets:Checking": {
+        "date": "2022-02-04T00:00:00Z",
+        "account": "Assets:Checking",
+        "market_amount": 2300
+      }
+    },
+    {
+      "Assets:Checking": {
+        "date": "2022-02-05T00:00:00Z",
+        "account": "Assets:Checking",
+        "market_amount": 2300
+      }
+    },
+    {
+      "Assets:Checking": {
+        "date": "2022-02-06T00:00:00Z",
+        "account": "Assets:Checking",
+        "market_amount": 2300
+      }
+    },
+    {
+      "Assets:Checking": {
+        "date": "2022-02-07T00:00:00Z",
+        "account": "Assets:Checking",
+        "market_amount": 2300
+      }
+    }
+  ],
+  "allocation_targets": null
+}

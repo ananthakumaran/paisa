@@ -113,7 +113,13 @@ func computeBudet(db *gorm.DB, forecastPostings, expensesPostings []posting.Post
 					return decimal.Zero
 				})
 
-			availableForBudgeting = availableForBudgeting.Sub(availableThisMonth)
+			rollover := utils.SumBy(
+				accountBudgets, func(budget AccountBudget) decimal.Decimal {
+					return budget.Rollover
+				})
+
+			// Rollover was already reserved in the previous month.
+			availableForBudgeting = availableForBudgeting.Sub(availableThisMonth.Sub(rollover))
 			endOfMonthBalance := availableForBudgeting
 
 			budgetsByMonth[month] = Budget{

@@ -1,0 +1,26 @@
+{
+  "asset_breakdowns": {
+    "Assets": {
+      "group": "Assets",
+      "investmentAmount": 0,
+      "withdrawalAmount": 0,
+      "marketAmount": 2300,
+      "balanceUnits": 0,
+      "latestPrice": 0,
+      "xirr": 0,
+      "gainAmount": 2300,
+      "absoluteReturn": 0
+    },
+    "Assets:Checking": {
+      "group": "Assets:Checking",
+      "investmentAmount": 0,
+      "withdrawalAmount": 0,
+      "marketAmount": 2300,
+      "balanceUnits": 0,
+      "latestPrice": 0,
+      "xirr": 0,
+      "gainAmount": 2300,
+      "absoluteReturn": 0
+    }
+  }
+}

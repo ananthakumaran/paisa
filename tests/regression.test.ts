@@ -7,6 +7,7 @@ import waitPort from "wait-port";
 import fs from "fs";
 import axios from "axios";
 import { diffString } from "json-diff";
+import type { LedgerFile } from "../src/lib/utils";
 
 const fixture = "tests/fixture";
 const port = 5700;
@@ -80,7 +81,7 @@ async function verifyApi(dir: string) {
 
   const {
     data: { files }
-  } = await axios.get("/api/editor/files");
+  } = await axios.get<{ files: LedgerFile[] }>("/api/editor/files");
   for (const file of files) {
     const { data } = await axios.post("/api/editor/validate", file);
     assert.deepStrictEqual(data.errors, [], `Validation failed for ${file.name}`);

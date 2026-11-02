@@ -78,12 +78,15 @@ func DeleteBackups(file LedgerFile) gin.H {
 }
 
 func SaveFile(db *gorm.DB, file LedgerFile) gin.H {
+	path := config.GetJournalPath()
+	if extension := filepath.Ext(path); extension != "" && filepath.Ext(file.Name) != extension {
+		return gin.H{"errors": []ledger.LedgerFileError{}, "saved": false, "message": "File name must end with " + extension}
+	}
 	errors, _, err := validateFile(file)
 	if err != nil {
 		return gin.H{"errors": errors, "saved": false, "message": "Validation failed"}
 	}
 
-	path := config.GetJournalPath()
 	dir := filepath.Dir(path)
 
 	filePath, err := utils.BuildSubPath(dir, file.Name)

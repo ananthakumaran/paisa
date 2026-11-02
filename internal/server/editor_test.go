@@ -3,10 +3,12 @@ package server
 import (
 	"encoding/json"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"testing"
 
 	"github.com/ananthakumaran/paisa/internal/config"
+	"github.com/ananthakumaran/paisa/internal/utils"
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/require"
 )
@@ -84,6 +86,66 @@ func TestDeleteBackupsDoesNotExpandFilename(t *testing.T) {
 
 			require.NoFileExists(t, path+".backup.1")
 			require.FileExists(t, unrelated)
+		})
+	}
+}
+
+func TestSaveFileRejectsWrongExtension(t *testing.T) {
+	for _, extension := range []string{".ledger", ".hledger", ".beancount"} {
+		t.Run(extension, func(t *testing.T) {
+			root := t.TempDir()
+			content, err := json.Marshal(map[string]string{
+				"journal_path": filepath.Join(root, "main"+extension),
+				"db_path":      filepath.Join(root, "paisa.db"),
+			})
+			require.NoError(t, err)
+			require.NoError(t, config.LoadConfig(content, ""))
+
+			for _, name := range []string{"expenses", "expenses.txt", "nested/expenses", "expenses" + extension + ".backup"} {
+				response := SaveFile(nil, LedgerFile{
+					Name:      filepath.FromSlash(name),
+					Content:   "2022/01/01 Unbalanced\n    Assets:Checking  1 INR\n    Expenses:Food    2 INR\n",
+					Operation: "overwrite",
+				})
+				require.Equal(t, false, response["saved"])
+				require.Equal(t, "File name must end with "+extension, response["message"])
+			}
+
+			entries, err := os.ReadDir(root)
+			require.NoError(t, err)
+			require.Empty(t, entries, "invalid filenames must not create files or directories")
+		})
+	}
+}
+
+func TestSaveFileKeepsFilenameWithCorrectExtension(t *testing.T) {
+	if _, err := exec.LookPath("ledger"); err != nil {
+		t.Skip("ledger executable is not installed")
+	}
+
+	for _, name := range []string{"expenses.ledger", "nested/expenses.ledger"} {
+		t.Run(name, func(t *testing.T) {
+			root := t.TempDir()
+			configureEditor(t, root, false)
+			writeEditorFile(t, filepath.Join(root, "main.ledger"), "")
+			db, err := utils.OpenDB()
+			require.NoError(t, err)
+			connection, err := db.DB()
+			require.NoError(t, err)
+			t.Cleanup(func() { require.NoError(t, connection.Close()) })
+
+			name := filepath.FromSlash(name)
+			response := SaveFile(db, LedgerFile{Name: name, Operation: "create"})
+			require.Equal(t, true, response["saved"])
+			require.Equal(t, name, response["file"].(*LedgerFile).Name)
+			require.FileExists(t, filepath.Join(root, name))
+			require.NoFileExists(t, filepath.Join(root, name+".ledger"))
+
+			var names []string
+			for _, file := range GetFiles(db)["files"].([]*LedgerFile) {
+				names = append(names, file.Name)
+			}
+			require.Contains(t, names, name)
 		})
 	}
 }

@@ -42,6 +42,20 @@ async function verifyApi(dir: string) {
   } = await axios.post("/api/sync", { journal: true });
   assert.strictEqual(success, true);
 
+  const {
+    data: { config }
+  } = await axios.get("/api/config");
+  const extension = path.extname(config.journal_path);
+  for (const name of ["expenses", "expenses.txt"]) {
+    const { data } = await axios.post("/api/editor/save", {
+      name,
+      content: "",
+      operation: "create"
+    });
+    assert.strictEqual(data.saved, false);
+    assert.strictEqual(data.message, `File name must end with ${extension}`);
+  }
+
   await recordAndVerify(dir, "/api/dashboard", "dashboard");
   await recordAndVerify(dir, "/api/cash_flow", "cash_flow");
   await recordAndVerify(dir, "/api/income_statement", "income_statement");

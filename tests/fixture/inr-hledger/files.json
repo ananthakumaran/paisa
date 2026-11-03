@@ -2,6 +2,8 @@
   "accounts": [
     "Income:Salary:Acme",
     "Assets:Checking",
+    "Expenses:Shopping",
+    "Liabilities:CreditCard:HDFC",
     "Expenses:Rent",
     "Assets:Equity:NIFTY",
     "Assets:Equity:ABNB",
@@ -26,6 +28,12 @@
       "operation": ""
     },
     {
+      "name": "journals/2021/credit-card.ledger",
+      "content": "; Regression #350: exact payment, one-unit shortfall, overpayment, and bank rounding.\n2021-10-01 Salary\n    Income:Salary:Acme           -20000 INR\n    Assets:Checking              20000 INR\n\n2021-10-20 Purchase\n    Expenses:Shopping              100 INR\n    Liabilities:CreditCard:HDFC    -100 INR\n\n2021-11-01 Exact payment\n    Assets:Checking               -100 INR\n    Liabilities:CreditCard:HDFC     100 INR\n\n2021-11-20 Purchase\n    Expenses:Shopping              100 INR\n    Liabilities:CreditCard:HDFC    -100 INR\n\n2021-12-01 One unit still due\n    Assets:Checking                -99 INR\n    Liabilities:CreditCard:HDFC      99 INR\n\n2021-12-20 Purchase\n    Expenses:Shopping              100 INR\n    Liabilities:CreditCard:HDFC    -100 INR\n\n2022-01-01 Overpayment\n    Assets:Checking               -102 INR\n    Liabilities:CreditCard:HDFC     102 INR\n\n2022-01-20 Purchase\n    Expenses:Shopping           14310.14 INR\n    Liabilities:CreditCard:HDFC  -14310.14 INR\n\n2022-02-01 Rounded bill payment\n    Assets:Checking             -14309 INR\n    Liabilities:CreditCard:HDFC   14309 INR\n",
+      "versions": [],
+      "operation": ""
+    },
+    {
       "name": "journals/2022/bank.ledger",
       "content": "include bank/*.ledger\n",
       "versions": [],
@@ -40,6 +48,10 @@
   ],
   "payees": [
     "Salary",
+    "Purchase",
+    "Exact payment",
+    "One unit still due",
+    "Overpayment",
     "Rent",
     "Bonus",
     "Investment",
@@ -51,6 +63,7 @@
     "Sell",
     "Multi Currency Debit",
     "Interest",
+    "Rounded bill payment",
     "AutoPostingForecast"
   ]
 }

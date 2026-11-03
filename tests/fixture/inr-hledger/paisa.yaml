@@ -1,4 +1,12 @@
 journal_path: main.ledger
 db_path: paisa.db
 ledger_cli: hledger
+credit_cards:
+  - account: Liabilities:CreditCard:HDFC
+    credit_limit: 100000
+    statement_end_day: 25
+    due_day: 15
+    network: mastercard
+    number: "3827"
+    expiration_date: "2030-10-31"
 

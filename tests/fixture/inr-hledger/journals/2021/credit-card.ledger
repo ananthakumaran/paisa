@@ -1,0 +1,36 @@
+; Regression #350: exact payment, one-unit shortfall, overpayment, and bank rounding.
+2021-10-01 Salary
+    Income:Salary:Acme           -20000 INR
+    Assets:Checking              20000 INR
+
+2021-10-20 Purchase
+    Expenses:Shopping              100 INR
+    Liabilities:CreditCard:HDFC    -100 INR
+
+2021-11-01 Exact payment
+    Assets:Checking               -100 INR
+    Liabilities:CreditCard:HDFC     100 INR
+
+2021-11-20 Purchase
+    Expenses:Shopping              100 INR
+    Liabilities:CreditCard:HDFC    -100 INR
+
+2021-12-01 One unit still due
+    Assets:Checking                -99 INR
+    Liabilities:CreditCard:HDFC      99 INR
+
+2021-12-20 Purchase
+    Expenses:Shopping              100 INR
+    Liabilities:CreditCard:HDFC    -100 INR
+
+2022-01-01 Overpayment
+    Assets:Checking               -102 INR
+    Liabilities:CreditCard:HDFC     102 INR
+
+2022-01-20 Purchase
+    Expenses:Shopping           14310.14 INR
+    Liabilities:CreditCard:HDFC  -14310.14 INR
+
+2022-02-01 Rounded bill payment
+    Assets:Checking             -14309 INR
+    Liabilities:CreditCard:HDFC   14309 INR

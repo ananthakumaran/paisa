@@ -1,11 +1,45 @@
 {
   "income_timeline": [
     {
-      "date": "2022-01-01T00:00:00Z",
+      "date": "2021-10-01T00:00:00Z",
       "postings": [
         {
           "id": 1,
           "transaction_id": "1",
+          "date": "2021-10-01T00:00:00Z",
+          "payee": "Salary",
+          "account": "Income:Salary:Acme",
+          "commodity": "INR",
+          "quantity": -20000,
+          "amount": -20000,
+          "status": "unmarked",
+          "tag_recurring": "",
+          "tag_period": "",
+          "transaction_begin_line": 2,
+          "transaction_end_line": 5,
+          "file_name": "journals/2021/credit-card.ledger",
+          "forecast": false,
+          "note": "",
+          "transaction_note": "",
+          "market_amount": 0,
+          "balance": 0
+        }
+      ]
+    },
+    {
+      "date": "2021-11-01T00:00:00Z",
+      "postings": []
+    },
+    {
+      "date": "2021-12-01T00:00:00Z",
+      "postings": []
+    },
+    {
+      "date": "2022-01-01T00:00:00Z",
+      "postings": [
+        {
+          "id": 15,
+          "transaction_id": "10",
           "date": "2022-01-01T00:00:00Z",
           "payee": "Salary",
           "account": "Income:Salary:Acme",
@@ -25,8 +59,8 @@
           "balance": 0
         },
         {
-          "id": 5,
-          "transaction_id": "3",
+          "id": 19,
+          "transaction_id": "12",
           "date": "2022-01-06T00:00:00Z",
           "payee": "Bonus",
           "account": "Income:Salary:Acme",
@@ -46,8 +80,8 @@
           "balance": 0
         },
         {
-          "id": 20,
-          "transaction_id": "10",
+          "id": 34,
+          "transaction_id": "19",
           "date": "2022-01-09T00:00:00Z",
           "payee": "Sell",
           "account": "Income:CapitalGains:Equity:AAPL",
@@ -67,8 +101,8 @@
           "balance": 0
         },
         {
-          "id": 26,
-          "transaction_id": "12",
+          "id": 42,
+          "transaction_id": "21",
           "date": "2022-01-31T00:00:00Z",
           "payee": "Interest",
           "account": "Income:Interest:Checking",
@@ -103,6 +137,27 @@
         {
           "id": 1,
           "transaction_id": "1",
+          "date": "2021-10-01T00:00:00Z",
+          "payee": "Salary",
+          "account": "Income:Salary:Acme",
+          "commodity": "INR",
+          "quantity": -20000,
+          "amount": -20000,
+          "status": "unmarked",
+          "tag_recurring": "",
+          "tag_period": "",
+          "transaction_begin_line": 2,
+          "transaction_end_line": 5,
+          "file_name": "journals/2021/credit-card.ledger",
+          "forecast": false,
+          "note": "",
+          "transaction_note": "",
+          "market_amount": 0,
+          "balance": 0
+        },
+        {
+          "id": 15,
+          "transaction_id": "10",
           "date": "2022-01-01T00:00:00Z",
           "payee": "Salary",
           "account": "Income:Salary:Acme",
@@ -122,8 +177,8 @@
           "balance": 0
         },
         {
-          "id": 5,
-          "transaction_id": "3",
+          "id": 19,
+          "transaction_id": "12",
           "date": "2022-01-06T00:00:00Z",
           "payee": "Bonus",
           "account": "Income:Salary:Acme",
@@ -143,8 +198,8 @@
           "balance": 0
         },
         {
-          "id": 20,
-          "transaction_id": "10",
+          "id": 34,
+          "transaction_id": "19",
           "date": "2022-01-09T00:00:00Z",
           "payee": "Sell",
           "account": "Income:CapitalGains:Equity:AAPL",
@@ -164,8 +219,8 @@
           "balance": 0
         },
         {
-          "id": 26,
-          "transaction_id": "12",
+          "id": 42,
+          "transaction_id": "21",
           "date": "2022-01-31T00:00:00Z",
           "payee": "Interest",
           "account": "Income:Interest:Checking",
@@ -185,9 +240,9 @@
           "balance": 0
         }
       ],
-      "gross_income": 121027.3,
+      "gross_income": 141027.3,
       "net_tax": 0,
-      "net_income": 121027.3
+      "net_income": 141027.3
     }
   ]
 }

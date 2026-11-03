@@ -2,6 +2,8 @@
   "accounts": [
     "Income:Salary:Acme",
     "Assets:Checking",
+    "Expenses:Shopping",
+    "Liabilities:CreditCard:HDFC",
     "Expenses:Rent",
     "Assets:Equity:NIFTY",
     "Assets:Equity:ABNB",
@@ -38,7 +40,17 @@
       "savings": []
     },
     "user_accounts": [],
-    "credit_cards": []
+    "credit_cards": [
+      {
+        "account": "Liabilities:CreditCard:HDFC",
+        "credit_limit": 100000,
+        "statement_end_day": 25,
+        "due_day": 15,
+        "network": "mastercard",
+        "number": "3827",
+        "expiration_date": "2030-10-31"
+      }
+    ]
   },
   "now": "2022-02-07T00:00:00Z",
   "schema": {

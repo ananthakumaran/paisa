@@ -1,3 +1,28 @@
 {
-  "liability_breakdowns": {}
+  "liability_breakdowns": {
+    "Liabilities": {
+      "group": "Liabilities",
+      "drawn_amount": 14610.14,
+      "repaid_amount": 14610,
+      "interest_amount": 0,
+      "balance_amount": 0.14,
+      "apr": 0
+    },
+    "Liabilities:CreditCard": {
+      "group": "Liabilities:CreditCard",
+      "drawn_amount": 14610.14,
+      "repaid_amount": 14610,
+      "interest_amount": 0,
+      "balance_amount": 0.14,
+      "apr": 0
+    },
+    "Liabilities:CreditCard:HDFC": {
+      "group": "Liabilities:CreditCard:HDFC",
+      "drawn_amount": 14610.14,
+      "repaid_amount": 14610,
+      "interest_amount": 0,
+      "balance_amount": 0.14,
+      "apr": 0
+    }
+  }
 }

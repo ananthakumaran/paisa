@@ -152,7 +152,9 @@ func computeBills(db *gorm.DB, creditCardConfig config.CreditCard, ps []posting.
 				creditsRunningBalance = creditsRunningBalance.Add(p.Amount)
 				bill.Credits = bill.Credits.Add(p.Amount)
 				for unpaidBill < len(bills) {
-					if bills[unpaidBill].DebitsRunningBalance.LessThanOrEqual(creditsRunningBalance) {
+					// Banks may round bills, leaving a remainder below one currency unit.
+					remaining := bills[unpaidBill].DebitsRunningBalance.Sub(creditsRunningBalance)
+					if remaining.LessThan(decimal.NewFromInt(1)) {
 						paidDate := p.Date
 						bills[unpaidBill].PaidDate = &paidDate
 						unpaidBill++

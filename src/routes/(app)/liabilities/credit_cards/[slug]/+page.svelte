@@ -114,9 +114,13 @@
                 </div>
                 <div class="ml-3 whitespace-nowrap">
                   <span class="mr-1 is-size-7 has-text-grey">Payment</span>
-                  <span
-                    ><DueDate dueDate={currentBill.dueDate} paidDate={currentBill.paidDate} /></span
-                  >
+                  <span>
+                    <DueDate
+                      dueDate={currentBill.dueDate}
+                      paidDate={currentBill.paidDate}
+                      amountDue={currentBill.closingBalance}
+                    />
+                  </span>
                 </div>
               </div>
             </div>

@@ -73,7 +73,11 @@
           <span class="is-size-4 has-text-grey-dark">{formatCurrency(bill.closingBalance)}</span>
         </div>
         <div class="is-size-7 has-text-grey">
-          <DueDate dueDate={bill.dueDate} paidDate={bill.paidDate} />
+          <DueDate
+            dueDate={bill.dueDate}
+            paidDate={bill.paidDate}
+            amountDue={bill.closingBalance}
+          />
         </div>
       {/if}
     </div>

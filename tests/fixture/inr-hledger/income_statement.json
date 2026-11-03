@@ -2,10 +2,10 @@
   "yearly": {
     "2021 - 22": {
       "startingBalance": 0,
-      "endingBalance": 85096.5859857408,
+      "endingBalance": 90486.5859857408,
       "date": "2021-04-01T00:00:00Z",
       "income": {
-        "Income:Salary:Acme": -120000
+        "Income:Salary:Acme": -140000
       },
       "interest": {
         "Income:Interest:Checking": -1000
@@ -16,11 +16,14 @@
         "Assets:Equity:ABNB": -16049.1140142592,
         "Assets:Equity:NIFTY": 218.4
       },
-      "liabilities": {},
+      "liabilities": {
+        "Liabilities:CreditCard:HDFC": -0.14
+      },
       "tax": {},
       "expenses": {
         "Expenses:Charges": 100,
-        "Expenses:Rent": 20000
+        "Expenses:Rent": 20000,
+        "Expenses:Shopping": 14610.14
       }
     }
   }

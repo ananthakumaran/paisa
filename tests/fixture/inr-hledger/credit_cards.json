@@ -1,0 +1,80 @@
+{
+  "creditCards": [
+    {
+      "account": "Liabilities:CreditCard:HDFC",
+      "network": "mastercard",
+      "number": "3827",
+      "balance": 0.14,
+      "bills": [
+        {
+          "statementStartDate": "2021-09-26T00:00:00Z",
+          "statementEndDate": "2021-10-25T00:00:00Z",
+          "dueDate": "2021-11-15T00:00:00Z",
+          "paidDate": "2021-11-01T00:00:00Z",
+          "credits": 0,
+          "debits": 100,
+          "DebitsRunningBalance": 100,
+          "openingBalance": 0,
+          "closingBalance": 100,
+          "postings": [],
+          "transactions": []
+        },
+        {
+          "statementStartDate": "2021-10-26T00:00:00Z",
+          "statementEndDate": "2021-11-25T00:00:00Z",
+          "dueDate": "2021-12-15T00:00:00Z",
+          "paidDate": "2022-01-01T00:00:00Z",
+          "credits": 100,
+          "debits": 100,
+          "DebitsRunningBalance": 200,
+          "openingBalance": 100,
+          "closingBalance": 100,
+          "postings": [],
+          "transactions": []
+        },
+        {
+          "statementStartDate": "2021-11-26T00:00:00Z",
+          "statementEndDate": "2021-12-25T00:00:00Z",
+          "dueDate": "2022-01-15T00:00:00Z",
+          "paidDate": "2022-01-01T00:00:00Z",
+          "credits": 99,
+          "debits": 100,
+          "DebitsRunningBalance": 300,
+          "openingBalance": 100,
+          "closingBalance": 101,
+          "postings": [],
+          "transactions": []
+        },
+        {
+          "statementStartDate": "2021-12-26T00:00:00Z",
+          "statementEndDate": "2022-01-25T00:00:00Z",
+          "dueDate": "2022-02-15T00:00:00Z",
+          "paidDate": "2022-02-01T00:00:00Z",
+          "credits": 102,
+          "debits": 14310.14,
+          "DebitsRunningBalance": 14610.14,
+          "openingBalance": 101,
+          "closingBalance": 14309.14,
+          "postings": [],
+          "transactions": []
+        },
+        {
+          "statementStartDate": "2022-01-26T00:00:00Z",
+          "statementEndDate": "2022-02-25T00:00:00Z",
+          "dueDate": "2022-03-15T00:00:00Z",
+          "paidDate": null,
+          "credits": 14309,
+          "debits": 0,
+          "DebitsRunningBalance": 14610.14,
+          "openingBalance": 14309.14,
+          "closingBalance": 0.14,
+          "postings": [],
+          "transactions": []
+        }
+      ],
+      "creditLimit": 100000,
+      "yearlySpends": {},
+      "expirationDate": "2030-10-31T00:00:00Z"
+    }
+  ]
+}

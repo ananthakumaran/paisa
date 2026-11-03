@@ -1,8 +1,71 @@
 {
   "expenses": [
     {
-      "id": 4,
+      "id": 3,
       "transaction_id": "2",
+      "date": "2021-10-20T00:00:00Z",
+      "payee": "Purchase",
+      "account": "Expenses:Shopping",
+      "commodity": "INR",
+      "quantity": 100,
+      "amount": 100,
+      "status": "unmarked",
+      "tag_recurring": "",
+      "tag_period": "",
+      "transaction_begin_line": 6,
+      "transaction_end_line": 9,
+      "file_name": "journals/2021/credit-card.ledger",
+      "forecast": false,
+      "note": "",
+      "transaction_note": "",
+      "market_amount": 0,
+      "balance": 0
+    },
+    {
+      "id": 7,
+      "transaction_id": "4",
+      "date": "2021-11-20T00:00:00Z",
+      "payee": "Purchase",
+      "account": "Expenses:Shopping",
+      "commodity": "INR",
+      "quantity": 100,
+      "amount": 100,
+      "status": "unmarked",
+      "tag_recurring": "",
+      "tag_period": "",
+      "transaction_begin_line": 14,
+      "transaction_end_line": 17,
+      "file_name": "journals/2021/credit-card.ledger",
+      "forecast": false,
+      "note": "",
+      "transaction_note": "",
+      "market_amount": 0,
+      "balance": 0
+    },
+    {
+      "id": 11,
+      "transaction_id": "6",
+      "date": "2021-12-20T00:00:00Z",
+      "payee": "Purchase",
+      "account": "Expenses:Shopping",
+      "commodity": "INR",
+      "quantity": 100,
+      "amount": 100,
+      "status": "unmarked",
+      "tag_recurring": "",
+      "tag_period": "",
+      "transaction_begin_line": 22,
+      "transaction_end_line": 25,
+      "file_name": "journals/2021/credit-card.ledger",
+      "forecast": false,
+      "note": "",
+      "transaction_note": "",
+      "market_amount": 0,
+      "balance": 0
+    },
+    {
+      "id": 18,
+      "transaction_id": "11",
       "date": "2022-01-03T00:00:00Z",
       "payee": "Rent",
       "account": "Expenses:Rent",
@@ -22,8 +85,8 @@
       "balance": 0
     },
     {
-      "id": 22,
-      "transaction_id": "11",
+      "id": 36,
+      "transaction_id": "20",
       "date": "2022-01-09T00:00:00Z",
       "payee": "Multi Currency Debit",
       "account": "Expenses:Charges",
@@ -41,6 +104,27 @@
       "transaction_note": "",
       "market_amount": 0,
       "balance": 0
+    },
+    {
+      "id": 40,
+      "transaction_id": "8",
+      "date": "2022-01-20T00:00:00Z",
+      "payee": "Purchase",
+      "account": "Expenses:Shopping",
+      "commodity": "INR",
+      "quantity": 14310.14,
+      "amount": 14310.14,
+      "status": "unmarked",
+      "tag_recurring": "",
+      "tag_period": "",
+      "transaction_begin_line": 30,
+      "transaction_end_line": 33,
+      "file_name": "journals/2021/credit-card.ledger",
+      "forecast": false,
+      "note": "",
+      "transaction_note": "",
+      "market_amount": 0,
+      "balance": 0
     }
   ],
   "graph": {
@@ -51,19 +135,19 @@
           "name": "Assets:Checking"
         },
         {
-          "id": 10,
+          "id": 12,
           "name": "Assets:Dollar"
         },
         {
-          "id": 9,
+          "id": 11,
           "name": "Assets:Equity:AAPL"
         },
         {
-          "id": 8,
+          "id": 10,
           "name": "Assets:Equity:ABNB"
         },
         {
-          "id": 7,
+          "id": 9,
           "name": "Assets:Equity:NIFTY"
         },
         {
@@ -71,35 +155,39 @@
           "name": "Expenses"
         },
         {
-          "id": 11,
+          "id": 13,
           "name": "Expenses:Charges"
         },
         {
-          "id": 6,
+          "id": 8,
           "name": "Expenses:Rent"
+        },
+        {
+          "id": 6,
+          "name": "Expenses:Shopping"
         },
         {
           "id": 2,
           "name": "Income"
         },
         {
-          "id": 12,
+          "id": 14,
           "name": "Income:CapitalGains"
         },
         {
-          "id": 13,
+          "id": 15,
           "name": "Income:CapitalGains:Equity"
         },
         {
-          "id": 14,
+          "id": 16,
           "name": "Income:CapitalGains:Equity:AAPL"
         },
         {
-          "id": 15,
+          "id": 17,
           "name": "Income:Interest"
         },
         {
-          "id": 16,
+          "id": 18,
           "name": "Income:Interest:Checking"
         },
         {
@@ -109,6 +197,10 @@
         {
           "id": 4,
           "name": "Income:Salary:Acme"
+        },
+        {
+          "id": 7,
+          "name": "Liabilities:CreditCard:HDFC"
         }
       ],
       "links": [
@@ -120,76 +212,91 @@
         {
           "source": 1,
           "target": 7,
-          "value": 80000
-        },
-        {
-          "source": 1,
-          "target": 8,
-          "value": 16050.6340142592
+          "value": 14610
         },
         {
           "source": 1,
           "target": 9,
-          "value": 10000
+          "value": 80000
         },
         {
           "source": 1,
           "target": 10,
+          "value": 16050.6340142592
+        },
+        {
+          "source": 1,
+          "target": 11,
+          "value": 10000
+        },
+        {
+          "source": 1,
+          "target": 12,
           "value": 804.42048
         },
         {
           "source": 2,
           "target": 1,
-          "value": 121027.3
+          "value": 141027.3
         },
         {
           "source": 3,
           "target": 2,
-          "value": 120000
+          "value": 140000
         },
         {
           "source": 4,
           "target": 3,
-          "value": 120000
+          "value": 140000
         },
         {
           "source": 5,
           "target": 6,
+          "value": 14610.14
+        },
+        {
+          "source": 5,
+          "target": 8,
           "value": 20000
         },
         {
           "source": 5,
-          "target": 11,
+          "target": 13,
           "value": 100
         },
         {
-          "source": 9,
+          "source": 7,
+          "target": 5,
+          "value": 14610.14
+        },
+        {
+          "source": 11,
           "target": 1,
           "value": 10000
         },
         {
-          "source": 12,
-          "target": 2,
-          "value": 27.3
-        },
-        {
-          "source": 13,
-          "target": 12,
-          "value": 27.3
-        },
-        {
           "source": 14,
-          "target": 13,
+          "target": 2,
           "value": 27.3
         },
         {
           "source": 15,
-          "target": 2,
-          "value": 1000
+          "target": 14,
+          "value": 27.3
         },
         {
           "source": 16,
           "target": 15,
+          "value": 27.3
+        },
+        {
+          "source": 17,
+          "target": 2,
+          "value": 1000
+        },
+        {
+          "source": 18,
+          "target": 17,
           "value": 1000
         }
       ]
@@ -197,10 +304,79 @@
   },
   "month_wise": {
     "expenses": {
+      "2021-10": [
+        {
+          "id": 3,
+          "transaction_id": "2",
+          "date": "2021-10-20T00:00:00Z",
+          "payee": "Purchase",
+          "account": "Expenses:Shopping",
+          "commodity": "INR",
+          "quantity": 100,
+          "amount": 100,
+          "status": "unmarked",
+          "tag_recurring": "",
+          "tag_period": "",
+          "transaction_begin_line": 6,
+          "transaction_end_line": 9,
+          "file_name": "journals/2021/credit-card.ledger",
+          "forecast": false,
+          "note": "",
+          "transaction_note": "",
+          "market_amount": 0,
+          "balance": 0
+        }
+      ],
+      "2021-11": [
+        {
+          "id": 7,
+          "transaction_id": "4",
+          "date": "2021-11-20T00:00:00Z",
+          "payee": "Purchase",
+          "account": "Expenses:Shopping",
+          "commodity": "INR",
+          "quantity": 100,
+          "amount": 100,
+          "status": "unmarked",
+          "tag_recurring": "",
+          "tag_period": "",
+          "transaction_begin_line": 14,
+          "transaction_end_line": 17,
+          "file_name": "journals/2021/credit-card.ledger",
+          "forecast": false,
+          "note": "",
+          "transaction_note": "",
+          "market_amount": 0,
+          "balance": 0
+        }
+      ],
+      "2021-12": [
+        {
+          "id": 11,
+          "transaction_id": "6",
+          "date": "2021-12-20T00:00:00Z",
+          "payee": "Purchase",
+          "account": "Expenses:Shopping",
+          "commodity": "INR",
+          "quantity": 100,
+          "amount": 100,
+          "status": "unmarked",
+          "tag_recurring": "",
+          "tag_period": "",
+          "transaction_begin_line": 22,
+          "transaction_end_line": 25,
+          "file_name": "journals/2021/credit-card.ledger",
+          "forecast": false,
+          "note": "",
+          "transaction_note": "",
+          "market_amount": 0,
+          "balance": 0
+        }
+      ],
       "2022-01": [
         {
-          "id": 4,
-          "transaction_id": "2",
+          "id": 18,
+          "transaction_id": "11",
           "date": "2022-01-03T00:00:00Z",
           "payee": "Rent",
           "account": "Expenses:Rent",
@@ -220,8 +396,8 @@
           "balance": 0
         },
         {
-          "id": 22,
-          "transaction_id": "11",
+          "id": 36,
+          "transaction_id": "20",
           "date": "2022-01-09T00:00:00Z",
           "payee": "Multi Currency Debit",
           "account": "Expenses:Charges",
@@ -239,14 +415,58 @@
           "transaction_note": "",
           "market_amount": 0,
           "balance": 0
+        },
+        {
+          "id": 40,
+          "transaction_id": "8",
+          "date": "2022-01-20T00:00:00Z",
+          "payee": "Purchase",
+          "account": "Expenses:Shopping",
+          "commodity": "INR",
+          "quantity": 14310.14,
+          "amount": 14310.14,
+          "status": "unmarked",
+          "tag_recurring": "",
+          "tag_period": "",
+          "transaction_begin_line": 30,
+          "transaction_end_line": 33,
+          "file_name": "journals/2021/credit-card.ledger",
+          "forecast": false,
+          "note": "",
+          "transaction_note": "",
+          "market_amount": 0,
+          "balance": 0
         }
       ]
     },
     "incomes": {
-      "2022-01": [
+      "2021-10": [
         {
           "id": 1,
           "transaction_id": "1",
+          "date": "2021-10-01T00:00:00Z",
+          "payee": "Salary",
+          "account": "Income:Salary:Acme",
+          "commodity": "INR",
+          "quantity": -20000,
+          "amount": -20000,
+          "status": "unmarked",
+          "tag_recurring": "",
+          "tag_period": "",
+          "transaction_begin_line": 2,
+          "transaction_end_line": 5,
+          "file_name": "journals/2021/credit-card.ledger",
+          "forecast": false,
+          "note": "",
+          "transaction_note": "",
+          "market_amount": 0,
+          "balance": 0
+        }
+      ],
+      "2022-01": [
+        {
+          "id": 15,
+          "transaction_id": "10",
           "date": "2022-01-01T00:00:00Z",
           "payee": "Salary",
           "account": "Income:Salary:Acme",
@@ -266,8 +486,8 @@
           "balance": 0
         },
         {
-          "id": 5,
-          "transaction_id": "3",
+          "id": 19,
+          "transaction_id": "12",
           "date": "2022-01-06T00:00:00Z",
           "payee": "Bonus",
           "account": "Income:Salary:Acme",
@@ -287,8 +507,8 @@
           "balance": 0
         },
         {
-          "id": 20,
-          "transaction_id": "10",
+          "id": 34,
+          "transaction_id": "19",
           "date": "2022-01-09T00:00:00Z",
           "payee": "Sell",
           "account": "Income:CapitalGains:Equity:AAPL",
@@ -308,8 +528,8 @@
           "balance": 0
         },
         {
-          "id": 26,
-          "transaction_id": "12",
+          "id": 42,
+          "transaction_id": "21",
           "date": "2022-01-31T00:00:00Z",
           "payee": "Interest",
           "account": "Income:Interest:Checking",
@@ -333,8 +553,8 @@
     "investments": {
       "2022-01": [
         {
-          "id": 8,
-          "transaction_id": "4",
+          "id": 22,
+          "transaction_id": "13",
           "date": "2022-01-07T00:00:00Z",
           "payee": "Investment",
           "account": "Assets:Equity:NIFTY",
@@ -354,8 +574,8 @@
           "balance": 0
         },
         {
-          "id": 13,
-          "transaction_id": "7",
+          "id": 27,
+          "transaction_id": "16",
           "date": "2022-01-08T00:00:00Z",
           "payee": "Buy ABNB",
           "account": "Assets:Equity:ABNB",
@@ -375,8 +595,8 @@
           "balance": 0
         },
         {
-          "id": 10,
-          "transaction_id": "5",
+          "id": 24,
+          "transaction_id": "14",
           "date": "2022-01-08T00:00:00Z",
           "payee": "Investment 2",
           "account": "Assets:Equity:NIFTY",
@@ -396,8 +616,8 @@
           "balance": 0
         },
         {
-          "id": 15,
-          "transaction_id": "9",
+          "id": 29,
+          "transaction_id": "18",
           "date": "2022-01-08T00:00:00Z",
           "payee": "Buy Apple",
           "account": "Assets:Equity:AAPL",
@@ -417,8 +637,8 @@
           "balance": 0
         },
         {
-          "id": 12,
-          "transaction_id": "6",
+          "id": 26,
+          "transaction_id": "15",
           "date": "2022-01-08T00:00:00Z",
           "payee": "Investment 3",
           "account": "Assets:Equity:NIFTY",
@@ -438,8 +658,8 @@
           "balance": 0
         },
         {
-          "id": 23,
-          "transaction_id": "11",
+          "id": 37,
+          "transaction_id": "20",
           "date": "2022-01-09T00:00:00Z",
           "payee": "Multi Currency Debit",
           "account": "Assets:Dollar",
@@ -459,8 +679,8 @@
           "balance": 0
         },
         {
-          "id": 17,
-          "transaction_id": "8",
+          "id": 31,
+          "transaction_id": "17",
           "date": "2022-01-09T00:00:00Z",
           "payee": "Buy ABNB total price",
           "account": "Assets:Equity:ABNB",
@@ -480,8 +700,8 @@
           "balance": 0
         },
         {
-          "id": 19,
-          "transaction_id": "10",
+          "id": 33,
+          "transaction_id": "19",
           "date": "2022-01-09T00:00:00Z",
           "payee": "Sell",
           "account": "Assets:Equity:AAPL",
@@ -508,8 +728,71 @@
     "expenses": {
       "2021 - 22": [
         {
-          "id": 4,
+          "id": 3,
           "transaction_id": "2",
+          "date": "2021-10-20T00:00:00Z",
+          "payee": "Purchase",
+          "account": "Expenses:Shopping",
+          "commodity": "INR",
+          "quantity": 100,
+          "amount": 100,
+          "status": "unmarked",
+          "tag_recurring": "",
+          "tag_period": "",
+          "transaction_begin_line": 6,
+          "transaction_end_line": 9,
+          "file_name": "journals/2021/credit-card.ledger",
+          "forecast": false,
+          "note": "",
+          "transaction_note": "",
+          "market_amount": 0,
+          "balance": 0
+        },
+        {
+          "id": 7,
+          "transaction_id": "4",
+          "date": "2021-11-20T00:00:00Z",
+          "payee": "Purchase",
+          "account": "Expenses:Shopping",
+          "commodity": "INR",
+          "quantity": 100,
+          "amount": 100,
+          "status": "unmarked",
+          "tag_recurring": "",
+          "tag_period": "",
+          "transaction_begin_line": 14,
+          "transaction_end_line": 17,
+          "file_name": "journals/2021/credit-card.ledger",
+          "forecast": false,
+          "note": "",
+          "transaction_note": "",
+          "market_amount": 0,
+          "balance": 0
+        },
+        {
+          "id": 11,
+          "transaction_id": "6",
+          "date": "2021-12-20T00:00:00Z",
+          "payee": "Purchase",
+          "account": "Expenses:Shopping",
+          "commodity": "INR",
+          "quantity": 100,
+          "amount": 100,
+          "status": "unmarked",
+          "tag_recurring": "",
+          "tag_period": "",
+          "transaction_begin_line": 22,
+          "transaction_end_line": 25,
+          "file_name": "journals/2021/credit-card.ledger",
+          "forecast": false,
+          "note": "",
+          "transaction_note": "",
+          "market_amount": 0,
+          "balance": 0
+        },
+        {
+          "id": 18,
+          "transaction_id": "11",
           "date": "2022-01-03T00:00:00Z",
           "payee": "Rent",
           "account": "Expenses:Rent",
@@ -529,8 +812,8 @@
           "balance": 0
         },
         {
-          "id": 22,
-          "transaction_id": "11",
+          "id": 36,
+          "transaction_id": "20",
           "date": "2022-01-09T00:00:00Z",
           "payee": "Multi Currency Debit",
           "account": "Expenses:Charges",
@@ -548,6 +831,27 @@
           "transaction_note": "",
           "market_amount": 0,
           "balance": 0
+        },
+        {
+          "id": 40,
+          "transaction_id": "8",
+          "date": "2022-01-20T00:00:00Z",
+          "payee": "Purchase",
+          "account": "Expenses:Shopping",
+          "commodity": "INR",
+          "quantity": 14310.14,
+          "amount": 14310.14,
+          "status": "unmarked",
+          "tag_recurring": "",
+          "tag_period": "",
+          "transaction_begin_line": 30,
+          "transaction_end_line": 33,
+          "file_name": "journals/2021/credit-card.ledger",
+          "forecast": false,
+          "note": "",
+          "transaction_note": "",
+          "market_amount": 0,
+          "balance": 0
         }
       ]
     },
@@ -556,6 +860,27 @@
         {
           "id": 1,
           "transaction_id": "1",
+          "date": "2021-10-01T00:00:00Z",
+          "payee": "Salary",
+          "account": "Income:Salary:Acme",
+          "commodity": "INR",
+          "quantity": -20000,
+          "amount": -20000,
+          "status": "unmarked",
+          "tag_recurring": "",
+          "tag_period": "",
+          "transaction_begin_line": 2,
+          "transaction_end_line": 5,
+          "file_name": "journals/2021/credit-card.ledger",
+          "forecast": false,
+          "note": "",
+          "transaction_note": "",
+          "market_amount": 0,
+          "balance": 0
+        },
+        {
+          "id": 15,
+          "transaction_id": "10",
           "date": "2022-01-01T00:00:00Z",
           "payee": "Salary",
           "account": "Income:Salary:Acme",
@@ -575,8 +900,8 @@
           "balance": 0
         },
         {
-          "id": 5,
-          "transaction_id": "3",
+          "id": 19,
+          "transaction_id": "12",
           "date": "2022-01-06T00:00:00Z",
           "payee": "Bonus",
           "account": "Income:Salary:Acme",
@@ -596,8 +921,8 @@
           "balance": 0
         },
         {
-          "id": 20,
-          "transaction_id": "10",
+          "id": 34,
+          "transaction_id": "19",
           "date": "2022-01-09T00:00:00Z",
           "payee": "Sell",
           "account": "Income:CapitalGains:Equity:AAPL",
@@ -617,8 +942,8 @@
           "balance": 0
         },
         {
-          "id": 26,
-          "transaction_id": "12",
+          "id": 42,
+          "transaction_id": "21",
           "date": "2022-01-31T00:00:00Z",
           "payee": "Interest",
           "account": "Income:Interest:Checking",
@@ -642,8 +967,8 @@
     "investments": {
       "2021 - 22": [
         {
-          "id": 8,
-          "transaction_id": "4",
+          "id": 22,
+          "transaction_id": "13",
           "date": "2022-01-07T00:00:00Z",
           "payee": "Investment",
           "account": "Assets:Equity:NIFTY",
@@ -663,8 +988,8 @@
           "balance": 0
         },
         {
-          "id": 13,
-          "transaction_id": "7",
+          "id": 27,
+          "transaction_id": "16",
           "date": "2022-01-08T00:00:00Z",
           "payee": "Buy ABNB",
           "account": "Assets:Equity:ABNB",
@@ -684,8 +1009,8 @@
           "balance": 0
         },
         {
-          "id": 10,
-          "transaction_id": "5",
+          "id": 24,
+          "transaction_id": "14",
           "date": "2022-01-08T00:00:00Z",
           "payee": "Investment 2",
           "account": "Assets:Equity:NIFTY",
@@ -705,8 +1030,8 @@
           "balance": 0
         },
         {
-          "id": 15,
-          "transaction_id": "9",
+          "id": 29,
+          "transaction_id": "18",
           "date": "2022-01-08T00:00:00Z",
           "payee": "Buy Apple",
           "account": "Assets:Equity:AAPL",
@@ -726,8 +1051,8 @@
           "balance": 0
         },
         {
-          "id": 12,
-          "transaction_id": "6",
+          "id": 26,
+          "transaction_id": "15",
           "date": "2022-01-08T00:00:00Z",
           "payee": "Investment 3",
           "account": "Assets:Equity:NIFTY",
@@ -747,8 +1072,8 @@
           "balance": 0
         },
         {
-          "id": 23,
-          "transaction_id": "11",
+          "id": 37,
+          "transaction_id": "20",
           "date": "2022-01-09T00:00:00Z",
           "payee": "Multi Currency Debit",
           "account": "Assets:Dollar",
@@ -768,8 +1093,8 @@
           "balance": 0
         },
         {
-          "id": 17,
-          "transaction_id": "8",
+          "id": 31,
+          "transaction_id": "17",
           "date": "2022-01-09T00:00:00Z",
           "payee": "Buy ABNB total price",
           "account": "Assets:Equity:ABNB",
@@ -789,8 +1114,8 @@
           "balance": 0
         },
         {
-          "id": 19,
-          "transaction_id": "10",
+          "id": 33,
+          "transaction_id": "19",
           "date": "2022-01-09T00:00:00Z",
           "payee": "Sell",
           "account": "Assets:Equity:AAPL",

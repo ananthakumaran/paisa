@@ -1,24 +1,54 @@
 {
   "cash_flows": [
     {
+      "date": "2021-10-01T00:00:00Z",
+      "income": 20000,
+      "expenses": 100,
+      "liabilities": 100,
+      "investment": 0,
+      "tax": 0,
+      "checking": 20000,
+      "balance": 20000
+    },
+    {
+      "date": "2021-11-01T00:00:00Z",
+      "income": 0,
+      "expenses": 100,
+      "liabilities": 0,
+      "investment": 0,
+      "tax": 0,
+      "checking": -100,
+      "balance": 19900
+    },
+    {
+      "date": "2021-12-01T00:00:00Z",
+      "income": 0,
+      "expenses": 100,
+      "liabilities": 1,
+      "investment": 0,
+      "tax": 0,
+      "checking": -99,
+      "balance": 19801
+    },
+    {
       "date": "2022-01-01T00:00:00Z",
       "income": 121027.3,
-      "expenses": 20100,
-      "liabilities": 0,
+      "expenses": 34410.14,
+      "liabilities": 14208.14,
       "investment": 96855.0544942592,
       "tax": 0,
-      "checking": 4072.2455057408,
-      "balance": 4072.2455057408
+      "checking": 3970.2455057408,
+      "balance": 23771.2455057408
     },
     {
       "date": "2022-02-01T00:00:00Z",
       "income": 0,
       "expenses": 0,
-      "liabilities": 0,
+      "liabilities": -14309,
       "investment": 0,
       "tax": 0,
-      "checking": 0,
-      "balance": 4072.2455057408
+      "checking": -14309,
+      "balance": 9462.2455057408
     }
   ]
 }

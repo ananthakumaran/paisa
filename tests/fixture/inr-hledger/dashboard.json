@@ -1,39 +1,72 @@
 {
   "budget": {
-    "availableForBudgeting": 4072.2455057408,
+    "availableForBudgeting": 9462.2455057408,
     "budgetsByMonth": {},
-    "checkingBalance": 4072.2455057408
+    "checkingBalance": 9462.2455057408
   },
   "cashFlows": [
     {
+      "date": "2021-12-01T00:00:00Z",
+      "income": 0,
+      "expenses": 100,
+      "liabilities": 1,
+      "investment": 0,
+      "tax": 0,
+      "checking": -99,
+      "balance": 19801
+    },
+    {
       "date": "2022-01-01T00:00:00Z",
       "income": 121027.3,
-      "expenses": 20100,
-      "liabilities": 0,
+      "expenses": 34410.14,
+      "liabilities": 14208.14,
       "investment": 96855.0544942592,
       "tax": 0,
-      "checking": 4072.2455057408,
-      "balance": 4072.2455057408
+      "checking": 3970.2455057408,
+      "balance": 23771.2455057408
     },
     {
       "date": "2022-02-01T00:00:00Z",
       "income": 0,
       "expenses": 0,
-      "liabilities": 0,
+      "liabilities": -14309,
       "investment": 0,
       "tax": 0,
-      "checking": 0,
-      "balance": 4072.2455057408
+      "checking": -14309,
+      "balance": 9462.2455057408
     }
   ],
   "checkingBalances": {
     "asset_breakdowns": {}
   },
   "expenses": {
+    "2021-12": [
+      {
+        "id": 11,
+        "transaction_id": "6",
+        "date": "2021-12-20T00:00:00Z",
+        "payee": "Purchase",
+        "account": "Expenses:Shopping",
+        "commodity": "INR",
+        "quantity": 100,
+        "amount": 100,
+        "status": "unmarked",
+        "tag_recurring": "",
+        "tag_period": "",
+        "transaction_begin_line": 22,
+        "transaction_end_line": 25,
+        "file_name": "journals/2021/credit-card.ledger",
+        "forecast": false,
+        "note": "",
+        "transaction_note": "",
+        "market_amount": 0,
+        "balance": 0
+      }
+    ],
     "2022-01": [
       {
-        "id": 4,
-        "transaction_id": "2",
+        "id": 18,
+        "transaction_id": "11",
         "date": "2022-01-03T00:00:00Z",
         "payee": "Rent",
         "account": "Expenses:Rent",
@@ -53,8 +86,8 @@
         "balance": 0
       },
       {
-        "id": 22,
-        "transaction_id": "11",
+        "id": 36,
+        "transaction_id": "20",
         "date": "2022-01-09T00:00:00Z",
         "payee": "Multi Currency Debit",
         "account": "Expenses:Charges",
@@ -72,6 +105,27 @@
         "transaction_note": "",
         "market_amount": 0,
         "balance": 0
+      },
+      {
+        "id": 40,
+        "transaction_id": "8",
+        "date": "2022-01-20T00:00:00Z",
+        "payee": "Purchase",
+        "account": "Expenses:Shopping",
+        "commodity": "INR",
+        "quantity": 14310.14,
+        "amount": 14310.14,
+        "status": "unmarked",
+        "tag_recurring": "",
+        "tag_period": "",
+        "transaction_begin_line": 30,
+        "transaction_end_line": 33,
+        "file_name": "journals/2021/credit-card.ledger",
+        "forecast": false,
+        "note": "",
+        "transaction_note": "",
+        "market_amount": 0,
+        "balance": 0
       }
     ]
   },
@@ -79,25 +133,80 @@
   "networth": {
     "networth": {
       "date": "2022-02-07T23:59:59.999999999Z",
-      "investmentAmount": 236882.3544942592,
-      "withdrawalAmount": 136982.3544942592,
+      "investmentAmount": 271492.3544942592,
+      "withdrawalAmount": 166202.4944942592,
       "gainAmount": 1245.7,
-      "balanceAmount": 101145.7,
+      "balanceAmount": 106535.56,
       "balanceUnits": 0,
-      "netInvestmentAmount": 99900
+      "netInvestmentAmount": 105289.86
     },
-    "xirr": 12.85
+    "xirr": 7.75
   },
   "transactionSequences": [],
   "transactions": [
     {
-      "id": "12",
+      "id": "9",
+      "date": "2022-02-01T00:00:00Z",
+      "payee": "Rounded bill payment",
+      "postings": [
+        {
+          "id": 45,
+          "transaction_id": "9",
+          "date": "2022-02-01T00:00:00Z",
+          "payee": "Rounded bill payment",
+          "account": "Liabilities:CreditCard:HDFC",
+          "commodity": "INR",
+          "quantity": 14309,
+          "amount": 14309,
+          "status": "unmarked",
+          "tag_recurring": "",
+          "tag_period": "",
+          "transaction_begin_line": 34,
+          "transaction_end_line": 37,
+          "file_name": "journals/2021/credit-card.ledger",
+          "forecast": false,
+          "note": "",
+          "transaction_note": "",
+          "market_amount": 0,
+          "balance": 0
+        },
+        {
+          "id": 44,
+          "transaction_id": "9",
+          "date": "2022-02-01T00:00:00Z",
+          "payee": "Rounded bill payment",
+          "account": "Assets:Checking",
+          "commodity": "INR",
+          "quantity": -14309,
+          "amount": -14309,
+          "status": "unmarked",
+          "tag_recurring": "",
+          "tag_period": "",
+          "transaction_begin_line": 34,
+          "transaction_end_line": 37,
+          "file_name": "journals/2021/credit-card.ledger",
+          "forecast": false,
+          "note": "",
+          "transaction_note": "",
+          "market_amount": 0,
+          "balance": 0
+        }
+      ],
+      "tag_recurring": "",
+      "tag_period": "",
+      "beginLine": 34,
+      "endLine": 37,
+      "fileName": "journals/2021/credit-card.ledger",
+      "note": ""
+    },
+    {
+      "id": "21",
       "date": "2022-01-31T00:00:00Z",
       "payee": "Interest",
       "postings": [
         {
-          "id": 27,
-          "transaction_id": "12",
+          "id": 43,
+          "transaction_id": "21",
           "date": "2022-01-31T00:00:00Z",
           "payee": "Interest",
           "account": "Assets:Checking",
@@ -117,8 +226,8 @@
           "balance": 0
         },
         {
-          "id": 26,
-          "transaction_id": "12",
+          "id": 42,
+          "transaction_id": "21",
           "date": "2022-01-31T00:00:00Z",
           "payee": "Interest",
           "account": "Income:Interest:Checking",
@@ -147,24 +256,24 @@
     },
     {
       "id": "8",
-      "date": "2022-01-09T00:00:00Z",
-      "payee": "Buy ABNB total price",
+      "date": "2022-01-20T00:00:00Z",
+      "payee": "Purchase",
       "postings": [
         {
-          "id": 17,
+          "id": 40,
           "transaction_id": "8",
-          "date": "2022-01-09T00:00:00Z",
-          "payee": "Buy ABNB total price",
-          "account": "Assets:Equity:ABNB",
-          "commodity": "ABNB",
-          "quantity": 0.76,
-          "amount": 8025.3170071296,
+          "date": "2022-01-20T00:00:00Z",
+          "payee": "Purchase",
+          "account": "Expenses:Shopping",
+          "commodity": "INR",
+          "quantity": 14310.14,
+          "amount": 14310.14,
           "status": "unmarked",
           "tag_recurring": "",
           "tag_period": "",
-          "transaction_begin_line": 34,
-          "transaction_end_line": 37,
-          "file_name": "main.ledger",
+          "transaction_begin_line": 30,
+          "transaction_end_line": 33,
+          "file_name": "journals/2021/credit-card.ledger",
           "forecast": false,
           "note": "",
           "transaction_note": "",
@@ -172,20 +281,20 @@
           "balance": 0
         },
         {
-          "id": 18,
+          "id": 41,
           "transaction_id": "8",
-          "date": "2022-01-09T00:00:00Z",
-          "payee": "Buy ABNB total price",
-          "account": "Assets:Checking",
-          "commodity": "USD",
-          "quantity": -99.7652,
-          "amount": -8025.3170071296,
+          "date": "2022-01-20T00:00:00Z",
+          "payee": "Purchase",
+          "account": "Liabilities:CreditCard:HDFC",
+          "commodity": "INR",
+          "quantity": -14310.14,
+          "amount": -14310.14,
           "status": "unmarked",
           "tag_recurring": "",
           "tag_period": "",
-          "transaction_begin_line": 34,
-          "transaction_end_line": 37,
-          "file_name": "main.ledger",
+          "transaction_begin_line": 30,
+          "transaction_end_line": 33,
+          "file_name": "journals/2021/credit-card.ledger",
           "forecast": false,
           "note": "",
           "transaction_note": "",
@@ -195,19 +304,19 @@
       ],
       "tag_recurring": "",
       "tag_period": "",
-      "beginLine": 34,
-      "endLine": 37,
-      "fileName": "main.ledger",
+      "beginLine": 30,
+      "endLine": 33,
+      "fileName": "journals/2021/credit-card.ledger",
       "note": ""
     },
     {
-      "id": "11",
+      "id": "20",
       "date": "2022-01-09T00:00:00Z",
       "payee": "Multi Currency Debit",
       "postings": [
         {
-          "id": 23,
-          "transaction_id": "11",
+          "id": 37,
+          "transaction_id": "20",
           "date": "2022-01-09T00:00:00Z",
           "payee": "Multi Currency Debit",
           "account": "Assets:Dollar",
@@ -227,8 +336,8 @@
           "balance": 0
         },
         {
-          "id": 22,
-          "transaction_id": "11",
+          "id": 36,
+          "transaction_id": "20",
           "date": "2022-01-09T00:00:00Z",
           "payee": "Multi Currency Debit",
           "account": "Expenses:Charges",
@@ -248,8 +357,8 @@
           "balance": 0
         },
         {
-          "id": 25,
-          "transaction_id": "11",
+          "id": 39,
+          "transaction_id": "20",
           "date": "2022-01-09T00:00:00Z",
           "payee": "Multi Currency Debit",
           "account": "Assets:Checking",
@@ -269,8 +378,8 @@
           "balance": 0
         },
         {
-          "id": 24,
-          "transaction_id": "11",
+          "id": 38,
+          "transaction_id": "20",
           "date": "2022-01-09T00:00:00Z",
           "payee": "Multi Currency Debit",
           "account": "Assets:Checking",
@@ -298,13 +407,13 @@
       "note": ""
     },
     {
-      "id": "10",
+      "id": "19",
       "date": "2022-01-09T00:00:00Z",
       "payee": "Sell",
       "postings": [
         {
-          "id": 21,
-          "transaction_id": "10",
+          "id": 35,
+          "transaction_id": "19",
           "date": "2022-01-09T00:00:00Z",
           "payee": "Sell",
           "account": "Assets:Checking",
@@ -324,8 +433,8 @@
           "balance": 0
         },
         {
-          "id": 20,
-          "transaction_id": "10",
+          "id": 34,
+          "transaction_id": "19",
           "date": "2022-01-09T00:00:00Z",
           "payee": "Sell",
           "account": "Income:CapitalGains:Equity:AAPL",
@@ -345,8 +454,8 @@
           "balance": 0
         },
         {
-          "id": 19,
-          "transaction_id": "10",
+          "id": 33,
+          "transaction_id": "19",
           "date": "2022-01-09T00:00:00Z",
           "payee": "Sell",
           "account": "Assets:Equity:AAPL",
@@ -374,13 +483,68 @@
       "note": ""
     },
     {
-      "id": "9",
+      "id": "17",
+      "date": "2022-01-09T00:00:00Z",
+      "payee": "Buy ABNB total price",
+      "postings": [
+        {
+          "id": 31,
+          "transaction_id": "17",
+          "date": "2022-01-09T00:00:00Z",
+          "payee": "Buy ABNB total price",
+          "account": "Assets:Equity:ABNB",
+          "commodity": "ABNB",
+          "quantity": 0.76,
+          "amount": 8025.3170071296,
+          "status": "unmarked",
+          "tag_recurring": "",
+          "tag_period": "",
+          "transaction_begin_line": 34,
+          "transaction_end_line": 37,
+          "file_name": "main.ledger",
+          "forecast": false,
+          "note": "",
+          "transaction_note": "",
+          "market_amount": 0,
+          "balance": 0
+        },
+        {
+          "id": 32,
+          "transaction_id": "17",
+          "date": "2022-01-09T00:00:00Z",
+          "payee": "Buy ABNB total price",
+          "account": "Assets:Checking",
+          "commodity": "USD",
+          "quantity": -99.7652,
+          "amount": -8025.3170071296,
+          "status": "unmarked",
+          "tag_recurring": "",
+          "tag_period": "",
+          "transaction_begin_line": 34,
+          "transaction_end_line": 37,
+          "file_name": "main.ledger",
+          "forecast": false,
+          "note": "",
+          "transaction_note": "",
+          "market_amount": 0,
+          "balance": 0
+        }
+      ],
+      "tag_recurring": "",
+      "tag_period": "",
+      "beginLine": 34,
+      "endLine": 37,
+      "fileName": "main.ledger",
+      "note": ""
+    },
+    {
+      "id": "18",
       "date": "2022-01-08T00:00:00Z",
       "payee": "Buy Apple",
       "postings": [
         {
-          "id": 15,
-          "transaction_id": "9",
+          "id": 29,
+          "transaction_id": "18",
           "date": "2022-01-08T00:00:00Z",
           "payee": "Buy Apple",
           "account": "Assets:Equity:AAPL",
@@ -400,8 +564,8 @@
           "balance": 0
         },
         {
-          "id": 16,
-          "transaction_id": "9",
+          "id": 30,
+          "transaction_id": "18",
           "date": "2022-01-08T00:00:00Z",
           "payee": "Buy Apple",
           "account": "Assets:Checking",
@@ -429,13 +593,13 @@
       "note": ""
     },
     {
-      "id": "7",
+      "id": "16",
       "date": "2022-01-08T00:00:00Z",
       "payee": "Buy ABNB",
       "postings": [
         {
-          "id": 13,
-          "transaction_id": "7",
+          "id": 27,
+          "transaction_id": "16",
           "date": "2022-01-08T00:00:00Z",
           "payee": "Buy ABNB",
           "account": "Assets:Equity:ABNB",
@@ -455,8 +619,8 @@
           "balance": 0
         },
         {
-          "id": 14,
-          "transaction_id": "7",
+          "id": 28,
+          "transaction_id": "16",
           "date": "2022-01-08T00:00:00Z",
           "payee": "Buy ABNB",
           "account": "Assets:Checking",
@@ -484,13 +648,13 @@
       "note": ""
     },
     {
-      "id": "6",
+      "id": "15",
       "date": "2022-01-08T00:00:00Z",
       "payee": "Investment 3",
       "postings": [
         {
-          "id": 12,
-          "transaction_id": "6",
+          "id": 26,
+          "transaction_id": "15",
           "date": "2022-01-08T00:00:00Z",
           "payee": "Investment 3",
           "account": "Assets:Equity:NIFTY",
@@ -510,8 +674,8 @@
           "balance": 0
         },
         {
-          "id": 11,
-          "transaction_id": "6",
+          "id": 25,
+          "transaction_id": "15",
           "date": "2022-01-08T00:00:00Z",
           "payee": "Investment 3",
           "account": "Assets:Checking",
@@ -539,13 +703,13 @@
       "note": ""
     },
     {
-      "id": "5",
+      "id": "14",
       "date": "2022-01-08T00:00:00Z",
       "payee": "Investment 2",
       "postings": [
         {
-          "id": 10,
-          "transaction_id": "5",
+          "id": 24,
+          "transaction_id": "14",
           "date": "2022-01-08T00:00:00Z",
           "payee": "Investment 2",
           "account": "Assets:Equity:NIFTY",
@@ -565,8 +729,8 @@
           "balance": 0
         },
         {
-          "id": 9,
-          "transaction_id": "5",
+          "id": 23,
+          "transaction_id": "14",
           "date": "2022-01-08T00:00:00Z",
           "payee": "Investment 2",
           "account": "Assets:Checking",
@@ -594,13 +758,13 @@
       "note": ""
     },
     {
-      "id": "4",
+      "id": "13",
       "date": "2022-01-07T00:00:00Z",
       "payee": "Investment",
       "postings": [
         {
-          "id": 8,
-          "transaction_id": "4",
+          "id": 22,
+          "transaction_id": "13",
           "date": "2022-01-07T00:00:00Z",
           "payee": "Investment",
           "account": "Assets:Equity:NIFTY",
@@ -620,8 +784,8 @@
           "balance": 0
         },
         {
-          "id": 7,
-          "transaction_id": "4",
+          "id": 21,
+          "transaction_id": "13",
           "date": "2022-01-07T00:00:00Z",
           "payee": "Investment",
           "account": "Assets:Checking",
@@ -649,13 +813,13 @@
       "note": ""
     },
     {
-      "id": "3",
+      "id": "12",
       "date": "2022-01-06T00:00:00Z",
       "payee": "Bonus",
       "postings": [
         {
-          "id": 6,
-          "transaction_id": "3",
+          "id": 20,
+          "transaction_id": "12",
           "date": "2022-01-06T00:00:00Z",
           "payee": "Bonus",
           "account": "Assets:Checking",
@@ -675,8 +839,8 @@
           "balance": 0
         },
         {
-          "id": 5,
-          "transaction_id": "3",
+          "id": 19,
+          "transaction_id": "12",
           "date": "2022-01-06T00:00:00Z",
           "payee": "Bonus",
           "account": "Income:Salary:Acme",
@@ -704,13 +868,13 @@
       "note": ""
     },
     {
-      "id": "2",
+      "id": "11",
       "date": "2022-01-03T00:00:00Z",
       "payee": "Rent",
       "postings": [
         {
-          "id": 4,
-          "transaction_id": "2",
+          "id": 18,
+          "transaction_id": "11",
           "date": "2022-01-03T00:00:00Z",
           "payee": "Rent",
           "account": "Expenses:Rent",
@@ -730,8 +894,8 @@
           "balance": 0
         },
         {
-          "id": 3,
-          "transaction_id": "2",
+          "id": 17,
+          "transaction_id": "11",
           "date": "2022-01-03T00:00:00Z",
           "payee": "Rent",
           "account": "Assets:Checking",
@@ -759,13 +923,68 @@
       "note": ""
     },
     {
-      "id": "1",
+      "id": "7",
+      "date": "2022-01-01T00:00:00Z",
+      "payee": "Overpayment",
+      "postings": [
+        {
+          "id": 14,
+          "transaction_id": "7",
+          "date": "2022-01-01T00:00:00Z",
+          "payee": "Overpayment",
+          "account": "Liabilities:CreditCard:HDFC",
+          "commodity": "INR",
+          "quantity": 102,
+          "amount": 102,
+          "status": "unmarked",
+          "tag_recurring": "",
+          "tag_period": "",
+          "transaction_begin_line": 26,
+          "transaction_end_line": 29,
+          "file_name": "journals/2021/credit-card.ledger",
+          "forecast": false,
+          "note": "",
+          "transaction_note": "",
+          "market_amount": 0,
+          "balance": 0
+        },
+        {
+          "id": 13,
+          "transaction_id": "7",
+          "date": "2022-01-01T00:00:00Z",
+          "payee": "Overpayment",
+          "account": "Assets:Checking",
+          "commodity": "INR",
+          "quantity": -102,
+          "amount": -102,
+          "status": "unmarked",
+          "tag_recurring": "",
+          "tag_period": "",
+          "transaction_begin_line": 26,
+          "transaction_end_line": 29,
+          "file_name": "journals/2021/credit-card.ledger",
+          "forecast": false,
+          "note": "",
+          "transaction_note": "",
+          "market_amount": 0,
+          "balance": 0
+        }
+      ],
+      "tag_recurring": "",
+      "tag_period": "",
+      "beginLine": 26,
+      "endLine": 29,
+      "fileName": "journals/2021/credit-card.ledger",
+      "note": ""
+    },
+    {
+      "id": "10",
       "date": "2022-01-01T00:00:00Z",
       "payee": "Salary",
       "postings": [
         {
-          "id": 2,
-          "transaction_id": "1",
+          "id": 16,
+          "transaction_id": "10",
           "date": "2022-01-01T00:00:00Z",
           "payee": "Salary",
           "account": "Assets:Checking",
@@ -785,8 +1004,8 @@
           "balance": 0
         },
         {
-          "id": 1,
-          "transaction_id": "1",
+          "id": 15,
+          "transaction_id": "10",
           "date": "2022-01-01T00:00:00Z",
           "payee": "Salary",
           "account": "Income:Salary:Acme",
@@ -811,6 +1030,336 @@
       "beginLine": 6,
       "endLine": 9,
       "fileName": "main.ledger",
+      "note": ""
+    },
+    {
+      "id": "6",
+      "date": "2021-12-20T00:00:00Z",
+      "payee": "Purchase",
+      "postings": [
+        {
+          "id": 11,
+          "transaction_id": "6",
+          "date": "2021-12-20T00:00:00Z",
+          "payee": "Purchase",
+          "account": "Expenses:Shopping",
+          "commodity": "INR",
+          "quantity": 100,
+          "amount": 100,
+          "status": "unmarked",
+          "tag_recurring": "",
+          "tag_period": "",
+          "transaction_begin_line": 22,
+          "transaction_end_line": 25,
+          "file_name": "journals/2021/credit-card.ledger",
+          "forecast": false,
+          "note": "",
+          "transaction_note": "",
+          "market_amount": 0,
+          "balance": 0
+        },
+        {
+          "id": 12,
+          "transaction_id": "6",
+          "date": "2021-12-20T00:00:00Z",
+          "payee": "Purchase",
+          "account": "Liabilities:CreditCard:HDFC",
+          "commodity": "INR",
+          "quantity": -100,
+          "amount": -100,
+          "status": "unmarked",
+          "tag_recurring": "",
+          "tag_period": "",
+          "transaction_begin_line": 22,
+          "transaction_end_line": 25,
+          "file_name": "journals/2021/credit-card.ledger",
+          "forecast": false,
+          "note": "",
+          "transaction_note": "",
+          "market_amount": 0,
+          "balance": 0
+        }
+      ],
+      "tag_recurring": "",
+      "tag_period": "",
+      "beginLine": 22,
+      "endLine": 25,
+      "fileName": "journals/2021/credit-card.ledger",
+      "note": ""
+    },
+    {
+      "id": "5",
+      "date": "2021-12-01T00:00:00Z",
+      "payee": "One unit still due",
+      "postings": [
+        {
+          "id": 10,
+          "transaction_id": "5",
+          "date": "2021-12-01T00:00:00Z",
+          "payee": "One unit still due",
+          "account": "Liabilities:CreditCard:HDFC",
+          "commodity": "INR",
+          "quantity": 99,
+          "amount": 99,
+          "status": "unmarked",
+          "tag_recurring": "",
+          "tag_period": "",
+          "transaction_begin_line": 18,
+          "transaction_end_line": 21,
+          "file_name": "journals/2021/credit-card.ledger",
+          "forecast": false,
+          "note": "",
+          "transaction_note": "",
+          "market_amount": 0,
+          "balance": 0
+        },
+        {
+          "id": 9,
+          "transaction_id": "5",
+          "date": "2021-12-01T00:00:00Z",
+          "payee": "One unit still due",
+          "account": "Assets:Checking",
+          "commodity": "INR",
+          "quantity": -99,
+          "amount": -99,
+          "status": "unmarked",
+          "tag_recurring": "",
+          "tag_period": "",
+          "transaction_begin_line": 18,
+          "transaction_end_line": 21,
+          "file_name": "journals/2021/credit-card.ledger",
+          "forecast": false,
+          "note": "",
+          "transaction_note": "",
+          "market_amount": 0,
+          "balance": 0
+        }
+      ],
+      "tag_recurring": "",
+      "tag_period": "",
+      "beginLine": 18,
+      "endLine": 21,
+      "fileName": "journals/2021/credit-card.ledger",
+      "note": ""
+    },
+    {
+      "id": "4",
+      "date": "2021-11-20T00:00:00Z",
+      "payee": "Purchase",
+      "postings": [
+        {
+          "id": 7,
+          "transaction_id": "4",
+          "date": "2021-11-20T00:00:00Z",
+          "payee": "Purchase",
+          "account": "Expenses:Shopping",
+          "commodity": "INR",
+          "quantity": 100,
+          "amount": 100,
+          "status": "unmarked",
+          "tag_recurring": "",
+          "tag_period": "",
+          "transaction_begin_line": 14,
+          "transaction_end_line": 17,
+          "file_name": "journals/2021/credit-card.ledger",
+          "forecast": false,
+          "note": "",
+          "transaction_note": "",
+          "market_amount": 0,
+          "balance": 0
+        },
+        {
+          "id": 8,
+          "transaction_id": "4",
+          "date": "2021-11-20T00:00:00Z",
+          "payee": "Purchase",
+          "account": "Liabilities:CreditCard:HDFC",
+          "commodity": "INR",
+          "quantity": -100,
+          "amount": -100,
+          "status": "unmarked",
+          "tag_recurring": "",
+          "tag_period": "",
+          "transaction_begin_line": 14,
+          "transaction_end_line": 17,
+          "file_name": "journals/2021/credit-card.ledger",
+          "forecast": false,
+          "note": "",
+          "transaction_note": "",
+          "market_amount": 0,
+          "balance": 0
+        }
+      ],
+      "tag_recurring": "",
+      "tag_period": "",
+      "beginLine": 14,
+      "endLine": 17,
+      "fileName": "journals/2021/credit-card.ledger",
+      "note": ""
+    },
+    {
+      "id": "3",
+      "date": "2021-11-01T00:00:00Z",
+      "payee": "Exact payment",
+      "postings": [
+        {
+          "id": 6,
+          "transaction_id": "3",
+          "date": "2021-11-01T00:00:00Z",
+          "payee": "Exact payment",
+          "account": "Liabilities:CreditCard:HDFC",
+          "commodity": "INR",
+          "quantity": 100,
+          "amount": 100,
+          "status": "unmarked",
+          "tag_recurring": "",
+          "tag_period": "",
+          "transaction_begin_line": 10,
+          "transaction_end_line": 13,
+          "file_name": "journals/2021/credit-card.ledger",
+          "forecast": false,
+          "note": "",
+          "transaction_note": "",
+          "market_amount": 0,
+          "balance": 0
+        },
+        {
+          "id": 5,
+          "transaction_id": "3",
+          "date": "2021-11-01T00:00:00Z",
+          "payee": "Exact payment",
+          "account": "Assets:Checking",
+          "commodity": "INR",
+          "quantity": -100,
+          "amount": -100,
+          "status": "unmarked",
+          "tag_recurring": "",
+          "tag_period": "",
+          "transaction_begin_line": 10,
+          "transaction_end_line": 13,
+          "file_name": "journals/2021/credit-card.ledger",
+          "forecast": false,
+          "note": "",
+          "transaction_note": "",
+          "market_amount": 0,
+          "balance": 0
+        }
+      ],
+      "tag_recurring": "",
+      "tag_period": "",
+      "beginLine": 10,
+      "endLine": 13,
+      "fileName": "journals/2021/credit-card.ledger",
+      "note": ""
+    },
+    {
+      "id": "2",
+      "date": "2021-10-20T00:00:00Z",
+      "payee": "Purchase",
+      "postings": [
+        {
+          "id": 3,
+          "transaction_id": "2",
+          "date": "2021-10-20T00:00:00Z",
+          "payee": "Purchase",
+          "account": "Expenses:Shopping",
+          "commodity": "INR",
+          "quantity": 100,
+          "amount": 100,
+          "status": "unmarked",
+          "tag_recurring": "",
+          "tag_period": "",
+          "transaction_begin_line": 6,
+          "transaction_end_line": 9,
+          "file_name": "journals/2021/credit-card.ledger",
+          "forecast": false,
+          "note": "",
+          "transaction_note": "",
+          "market_amount": 0,
+          "balance": 0
+        },
+        {
+          "id": 4,
+          "transaction_id": "2",
+          "date": "2021-10-20T00:00:00Z",
+          "payee": "Purchase",
+          "account": "Liabilities:CreditCard:HDFC",
+          "commodity": "INR",
+          "quantity": -100,
+          "amount": -100,
+          "status": "unmarked",
+          "tag_recurring": "",
+          "tag_period": "",
+          "transaction_begin_line": 6,
+          "transaction_end_line": 9,
+          "file_name": "journals/2021/credit-card.ledger",
+          "forecast": false,
+          "note": "",
+          "transaction_note": "",
+          "market_amount": 0,
+          "balance": 0
+        }
+      ],
+      "tag_recurring": "",
+      "tag_period": "",
+      "beginLine": 6,
+      "endLine": 9,
+      "fileName": "journals/2021/credit-card.ledger",
+      "note": ""
+    },
+    {
+      "id": "1",
+      "date": "2021-10-01T00:00:00Z",
+      "payee": "Salary",
+      "postings": [
+        {
+          "id": 2,
+          "transaction_id": "1",
+          "date": "2021-10-01T00:00:00Z",
+          "payee": "Salary",
+          "account": "Assets:Checking",
+          "commodity": "INR",
+          "quantity": 20000,
+          "amount": 20000,
+          "status": "unmarked",
+          "tag_recurring": "",
+          "tag_period": "",
+          "transaction_begin_line": 2,
+          "transaction_end_line": 5,
+          "file_name": "journals/2021/credit-card.ledger",
+          "forecast": false,
+          "note": "",
+          "transaction_note": "",
+          "market_amount": 0,
+          "balance": 0
+        },
+        {
+          "id": 1,
+          "transaction_id": "1",
+          "date": "2021-10-01T00:00:00Z",
+          "payee": "Salary",
+          "account": "Income:Salary:Acme",
+          "commodity": "INR",
+          "quantity": -20000,
+          "amount": -20000,
+          "status": "unmarked",
+          "tag_recurring": "",
+          "tag_period": "",
+          "transaction_begin_line": 2,
+          "transaction_end_line": 5,
+          "file_name": "journals/2021/credit-card.ledger",
+          "forecast": false,
+          "note": "",
+          "transaction_note": "",
+          "market_amount": 0,
+          "balance": 0
+        }
+      ],
+      "tag_recurring": "",
+      "tag_period": "",
+      "beginLine": 2,
+      "endLine": 5,
+      "fileName": "journals/2021/credit-card.ledger",
       "note": ""
     }
   ]

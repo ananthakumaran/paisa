@@ -8,7 +8,7 @@
     "Assets:Checking": {
       "date": "2022-02-07T23:59:59.999999999Z",
       "account": "Assets:Checking",
-      "market_amount": 4072.2455057408
+      "market_amount": 9462.2455057408
     },
     "Assets:Dollar": {
       "date": "2022-02-07T23:59:59.999999999Z",
@@ -39,51 +39,695 @@
   "aggregates_timeline": [
     {
       "Assets:Checking": {
+        "date": "2021-10-01T00:00:00Z",
+        "account": "Assets:Checking",
+        "market_amount": 20000
+      }
+    },
+    {
+      "Assets:Checking": {
+        "date": "2021-10-02T00:00:00Z",
+        "account": "Assets:Checking",
+        "market_amount": 20000
+      }
+    },
+    {
+      "Assets:Checking": {
+        "date": "2021-10-03T00:00:00Z",
+        "account": "Assets:Checking",
+        "market_amount": 20000
+      }
+    },
+    {
+      "Assets:Checking": {
+        "date": "2021-10-04T00:00:00Z",
+        "account": "Assets:Checking",
+        "market_amount": 20000
+      }
+    },
+    {
+      "Assets:Checking": {
+        "date": "2021-10-05T00:00:00Z",
+        "account": "Assets:Checking",
+        "market_amount": 20000
+      }
+    },
+    {
+      "Assets:Checking": {
+        "date": "2021-10-06T00:00:00Z",
+        "account": "Assets:Checking",
+        "market_amount": 20000
+      }
+    },
+    {
+      "Assets:Checking": {
+        "date": "2021-10-07T00:00:00Z",
+        "account": "Assets:Checking",
+        "market_amount": 20000
+      }
+    },
+    {
+      "Assets:Checking": {
+        "date": "2021-10-08T00:00:00Z",
+        "account": "Assets:Checking",
+        "market_amount": 20000
+      }
+    },
+    {
+      "Assets:Checking": {
+        "date": "2021-10-09T00:00:00Z",
+        "account": "Assets:Checking",
+        "market_amount": 20000
+      }
+    },
+    {
+      "Assets:Checking": {
+        "date": "2021-10-10T00:00:00Z",
+        "account": "Assets:Checking",
+        "market_amount": 20000
+      }
+    },
+    {
+      "Assets:Checking": {
+        "date": "2021-10-11T00:00:00Z",
+        "account": "Assets:Checking",
+        "market_amount": 20000
+      }
+    },
+    {
+      "Assets:Checking": {
+        "date": "2021-10-12T00:00:00Z",
+        "account": "Assets:Checking",
+        "market_amount": 20000
+      }
+    },
+    {
+      "Assets:Checking": {
+        "date": "2021-10-13T00:00:00Z",
+        "account": "Assets:Checking",
+        "market_amount": 20000
+      }
+    },
+    {
+      "Assets:Checking": {
+        "date": "2021-10-14T00:00:00Z",
+        "account": "Assets:Checking",
+        "market_amount": 20000
+      }
+    },
+    {
+      "Assets:Checking": {
+        "date": "2021-10-15T00:00:00Z",
+        "account": "Assets:Checking",
+        "market_amount": 20000
+      }
+    },
+    {
+      "Assets:Checking": {
+        "date": "2021-10-16T00:00:00Z",
+        "account": "Assets:Checking",
+        "market_amount": 20000
+      }
+    },
+    {
+      "Assets:Checking": {
+        "date": "2021-10-17T00:00:00Z",
+        "account": "Assets:Checking",
+        "market_amount": 20000
+      }
+    },
+    {
+      "Assets:Checking": {
+        "date": "2021-10-18T00:00:00Z",
+        "account": "Assets:Checking",
+        "market_amount": 20000
+      }
+    },
+    {
+      "Assets:Checking": {
+        "date": "2021-10-19T00:00:00Z",
+        "account": "Assets:Checking",
+        "market_amount": 20000
+      }
+    },
+    {
+      "Assets:Checking": {
+        "date": "2021-10-20T00:00:00Z",
+        "account": "Assets:Checking",
+        "market_amount": 20000
+      }
+    },
+    {
+      "Assets:Checking": {
+        "date": "2021-10-21T00:00:00Z",
+        "account": "Assets:Checking",
+        "market_amount": 20000
+      }
+    },
+    {
+      "Assets:Checking": {
+        "date": "2021-10-22T00:00:00Z",
+        "account": "Assets:Checking",
+        "market_amount": 20000
+      }
+    },
+    {
+      "Assets:Checking": {
+        "date": "2021-10-23T00:00:00Z",
+        "account": "Assets:Checking",
+        "market_amount": 20000
+      }
+    },
+    {
+      "Assets:Checking": {
+        "date": "2021-10-24T00:00:00Z",
+        "account": "Assets:Checking",
+        "market_amount": 20000
+      }
+    },
+    {
+      "Assets:Checking": {
+        "date": "2021-10-25T00:00:00Z",
+        "account": "Assets:Checking",
+        "market_amount": 20000
+      }
+    },
+    {
+      "Assets:Checking": {
+        "date": "2021-10-26T00:00:00Z",
+        "account": "Assets:Checking",
+        "market_amount": 20000
+      }
+    },
+    {
+      "Assets:Checking": {
+        "date": "2021-10-27T00:00:00Z",
+        "account": "Assets:Checking",
+        "market_amount": 20000
+      }
+    },
+    {
+      "Assets:Checking": {
+        "date": "2021-10-28T00:00:00Z",
+        "account": "Assets:Checking",
+        "market_amount": 20000
+      }
+    },
+    {
+      "Assets:Checking": {
+        "date": "2021-10-29T00:00:00Z",
+        "account": "Assets:Checking",
+        "market_amount": 20000
+      }
+    },
+    {
+      "Assets:Checking": {
+        "date": "2021-10-30T00:00:00Z",
+        "account": "Assets:Checking",
+        "market_amount": 20000
+      }
+    },
+    {
+      "Assets:Checking": {
+        "date": "2021-10-31T00:00:00Z",
+        "account": "Assets:Checking",
+        "market_amount": 20000
+      }
+    },
+    {
+      "Assets:Checking": {
+        "date": "2021-11-01T00:00:00Z",
+        "account": "Assets:Checking",
+        "market_amount": 19900
+      }
+    },
+    {
+      "Assets:Checking": {
+        "date": "2021-11-02T00:00:00Z",
+        "account": "Assets:Checking",
+        "market_amount": 19900
+      }
+    },
+    {
+      "Assets:Checking": {
+        "date": "2021-11-03T00:00:00Z",
+        "account": "Assets:Checking",
+        "market_amount": 19900
+      }
+    },
+    {
+      "Assets:Checking": {
+        "date": "2021-11-04T00:00:00Z",
+        "account": "Assets:Checking",
+        "market_amount": 19900
+      }
+    },
+    {
+      "Assets:Checking": {
+        "date": "2021-11-05T00:00:00Z",
+        "account": "Assets:Checking",
+        "market_amount": 19900
+      }
+    },
+    {
+      "Assets:Checking": {
+        "date": "2021-11-06T00:00:00Z",
+        "account": "Assets:Checking",
+        "market_amount": 19900
+      }
+    },
+    {
+      "Assets:Checking": {
+        "date": "2021-11-07T00:00:00Z",
+        "account": "Assets:Checking",
+        "market_amount": 19900
+      }
+    },
+    {
+      "Assets:Checking": {
+        "date": "2021-11-08T00:00:00Z",
+        "account": "Assets:Checking",
+        "market_amount": 19900
+      }
+    },
+    {
+      "Assets:Checking": {
+        "date": "2021-11-09T00:00:00Z",
+        "account": "Assets:Checking",
+        "market_amount": 19900
+      }
+    },
+    {
+      "Assets:Checking": {
+        "date": "2021-11-10T00:00:00Z",
+        "account": "Assets:Checking",
+        "market_amount": 19900
+      }
+    },
+    {
+      "Assets:Checking": {
+        "date": "2021-11-11T00:00:00Z",
+        "account": "Assets:Checking",
+        "market_amount": 19900
+      }
+    },
+    {
+      "Assets:Checking": {
+        "date": "2021-11-12T00:00:00Z",
+        "account": "Assets:Checking",
+        "market_amount": 19900
+      }
+    },
+    {
+      "Assets:Checking": {
+        "date": "2021-11-13T00:00:00Z",
+        "account": "Assets:Checking",
+        "market_amount": 19900
+      }
+    },
+    {
+      "Assets:Checking": {
+        "date": "2021-11-14T00:00:00Z",
+        "account": "Assets:Checking",
+        "market_amount": 19900
+      }
+    },
+    {
+      "Assets:Checking": {
+        "date": "2021-11-15T00:00:00Z",
+        "account": "Assets:Checking",
+        "market_amount": 19900
+      }
+    },
+    {
+      "Assets:Checking": {
+        "date": "2021-11-16T00:00:00Z",
+        "account": "Assets:Checking",
+        "market_amount": 19900
+      }
+    },
+    {
+      "Assets:Checking": {
+        "date": "2021-11-17T00:00:00Z",
+        "account": "Assets:Checking",
+        "market_amount": 19900
+      }
+    },
+    {
+      "Assets:Checking": {
+        "date": "2021-11-18T00:00:00Z",
+        "account": "Assets:Checking",
+        "market_amount": 19900
+      }
+    },
+    {
+      "Assets:Checking": {
+        "date": "2021-11-19T00:00:00Z",
+        "account": "Assets:Checking",
+        "market_amount": 19900
+      }
+    },
+    {
+      "Assets:Checking": {
+        "date": "2021-11-20T00:00:00Z",
+        "account": "Assets:Checking",
+        "market_amount": 19900
+      }
+    },
+    {
+      "Assets:Checking": {
+        "date": "2021-11-21T00:00:00Z",
+        "account": "Assets:Checking",
+        "market_amount": 19900
+      }
+    },
+    {
+      "Assets:Checking": {
+        "date": "2021-11-22T00:00:00Z",
+        "account": "Assets:Checking",
+        "market_amount": 19900
+      }
+    },
+    {
+      "Assets:Checking": {
+        "date": "2021-11-23T00:00:00Z",
+        "account": "Assets:Checking",
+        "market_amount": 19900
+      }
+    },
+    {
+      "Assets:Checking": {
+        "date": "2021-11-24T00:00:00Z",
+        "account": "Assets:Checking",
+        "market_amount": 19900
+      }
+    },
+    {
+      "Assets:Checking": {
+        "date": "2021-11-25T00:00:00Z",
+        "account": "Assets:Checking",
+        "market_amount": 19900
+      }
+    },
+    {
+      "Assets:Checking": {
+        "date": "2021-11-26T00:00:00Z",
+        "account": "Assets:Checking",
+        "market_amount": 19900
+      }
+    },
+    {
+      "Assets:Checking": {
+        "date": "2021-11-27T00:00:00Z",
+        "account": "Assets:Checking",
+        "market_amount": 19900
+      }
+    },
+    {
+      "Assets:Checking": {
+        "date": "2021-11-28T00:00:00Z",
+        "account": "Assets:Checking",
+        "market_amount": 19900
+      }
+    },
+    {
+      "Assets:Checking": {
+        "date": "2021-11-29T00:00:00Z",
+        "account": "Assets:Checking",
+        "market_amount": 19900
+      }
+    },
+    {
+      "Assets:Checking": {
+        "date": "2021-11-30T00:00:00Z",
+        "account": "Assets:Checking",
+        "market_amount": 19900
+      }
+    },
+    {
+      "Assets:Checking": {
+        "date": "2021-12-01T00:00:00Z",
+        "account": "Assets:Checking",
+        "market_amount": 19801
+      }
+    },
+    {
+      "Assets:Checking": {
+        "date": "2021-12-02T00:00:00Z",
+        "account": "Assets:Checking",
+        "market_amount": 19801
+      }
+    },
+    {
+      "Assets:Checking": {
+        "date": "2021-12-03T00:00:00Z",
+        "account": "Assets:Checking",
+        "market_amount": 19801
+      }
+    },
+    {
+      "Assets:Checking": {
+        "date": "2021-12-04T00:00:00Z",
+        "account": "Assets:Checking",
+        "market_amount": 19801
+      }
+    },
+    {
+      "Assets:Checking": {
+        "date": "2021-12-05T00:00:00Z",
+        "account": "Assets:Checking",
+        "market_amount": 19801
+      }
+    },
+    {
+      "Assets:Checking": {
+        "date": "2021-12-06T00:00:00Z",
+        "account": "Assets:Checking",
+        "market_amount": 19801
+      }
+    },
+    {
+      "Assets:Checking": {
+        "date": "2021-12-07T00:00:00Z",
+        "account": "Assets:Checking",
+        "market_amount": 19801
+      }
+    },
+    {
+      "Assets:Checking": {
+        "date": "2021-12-08T00:00:00Z",
+        "account": "Assets:Checking",
+        "market_amount": 19801
+      }
+    },
+    {
+      "Assets:Checking": {
+        "date": "2021-12-09T00:00:00Z",
+        "account": "Assets:Checking",
+        "market_amount": 19801
+      }
+    },
+    {
+      "Assets:Checking": {
+        "date": "2021-12-10T00:00:00Z",
+        "account": "Assets:Checking",
+        "market_amount": 19801
+      }
+    },
+    {
+      "Assets:Checking": {
+        "date": "2021-12-11T00:00:00Z",
+        "account": "Assets:Checking",
+        "market_amount": 19801
+      }
+    },
+    {
+      "Assets:Checking": {
+        "date": "2021-12-12T00:00:00Z",
+        "account": "Assets:Checking",
+        "market_amount": 19801
+      }
+    },
+    {
+      "Assets:Checking": {
+        "date": "2021-12-13T00:00:00Z",
+        "account": "Assets:Checking",
+        "market_amount": 19801
+      }
+    },
+    {
+      "Assets:Checking": {
+        "date": "2021-12-14T00:00:00Z",
+        "account": "Assets:Checking",
+        "market_amount": 19801
+      }
+    },
+    {
+      "Assets:Checking": {
+        "date": "2021-12-15T00:00:00Z",
+        "account": "Assets:Checking",
+        "market_amount": 19801
+      }
+    },
+    {
+      "Assets:Checking": {
+        "date": "2021-12-16T00:00:00Z",
+        "account": "Assets:Checking",
+        "market_amount": 19801
+      }
+    },
+    {
+      "Assets:Checking": {
+        "date": "2021-12-17T00:00:00Z",
+        "account": "Assets:Checking",
+        "market_amount": 19801
+      }
+    },
+    {
+      "Assets:Checking": {
+        "date": "2021-12-18T00:00:00Z",
+        "account": "Assets:Checking",
+        "market_amount": 19801
+      }
+    },
+    {
+      "Assets:Checking": {
+        "date": "2021-12-19T00:00:00Z",
+        "account": "Assets:Checking",
+        "market_amount": 19801
+      }
+    },
+    {
+      "Assets:Checking": {
+        "date": "2021-12-20T00:00:00Z",
+        "account": "Assets:Checking",
+        "market_amount": 19801
+      }
+    },
+    {
+      "Assets:Checking": {
+        "date": "2021-12-21T00:00:00Z",
+        "account": "Assets:Checking",
+        "market_amount": 19801
+      }
+    },
+    {
+      "Assets:Checking": {
+        "date": "2021-12-22T00:00:00Z",
+        "account": "Assets:Checking",
+        "market_amount": 19801
+      }
+    },
+    {
+      "Assets:Checking": {
+        "date": "2021-12-23T00:00:00Z",
+        "account": "Assets:Checking",
+        "market_amount": 19801
+      }
+    },
+    {
+      "Assets:Checking": {
+        "date": "2021-12-24T00:00:00Z",
+        "account": "Assets:Checking",
+        "market_amount": 19801
+      }
+    },
+    {
+      "Assets:Checking": {
+        "date": "2021-12-25T00:00:00Z",
+        "account": "Assets:Checking",
+        "market_amount": 19801
+      }
+    },
+    {
+      "Assets:Checking": {
+        "date": "2021-12-26T00:00:00Z",
+        "account": "Assets:Checking",
+        "market_amount": 19801
+      }
+    },
+    {
+      "Assets:Checking": {
+        "date": "2021-12-27T00:00:00Z",
+        "account": "Assets:Checking",
+        "market_amount": 19801
+      }
+    },
+    {
+      "Assets:Checking": {
+        "date": "2021-12-28T00:00:00Z",
+        "account": "Assets:Checking",
+        "market_amount": 19801
+      }
+    },
+    {
+      "Assets:Checking": {
+        "date": "2021-12-29T00:00:00Z",
+        "account": "Assets:Checking",
+        "market_amount": 19801
+      }
+    },
+    {
+      "Assets:Checking": {
+        "date": "2021-12-30T00:00:00Z",
+        "account": "Assets:Checking",
+        "market_amount": 19801
+      }
+    },
+    {
+      "Assets:Checking": {
+        "date": "2021-12-31T00:00:00Z",
+        "account": "Assets:Checking",
+        "market_amount": 19801
+      }
+    },
+    {
+      "Assets:Checking": {
         "date": "2022-01-01T00:00:00Z",
         "account": "Assets:Checking",
-        "market_amount": 100000
+        "market_amount": 119699
       }
     },
     {
       "Assets:Checking": {
         "date": "2022-01-02T00:00:00Z",
         "account": "Assets:Checking",
-        "market_amount": 100000
+        "market_amount": 119699
       }
     },
     {
       "Assets:Checking": {
         "date": "2022-01-03T00:00:00Z",
         "account": "Assets:Checking",
-        "market_amount": 80000
+        "market_amount": 99699
       }
     },
     {
       "Assets:Checking": {
         "date": "2022-01-04T00:00:00Z",
         "account": "Assets:Checking",
-        "market_amount": 80000
+        "market_amount": 99699
       }
     },
     {
       "Assets:Checking": {
         "date": "2022-01-05T00:00:00Z",
         "account": "Assets:Checking",
-        "market_amount": 80000
+        "market_amount": 99699
       }
     },
     {
       "Assets:Checking": {
         "date": "2022-01-06T00:00:00Z",
         "account": "Assets:Checking",
-        "market_amount": 100000
+        "market_amount": 119699
       }
     },
     {
       "Assets:Checking": {
         "date": "2022-01-07T00:00:00Z",
         "account": "Assets:Checking",
-        "market_amount": 60000
+        "market_amount": 79699
       },
       "Assets:Equity:NIFTY": {
         "date": "2022-01-07T00:00:00Z",
@@ -95,7 +739,7 @@
       "Assets:Checking": {
         "date": "2022-01-08T00:00:00Z",
         "account": "Assets:Checking",
-        "market_amount": 1974.6829928704
+        "market_amount": 21673.6829928704
       },
       "Assets:Equity:AAPL": {
         "date": "2022-01-08T00:00:00Z",
@@ -117,7 +761,7 @@
       "Assets:Checking": {
         "date": "2022-01-09T00:00:00Z",
         "account": "Assets:Checking",
-        "market_amount": 3072.2455057408
+        "market_amount": 22771.2455057408
       },
       "Assets:Dollar": {
         "date": "2022-01-09T00:00:00Z",
@@ -144,7 +788,7 @@
       "Assets:Checking": {
         "date": "2022-01-10T00:00:00Z",
         "account": "Assets:Checking",
-        "market_amount": 3072.2455057408
+        "market_amount": 22771.2455057408
       },
       "Assets:Dollar": {
         "date": "2022-01-10T00:00:00Z",
@@ -171,7 +815,7 @@
       "Assets:Checking": {
         "date": "2022-01-11T00:00:00Z",
         "account": "Assets:Checking",
-        "market_amount": 3072.2455057408
+        "market_amount": 22771.2455057408
       },
       "Assets:Dollar": {
         "date": "2022-01-11T00:00:00Z",
@@ -198,7 +842,7 @@
       "Assets:Checking": {
         "date": "2022-01-12T00:00:00Z",
         "account": "Assets:Checking",
-        "market_amount": 3072.2455057408
+        "market_amount": 22771.2455057408
       },
       "Assets:Dollar": {
         "date": "2022-01-12T00:00:00Z",
@@ -225,7 +869,7 @@
       "Assets:Checking": {
         "date": "2022-01-13T00:00:00Z",
         "account": "Assets:Checking",
-        "market_amount": 3072.2455057408
+        "market_amount": 22771.2455057408
       },
       "Assets:Dollar": {
         "date": "2022-01-13T00:00:00Z",
@@ -252,7 +896,7 @@
       "Assets:Checking": {
         "date": "2022-01-14T00:00:00Z",
         "account": "Assets:Checking",
-        "market_amount": 3072.2455057408
+        "market_amount": 22771.2455057408
       },
       "Assets:Dollar": {
         "date": "2022-01-14T00:00:00Z",
@@ -279,7 +923,7 @@
       "Assets:Checking": {
         "date": "2022-01-15T00:00:00Z",
         "account": "Assets:Checking",
-        "market_amount": 3072.2455057408
+        "market_amount": 22771.2455057408
       },
       "Assets:Dollar": {
         "date": "2022-01-15T00:00:00Z",
@@ -306,7 +950,7 @@
       "Assets:Checking": {
         "date": "2022-01-16T00:00:00Z",
         "account": "Assets:Checking",
-        "market_amount": 3072.2455057408
+        "market_amount": 22771.2455057408
       },
       "Assets:Dollar": {
         "date": "2022-01-16T00:00:00Z",
@@ -333,7 +977,7 @@
       "Assets:Checking": {
         "date": "2022-01-17T00:00:00Z",
         "account": "Assets:Checking",
-        "market_amount": 3072.2455057408
+        "market_amount": 22771.2455057408
       },
       "Assets:Dollar": {
         "date": "2022-01-17T00:00:00Z",
@@ -360,7 +1004,7 @@
       "Assets:Checking": {
         "date": "2022-01-18T00:00:00Z",
         "account": "Assets:Checking",
-        "market_amount": 3072.2455057408
+        "market_amount": 22771.2455057408
       },
       "Assets:Dollar": {
         "date": "2022-01-18T00:00:00Z",
@@ -387,7 +1031,7 @@
       "Assets:Checking": {
         "date": "2022-01-19T00:00:00Z",
         "account": "Assets:Checking",
-        "market_amount": 3072.2455057408
+        "market_amount": 22771.2455057408
       },
       "Assets:Dollar": {
         "date": "2022-01-19T00:00:00Z",
@@ -414,7 +1058,7 @@
       "Assets:Checking": {
         "date": "2022-01-20T00:00:00Z",
         "account": "Assets:Checking",
-        "market_amount": 3072.2455057408
+        "market_amount": 22771.2455057408
       },
       "Assets:Dollar": {
         "date": "2022-01-20T00:00:00Z",
@@ -441,7 +1085,7 @@
       "Assets:Checking": {
         "date": "2022-01-21T00:00:00Z",
         "account": "Assets:Checking",
-        "market_amount": 3072.2455057408
+        "market_amount": 22771.2455057408
       },
       "Assets:Dollar": {
         "date": "2022-01-21T00:00:00Z",
@@ -468,7 +1112,7 @@
       "Assets:Checking": {
         "date": "2022-01-22T00:00:00Z",
         "account": "Assets:Checking",
-        "market_amount": 3072.2455057408
+        "market_amount": 22771.2455057408
       },
       "Assets:Dollar": {
         "date": "2022-01-22T00:00:00Z",
@@ -495,7 +1139,7 @@
       "Assets:Checking": {
         "date": "2022-01-23T00:00:00Z",
         "account": "Assets:Checking",
-        "market_amount": 3072.2455057408
+        "market_amount": 22771.2455057408
       },
       "Assets:Dollar": {
         "date": "2022-01-23T00:00:00Z",
@@ -522,7 +1166,7 @@
       "Assets:Checking": {
         "date": "2022-01-24T00:00:00Z",
         "account": "Assets:Checking",
-        "market_amount": 3072.2455057408
+        "market_amount": 22771.2455057408
       },
       "Assets:Dollar": {
         "date": "2022-01-24T00:00:00Z",
@@ -549,7 +1193,7 @@
       "Assets:Checking": {
         "date": "2022-01-25T00:00:00Z",
         "account": "Assets:Checking",
-        "market_amount": 3072.2455057408
+        "market_amount": 22771.2455057408
       },
       "Assets:Dollar": {
         "date": "2022-01-25T00:00:00Z",
@@ -576,7 +1220,7 @@
       "Assets:Checking": {
         "date": "2022-01-26T00:00:00Z",
         "account": "Assets:Checking",
-        "market_amount": 3072.2455057408
+        "market_amount": 22771.2455057408
       },
       "Assets:Dollar": {
         "date": "2022-01-26T00:00:00Z",
@@ -603,7 +1247,7 @@
       "Assets:Checking": {
         "date": "2022-01-27T00:00:00Z",
         "account": "Assets:Checking",
-        "market_amount": 3072.2455057408
+        "market_amount": 22771.2455057408
       },
       "Assets:Dollar": {
         "date": "2022-01-27T00:00:00Z",
@@ -630,7 +1274,7 @@
       "Assets:Checking": {
         "date": "2022-01-28T00:00:00Z",
         "account": "Assets:Checking",
-        "market_amount": 3072.2455057408
+        "market_amount": 22771.2455057408
       },
       "Assets:Dollar": {
         "date": "2022-01-28T00:00:00Z",
@@ -657,7 +1301,7 @@
       "Assets:Checking": {
         "date": "2022-01-29T00:00:00Z",
         "account": "Assets:Checking",
-        "market_amount": 3072.2455057408
+        "market_amount": 22771.2455057408
       },
       "Assets:Dollar": {
         "date": "2022-01-29T00:00:00Z",
@@ -684,7 +1328,7 @@
       "Assets:Checking": {
         "date": "2022-01-30T00:00:00Z",
         "account": "Assets:Checking",
-        "market_amount": 3072.2455057408
+        "market_amount": 22771.2455057408
       },
       "Assets:Dollar": {
         "date": "2022-01-30T00:00:00Z",
@@ -711,7 +1355,7 @@
       "Assets:Checking": {
         "date": "2022-01-31T00:00:00Z",
         "account": "Assets:Checking",
-        "market_amount": 4072.2455057408
+        "market_amount": 23771.2455057408
       },
       "Assets:Dollar": {
         "date": "2022-01-31T00:00:00Z",
@@ -738,7 +1382,7 @@
       "Assets:Checking": {
         "date": "2022-02-01T00:00:00Z",
         "account": "Assets:Checking",
-        "market_amount": 4072.2455057408
+        "market_amount": 9462.2455057408
       },
       "Assets:Dollar": {
         "date": "2022-02-01T00:00:00Z",
@@ -765,7 +1409,7 @@
       "Assets:Checking": {
         "date": "2022-02-02T00:00:00Z",
         "account": "Assets:Checking",
-        "market_amount": 4072.2455057408
+        "market_amount": 9462.2455057408
       },
       "Assets:Dollar": {
         "date": "2022-02-02T00:00:00Z",
@@ -792,7 +1436,7 @@
       "Assets:Checking": {
         "date": "2022-02-03T00:00:00Z",
         "account": "Assets:Checking",
-        "market_amount": 4072.2455057408
+        "market_amount": 9462.2455057408
       },
       "Assets:Dollar": {
         "date": "2022-02-03T00:00:00Z",
@@ -819,7 +1463,7 @@
       "Assets:Checking": {
         "date": "2022-02-04T00:00:00Z",
         "account": "Assets:Checking",
-        "market_amount": 4072.2455057408
+        "market_amount": 9462.2455057408
       },
       "Assets:Dollar": {
         "date": "2022-02-04T00:00:00Z",
@@ -846,7 +1490,7 @@
       "Assets:Checking": {
         "date": "2022-02-05T00:00:00Z",
         "account": "Assets:Checking",
-        "market_amount": 4072.2455057408
+        "market_amount": 9462.2455057408
       },
       "Assets:Dollar": {
         "date": "2022-02-05T00:00:00Z",
@@ -873,7 +1517,7 @@
       "Assets:Checking": {
         "date": "2022-02-06T00:00:00Z",
         "account": "Assets:Checking",
-        "market_amount": 4072.2455057408
+        "market_amount": 9462.2455057408
       },
       "Assets:Dollar": {
         "date": "2022-02-06T00:00:00Z",
@@ -900,7 +1544,7 @@
       "Assets:Checking": {
         "date": "2022-02-07T00:00:00Z",
         "account": "Assets:Checking",
-        "market_amount": 4072.2455057408
+        "market_amount": 9462.2455057408
       },
       "Assets:Dollar": {
         "date": "2022-02-07T00:00:00Z",

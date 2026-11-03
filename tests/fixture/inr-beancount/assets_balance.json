@@ -18,8 +18,8 @@
       "marketAmount": 13170.22810619763,
       "balanceUnits": 0,
       "latestPrice": 0,
-      "xirr": 47.79,
-      "gainAmount": 13170.22810619763,
+      "xirr": 0,
+      "gainAmount": 0,
       "absoluteReturn": 0
     },
     "Assets:Coinbase": {

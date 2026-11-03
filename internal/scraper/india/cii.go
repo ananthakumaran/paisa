@@ -11,7 +11,7 @@ import (
 )
 
 func GetCostInflationIndex() ([]*cii.CII, error) {
-	log.Info("Fetching Cost Inflation Index from Purified Bytes")
+	log.Info("Fetching Cost Inflation Index from FinBodhi")
 	resp, err := http.Get("https://india.finbodhi.com/api/cii/v2.json")
 	if err != nil {
 		return nil, err

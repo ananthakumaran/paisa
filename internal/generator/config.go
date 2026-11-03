@@ -145,17 +145,17 @@ commodities:
   - name: NPS_HDFC_E
     type: nps
     price:
-      provider: com-purifiedbytes-nps
+      provider: com-finbodhi-nps
       code: SM008001
   - name: NPS_HDFC_C
     type: nps
     price:
-      provider: com-purifiedbytes-nps
+      provider: com-finbodhi-nps
       code: SM008002
   - name: NPS_HDFC_G
     type: nps
     price:
-      provider: com-purifiedbytes-nps
+      provider: com-finbodhi-nps
       code: SM008003
 credit_cards:
     - account: Liabilities:CreditCard:Freedom

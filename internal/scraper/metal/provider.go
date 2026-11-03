@@ -18,11 +18,11 @@ type PriceProvider struct {
 }
 
 func (p *PriceProvider) Code() string {
-	return "com-purifiedbytes-metal"
+	return "com-finbodhi-metal"
 }
 
 func (p *PriceProvider) Label() string {
-	return "Purified Bytes Metals India"
+	return "FinBodhi Metals India"
 }
 
 func (p *PriceProvider) Description() string {
@@ -50,7 +50,7 @@ func (p *PriceProvider) ClearCache(db *gorm.DB) {
 }
 
 func (p *PriceProvider) GetPrices(code string, commodityName string) ([]*price.Price, error) {
-	log.Info("Fetching Metal price history from Purified Bytes")
+	log.Info("Fetching Metal price history from FinBodhi")
 	url := fmt.Sprintf("https://india.finbodhi.com/api/metal/%s/price.json", code)
 	resp, err := http.Get(url)
 	if err != nil {

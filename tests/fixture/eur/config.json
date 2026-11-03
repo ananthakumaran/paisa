@@ -175,8 +175,8 @@
                   "enum": [
                     "in-mfapi",
                     "com-yahoo",
-                    "com-purifiedbytes-nps",
-                    "com-purifiedbytes-metal",
+                    "com-finbodhi-nps",
+                    "com-finbodhi-metal",
                     "co-alphavantage"
                   ],
                   "type": "string"

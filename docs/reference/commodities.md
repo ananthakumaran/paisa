@@ -118,7 +118,7 @@ the api key, `RELIANCE.BSE` is the symbol and `INR` is the
 currency. Alpha Vantage provides [free api key](https://www.alphavantage.co/support/#api-key) with 25 requests per day
 limit.
 
-## Purified Bytes NPS <sub>:flag_in:</sub>
+## FinBodhi NPS <sub>:flag_in:</sub>
 
 To automatically track the latest value of your nps funds holdings,
 you need to link the commodity and the fund scheme code.
@@ -128,7 +128,7 @@ commodities:
   - name: NPS_HDFC_E # (1)!
     type: nps # (2)!
     price:
-        provider: com-purifiedbytes-nps # (3)!
+        provider: com-finbodhi-nps # (3)!
         code: SM008002 # (4)!
 ```
 
@@ -140,7 +140,7 @@ commodities:
 The example configuration above links NPS fund commodity with their
 respective NPS fund scheme code.
 
-## Purified Bytes Metals <sub>:flag_in:</sub>
+## FinBodhi Metals <sub>:flag_in:</sub>
 
 To automatically track the latest price of gold or silver at various
 level of purity, you need to link the commodity and the metal
@@ -151,7 +151,7 @@ commodities:
   - name: GOLD # (1)!
     type: metal # (2)!
     price:
-        provider: com-purifiedbytes-metal # (3)!
+        provider: com-finbodhi-metal # (3)!
         code: gold-999 # (4)!
 ```
 

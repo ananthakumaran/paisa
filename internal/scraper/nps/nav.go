@@ -15,7 +15,7 @@ import (
 )
 
 func GetNav(schemeCode string, commodityName string) ([]*price.Price, error) {
-	log.Info("Fetching NPS Fund nav from Purified Bytes")
+	log.Info("Fetching NPS Fund nav from FinBodhi")
 	url := fmt.Sprintf("https://nps.finbodhi.com/api/schemes/%s/nav.json", schemeCode)
 	resp, err := http.Get(url)
 	if err != nil {

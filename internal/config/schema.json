@@ -980,6 +980,7 @@
                 "type": "string",
                 "enum": [
                   "in-mfapi",
+                  "com-finbodhi-mutualfund",
                   "com-yahoo",
                   "com-finbodhi-stock",
                   "com-finbodhi-nps",

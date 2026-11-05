@@ -156,7 +156,7 @@ func SyncPortfolios(db *gorm.DB) error {
 	log.Info("Fetching commodities portfolio")
 	commodities := commodity.FindByType(config.MutualFund)
 	for _, commodity := range commodities {
-		if commodity.Price.Provider != "in-mfapi" {
+		if commodity.Price.Provider != "in-mfapi" && commodity.Price.Provider != "com-finbodhi-mutualfund" {
 			continue
 		}
 

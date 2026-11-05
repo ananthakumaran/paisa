@@ -29,6 +29,7 @@ func TestNormalizePriceProviders(t *testing.T) {
 		{"com-finbodhi-nps", "com-finbodhi-nps", "SM008002"},
 		{"com-finbodhi-metal", "com-finbodhi-metal", "gold-999"},
 		{"in-mfapi", "in-mfapi", "120716"},
+		{"com-finbodhi-mutualfund", "com-finbodhi-mutualfund", "120716"},
 		{"in-mfapi", "in-mfapi", "012345"},
 	} {
 		t.Run(tc.provider+"/"+tc.code, func(t *testing.T) {

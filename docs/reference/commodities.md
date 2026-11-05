@@ -77,6 +77,20 @@ Save the configuration and select **Update Prices**. If one USD is worth
 For an Indian mutual fund whose price is already in INR, leave
 **Quote commodity** empty.
 
+## FinBodhi Mutual Funds <sub>:flag_in:</sub>
+
+Choose **FinBodhi Mutual Funds India** in the price provider picker and
+search by fund name or scheme code. Select the correct plan and option.
+
+```yaml
+commodities:
+  - name: NIFTY
+    type: mutualfund
+    price:
+      provider: com-finbodhi-mutualfund
+      code: 120716
+```
+
 ## MF API Mutual Fund <sub>:flag_in:</sub>
 
 To automatically track the latest value of your mutual funds holdings,

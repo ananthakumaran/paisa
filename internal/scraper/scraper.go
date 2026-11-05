@@ -15,6 +15,7 @@ func GetAllProviders() []price.PriceProvider {
 		&stock.YahooPriceProvider{},
 		&stock.FinBodhiPriceProvider{},
 		&mutualfund.PriceProvider{},
+		&mutualfund.FinBodhiPriceProvider{},
 		&stock.AlphaVantagePriceProvider{},
 		&nps.PriceProvider{},
 		&sif.PriceProvider{},
@@ -27,6 +28,8 @@ func GetProviderByCode(code string) price.PriceProvider {
 	switch code {
 	case "in-mfapi":
 		return &mutualfund.PriceProvider{}
+	case "com-finbodhi-mutualfund":
+		return &mutualfund.FinBodhiPriceProvider{}
 	case "com-finbodhi-nps":
 		return &nps.PriceProvider{}
 	case "com-finbodhi-sif":

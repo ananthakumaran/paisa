@@ -179,6 +179,7 @@
                   "enum": [
                     "in-mfapi",
                     "com-yahoo",
+                    "com-finbodhi-stock",
                     "com-finbodhi-nps",
                     "com-finbodhi-sif",
                     "com-finbodhi-metal",

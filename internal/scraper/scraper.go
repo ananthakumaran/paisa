@@ -13,6 +13,7 @@ import (
 func GetAllProviders() []price.PriceProvider {
 	return []price.PriceProvider{
 		&stock.YahooPriceProvider{},
+		&stock.FinBodhiPriceProvider{},
 		&mutualfund.PriceProvider{},
 		&stock.AlphaVantagePriceProvider{},
 		&nps.PriceProvider{},
@@ -34,6 +35,8 @@ func GetProviderByCode(code string) price.PriceProvider {
 		return &metal.PriceProvider{}
 	case "com-yahoo":
 		return &stock.YahooPriceProvider{}
+	case "com-finbodhi-stock":
+		return &stock.FinBodhiPriceProvider{}
 	case "co-alphavantage":
 		return &stock.AlphaVantagePriceProvider{}
 	}

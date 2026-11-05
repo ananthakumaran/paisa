@@ -147,6 +147,24 @@ Stock prices are fetched from Yahoo Finance. The ticker code should match
 the code used on Yahoo. For INR reporting, add the USD exchange-rate source
 shown in [Prices in another currency](#prices-in-another-currency).
 
+## FinBodhi Stocks <sub>:globe_with_meridians:</sub>
+
+Supports Indian and US stocks and ETFs, and GIFT City funds. Choose
+**FinBodhi Stocks** in the price provider picker and search by name,
+ticker or ISIN.
+
+```yaml
+commodities:
+  - name: RELIANCE
+    type: stock
+    price:
+      provider: com-finbodhi-stock
+      code: INE002A01018
+```
+
+For US stocks and GIFT City funds, set **Quote commodity** to USD and
+configure a [USD exchange-rate source](#prices-in-another-currency).
+
 ## Alpha Vantage <sub>:globe_with_meridians:</sub>
 
 Supports 100,000+ stocks, ETFs, mutual funds etc. Set the quote commodity

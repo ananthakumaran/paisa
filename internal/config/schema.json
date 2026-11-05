@@ -970,7 +970,7 @@
           },
           "type": {
             "type": "string",
-            "enum": ["mutualfund", "stock", "nps", "metal", "currency", "unknown"]
+            "enum": ["mutualfund", "sif", "stock", "nps", "metal", "currency", "unknown"]
           },
           "price": {
             "type": "object",
@@ -982,6 +982,7 @@
                   "in-mfapi",
                   "com-yahoo",
                   "com-finbodhi-nps",
+                  "com-finbodhi-sif",
                   "com-finbodhi-metal",
                   "co-alphavantage"
                 ]

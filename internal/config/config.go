@@ -33,6 +33,7 @@ type CommodityType string
 
 const (
 	MutualFund CommodityType = "mutualfund"
+	SIF        CommodityType = "sif"
 	NPS        CommodityType = "nps"
 	Stock      CommodityType = "stock"
 	Metal      CommodityType = "metal"

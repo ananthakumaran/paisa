@@ -194,6 +194,23 @@ commodities:
 The example configuration above links NPS fund commodity with their
 respective NPS fund scheme code.
 
+## FinBodhi SIF <sub>:flag_in:</sub>
+
+Supports NAV history for [Specialized Investment Funds](https://www.amfiindia.com/sif) in India. In the
+price provider picker, choose **FinBodhi SIF India** and search by scheme
+name or SIF number. Each result shows the full NAV name and number;
+select the correct plan and option.
+
+```yaml
+commodities:
+  - name: ALTIVA_EX_TOP100_LONG_SHORT
+    type: sif
+    price:
+      provider: com-finbodhi-sif
+      code: SIF-120
+```
+
+
 ## FinBodhi Metals <sub>:flag_in:</sub>
 
 To automatically track the latest price of gold or silver at various

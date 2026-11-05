@@ -199,6 +199,7 @@
                     "in-mfapi",
                     "com-yahoo",
                     "com-finbodhi-nps",
+                    "com-finbodhi-sif",
                     "com-finbodhi-metal",
                     "co-alphavantage"
                   ],
@@ -226,6 +227,7 @@
             "type": {
               "enum": [
                 "mutualfund",
+                "sif",
                 "stock",
                 "nps",
                 "metal",

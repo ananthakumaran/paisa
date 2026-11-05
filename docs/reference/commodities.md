@@ -46,6 +46,37 @@ latest price of the commodity under `Assets` :material-chevron-right:
 `Balance`. You can also view the full price history on `Ledger`
 :material-chevron-right: `Price`
 
+## Prices in another currency
+
+Suppose you track your finances in INR and own Apple shares. Yahoo gives
+you Apple's price in USD, such as 200 USD per share. To show its value in
+INR, Paisa also needs the USD-to-INR exchange rate.
+
+In Apple's price settings, enter **USD** in **Quote commodity**. Then add a
+USD commodity with Yahoo's `USDINR=X` as its price source:
+
+```yaml
+default_currency: INR
+commodities:
+  - name: APPLE
+    type: stock
+    price:
+      provider: com-yahoo
+      code: AAPL
+      commodity: USD # Apple's price is in USD
+  - name: USD
+    type: currency
+    price:
+      provider: com-yahoo
+      code: USDINR=X
+```
+
+Save the configuration and select **Update Prices**. If one USD is worth
+83 INR, Paisa shows the Apple share's value as 16,600 INR.
+
+For an Indian mutual fund whose price is already in INR, leave
+**Quote commodity** empty.
+
 ## MF API Mutual Fund <sub>:flag_in:</sub>
 
 To automatically track the latest value of your mutual funds holdings,
@@ -68,6 +99,29 @@ commodities:
 The example configuration above links nifty commodity with the respective
 mutual fund scheme code.
 
+### Reporting in another currency
+
+MFAPI quotes NAVs in INR. With USD reporting, set the fund's quote commodity
+to INR and configure an INR-to-USD price source:
+
+```yaml
+default_currency: USD
+commodities:
+  - name: NIFTY
+    type: mutualfund
+    price:
+      provider: in-mfapi
+      code: 120716
+      commodity: INR
+  - name: INR
+    type: currency
+    price:
+      provider: com-yahoo
+      code: INRUSD=X
+```
+
+Use the same setup for INR-denominated FinBodhi NPS and metal prices.
+
 ## Yahoo <sub>:globe_with_meridians:</sub>
 
 To automatically track the latest value of your stock holdings,
@@ -80,23 +134,23 @@ commodities:
     price:
         provider: com-yahoo # (3)!
         code: AAPL # (4)!
+        commodity: USD # (5)!
 ```
 
 1. commodity name
 1. type
 1. price provider name
 1. stock ticker code
+1. currency of the stock price
 
-Stock prices are fetched from yahoo finance website. The ticker code
-should match the code used in yahoo. If the fetched price currency is
-not the default currency, it will be converted to default currency
-using the forex rate apis.
+Stock prices are fetched from Yahoo Finance. The ticker code should match
+the code used on Yahoo. For INR reporting, add the USD exchange-rate source
+shown in [Prices in another currency](#prices-in-another-currency).
 
 ## Alpha Vantage <sub>:globe_with_meridians:</sub>
 
-Supports 100,000+ stocks, ETFs, mutual funds etc. It also provides
-exchange rates, so the price can be converted to default currency if
-required.
+Supports 100,000+ stocks, ETFs, mutual funds etc. Set the quote commodity
+and configure any required currency source as described above.
 
 ```yaml
 commodities:

@@ -32,9 +32,15 @@ func DeleteAll(db *gorm.DB) error {
 	return nil
 }
 
-func UpsertAllByTypeNameAndID(db *gorm.DB, commodityType config.CommodityType, commodityName string, commodityID string, prices []*Price) {
-	err := db.Transaction(func(tx *gorm.DB) error {
-		err := tx.Delete(&Price{}, "commodity_type = ? and (commodity_id = ? or commodity_name = ?)", commodityType, commodityID, commodityName).Error
+func UpsertAllByTypeAndName(db *gorm.DB, commodityType config.CommodityType, commodityName string, prices []*Price) error {
+	return db.Transaction(func(tx *gorm.DB) error {
+		previous := tx.Where("commodity_name = ?", commodityName)
+		if commodityType == config.Unknown {
+			previous = previous.Where("commodity_type = ?", config.Unknown)
+		} else {
+			previous = previous.Where("commodity_type != ?", config.Unknown)
+		}
+		err := previous.Delete(&Price{}).Error
 		if err != nil {
 			return err
 		}
@@ -48,10 +54,6 @@ func UpsertAllByTypeNameAndID(db *gorm.DB, commodityType config.CommodityType, c
 
 		return nil
 	})
-
-	if err != nil {
-		log.Fatal(err)
-	}
 }
 
 func UpsertAllByType(db *gorm.DB, commodityType config.CommodityType, prices []Price) {

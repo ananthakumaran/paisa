@@ -7,6 +7,14 @@
 
   let label = "Choose Price Provider";
   export let open = false;
+  export let initialPrice: {
+    provider?: string;
+    code?: string | number;
+    commodity?: string;
+  } = {};
+  export let defaultCurrency: string;
+  let commodity = "";
+  const commodityInputId = _.uniqueId("price-quote-commodity-");
   let code = "";
 
   let providers: PriceProvider[] = [];
@@ -45,6 +53,17 @@
     for (let i = 0; i < _.max(_.map(providers, (p) => p.fields.length)); i++) {
       clearCache(i);
     }
+  }
+
+  let editing = false;
+  $: if (!open) {
+    editing = false;
+  } else if (!editing && providers.length > 0) {
+    reset();
+    selectedProvider = providers.find((p) => p.code === initialPrice.provider) || providers[0];
+    code = String(initialPrice.code ?? "");
+    commodity = initialPrice.commodity || "";
+    editing = true;
   }
 
   function makeAutoComplete(
@@ -143,15 +162,34 @@
           </div>
         {/each}
       </div>
+      <div class="field">
+        <label class="label" for={commodityInputId}>Quote commodity</label>
+        <div class="control">
+          <input
+            id={commodityInputId}
+            class="input"
+            type="text"
+            bind:value={commodity}
+            placeholder={defaultCurrency}
+          />
+        </div>
+        <p class="help">
+          Commodity in which the fetched price is quoted. Defaults to {defaultCurrency} when empty.
+        </p>
+      </div>
     {/if}
   </div>
   <svelte:fragment slot="foot" let:close>
     <div>
       <button
         class="button is-success"
-        disabled={_.isEmpty(code)}
+        disabled={!selectedProvider || _.isEmpty(code)}
         on:click={(e) => {
-          dispatch("select", { code: code, provider: selectedProvider.code });
+          dispatch("select", {
+            code: code,
+            provider: selectedProvider.code,
+            commodity: commodity === defaultCurrency ? "" : commodity
+          });
           reset();
           close(e);
         }}>Select</button

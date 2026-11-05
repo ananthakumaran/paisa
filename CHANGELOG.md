@@ -1,5 +1,39 @@
 # CHANGELOG
 
+### Unreleased
+
+* Choose the currency of downloaded investment prices for every price provider.
+* Add a `currency` commodity type for exchange rates.
+* Report incomplete exchange-rate settings and missing historical rates.
+
+#### Breaking Changes :rotating_light:
+
+**Yahoo and Alpha Vantage users need to check their price settings.**
+You now choose the currency in which prices are supplied, and add an
+exchange rate when it differs from the currency used in your reports.
+
+For example, suppose your reports use INR and you own Apple shares.
+Yahoo supplies Apple's price in USD. Set it up as follows:
+
+1. Under **Configuration → Commodities**, open Apple's price settings.
+   Set **Quote commodity** to **USD**. This field means “the currency of
+   the price supplied by the provider.”
+2. Add another entry named **USD**, with **Type: currency**. Choose
+   **Yahoo Finance** as its price provider and **USDINR=X** as its code.
+   This supplies the number of rupees worth one dollar.
+3. Save the configuration.
+4. Select **Update Prices** from the top-right menu.
+
+If an investment's price is already in the currency used in your reports,
+leave **Quote commodity** empty.
+
+MFAPI and FinBodhi supply prices in INR. If your reports use another
+currency, choose **INR** in their price settings and add the corresponding
+exchange rate. See the [example for USD reports](https://paisa.fyi/reference/commodities/#reporting-in-another-currency).
+
+Your existing transactions, including purchases written as `@ 100 USD`,
+can stay unchanged. Keep any exchange rates already written in your journal.
+
 ### 0.7.8 (2026-10-21)
 
 * Fix path traversal allowing file reads and backup deletion outside the ledger and sheet directories ([#420](https://github.com/ananthakumaran/paisa/issues/420)).

@@ -1,9 +1,10 @@
 package cmd
 
 import (
+	"errors"
+
 	"github.com/ananthakumaran/paisa/internal/model"
 	"github.com/ananthakumaran/paisa/internal/utils"
-	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
 
@@ -14,10 +15,10 @@ var updatePortfolios bool
 var updateCmd = &cobra.Command{
 	Use:   "update",
 	Short: "Sync journal data",
-	Run: func(cmd *cobra.Command, args []string) {
+	RunE: func(cmd *cobra.Command, args []string) error {
 		db, err := utils.OpenDB()
 		if err != nil {
-			log.Fatal(err)
+			return err
 		}
 
 		syncAll := !updateJournal && !updateCommodities && !updatePortfolios
@@ -25,21 +26,28 @@ var updateCmd = &cobra.Command{
 		if syncAll || updateJournal {
 			message, err := model.SyncJournal(db)
 			if err != nil {
-				log.Fatal(message)
+				return errors.New(message)
 			}
 		}
 
 		if syncAll || updateCommodities {
-			model.SyncCommodities(db)
+			if _, err := model.SyncCommodities(db); err != nil {
+				return err
+			}
 		}
 
 		if syncAll || updatePortfolios {
-			model.SyncPortfolios(db)
+			if err := model.SyncPortfolios(db); err != nil {
+				return err
+			}
 		}
 
 		if syncAll {
-			model.SyncCII(db)
+			if err := model.SyncCII(db); err != nil {
+				return err
+			}
 		}
+		return nil
 	},
 }
 

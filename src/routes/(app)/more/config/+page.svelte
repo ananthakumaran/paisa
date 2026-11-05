@@ -107,6 +107,7 @@
             </div>
             <JsonSchemaForm
               allAccounts={accounts}
+              defaultCurrency={config.default_currency}
               key="configuration"
               bind:value={config}
               {schema}

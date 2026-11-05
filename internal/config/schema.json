@@ -970,7 +970,7 @@
           },
           "type": {
             "type": "string",
-            "enum": ["mutualfund", "stock", "nps", "metal", "unknown"]
+            "enum": ["mutualfund", "stock", "nps", "metal", "currency", "unknown"]
           },
           "price": {
             "type": "object",
@@ -988,6 +988,10 @@
               },
               "code": {
                 "type": ["string", "integer"]
+              },
+              "commodity": {
+                "type": "string",
+                "description": "Commodity in which the fetched price is quoted. Defaults to your default currency when omitted or empty."
               }
             },
             "required": ["provider", "code"]

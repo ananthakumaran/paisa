@@ -95,24 +95,14 @@ func GetUnitPrice(db *gorm.DB, commodity string, date time.Time) price.Price {
 func GetAllPrices(db *gorm.DB, commodity string) []price.Price {
 	pcache.Do(func() { loadPriceCache(db) })
 
-	pt := pcache.postingPricesTree[commodity]
-	if pt == nil {
-		log.Fatal("Price not found ", commodity)
-	}
-
 	pmap := make(map[string]price.Price)
-
-	for _, price := range utils.BTreeToSlice[price.Price](pt) {
-		pmap[price.Date.String()] = price
-	}
-
-	pt = pcache.pricesTree[commodity]
-	if pt == nil {
-		log.Fatal("Price not found ", commodity)
-	}
-
-	for _, price := range utils.BTreeToSlice[price.Price](pt) {
-		pmap[price.Date.String()] = price
+	for _, pt := range []*btree.BTree{pcache.postingPricesTree[commodity], pcache.pricesTree[commodity]} {
+		if pt == nil {
+			continue
+		}
+		for _, price := range utils.BTreeToSlice[price.Price](pt) {
+			pmap[price.Date.String()] = price
+		}
 	}
 
 	prices := []price.Price{}

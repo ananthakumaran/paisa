@@ -36,6 +36,7 @@ const (
 	NPS        CommodityType = "nps"
 	Stock      CommodityType = "stock"
 	Metal      CommodityType = "metal"
+	Currency   CommodityType = "currency"
 	Unknown    CommodityType = "unknown"
 )
 
@@ -52,8 +53,17 @@ type ImportTemplate struct {
 }
 
 type Price struct {
-	Provider string `json:"provider" yaml:"provider"`
-	Code     string `json:"code" yaml:"code"`
+	Provider  string `json:"provider" yaml:"provider"`
+	Code      string `json:"code" yaml:"code"`
+	Commodity string `json:"commodity,omitempty" yaml:"commodity,omitempty"`
+}
+
+// QuoteCommodity returns the fetched price's unit, defaulting to the reporting currency.
+func (p Price) QuoteCommodity(defaultCurrency string) string {
+	if p.Commodity == "" {
+		return defaultCurrency
+	}
+	return p.Commodity
 }
 
 type Commodity struct {
@@ -258,12 +268,12 @@ func SaveConfigObject(config Config) error {
 }
 
 func SaveConfig(content []byte) error {
-	err := LoadConfig(content, "")
+	next, nextLocation, err := parseConfig(content)
 	if err != nil {
 		return err
 	}
 
-	yamlContent, err := yaml.Marshal(config)
+	yamlContent, err := yaml.Marshal(next)
 	if err != nil {
 		return err
 	}
@@ -273,6 +283,7 @@ func SaveConfig(content []byte) error {
 		return err
 	}
 
+	config, location = next, nextLocation
 	return nil
 }
 
@@ -319,51 +330,61 @@ func normalizeConfig(value interface{}) {
 }
 
 func LoadConfig(content []byte, cp string) error {
+	next, nextLocation, err := parseConfig(content)
+	if err != nil {
+		return err
+	}
+
+	config, location = next, nextLocation
+	if cp != "" && configPath == "" {
+		configPath = cp
+	}
+	return nil
+}
+
+func parseConfig(content []byte) (Config, *time.Location, error) {
 	var configJson interface{}
 	err := yaml.Unmarshal(content, &configJson)
 	if err != nil {
-		return err
+		return Config{}, nil, err
 	}
 
 	normalizeConfig(configJson)
 
 	err = schema.Validate(configJson)
 	if err != nil {
-		return errors.New(fmt.Sprintf("Invalid configuration\n%#v", err))
+		return Config{}, nil, errors.New(fmt.Sprintf("Invalid configuration\n%#v", err))
 	}
 
 	// Decode the original YAML to preserve formatting of numeric commodity codes.
-	config = Config{}
-	err = yaml.Unmarshal(content, &config)
+	var next Config
+	err = yaml.Unmarshal(content, &next)
 	if err != nil {
-		return err
+		return Config{}, nil, err
 	}
 
-	for i := range config.Commodities {
-		config.Commodities[i].Price.Provider = normalizePriceProvider(config.Commodities[i].Price.Provider)
+	for i := range next.Commodities {
+		next.Commodities[i].Price.Provider = normalizePriceProvider(next.Commodities[i].Price.Provider)
 	}
 
-	err = mergo.Merge(&config, defaultConfig, mergo.WithOverrideEmptySlice)
-
+	err = mergo.Merge(&next, defaultConfig, mergo.WithOverrideEmptySlice)
 	if err != nil {
-		return err
+		return Config{}, nil, err
 	}
 
-	if cp != "" && configPath == "" {
-		configPath = cp
+	if _, err := next.OrderedPriceCommodities(); err != nil {
+		return Config{}, nil, err
 	}
 
-	if config.TimeZone == "" {
-		location = time.Local
-	} else {
-		location, err = time.LoadLocation(config.TimeZone)
+	nextLocation := time.Local
+	if next.TimeZone != "" {
+		nextLocation, err = time.LoadLocation(next.TimeZone)
 		if err != nil {
-			location = time.Local
-			return errors.New(fmt.Sprintf("Invalid time zone: %s\n%#v", config.TimeZone, err))
+			return Config{}, nil, errors.New(fmt.Sprintf("Invalid time zone: %s\n%#v", next.TimeZone, err))
 		}
 	}
 
-	return nil
+	return next, nextLocation, nil
 }
 
 func GetConfig() Config {

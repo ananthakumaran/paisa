@@ -741,7 +741,7 @@ export function ajax(
 export function ajax(
   route: "/api/sync",
   options?: RequestOptions
-): Promise<{ success: boolean; message: string }>;
+): Promise<{ success: boolean; message?: string; warnings?: string[] }>;
 export function ajax(
   route: "/api/price/providers",
   options?: RequestOptions

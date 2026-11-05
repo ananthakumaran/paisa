@@ -222,10 +222,10 @@ allocation_targets:
 # OPTIONAL, DEFAULT: []
 commodities:
   - name: NASDAQ
-    # Required, ENUM: mutualfund, stock, nps, unknown
+    # Required, ENUM: mutualfund, stock, nps, metal, currency, unknown
     type: mutualfund
     price:
-      # Required, ENUM: in-mfapi, com-yahoo, com-finbodhi-nps, co-alphavantage
+      # Required, ENUM: in-mfapi, com-yahoo, com-finbodhi-nps, com-finbodhi-metal, co-alphavantage
       provider: in-mfapi
       # differs based on provider
       code: 145552
@@ -244,8 +244,16 @@ commodities:
     price:
       provider: com-yahoo
       code: AAPL
+      # Commodity in which the fetched price is quoted.
+      # OPTIONAL, DEFAULT: default_currency; omit to follow the default.
+      commodity: USD
     harvest: 1095
     tax_category: equity65
+  - name: USD
+    type: currency
+    price:
+      provider: com-yahoo
+      code: USDINR=X
 
 ## Import Templates
 # OPTIONAL, DEFAULT: []

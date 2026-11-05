@@ -24,8 +24,14 @@ func GetPrices(db *gorm.DB) gin.H {
 		log.Fatal(result.Error)
 	}
 
+	for _, commodity := range config.GetConfig().Commodities {
+		if commodity.Name != config.DefaultCurrency() {
+			commodities = append(commodities, commodity.Name)
+		}
+	}
+
 	var prices = make(map[string][]price.Price)
-	for _, commodity := range commodities {
+	for _, commodity := range lo.Uniq(commodities) {
 		prices[commodity] = service.GetAllPrices(db, commodity)
 	}
 	return gin.H{"prices": prices}

@@ -11,13 +11,11 @@ import (
 
 	"gorm.io/gorm"
 
-	"github.com/google/btree"
 	"github.com/shopspring/decimal"
 	log "github.com/sirupsen/logrus"
 
 	"github.com/ananthakumaran/paisa/internal/config"
 	"github.com/ananthakumaran/paisa/internal/model/price"
-	"github.com/ananthakumaran/paisa/internal/utils"
 )
 
 var UserAgents = []string{
@@ -114,15 +112,6 @@ type Response struct {
 	Chart Chart
 }
 
-type ExchangePrice struct {
-	Timestamp int64
-	Close     float64
-}
-
-func (p ExchangePrice) Less(o btree.Item) bool {
-	return p.Timestamp < (o.(ExchangePrice).Timestamp)
-}
-
 func GetHistory(ticker string, commodityName string) ([]*price.Price, error) {
 	log.Info("Fetching stock price history from Yahoo")
 	response, err := getTicker(ticker)
@@ -132,35 +121,10 @@ func GetHistory(ticker string, commodityName string) ([]*price.Price, error) {
 
 	var prices []*price.Price
 	result := response.Chart.Result[0]
-	needExchangePrice := false
-	var exchangePrice *btree.BTree
-
-	if !utils.IsCurrency(result.Meta.Currency) {
-		needExchangePrice = true
-		exchangeResponse, err := getTicker(fmt.Sprintf("%s%s=X", result.Meta.Currency, config.DefaultCurrency()))
-		if err != nil {
-			return nil, err
-		}
-
-		exchangeResult := exchangeResponse.Chart.Result[0]
-
-		exchangePrice = btree.New(2)
-		for i, t := range exchangeResult.Timestamp {
-			exchangePrice.ReplaceOrInsert(ExchangePrice{Timestamp: t, Close: exchangeResult.Indicators.Quote[0].Close[i]})
-		}
-	}
-
 	for i, timestamp := range result.Timestamp {
 		date := time.Unix(timestamp, 0)
 		value := result.Indicators.Quote[0].Close[i]
-
-		if needExchangePrice {
-			exchangePrice := utils.BTreeDescendFirstLessOrEqual(exchangePrice, ExchangePrice{Timestamp: timestamp})
-			value = value * exchangePrice.Close
-		}
-
 		price := price.Price{Date: date, CommodityType: config.Stock, CommodityID: ticker, CommodityName: commodityName, Value: decimal.NewFromFloat(value)}
-
 		prices = append(prices, &price)
 	}
 	return prices, nil
@@ -208,7 +172,7 @@ func (p *YahooPriceProvider) Label() string {
 }
 
 func (p *YahooPriceProvider) Description() string {
-	return "Supports a large set of stocks, ETFs, mutual funds, currencies, bonds, commodities, and cryptocurrencies. The stock price will be automatically converted to your default currency using the yahoo exchange rate."
+	return "Supports a large set of stocks, ETFs, mutual funds, currencies, bonds, commodities, and cryptocurrencies."
 }
 
 func (p *YahooPriceProvider) AutoCompleteFields() []price.AutoCompleteField {

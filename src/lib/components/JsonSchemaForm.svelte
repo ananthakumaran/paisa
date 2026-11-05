@@ -24,6 +24,7 @@
   export let deletable: () => void = null;
   export let disabled: boolean = false;
   export let allAccounts: string[];
+  export let defaultCurrency: string;
 
   export let modalOpen = false;
 
@@ -239,9 +240,12 @@
 
   <PriceCodeSearchModal
     bind:open={modalOpen}
+    initialPrice={value}
+    {defaultCurrency}
     on:select={(e) => {
       value["code"] = e.detail.code;
       value["provider"] = e.detail.provider;
+      value["commodity"] = e.detail.commodity;
     }}
   />
 
@@ -249,6 +253,7 @@
     {#each sortedProperties(schema) as [key, subSchema]}
       <svelte:self
         {allAccounts}
+        {defaultCurrency}
         required={_.includes(schema.required || [], key)}
         depth={depth + 1}
         {key}
@@ -277,6 +282,7 @@
       {#each sortedProperties(schema) as [key, subSchema]}
         <svelte:self
           {allAccounts}
+          {defaultCurrency}
           required={_.includes(schema.required || [], key)}
           depth={depth + 1}
           {key}
@@ -312,6 +318,7 @@
       {#each value as _item, i}
         <svelte:self
           {allAccounts}
+          {defaultCurrency}
           deletable={() => {
             value.splice(i, 1);
             value = [...value];

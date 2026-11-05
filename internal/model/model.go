@@ -17,7 +17,6 @@ import (
 	"github.com/ananthakumaran/paisa/internal/scraper"
 	"github.com/ananthakumaran/paisa/internal/scraper/india"
 	"github.com/ananthakumaran/paisa/internal/scraper/mutualfund"
-	"github.com/samber/lo"
 	log "github.com/sirupsen/logrus"
 	"gorm.io/gorm"
 )
@@ -67,29 +66,67 @@ func SyncJournal(db *gorm.DB) (string, error) {
 	return "", nil
 }
 
-func SyncCommodities(db *gorm.DB) error {
+func SyncCommodities(db *gorm.DB) ([]string, error) {
+	conf := config.GetConfig()
+	commodities, err := conf.OrderedPriceCommodities()
+	if err != nil {
+		return nil, err
+	}
+
 	AutoMigrate(db)
 	log.Info("Fetching commodities price history")
-	commodities := lo.Shuffle(commodity.All())
+
+	dependencies := make(map[string]bool)
+	for _, commodity := range commodities {
+		quote := commodity.Price.QuoteCommodity(conf.DefaultCurrency)
+		if quote != conf.DefaultCurrency {
+			dependencies[quote] = true
+		}
+	}
+	histories := make(map[string]priceHistory)
 
 	var errors []error
+	var warnings []string
 	for _, commodity := range commodities {
 		name := commodity.Name
+		quote := commodity.Price.QuoteCommodity(conf.DefaultCurrency)
+		exchange, available := histories[quote]
+		if quote != conf.DefaultCurrency && !available {
+			err := fmt.Errorf("Skipped price for %s: quote commodity %s did not update successfully", name, quote)
+			log.Error(err)
+			errors = append(errors, err)
+			continue
+		}
+
 		log.Info("Fetching commodity ", name)
-		code := commodity.Price.Code
-		var prices []*price.Price
-		var err error
-
 		provider := scraper.GetProviderByCode(commodity.Price.Provider)
-		prices, err = provider.GetPrices(code, name)
-
+		raw, err := provider.GetPrices(commodity.Price.Code, name)
 		if err != nil {
 			log.Error(err)
 			errors = append(errors, fmt.Errorf("Failed to fetch price for %s: %w", name, err))
 			continue
 		}
 
-		price.UpsertAllByTypeNameAndID(db, commodity.Type, name, code, prices)
+		prices, gap, err := normalizeCommodityPrices(commodity, raw, exchange, conf.DefaultCurrency)
+		if err != nil {
+			log.Error(err)
+			errors = append(errors, fmt.Errorf("Failed to convert price for %s: %w", name, err))
+			continue
+		}
+		if gap.Count > 0 {
+			warning := fmt.Sprintf("%s: %s", name, gap)
+			warnings = append(warnings, warning)
+			log.Warn(warning)
+		}
+
+		if err := price.UpsertAllByTypeAndName(db, commodity.Type, name, prices); err != nil {
+			log.Error(err)
+			errors = append(errors, fmt.Errorf("Failed to store price for %s: %w", name, err))
+			continue
+		}
+		if dependencies[name] {
+			histories[name] = newPriceHistory(prices)
+		}
 	}
 
 	if len(errors) > 0 {
@@ -97,9 +134,9 @@ func SyncCommodities(db *gorm.DB) error {
 		for _, error := range errors {
 			message += error.Error() + "\n"
 		}
-		return fmt.Errorf("%s", strings.Trim(message, "\n"))
+		return warnings, fmt.Errorf("%s", strings.Trim(message, "\n"))
 	}
-	return nil
+	return warnings, nil
 }
 
 func SyncCII(db *gorm.DB) error {

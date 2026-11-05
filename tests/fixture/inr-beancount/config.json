@@ -180,6 +180,10 @@
                     "integer"
                   ]
                 },
+                "commodity": {
+                  "description": "Commodity in which the fetched price is quoted. Defaults to your default currency when omitted or empty.",
+                  "type": "string"
+                },
                 "provider": {
                   "enum": [
                     "in-mfapi",
@@ -215,6 +219,7 @@
                 "stock",
                 "nps",
                 "metal",
+                "currency",
                 "unknown"
               ],
               "type": "string"

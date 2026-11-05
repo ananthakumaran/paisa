@@ -8,7 +8,6 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/ananthakumaran/paisa/internal/config"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -69,54 +68,15 @@ func (f yahooRoundTripFunc) RoundTrip(req *http.Request) (*http.Response, error)
 	return f(req)
 }
 
-func TestGetHistorySkipsNullCloses(t *testing.T) {
-	baseCurrency := config.DefaultCurrency()
-	foreignCurrency := "IDR"
-	if foreignCurrency == baseCurrency {
-		foreignCurrency = "USD"
-	}
-
-	for _, tc := range []struct {
-		name       string
-		currency   string
-		timestamps string
-		closes     string
-		exchange   bool
-		wantValues []float64
-	}{
-		{
-			name:       "stock quotes in default currency",
-			currency:   baseCurrency,
-			timestamps: "[100,200,300,400,500]",
-			closes:     "[null,10,null,20,null]",
-			wantValues: []float64{10, 20},
-		},
-		{
-			name:       "missing exchange rate uses preceding valid rate",
-			currency:   foreignCurrency,
-			timestamps: "[200,400]",
-			closes:     "[10,20]",
-			exchange:   true,
-			wantValues: []float64{5, 5},
-		},
-	} {
-		t.Run(tc.name, func(t *testing.T) {
-			stockBody := fmt.Sprintf(`{"chart":{"result":[{"timestamp":%s,"meta":{"currency":%q},"indicators":{"quote":[{"close":%s}]}}]}}`, tc.timestamps, tc.currency, tc.closes)
-			exchangeBody := `{"chart":{"result":[{"timestamp":[100,200,300,500],"indicators":{"quote":[{"close":[0.5,null,0.25,2]}]}}]}}`
+func TestGetHistoryReturnsUnconvertedPrices(t *testing.T) {
+	for _, currency := range []string{"INR", "USD", "IDR", "₹", ""} {
+		t.Run("currency="+currency, func(t *testing.T) {
+			body := fmt.Sprintf(`{"chart":{"result":[{"timestamp":[100,200,300,400,500],"meta":{"currency":%q},"indicators":{"quote":[{"close":[null,0,null,20,null]}]}}]}}`, currency)
 			requests := 0
 			originalClient := http.DefaultClient
 			http.DefaultClient = &http.Client{Transport: yahooRoundTripFunc(func(req *http.Request) (*http.Response, error) {
 				requests++
-				var body string
-				switch req.URL.Path {
-				case "/v8/finance/chart/STOCK":
-					body = stockBody
-				case "/v8/finance/chart/" + foreignCurrency + baseCurrency + "=X":
-					require.True(t, tc.exchange, "default-currency stock must not request FX")
-					body = exchangeBody
-				default:
-					t.Fatalf("unexpected Yahoo request: %s", req.URL)
-				}
+				require.Equal(t, "/v8/finance/chart/STOCK", req.URL.Path)
 				return &http.Response{StatusCode: http.StatusOK, Body: io.NopCloser(strings.NewReader(body)), Header: make(http.Header)}, nil
 			})}
 			t.Cleanup(func() { http.DefaultClient = originalClient })
@@ -124,15 +84,12 @@ func TestGetHistorySkipsNullCloses(t *testing.T) {
 			prices, err := GetHistory("STOCK", "Stock")
 			require.NoError(t, err)
 			require.Len(t, prices, 2)
-			for i, p := range prices {
-				assert.Equal(t, int64((i+1)*200), p.Date.Unix())
-				assert.Equal(t, tc.wantValues[i], p.Value.InexactFloat64())
-			}
-			if tc.exchange {
-				assert.Equal(t, 2, requests)
-			} else {
-				assert.Equal(t, 1, requests)
-			}
+			assert.Equal(t, int64(200), prices[0].Date.Unix())
+			assert.True(t, prices[0].Value.IsZero())
+			assert.Equal(t, int64(400), prices[1].Date.Unix())
+			assert.Equal(t, float64(20), prices[1].Value.InexactFloat64())
+			assert.Equal(t, "Stock", prices[1].CommodityName)
+			assert.Equal(t, 1, requests)
 		})
 	}
 }

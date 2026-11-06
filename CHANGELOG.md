@@ -5,6 +5,7 @@
 * Choose the currency of downloaded investment prices for every price provider.
 * Add a `currency` commodity type for exchange rates.
 * Report incomplete exchange-rate settings and missing historical rates.
+* Fix silver prices being 100 times too high ([#353](https://github.com/ananthakumaran/paisa/issues/353)). Select **Update Prices** to refresh existing prices.
 
 #### Breaking Changes :rotating_light:
 

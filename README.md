@@ -10,6 +10,11 @@ top of the [ledger](https://www.ledger-cli.org/) double entry accounting tool. C
 
 A demo of the Web UI can be found at [https://demo.paisa.fyi](https://demo.paisa.fyi)
 
+## One-Click Deploy
+
+<a href="https://repocloud.io/details/Paisa/"><img src="https://d16t0pc4846x52.cloudfront.net/deploylobe.svg" alt="Deploy on RepoCloud" height="42"></a>
+<a href="https://railway.com/deploy/paisa"><img src="https://railway.com/button.svg" alt="Deploy on Railway" height="42"></a>
+
 ## Status
 
 I use it to track my personal finance. Most of my personal use cases

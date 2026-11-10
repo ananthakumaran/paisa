@@ -34,7 +34,10 @@ func Add(a, b Tax) Tax {
 	return Tax{Gain: a.Gain.Add(b.Gain), Taxable: a.Taxable.Add(b.Taxable), LongTerm: a.LongTerm.Add(b.LongTerm), ShortTerm: a.ShortTerm.Add(b.ShortTerm), Slab: a.Slab.Add(b.Slab)}
 }
 
-func Calculate(db *gorm.DB, quantity decimal.Decimal, commodity config.Commodity, purchasePrice decimal.Decimal, purchaseDate time.Time, sellPrice decimal.Decimal, sellDate time.Time) Tax {
+// Calculate expects the quantity and the prices in terms of the units
+// sold. splitRatio is the number of such units for each unit held on
+// the grandfather date.
+func Calculate(db *gorm.DB, quantity decimal.Decimal, commodity config.Commodity, purchasePrice decimal.Decimal, purchaseDate time.Time, sellPrice decimal.Decimal, sellDate time.Time, splitRatio decimal.Decimal) Tax {
 
 	dateDiff := sellDate.Sub(purchaseDate)
 	gain := sellPrice.Mul(quantity).Sub(purchasePrice.Mul(quantity))
@@ -44,7 +47,7 @@ func Calculate(db *gorm.DB, quantity decimal.Decimal, commodity config.Commodity
 	}
 
 	if (commodity.TaxCategory == config.Equity || commodity.TaxCategory == config.Equity65) && purchaseDate.Before(EQUITY_GRANDFATHER_DATE) {
-		purchasePrice = service.GetUnitPrice(db, commodity.Name, EQUITY_GRANDFATHER_DATE).Value
+		purchasePrice = grandfatherPrice(db, commodity, splitRatio)
 	}
 
 	if commodity.TaxCategory == config.Debt && purchaseDate.After(CII_START_DATE) && dateDiff > THREE_YEAR {
@@ -94,4 +97,15 @@ func Calculate(db *gorm.DB, quantity decimal.Decimal, commodity config.Commodity
 	}
 
 	return Tax{Gain: gain, Taxable: taxable, ShortTerm: shortTerm, LongTerm: longTerm, Slab: slab}
+}
+
+func grandfatherPrice(db *gorm.DB, commodity config.Commodity, splitRatio decimal.Decimal) decimal.Decimal {
+	price := service.GetUnitPrice(db, commodity.Name, EQUITY_GRANDFATHER_DATE)
+
+	// yahoo adjusts the historical prices for splits, unlike the prices
+	// from other providers and journal.
+	if commodity.Price.Provider == "com-yahoo" && price.CommodityType != config.Unknown {
+		return price.Value
+	}
+	return price.Value.Div(splitRatio)
 }

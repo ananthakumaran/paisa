@@ -51,7 +51,7 @@ func GetHarvest(db *gorm.DB) gin.H {
 }
 
 func computeHarvestable(db *gorm.DB, account string, commodity config.Commodity, postings []posting.Posting) Harvestable {
-	available := accounting.FIFO(postings)
+	_, available := accounting.MatchLots(db, postings)
 
 	today := utils.EndOfToday()
 	currentPrice := service.GetUnitPrice(db, commodity.Name, today)
@@ -61,7 +61,7 @@ func computeHarvestable(db *gorm.DB, account string, commodity config.Commodity,
 	for _, p := range available {
 		harvestable.TotalUnits = harvestable.TotalUnits.Add(p.Quantity)
 		if p.Date.Before(cutoff) {
-			tax := taxation.Calculate(db, p.Quantity, commodity, p.Price(), p.Date, currentPrice.Value, currentPrice.Date)
+			tax := taxation.Calculate(db, p.Quantity, commodity, p.Price(), p.Date, currentPrice.Value, currentPrice.Date, p.SplitRatioAfter(taxation.EQUITY_GRANDFATHER_DATE))
 			harvestable.HarvestableUnits = harvestable.HarvestableUnits.Add(p.Quantity)
 			harvestable.UnrealizedGain = harvestable.UnrealizedGain.Add(tax.Gain)
 			harvestable.TaxableUnrealizedGain = harvestable.TaxableUnrealizedGain.Add(tax.Taxable)

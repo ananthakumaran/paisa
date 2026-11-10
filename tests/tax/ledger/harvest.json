@@ -1,0 +1,96 @@
+{
+  "harvestables": {
+    "Assets:Equity:ACME": {
+      "account": "Assets:Equity:ACME",
+      "tax_category": "equity",
+      "total_units": 25,
+      "harvestable_units": 25,
+      "unrealized_gain": 5500,
+      "taxable_unrealized_gain": 5500,
+      "harvest_breakdown": [
+        {
+          "units": 25,
+          "purchase_date": "2020-01-02T00:00:00Z",
+          "purchase_price": 0,
+          "current_price": 5500,
+          "purchase_unit_price": 0,
+          "tax": {
+            "gain": 5500,
+            "taxable": 5500,
+            "slab": 0,
+            "long_term": 550,
+            "short_term": 0
+          }
+        }
+      ],
+      "current_unit_price": 220,
+      "current_unit_date": "2022-02-01T00:00:00Z"
+    },
+    "Assets:Equity:BETA": {
+      "account": "Assets:Equity:BETA",
+      "tax_category": "equity35",
+      "total_units": 20,
+      "harvestable_units": 20,
+      "unrealized_gain": 1000,
+      "taxable_unrealized_gain": 1000,
+      "harvest_breakdown": [
+        {
+          "units": 10,
+          "purchase_date": "2020-08-03T00:00:00Z",
+          "purchase_price": 0,
+          "current_price": 900,
+          "purchase_unit_price": 0,
+          "tax": {
+            "gain": 900,
+            "taxable": 900,
+            "slab": 900,
+            "long_term": 0,
+            "short_term": 0
+          }
+        },
+        {
+          "units": 10,
+          "purchase_date": "2020-08-03T00:00:00Z",
+          "purchase_price": 800,
+          "current_price": 900,
+          "purchase_unit_price": 80,
+          "tax": {
+            "gain": 100,
+            "taxable": 100,
+            "slab": 100,
+            "long_term": 0,
+            "short_term": 0
+          }
+        }
+      ],
+      "current_unit_price": 90,
+      "current_unit_date": "2022-02-01T00:00:00Z"
+    },
+    "Assets:Equity:RSU": {
+      "account": "Assets:Equity:RSU",
+      "tax_category": "equity35",
+      "total_units": 10,
+      "harvestable_units": 10,
+      "unrealized_gain": 300,
+      "taxable_unrealized_gain": 300,
+      "harvest_breakdown": [
+        {
+          "units": 10,
+          "purchase_date": "2020-01-01T00:00:00Z",
+          "purchase_price": 500,
+          "current_price": 800,
+          "purchase_unit_price": 50,
+          "tax": {
+            "gain": 300,
+            "taxable": 300,
+            "slab": 300,
+            "long_term": 0,
+            "short_term": 0
+          }
+        }
+      ],
+      "current_unit_price": 80,
+      "current_unit_date": "2022-02-01T00:00:00Z"
+    }
+  }
+}

@@ -1,0 +1,83 @@
+P 2018/01/31 ACME 400 INR
+P 2020/01/01 RSU 50 INR
+P 2022/02/01 ACME 220 INR
+P 2022/02/01 BETA 90 INR
+P 2022/02/01 RSU 80 INR
+
+2017/06/01 Buy ACME
+    Assets:Equity:ACME                            10 ACME @ 300 INR
+    Assets:Checking                            -3000 INR
+
+2019/01/10 Buy ACME
+    Assets:Equity:ACME                            10 ACME @ 500 INR
+    Assets:Checking                            -5000 INR
+
+2019/06/03 Split ACME 1:2
+    Assets:Equity:ACME                           -10 ACME @ 300 INR
+    Assets:Equity:ACME                            20 ACME @ 150 INR
+    Assets:Equity:ACME                           -10 ACME @ 500 INR
+    Assets:Equity:ACME                            20 ACME @ 250 INR
+
+; valued at lot cost, gain comes from the capital gains account
+2019/07/01 Sell ACME
+    Assets:Equity:ACME                            -5 ACME @ 150 INR
+    Income:CapitalGains:Equity:ACME             -650 INR
+    Assets:Checking                             1400 INR
+
+2020/01/02 Bonus ACME 1:1
+    Assets:Equity:ACME                            35 ACME
+    Income:Bonus:ACME                            -35 ACME
+
+2020/03/02 Sell ACME
+    Assets:Equity:ACME                           -15 ACME @ 150 INR
+    Assets:Equity:ACME                            -5 ACME @ 250 INR
+    Income:CapitalGains:Equity:ACME              300 INR
+    Assets:Checking                             3200 INR
+
+; bonus units are valued at zero cost
+2021/06/01 Sell ACME
+    Assets:Equity:ACME                           -15 ACME @ 250 INR
+    Assets:Equity:ACME                           -10 ACME @ 0 INR
+    Income:CapitalGains:Equity:ACME            -1250 INR
+    Assets:Checking                             5000 INR
+
+2019/01/01 Buy BETA
+    Assets:Equity:BETA                            40 BETA @ 30 INR
+    Assets:Checking                            -1200 INR
+
+2019/02/01 Buy BETA
+    Assets:Equity:BETA                            50 BETA @ 60 INR
+    Assets:Checking                            -3000 INR
+
+; reverse split
+2020/02/03 Split BETA 3:1
+    Assets:Equity:BETA                           -40 BETA @ 30 INR
+    Assets:Equity:BETA                           -50 BETA @ 60 INR
+    Assets:Equity:BETA                            30 BETA @ 140 INR
+
+2020/06/01 Sell BETA
+    Assets:Equity:BETA                           -20 BETA @ 150 INR
+    Assets:Checking                             3000 INR
+
+; bonus is also eligible for the split on the same day
+2020/08/03 Bonus BETA 1:1
+    Assets:Equity:BETA                            10 BETA @ 0 INR
+    Income:Bonus:BETA
+
+2020/08/03 Split BETA 1:2
+    Assets:Equity:BETA                           -20 BETA @ 70 INR
+    Assets:Equity:BETA                            40 BETA @ 35 INR
+
+; trades happen at the adjusted price
+2020/08/03 Buy BETA
+    Assets:Equity:BETA                            10 BETA @ 80 INR
+    Assets:Checking                             -800 INR
+
+2021/09/01 Sell BETA
+    Assets:Equity:BETA                           -30 BETA @ 85 INR
+    Assets:Checking                             2550 INR
+
+; taxed on receipt, market value is the cost
+2020/01/01 RSU Vest
+    Assets:Equity:RSU                             10 RSU
+    Income:Salary:Acme                           -10 RSU

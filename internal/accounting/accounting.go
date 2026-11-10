@@ -77,44 +77,133 @@ func FilterByGlob(postings []posting.Posting, accounts []string) []posting.Posti
 func FIFO(postings []posting.Posting) []posting.Posting {
 	var available []posting.Posting
 	for _, p := range postings {
-		if utils.IsCurrency(p.Commodity) {
-			if p.Amount.GreaterThan(decimal.Zero) {
-				available = append(available, p)
-			} else {
-				amount := p.Amount.Neg()
-				for amount.GreaterThan(decimal.Zero) && len(available) > 0 {
-					first := available[0]
-					if first.Amount.GreaterThan(amount) {
-						first.AddAmount(amount.Neg())
-						available[0] = first
-						amount = decimal.Zero
-					} else {
-						amount = amount.Sub(first.Amount)
-						available = available[1:]
-					}
+		available, _ = fifoApply(available, p)
+	}
+
+	return available
+}
+
+// fifoApply adds the posting to the available lots, or if it reduces
+// the holding, consumes the available lots in FIFO order. Returns the
+// remaining lots and, for commodities, the consumed portion of each lot.
+func fifoApply(available []posting.Posting, p posting.Posting) ([]posting.Posting, []posting.Posting) {
+	var consumed []posting.Posting
+	if utils.IsCurrency(p.Commodity) {
+		if p.Amount.GreaterThan(decimal.Zero) {
+			available = append(available, p)
+		} else {
+			amount := p.Amount.Neg()
+			for amount.GreaterThan(decimal.Zero) && len(available) > 0 {
+				first := available[0]
+				if first.Amount.GreaterThan(amount) {
+					first.AddAmount(amount.Neg())
+					available[0] = first
+					amount = decimal.Zero
+				} else {
+					amount = amount.Sub(first.Amount)
+					available = available[1:]
 				}
 			}
+		}
+	} else {
+		if p.Quantity.GreaterThan(decimal.Zero) {
+			available = append(available, p)
 		} else {
-			if p.Quantity.GreaterThan(decimal.Zero) {
-				available = append(available, p)
-			} else {
-				quantity := p.Quantity.Neg()
-				for quantity.GreaterThan(decimal.Zero) && len(available) > 0 {
-					first := available[0]
-					if first.Quantity.GreaterThan(quantity) {
-						first.AddQuantity(quantity.Neg())
-						available[0] = first
-						quantity = decimal.Zero
-					} else {
-						quantity = quantity.Sub(first.Quantity)
-						available = available[1:]
-					}
+			quantity := p.Quantity.Neg()
+			for quantity.GreaterThan(decimal.Zero) && len(available) > 0 {
+				first := available[0]
+				if first.Quantity.GreaterThan(quantity) {
+					consumed = append(consumed, first.WithQuantity(quantity))
+					first.AddQuantity(quantity.Neg())
+					available[0] = first
+					quantity = decimal.Zero
+				} else {
+					consumed = append(consumed, first)
+					quantity = quantity.Sub(first.Quantity)
+					available = available[1:]
 				}
 			}
 		}
 	}
 
-	return available
+	return available, consumed
+}
+
+type TaxSale struct {
+	Sell      posting.Posting
+	Purchases []posting.Posting
+}
+
+// TaxFIFO matches the sells of a single account against its purchases
+// in FIFO order, for computing the cost basis and capital gains.
+//
+// Unlike FIFO, a stock split is not treated as a sell followed by a
+// fresh purchase. Instead the units of the open lots are scaled by the
+// split ratio, keeping their purchase date and cost. Bonus units issued
+// against an Income account are acquired at zero cost on the allotment
+// date, irrespective of the value booked against the Income account.
+func TaxFIFO(db *gorm.DB, postings []posting.Posting) ([]posting.Posting, []TaxSale) {
+	var available []posting.Posting
+	var sales []TaxSale
+	splits := make(map[string]bool)
+	for i, p := range postings {
+		if service.IsStockSplit(db, p) {
+			if splits[p.TransactionID] {
+				continue
+			}
+			splits[p.TransactionID] = true
+
+			split := lo.Filter(postings[i:], func(sp posting.Posting, _ int) bool {
+				return sp.TransactionID == p.TransactionID
+			})
+			if adjusted, ok := applySplit(available, split); ok {
+				available = adjusted
+			} else {
+				for _, sp := range split {
+					available, _ = fifoApply(available, sp)
+				}
+			}
+			continue
+		}
+
+		if service.IsBonus(db, p) {
+			p.Amount = decimal.Zero
+		}
+
+		var consumed []posting.Posting
+		available, consumed = fifoApply(available, p)
+		if !utils.IsCurrency(p.Commodity) && p.Quantity.IsNegative() {
+			p.Amount = service.SellAmount(db, p)
+			sales = append(sales, TaxSale{Sell: p, Purchases: consumed})
+		}
+	}
+
+	return available, sales
+}
+
+// applySplit scales the units of the available lots so that they add
+// up to the holding after the split, leaving the cost of each lot
+// unchanged.
+func applySplit(available []posting.Posting, split []posting.Posting) ([]posting.Posting, bool) {
+	held := utils.SumBy(available, func(p posting.Posting) decimal.Decimal { return p.Quantity })
+	after := held.Add(utils.SumBy(split, func(p posting.Posting) decimal.Decimal { return p.Quantity }))
+	if !held.IsPositive() || !after.IsPositive() {
+		return available, false
+	}
+
+	adjusted := make([]posting.Posting, len(available))
+	remaining := after
+	for i, p := range available {
+		if i == len(available)-1 {
+			// assign the remainder to the last lot to avoid rounding errors
+			p.Quantity = remaining
+		} else {
+			p.Quantity = p.Quantity.Mul(after).Div(held)
+			remaining = remaining.Sub(p.Quantity)
+		}
+		adjusted[i] = p
+	}
+	return adjusted, true
 }
 
 func CostBalance(postings []posting.Posting) decimal.Decimal {
@@ -125,6 +214,18 @@ func CostBalance(postings []posting.Posting) decimal.Decimal {
 		})
 	})
 
+}
+
+// TaxCostBalance is like CostBalance, but handles stock splits and
+// bonus issues the way TaxFIFO does.
+func TaxCostBalance(db *gorm.DB, postings []posting.Posting) decimal.Decimal {
+	byAccount := lo.GroupBy(postings, func(p posting.Posting) string { return p.Account })
+	return utils.SumBy(lo.Values(byAccount), func(ps []posting.Posting) decimal.Decimal {
+		available, _ := TaxFIFO(db, ps)
+		return utils.SumBy(available, func(p posting.Posting) decimal.Decimal {
+			return p.Amount
+		})
+	})
 }
 
 func CurrentBalance(postings []posting.Posting) decimal.Decimal {

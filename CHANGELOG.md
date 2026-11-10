@@ -6,6 +6,10 @@
 * Add a `currency` commodity type for exchange rates.
 * Report incomplete exchange-rate settings and missing historical rates.
 * Fix silver prices being 100 times too high ([#353](https://github.com/ananthakumaran/paisa/issues/353)). Select **Update Prices** to refresh existing prices.
+* Handle stock splits and bonus units in capital gains and tax harvesting pages.
+* Include the gain from `Income:CapitalGains` account in the sell price when units are sold at lot price.
+* Use the price specified via `@` in beancount and handle zero price in hledger.
+* Fix cost parsing in newer versions of hledger (1.40).
 
 #### Breaking Changes :rotating_light:
 

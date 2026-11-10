@@ -1,0 +1,25 @@
+journal_path: main.ledger
+db_path: paisa.db
+ledger_cli: ledger
+commodities:
+  - name: ACME
+    type: stock
+    harvest: 365
+    tax_category: equity
+    price:
+      provider: com-yahoo
+      code: ACME
+  - name: BETA
+    type: stock
+    harvest: 365
+    tax_category: equity35
+    price:
+      provider: com-yahoo
+      code: BETA
+  - name: RSU
+    type: stock
+    harvest: 365
+    tax_category: equity35
+    price:
+      provider: com-yahoo
+      code: RSU

@@ -1,0 +1,536 @@
+{
+  "capital_gains": {
+    "Assets:Equity:ACME": {
+      "account": "Assets:Equity:ACME",
+      "tax_category": "equity",
+      "fy": {
+        "2019-20": {
+          "units": 25,
+          "purchase_price": 4250,
+          "sell_price": 4600,
+          "tax": {
+            "gain": 350,
+            "taxable": -650,
+            "slab": 0,
+            "long_term": -65,
+            "short_term": 0
+          },
+          "posting_pairs": [
+            {
+              "purchase": {
+                "id": 38,
+                "transaction_id": "d84b6999-200b-5b90-9a3e-f94dc8a177da",
+                "date": "2017-06-01T00:00:00Z",
+                "payee": "Buy ACME",
+                "account": "Assets:Equity:ACME",
+                "commodity": "ACME",
+                "quantity": 5,
+                "amount": 750,
+                "status": "unmarked",
+                "tag_recurring": "",
+                "tag_period": "",
+                "transaction_begin_line": 7,
+                "transaction_end_line": 9,
+                "file_name": "main.ledger",
+                "forecast": false,
+                "note": "",
+                "transaction_note": "",
+                "market_amount": 0,
+                "balance": 0
+              },
+              "sell": {
+                "id": 46,
+                "transaction_id": "da653d7b-3378-5558-8785-3816deb61763",
+                "date": "2019-07-01T00:00:00Z",
+                "payee": "Sell ACME",
+                "account": "Assets:Equity:ACME",
+                "commodity": "ACME",
+                "quantity": -5,
+                "amount": -1400,
+                "status": "unmarked",
+                "tag_recurring": "",
+                "tag_period": "",
+                "transaction_begin_line": 22,
+                "transaction_end_line": 25,
+                "file_name": "main.ledger",
+                "forecast": false,
+                "note": "",
+                "transaction_note": "",
+                "market_amount": 0,
+                "balance": 0
+              },
+              "tax": {
+                "gain": 650,
+                "taxable": 400,
+                "slab": 0,
+                "long_term": 40,
+                "short_term": 0
+              }
+            },
+            {
+              "purchase": {
+                "id": 38,
+                "transaction_id": "d84b6999-200b-5b90-9a3e-f94dc8a177da",
+                "date": "2017-06-01T00:00:00Z",
+                "payee": "Buy ACME",
+                "account": "Assets:Equity:ACME",
+                "commodity": "ACME",
+                "quantity": 15,
+                "amount": 2250,
+                "status": "unmarked",
+                "tag_recurring": "",
+                "tag_period": "",
+                "transaction_begin_line": 7,
+                "transaction_end_line": 9,
+                "file_name": "main.ledger",
+                "forecast": false,
+                "note": "",
+                "transaction_note": "",
+                "market_amount": 0,
+                "balance": 0
+              },
+              "sell": {
+                "id": 51,
+                "transaction_id": "b2e50492-9dc7-5845-8ed9-9f4590b301a8",
+                "date": "2020-03-02T00:00:00Z",
+                "payee": "Sell ACME",
+                "account": "Assets:Equity:ACME",
+                "commodity": "ACME",
+                "quantity": -15,
+                "amount": -2400,
+                "status": "unmarked",
+                "tag_recurring": "",
+                "tag_period": "",
+                "transaction_begin_line": 31,
+                "transaction_end_line": 35,
+                "file_name": "main.ledger",
+                "forecast": false,
+                "note": "",
+                "transaction_note": "",
+                "market_amount": 0,
+                "balance": 0
+              },
+              "tax": {
+                "gain": 150,
+                "taxable": -600,
+                "slab": 0,
+                "long_term": -60,
+                "short_term": 0
+              }
+            },
+            {
+              "purchase": {
+                "id": 40,
+                "transaction_id": "67f44c92-c138-550d-9ae2-84034aca39d3",
+                "date": "2019-01-10T00:00:00Z",
+                "payee": "Buy ACME",
+                "account": "Assets:Equity:ACME",
+                "commodity": "ACME",
+                "quantity": 5,
+                "amount": 1250,
+                "status": "unmarked",
+                "tag_recurring": "",
+                "tag_period": "",
+                "transaction_begin_line": 11,
+                "transaction_end_line": 13,
+                "file_name": "main.ledger",
+                "forecast": false,
+                "note": "",
+                "transaction_note": "",
+                "market_amount": 0,
+                "balance": 0
+              },
+              "sell": {
+                "id": 52,
+                "transaction_id": "b2e50492-9dc7-5845-8ed9-9f4590b301a8",
+                "date": "2020-03-02T00:00:00Z",
+                "payee": "Sell ACME",
+                "account": "Assets:Equity:ACME",
+                "commodity": "ACME",
+                "quantity": -5,
+                "amount": -800,
+                "status": "unmarked",
+                "tag_recurring": "",
+                "tag_period": "",
+                "transaction_begin_line": 31,
+                "transaction_end_line": 35,
+                "file_name": "main.ledger",
+                "forecast": false,
+                "note": "",
+                "transaction_note": "",
+                "market_amount": 0,
+                "balance": 0
+              },
+              "tax": {
+                "gain": -450,
+                "taxable": -450,
+                "slab": 0,
+                "long_term": -45,
+                "short_term": 0
+              }
+            }
+          ]
+        },
+        "2021-22": {
+          "units": 25,
+          "purchase_price": 3750,
+          "sell_price": 5000,
+          "tax": {
+            "gain": 1250,
+            "taxable": 1250,
+            "slab": 0,
+            "long_term": 125,
+            "short_term": 0
+          },
+          "posting_pairs": [
+            {
+              "purchase": {
+                "id": 40,
+                "transaction_id": "67f44c92-c138-550d-9ae2-84034aca39d3",
+                "date": "2019-01-10T00:00:00Z",
+                "payee": "Buy ACME",
+                "account": "Assets:Equity:ACME",
+                "commodity": "ACME",
+                "quantity": 15,
+                "amount": 3750,
+                "status": "unmarked",
+                "tag_recurring": "",
+                "tag_period": "",
+                "transaction_begin_line": 11,
+                "transaction_end_line": 13,
+                "file_name": "main.ledger",
+                "forecast": false,
+                "note": "",
+                "transaction_note": "",
+                "market_amount": 0,
+                "balance": 0
+              },
+              "sell": {
+                "id": 55,
+                "transaction_id": "d41384ab-2b57-5644-a9f9-5c0c7334d770",
+                "date": "2021-06-01T00:00:00Z",
+                "payee": "Sell ACME",
+                "account": "Assets:Equity:ACME",
+                "commodity": "ACME",
+                "quantity": -15,
+                "amount": -3000,
+                "status": "unmarked",
+                "tag_recurring": "",
+                "tag_period": "",
+                "transaction_begin_line": 38,
+                "transaction_end_line": 40,
+                "file_name": "main.ledger",
+                "forecast": false,
+                "note": "",
+                "transaction_note": "",
+                "market_amount": 0,
+                "balance": 0
+              },
+              "tax": {
+                "gain": -750,
+                "taxable": -750,
+                "slab": 0,
+                "long_term": -75,
+                "short_term": 0
+              }
+            },
+            {
+              "purchase": {
+                "id": 49,
+                "transaction_id": "608fccf0-e80c-570e-87df-63a9a959c59a",
+                "date": "2020-01-02T00:00:00Z",
+                "payee": "Bonus ACME 1:1",
+                "account": "Assets:Equity:ACME",
+                "commodity": "ACME",
+                "quantity": 10,
+                "amount": 0,
+                "status": "unmarked",
+                "tag_recurring": "",
+                "tag_period": "",
+                "transaction_begin_line": 27,
+                "transaction_end_line": 29,
+                "file_name": "main.ledger",
+                "forecast": false,
+                "note": "",
+                "transaction_note": "",
+                "market_amount": 0,
+                "balance": 0
+              },
+              "sell": {
+                "id": 55,
+                "transaction_id": "d41384ab-2b57-5644-a9f9-5c0c7334d770",
+                "date": "2021-06-01T00:00:00Z",
+                "payee": "Sell ACME",
+                "account": "Assets:Equity:ACME",
+                "commodity": "ACME",
+                "quantity": -10,
+                "amount": -2000,
+                "status": "unmarked",
+                "tag_recurring": "",
+                "tag_period": "",
+                "transaction_begin_line": 38,
+                "transaction_end_line": 40,
+                "file_name": "main.ledger",
+                "forecast": false,
+                "note": "",
+                "transaction_note": "",
+                "market_amount": 0,
+                "balance": 0
+              },
+              "tax": {
+                "gain": 2000,
+                "taxable": 2000,
+                "slab": 0,
+                "long_term": 200,
+                "short_term": 0
+              }
+            }
+          ]
+        }
+      }
+    },
+    "Assets:Equity:BETA": {
+      "account": "Assets:Equity:BETA",
+      "tax_category": "equity35",
+      "fy": {
+        "2020-21": {
+          "units": 20,
+          "purchase_price": 2400,
+          "sell_price": 3000,
+          "tax": {
+            "gain": 600,
+            "taxable": 600,
+            "slab": 600,
+            "long_term": 0,
+            "short_term": 0
+          },
+          "posting_pairs": [
+            {
+              "purchase": {
+                "id": 57,
+                "transaction_id": "6c08d472-cc1e-5b12-8838-03a21e3d8964",
+                "date": "2019-01-01T00:00:00Z",
+                "payee": "Buy BETA",
+                "account": "Assets:Equity:BETA",
+                "commodity": "BETA",
+                "quantity": 13.333333333333334,
+                "amount": 1200,
+                "status": "unmarked",
+                "tag_recurring": "",
+                "tag_period": "",
+                "transaction_begin_line": 42,
+                "transaction_end_line": 44,
+                "file_name": "main.ledger",
+                "forecast": false,
+                "note": "",
+                "transaction_note": "",
+                "market_amount": 0,
+                "balance": 0
+              },
+              "sell": {
+                "id": 64,
+                "transaction_id": "5e041fc2-1e7f-5a2a-9f52-9944bbefb522",
+                "date": "2020-06-01T00:00:00Z",
+                "payee": "Sell BETA",
+                "account": "Assets:Equity:BETA",
+                "commodity": "BETA",
+                "quantity": -13.333333333333334,
+                "amount": -2000,
+                "status": "unmarked",
+                "tag_recurring": "",
+                "tag_period": "",
+                "transaction_begin_line": 56,
+                "transaction_end_line": 58,
+                "file_name": "main.ledger",
+                "forecast": false,
+                "note": "",
+                "transaction_note": "",
+                "market_amount": 0,
+                "balance": 0
+              },
+              "tax": {
+                "gain": 800,
+                "taxable": 800,
+                "slab": 800,
+                "long_term": 0,
+                "short_term": 0
+              }
+            },
+            {
+              "purchase": {
+                "id": 59,
+                "transaction_id": "05767484-bd95-5981-9e2f-5bce25875fe9",
+                "date": "2019-02-01T00:00:00Z",
+                "payee": "Buy BETA",
+                "account": "Assets:Equity:BETA",
+                "commodity": "BETA",
+                "quantity": 6.666666666666667,
+                "amount": 1200,
+                "status": "unmarked",
+                "tag_recurring": "",
+                "tag_period": "",
+                "transaction_begin_line": 46,
+                "transaction_end_line": 48,
+                "file_name": "main.ledger",
+                "forecast": false,
+                "note": "",
+                "transaction_note": "",
+                "market_amount": 0,
+                "balance": 0
+              },
+              "sell": {
+                "id": 64,
+                "transaction_id": "5e041fc2-1e7f-5a2a-9f52-9944bbefb522",
+                "date": "2020-06-01T00:00:00Z",
+                "payee": "Sell BETA",
+                "account": "Assets:Equity:BETA",
+                "commodity": "BETA",
+                "quantity": -6.666666666666667,
+                "amount": -1000,
+                "status": "unmarked",
+                "tag_recurring": "",
+                "tag_period": "",
+                "transaction_begin_line": 56,
+                "transaction_end_line": 58,
+                "file_name": "main.ledger",
+                "forecast": false,
+                "note": "",
+                "transaction_note": "",
+                "market_amount": 0,
+                "balance": 0
+              },
+              "tax": {
+                "gain": -200,
+                "taxable": -200,
+                "slab": -200,
+                "long_term": 0,
+                "short_term": 0
+              }
+            }
+          ]
+        },
+        "2021-22": {
+          "units": 30,
+          "purchase_price": 1800,
+          "sell_price": 2550,
+          "tax": {
+            "gain": 750,
+            "taxable": 750,
+            "slab": 750,
+            "long_term": 0,
+            "short_term": 0
+          },
+          "posting_pairs": [
+            {
+              "purchase": {
+                "id": 59,
+                "transaction_id": "05767484-bd95-5981-9e2f-5bce25875fe9",
+                "date": "2019-02-01T00:00:00Z",
+                "payee": "Buy BETA",
+                "account": "Assets:Equity:BETA",
+                "commodity": "BETA",
+                "quantity": 20,
+                "amount": 1800,
+                "status": "unmarked",
+                "tag_recurring": "",
+                "tag_period": "",
+                "transaction_begin_line": 46,
+                "transaction_end_line": 48,
+                "file_name": "main.ledger",
+                "forecast": false,
+                "note": "",
+                "transaction_note": "",
+                "market_amount": 0,
+                "balance": 0
+              },
+              "sell": {
+                "id": 71,
+                "transaction_id": "d6c22eef-c19e-55b9-9c30-0a5ed8aa3116",
+                "date": "2021-09-01T00:00:00Z",
+                "payee": "Sell BETA",
+                "account": "Assets:Equity:BETA",
+                "commodity": "BETA",
+                "quantity": -20,
+                "amount": -1700,
+                "status": "unmarked",
+                "tag_recurring": "",
+                "tag_period": "",
+                "transaction_begin_line": 74,
+                "transaction_end_line": 76,
+                "file_name": "main.ledger",
+                "forecast": false,
+                "note": "",
+                "transaction_note": "",
+                "market_amount": 0,
+                "balance": 0
+              },
+              "tax": {
+                "gain": -100,
+                "taxable": -100,
+                "slab": -100,
+                "long_term": 0,
+                "short_term": 0
+              }
+            },
+            {
+              "purchase": {
+                "id": 66,
+                "transaction_id": "1194fdf6-3c6a-5e1c-ab4e-8ae56a59dec7",
+                "date": "2020-08-03T00:00:00Z",
+                "payee": "Bonus BETA 1:1",
+                "account": "Assets:Equity:BETA",
+                "commodity": "BETA",
+                "quantity": 10,
+                "amount": 0,
+                "status": "unmarked",
+                "tag_recurring": "",
+                "tag_period": "",
+                "transaction_begin_line": 61,
+                "transaction_end_line": 63,
+                "file_name": "main.ledger",
+                "forecast": false,
+                "note": "",
+                "transaction_note": "",
+                "market_amount": 0,
+                "balance": 0
+              },
+              "sell": {
+                "id": 71,
+                "transaction_id": "d6c22eef-c19e-55b9-9c30-0a5ed8aa3116",
+                "date": "2021-09-01T00:00:00Z",
+                "payee": "Sell BETA",
+                "account": "Assets:Equity:BETA",
+                "commodity": "BETA",
+                "quantity": -10,
+                "amount": -850,
+                "status": "unmarked",
+                "tag_recurring": "",
+                "tag_period": "",
+                "transaction_begin_line": 74,
+                "transaction_end_line": 76,
+                "file_name": "main.ledger",
+                "forecast": false,
+                "note": "",
+                "transaction_note": "",
+                "market_amount": 0,
+                "balance": 0
+              },
+              "tax": {
+                "gain": 850,
+                "taxable": 850,
+                "slab": 850,
+                "long_term": 0,
+                "short_term": 0
+              }
+            }
+          ]
+        }
+      }
+    },
+    "Assets:Equity:RSU": {
+      "account": "Assets:Equity:RSU",
+      "tax_category": "equity35",
+      "fy": {}
+    }
+  }
+}

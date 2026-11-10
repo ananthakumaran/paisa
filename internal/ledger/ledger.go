@@ -323,7 +323,7 @@ func (Beancount) Parse(journalPath string, prices []price.Price) ([]*posting.Pos
 		TagPeriod
 	)
 	// Stringify decimals to bypass bean-query's precision-losing numeric CSV renderer.
-	args := []string{"-f", "csv", journalPath, "select date,payee,narration,account,currency,str(number(units(position))),str(number(cost(position))),currency(cost(position)),filename,location,id,flag,ANY_META('recurring'),ANY_META('period')"}
+	args := []string{"-f", "csv", journalPath, "select date,payee,narration,account,currency,str(number(units(position))),str(number(weight)),currency(weight),filename,location,id,flag,ANY_META('recurring'),ANY_META('period')"}
 
 	path, err := binary.LookPath("bean-query")
 	if err != nil {
@@ -754,25 +754,43 @@ func execLedgerCommand(journalPath string, flags []string) ([]*posting.Posting, 
 	return postings, nil
 }
 
-type HLedgerPosting struct {
-	Account string     `json:"paccount"`
-	Comment string     `json:"pcomment"`
-	Tags    [][]string `json:"ptags"`
-	Amount  []struct {
+type HLedgerPrice struct {
+	Contents struct {
 		Commodity string `json:"acommodity"`
 		Quantity  struct {
 			Value float64 `json:"floatingPoint"`
 		} `json:"aquantity"`
-		Price struct {
-			Contents struct {
-				Commodity string `json:"acommodity"`
-				Quantity  struct {
-					Value float64 `json:"floatingPoint"`
-				} `json:"aquantity"`
-			} `json:"contents"`
-			Tag string `json:"tag"`
-		} `json:"aprice"`
-	} `json:"pamount"`
+	} `json:"contents"`
+	Tag string `json:"tag"`
+}
+
+func (p HLedgerPrice) IsTotal() bool {
+	return p.Tag == "TotalPrice" || p.Tag == "TotalCost"
+}
+
+type HLedgerAmount struct {
+	Commodity string `json:"acommodity"`
+	Quantity  struct {
+		Value float64 `json:"floatingPoint"`
+	} `json:"aquantity"`
+	Price *HLedgerPrice `json:"aprice"`
+	// newer versions of hledger use acost instead of aprice
+	Cost *HLedgerPrice `json:"acost"`
+}
+
+// GetPrice returns nil if the price is not specified.
+func (a HLedgerAmount) GetPrice() *HLedgerPrice {
+	if a.Cost != nil {
+		return a.Cost
+	}
+	return a.Price
+}
+
+type HLedgerPosting struct {
+	Account string          `json:"paccount"`
+	Comment string          `json:"pcomment"`
+	Tags    [][]string      `json:"ptags"`
+	Amount  []HLedgerAmount `json:"pamount"`
 }
 
 type HLedgerTransaction struct {
@@ -886,22 +904,23 @@ func buildHLedgerPostings(p HLedgerPosting, t HLedgerTransaction, pricesTree map
 		totalAmountSet := false
 
 		if amount.Commodity != config.DefaultCurrency() {
-			if amount.Price.Contents.Quantity.Value != 0 {
+			// price could be explicitly specified as zero, ex: bonus units
+			if amountPrice := amount.GetPrice(); amountPrice != nil {
 				var unconvertedTotal decimal.Decimal
-				if amount.Price.Tag == "TotalPrice" {
-					unconvertedTotal = decimal.NewFromFloat(amount.Price.Contents.Quantity.Value)
+				if amountPrice.IsTotal() {
+					unconvertedTotal = decimal.NewFromFloat(amountPrice.Contents.Quantity.Value)
 				} else {
-					unconvertedTotal = decimal.NewFromFloat(amount.Price.Contents.Quantity.Value).Mul(decimal.NewFromFloat(amount.Quantity.Value))
+					unconvertedTotal = decimal.NewFromFloat(amountPrice.Contents.Quantity.Value).Mul(decimal.NewFromFloat(amount.Quantity.Value))
 				}
 
-				if amount.Price.Contents.Commodity != config.DefaultCurrency() {
+				if amountPrice.Contents.Commodity != config.DefaultCurrency() {
 					pr := lookupPrice(pricesTree, amount.Commodity, date)
 					if !pr.Equal(decimal.Zero) {
 						totalAmount = decimal.NewFromFloat(amount.Quantity.Value).Mul(pr)
 						totalAmountSet = true
 					}
 					if !totalAmountSet {
-						pr = lookupPrice(pricesTree, amount.Price.Contents.Commodity, date)
+						pr = lookupPrice(pricesTree, amountPrice.Contents.Commodity, date)
 						if !pr.Equal(decimal.Zero) {
 							totalAmount = unconvertedTotal.Mul(pr)
 						}

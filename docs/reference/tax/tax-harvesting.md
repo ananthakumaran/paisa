@@ -51,3 +51,9 @@ harvesting.
 Paisa uses FIFO method within an Account. If you have multiple folios,
 this might result in incorrect values. The issue can be solved by
 using a different Account for each folio.
+
+## Stock Split and Bonus
+
+Units acquired via stock split retain the original purchase date and
+bonus units are considered as purchased at zero cost on the date of
+bonus. Refer [Capital Gains](capital-gains.md#stock-split) for details.

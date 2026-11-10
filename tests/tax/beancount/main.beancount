@@ -1,0 +1,100 @@
+option "booking_method" "FIFO"
+
+1970-01-01 open Assets:Checking
+1970-01-01 open Assets:Equity:ACME
+1970-01-01 open Assets:Equity:BETA
+1970-01-01 open Assets:Equity:RSU
+1970-01-01 open Income:Bonus:ACME
+1970-01-01 open Income:Bonus:BETA
+1970-01-01 open Income:Salary:Acme
+1970-01-01 open Income:CapitalGains:Equity:ACME
+1970-01-01 open Income:CapitalGains:Equity:BETA
+
+2018-01-31 price ACME 400 INR
+2020-01-01 price RSU 50 INR
+2022-02-01 price ACME 220 INR
+2022-02-01 price BETA 90 INR
+2022-02-01 price RSU 80 INR
+
+2017-06-01 * "Buy ACME"
+    Assets:Equity:ACME                            10 ACME {300 INR}
+    Assets:Checking                            -3000 INR
+
+2019-01-10 * "Buy ACME"
+    Assets:Equity:ACME                            10 ACME {500 INR}
+    Assets:Checking                            -5000 INR
+
+2019-06-03 * "Split ACME 1:2"
+    Assets:Equity:ACME                           -10 ACME {300 INR}
+    Assets:Equity:ACME                            20 ACME {150 INR}
+    Assets:Equity:ACME                           -10 ACME {500 INR}
+    Assets:Equity:ACME                            20 ACME {250 INR}
+
+; valued at lot cost, gain comes from the capital gains account
+2019-07-01 * "Sell ACME"
+    Assets:Equity:ACME                            -5 ACME {150 INR} @ 280 INR
+    Income:CapitalGains:Equity:ACME             -650 INR
+    Assets:Checking                             1400 INR
+
+2020-01-02 * "Bonus ACME 1:1"
+    Assets:Equity:ACME                            35 ACME
+    Income:Bonus:ACME                            -35 ACME
+
+2020-03-02 * "Sell ACME"
+    Assets:Equity:ACME                           -15 ACME {150 INR} @ 160 INR
+    Assets:Equity:ACME                            -5 ACME {250 INR} @ 160 INR
+    Income:CapitalGains:Equity:ACME              300 INR
+    Assets:Checking                             3200 INR
+
+; bonus units do not have a cost, so they are valued at sell price
+2021-06-01 * "Sell ACME"
+    Assets:Equity:ACME                           -15 ACME {250 INR} @ 200 INR
+    Assets:Equity:ACME                           -10 ACME @ 200 INR
+    Income:CapitalGains:Equity:ACME              750 INR
+    Assets:Checking                             5000 INR
+
+2019-01-01 * "Buy BETA"
+    Assets:Equity:BETA                            40 BETA {30 INR}
+    Assets:Checking                            -1200 INR
+
+2019-02-01 * "Buy BETA"
+    Assets:Equity:BETA                            50 BETA {60 INR}
+    Assets:Checking                            -3000 INR
+
+; reverse split
+2020-02-03 * "Split BETA 3:1"
+    Assets:Equity:BETA                           -40 BETA {30 INR}
+    Assets:Equity:BETA                           -50 BETA {60 INR}
+    Assets:Equity:BETA                            30 BETA {140 INR}
+
+2020-06-01 * "Sell BETA"
+    Assets:Equity:BETA                           -20 BETA {140 INR} @ 150 INR
+    Income:CapitalGains:Equity:BETA             -200 INR
+    Assets:Checking                             3000 INR
+
+; bonus is also eligible for the split on the same day
+2020-08-03 * "Bonus BETA 1:1"
+    Assets:Equity:BETA                            10 BETA {0 INR}
+    Income:Bonus:BETA
+
+2020-08-03 * "Split BETA 1:2"
+    Assets:Equity:BETA                           -10 BETA {140 INR}
+    Assets:Equity:BETA                            20 BETA {70 INR}
+    Assets:Equity:BETA                           -10 BETA {0 INR}
+    Assets:Equity:BETA                            20 BETA {0 INR}
+
+; trades happen at the adjusted price
+2020-08-03 * "Buy BETA"
+    Assets:Equity:BETA                            10 BETA {80 INR}
+    Assets:Checking                             -800 INR
+
+2021-09-01 * "Sell BETA"
+    Assets:Equity:BETA                           -20 BETA {70 INR} @ 85 INR
+    Assets:Equity:BETA                           -10 BETA {0 INR, 2020-08-03} @ 85 INR
+    Income:CapitalGains:Equity:BETA            -1150 INR
+    Assets:Checking                             2550 INR
+
+; taxed on receipt, market value is the cost
+2020-01-01 * "RSU Vest"
+    Assets:Equity:RSU                             10 RSU
+    Income:Salary:Acme                           -10 RSU

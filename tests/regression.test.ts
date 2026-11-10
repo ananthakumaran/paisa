@@ -10,6 +10,7 @@ import { diffString } from "json-diff";
 import type { LedgerFile } from "../src/lib/utils";
 
 const fixture = "tests/fixture";
+const taxFixture = "tests/tax";
 const port = 5700;
 axios.defaults.baseURL = `http://localhost:${port}`;
 
@@ -38,11 +39,15 @@ async function recordAndVerify(dir: string, route: string, name: string) {
   fs.writeFileSync(filename, JSON.stringify(data, null, 2));
 }
 
-async function verifyApi(dir: string) {
+async function syncJournal() {
   const {
     data: { success }
   } = await axios.post("/api/sync", { journal: true });
   assert.strictEqual(success, true);
+}
+
+async function verifyApi(dir: string) {
+  await syncJournal();
 
   const {
     data: { config }
@@ -103,6 +108,25 @@ async function verifyApi(dir: string) {
   }
 }
 
+async function verifyTaxApi(dir: string) {
+  await syncJournal();
+
+  await recordAndVerify(dir, "/api/capital_gains", "capital_gains");
+  await recordAndVerify(dir, "/api/harvest", "harvest");
+}
+
+function readTaxSummary(dir: string) {
+  const read = (name: string) =>
+    JSON.parse(fs.readFileSync(path.join(taxFixture, dir, name + ".json")).toString());
+
+  const { capital_gains } = read("capital_gains");
+  for (const capitalGain of Object.values<any>(capital_gains)) {
+    // the number of postings per sale could vary
+    Object.values<any>(capitalGain.fy).forEach((fy) => delete fy.posting_pairs);
+  }
+  return { capital_gains, harvest: read("harvest") };
+}
+
 async function wait() {
   try {
     await waitPort({ port: port, output: "silent" });
@@ -111,7 +135,7 @@ async function wait() {
   }
 }
 
-async function check(directory: string) {
+async function check(directory: string, verify: (directory: string) => Promise<void>) {
   const child = spawn("./paisa", [
     "--config",
     path.join(directory, "paisa.yaml"),
@@ -123,7 +147,7 @@ async function check(directory: string) {
   ]);
   try {
     await wait();
-    await verifyApi(directory);
+    await verify(directory);
   } finally {
     if (child.exitCode === null) {
       child.kill();
@@ -136,7 +160,22 @@ describe("regression", () => {
   fs.readdirSync(fixture).forEach((dir) => {
     test(dir, async () => {
       const directory = path.join(fixture, dir);
-      await check(directory);
+      await check(directory, verifyApi);
     });
+  });
+});
+
+describe("tax regression", () => {
+  const dirs = fs.readdirSync(taxFixture);
+
+  dirs.forEach((dir) => {
+    test(dir, async () => {
+      await check(path.join(taxFixture, dir), verifyTaxApi);
+    });
+  });
+
+  test("same result irrespective of the ledger cli", () => {
+    const [expected, ...rest] = dirs.map(readTaxSummary);
+    rest.forEach((actual) => assert.equal(diffString(expected, actual, { precision: 6 }), ""));
   });
 });

@@ -2,10 +2,17 @@
 
 ### Unreleased
 
+### 0.8.0 (2026-11-15)
+
 * Choose the currency of downloaded investment prices for every price provider.
 * Add a `currency` commodity type for exchange rates.
+* Add FinBodhi providers for stocks, mutual funds, and SIFs.
+* Rename Purified Bytes price providers to FinBodhi and migrate existing configuration codes.
 * Report incomplete exchange-rate settings and missing historical rates.
 * Fix silver prices being 100 times too high ([#353](https://github.com/ananthakumaran/paisa/issues/353)). Select **Update Prices** to refresh existing prices.
+* Skip investment-return calculations for checking accounts, rounded credit-card bill statuses, and projected budget rollovers.
+* Fix expense chart labels, Beancount commodities containing digits, and hledger forecast detection with automatic postings.
+* Fix validation of nested journal includes, reject journal filenames with mismatched extensions, and support import columns beyond Z and locale-aware number formats.
 
 #### Breaking Changes :rotating_light:
 

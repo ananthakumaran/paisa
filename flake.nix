@@ -13,7 +13,7 @@
     ] (system:
       let
         pkgs = nixpkgs.legacyPackages.${system};
-        version = "0.7.8";
+        version = "0.8.0";
         hledger = hledger-pkgs.legacyPackages.${system};
         frontend = pkgs.buildNpmPackage {
           pname = "paisa-frontend";

@@ -1000,10 +1000,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#gtea-string-number-b-string-number-boolean" class="md-nav__link">
+  <a href="#gtea-string-number-amount-b-string-number-amount-boolean" class="md-nav__link">
     <span class="md-ellipsis">
       
-        gte(a: string | number, b: string | number): boolean
+        gte(a: string | number | Amount, b: string | number | Amount): boolean
       
     </span>
   </a>
@@ -1011,10 +1011,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#gta-string-number-b-string-number-boolean" class="md-nav__link">
+  <a href="#gta-string-number-amount-b-string-number-amount-boolean" class="md-nav__link">
     <span class="md-ellipsis">
       
-        gt(a: string | number, b: string | number): boolean
+        gt(a: string | number | Amount, b: string | number | Amount): boolean
       
     </span>
   </a>
@@ -1022,10 +1022,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#ltea-string-number-b-string-number-boolean" class="md-nav__link">
+  <a href="#ltea-string-number-amount-b-string-number-amount-boolean" class="md-nav__link">
     <span class="md-ellipsis">
       
-        lte(a: string | number, b: string | number): boolean
+        lte(a: string | number | Amount, b: string | number | Amount): boolean
       
     </span>
   </a>
@@ -1033,10 +1033,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#lta-string-number-b-string-number-boolean" class="md-nav__link">
+  <a href="#lta-string-number-amount-b-string-number-amount-boolean" class="md-nav__link">
     <span class="md-ellipsis">
       
-        lt(a: string | number, b: string | number): boolean
+        lt(a: string | number | Amount, b: string | number | Amount): boolean
       
     </span>
   </a>
@@ -1044,10 +1044,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#negatevalue-string-number-number" class="md-nav__link">
+  <a href="#negatevalue-string-number-amount-amount" class="md-nav__link">
     <span class="md-ellipsis">
       
-        negate(value: string | number): number
+        negate(value: string | number | Amount): Amount | &quot;&quot;
       
     </span>
   </a>
@@ -1055,10 +1055,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#amountstr-string-default-string-string" class="md-nav__link">
+  <a href="#amountvalue-string-number-amount-default-string-number-amount-string-number" class="md-nav__link">
     <span class="md-ellipsis">
       
-        amount(str: string, {default?: string}): string
+        amount(value: string | number | Amount, {default?: string | number}): Amount | string | number
       
     </span>
   </a>
@@ -1066,10 +1066,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#roundstr-string-precision-number-number" class="md-nav__link">
+  <a href="#roundvalue-string-number-amount-precision-number-amount" class="md-nav__link">
     <span class="md-ellipsis">
       
-        round(str: string, {precision?: number}): number
+        round(value: string | number | Amount, {precision?: number}): Amount | &quot;&quot;
       
     </span>
   </a>
@@ -2439,10 +2439,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#gtea-string-number-b-string-number-boolean" class="md-nav__link">
+  <a href="#gtea-string-number-amount-b-string-number-amount-boolean" class="md-nav__link">
     <span class="md-ellipsis">
       
-        gte(a: string | number, b: string | number): boolean
+        gte(a: string | number | Amount, b: string | number | Amount): boolean
       
     </span>
   </a>
@@ -2450,10 +2450,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#gta-string-number-b-string-number-boolean" class="md-nav__link">
+  <a href="#gta-string-number-amount-b-string-number-amount-boolean" class="md-nav__link">
     <span class="md-ellipsis">
       
-        gt(a: string | number, b: string | number): boolean
+        gt(a: string | number | Amount, b: string | number | Amount): boolean
       
     </span>
   </a>
@@ -2461,10 +2461,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#ltea-string-number-b-string-number-boolean" class="md-nav__link">
+  <a href="#ltea-string-number-amount-b-string-number-amount-boolean" class="md-nav__link">
     <span class="md-ellipsis">
       
-        lte(a: string | number, b: string | number): boolean
+        lte(a: string | number | Amount, b: string | number | Amount): boolean
       
     </span>
   </a>
@@ -2472,10 +2472,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#lta-string-number-b-string-number-boolean" class="md-nav__link">
+  <a href="#lta-string-number-amount-b-string-number-amount-boolean" class="md-nav__link">
     <span class="md-ellipsis">
       
-        lt(a: string | number, b: string | number): boolean
+        lt(a: string | number | Amount, b: string | number | Amount): boolean
       
     </span>
   </a>
@@ -2483,10 +2483,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#negatevalue-string-number-number" class="md-nav__link">
+  <a href="#negatevalue-string-number-amount-amount" class="md-nav__link">
     <span class="md-ellipsis">
       
-        negate(value: string | number): number
+        negate(value: string | number | Amount): Amount | &quot;&quot;
       
     </span>
   </a>
@@ -2494,10 +2494,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#amountstr-string-default-string-string" class="md-nav__link">
+  <a href="#amountvalue-string-number-amount-default-string-number-amount-string-number" class="md-nav__link">
     <span class="md-ellipsis">
       
-        amount(str: string, {default?: string}): string
+        amount(value: string | number | Amount, {default?: string | number}): Amount | string | number
       
     </span>
   </a>
@@ -2505,10 +2505,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#roundstr-string-precision-number-number" class="md-nav__link">
+  <a href="#roundvalue-string-number-amount-precision-number-amount" class="md-nav__link">
     <span class="md-ellipsis">
       
-        round(str: string, {precision?: number}): number
+        round(value: string | number | Amount, {precision?: number}): Amount | &quot;&quot;
       
     </span>
   </a>
@@ -2855,24 +2855,28 @@ adding it to the built-in templates.</p>
 <p>Returns true if all the arguments are true.</p>
 <h4 id="orargs-any-boolean"><code class="language-typescript highlight"><span class="nx">or</span><span class="p">(</span><span class="nx">...args</span><span class="o">:</span><span class="w"> </span><span class="kt">any</span><span class="p">[])</span><span class="o">:</span><span class="w"> </span><span class="kt">boolean</span></code><a class="headerlink" href="#orargs-any-boolean" title="Permanent link">&para;</a></h4>
 <p>Returns true if any of the arguments are true.</p>
-<h4 id="gtea-string-number-b-string-number-boolean"><code class="language-typescript highlight"><span class="nx">gte</span><span class="p">(</span><span class="nx">a</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="kt">number</span><span class="p">,</span><span class="w"> </span><span class="nx">b</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="kt">number</span><span class="p">)</span><span class="o">:</span><span class="w"> </span><span class="kt">boolean</span></code><a class="headerlink" href="#gtea-string-number-b-string-number-boolean" title="Permanent link">&para;</a></h4>
+<h4 id="gtea-string-number-amount-b-string-number-amount-boolean"><code class="language-typescript highlight"><span class="nx">gte</span><span class="p">(</span><span class="nx">a</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="kt">number</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="nx">Amount</span><span class="p">,</span><span class="w"> </span><span class="nx">b</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="kt">number</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="nx">Amount</span><span class="p">)</span><span class="o">:</span><span class="w"> </span><span class="kt">boolean</span></code><a class="headerlink" href="#gtea-string-number-amount-b-string-number-amount-boolean" title="Permanent link">&para;</a></h4>
 <p>Checks if a is greater than or equal to b.</p>
-<h4 id="gta-string-number-b-string-number-boolean"><code class="language-typescript highlight"><span class="nx">gt</span><span class="p">(</span><span class="nx">a</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="kt">number</span><span class="p">,</span><span class="w"> </span><span class="nx">b</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="kt">number</span><span class="p">)</span><span class="o">:</span><span class="w"> </span><span class="kt">boolean</span></code><a class="headerlink" href="#gta-string-number-b-string-number-boolean" title="Permanent link">&para;</a></h4>
+<h4 id="gta-string-number-amount-b-string-number-amount-boolean"><code class="language-typescript highlight"><span class="nx">gt</span><span class="p">(</span><span class="nx">a</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="kt">number</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="nx">Amount</span><span class="p">,</span><span class="w"> </span><span class="nx">b</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="kt">number</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="nx">Amount</span><span class="p">)</span><span class="o">:</span><span class="w"> </span><span class="kt">boolean</span></code><a class="headerlink" href="#gta-string-number-amount-b-string-number-amount-boolean" title="Permanent link">&para;</a></h4>
 <p>Checks if a is greater than b.</p>
-<h4 id="ltea-string-number-b-string-number-boolean"><code class="language-typescript highlight"><span class="nx">lte</span><span class="p">(</span><span class="nx">a</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="kt">number</span><span class="p">,</span><span class="w"> </span><span class="nx">b</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="kt">number</span><span class="p">)</span><span class="o">:</span><span class="w"> </span><span class="kt">boolean</span></code><a class="headerlink" href="#ltea-string-number-b-string-number-boolean" title="Permanent link">&para;</a></h4>
+<h4 id="ltea-string-number-amount-b-string-number-amount-boolean"><code class="language-typescript highlight"><span class="nx">lte</span><span class="p">(</span><span class="nx">a</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="kt">number</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="nx">Amount</span><span class="p">,</span><span class="w"> </span><span class="nx">b</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="kt">number</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="nx">Amount</span><span class="p">)</span><span class="o">:</span><span class="w"> </span><span class="kt">boolean</span></code><a class="headerlink" href="#ltea-string-number-amount-b-string-number-amount-boolean" title="Permanent link">&para;</a></h4>
 <p>Checks if a is less than or equal to b.</p>
-<h4 id="lta-string-number-b-string-number-boolean"><code class="language-typescript highlight"><span class="nx">lt</span><span class="p">(</span><span class="nx">a</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="kt">number</span><span class="p">,</span><span class="w"> </span><span class="nx">b</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="kt">number</span><span class="p">)</span><span class="o">:</span><span class="w"> </span><span class="kt">boolean</span></code><a class="headerlink" href="#lta-string-number-b-string-number-boolean" title="Permanent link">&para;</a></h4>
+<h4 id="lta-string-number-amount-b-string-number-amount-boolean"><code class="language-typescript highlight"><span class="nx">lt</span><span class="p">(</span><span class="nx">a</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="kt">number</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="nx">Amount</span><span class="p">,</span><span class="w"> </span><span class="nx">b</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="kt">number</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="nx">Amount</span><span class="p">)</span><span class="o">:</span><span class="w"> </span><span class="kt">boolean</span></code><a class="headerlink" href="#lta-string-number-amount-b-string-number-amount-boolean" title="Permanent link">&para;</a></h4>
 <p>Checks if a is less than b.</p>
-<h4 id="negatevalue-string-number-number"><code class="language-typescript highlight"><span class="nx">negate</span><span class="p">(</span><span class="nx">value</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="kt">number</span><span class="p">)</span><span class="o">:</span><span class="w"> </span><span class="kt">number</span></code><a class="headerlink" href="#negatevalue-string-number-number" title="Permanent link">&para;</a></h4>
-<p>Negates the given value. For example, <code>negate("123.45")</code> will return
-<code>-123.45</code></p>
-<h4 id="amountstr-string-default-string-string"><code class="language-typescript highlight"><span class="nx">amount</span><span class="p">(</span><span class="nx">str</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="nx">default?</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">})</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span></code><a class="headerlink" href="#amountstr-string-default-string-string" title="Permanent link">&para;</a></h4>
-<p>Converts the given string to a valid amount. If the string is blank,
-the default value is used. Examples <code>(0.9534)</code> to <code>-0.9534</code>, <code>₹
-1,234.56</code> to <code>1234.56</code></p>
-<h4 id="roundstr-string-precision-number-number"><code class="language-typescript highlight"><span class="nx">round</span><span class="p">(</span><span class="nx">str</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="nx">precision?</span><span class="o">:</span><span class="w"> </span><span class="kt">number</span><span class="p">})</span><span class="o">:</span><span class="w"> </span><span class="kt">number</span></code><a class="headerlink" href="#roundstr-string-precision-number-number" title="Permanent link">&para;</a></h4>
+<h4 id="negatevalue-string-number-amount-amount"><code class="language-typescript highlight"><span class="nx">negate</span><span class="p">(</span><span class="nx">value</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="kt">number</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="nx">Amount</span><span class="p">)</span><span class="o">:</span><span class="w"> </span><span class="nx">Amount</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="s2">&quot;&quot;</span></code><a class="headerlink" href="#negatevalue-string-number-amount-amount" title="Permanent link">&para;</a></h4>
+<p>Negates the given value. For example, with <code>locale: en-US</code>,
+<code>negate("123.45")</code> renders <code>-123.45</code>. Blank or unparseable input
+renders nothing.</p>
+<h4 id="amountvalue-string-number-amount-default-string-number-amount-string-number"><code class="language-typescript highlight"><span class="nx">amount</span><span class="p">(</span><span class="nx">value</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="kt">number</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="nx">Amount</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="nx">default?</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="kt">number</span><span class="p">})</span><span class="o">:</span><span class="w"> </span><span class="nx">Amount</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="kt">number</span></code><a class="headerlink" href="#amountvalue-string-number-amount-default-string-number-amount-string-number" title="Permanent link">&para;</a></h4>
+<p>Converts the given value to an amount. If it is blank or unparseable,
+the default value is used, or nothing is rendered if no default is set.
+With <code>locale: en-US</code>, examples include <code>(0.9534)</code> to <code>-0.9534</code>
+and <code>₹ 1,234.56</code> to <code>1234.56</code>. Fractional trailing zeros are preserved.</p>
+<h4 id="roundvalue-string-number-amount-precision-number-amount"><code class="language-typescript highlight"><span class="nx">round</span><span class="p">(</span><span class="nx">value</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="kt">number</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="nx">Amount</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="nx">precision?</span><span class="o">:</span><span class="w"> </span><span class="kt">number</span><span class="p">})</span><span class="o">:</span><span class="w"> </span><span class="nx">Amount</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="s2">&quot;&quot;</span></code><a class="headerlink" href="#roundvalue-string-number-amount-precision-number-amount" title="Permanent link">&para;</a></h4>
 <p>Rounds the given value to the given precision. If precision is not
-set, defaults to <code>0</code></p>
+set, defaults to <code>0</code>.
+Ties round towards positive infinity (for example, <code>-1.5</code> rounds to
+<code>-1</code>). Blank or unparseable input renders nothing.</p>
 <h4 id="isdatestr-string-format-string-boolean"><code class="language-typescript highlight"><span class="nx">isDate</span><span class="p">(</span><span class="nx">str</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="nx">format</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="o">:</span><span class="w"> </span><span class="kt">boolean</span></code><a class="headerlink" href="#isdatestr-string-format-string-boolean" title="Permanent link">&para;</a></h4>
 <p>Checks if the given string is a valid date in the given format. Refer
 <a href="https://day.js.org/docs/en/parse/string-format#list-of-all-available-parsing-tokens">Day.js</a> for the full list of supported formats.</p>

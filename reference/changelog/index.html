@@ -1483,6 +1483,45 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#unreleased" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Unreleased
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#080-2026-11-15" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        0.8.0 (2026-11-15)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="0.8.0 (2026-11-15)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#breaking-changes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Breaking Changes
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#078-2026-10-21" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1682,7 +1721,7 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#breaking-changes" class="md-nav__link">
+  <a href="#breaking-changes_1" class="md-nav__link">
     <span class="md-ellipsis">
       
         Breaking Changes
@@ -1743,7 +1782,7 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#breaking-changes_1" class="md-nav__link">
+  <a href="#breaking-changes_2" class="md-nav__link">
     <span class="md-ellipsis">
       
         Breaking Changes
@@ -1771,7 +1810,7 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#breaking-changes_2" class="md-nav__link">
+  <a href="#breaking-changes_3" class="md-nav__link">
     <span class="md-ellipsis">
       
         Breaking Changes
@@ -2380,6 +2419,45 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#unreleased" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Unreleased
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#080-2026-11-15" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        0.8.0 (2026-11-15)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="0.8.0 (2026-11-15)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#breaking-changes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Breaking Changes
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#078-2026-10-21" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2579,7 +2657,7 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#breaking-changes" class="md-nav__link">
+  <a href="#breaking-changes_1" class="md-nav__link">
     <span class="md-ellipsis">
       
         Breaking Changes
@@ -2640,7 +2718,7 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#breaking-changes_1" class="md-nav__link">
+  <a href="#breaking-changes_2" class="md-nav__link">
     <span class="md-ellipsis">
       
         Breaking Changes
@@ -2668,7 +2746,7 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#breaking-changes_2" class="md-nav__link">
+  <a href="#breaking-changes_3" class="md-nav__link">
     <span class="md-ellipsis">
       
         Breaking Changes
@@ -2748,6 +2826,47 @@
 
 
 <h1 id="release-changelog">Release Changelog<a class="headerlink" href="#release-changelog" title="Permanent link">&para;</a></h1>
+<h3 id="unreleased">Unreleased<a class="headerlink" href="#unreleased" title="Permanent link">&para;</a></h3>
+<h3 id="080-2026-11-15">0.8.0 (2026-11-15)<a class="headerlink" href="#080-2026-11-15" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Choose the currency of downloaded investment prices for every price provider.</li>
+<li>Add a <code>currency</code> commodity type for exchange rates.</li>
+<li>Add FinBodhi providers for stocks, mutual funds, and SIFs.</li>
+<li>Rename Purified Bytes price providers to FinBodhi and migrate existing configuration codes.</li>
+<li>Report incomplete exchange-rate settings and missing historical rates.</li>
+<li>Fix silver prices being 100 times too high (<a href="https://github.com/ananthakumaran/paisa/issues/353">#353</a>). Select <strong>Update Prices</strong> to refresh existing prices.</li>
+<li>Skip investment-return calculations for checking accounts.</li>
+<li>Fix payment statuses for rounded credit-card bills and double-counted budget rollovers in projected balances.</li>
+<li>Fix expense chart label overlaps and budget amount styling.</li>
+<li>Fix Beancount commodities containing digits and hledger forecast detection with automatic postings.</li>
+<li>Fix validation of nested journal includes, reject journal filenames with mismatched extensions, and support import columns beyond Z and locale-aware number formats.</li>
+</ul>
+<h4 id="breaking-changes">Breaking Changes <img alt="🚨" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@16.0.1/assets/svg/1f6a8.svg" title=":rotating_light:" /><a class="headerlink" href="#breaking-changes" title="Permanent link">&para;</a></h4>
+<p><strong>Yahoo and Alpha Vantage users need to check their price settings.</strong>
+You now choose the currency in which prices are supplied, and add an
+exchange rate when it differs from the currency used in your reports.</p>
+<p>For example, suppose your reports use INR and you own Apple shares.
+Yahoo supplies Apple's price in USD. Set it up as follows:</p>
+<ol>
+<li>Under <strong>Configuration → Commodities</strong>, open Apple's price settings.
+   Set <strong>Quote commodity</strong> to <strong>USD</strong>. This field means “the currency of
+   the price supplied by the provider.”</li>
+<li>Add another entry named <strong>USD</strong>, with <strong>Type: currency</strong>. Choose
+   <strong>Yahoo Finance</strong> as its price provider and <strong>USDINR=X</strong> as its code.
+   This supplies the number of rupees worth one dollar.</li>
+<li>Save the configuration.</li>
+<li>Select <strong>Update Prices</strong> from the top-right menu.</li>
+</ol>
+<p>If an investment's price is already in the currency used in your reports,
+leave <strong>Quote commodity</strong> empty.</p>
+<p>MFAPI and FinBodhi's Indian mutual funds, NPS, SIFs, and metals supply
+prices in INR. If your reports use another currency, choose <strong>INR</strong> in
+their price settings and add the corresponding exchange rate. See the
+<a href="https://paisa.fyi/reference/commodities/#reporting-in-another-currency">example for USD reports</a>.</p>
+<p>FinBodhi's US stocks and GIFT City funds are quoted in USD. Use <strong>USD</strong>
+as their quote commodity and add an exchange rate if needed.</p>
+<p>Your existing transactions, including purchases written as <code>@ 100 USD</code>,
+can stay unchanged. Keep any exchange rates already written in your journal.</p>
 <h3 id="078-2026-10-21">0.7.8 (2026-10-21)<a class="headerlink" href="#078-2026-10-21" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Fix path traversal allowing file reads and backup deletion outside the ledger and sheet directories (<a href="https://github.com/ananthakumaran/paisa/issues/420">#420</a>).</li>
@@ -2865,7 +2984,7 @@
 <li>Remove retirement page (available under goals)</li>
 <li>Bug fixes</li>
 </ul>
-<h4 id="breaking-changes">Breaking Changes <img alt="🚨" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@16.0.1/assets/svg/1f6a8.svg" title=":rotating_light:" /><a class="headerlink" href="#breaking-changes" title="Permanent link">&para;</a></h4>
+<h4 id="breaking-changes_1">Breaking Changes <img alt="🚨" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@16.0.1/assets/svg/1f6a8.svg" title=":rotating_light:" /><a class="headerlink" href="#breaking-changes_1" title="Permanent link">&para;</a></h4>
 <p>Retirement page has been moved under goals. If you have used
 retirement, you need to setup a new <a href="https://paisa.fyi/reference/goals">retirement goal</a></p>
 <h3 id="056-2023-11-04">0.5.6 (2023-11-04)<a class="headerlink" href="#056-2023-11-04" title="Permanent link">&para;</a></h3>
@@ -2895,7 +3014,7 @@ retirement, you need to setup a new <a href="https://paisa.fyi/reference/goals">
 <li>Move import templates to configuration file</li>
 <li>Bug fixes</li>
 </ul>
-<h4 id="breaking-changes_1">Breaking Changes <img alt="🚨" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@16.0.1/assets/svg/1f6a8.svg" title=":rotating_light:" /><a class="headerlink" href="#breaking-changes_1" title="Permanent link">&para;</a></h4>
+<h4 id="breaking-changes_2">Breaking Changes <img alt="🚨" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@16.0.1/assets/svg/1f6a8.svg" title=":rotating_light:" /><a class="headerlink" href="#breaking-changes_2" title="Permanent link">&para;</a></h4>
 <p>User's custom import templates used to be stored in Database, which is
 a bad idea in hindsight. It's being moved to the configuration
 file. With this change, all the data in paisa.db would be transient
@@ -2911,7 +3030,7 @@ get the data directly from the db file using the following query
 <li>Support password protected PDF on import page</li>
 <li>Bug fixes</li>
 </ul>
-<h4 id="breaking-changes_2">Breaking Changes <img alt="🚨" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@16.0.1/assets/svg/1f6a8.svg" title=":rotating_light:" /><a class="headerlink" href="#breaking-changes_2" title="Permanent link">&para;</a></h4>
+<h4 id="breaking-changes_3">Breaking Changes <img alt="🚨" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@16.0.1/assets/svg/1f6a8.svg" title=":rotating_light:" /><a class="headerlink" href="#breaking-changes_3" title="Permanent link">&para;</a></h4>
 <ul>
 <li>The structure of price code configuration has been updated to make
   it easier to add more price provider in the future. In addition to

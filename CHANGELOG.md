@@ -10,8 +10,10 @@
 * Rename Purified Bytes price providers to FinBodhi and migrate existing configuration codes.
 * Report incomplete exchange-rate settings and missing historical rates.
 * Fix silver prices being 100 times too high ([#353](https://github.com/ananthakumaran/paisa/issues/353)). Select **Update Prices** to refresh existing prices.
-* Skip investment-return calculations for checking accounts, rounded credit-card bill statuses, and projected budget rollovers.
-* Fix expense chart labels, Beancount commodities containing digits, and hledger forecast detection with automatic postings.
+* Skip investment-return calculations for checking accounts.
+* Fix payment statuses for rounded credit-card bills and double-counted budget rollovers in projected balances.
+* Fix expense chart label overlaps and budget amount styling.
+* Fix Beancount commodities containing digits and hledger forecast detection with automatic postings.
 * Fix validation of nested journal includes, reject journal filenames with mismatched extensions, and support import columns beyond Z and locale-aware number formats.
 
 #### Breaking Changes :rotating_light:
@@ -35,9 +37,13 @@ Yahoo supplies Apple's price in USD. Set it up as follows:
 If an investment's price is already in the currency used in your reports,
 leave **Quote commodity** empty.
 
-MFAPI and FinBodhi supply prices in INR. If your reports use another
-currency, choose **INR** in their price settings and add the corresponding
-exchange rate. See the [example for USD reports](https://paisa.fyi/reference/commodities/#reporting-in-another-currency).
+MFAPI and FinBodhi's Indian mutual funds, NPS, SIFs, and metals supply
+prices in INR. If your reports use another currency, choose **INR** in
+their price settings and add the corresponding exchange rate. See the
+[example for USD reports](https://paisa.fyi/reference/commodities/#reporting-in-another-currency).
+
+FinBodhi's US stocks and GIFT City funds are quoted in USD. Use **USD**
+as their quote commodity and add an exchange rate if needed.
 
 Your existing transactions, including purchases written as `@ 100 USD`,
 can stay unchanged. Keep any exchange rates already written in your journal.

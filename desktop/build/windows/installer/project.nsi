@@ -59,21 +59,42 @@ VIAddVersionKey "ProductName"     "${INFO_PRODUCTNAME}"
 !insertmacro MUI_PAGE_INSTFILES # Installing page.
 !insertmacro MUI_PAGE_FINISH # Finished installation page.
 
+!ifndef SIGNED_UNINSTALLER
 !insertmacro MUI_UNPAGE_INSTFILES # Uinstalling page
+!endif
 
 !insertmacro MUI_LANGUAGE "English" # Set the Language of the installer
 
-## The following two statements can be used to sign the installer and the uninstaller. The path to the binaries are provided in %1
-#!uninstfinalize 'signtool --file "%1"'
-#!finalize 'signtool --file "%1"'
+# SignPath signs files between builds, not via NSIS's synchronous signing hooks.
+# WRITE_UNINSTALLER builds a helper that only exports uninstall.exe.
+# SIGNED_UNINSTALLER embeds that file after it has been signed.
+!ifdef WRITE_UNINSTALLER
+    !ifdef SIGNED_UNINSTALLER
+        !error "WRITE_UNINSTALLER and SIGNED_UNINSTALLER are mutually exclusive"
+    !endif
+!endif
 
 Name "${INFO_PRODUCTNAME}"
+!ifdef WRITE_UNINSTALLER
+OutFile "..\..\bin\uninstall-writer.exe"
+!else
 OutFile "..\..\bin\${INFO_PROJECTNAME}-${ARCH}-installer.exe" # Name of the installer's file.
+!endif
 InstallDir "$PROGRAMFILES64\${INFO_COMPANYNAME}\${INFO_PRODUCTNAME}" # Default installing folder ($PROGRAMFILES is Program Files folder).
 ShowInstDetails show # This will always show the installation details.
 
 Function .onInit
    !insertmacro wails.checkArchitecture
+!ifdef WRITE_UNINSTALLER
+   ClearErrors
+   WriteUninstaller "${WRITE_UNINSTALLER}"
+   IfErrors writeFailed
+   SetErrorLevel 0
+   Quit
+   writeFailed:
+   SetErrorLevel 1
+   Quit
+!endif
 FunctionEnd
 
 Section
@@ -88,9 +109,27 @@ Section
     CreateShortcut "$SMPROGRAMS\${INFO_PRODUCTNAME}.lnk" "$INSTDIR\${PRODUCT_EXECUTABLE}"
     CreateShortCut "$DESKTOP\${INFO_PRODUCTNAME}.lnk" "$INSTDIR\${PRODUCT_EXECUTABLE}"
 
+!ifdef SIGNED_UNINSTALLER
+    File "/oname=uninstall.exe" "${SIGNED_UNINSTALLER}"
+
+    # Keep these registry entries in sync with wails.writeUninstaller when upgrading Wails.
+    SetRegView 64
+    WriteRegStr HKLM "${UNINST_KEY}" "Publisher" "${INFO_COMPANYNAME}"
+    WriteRegStr HKLM "${UNINST_KEY}" "DisplayName" "${INFO_PRODUCTNAME}"
+    WriteRegStr HKLM "${UNINST_KEY}" "DisplayVersion" "${INFO_PRODUCTVERSION}"
+    WriteRegStr HKLM "${UNINST_KEY}" "DisplayIcon" "$INSTDIR\${PRODUCT_EXECUTABLE}"
+    WriteRegStr HKLM "${UNINST_KEY}" "UninstallString" "$\"$INSTDIR\uninstall.exe$\""
+    WriteRegStr HKLM "${UNINST_KEY}" "QuietUninstallString" "$\"$INSTDIR\uninstall.exe$\" /S"
+
+    ${GetSize} "$INSTDIR" "/S=0K" $0 $1 $2
+    IntFmt $0 "0x%08X" $0
+    WriteRegDWORD HKLM "${UNINST_KEY}" "EstimatedSize" "$0"
+!else
     !insertmacro wails.writeUninstaller
+!endif
 SectionEnd
 
+!ifndef SIGNED_UNINSTALLER
 Section "uninstall" 
     !insertmacro wails.setShellContext
 
@@ -103,3 +142,4 @@ Section "uninstall"
 
     !insertmacro wails.deleteUninstaller
 SectionEnd
+!endif

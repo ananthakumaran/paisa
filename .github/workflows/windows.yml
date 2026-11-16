@@ -6,12 +6,46 @@ on:
       - ci/windows-*
     tags:
       - '*'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+env:
+  SIGNPATH_ORGANIZATION_ID: ${{ vars.SIGNPATH_ORGANIZATION_ID }}
+  # Branches always use the test certificate. Tags also use it until production is enabled.
+  SIGNPATH_SIGNING_POLICY_SLUG: ${{ startsWith(github.ref, 'refs/tags/') && vars.SIGNPATH_SIGNING_POLICY_SLUG || 'test-signing' }}
+
+defaults:
+  run:
+    shell: pwsh
 
 jobs:
   windows-binary:
     runs-on: windows-2022
+    timeout-minutes: 180
+    outputs:
+      signing-policy: ${{ steps.signing.outputs.policy }}
+      artifact-name: ${{ steps.signing.outputs.artifact-name }}
     steps:
     - uses: actions/checkout@v2.4.0
+    - name: Check signing configuration
+      id: signing
+      env:
+        SIGNPATH_API_TOKEN: ${{ secrets.SIGNPATH_API_TOKEN }}
+      run: |
+        if ([string]::IsNullOrWhiteSpace($env:SIGNPATH_ORGANIZATION_ID)) {
+          throw "Set the SIGNPATH_ORGANIZATION_ID repository variable. See .signpath/README.md."
+        }
+        if ([string]::IsNullOrWhiteSpace($env:SIGNPATH_API_TOKEN)) {
+          throw "Set the SIGNPATH_API_TOKEN repository secret for the SignPath CI user."
+        }
+        if ($env:SIGNPATH_SIGNING_POLICY_SLUG -notin @('test-signing', 'release-signing')) {
+          throw "Unsupported signing policy: $env:SIGNPATH_SIGNING_POLICY_SLUG"
+        }
+        "policy=$env:SIGNPATH_SIGNING_POLICY_SLUG" >> $env:GITHUB_OUTPUT
+        "artifact-name=windows-$env:SIGNPATH_SIGNING_POLICY_SLUG" >> $env:GITHUB_OUTPUT
     - uses: actions/setup-node@v3
       with:
         node-version: 24
@@ -19,27 +53,175 @@ jobs:
     - uses: actions/setup-go@v4
       with:
         go-version: '1.26.6'
-    - run: |
-        choco install sqlite
-        choco install wget
-        choco install nsis
+    - name: Install Windows build tools
+      run: |
+        choco install sqlite wget nsis -y --no-progress
+        if ($LASTEXITCODE -ne 0) { throw "Unable to install Windows build tools" }
+        "C:\Program Files (x86)\NSIS" >> $env:GITHUB_PATH
+        "C:\Program Files (x86)\NSIS\Bin" >> $env:GITHUB_PATH
+    - name: Build frontend
+      run: |
         npm install
+        if ($LASTEXITCODE -ne 0) { throw "npm install failed" }
         npm run build
+        if ($LASTEXITCODE -ne 0) { throw "Frontend build failed" }
+    - name: Download embedded Ledger dependency
+      # Third-party Ledger is deliberately not submitted to SignPath.
+      run: |
         wget https://github.com/FullofQuarks/Windows-Ledger-Binaries/releases/download/v3.3.2/ledger.exe
-        cp ledger.exe internal/binary/ledger
+        if ($LASTEXITCODE -ne 0) { throw "Ledger download failed" }
+        Copy-Item ledger.exe internal/binary/ledger
+    - name: Build CLI
+      run: |
         go build
-        cp paisa.exe paisa-cli-windows-amd64.exe
-        $env:PATH += ";C:\Program Files (x86)\NSIS\Bin"
-        cd desktop
+        if ($LASTEXITCODE -ne 0) { throw "CLI build failed" }
+        Copy-Item paisa.exe paisa-cli-windows-amd64.exe
+    - name: Build desktop and prepare NSIS inputs
+      working-directory: desktop
+      run: |
         go install github.com/wailsapp/wails/v2/cmd/wails@latest
+        if ($LASTEXITCODE -ne 0) { throw "Wails installation failed" }
         wails build -tags webkit2_40 -nsis -webview2 embed
-        cd ..
-        cp .\desktop\build\bin\paisa-amd64-installer.exe paisa-app-windows-amd64.exe
+        if ($LASTEXITCODE -ne 0) { throw "Desktop build failed" }
+    - name: Stage executables and generate the uninstaller
+      run: |
+        $binaries = New-Item -ItemType Directory -Force signing-input/binaries
+        Copy-Item paisa-cli-windows-amd64.exe $binaries.FullName
+        Copy-Item desktop/build/bin/Paisa.exe $binaries.FullName
+        $app = (Resolve-Path desktop/build/bin/Paisa.exe).Path
+        $uninstaller = Join-Path $binaries.FullName uninstall.exe
+        Push-Location desktop/build/windows/installer
+        try {
+          makensis "-DARG_WAILS_AMD64_BINARY=$app" "-DWRITE_UNINSTALLER=$uninstaller" project.nsi
+          if ($LASTEXITCODE -ne 0) { throw "Uninstaller writer build failed" }
+        } finally {
+          Pop-Location
+        }
+        # This helper only writes uninstall.exe and exits; it does not install Paisa.
+        $writer = Start-Process -FilePath desktop/build/bin/uninstall-writer.exe -Wait -PassThru
+        if ($writer.ExitCode -ne 0 -or -not (Test-Path $uninstaller)) {
+          throw "Uninstaller generation failed"
+        }
+        Remove-Item desktop/build/bin/uninstall-writer.exe
+    - name: Upload unsigned executables
+      id: unsigned-binaries
+      uses: actions/upload-artifact@v4
+      with:
+        name: windows-unsigned-binaries
+        path: signing-input/binaries/
+        if-no-files-found: error
+        retention-days: 7
+    - name: Sign CLI, desktop application, and uninstaller
+      uses: signpath/github-action-submit-signing-request@f6d04783b4569d051e0c80105fe66e82819d0092 # v3.0
+      with:
+        api-token: ${{ secrets.SIGNPATH_API_TOKEN }}
+        organization-id: ${{ env.SIGNPATH_ORGANIZATION_ID }}
+        project-slug: paisa
+        signing-policy-slug: ${{ env.SIGNPATH_SIGNING_POLICY_SLUG }}
+        artifact-configuration-slug: windows-binaries
+        github-artifact-id: ${{ steps.unsigned-binaries.outputs.artifact-id }}
+        wait-for-completion: true
+        wait-for-completion-timeout-in-seconds: 3600
+        output-artifact-directory: signed/binaries
+    - name: Verify signed executables
+      id: verify-binaries
+      run: |
+        ./.github/scripts/verify-windows-signatures.ps1 -Path @(
+          'signed/binaries/Paisa.exe',
+          'signed/binaries/paisa-cli-windows-amd64.exe',
+          'signed/binaries/uninstall.exe'
+        ) -SigningPolicy $env:SIGNPATH_SIGNING_POLICY_SLUG
+    - name: Rebuild installer with signed application and uninstaller
+      run: |
+        $app = (Resolve-Path signed/binaries/Paisa.exe).Path
+        $uninstaller = (Resolve-Path signed/binaries/uninstall.exe).Path
+        Push-Location desktop/build/windows/installer
+        try {
+          makensis "-DARG_WAILS_AMD64_BINARY=$app" "-DSIGNED_UNINSTALLER=$uninstaller" project.nsi
+          if ($LASTEXITCODE -ne 0) { throw "Signed payload packaging failed" }
+        } finally {
+          Pop-Location
+        }
+        New-Item -ItemType Directory -Force signing-input/installer | Out-Null
+        Copy-Item desktop/build/bin/Paisa-amd64-installer.exe signing-input/installer/paisa-app-windows-amd64.exe
+    - name: Upload unsigned installer
+      id: unsigned-installer
+      uses: actions/upload-artifact@v4
+      with:
+        name: windows-unsigned-installer
+        path: signing-input/installer/
+        if-no-files-found: error
+        retention-days: 7
+    - name: Sign installer
+      uses: signpath/github-action-submit-signing-request@f6d04783b4569d051e0c80105fe66e82819d0092 # v3.0
+      with:
+        api-token: ${{ secrets.SIGNPATH_API_TOKEN }}
+        organization-id: ${{ env.SIGNPATH_ORGANIZATION_ID }}
+        project-slug: paisa
+        signing-policy-slug: ${{ env.SIGNPATH_SIGNING_POLICY_SLUG }}
+        artifact-configuration-slug: windows-installer
+        github-artifact-id: ${{ steps.unsigned-installer.outputs.artifact-id }}
+        wait-for-completion: true
+        wait-for-completion-timeout-in-seconds: 3600
+        output-artifact-directory: signed/installer
+    - name: Verify signed installer
+      run: |
+        ./.github/scripts/verify-windows-signatures.ps1 -Path signed/installer/paisa-app-windows-amd64.exe -SigningPolicy $env:SIGNPATH_SIGNING_POLICY_SLUG -ExpectedThumbprint '${{ steps.verify-binaries.outputs.certificate-thumbprint }}'
+    - name: Smoke-test installation and uninstallation
+      run: |
+        $installer = (Resolve-Path signed/installer/paisa-app-windows-amd64.exe).Path
+        $installDir = Join-Path $env:RUNNER_TEMP 'Paisa signing smoke'
+        if (Test-Path $installDir) { throw "Smoke-test directory already exists" }
+        # NSIS requires /D to be last, with no quotes around the path.
+        $process = Start-Process -FilePath $installer -ArgumentList "/S /D=$installDir" -Wait -PassThru
+        if ($process.ExitCode -ne 0) { throw "Installation failed: $($process.ExitCode)" }
+        ./.github/scripts/verify-windows-signatures.ps1 -Path @(
+          "$installDir/Paisa.exe",
+          "$installDir/uninstall.exe"
+        ) -SigningPolicy $env:SIGNPATH_SIGNING_POLICY_SLUG -ExpectedThumbprint '${{ steps.verify-binaries.outputs.certificate-thumbprint }}'
+        foreach ($file in @('Paisa.exe', 'uninstall.exe')) {
+          if ((Get-FileHash "$installDir/$file").Hash -ne (Get-FileHash "signed/binaries/$file").Hash) {
+            throw "Installer changed the signed payload: $file"
+          }
+        }
+        $process = Start-Process -FilePath "$installDir/uninstall.exe" -ArgumentList /S -Wait -PassThru
+        if ($process.ExitCode -ne 0) { throw "Uninstallation failed: $($process.ExitCode)" }
+        # NSIS may launch a temporary uninstaller process; wait for its cleanup.
+        for ($attempt = 0; $attempt -lt 60 -and (Test-Path $installDir); $attempt++) {
+          Start-Sleep -Milliseconds 500
+        }
+        if (Test-Path $installDir) { throw "Uninstaller did not remove the installation" }
+    - name: Upload signed Windows artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ steps.signing.outputs.artifact-name }}
+        path: signed/
+        if-no-files-found: error
+        retention-days: 14
+
+  release:
+    needs: windows-binary
+    # Keep branch and tag builds available for testing without publishing them.
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      actions: read
+    steps:
+    - uses: actions/download-artifact@v4
+      with:
+        name: ${{ needs.windows-binary.outputs.artifact-name }}
+        path: signed
     - name: Release
       uses: softprops/action-gh-release@v1
       with:
         draft: true
+        tag_name: ${{ github.ref_name }}
+        target_commitish: ${{ github.sha }}
+        name: ${{ github.ref_name }} (${{ needs.windows-binary.outputs.signing-policy }})
+        body: ${{ needs.windows-binary.outputs.signing-policy == 'test-signing' && 'Test-signed Windows build. The self-signed certificate is not publicly trusted.' || 'Windows binaries signed via SignPath Foundation.' }}
+        fail_on_unmatched_files: true
         files: |
-          paisa-*
+          signed/binaries/paisa-cli-windows-amd64.exe
+          signed/installer/paisa-app-windows-amd64.exe
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

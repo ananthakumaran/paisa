@@ -3,6 +3,7 @@ import { spawn } from "node:child_process";
 import { once } from "node:events";
 import path from "path";
 import { describe, test } from "node:test";
+import { DatabaseSync } from "node:sqlite";
 import waitPort from "wait-port";
 import fs from "fs";
 import axios from "axios";
@@ -47,6 +48,17 @@ async function verifyApi(dir: string) {
   const {
     data: { config }
   } = await axios.get("/api/config");
+
+  const seed = path.join(dir, "seed.sql");
+  if (fs.existsSync(seed)) {
+    const db = new DatabaseSync(path.resolve(dir, config.db_path));
+    try {
+      db.exec(fs.readFileSync(seed, "utf8"));
+    } finally {
+      db.close();
+    }
+  }
+
   const extension = path.extname(config.journal_path);
   for (const name of ["expenses", "expenses.txt"]) {
     const { data } = await axios.post("/api/editor/save", {
@@ -68,6 +80,7 @@ async function verifyApi(dir: string) {
   await recordAndVerify(dir, "/api/networth", "networth");
   await recordAndVerify(dir, "/api/investment", "investment");
   await recordAndVerify(dir, "/api/gain", "gain");
+  await recordAndVerify(dir, "/api/capital_gains", "capital_gains");
   await recordAndVerify(dir, "/api/allocation", "allocation");
   await recordAndVerify(dir, "/api/liabilities/balance", "liabilities_balance");
   await recordAndVerify(dir, "/api/liabilities/repayment", "liabilities_repayment");

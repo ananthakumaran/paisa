@@ -207,6 +207,7 @@
               "enum": [
                 "",
                 "debt",
+                "listed_debt",
                 "equity",
                 "equity65",
                 "equity35",

@@ -1,0 +1,142 @@
+{
+  "yearly": {
+    "2016 - 17": {
+      "startingBalance": 0,
+      "endingBalance": 0,
+      "date": "2016-04-01T00:00:00Z",
+      "income": {},
+      "interest": {},
+      "equity": {},
+      "pnl": {},
+      "liabilities": {},
+      "tax": {},
+      "expenses": {}
+    },
+    "2017 - 18": {
+      "startingBalance": 0,
+      "endingBalance": 400,
+      "date": "2017-04-01T00:00:00Z",
+      "income": {},
+      "interest": {},
+      "equity": {},
+      "pnl": {
+        "Assets:Equity:ABOVEFMV": 70,
+        "Assets:Equity:ACTUALLOSS": 70,
+        "Assets:Equity:APRILSHORT": 70,
+        "Assets:Equity:BELOWFMV": 70,
+        "Assets:Equity:MARCHLONG": 100,
+        "Assets:Equity:MARCHSHORT": 20
+      },
+      "liabilities": {},
+      "tax": {},
+      "expenses": {}
+    },
+    "2018 - 19": {
+      "startingBalance": 400,
+      "endingBalance": 240,
+      "date": "2018-04-01T00:00:00Z",
+      "income": {},
+      "interest": {},
+      "equity": {},
+      "pnl": {
+        "Assets:Equity:ABOVEFMV": 30,
+        "Assets:Equity:ACTUALLOSS": -90,
+        "Assets:Equity:APRILSHORT": -50,
+        "Assets:Equity:BELOWFMV": -50
+      },
+      "liabilities": {},
+      "tax": {},
+      "expenses": {}
+    },
+    "2021 - 22": {
+      "startingBalance": 240,
+      "endingBalance": 240,
+      "date": "2021-04-01T00:00:00Z",
+      "income": {},
+      "interest": {},
+      "equity": {},
+      "pnl": {},
+      "liabilities": {},
+      "tax": {},
+      "expenses": {}
+    },
+    "2022 - 23": {
+      "startingBalance": 240,
+      "endingBalance": 240,
+      "date": "2022-04-01T00:00:00Z",
+      "income": {},
+      "interest": {},
+      "equity": {},
+      "pnl": {},
+      "liabilities": {},
+      "tax": {},
+      "expenses": {}
+    },
+    "2023 - 24": {
+      "startingBalance": 240,
+      "endingBalance": 240,
+      "date": "2023-04-01T00:00:00Z",
+      "income": {},
+      "interest": {},
+      "equity": {},
+      "pnl": {},
+      "liabilities": {},
+      "tax": {},
+      "expenses": {}
+    },
+    "2024 - 25": {
+      "startingBalance": 240,
+      "endingBalance": 63440,
+      "date": "2024-04-01T00:00:00Z",
+      "income": {},
+      "interest": {},
+      "equity": {},
+      "pnl": {
+        "Assets:Debt:DEBTINDEXED": 8300,
+        "Assets:Debt:DEBTTHREEYEARS": 8300,
+        "Assets:Debt:DEBTTWOYEARS": 6900,
+        "Assets:Debt:DEBTUNINDEXED": 8300,
+        "Assets:Debt:DEBTUNLISTED": 100,
+        "Assets:Debt:LIQUIDBEES": 100,
+        "Assets:Equity:FUNDJULYAFTER": 200,
+        "Assets:Equity:FUNDJULYBEFORE": 200,
+        "Assets:Equity:STOCKJULYAFTER": 200,
+        "Assets:Equity:STOCKJULYBEFORE": 200,
+        "Assets:Equity:UNLISTED": 13800,
+        "Assets:Hybrid:HYBRID": 16600
+      },
+      "liabilities": {},
+      "tax": {},
+      "expenses": {}
+    },
+    "2025 - 26": {
+      "startingBalance": 63440,
+      "endingBalance": 83440,
+      "date": "2025-04-01T00:00:00Z",
+      "income": {},
+      "interest": {},
+      "equity": {},
+      "pnl": {
+        "Assets:Debt:DEBTAPRIL": 10000,
+        "Assets:Debt:DEBTMARCH": 10000
+      },
+      "liabilities": {},
+      "tax": {},
+      "expenses": {}
+    },
+    "2026 - 27": {
+      "startingBalance": 83440,
+      "endingBalance": 93440,
+      "date": "2026-04-01T00:00:00Z",
+      "income": {},
+      "interest": {},
+      "equity": {},
+      "pnl": {
+        "Assets:Debt:DEBTAPRILLONG": 10000
+      },
+      "liabilities": {},
+      "tax": {},
+      "expenses": {}
+    }
+  }
+}

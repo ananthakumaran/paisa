@@ -1,0 +1,10 @@
+{
+  "issues": [
+    {
+      "level": "danger",
+      "summary": "Negative Balance",
+      "description": "The running balance of an <b>asset</b> account is not supposed to go negative at any time. This issue typically happens due to incorrect transaction entries.",
+      "details": "<b>Assets:Cash</b> account went negative (-400.00) on 01 Mar 2017"
+    }
+  ]
+}

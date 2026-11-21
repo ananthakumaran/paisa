@@ -14,31 +14,32 @@ harvesting.
    eligible for tax harvesting. This should be set based on fund exit
    load, fund category etc
 
-2. tax_category - This defines how the taxes are calculated as the
-   government usually tweaks the tax code regularly with various rules
-   like grandfathering, cost inflation index adjustment, etc.
+2. tax_category - Choose the category that matches your investment below.
 
-    1. `equity65` - This is for 65% or more investment in Indian
-       equity.
+## Tax categories
 
-    2. `equity35` - This if for 35% or more investment in India equity
-       but less than 65%
-
-    3. `debt` - This is for debt funds.
-
-    4. `unlisted_equity` - This is for unlisted foreign on Indian equity.
-
+| `tax_category` | Use it for |
+| --- | --- |
+| `equity65` | Stocks traded on an Indian exchange and equity mutual funds, such as Nifty 50 index funds and NIFTYBEES. |
+| `equity35` | Hybrid mutual funds that don’t qualify as equity or debt funds, such as a 40% equity / 60% debt fund. |
+| `debt` | Debt mutual funds that don’t trade on a stock exchange. |
+| `listed_debt` | Debt funds that trade on an Indian stock exchange, such as LIQUIDBEES. |
+| `unlisted_equity` | Company shares that don’t trade on an Indian stock exchange. |
 
 ```yaml
 commodities:
   - name: NIFTY
     type: mutualfund
-    code: 120716
+    price:
+      provider: in-mfapi
+      code: 120716
     harvest: 365
     tax_category: equity65
   - name: ABSTF
     type: mutualfund
-    code: 119533
+    price:
+      provider: in-mfapi
+      code: 119533
     harvest: 1095
     tax_category: debt
 ```

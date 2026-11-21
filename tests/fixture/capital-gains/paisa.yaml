@@ -1,0 +1,132 @@
+journal_path: main.ledger
+db_path: paisa.db
+ledger_cli: ledger
+default_currency: INR
+financial_year_starting_month: 4
+commodities:
+  - name: MARCHLONG
+    type: stock
+    tax_category: equity
+    price:
+      provider: com-yahoo
+      code: MARCHLONG
+  - name: MARCHSHORT
+    type: stock
+    tax_category: equity
+    price:
+      provider: com-yahoo
+      code: MARCHSHORT
+  - name: ABOVEFMV
+    type: mutualfund
+    tax_category: equity65
+    price:
+      provider: in-mfapi
+      code: ABOVEFMV
+  - name: BELOWFMV
+    type: stock
+    tax_category: equity
+    price:
+      provider: com-yahoo
+      code: BELOWFMV
+  - name: ACTUALLOSS
+    type: stock
+    tax_category: equity
+    price:
+      provider: com-yahoo
+      code: ACTUALLOSS
+  - name: APRILSHORT
+    type: stock
+    tax_category: equity
+    price:
+      provider: com-yahoo
+      code: APRILSHORT
+  - name: DEBTINDEXED
+    type: mutualfund
+    tax_category: debt
+    price:
+      provider: in-mfapi
+      code: DEBTINDEXED
+  - name: DEBTUNINDEXED
+    type: mutualfund
+    tax_category: debt
+    price:
+      provider: in-mfapi
+      code: DEBTUNINDEXED
+  - name: DEBTMARCH
+    type: mutualfund
+    tax_category: debt
+    price:
+      provider: in-mfapi
+      code: DEBTMARCH
+  - name: DEBTAPRIL
+    type: mutualfund
+    tax_category: debt
+    price:
+      provider: in-mfapi
+      code: DEBTAPRIL
+  - name: DEBTAPRILLONG
+    type: mutualfund
+    tax_category: debt
+    price:
+      provider: in-mfapi
+      code: DEBTAPRILLONG
+  - name: DEBTTHREEYEARS
+    type: mutualfund
+    tax_category: debt
+    price:
+      provider: in-mfapi
+      code: DEBTTHREEYEARS
+  - name: DEBTTWOYEARS
+    type: mutualfund
+    tax_category: debt
+    price:
+      provider: in-mfapi
+      code: DEBTTWOYEARS
+  - name: HYBRID
+    type: mutualfund
+    tax_category: equity35
+    price:
+      provider: in-mfapi
+      code: HYBRID
+  - name: UNLISTED
+    type: stock
+    tax_category: unlisted_equity
+    price:
+      provider: com-yahoo
+      code: UNLISTED
+  - name: STOCKJULYBEFORE
+    type: stock
+    tax_category: equity
+    price:
+      provider: com-yahoo
+      code: STOCKJULYBEFORE
+  - name: STOCKJULYAFTER
+    type: stock
+    tax_category: equity
+    price:
+      provider: com-yahoo
+      code: STOCKJULYAFTER
+  - name: FUNDJULYBEFORE
+    type: mutualfund
+    tax_category: equity65
+    price:
+      provider: in-mfapi
+      code: FUNDJULYBEFORE
+  - name: FUNDJULYAFTER
+    type: mutualfund
+    tax_category: equity65
+    price:
+      provider: in-mfapi
+      code: FUNDJULYAFTER
+  - name: LIQUIDBEES
+    type: mutualfund
+    tax_category: listed_debt
+    price:
+      provider: com-yahoo
+      code: LIQUIDBEES.NS
+  - name: DEBTUNLISTED
+    type: mutualfund
+    tax_category: debt
+    price:
+      provider: in-mfapi
+      code: DEBTUNLISTED

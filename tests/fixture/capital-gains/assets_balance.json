@@ -1,0 +1,290 @@
+{
+  "asset_breakdowns": {
+    "Assets": {
+      "group": "Assets",
+      "investmentAmount": 672240,
+      "withdrawalAmount": 672240,
+      "marketAmount": 41740,
+      "balanceUnits": 0,
+      "latestPrice": 0,
+      "xirr": 178570967542.36,
+      "gainAmount": 41740,
+      "absoluteReturn": 0.0620909199095561
+    },
+    "Assets:Cash": {
+      "group": "Assets:Cash",
+      "investmentAmount": 382840,
+      "withdrawalAmount": 289400,
+      "marketAmount": 93440,
+      "balanceUnits": 0,
+      "latestPrice": 0,
+      "xirr": 0,
+      "gainAmount": 0,
+      "absoluteReturn": 0
+    },
+    "Assets:Debt": {
+      "group": "Assets:Debt",
+      "investmentAmount": 158400,
+      "withdrawalAmount": 220400,
+      "marketAmount": -37100,
+      "balanceUnits": 0,
+      "latestPrice": 0,
+      "xirr": 4.42,
+      "gainAmount": 24900,
+      "absoluteReturn": 0.1571969696969697
+    },
+    "Assets:Debt:DEBTAPRIL": {
+      "group": "Assets:Debt:DEBTAPRIL",
+      "investmentAmount": 10000,
+      "withdrawalAmount": 20000,
+      "marketAmount": -10000,
+      "balanceUnits": 0,
+      "latestPrice": 0,
+      "xirr": 0,
+      "gainAmount": 0,
+      "absoluteReturn": 0
+    },
+    "Assets:Debt:DEBTAPRILLONG": {
+      "group": "Assets:Debt:DEBTAPRILLONG",
+      "investmentAmount": 10000,
+      "withdrawalAmount": 20000,
+      "marketAmount": -10000,
+      "balanceUnits": 0,
+      "latestPrice": 0,
+      "xirr": 0,
+      "gainAmount": 0,
+      "absoluteReturn": 0
+    },
+    "Assets:Debt:DEBTINDEXED": {
+      "group": "Assets:Debt:DEBTINDEXED",
+      "investmentAmount": 31700,
+      "withdrawalAmount": 40000,
+      "marketAmount": 0,
+      "balanceUnits": 0,
+      "latestPrice": 0,
+      "xirr": 7.9,
+      "gainAmount": 8300,
+      "absoluteReturn": 0.2618296529968454
+    },
+    "Assets:Debt:DEBTMARCH": {
+      "group": "Assets:Debt:DEBTMARCH",
+      "investmentAmount": 10000,
+      "withdrawalAmount": 20000,
+      "marketAmount": -10000,
+      "balanceUnits": 0,
+      "latestPrice": 0,
+      "xirr": 0,
+      "gainAmount": 0,
+      "absoluteReturn": 0
+    },
+    "Assets:Debt:DEBTTHREEYEARS": {
+      "group": "Assets:Debt:DEBTTHREEYEARS",
+      "investmentAmount": 31700,
+      "withdrawalAmount": 40000,
+      "marketAmount": 0,
+      "balanceUnits": 0,
+      "latestPrice": 0,
+      "xirr": 8.05,
+      "gainAmount": 8300,
+      "absoluteReturn": 0.2618296529968454
+    },
+    "Assets:Debt:DEBTTWOYEARS": {
+      "group": "Assets:Debt:DEBTTWOYEARS",
+      "investmentAmount": 33100,
+      "withdrawalAmount": 40000,
+      "marketAmount": -6900,
+      "balanceUnits": 0,
+      "latestPrice": 0,
+      "xirr": 0,
+      "gainAmount": 0,
+      "absoluteReturn": 0
+    },
+    "Assets:Debt:DEBTUNINDEXED": {
+      "group": "Assets:Debt:DEBTUNINDEXED",
+      "investmentAmount": 31700,
+      "withdrawalAmount": 40000,
+      "marketAmount": 0,
+      "balanceUnits": 0,
+      "latestPrice": 0,
+      "xirr": 7.89,
+      "gainAmount": 8300,
+      "absoluteReturn": 0.2618296529968454
+    },
+    "Assets:Debt:DEBTUNLISTED": {
+      "group": "Assets:Debt:DEBTUNLISTED",
+      "investmentAmount": 100,
+      "withdrawalAmount": 200,
+      "marketAmount": -100,
+      "balanceUnits": 0,
+      "latestPrice": 0,
+      "xirr": 0,
+      "gainAmount": 0,
+      "absoluteReturn": 0
+    },
+    "Assets:Debt:LIQUIDBEES": {
+      "group": "Assets:Debt:LIQUIDBEES",
+      "investmentAmount": 100,
+      "withdrawalAmount": 200,
+      "marketAmount": -100,
+      "balanceUnits": 0,
+      "latestPrice": 0,
+      "xirr": 0,
+      "gainAmount": 0,
+      "absoluteReturn": 0
+    },
+    "Assets:Equity": {
+      "group": "Assets:Equity",
+      "investmentAmount": 67600,
+      "withdrawalAmount": 82440,
+      "marketAmount": -14600,
+      "balanceUnits": 0,
+      "latestPrice": 0,
+      "xirr": 0.14,
+      "gainAmount": 240,
+      "absoluteReturn": 0.0035502958579882
+    },
+    "Assets:Equity:ABOVEFMV": {
+      "group": "Assets:Equity:ABOVEFMV",
+      "investmentAmount": 100,
+      "withdrawalAmount": 200,
+      "marketAmount": 0,
+      "balanceUnits": 0,
+      "latestPrice": 0,
+      "xirr": 89.44,
+      "gainAmount": 100,
+      "absoluteReturn": 1
+    },
+    "Assets:Equity:ACTUALLOSS": {
+      "group": "Assets:Equity:ACTUALLOSS",
+      "investmentAmount": 100,
+      "withdrawalAmount": 80,
+      "marketAmount": 0,
+      "balanceUnits": 0,
+      "latestPrice": 0,
+      "xirr": -18.59,
+      "gainAmount": -20,
+      "absoluteReturn": -0.2
+    },
+    "Assets:Equity:APRILSHORT": {
+      "group": "Assets:Equity:APRILSHORT",
+      "investmentAmount": 100,
+      "withdrawalAmount": 120,
+      "marketAmount": 0,
+      "balanceUnits": 0,
+      "latestPrice": 0,
+      "xirr": 21.98,
+      "gainAmount": 20,
+      "absoluteReturn": 0.2
+    },
+    "Assets:Equity:BELOWFMV": {
+      "group": "Assets:Equity:BELOWFMV",
+      "investmentAmount": 100,
+      "withdrawalAmount": 120,
+      "marketAmount": 0,
+      "balanceUnits": 0,
+      "latestPrice": 0,
+      "xirr": 18.3,
+      "gainAmount": 20,
+      "absoluteReturn": 0.2
+    },
+    "Assets:Equity:FUNDJULYAFTER": {
+      "group": "Assets:Equity:FUNDJULYAFTER",
+      "investmentAmount": 200,
+      "withdrawalAmount": 400,
+      "marketAmount": -200,
+      "balanceUnits": 0,
+      "latestPrice": 0,
+      "xirr": 0,
+      "gainAmount": 0,
+      "absoluteReturn": 0
+    },
+    "Assets:Equity:FUNDJULYBEFORE": {
+      "group": "Assets:Equity:FUNDJULYBEFORE",
+      "investmentAmount": 200,
+      "withdrawalAmount": 400,
+      "marketAmount": -200,
+      "balanceUnits": 0,
+      "latestPrice": 0,
+      "xirr": 0,
+      "gainAmount": 0,
+      "absoluteReturn": 0
+    },
+    "Assets:Equity:MARCHLONG": {
+      "group": "Assets:Equity:MARCHLONG",
+      "investmentAmount": 100,
+      "withdrawalAmount": 200,
+      "marketAmount": 0,
+      "balanceUnits": 0,
+      "latestPrice": 0,
+      "xirr": 89.74,
+      "gainAmount": 100,
+      "absoluteReturn": 1
+    },
+    "Assets:Equity:MARCHSHORT": {
+      "group": "Assets:Equity:MARCHSHORT",
+      "investmentAmount": 100,
+      "withdrawalAmount": 120,
+      "marketAmount": 0,
+      "balanceUnits": 0,
+      "latestPrice": 0,
+      "xirr": 22.05,
+      "gainAmount": 20,
+      "absoluteReturn": 0.2
+    },
+    "Assets:Equity:STOCKJULYAFTER": {
+      "group": "Assets:Equity:STOCKJULYAFTER",
+      "investmentAmount": 200,
+      "withdrawalAmount": 400,
+      "marketAmount": -200,
+      "balanceUnits": 0,
+      "latestPrice": 0,
+      "xirr": 0,
+      "gainAmount": 0,
+      "absoluteReturn": 0
+    },
+    "Assets:Equity:STOCKJULYBEFORE": {
+      "group": "Assets:Equity:STOCKJULYBEFORE",
+      "investmentAmount": 200,
+      "withdrawalAmount": 400,
+      "marketAmount": -200,
+      "balanceUnits": 0,
+      "latestPrice": 0,
+      "xirr": 0,
+      "gainAmount": 0,
+      "absoluteReturn": 0
+    },
+    "Assets:Equity:UNLISTED": {
+      "group": "Assets:Equity:UNLISTED",
+      "investmentAmount": 66200,
+      "withdrawalAmount": 80000,
+      "marketAmount": -13800,
+      "balanceUnits": 0,
+      "latestPrice": 0,
+      "xirr": 0,
+      "gainAmount": 0,
+      "absoluteReturn": 0
+    },
+    "Assets:Hybrid": {
+      "group": "Assets:Hybrid",
+      "investmentAmount": 63400,
+      "withdrawalAmount": 80000,
+      "marketAmount": 0,
+      "balanceUnits": 0,
+      "latestPrice": 0,
+      "xirr": 7.89,
+      "gainAmount": 16600,
+      "absoluteReturn": 0.2618296529968454
+    },
+    "Assets:Hybrid:HYBRID": {
+      "group": "Assets:Hybrid:HYBRID",
+      "investmentAmount": 63400,
+      "withdrawalAmount": 80000,
+      "marketAmount": 0,
+      "balanceUnits": 0,
+      "latestPrice": 0,
+      "xirr": 7.89,
+      "gainAmount": 16600,
+      "absoluteReturn": 0.2618296529968454
+    }
+  }
+}

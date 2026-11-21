@@ -1,0 +1,54 @@
+{
+  "income_timeline": [],
+  "tax_timeline": [],
+  "yearly_cards": [
+    {
+      "start_date": "2016-04-01T00:00:00Z",
+      "end_date": "2017-03-31T23:59:59.999999999Z",
+      "postings": [],
+      "gross_income": 0,
+      "net_tax": 0,
+      "net_income": 0
+    },
+    {
+      "start_date": "2017-04-01T00:00:00Z",
+      "end_date": "2018-03-31T23:59:59.999999999Z",
+      "postings": [],
+      "gross_income": 0,
+      "net_tax": 0,
+      "net_income": 0
+    },
+    {
+      "start_date": "2018-04-01T00:00:00Z",
+      "end_date": "2019-03-31T23:59:59.999999999Z",
+      "postings": [],
+      "gross_income": 0,
+      "net_tax": 0,
+      "net_income": 0
+    },
+    {
+      "start_date": "2019-04-01T00:00:00Z",
+      "end_date": "2020-03-31T23:59:59.999999999Z",
+      "postings": [],
+      "gross_income": 0,
+      "net_tax": 0,
+      "net_income": 0
+    },
+    {
+      "start_date": "2020-04-01T00:00:00Z",
+      "end_date": "2021-03-31T23:59:59.999999999Z",
+      "postings": [],
+      "gross_income": 0,
+      "net_tax": 0,
+      "net_income": 0
+    },
+    {
+      "start_date": "2021-04-01T00:00:00Z",
+      "end_date": "2022-03-31T23:59:59.999999999Z",
+      "postings": [],
+      "gross_income": 0,
+      "net_tax": 0,
+      "net_income": 0
+    }
+  ]
+}

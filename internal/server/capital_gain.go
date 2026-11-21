@@ -35,8 +35,15 @@ type CapitalGain struct {
 
 func GetCapitalGains(db *gorm.DB) gin.H {
 	commodities := lo.Filter(c.All(), func(c config.Commodity, _ int) bool {
-		return (c.Type == config.MutualFund || c.Type == config.Stock) &&
-			(c.TaxCategory == config.Debt || c.TaxCategory == config.Equity || c.TaxCategory == config.Equity65 || c.TaxCategory == config.Equity35 || c.TaxCategory == config.UnlistedEquity)
+		if c.Type != config.MutualFund && c.Type != config.Stock {
+			return false
+		}
+		switch c.TaxCategory {
+		case config.Debt, config.ListedDebt, config.Equity, config.Equity65, config.Equity35, config.UnlistedEquity:
+			return true
+		default:
+			return false
+		}
 	})
 	postings := query.Init(db).Like("Assets:%").Commodities(commodities).All()
 	byAccount := lo.GroupBy(postings, func(p posting.Posting) string { return p.Account })

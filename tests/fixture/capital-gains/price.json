@@ -1,0 +1,526 @@
+{
+  "prices": {
+    "ABOVEFMV": [
+      {
+        "id": 634,
+        "date": "2018-04-01T00:00:00Z",
+        "commodity_type": "unknown",
+        "commodity_id": "ABOVEFMV",
+        "commodity_name": "ABOVEFMV",
+        "value": 200
+      },
+      {
+        "id": 633,
+        "date": "2018-02-01T00:00:00Z",
+        "commodity_type": "unknown",
+        "commodity_id": "ABOVEFMV",
+        "commodity_name": "ABOVEFMV",
+        "value": 170
+      },
+      {
+        "id": 632,
+        "date": "2018-01-31T00:00:00Z",
+        "commodity_type": "unknown",
+        "commodity_id": "ABOVEFMV",
+        "commodity_name": "ABOVEFMV",
+        "value": 150
+      },
+      {
+        "id": 631,
+        "date": "2017-03-01T00:00:00Z",
+        "commodity_type": "unknown",
+        "commodity_id": "ABOVEFMV",
+        "commodity_name": "ABOVEFMV",
+        "value": 100
+      }
+    ],
+    "ACTUALLOSS": [
+      {
+        "id": 638,
+        "date": "2018-04-01T00:00:00Z",
+        "commodity_type": "unknown",
+        "commodity_id": "ACTUALLOSS",
+        "commodity_name": "ACTUALLOSS",
+        "value": 80
+      },
+      {
+        "id": 637,
+        "date": "2018-02-01T00:00:00Z",
+        "commodity_type": "unknown",
+        "commodity_id": "ACTUALLOSS",
+        "commodity_name": "ACTUALLOSS",
+        "value": 170
+      },
+      {
+        "id": 636,
+        "date": "2018-01-31T00:00:00Z",
+        "commodity_type": "unknown",
+        "commodity_id": "ACTUALLOSS",
+        "commodity_name": "ACTUALLOSS",
+        "value": 150
+      },
+      {
+        "id": 635,
+        "date": "2017-03-01T00:00:00Z",
+        "commodity_type": "unknown",
+        "commodity_id": "ACTUALLOSS",
+        "commodity_name": "ACTUALLOSS",
+        "value": 100
+      }
+    ],
+    "APRILSHORT": [
+      {
+        "id": 650,
+        "date": "2018-04-01T00:00:00Z",
+        "commodity_type": "unknown",
+        "commodity_id": "APRILSHORT",
+        "commodity_name": "APRILSHORT",
+        "value": 120
+      },
+      {
+        "id": 649,
+        "date": "2018-02-01T00:00:00Z",
+        "commodity_type": "unknown",
+        "commodity_id": "APRILSHORT",
+        "commodity_name": "APRILSHORT",
+        "value": 170
+      },
+      {
+        "id": 648,
+        "date": "2018-01-31T00:00:00Z",
+        "commodity_type": "unknown",
+        "commodity_id": "APRILSHORT",
+        "commodity_name": "APRILSHORT",
+        "value": 150
+      },
+      {
+        "id": 647,
+        "date": "2017-05-01T00:00:00Z",
+        "commodity_type": "unknown",
+        "commodity_id": "APRILSHORT",
+        "commodity_name": "APRILSHORT",
+        "value": 100
+      }
+    ],
+    "BELOWFMV": [
+      {
+        "id": 642,
+        "date": "2018-04-01T00:00:00Z",
+        "commodity_type": "unknown",
+        "commodity_id": "BELOWFMV",
+        "commodity_name": "BELOWFMV",
+        "value": 120
+      },
+      {
+        "id": 641,
+        "date": "2018-02-01T00:00:00Z",
+        "commodity_type": "unknown",
+        "commodity_id": "BELOWFMV",
+        "commodity_name": "BELOWFMV",
+        "value": 170
+      },
+      {
+        "id": 640,
+        "date": "2018-01-31T00:00:00Z",
+        "commodity_type": "unknown",
+        "commodity_id": "BELOWFMV",
+        "commodity_name": "BELOWFMV",
+        "value": 150
+      },
+      {
+        "id": 639,
+        "date": "2017-03-01T00:00:00Z",
+        "commodity_type": "unknown",
+        "commodity_id": "BELOWFMV",
+        "commodity_name": "BELOWFMV",
+        "value": 100
+      }
+    ],
+    "DEBTAPRIL": [
+      {
+        "id": 676,
+        "date": "2025-04-02T00:00:00Z",
+        "commodity_type": "unknown",
+        "commodity_id": "DEBTAPRIL",
+        "commodity_name": "DEBTAPRIL",
+        "value": 20000
+      },
+      {
+        "id": 675,
+        "date": "2023-04-01T00:00:00Z",
+        "commodity_type": "unknown",
+        "commodity_id": "DEBTAPRIL",
+        "commodity_name": "DEBTAPRIL",
+        "value": 10000
+      }
+    ],
+    "DEBTAPRILLONG": [
+      {
+        "id": 678,
+        "date": "2026-04-02T00:00:00Z",
+        "commodity_type": "unknown",
+        "commodity_id": "DEBTAPRILLONG",
+        "commodity_name": "DEBTAPRILLONG",
+        "value": 20000
+      },
+      {
+        "id": 677,
+        "date": "2023-04-01T00:00:00Z",
+        "commodity_type": "unknown",
+        "commodity_id": "DEBTAPRILLONG",
+        "commodity_name": "DEBTAPRILLONG",
+        "value": 10000
+      }
+    ],
+    "DEBTINDEXED": [
+      {
+        "id": 656,
+        "date": "2024-07-22T00:00:00Z",
+        "commodity_type": "unknown",
+        "commodity_id": "DEBTINDEXED",
+        "commodity_name": "DEBTINDEXED",
+        "value": 40000
+      },
+      {
+        "id": 655,
+        "date": "2021-07-01T00:00:00Z",
+        "commodity_type": "unknown",
+        "commodity_id": "DEBTINDEXED",
+        "commodity_name": "DEBTINDEXED",
+        "value": 31700
+      }
+    ],
+    "DEBTMARCH": [
+      {
+        "id": 670,
+        "date": "2025-04-02T00:00:00Z",
+        "commodity_type": "unknown",
+        "commodity_id": "DEBTMARCH",
+        "commodity_name": "DEBTMARCH",
+        "value": 20000
+      },
+      {
+        "id": 669,
+        "date": "2023-03-31T00:00:00Z",
+        "commodity_type": "unknown",
+        "commodity_id": "DEBTMARCH",
+        "commodity_name": "DEBTMARCH",
+        "value": 10000
+      }
+    ],
+    "DEBTTHREEYEARS": [
+      {
+        "id": 663,
+        "date": "2024-07-22T00:00:00Z",
+        "commodity_type": "unknown",
+        "commodity_id": "DEBTTHREEYEARS",
+        "commodity_name": "DEBTTHREEYEARS",
+        "value": 40000
+      },
+      {
+        "id": 662,
+        "date": "2021-07-22T00:00:00Z",
+        "commodity_type": "unknown",
+        "commodity_id": "DEBTTHREEYEARS",
+        "commodity_name": "DEBTTHREEYEARS",
+        "value": 31700
+      }
+    ],
+    "DEBTTWOYEARS": [
+      {
+        "id": 668,
+        "date": "2024-07-23T00:00:00Z",
+        "commodity_type": "unknown",
+        "commodity_id": "DEBTTWOYEARS",
+        "commodity_name": "DEBTTWOYEARS",
+        "value": 40000
+      },
+      {
+        "id": 667,
+        "date": "2022-07-23T00:00:00Z",
+        "commodity_type": "unknown",
+        "commodity_id": "DEBTTWOYEARS",
+        "commodity_name": "DEBTTWOYEARS",
+        "value": 33100
+      }
+    ],
+    "DEBTUNINDEXED": [
+      {
+        "id": 658,
+        "date": "2024-07-23T00:00:00Z",
+        "commodity_type": "unknown",
+        "commodity_id": "DEBTUNINDEXED",
+        "commodity_name": "DEBTUNINDEXED",
+        "value": 40000
+      },
+      {
+        "id": 657,
+        "date": "2021-07-01T00:00:00Z",
+        "commodity_type": "unknown",
+        "commodity_id": "DEBTUNINDEXED",
+        "commodity_name": "DEBTUNINDEXED",
+        "value": 31700
+      }
+    ],
+    "DEBTUNLISTED": [
+      {
+        "id": 672,
+        "date": "2024-07-23T00:00:00Z",
+        "commodity_type": "unknown",
+        "commodity_id": "DEBTUNLISTED",
+        "commodity_name": "DEBTUNLISTED",
+        "value": 200
+      },
+      {
+        "id": 671,
+        "date": "2023-03-31T00:00:00Z",
+        "commodity_type": "unknown",
+        "commodity_id": "DEBTUNLISTED",
+        "commodity_name": "DEBTUNLISTED",
+        "value": 100
+      }
+    ],
+    "FUNDJULYAFTER": [
+      {
+        "id": 681,
+        "date": "2024-07-23T00:00:00Z",
+        "commodity_type": "unknown",
+        "commodity_id": "FUNDJULYAFTER",
+        "commodity_name": "FUNDJULYAFTER",
+        "value": 200
+      },
+      {
+        "id": 680,
+        "date": "2024-01-02T00:00:00Z",
+        "commodity_type": "unknown",
+        "commodity_id": "FUNDJULYAFTER",
+        "commodity_name": "FUNDJULYAFTER",
+        "value": 100
+      },
+      {
+        "id": 679,
+        "date": "2023-07-01T00:00:00Z",
+        "commodity_type": "unknown",
+        "commodity_id": "FUNDJULYAFTER",
+        "commodity_name": "FUNDJULYAFTER",
+        "value": 100
+      }
+    ],
+    "FUNDJULYBEFORE": [
+      {
+        "id": 684,
+        "date": "2024-07-22T00:00:00Z",
+        "commodity_type": "unknown",
+        "commodity_id": "FUNDJULYBEFORE",
+        "commodity_name": "FUNDJULYBEFORE",
+        "value": 200
+      },
+      {
+        "id": 683,
+        "date": "2024-01-02T00:00:00Z",
+        "commodity_type": "unknown",
+        "commodity_id": "FUNDJULYBEFORE",
+        "commodity_name": "FUNDJULYBEFORE",
+        "value": 100
+      },
+      {
+        "id": 682,
+        "date": "2023-07-01T00:00:00Z",
+        "commodity_type": "unknown",
+        "commodity_id": "FUNDJULYBEFORE",
+        "commodity_name": "FUNDJULYBEFORE",
+        "value": 100
+      }
+    ],
+    "HYBRID": [
+      {
+        "id": 661,
+        "date": "2024-07-23T00:00:00Z",
+        "commodity_type": "unknown",
+        "commodity_id": "HYBRID",
+        "commodity_name": "HYBRID",
+        "value": 40000
+      },
+      {
+        "id": 660,
+        "date": "2024-07-22T00:00:00Z",
+        "commodity_type": "unknown",
+        "commodity_id": "HYBRID",
+        "commodity_name": "HYBRID",
+        "value": 40000
+      },
+      {
+        "id": 659,
+        "date": "2021-07-01T00:00:00Z",
+        "commodity_type": "unknown",
+        "commodity_id": "HYBRID",
+        "commodity_name": "HYBRID",
+        "value": 31700
+      }
+    ],
+    "LIQUIDBEES": [
+      {
+        "id": 674,
+        "date": "2024-07-23T00:00:00Z",
+        "commodity_type": "unknown",
+        "commodity_id": "LIQUIDBEES",
+        "commodity_name": "LIQUIDBEES",
+        "value": 200
+      },
+      {
+        "id": 673,
+        "date": "2023-03-31T00:00:00Z",
+        "commodity_type": "unknown",
+        "commodity_id": "LIQUIDBEES",
+        "commodity_name": "LIQUIDBEES",
+        "value": 100
+      }
+    ],
+    "MARCHLONG": [
+      {
+        "id": 646,
+        "date": "2018-03-31T00:00:00Z",
+        "commodity_type": "unknown",
+        "commodity_id": "MARCHLONG",
+        "commodity_name": "MARCHLONG",
+        "value": 200
+      },
+      {
+        "id": 645,
+        "date": "2018-02-01T00:00:00Z",
+        "commodity_type": "unknown",
+        "commodity_id": "MARCHLONG",
+        "commodity_name": "MARCHLONG",
+        "value": 170
+      },
+      {
+        "id": 644,
+        "date": "2018-01-31T00:00:00Z",
+        "commodity_type": "unknown",
+        "commodity_id": "MARCHLONG",
+        "commodity_name": "MARCHLONG",
+        "value": 150
+      },
+      {
+        "id": 643,
+        "date": "2017-03-01T00:00:00Z",
+        "commodity_type": "unknown",
+        "commodity_id": "MARCHLONG",
+        "commodity_name": "MARCHLONG",
+        "value": 100
+      }
+    ],
+    "MARCHSHORT": [
+      {
+        "id": 654,
+        "date": "2018-03-31T00:00:00Z",
+        "commodity_type": "unknown",
+        "commodity_id": "MARCHSHORT",
+        "commodity_name": "MARCHSHORT",
+        "value": 120
+      },
+      {
+        "id": 653,
+        "date": "2018-02-01T00:00:00Z",
+        "commodity_type": "unknown",
+        "commodity_id": "MARCHSHORT",
+        "commodity_name": "MARCHSHORT",
+        "value": 170
+      },
+      {
+        "id": 652,
+        "date": "2018-01-31T00:00:00Z",
+        "commodity_type": "unknown",
+        "commodity_id": "MARCHSHORT",
+        "commodity_name": "MARCHSHORT",
+        "value": 150
+      },
+      {
+        "id": 651,
+        "date": "2017-05-01T00:00:00Z",
+        "commodity_type": "unknown",
+        "commodity_id": "MARCHSHORT",
+        "commodity_name": "MARCHSHORT",
+        "value": 100
+      }
+    ],
+    "STOCKJULYAFTER": [
+      {
+        "id": 687,
+        "date": "2024-07-23T00:00:00Z",
+        "commodity_type": "unknown",
+        "commodity_id": "STOCKJULYAFTER",
+        "commodity_name": "STOCKJULYAFTER",
+        "value": 200
+      },
+      {
+        "id": 686,
+        "date": "2024-01-02T00:00:00Z",
+        "commodity_type": "unknown",
+        "commodity_id": "STOCKJULYAFTER",
+        "commodity_name": "STOCKJULYAFTER",
+        "value": 100
+      },
+      {
+        "id": 685,
+        "date": "2023-07-01T00:00:00Z",
+        "commodity_type": "unknown",
+        "commodity_id": "STOCKJULYAFTER",
+        "commodity_name": "STOCKJULYAFTER",
+        "value": 100
+      }
+    ],
+    "STOCKJULYBEFORE": [
+      {
+        "id": 690,
+        "date": "2024-07-22T00:00:00Z",
+        "commodity_type": "unknown",
+        "commodity_id": "STOCKJULYBEFORE",
+        "commodity_name": "STOCKJULYBEFORE",
+        "value": 200
+      },
+      {
+        "id": 689,
+        "date": "2024-01-02T00:00:00Z",
+        "commodity_type": "unknown",
+        "commodity_id": "STOCKJULYBEFORE",
+        "commodity_name": "STOCKJULYBEFORE",
+        "value": 100
+      },
+      {
+        "id": 688,
+        "date": "2023-07-01T00:00:00Z",
+        "commodity_type": "unknown",
+        "commodity_id": "STOCKJULYBEFORE",
+        "commodity_name": "STOCKJULYBEFORE",
+        "value": 100
+      }
+    ],
+    "UNLISTED": [
+      {
+        "id": 666,
+        "date": "2024-07-23T00:00:00Z",
+        "commodity_type": "unknown",
+        "commodity_id": "UNLISTED",
+        "commodity_name": "UNLISTED",
+        "value": 40000
+      },
+      {
+        "id": 665,
+        "date": "2024-07-22T00:00:00Z",
+        "commodity_type": "unknown",
+        "commodity_id": "UNLISTED",
+        "commodity_name": "UNLISTED",
+        "value": 40000
+      },
+      {
+        "id": 664,
+        "date": "2022-07-21T00:00:00Z",
+        "commodity_type": "unknown",
+        "commodity_id": "UNLISTED",
+        "commodity_name": "UNLISTED",
+        "value": 33100
+      }
+    ]
+  }
+}

@@ -230,7 +230,7 @@ commodities:
       # differs based on provider
       code: 145552
     harvest: 1095
-    # Optional, ENUM: equity65, equity35, debt, unlisted_equity
+    # Optional, ENUM: equity65, equity35, debt, listed_debt, unlisted_equity
     tax_category: debt
   - name: NIFTY
     type: mutualfund

@@ -1005,7 +1005,7 @@
           },
           "tax_category": {
             "type": "string",
-            "enum": ["", "debt", "equity", "equity65", "equity35", "unlisted_equity"]
+            "enum": ["", "debt", "listed_debt", "equity", "equity65", "equity35", "unlisted_equity"]
           }
         },
         "required": ["name", "type", "price"],

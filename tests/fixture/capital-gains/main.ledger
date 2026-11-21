@@ -1,0 +1,209 @@
+P 2018/01/31 MARCHLONG 150 INR
+P 2018/02/01 MARCHLONG 170 INR
+P 2018/01/31 MARCHSHORT 150 INR
+P 2018/02/01 MARCHSHORT 170 INR
+P 2018/01/31 ABOVEFMV 150 INR
+P 2018/02/01 ABOVEFMV 170 INR
+P 2018/01/31 BELOWFMV 150 INR
+P 2018/02/01 BELOWFMV 170 INR
+P 2018/01/31 ACTUALLOSS 150 INR
+P 2018/02/01 ACTUALLOSS 170 INR
+P 2018/01/31 APRILSHORT 150 INR
+P 2018/02/01 APRILSHORT 170 INR
+
+2017/03/01 Buy MARCHLONG
+    Assets:Equity:MARCHLONG    1 MARCHLONG @ 100 INR
+    Assets:Cash
+
+2017/03/01 Buy ABOVEFMV
+    Assets:Equity:ABOVEFMV    1 ABOVEFMV @ 100 INR
+    Assets:Cash
+
+2017/03/01 Buy BELOWFMV
+    Assets:Equity:BELOWFMV    1 BELOWFMV @ 100 INR
+    Assets:Cash
+
+2017/03/01 Buy ACTUALLOSS
+    Assets:Equity:ACTUALLOSS    1 ACTUALLOSS @ 100 INR
+    Assets:Cash
+
+2017/05/01 Buy MARCHSHORT
+    Assets:Equity:MARCHSHORT    1 MARCHSHORT @ 100 INR
+    Assets:Cash
+
+2017/05/01 Buy APRILSHORT
+    Assets:Equity:APRILSHORT    1 APRILSHORT @ 100 INR
+    Assets:Cash
+
+2018/03/31 Sell long-term lot before April 1
+    Assets:Equity:MARCHLONG    -1 MARCHLONG @ 200 INR
+    Assets:Cash
+
+2018/03/31 Sell short-term lot before April 1
+    Assets:Equity:MARCHSHORT    -1 MARCHSHORT @ 120 INR
+    Assets:Cash
+
+2018/04/01 Sell long-term lot above January 31 value
+    Assets:Equity:ABOVEFMV    -1 ABOVEFMV @ 200 INR
+    Assets:Cash
+
+2018/04/01 Sell long-term lot below January 31 value
+    Assets:Equity:BELOWFMV    -1 BELOWFMV @ 120 INR
+    Assets:Cash
+
+2018/04/01 Sell long-term lot below actual cost
+    Assets:Equity:ACTUALLOSS    -1 ACTUALLOSS @ 80 INR
+    Assets:Cash
+
+2018/04/01 Sell short-term lot on April 1
+    Assets:Equity:APRILSHORT    -1 APRILSHORT @ 120 INR
+    Assets:Cash
+
+2021/07/01 Buy DEBTINDEXED
+    Assets:Debt:DEBTINDEXED    1 DEBTINDEXED @ 31700 INR
+    Assets:Cash
+
+2021/07/01 Buy DEBTUNINDEXED
+    Assets:Debt:DEBTUNINDEXED    1 DEBTUNINDEXED @ 31700 INR
+    Assets:Cash
+
+2023/03/31 Buy DEBTMARCH
+    Assets:Debt:DEBTMARCH    1 DEBTMARCH @ 10000 INR
+    Assets:Cash
+
+2023/04/01 Buy DEBTAPRIL
+    Assets:Debt:DEBTAPRIL    1 DEBTAPRIL @ 10000 INR
+    Assets:Cash
+
+2023/04/01 Buy DEBTAPRILLONG
+    Assets:Debt:DEBTAPRILLONG    1 DEBTAPRILLONG @ 10000 INR
+    Assets:Cash
+
+2024/07/22 Redeem before indexation ends
+    Assets:Debt:DEBTINDEXED    -1 DEBTINDEXED @ 40000 INR
+    Assets:Cash
+
+2024/07/23 Redeem on the indexation cutoff
+    Assets:Debt:DEBTUNINDEXED    -1 DEBTUNINDEXED @ 40000 INR
+    Assets:Cash
+
+2025/04/02 Redeem pre-April 2023 units after 24 months
+    Assets:Debt:DEBTMARCH    -1 DEBTMARCH @ 20000 INR
+    Assets:Cash
+
+2025/04/02 Redeem April 2023 units after 24 months
+    Assets:Debt:DEBTAPRIL    -1 DEBTAPRIL @ 20000 INR
+    Assets:Cash
+
+2026/04/02 Redeem April 2023 units after 36 months
+    Assets:Debt:DEBTAPRILLONG    -1 DEBTAPRILLONG @ 20000 INR
+    Assets:Cash
+
+2021/07/22 Buy DEBTTHREEYEARS
+    Assets:Debt:DEBTTHREEYEARS    1 DEBTTHREEYEARS @ 31700 INR
+    Assets:Cash
+
+2024/07/22 Redeem debt units at exactly 36 months under the old rules
+    Assets:Debt:DEBTTHREEYEARS    -1 DEBTTHREEYEARS @ 40000 INR
+    Assets:Cash
+
+2022/07/23 Buy DEBTTWOYEARS
+    Assets:Debt:DEBTTWOYEARS    1 DEBTTWOYEARS @ 33100 INR
+    Assets:Cash
+
+2024/07/23 Redeem debt units at exactly 24 months under the new rules
+    Assets:Debt:DEBTTWOYEARS    -1 DEBTTWOYEARS @ 40000 INR
+    Assets:Cash
+
+; Unlisted hybrid fund: 40% domestic equity, 60% debt; not a specified mutual fund.
+2021/07/01 Buy HYBRID
+    Assets:Hybrid:HYBRID    2 HYBRID @ 31700 INR
+    Assets:Cash
+
+2024/07/22 Redeem hybrid units under the old rules
+    Assets:Hybrid:HYBRID    -1 HYBRID @ 40000 INR
+    Assets:Cash
+
+2024/07/23 Redeem hybrid units under the new rules
+    Assets:Hybrid:HYBRID    -1 HYBRID @ 40000 INR
+    Assets:Cash
+
+; Unlisted Indian shares held by a resident taxpayer.
+2022/07/21 Buy UNLISTED
+    Assets:Equity:UNLISTED    2 UNLISTED @ 33100 INR
+    Assets:Cash
+
+2024/07/22 Sell unlisted shares under the old rules
+    Assets:Equity:UNLISTED    -1 UNLISTED @ 40000 INR
+    Assets:Cash
+
+2024/07/23 Sell unlisted shares under the new rules
+    Assets:Equity:UNLISTED    -1 UNLISTED @ 40000 INR
+    Assets:Cash
+
+; Equity rate examples show per-lot tax before the annual LTCG exemption.
+2023/07/01 Buy STOCKJULYBEFORE long-term lot
+    Assets:Equity:STOCKJULYBEFORE    1 STOCKJULYBEFORE @ 100 INR
+    Assets:Cash
+
+2024/01/02 Buy STOCKJULYBEFORE short-term lot
+    Assets:Equity:STOCKJULYBEFORE    1 STOCKJULYBEFORE @ 100 INR
+    Assets:Cash
+
+2024/07/22 Sell STOCKJULYBEFORE long- and short-term lots
+    Assets:Equity:STOCKJULYBEFORE    -2 STOCKJULYBEFORE @ 200 INR
+    Assets:Cash
+
+2023/07/01 Buy STOCKJULYAFTER long-term lot
+    Assets:Equity:STOCKJULYAFTER    1 STOCKJULYAFTER @ 100 INR
+    Assets:Cash
+
+2024/01/02 Buy STOCKJULYAFTER short-term lot
+    Assets:Equity:STOCKJULYAFTER    1 STOCKJULYAFTER @ 100 INR
+    Assets:Cash
+
+2024/07/23 Sell STOCKJULYAFTER long- and short-term lots
+    Assets:Equity:STOCKJULYAFTER    -2 STOCKJULYAFTER @ 200 INR
+    Assets:Cash
+
+2023/07/01 Buy FUNDJULYBEFORE long-term lot
+    Assets:Equity:FUNDJULYBEFORE    1 FUNDJULYBEFORE @ 100 INR
+    Assets:Cash
+
+2024/01/02 Buy FUNDJULYBEFORE short-term lot
+    Assets:Equity:FUNDJULYBEFORE    1 FUNDJULYBEFORE @ 100 INR
+    Assets:Cash
+
+2024/07/22 Sell FUNDJULYBEFORE long- and short-term lots
+    Assets:Equity:FUNDJULYBEFORE    -2 FUNDJULYBEFORE @ 200 INR
+    Assets:Cash
+
+2023/07/01 Buy FUNDJULYAFTER long-term lot
+    Assets:Equity:FUNDJULYAFTER    1 FUNDJULYAFTER @ 100 INR
+    Assets:Cash
+
+2024/01/02 Buy FUNDJULYAFTER short-term lot
+    Assets:Equity:FUNDJULYAFTER    1 FUNDJULYAFTER @ 100 INR
+    Assets:Cash
+
+2024/07/23 Sell FUNDJULYAFTER long- and short-term lots
+    Assets:Equity:FUNDJULYAFTER    -2 FUNDJULYAFTER @ 200 INR
+    Assets:Cash
+
+; Listed debt ETF. Prices are synthetic. The holding period is over 12 but under 24 months.
+2023/03/31 Buy LIQUIDBEES
+    Assets:Debt:LIQUIDBEES    1 LIQUIDBEES @ 100 INR
+    Assets:Cash
+
+2024/07/23 Sell LIQUIDBEES
+    Assets:Debt:LIQUIDBEES    -1 LIQUIDBEES @ 200 INR
+    Assets:Cash
+
+; Unlisted debt fund control: same dates and prices as the listed ETF.
+2023/03/31 Buy DEBTUNLISTED
+    Assets:Debt:DEBTUNLISTED    1 DEBTUNLISTED @ 100 INR
+    Assets:Cash
+
+2024/07/23 Sell DEBTUNLISTED
+    Assets:Debt:DEBTUNLISTED    -1 DEBTUNLISTED @ 200 INR
+    Assets:Cash

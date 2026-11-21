@@ -11,14 +11,33 @@ import (
 	"gorm.io/gorm"
 )
 
-var EQUITY_GRANDFATHER_DATE, DEBT_INDEXATION_REVOCATION_DATE, CII_START_DATE time.Time
+// Sections 55(2)(ac) and 112A use separate valuation, acquisition, and transfer dates.
+const (
+	equityGrandfatherFMVDay            = "2018-01-31"
+	equityGrandfatherPurchaseCutoffDay = "2018-02-01"
+	equityLTCGStartDay                 = "2018-04-01"
+)
+
+const (
+	specifiedDebtFundPurchaseCutoffDay = "2023-04-01" // Section 50AA
+	capitalGainsReformDay              = "2024-07-23" // Sections 48, 111A, 112 and 112A
+)
+
+var (
+	equityGrandfatherFMVDate            time.Time
+	equityGrandfatherPurchaseCutoffDate time.Time
+	equityLTCGStartDate                 time.Time
+)
+
+var specifiedDebtFundPurchaseCutoffDate, capitalGainsReformDate, CII_START_DATE time.Time
 var ONE_YEAR = time.Hour * 24 * 365
-var THREE_YEAR = ONE_YEAR * 3
-var TWO_YEAR = ONE_YEAR * 2
 
 func init() {
-	EQUITY_GRANDFATHER_DATE, _ = time.ParseInLocation("2006-01-02", "2018-02-01", config.TimeZone())
-	DEBT_INDEXATION_REVOCATION_DATE, _ = time.ParseInLocation("2006-01-02", "2023-04-01", config.TimeZone())
+	equityGrandfatherFMVDate, _ = time.ParseInLocation(time.DateOnly, equityGrandfatherFMVDay, config.TimeZone())
+	equityGrandfatherPurchaseCutoffDate, _ = time.ParseInLocation(time.DateOnly, equityGrandfatherPurchaseCutoffDay, config.TimeZone())
+	equityLTCGStartDate, _ = time.ParseInLocation(time.DateOnly, equityLTCGStartDay, config.TimeZone())
+	specifiedDebtFundPurchaseCutoffDate, _ = time.Parse(time.DateOnly, specifiedDebtFundPurchaseCutoffDay)
+	capitalGainsReformDate, _ = time.Parse(time.DateOnly, capitalGainsReformDay)
 	CII_START_DATE, _ = time.ParseInLocation("2006-01-02", "2001-03-31", config.TimeZone())
 }
 
@@ -34,64 +53,99 @@ func Add(a, b Tax) Tax {
 	return Tax{Gain: a.Gain.Add(b.Gain), Taxable: a.Taxable.Add(b.Taxable), LongTerm: a.LongTerm.Add(b.LongTerm), ShortTerm: a.ShortTerm.Add(b.ShortTerm), Slab: a.Slab.Add(b.Slab)}
 }
 
+// Keep the journal's calendar date while comparing it to date-only cutoffs.
+func calendarDay(date time.Time) time.Time {
+	year, month, day := date.Date()
+	return time.Date(year, month, day, 0, 0, 0, 0, time.UTC)
+}
+
+func heldMoreThanYears(purchaseDay, sellDay time.Time, years int) bool {
+	anniversary := purchaseDay.AddDate(years, 0, 0)
+	// Go rolls Feb 29 into March 1 in a non-leap year.
+	if anniversary.Month() != purchaseDay.Month() {
+		anniversary = anniversary.AddDate(0, 0, -1)
+	}
+	return sellDay.After(anniversary)
+}
+
+func calculateSection112(db *gorm.DB, category config.TaxCategoryType, quantity, purchasePrice, sellPrice, gain decimal.Decimal, purchaseDate, sellDate time.Time) Tax {
+	purchaseDay, sellDay := calendarDay(purchaseDate), calendarDay(sellDate)
+	shortTerm := Tax{Gain: gain, Taxable: gain, Slab: gain}
+
+	// Only specified debt funds are deemed short-term under Section 50AA.
+	if (category == config.Debt || category == config.ListedDebt) && !purchaseDay.Before(specifiedDebtFundPurchaseCutoffDate) {
+		return shortTerm
+	}
+
+	if !sellDay.Before(capitalGainsReformDate) {
+		holdingYears := 2
+		if category == config.ListedDebt {
+			holdingYears = 1
+		}
+		if heldMoreThanYears(purchaseDay, sellDay, holdingYears) {
+			return Tax{Gain: gain, Taxable: gain, LongTerm: gain.Mul(decimal.NewFromFloat(0.125))}
+		}
+		return shortTerm
+	}
+
+	// Before July 23, unlisted shares already used a 24-month threshold.
+	oldHoldingYears := 3
+	if category == config.UnlistedEquity {
+		oldHoldingYears = 2
+	}
+	if !heldMoreThanYears(purchaseDay, sellDay, oldHoldingYears) {
+		return shortTerm
+	}
+
+	if purchaseDate.After(CII_START_DATE) {
+		sellIndex := decimal.NewFromInt(int64(cii.GetIndex(db, utils.FY(sellDate))))
+		purchaseIndex := decimal.NewFromInt(int64(cii.GetIndex(db, utils.FY(purchaseDate))))
+		purchasePrice = purchasePrice.Mul(sellIndex.Div(purchaseIndex))
+	}
+	taxable := sellPrice.Sub(purchasePrice).Mul(quantity)
+	return Tax{Gain: gain, Taxable: taxable, LongTerm: taxable.Mul(decimal.NewFromFloat(0.20))}
+}
+
 func Calculate(db *gorm.DB, quantity decimal.Decimal, commodity config.Commodity, purchasePrice decimal.Decimal, purchaseDate time.Time, sellPrice decimal.Decimal, sellDate time.Time) Tax {
 
 	dateDiff := sellDate.Sub(purchaseDate)
 	gain := sellPrice.Mul(quantity).Sub(purchasePrice.Mul(quantity))
 
-	if (commodity.TaxCategory == config.Equity || commodity.TaxCategory == config.Equity65) && sellDate.Before(EQUITY_GRANDFATHER_DATE) {
-		return Tax{Gain: gain, Taxable: decimal.Zero, ShortTerm: decimal.Zero, LongTerm: decimal.Zero, Slab: decimal.Zero}
+	switch commodity.TaxCategory {
+	case config.Debt, config.ListedDebt, config.Equity35, config.UnlistedEquity:
+		return calculateSection112(db, commodity.TaxCategory, quantity, purchasePrice, sellPrice, gain, purchaseDate, sellDate)
 	}
 
-	if (commodity.TaxCategory == config.Equity || commodity.TaxCategory == config.Equity65) && purchaseDate.Before(EQUITY_GRANDFATHER_DATE) {
-		purchasePrice = service.GetUnitPrice(db, commodity.Name, EQUITY_GRANDFATHER_DATE).Value
-	}
+	isEquity := commodity.TaxCategory == config.Equity || commodity.TaxCategory == config.Equity65
+	isLongTermEquity := isEquity && dateDiff > ONE_YEAR
 
-	if commodity.TaxCategory == config.Debt && purchaseDate.After(CII_START_DATE) && dateDiff > THREE_YEAR {
-		purchasePrice = purchasePrice.Mul(decimal.NewFromInt(int64(cii.GetIndex(db, utils.FY(sellDate)))).Div(decimal.NewFromInt(int64(cii.GetIndex(db, utils.FY(purchaseDate))))))
-	}
+	if isLongTermEquity {
+		// Qualifying long-term gains before Section 112A were exempt under Section 10(38).
+		if sellDate.Before(equityLTCGStartDate) {
+			return Tax{Gain: gain}
+		}
 
-	if commodity.TaxCategory == config.UnlistedEquity && purchaseDate.After(CII_START_DATE) && dateDiff > TWO_YEAR {
-		purchasePrice = purchasePrice.Mul(decimal.NewFromInt(int64(cii.GetIndex(db, utils.FY(sellDate)))).Div(decimal.NewFromInt(int64(cii.GetIndex(db, utils.FY(purchaseDate))))))
+		if purchaseDate.Before(equityGrandfatherPurchaseCutoffDate) {
+			fmv := service.GetUnitPrice(db, commodity.Name, equityGrandfatherFMVDate).Value
+			purchasePrice = decimal.Max(purchasePrice, decimal.Min(fmv, sellPrice))
+		}
 	}
 
 	taxable := sellPrice.Mul(quantity).Sub(purchasePrice.Mul(quantity))
 	shortTerm := decimal.Zero
 	longTerm := decimal.Zero
-	slab := decimal.Zero
 
-	if commodity.TaxCategory == config.Equity || commodity.TaxCategory == config.Equity65 {
-		if dateDiff > ONE_YEAR {
-			longTerm = taxable.Mul(decimal.NewFromFloat(0.10))
-		} else {
-			shortTerm = taxable.Mul(decimal.NewFromFloat(0.15))
+	if isEquity {
+		longTermRate, shortTermRate := 0.10, 0.15
+		if !calendarDay(sellDate).Before(capitalGainsReformDate) {
+			longTermRate, shortTermRate = 0.125, 0.20
 		}
-
-	}
-
-	if commodity.TaxCategory == config.Debt {
-		if dateDiff > THREE_YEAR && purchaseDate.Before(DEBT_INDEXATION_REVOCATION_DATE) {
-			longTerm = taxable.Mul(decimal.NewFromFloat(0.20))
+		if isLongTermEquity {
+			longTerm = taxable.Mul(decimal.NewFromFloat(longTermRate))
 		} else {
-			slab = taxable
+			shortTerm = taxable.Mul(decimal.NewFromFloat(shortTermRate))
 		}
 	}
 
-	if commodity.TaxCategory == config.Equity35 {
-		if dateDiff > THREE_YEAR {
-			longTerm = taxable.Mul(decimal.NewFromFloat(0.20))
-		} else {
-			slab = taxable
-		}
-	}
-
-	if commodity.TaxCategory == config.UnlistedEquity {
-		if dateDiff > TWO_YEAR {
-			longTerm = taxable.Mul(decimal.NewFromFloat(0.20))
-		} else {
-			slab = taxable
-		}
-	}
-
-	return Tax{Gain: gain, Taxable: taxable, ShortTerm: shortTerm, LongTerm: longTerm, Slab: slab}
+	return Tax{Gain: gain, Taxable: taxable, ShortTerm: shortTerm, LongTerm: longTerm}
 }

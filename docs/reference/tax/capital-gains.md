@@ -9,6 +9,12 @@ are available.
 Only commodities with `tax_category` are considered. Please check [Tax
 Harvesting](tax-harvesting.md) page for configuration details.
 
+If the gain is booked against an `Income:CapitalGains:{name}`
+account as shown in [Accounts](../accounts.md#capital-gains), the sell
+price is computed as the cost booked in the asset posting plus the
+gain. This is always the case with beancount, where the asset posting
+is valued at the cost of the lot.
+
 ### Gain
 
 The difference between the purchase and sell price.

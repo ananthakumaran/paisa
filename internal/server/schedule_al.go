@@ -61,13 +61,13 @@ func GetScheduleAL(db *gorm.DB) gin.H {
 		}
 
 		start = start.AddDate(0, 0, -1)
-		scheduleALs[utils.FYHuman(start)] = ScheduleAL{Entries: computeScheduleAL(postings), Date: start}
+		scheduleALs[utils.FYHuman(start)] = ScheduleAL{Entries: computeScheduleAL(db, postings), Date: start}
 	}
 
 	return gin.H{"schedule_als": scheduleALs}
 }
 
-func computeScheduleAL(postings []posting.Posting) []ScheduleALEntry {
+func computeScheduleAL(db *gorm.DB, postings []posting.Posting) []ScheduleALEntry {
 	scheduleALConfigs := config.GetConfig().ScheduleALs
 
 	return lo.Map(Sections, func(section ScheduleALSection, _ int) ScheduleALEntry {
@@ -84,7 +84,7 @@ func computeScheduleAL(postings []posting.Posting) []ScheduleALEntry {
 					return p.Negate()
 				})
 			}
-			amount = accounting.CostBalance(ps)
+			amount = accounting.TaxCostBalance(db, ps)
 		} else {
 			amount = decimal.Zero
 		}

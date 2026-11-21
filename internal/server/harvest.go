@@ -51,7 +51,7 @@ func GetHarvest(db *gorm.DB) gin.H {
 }
 
 func computeHarvestable(db *gorm.DB, account string, commodity config.Commodity, postings []posting.Posting) Harvestable {
-	available := accounting.FIFO(postings)
+	available, _ := accounting.TaxFIFO(db, postings)
 
 	today := utils.EndOfToday()
 	currentPrice := service.GetUnitPrice(db, commodity.Name, today)

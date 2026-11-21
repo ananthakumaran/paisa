@@ -1,6 +1,7 @@
 package server
 
 import (
+	"github.com/ananthakumaran/paisa/internal/accounting"
 	"github.com/ananthakumaran/paisa/internal/config"
 	c "github.com/ananthakumaran/paisa/internal/model/commodity"
 	"github.com/ananthakumaran/paisa/internal/model/posting"
@@ -48,48 +49,29 @@ func GetCapitalGains(db *gorm.DB) gin.H {
 
 func computeCapitalGains(db *gorm.DB, account string, commodity config.Commodity, postings []posting.Posting) CapitalGain {
 	capitalGain := CapitalGain{Account: account, TaxCategory: string(commodity.TaxCategory), FY: make(map[string]FYCapitalGain)}
-	var available []posting.Posting
-	for _, p := range postings {
-		if p.Quantity.GreaterThan(decimal.Zero) {
-			available = append(available, p)
-		} else {
-			quantity := p.Quantity.Neg()
-			totalTax := taxation.Tax{}
-			purchasePrice := decimal.Zero
-			postingPairs := make([]PostingPair, 0)
-			for quantity.GreaterThan(decimal.Zero) && len(available) > 0 {
-				first := available[0]
-				q := decimal.Zero
-
-				if first.Quantity.GreaterThan(quantity) {
-					first.AddQuantity(quantity.Neg())
-					q = quantity
-					available[0] = first
-					quantity = decimal.Zero
-				} else {
-					quantity = quantity.Sub(first.Quantity)
-					q = first.Quantity
-					available = available[1:]
-				}
-
-				purchasePrice = purchasePrice.Add(q.Mul(first.Price()))
-				tax := taxation.Calculate(db, q, commodity, first.Price(), first.Date, p.Price(), p.Date)
-				totalTax = taxation.Add(totalTax, tax)
-				postingPair := PostingPair{Purchase: first.WithQuantity(q), Sell: p.WithQuantity(q.Neg()), Tax: tax}
-				postingPairs = append(postingPairs, postingPair)
-
-			}
-			fy := utils.FY(p.Date)
-			fyCapitalGain := capitalGain.FY[fy]
-			fyCapitalGain.Tax = taxation.Add(fyCapitalGain.Tax, totalTax)
-			fyCapitalGain.Units = fyCapitalGain.Units.Add(p.Quantity.Neg())
-			fyCapitalGain.PurchasePrice = fyCapitalGain.PurchasePrice.Add(purchasePrice)
-			fyCapitalGain.SellPrice = fyCapitalGain.SellPrice.Add(p.Amount.Neg())
-			fyCapitalGain.PostingPairs = append(fyCapitalGain.PostingPairs, postingPairs...)
-
-			capitalGain.FY[fy] = fyCapitalGain
-
+	_, sales := accounting.TaxFIFO(db, postings)
+	for _, sale := range sales {
+		p := sale.Sell
+		totalTax := taxation.Tax{}
+		purchasePrice := decimal.Zero
+		postingPairs := make([]PostingPair, 0)
+		for _, purchase := range sale.Purchases {
+			q := purchase.Quantity
+			purchasePrice = purchasePrice.Add(purchase.Amount)
+			tax := taxation.Calculate(db, q, commodity, purchase.Price(), purchase.Date, p.Price(), p.Date)
+			totalTax = taxation.Add(totalTax, tax)
+			postingPair := PostingPair{Purchase: purchase, Sell: p.WithQuantity(q.Neg()), Tax: tax}
+			postingPairs = append(postingPairs, postingPair)
 		}
+		fy := utils.FY(p.Date)
+		fyCapitalGain := capitalGain.FY[fy]
+		fyCapitalGain.Tax = taxation.Add(fyCapitalGain.Tax, totalTax)
+		fyCapitalGain.Units = fyCapitalGain.Units.Add(p.Quantity.Neg())
+		fyCapitalGain.PurchasePrice = fyCapitalGain.PurchasePrice.Add(purchasePrice)
+		fyCapitalGain.SellPrice = fyCapitalGain.SellPrice.Add(p.Amount.Neg())
+		fyCapitalGain.PostingPairs = append(fyCapitalGain.PostingPairs, postingPairs...)
+
+		capitalGain.FY[fy] = fyCapitalGain
 	}
 
 	return capitalGain

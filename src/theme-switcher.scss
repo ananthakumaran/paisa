@@ -235,6 +235,12 @@
   --icon-fill: hsl(210 10% 30%);
   --icon-fill-hover: hsl(210 10% 15%);
 
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  box-sizing: border-box;
+  color: var(--icon-fill);
   background: none;
   border: none;
   padding: 0;
@@ -250,7 +256,12 @@
 
   outline-offset: 5px;
 
+  &:is(:hover, :focus-visible) {
+    color: var(--icon-fill-hover);
+  }
+
   svg {
+    display: block;
     inline-size: 100%;
     block-size: 100%;
     stroke-linecap: round;

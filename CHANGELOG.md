@@ -2,6 +2,8 @@
 
 ### Unreleased
 
+* Add System theme mode to the app and documentation, following your device's light/dark preference by default.
+
 ### 0.8.0 (2026-11-15)
 
 * Choose the currency of downloaded investment prices for every price provider.

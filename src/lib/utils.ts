@@ -10,6 +10,9 @@ import { error } from "@sveltejs/kit";
 import { goto } from "$app/navigation";
 import chroma from "chroma-js";
 import { iconGlyph } from "./icon";
+import { getColorPreference } from "./theme";
+
+export { getColorPreference, setColorPreference } from "./theme";
 
 export interface AutoCompleteItem {
   label: string;
@@ -1163,22 +1166,8 @@ export function postingUrl(posting: Posting) {
   }`;
 }
 
-const storageKey = "theme-preference";
-
-export function getColorPreference() {
-  if (localStorage.getItem(storageKey)) {
-    return localStorage.getItem(storageKey);
-  } else {
-    return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-  }
-}
-
 export function darkLightColor(dark: string, light: string) {
   return getColorPreference() == "dark" ? dark : light;
-}
-
-export function setColorPreference(theme: string) {
-  localStorage.setItem(storageKey, theme);
 }
 
 export function isZero(n: number) {

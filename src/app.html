@@ -2,6 +2,25 @@
 <html class="paisa">
   <head>
     <meta charset="utf-8" />
+    <script>
+      // Apply the theme before loading styles or rendering the app.
+      (() => {
+        let preference;
+        try {
+          preference = localStorage.getItem("theme-preference");
+        } catch {
+          // Storage may be unavailable; default to the system preference.
+        }
+        const theme =
+          preference === "light" || preference === "dark"
+            ? preference
+            : window.matchMedia("(prefers-color-scheme: dark)").matches
+              ? "dark"
+              : "light";
+        document.documentElement.dataset.theme = theme;
+        document.documentElement.style.colorScheme = theme;
+      })();
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="robots" content="noindex, nofollow" />
     <meta

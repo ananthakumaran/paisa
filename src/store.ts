@@ -4,6 +4,7 @@ import * as d3 from "d3";
 import dayjs from "dayjs";
 import type { AccountTfIdf, LedgerFileError, SheetFileError, SheetLineResult } from "$lib/utils";
 import _ from "lodash";
+import { getColorPreference } from "./lib/theme";
 
 export function now() {
   if (globalThis.__now) {
@@ -76,7 +77,7 @@ export const dateRange = derived(
   }
 );
 
-export const theme = writable("light");
+export const theme = writable(getColorPreference());
 
 export const loading = writable(false);
 

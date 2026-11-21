@@ -48,6 +48,10 @@ theme:
     logo: paisa/logo
     repo: fontawesome/brands/github
   palette:
+    - media: "(prefers-color-scheme)"
+      toggle:
+        icon: material/monitor
+        name: Switch to light mode
     - scheme: default
       media: "(prefers-color-scheme: light)"
       primary: white
@@ -61,7 +65,7 @@ theme:
       accent: indigo
       toggle:
         icon: material/moon-waning-crescent
-        name: Switch to light mode
+        name: Switch to system mode
   features:
     - content.tabs.link
     - content.code.copy
@@ -112,6 +116,7 @@ markdown_extensions:
 
 extra_javascript:
   - javascripts/extra.js
+  - javascripts/comments.js
 extra_css:
   - stylesheets/device-frames.min.css
   - stylesheets/extra.css

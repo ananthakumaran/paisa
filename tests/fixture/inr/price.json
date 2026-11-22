@@ -19,6 +19,16 @@
       }
     ],
     "ABNB": [],
+    "AXIS SMALL CAP FUND - DIRECT PLAN": [
+      {
+        "id": 6,
+        "date": "2022-02-01T00:00:00Z",
+        "commodity_type": "unknown",
+        "commodity_id": "AXIS SMALL CAP FUND - DIRECT PLAN",
+        "commodity_name": "AXIS SMALL CAP FUND - DIRECT PLAN",
+        "value": 12.9
+      }
+    ],
     "NIFTY": [
       {
         "id": 2,

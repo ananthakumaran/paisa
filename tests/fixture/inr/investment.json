@@ -104,6 +104,27 @@
       "transaction_note": "",
       "market_amount": 0,
       "balance": 0
+    },
+    {
+      "id": 22,
+      "transaction_id": "de5dc819-a2c4-5bd9-a982-5a7a87f12e04",
+      "date": "2022-02-01T00:00:00Z",
+      "payee": "Purchased 98.762 units of AXIS SMALL CAP FUND - DIRECT PLAN",
+      "account": "Assets:Equity:AXIS SMALL CAP FUND - DIRECT PLAN",
+      "commodity": "AXIS SMALL CAP FUND - DIRECT PLAN",
+      "quantity": 98.762,
+      "amount": 1274.0298,
+      "status": "unmarked",
+      "tag_recurring": "",
+      "tag_period": "",
+      "transaction_begin_line": 51,
+      "transaction_end_line": 53,
+      "file_name": "main.ledger",
+      "forecast": false,
+      "note": "",
+      "transaction_note": "",
+      "market_amount": 0,
+      "balance": 0
     }
   ],
   "yearly_cards": [
@@ -215,15 +236,36 @@
           "transaction_note": "",
           "market_amount": 0,
           "balance": 0
+        },
+        {
+          "id": 22,
+          "transaction_id": "de5dc819-a2c4-5bd9-a982-5a7a87f12e04",
+          "date": "2022-02-01T00:00:00Z",
+          "payee": "Purchased 98.762 units of AXIS SMALL CAP FUND - DIRECT PLAN",
+          "account": "Assets:Equity:AXIS SMALL CAP FUND - DIRECT PLAN",
+          "commodity": "AXIS SMALL CAP FUND - DIRECT PLAN",
+          "quantity": 98.762,
+          "amount": 1274.0298,
+          "status": "unmarked",
+          "tag_recurring": "",
+          "tag_period": "",
+          "transaction_begin_line": 51,
+          "transaction_end_line": 53,
+          "file_name": "main.ledger",
+          "forecast": false,
+          "note": "",
+          "transaction_note": "",
+          "market_amount": 0,
+          "balance": 0
         }
       ],
       "gross_salary_income": 120000,
       "gross_other_income": 1027.3,
       "net_tax": 0,
       "net_income": 121027.3,
-      "net_investment": 88829.7374871296,
+      "net_investment": 90103.7672871296,
       "net_expense": 20100,
-      "savings_rate": 73.39644649358416
+      "savings_rate": 74.44912617825037
     }
   ]
 }

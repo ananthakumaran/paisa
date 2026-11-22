@@ -2,20 +2,20 @@
   "asset_breakdowns": {
     "Assets": {
       "group": "Assets",
-      "investmentAmount": 98829.7374871296,
+      "investmentAmount": 100103.7672871296,
       "withdrawalAmount": 10027.3,
       "marketAmount": 101145.7,
       "balanceUnits": 0,
       "latestPrice": 0,
       "xirr": 12.85,
-      "gainAmount": 12343.2625128704,
-      "absoluteReturn": 0.124894215311235
+      "gainAmount": 11069.2327128704,
+      "absoluteReturn": 0.1105775837698526
     },
     "Assets:Checking": {
       "group": "Assets:Checking",
       "investmentAmount": 0,
       "withdrawalAmount": 0,
-      "marketAmount": 12097.5625128704,
+      "marketAmount": 10823.5327128704,
       "balanceUnits": 0,
       "latestPrice": 0,
       "xirr": 0,
@@ -35,14 +35,14 @@
     },
     "Assets:Equity": {
       "group": "Assets:Equity",
-      "investmentAmount": 98025.3170071296,
+      "investmentAmount": 99299.3468071296,
       "withdrawalAmount": 10027.3,
-      "marketAmount": 88243.7170071296,
+      "marketAmount": 89517.7468071296,
       "balanceUnits": 0,
       "latestPrice": 0,
-      "xirr": 3.23,
+      "xirr": 3.22,
       "gainAmount": 245.7,
-      "absoluteReturn": 0.0025064953371396
+      "absoluteReturn": 0.0024743365178144
     },
     "Assets:Equity:AAPL": {
       "group": "Assets:Equity:AAPL",
@@ -61,6 +61,17 @@
       "withdrawalAmount": 0,
       "marketAmount": 8025.3170071296,
       "balanceUnits": 0.76,
+      "latestPrice": 0,
+      "xirr": 0,
+      "gainAmount": 0,
+      "absoluteReturn": 0
+    },
+    "Assets:Equity:AXIS SMALL CAP FUND - DIRECT PLAN": {
+      "group": "Assets:Equity:AXIS SMALL CAP FUND - DIRECT PLAN",
+      "investmentAmount": 1274.0298,
+      "withdrawalAmount": 0,
+      "marketAmount": 1274.0298,
+      "balanceUnits": 98.762,
       "latestPrice": 0,
       "xirr": 0,
       "gainAmount": 0,

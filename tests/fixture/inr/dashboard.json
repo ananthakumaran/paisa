@@ -1,8 +1,8 @@
 {
   "budget": {
-    "availableForBudgeting": 12097.5625128704,
+    "availableForBudgeting": 10823.5327128704,
     "budgetsByMonth": {},
-    "checkingBalance": 12097.5625128704
+    "checkingBalance": 10823.5327128704
   },
   "cashFlows": [
     {
@@ -20,10 +20,10 @@
       "income": 0,
       "expenses": 0,
       "liabilities": 0,
-      "investment": 0,
+      "investment": 1274.0298,
       "tax": 0,
-      "checking": 0,
-      "balance": 12097.5625128704
+      "checking": -1274.0298,
+      "balance": 10823.5327128704
     }
   ],
   "checkingBalances": {
@@ -79,8 +79,8 @@
   "networth": {
     "networth": {
       "date": "2022-02-07T23:59:59.999999999Z",
-      "investmentAmount": 228857.0374871296,
-      "withdrawalAmount": 128957.0374871296,
+      "investmentAmount": 230131.0672871296,
+      "withdrawalAmount": 130231.0672871296,
       "gainAmount": 1245.7,
       "balanceAmount": 101145.7,
       "balanceUnits": 0,
@@ -90,6 +90,61 @@
   },
   "transactionSequences": [],
   "transactions": [
+    {
+      "id": "de5dc819-a2c4-5bd9-a982-5a7a87f12e04",
+      "date": "2022-02-01T00:00:00Z",
+      "payee": "Purchased 98.762 units of AXIS SMALL CAP FUND - DIRECT PLAN",
+      "postings": [
+        {
+          "id": 22,
+          "transaction_id": "de5dc819-a2c4-5bd9-a982-5a7a87f12e04",
+          "date": "2022-02-01T00:00:00Z",
+          "payee": "Purchased 98.762 units of AXIS SMALL CAP FUND - DIRECT PLAN",
+          "account": "Assets:Equity:AXIS SMALL CAP FUND - DIRECT PLAN",
+          "commodity": "AXIS SMALL CAP FUND - DIRECT PLAN",
+          "quantity": 98.762,
+          "amount": 1274.0298,
+          "status": "unmarked",
+          "tag_recurring": "",
+          "tag_period": "",
+          "transaction_begin_line": 51,
+          "transaction_end_line": 53,
+          "file_name": "main.ledger",
+          "forecast": false,
+          "note": "",
+          "transaction_note": "",
+          "market_amount": 0,
+          "balance": 0
+        },
+        {
+          "id": 23,
+          "transaction_id": "de5dc819-a2c4-5bd9-a982-5a7a87f12e04",
+          "date": "2022-02-01T00:00:00Z",
+          "payee": "Purchased 98.762 units of AXIS SMALL CAP FUND - DIRECT PLAN",
+          "account": "Assets:Checking",
+          "commodity": "INR",
+          "quantity": -1274.0298,
+          "amount": -1274.0298,
+          "status": "unmarked",
+          "tag_recurring": "",
+          "tag_period": "",
+          "transaction_begin_line": 51,
+          "transaction_end_line": 53,
+          "file_name": "main.ledger",
+          "forecast": false,
+          "note": "",
+          "transaction_note": "",
+          "market_amount": 0,
+          "balance": 0
+        }
+      ],
+      "tag_recurring": "",
+      "tag_period": "",
+      "beginLine": 51,
+      "endLine": 53,
+      "fileName": "main.ledger",
+      "note": ""
+    },
     {
       "id": "47401a0a-4e6a-51cb-bb14-df103a1f73cb",
       "date": "2022-01-31T00:00:00Z",

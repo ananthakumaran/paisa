@@ -480,9 +480,12 @@ func parseHLedgerCommodities(journalPath string) ([]string, error) {
 	return commodities, nil
 }
 
+// A quote starts a quoted commodity, never a bare one.
+const priceCommodityPattern = `("[^"\r\n]+"|[^\s\d."-]+)`
+
 func parseLedgerPrices(output string, defaultCurrency string) ([]price.Price, error) {
 	var prices []price.Price
-	re := regexp.MustCompile(`P (\d{4}\/\d{2}\/\d{2}) (?:\d{2}:\d{2}:\d{2}) ([^\s\d.-]+|"[^"]+") ([^\n]+)\n`)
+	re := regexp.MustCompile(`P (\d{4}/\d{2}/\d{2}) (?:\d{2}:\d{2}:\d{2}) ` + priceCommodityPattern + ` ([^\n]+)\n`)
 	matches := re.FindAllStringSubmatch(output, -1)
 
 	for _, match := range matches {
@@ -510,7 +513,7 @@ func parseLedgerPrices(output string, defaultCurrency string) ([]price.Price, er
 
 func parseHLedgerPrices(output string, defaultCurrency string) ([]price.Price, error) {
 	var prices []price.Price
-	re := regexp.MustCompile(`P (\d{4}-\d{2}-\d{2}) ([^\s\d.-]+|"[^"]+") ([^\n]+)\n`)
+	re := regexp.MustCompile(`P (\d{4}-\d{2}-\d{2}) ` + priceCommodityPattern + ` ([^\n]+)\n`)
 	matches := re.FindAllStringSubmatch(output, -1)
 
 	for _, match := range matches {

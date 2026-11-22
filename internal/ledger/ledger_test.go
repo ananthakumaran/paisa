@@ -6,6 +6,7 @@ import (
 	"github.com/ananthakumaran/paisa/internal/model/price"
 	"github.com/ananthakumaran/paisa/internal/utils"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func assertPriceEqual(t *testing.T, actual price.Price, date string, commodityName string, value float64) {
@@ -59,6 +60,60 @@ func TestParseHLegerPrices(t *testing.T) {
 
 	parsedPrices, _ = parseHLedgerPrices("P 2023-05-01 USD $0.9\r\n", "INR")
 	assert.Len(t, parsedPrices, 0)
+}
+
+func TestParsePricesCommodityNames(t *testing.T) {
+	parsers := []struct {
+		name   string
+		prefix string
+		parse  func(string, string) ([]price.Price, error)
+	}{
+		{"Ledger", "P 2022/02/01 00:00:00 ", parseLedgerPrices},
+		{"hledger", "P 2022-02-01 ", parseHLedgerPrices},
+	}
+	cases := []struct {
+		name      string
+		fields    string
+		currency  string
+		commodity string
+		value     float64
+	}{
+		{"Zerodha fund", `"AXIS SMALL CAP FUND - DIRECT PLAN" 12.9 INR`, "INR", "AXIS SMALL CAP FUND - DIRECT PLAN", 12.9},
+		{"space without punctuation", `"Small Cap" 12.9 INR`, "INR", "Small Cap", 12.9},
+		{"consecutive spaces", `"Small  Cap" 12.9 INR`, "INR", "Small  Cap", 12.9},
+		{"Unicode and punctuation", `"Épargne & Revenu" 12.9 EUR`, "EUR", "Épargne & Revenu", 12.9},
+		{"starts with digits", `"2025 Growth Fund" 12.9 INR`, "INR", "2025 Growth Fund", 12.9},
+		{"punctuation without spaces", `"FUND-2025.A" 12.9 INR`, "INR", "FUND-2025.A", 12.9},
+		{"quoted currency after amount", `"Small Cap" 1.25 "Quote Currency 2"`, "Quote Currency 2", "Small Cap", 1.25},
+		{"quoted currency before amount", `"Small Cap" "Quote Currency 2" 1.25`, "Quote Currency 2", "Small Cap", 1.25},
+		{"bare commodity", `NIFTY 12.9 INR`, "INR", "NIFTY", 12.9},
+	}
+
+	for _, parser := range parsers {
+		t.Run(parser.name, func(t *testing.T) {
+			for _, tc := range cases {
+				t.Run(tc.name, func(t *testing.T) {
+					prices, err := parser.parse(parser.prefix+tc.fields+"\n", tc.currency)
+					require.NoError(t, err)
+					require.Len(t, prices, 1)
+					assertPriceEqual(t, prices[0], "2022/02/01", tc.commodity, tc.value)
+					assert.Equal(t, tc.commodity, prices[0].CommodityID)
+				})
+			}
+
+			t.Run("mixed quoted and bare rows", func(t *testing.T) {
+				output := parser.prefix + "NIFTY 100 INR\n" +
+					parser.prefix + "\"Small Cap\" 12.9 INR\n" +
+					parser.prefix + "SENSEX 200 INR\n"
+				prices, err := parser.parse(output, "INR")
+				require.NoError(t, err)
+				require.Len(t, prices, 3)
+				assertPriceEqual(t, prices[0], "2022/02/01", "NIFTY", 100)
+				assertPriceEqual(t, prices[1], "2022/02/01", "Small Cap", 12.9)
+				assertPriceEqual(t, prices[2], "2022/02/01", "SENSEX", 200)
+			})
+		})
+	}
 }
 
 func TestParseAmount(t *testing.T) {

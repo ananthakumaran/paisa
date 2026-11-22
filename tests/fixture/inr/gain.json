@@ -151,6 +151,42 @@
       ]
     },
     {
+      "account": "Assets:Equity:AXIS SMALL CAP FUND - DIRECT PLAN",
+      "networth": {
+        "date": "2022-02-07T23:59:59.999999999Z",
+        "investmentAmount": 1274.0298,
+        "withdrawalAmount": 0,
+        "gainAmount": 0,
+        "balanceAmount": 1274.0298,
+        "balanceUnits": 0,
+        "netInvestmentAmount": 1274.0298
+      },
+      "xirr": 0,
+      "postings": [
+        {
+          "id": 22,
+          "transaction_id": "de5dc819-a2c4-5bd9-a982-5a7a87f12e04",
+          "date": "2022-02-01T00:00:00Z",
+          "payee": "Purchased 98.762 units of AXIS SMALL CAP FUND - DIRECT PLAN",
+          "account": "Assets:Equity:AXIS SMALL CAP FUND - DIRECT PLAN",
+          "commodity": "AXIS SMALL CAP FUND - DIRECT PLAN",
+          "quantity": 98.762,
+          "amount": 1274.0298,
+          "status": "unmarked",
+          "tag_recurring": "",
+          "tag_period": "",
+          "transaction_begin_line": 51,
+          "transaction_end_line": 53,
+          "file_name": "main.ledger",
+          "forecast": false,
+          "note": "",
+          "transaction_note": "",
+          "market_amount": 1274.0298,
+          "balance": 0
+        }
+      ]
+    },
+    {
       "account": "Assets:Equity:NIFTY",
       "networth": {
         "date": "2022-02-07T23:59:59.999999999Z",

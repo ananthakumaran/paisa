@@ -8,7 +8,7 @@
     "Assets:Checking": {
       "date": "2022-02-07T23:59:59.999999999Z",
       "account": "Assets:Checking",
-      "market_amount": 12097.5625128704
+      "market_amount": 10823.5327128704
     },
     "Assets:Dollar": {
       "date": "2022-02-07T23:59:59.999999999Z",
@@ -29,6 +29,11 @@
       "date": "2022-02-07T23:59:59.999999999Z",
       "account": "Assets:Equity:ABNB",
       "market_amount": 8025.3170071296
+    },
+    "Assets:Equity:AXIS SMALL CAP FUND - DIRECT PLAN": {
+      "date": "2022-02-07T23:59:59.999999999Z",
+      "account": "Assets:Equity:AXIS SMALL CAP FUND - DIRECT PLAN",
+      "market_amount": 1274.0298
     },
     "Assets:Equity:NIFTY": {
       "date": "2022-02-07T23:59:59.999999999Z",
@@ -723,7 +728,7 @@
       "Assets:Checking": {
         "date": "2022-02-01T00:00:00Z",
         "account": "Assets:Checking",
-        "market_amount": 12097.5625128704
+        "market_amount": 10823.5327128704
       },
       "Assets:Dollar": {
         "date": "2022-02-01T00:00:00Z",
@@ -740,6 +745,11 @@
         "account": "Assets:Equity:ABNB",
         "market_amount": 8025.3170071296
       },
+      "Assets:Equity:AXIS SMALL CAP FUND - DIRECT PLAN": {
+        "date": "2022-02-01T00:00:00Z",
+        "account": "Assets:Equity:AXIS SMALL CAP FUND - DIRECT PLAN",
+        "market_amount": 1274.0298
+      },
       "Assets:Equity:NIFTY": {
         "date": "2022-02-01T00:00:00Z",
         "account": "Assets:Equity:NIFTY",
@@ -750,7 +760,7 @@
       "Assets:Checking": {
         "date": "2022-02-02T00:00:00Z",
         "account": "Assets:Checking",
-        "market_amount": 12097.5625128704
+        "market_amount": 10823.5327128704
       },
       "Assets:Dollar": {
         "date": "2022-02-02T00:00:00Z",
@@ -767,6 +777,11 @@
         "account": "Assets:Equity:ABNB",
         "market_amount": 8025.3170071296
       },
+      "Assets:Equity:AXIS SMALL CAP FUND - DIRECT PLAN": {
+        "date": "2022-02-02T00:00:00Z",
+        "account": "Assets:Equity:AXIS SMALL CAP FUND - DIRECT PLAN",
+        "market_amount": 1274.0298
+      },
       "Assets:Equity:NIFTY": {
         "date": "2022-02-02T00:00:00Z",
         "account": "Assets:Equity:NIFTY",
@@ -777,7 +792,7 @@
       "Assets:Checking": {
         "date": "2022-02-03T00:00:00Z",
         "account": "Assets:Checking",
-        "market_amount": 12097.5625128704
+        "market_amount": 10823.5327128704
       },
       "Assets:Dollar": {
         "date": "2022-02-03T00:00:00Z",
@@ -794,6 +809,11 @@
         "account": "Assets:Equity:ABNB",
         "market_amount": 8025.3170071296
       },
+      "Assets:Equity:AXIS SMALL CAP FUND - DIRECT PLAN": {
+        "date": "2022-02-03T00:00:00Z",
+        "account": "Assets:Equity:AXIS SMALL CAP FUND - DIRECT PLAN",
+        "market_amount": 1274.0298
+      },
       "Assets:Equity:NIFTY": {
         "date": "2022-02-03T00:00:00Z",
         "account": "Assets:Equity:NIFTY",
@@ -804,7 +824,7 @@
       "Assets:Checking": {
         "date": "2022-02-04T00:00:00Z",
         "account": "Assets:Checking",
-        "market_amount": 12097.5625128704
+        "market_amount": 10823.5327128704
       },
       "Assets:Dollar": {
         "date": "2022-02-04T00:00:00Z",
@@ -820,6 +840,11 @@
         "date": "2022-02-04T00:00:00Z",
         "account": "Assets:Equity:ABNB",
         "market_amount": 8025.3170071296
+      },
+      "Assets:Equity:AXIS SMALL CAP FUND - DIRECT PLAN": {
+        "date": "2022-02-04T00:00:00Z",
+        "account": "Assets:Equity:AXIS SMALL CAP FUND - DIRECT PLAN",
+        "market_amount": 1274.0298
       },
       "Assets:Equity:NIFTY": {
         "date": "2022-02-04T00:00:00Z",
@@ -831,7 +856,7 @@
       "Assets:Checking": {
         "date": "2022-02-05T00:00:00Z",
         "account": "Assets:Checking",
-        "market_amount": 12097.5625128704
+        "market_amount": 10823.5327128704
       },
       "Assets:Dollar": {
         "date": "2022-02-05T00:00:00Z",
@@ -847,6 +872,11 @@
         "date": "2022-02-05T00:00:00Z",
         "account": "Assets:Equity:ABNB",
         "market_amount": 8025.3170071296
+      },
+      "Assets:Equity:AXIS SMALL CAP FUND - DIRECT PLAN": {
+        "date": "2022-02-05T00:00:00Z",
+        "account": "Assets:Equity:AXIS SMALL CAP FUND - DIRECT PLAN",
+        "market_amount": 1274.0298
       },
       "Assets:Equity:NIFTY": {
         "date": "2022-02-05T00:00:00Z",
@@ -858,7 +888,7 @@
       "Assets:Checking": {
         "date": "2022-02-06T00:00:00Z",
         "account": "Assets:Checking",
-        "market_amount": 12097.5625128704
+        "market_amount": 10823.5327128704
       },
       "Assets:Dollar": {
         "date": "2022-02-06T00:00:00Z",
@@ -874,6 +904,11 @@
         "date": "2022-02-06T00:00:00Z",
         "account": "Assets:Equity:ABNB",
         "market_amount": 8025.3170071296
+      },
+      "Assets:Equity:AXIS SMALL CAP FUND - DIRECT PLAN": {
+        "date": "2022-02-06T00:00:00Z",
+        "account": "Assets:Equity:AXIS SMALL CAP FUND - DIRECT PLAN",
+        "market_amount": 1274.0298
       },
       "Assets:Equity:NIFTY": {
         "date": "2022-02-06T00:00:00Z",
@@ -885,7 +920,7 @@
       "Assets:Checking": {
         "date": "2022-02-07T00:00:00Z",
         "account": "Assets:Checking",
-        "market_amount": 12097.5625128704
+        "market_amount": 10823.5327128704
       },
       "Assets:Dollar": {
         "date": "2022-02-07T00:00:00Z",
@@ -901,6 +936,11 @@
         "date": "2022-02-07T00:00:00Z",
         "account": "Assets:Equity:ABNB",
         "market_amount": 8025.3170071296
+      },
+      "Assets:Equity:AXIS SMALL CAP FUND - DIRECT PLAN": {
+        "date": "2022-02-07T00:00:00Z",
+        "account": "Assets:Equity:AXIS SMALL CAP FUND - DIRECT PLAN",
+        "market_amount": 1274.0298
       },
       "Assets:Equity:NIFTY": {
         "date": "2022-02-07T00:00:00Z",

@@ -9,7 +9,8 @@
     "Income:CapitalGains:Equity:AAPL",
     "Expenses:Charges",
     "Assets:Dollar",
-    "Income:Interest:Checking"
+    "Income:Interest:Checking",
+    "Assets:Equity:AXIS SMALL CAP FUND - DIRECT PLAN"
   ],
   "config": {
     "journal_path": "main.ledger",

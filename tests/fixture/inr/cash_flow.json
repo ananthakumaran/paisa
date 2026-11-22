@@ -15,10 +15,10 @@
       "income": 0,
       "expenses": 0,
       "liabilities": 0,
-      "investment": 0,
+      "investment": 1274.0298,
       "tax": 0,
-      "checking": 0,
-      "balance": 12097.5625128704
+      "checking": -1274.0298,
+      "balance": 10823.5327128704
     }
   ]
 }

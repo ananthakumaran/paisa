@@ -3,6 +3,7 @@
 ### Unreleased
 
 * Add System theme mode to the app and documentation, following your device's light/dark preference by default.
+* `paisa serve` now listens only on `127.0.0.1` by default. For network access, pass `--host 0.0.0.0` or an explicit interface address. Docker images still listen on all interfaces inside the container. ([#333](https://github.com/ananthakumaran/paisa/issues/333))
 
 ### 0.8.0 (2026-11-15)
 

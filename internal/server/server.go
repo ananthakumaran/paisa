@@ -387,11 +387,12 @@ func Listen(db *gorm.DB, host string, port int) {
 	router := Build(db, true)
 	address := net.JoinHostPort(host, strconv.Itoa(port))
 
-	displayHost := host
-	if displayHost == "" {
-		displayHost = "localhost"
+	switch host {
+	case "", "0.0.0.0", "::":
+		log.Infof("Listening on all interfaces (%s)", address)
+	default:
+		log.Infof("Listening on http://%s", address)
 	}
-	log.Infof("Listening on http://%s", net.JoinHostPort(displayHost, strconv.Itoa(port)))
 	err := router.Run(address)
 	if err != nil {
 		log.Fatal(err)

@@ -19,4 +19,4 @@ RUN apk --no-cache add ca-certificates ledger tzdata
 WORKDIR /root/
 COPY --from=go /usr/src/paisa/paisa /usr/bin
 EXPOSE 7500
-CMD ["paisa", "serve"]
+CMD ["paisa", "serve", "--host", "0.0.0.0"]

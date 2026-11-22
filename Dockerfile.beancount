@@ -4,4 +4,4 @@ RUN apk --no-cache add beancount
 
 WORKDIR /root/
 
-CMD ["paisa", "serve"]
+CMD ["paisa", "serve", "--host", "0.0.0.0"]

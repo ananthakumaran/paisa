@@ -130,7 +130,7 @@ related files in a folder named `paisa` which will be located in your
     PS C:\Users\john> .\paisa.exe serve
     ```
 
-Go to [http://localhost:7500](http://localhost:7500). Read the [tutorial](./tutorial.md) to learn
+Go to [http://127.0.0.1:7500](http://127.0.0.1:7500). Read the [tutorial](./tutorial.md) to learn
 more.
 
 ## Docker

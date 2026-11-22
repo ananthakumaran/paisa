@@ -27,12 +27,12 @@ func TestServeFlags(t *testing.T) {
 		host string
 		port int
 	}{
-		{name: "defaults", host: "", port: 7500},
-		{name: "IPv4 loopback", args: []string{"--host", "127.0.0.1"}, host: "127.0.0.1", port: 7500},
+		{name: "defaults", host: "127.0.0.1", port: 7500},
+		{name: "IPv4 wildcard", args: []string{"--host", "0.0.0.0"}, host: "0.0.0.0", port: 7500},
 		{name: "IPv6 loopback", args: []string{"--host", "::1"}, host: "::1", port: 7500},
 		{name: "hostname", args: []string{"--host", "localhost"}, host: "localhost", port: 7500},
 		{name: "custom port", args: []string{"--host", "192.168.1.10", "--port", "8080"}, host: "192.168.1.10", port: 8080},
-		{name: "short port flag", args: []string{"-p", "8080"}, host: "", port: 8080},
+		{name: "short port flag", args: []string{"-p", "8080"}, host: "127.0.0.1", port: 8080},
 	} {
 		t.Run(tc.name, func(t *testing.T) {
 			require.NoError(t, hostFlag.Value.Set(hostFlag.DefValue))

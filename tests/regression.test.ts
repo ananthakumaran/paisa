@@ -11,8 +11,9 @@ import { diffString } from "json-diff";
 import type { LedgerFile } from "../src/lib/utils";
 
 const fixture = "tests/fixture";
+const host = "127.0.0.1";
 const port = 5700;
-axios.defaults.baseURL = `http://localhost:${port}`;
+axios.defaults.baseURL = `http://${host}:${port}`;
 
 function updateConfig(dir: string, from: string, to: string) {
   const filename = path.join(dir, "paisa.yaml");
@@ -118,7 +119,7 @@ async function verifyApi(dir: string) {
 
 async function wait() {
   try {
-    await waitPort({ port: port, output: "silent" });
+    await waitPort({ host, port, output: "silent" });
   } catch (e) {
     // ignore
   }

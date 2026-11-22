@@ -34,5 +34,5 @@ var serveCmd = &cobra.Command{
 func init() {
 	rootCmd.AddCommand(serveCmd)
 	serveCmd.Flags().IntVarP(&port, "port", "p", 7500, "port to listen on")
-	serveCmd.Flags().StringVar(&host, "host", "", "host to listen on (default is all interfaces)")
+	serveCmd.Flags().StringVar(&host, "host", "127.0.0.1", "host to listen on (use 0.0.0.0 for all interfaces)")
 }

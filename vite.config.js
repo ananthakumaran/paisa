@@ -17,7 +17,7 @@ const config = {
   server: {
     proxy: {
       "/api": {
-        target: "http://localhost:7500"
+        target: "http://127.0.0.1:7500"
       }
     },
     fs: {

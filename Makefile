@@ -71,7 +71,7 @@ fixture/main.transactions.json:
 	cp fixture/main.ledger /tmp/main.ledger
 	cd /tmp && paisa update --journal && paisa serve -p 6500 &
 	sleep 1
-	curl http://localhost:6500/api/transaction | jq .transactions > fixture/main.transactions.json
+	curl http://127.0.0.1:6500/api/transaction | jq .transactions > fixture/main.transactions.json
 	pkill -f 'paisa serve -p 6500'
 
 generate-fonts:

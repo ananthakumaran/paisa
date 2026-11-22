@@ -10,6 +10,7 @@ import (
 	"time"
 
 	_ "embed"
+	_ "time/tzdata"
 
 	log "github.com/sirupsen/logrus"
 

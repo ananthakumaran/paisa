@@ -80,6 +80,11 @@ func (r *Result) UnmarshalJSON(data []byte) error {
 		return err
 	}
 
+	for _, quote := range raw.Indicators.Quote {
+		if len(quote.Close) != len(raw.Timestamp) {
+			return fmt.Errorf("mismatched timestamps (%d) and closes (%d)", len(raw.Timestamp), len(quote.Close))
+		}
+	}
 	*r = Result{
 		Meta:       raw.Meta,
 		Timestamp:  make([]int64, 0, len(raw.Timestamp)),
@@ -107,6 +112,10 @@ func (r *Result) UnmarshalJSON(data []byte) error {
 
 type Chart struct {
 	Result []Result
+	Error  *struct {
+		Code        string
+		Description string
+	}
 }
 type Response struct {
 	Chart Chart
@@ -119,8 +128,15 @@ func GetHistory(ticker string, commodityName string) ([]*price.Price, error) {
 		return nil, err
 	}
 
-	var prices []*price.Price
+	if len(response.Chart.Result) == 0 {
+		return nil, fmt.Errorf("Yahoo Finance %s: no price history", ticker)
+	}
 	result := response.Chart.Result[0]
+	if len(result.Indicators.Quote) == 0 || len(result.Timestamp) == 0 {
+		return nil, fmt.Errorf("Yahoo Finance %s: no price history", ticker)
+	}
+
+	var prices []*price.Price
 	for i, timestamp := range result.Timestamp {
 		date := time.Unix(timestamp, 0)
 		value := result.Indicators.Quote[0].Close[i]
@@ -152,9 +168,15 @@ func getTicker(ticker string) (*Response, error) {
 	}
 
 	var response Response
-	err = json.Unmarshal(respBytes, &response)
-	if err != nil {
-		return nil, err
+	decodeErr := json.Unmarshal(respBytes, &response)
+	if chartErr := response.Chart.Error; decodeErr == nil && chartErr != nil {
+		return nil, fmt.Errorf("Yahoo Finance %s (HTTP %d): %s: %s", ticker, resp.StatusCode, chartErr.Code, chartErr.Description)
+	}
+	if resp.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("Yahoo Finance %s: HTTP %d %s", ticker, resp.StatusCode, http.StatusText(resp.StatusCode))
+	}
+	if decodeErr != nil {
+		return nil, fmt.Errorf("Yahoo Finance %s: invalid response: %w", ticker, decodeErr)
 	}
 
 	return &response, nil

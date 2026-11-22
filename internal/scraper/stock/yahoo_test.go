@@ -93,3 +93,35 @@ func TestGetHistoryReturnsUnconvertedPrices(t *testing.T) {
 		})
 	}
 }
+
+func TestGetHistoryRejectsUnexpectedResponses(t *testing.T) {
+	for _, tc := range []struct {
+		name   string
+		status int
+		body   string
+		want   string
+	}{
+		{"unknown ticker", http.StatusNotFound, `{"chart":{"result":null,"error":{"code":"Not Found","description":"No data found, symbol may be delisted"}}}`, "HTTP 404): Not Found: No data found, symbol may be delisted"},
+		{"rate limited", http.StatusTooManyRequests, "Edge: Too Many Requests", "HTTP 429 Too Many Requests"},
+		{"chart error", http.StatusOK, `{"chart":{"result":null,"error":{"code":"Unauthorized","description":"Invalid Cookie"}}}`, "Unauthorized: Invalid Cookie"},
+		{"invalid JSON", http.StatusOK, "not JSON", "invalid response"},
+		{"empty result", http.StatusOK, `{"chart":{"result":[]}}`, "no price history"},
+		{"missing quotes", http.StatusOK, `{"chart":{"result":[{"timestamp":[100]}]}}`, "no price history"},
+		{"all closes missing", http.StatusOK, `{"chart":{"result":[{"timestamp":[100],"indicators":{"quote":[{"close":[null]}]}}]}}`, "no price history"},
+		{"short closes", http.StatusOK, `{"chart":{"result":[{"timestamp":[100,200],"indicators":{"quote":[{"close":[10]}]}}]}}`, "mismatched timestamps (2) and closes (1)"},
+		{"extra closes", http.StatusOK, `{"chart":{"result":[{"timestamp":[100],"indicators":{"quote":[{"close":[10,20]}]}}]}}`, "mismatched timestamps (1) and closes (2)"},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			originalClient := http.DefaultClient
+			http.DefaultClient = &http.Client{Transport: yahooRoundTripFunc(func(req *http.Request) (*http.Response, error) {
+				return &http.Response{StatusCode: tc.status, Body: io.NopCloser(strings.NewReader(tc.body))}, nil
+			})}
+			t.Cleanup(func() { http.DefaultClient = originalClient })
+
+			prices, err := GetHistory("STOCK", "Stock")
+			require.ErrorContains(t, err, tc.want)
+			assert.ErrorContains(t, err, "STOCK")
+			assert.Nil(t, prices)
+		})
+	}
+}

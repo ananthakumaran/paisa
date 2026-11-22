@@ -116,6 +116,30 @@ func TestParsePricesCommodityNames(t *testing.T) {
 	}
 }
 
+func TestParseBeanQueryPrices(t *testing.T) {
+	const header = "date,currency,str(number(amount)),currency(amount)\r\n"
+	data := header +
+		"2022-01-07,NIFTY,100.273,INR\r\n" +
+		"2022-01-08,INR,0.0125,USD\r\n" +
+		"2022-01-09,ABC1DE,1E-8,INR\r\n" +
+		"2022-01-10,INR,0,EUR\r\n" +
+		"2022-01-11,USD,0.9,EUR\r\n"
+	prices, err := parseBeanQueryPrices([]byte(data), "INR")
+	require.NoError(t, err)
+	require.Len(t, prices, 3)
+	assertPriceEqual(t, prices[0], "2022/01/07", "NIFTY", 100.273)
+	assertPriceEqual(t, prices[1], "2022/01/08", "USD", 80)
+	assertPriceEqual(t, prices[2], "2022/01/09", "ABC1DE", 1e-8)
+	assert.Equal(t, "0.00000001", prices[2].Value.String())
+
+	prices, err = parseBeanQueryPrices([]byte(header), "INR")
+	require.NoError(t, err)
+	assert.Empty(t, prices)
+
+	_, err = parseBeanQueryPrices(nil, "INR")
+	require.ErrorContains(t, err, "no price CSV header")
+}
+
 func TestParseAmount(t *testing.T) {
 	commodity, amount, _ := parseAmount("0.9 USD")
 	assert.Equal(t, "USD", commodity)

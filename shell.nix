@@ -1,4 +1,4 @@
-{ pkgs ? import <nixpkgs> { }, hledger ? import <nixpkgs> { } }:
+{ pkgs ? import <nixpkgs> { }, hledger ? import <nixpkgs> { }, beancount3 ? false }:
 
 pkgs.mkShell {
   nativeBuildInputs = [
@@ -11,12 +11,16 @@ pkgs.mkShell {
     # pkgs.pkgsCross.mingwW64.buildPackages.gcc
 
     pkgs.python312Packages.mkdocs-material
-    pkgs.python312Packages.beancount_2
 
     # test
     pkgs.ledger
     hledger.hledger
-  ] ++ (pkgs.lib.optional pkgs.stdenv.hostPlatform.isLinux pkgs.wails);
+  ] ++ (if beancount3 then [
+    pkgs.python312Packages.beancount
+    pkgs.python312Packages.beanquery
+  ] else [
+    pkgs.python312Packages.beancount_2
+  ]) ++ (pkgs.lib.optional pkgs.stdenv.hostPlatform.isLinux pkgs.wails);
 
   shellHook = ''
     export CGO_ENABLED=1

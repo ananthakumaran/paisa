@@ -37,6 +37,10 @@
           inherit pkgs;
           inherit hledger;
         };
+        devShells.beancount3 = import ./shell.nix {
+          inherit pkgs hledger;
+          beancount3 = true;
+        };
 
         packages.default = pkgs.buildGoModule {
           pname = "paisa-cli";

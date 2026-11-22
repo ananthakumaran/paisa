@@ -18,3 +18,5 @@ jobs:
         nix develop --command npm install
         nix develop --command make lint
         nix develop --command make test
+    - name: Test Beancount 3 against the shared regression fixture
+      run: nix develop .#beancount3 --command env -u PAISA_CONFIG TZ=UTC node --import=tsx --test-name-pattern='^inr-beancount$' --test tests/regression.test.ts

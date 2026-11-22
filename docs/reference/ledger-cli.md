@@ -32,6 +32,11 @@ by **hledger** and **beancount**
 
 ### beancount
 
+Both Beancount 2 and 3 use `ledger_cli: beancount`. Beancount 2 works with its
+bundled commands. With Beancount 3, install the separate
+[`beanquery`](https://github.com/beancount/beanquery) package and make sure
+`bean-check` and `bean-query` are on your `PATH`.
+
 * [Budget](./budget.md) - budget is based on periodic transactions that is no
     supported by beancount.
 

@@ -279,6 +279,13 @@ Trims the given string.
 
 Replace the given search string with the given replace string.
 
+#### `#!typescript expandEscapes(str: string): string`
+
+Decodes `\n` (line feed), `\r` (carriage return), `\t` (tab), and `\\` (backslash).
+Other escape sequences are left unchanged. For example, use
+`#!handlebars {{replace ROW.G (expandEscapes "\n") " "}}` to replace LF line breaks
+in a cell with spaces. Use `"\r\n"` instead for CRLF line breaks.
+
 #### `#!typescript regexpTest(str: string, regexp: string): boolean`
 
 Tests the given string against the given regular expression.

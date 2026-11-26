@@ -171,6 +171,13 @@ export default {
     }
     return str.replaceAll(search, replace);
   },
+  expandEscapes(str: string) {
+    if (!_.isString(str)) {
+      return;
+    }
+    const escapes = { n: "\n", r: "\r", t: "\t", "\\": "\\" };
+    return str.replace(/\\([nrt\\])/g, (_, char: keyof typeof escapes) => escapes[char]);
+  },
   textRange(fromColumn: string, toColumn: string, options: any) {
     const row: Record<string, string> = options.data.root.ROW;
     const cells = [];

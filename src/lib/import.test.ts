@@ -63,7 +63,33 @@ describe("import", () => {
   });
 });
 
+describe("multiline CSV descriptions (#286)", () => {
+  for (const [name, newline, escaped] of [
+    ["LF", "\n", "\\n"],
+    ["CRLF", "\r\n", "\\r\\n"]
+  ]) {
+    test(`replace with expandEscapes flattens quoted ${name} descriptions`, async () => {
+      const csv = `2024/09/20,"Online store${newline}Order #123${newline}Paid"${newline}2024/09/21,Single line`;
+      const result = await parse(new File([csv], "multiline.csv"));
+      const template = Handlebars.compile(
+        `{{ROW.A}} {{replace ROW.B (expandEscapes "${escaped}") " "}}`,
+        { noEscape: true }
+      );
+
+      assert.strictEqual(
+        render(asRows(result), template, { trim: true }),
+        "2024/09/20 Online store Order #123 Paid\n\n2024/09/21 Single line"
+      );
+    });
+  }
+});
+
 describe("template helpers", () => {
+  test("expandEscapes decodes supported escapes once and preserves unknown ones", () => {
+    const template = Handlebars.compile(String.raw`{{expandEscapes "a\n\r\tb\\n\qc"}}`);
+    assert.strictEqual(template({}), "a\n\r\tb\\n\\qc");
+  });
+
   test("acronym", () => {
     assert.strictEqual(helpers.acronym("Foo Bar baz"), "FBB");
     assert.strictEqual(helpers.acronym("foo   the bar"), "FB");

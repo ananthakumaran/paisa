@@ -91,7 +91,7 @@
     
     
     
-    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="white" data-md-color-accent="indigo">
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
   
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
@@ -164,9 +164,19 @@
     
     
     
-    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="white" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    <input class="md-option" data-md-color-media="(prefers-color-scheme)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_0">
     
-      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 16H3V4h18m0-2H3c-1.11 0-2 .89-2 2v12a2 2 0 0 0 2 2h7v2H8v2h8v-2h-2v-2h7a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="white" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m3.55 19.09 1.41 1.41 1.8-1.79-1.42-1.42M12 6c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6c0-3.32-2.69-6-6-6m8 7h3v-2h-3m-2.76 7.71 1.8 1.79 1.41-1.41-1.79-1.8M20.45 5l-1.41-1.4-1.8 1.79 1.42 1.42M13 1h-2v3h2M6.76 5.39 4.96 3.6 3.55 5l1.79 1.81zM1 13h3v-2H1m12 9h-2v3h2"/></svg>
       </label>
     
@@ -174,9 +184,9 @@
     
     
     
-    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="indigo"  aria-label="Switch to system mode"  type="radio" name="__palette" id="__palette_2">
     
-      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+      <label class="md-header__button md-icon" title="Switch to system mode" for="__palette_0" hidden>
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M2 12a10 10 0 0 0 13 9.54 10 10 0 0 1 0-19.08A10 10 0 0 0 2 12"/></svg>
       </label>
     
@@ -1169,6 +1179,17 @@
     <span class="md-ellipsis">
       
         replace(str: string, search: string, replace: string): string
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#expandescapesstr-string-string" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        expandEscapes(str: string): string
       
     </span>
   </a>
@@ -2615,6 +2636,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#expandescapesstr-string-string" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        expandEscapes(str: string): string
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#regexpteststr-string-regexp-string-boolean" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2924,6 +2956,11 @@ Direct Plan</code> will be converted to <code>UNNI</code></p>
 <p>Trims the given string.</p>
 <h4 id="replacestr-string-search-string-replace-string-string"><code class="language-typescript highlight"><span class="nx">replace</span><span class="p">(</span><span class="nx">str</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="nx">search</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="nx">replace</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span></code><a class="headerlink" href="#replacestr-string-search-string-replace-string-string" title="Permanent link">&para;</a></h4>
 <p>Replace the given search string with the given replace string.</p>
+<h4 id="expandescapesstr-string-string"><code class="language-typescript highlight"><span class="nx">expandEscapes</span><span class="p">(</span><span class="nx">str</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span></code><a class="headerlink" href="#expandescapesstr-string-string" title="Permanent link">&para;</a></h4>
+<p>Decodes <code>\n</code> (line feed), <code>\r</code> (carriage return), <code>\t</code> (tab), and <code>\\</code> (backslash).
+Other escape sequences are left unchanged. For example, use
+<code class="language-handlebars highlight"><span class="cp">{{</span><span class="nv">replace</span> <span class="nv">ROW.G</span> <span class="nv">(expandEscapes</span> <span class="s2">&quot;\n&quot;</span><span class="nv">)</span> <span class="s2">&quot; &quot;</span><span class="cp">}}</span></code> to replace LF line breaks
+in a cell with spaces. Use <code>"\r\n"</code> instead for CRLF line breaks.</p>
 <h4 id="regexpteststr-string-regexp-string-boolean"><code class="language-typescript highlight"><span class="nx">regexpTest</span><span class="p">(</span><span class="nx">str</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="nx">regexp</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="o">:</span><span class="w"> </span><span class="kt">boolean</span></code><a class="headerlink" href="#regexpteststr-string-regexp-string-boolean" title="Permanent link">&para;</a></h4>
 <p>Tests the given string against the given regular expression.</p>
 <h4 id="regexpmatchstr-string-regexp-string-group-number-string"><code class="language-typescript highlight"><span class="nx">regexpMatch</span><span class="p">(</span><span class="nx">str</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="nx">regexp</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="nx">group?</span><span class="o">:</span><span class="w"> </span><span class="kt">number</span><span class="p">})</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span></code><a class="headerlink" href="#regexpmatchstr-string-regexp-string-group-number-string" title="Permanent link">&para;</a></h4>
@@ -3260,6 +3297,8 @@ with <code>or</code> helper to return a default account.</p>
       <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
       
         <script src="../../javascripts/extra.js"></script>
+      
+        <script src="../../javascripts/comments.js"></script>
       
     
   </body>

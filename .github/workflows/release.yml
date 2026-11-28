@@ -145,8 +145,13 @@ jobs:
           if [ "${GITHUB_EVENT_NAME}" = "workflow_dispatch" ]; then
             TAG="${{ inputs.tag }}"
           fi
-          gh release create "$TAG" \
-            dist/paisa_*_amd64.deb \
-            dist/paisa-docker-image.tar.gz \
-            --title "Paisa $TAG" \
-            --notes-file dist/release-notes.md
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            gh release upload "$TAG" dist/paisa_*_amd64.deb dist/paisa-docker-image.tar.gz --clobber
+            gh release edit "$TAG" --title "Paisa $TAG" --notes-file dist/release-notes.md
+          else
+            gh release create "$TAG" \
+              dist/paisa_*_amd64.deb \
+              dist/paisa-docker-image.tar.gz \
+              --title "Paisa $TAG" \
+              --notes-file dist/release-notes.md
+          fi

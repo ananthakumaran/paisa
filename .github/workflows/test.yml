@@ -16,6 +16,7 @@ jobs:
         restore-prefixes-first-match: nix-${{ runner.os }}-${{ runner.arch }}
     - run: |
         nix develop --command npm install
+        nix develop --command go mod tidy
         nix develop --command make lint
         nix develop --command make test
     - name: Test Beancount 3 against the shared regression fixture

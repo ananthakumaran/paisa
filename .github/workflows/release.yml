@@ -44,6 +44,9 @@ jobs:
           test -d web/static
 
       - name: Build Linux binary
+        run: mkdir -p dist
+
+      - name: Compile Linux binary
         env:
           CGO_ENABLED: "1"
         run: |

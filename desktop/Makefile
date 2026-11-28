@@ -1,10 +1,10 @@
 .PHONY: build
 
 develop:
-	wails dev -tags webkit2_40
+	wails dev -tags webkit2_41
 
 build:
-	wails build -tags webkit2_40
+	wails build -tags webkit2_41
 
 dmg:
 	rm -rf Paisa.dmg

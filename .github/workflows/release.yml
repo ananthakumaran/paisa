@@ -190,7 +190,7 @@ jobs:
           if [ "${GITHUB_EVENT_NAME}" = "workflow_dispatch" ]; then
             TAG="${{ inputs.tag }}"
           fi
-          ASSETS=(dist/paisa_*_amd64.deb dist/paisa-cli_*_amd64.deb dist/paisa-docker-image.tar.gz)
+          ASSETS=(dist/paisa_[0-9]*_amd64.deb dist/paisa-cli_*_amd64.deb dist/paisa-docker-image.tar.gz)
           if gh release view "$TAG" >/dev/null 2>&1; then
             gh release upload "$TAG" "${ASSETS[@]}" --clobber
             gh release edit "$TAG" --title "Paisa $TAG" --notes-file dist/release-notes.md

@@ -85,26 +85,23 @@ the primary difference being how the user interface is launched.
 
 === "Windows"
 
-    * Download the prebuilt [binary](https://github.com/ananthakumaran/paisa/releases/latest) named `paisa-cli-windows-amd64.exe`
+    * Download and extract `paisa-cli-windows-amd64.zip` from the [latest release](https://github.com/ananthakumaran/paisa/releases/latest). Keep the included `hledger.exe` beside the Paisa executable.
     * Since the binary is not signed[^1] with a certificate, you might get
     a warning from Windows. You would have to click `keep anyway`.
-    * Run the following command in a Windows PowerShell. Make sure
-    you are in the correct folder. You should see something like `PS C:\Users\yourname>`
+    * Run the following command in a Windows PowerShell from the extracted folder.
 
     ```pwsh-session
-    PS C:\Users\john> mv .\Downloads\paisa-cli-windows-amd64.exe .\paisa.exe
+    PS C:\Users\john> .\paisa-cli-windows-amd64.exe serve
     ```
 
-    * The `paisa.exe` binary will be placed in the user's home directory. You
-    can access it via PowerShell. Just open a new PowerShell window,
-    which will start in the home directory. Then, you can run `.\paisa.exe serve`
+    * Keep `hledger.exe` and the Paisa executable together so Paisa can find its default accounting engine.
 
 !!! tip
 
-    Paisa depends on the **[ledger](https://www.ledger-cli.org/download.html)** binary. The prebuilt
-    paisa binaries come with an embedded ledger binary and will use it if
-    it's not already installed on your system. If you prefer to install the
-    ledger yourself, follow the installation instructions on [ledger](https://www.ledger-cli.org/download.html) site.
+    Paisa uses **hledger** by default. Its Linux packages and Docker image include hledger, and the
+    Windows installer and CLI archive bundle it. For manual or self-built installations, install
+    hledger and make sure it is available on `PATH`. The prebuilt Paisa binary still includes Ledger;
+    select it or Beancount by setting `ledger_cli` in `paisa.yaml`.
 
 ## CLI Quick Start
 

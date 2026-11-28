@@ -69,7 +69,7 @@ func generateConfigFile(cwd string) {
 	config := `
 journal_path: '%s'
 db_path: '%s'
-ledger_cli: ledger
+ledger_cli: hledger
 default_currency: INR
 goals:
   retirement:

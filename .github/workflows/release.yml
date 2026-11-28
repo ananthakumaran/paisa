@@ -118,7 +118,7 @@ jobs:
           Priority: optional
           Architecture: amd64
           Maintainer: Deb426
-          Depends: libc6, libsqlite3-0
+          Depends: hledger, libc6, libsqlite3-0
           Description: Paisa command-line interface
            Command-line interface for the Paisa personal finance manager.
           EOF

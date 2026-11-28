@@ -84,6 +84,7 @@ Section
     SetOutPath $INSTDIR
     
     !insertmacro wails.files
+    File /r "${__FILEDIR__}\..\hledger\*"
 
     CreateShortcut "$SMPROGRAMS\${INFO_PRODUCTNAME}.lnk" "$INSTDIR\${PRODUCT_EXECUTABLE}"
     CreateShortCut "$DESKTOP\${INFO_PRODUCTNAME}.lnk" "$INSTDIR\${PRODUCT_EXECUTABLE}"

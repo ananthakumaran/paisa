@@ -23,10 +23,15 @@ jobs:
         choco install nsis
         npm install
         npm run build
+        Invoke-WebRequest -Uri https://github.com/simonmichael/hledger/releases/download/1.32.3/hledger-windows-x64.zip -OutFile hledger-windows-x64.zip
+        Expand-Archive -Path hledger-windows-x64.zip -DestinationPath hledger-bin
+        New-Item -ItemType Directory -Path desktop/build/windows/hledger -Force
+        Copy-Item hledger-bin/* desktop/build/windows/hledger -Recurse -Force
         wget https://github.com/FullofQuarks/Windows-Ledger-Binaries/releases/download/v3.3.2/ledger.exe
         cp ledger.exe internal/binary/ledger
         go build
         cp paisa.exe paisa-cli-windows-amd64.exe
+        Compress-Archive -Path .\paisa-cli-windows-amd64.exe, .\hledger-bin\* -DestinationPath .\paisa-cli-windows-amd64.zip -Force
         $env:PATH += ";C:\Program Files (x86)\NSIS\Bin"
         cd desktop
         go install github.com/wailsapp/wails/v2/cmd/wails@latest

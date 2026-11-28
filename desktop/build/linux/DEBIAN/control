@@ -3,7 +3,7 @@ Version: 0.8.1
 Section: misc
 Priority: optional
 Architecture: amd64
-Depends: libgtk-3-0, libwebkit2gtk-4.1-0
+Depends: hledger, libgtk-3-0, libwebkit2gtk-4.1-0
 Maintainer: Anantha Kumaran <ananthakumaran@gmail.com>
 Homepage: https://paisa.fyi
 Description: Personal finance manager

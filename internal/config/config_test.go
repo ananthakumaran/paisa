@@ -20,6 +20,24 @@ commodities:
       code: %s
 `
 
+func TestLedgerCliDefaultAndOptions(t *testing.T) {
+	for _, tc := range []struct {
+		name, setting, want string
+	}{
+		{"omitted", "", "hledger"},
+		{"hledger", "ledger_cli: hledger\n", "hledger"},
+		{"ledger", "ledger_cli: ledger\n", "ledger"},
+		{"beancount", "ledger_cli: beancount\n", "beancount"},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			content := []byte("journal_path: main.ledger\ndb_path: paisa.db\n" + tc.setting)
+			parsed, _, err := parseConfig(content)
+			require.NoError(t, err)
+			require.Equal(t, tc.want, parsed.LedgerCli)
+		})
+	}
+}
+
 func TestNormalizePriceProviders(t *testing.T) {
 	for _, tc := range []struct {
 		provider, canonical, code string

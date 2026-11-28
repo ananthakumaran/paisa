@@ -49,8 +49,8 @@ db_path: /home/john/Documents/paisa/paisa.db
 sheets_directory: sheets
 
 # The ledger client to use
-# OPTIONAL, DEFAULT: ledger, ENUM: ledger, hledger, beancount
-ledger_cli: ledger
+# OPTIONAL, DEFAULT: hledger, ENUM: ledger, hledger, beancount
+ledger_cli: hledger
 
 # The default currency to use. NOTE: Paisa tries to convert other
 # currencies to default currency, so make sure it's possible to

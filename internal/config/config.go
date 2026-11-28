@@ -178,7 +178,7 @@ var location *time.Location
 
 var defaultConfig = Config{
 	Readonly:                   false,
-	LedgerCli:                  "ledger",
+	LedgerCli:                  "hledger",
 	DefaultCurrency:            "INR",
 	DisplayPrecision:           0,
 	AmountAlignmentColumn:      52,

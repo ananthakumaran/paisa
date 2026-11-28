@@ -25,6 +25,19 @@ var cachedLedgerBinaryPath string
 func LookPath(name string) (string, error) {
 	path, err := exec.LookPath(name)
 	if err != nil {
+		if runtime.GOOS == "windows" {
+			if executable, executableErr := os.Executable(); executableErr == nil {
+				binaryName := name
+				if filepath.Ext(binaryName) == "" {
+					binaryName += ".exe"
+				}
+				candidate := filepath.Join(filepath.Dir(executable), binaryName)
+				if info, statErr := os.Stat(candidate); statErr == nil && !info.IsDir() {
+					return candidate, nil
+				}
+			}
+		}
+
 		// macOS doesn't set $PATH correctly for GUI apps
 		if runtime.GOOS == "darwin" {
 			for _, p := range DEFAULT_PATH {

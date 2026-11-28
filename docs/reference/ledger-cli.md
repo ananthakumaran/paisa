@@ -4,18 +4,19 @@ description: "Paisa supports all the top 3 plain text account clients namely led
 
 # Ledger CLI
 
-Paisa is compatible with [ledger](https://www.ledger-cli.org), [hledger](https://hledger.org/) and
-[beancount](https://beancount.github.io/). By default paisa will try to use **ledger**, if you
-prefer to use **hledger** or **beancount** instead, change the
-`ledger_cli` value in [paisa.yaml](./config.md)
+Paisa is compatible with [Ledger](https://www.ledger-cli.org), [hledger](https://hledger.org/) and
+[Beancount](https://beancount.github.io/). By default Paisa uses **hledger**. To choose another
+engine, set the existing `ledger_cli` option in [paisa.yaml](./config.md) to `ledger`, `hledger`, or
+`beancount`.
 
 ```yaml
-# OPTIONAL, DEFAULT: ledger, ENUM: ledger, hledger, beancount
+# OPTIONAL, DEFAULT: hledger, ENUM: ledger, hledger, beancount
 ledger_cli: hledger
 ```
 
-Paisa ships with ledger binary. If you use hledger or beancount, make
-sure that the binaries are installed.
+Paisa's Linux packages and Docker image include hledger. Other builds need hledger on `PATH` unless
+they bundle it. Paisa continues to support Ledger and Beancount; install their executables and select
+them with `ledger_cli` when needed. The Ledger binary remains embedded in the prebuilt Paisa binary.
 
 ## Unavailable Features
 

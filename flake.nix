@@ -19,7 +19,7 @@
           inherit version;
           src = ./.;
 
-          nativeBuildInputs = [ pkgs.nodejs_24 ];
+          nativeBuildInputs = [ pkgs.nodejs_24 pkgs.makeWrapper ];
           npmDepsHash = "sha256-481E+4KVeZwSTeZxCYmxaurR5ndHQzJeqxEYhjZiZLs=";
           npmBuildScript = "build";
           npmInstallFlags = [ "--ignore-scripts" ];
@@ -59,6 +59,11 @@
           doCheck = false;
 
           subPackages = [ "." ];
+
+          postInstall = ''
+            wrapProgram $out/bin/paisa \
+              --prefix PATH : ${pkgs.lib.makeBinPath [ hledger.hledger ]}
+          '';
 
           preConfigure = ''
             cp -r ${frontend}/static web/static

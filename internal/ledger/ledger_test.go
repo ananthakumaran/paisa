@@ -3,11 +3,32 @@ package ledger
 import (
 	"testing"
 
+	"github.com/ananthakumaran/paisa/internal/config"
 	"github.com/ananthakumaran/paisa/internal/model/price"
 	"github.com/ananthakumaran/paisa/internal/utils"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
+
+func TestCliSelectsConfiguredEngine(t *testing.T) {
+	for _, tc := range []struct {
+		name, config string
+		want         Ledger
+	}{
+		{"default hledger", "", HLedgerCLI{}},
+		{"hledger", "ledger_cli: hledger\n", HLedgerCLI{}},
+		{"ledger", "ledger_cli: ledger\n", LedgerCLI{}},
+		{"beancount", "ledger_cli: beancount\n", Beancount{}},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			content := []byte("journal_path: main.ledger\ndb_path: paisa.db\n" + tc.config)
+			require.NoError(t, config.LoadConfig(content, ""))
+			require.IsType(t, tc.want, Cli())
+		})
+	}
+	// Leave package-global configuration in its fresh-install state for other tests.
+	require.NoError(t, config.LoadConfig([]byte("journal_path: main.ledger\ndb_path: paisa.db\n"), ""))
+}
 
 func assertPriceEqual(t *testing.T, actual price.Price, date string, commodityName string, value float64) {
 	assert.Equal(t, commodityName, actual.CommodityName, "they should be equal")

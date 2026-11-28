@@ -43,7 +43,7 @@
           <div><Logo size={128} /></div>
           <div class="is-size-3 is-primary-color">Paisa</div>
           <div>
-            Version: <b>0.8.0</b>
+            Version: <b>0.8.1</b>
           </div>
         </div>
 

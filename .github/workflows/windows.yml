@@ -4,8 +4,6 @@ on:
   push:
     branches:
       - ci/windows-*
-    tags:
-      - '*'
 
 jobs:
   windows-binary:

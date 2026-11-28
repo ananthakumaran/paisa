@@ -8,6 +8,9 @@ on:
     tags:
       - '*'
 
+permissions:
+  contents: write
+
 jobs:
   publish:
     runs-on: ubuntu-latest

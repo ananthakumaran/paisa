@@ -107,7 +107,7 @@ jobs:
             VERSION="${VERSION#v}"
           fi
 
-          PKG="dist/paisa-cli"
+          PKG="dist/paisa-cli-package"
           mkdir -p "$PKG/DEBIAN" "$PKG/usr/bin" "$PKG/usr/share/doc/paisa-cli"
           install -m 0755 dist/paisa-cli "$PKG/usr/bin/paisa-cli"
           install -m 0644 COPYING "$PKG/usr/share/doc/paisa-cli/copyright"

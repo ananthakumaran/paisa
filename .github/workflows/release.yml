@@ -1,0 +1,149 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Existing version tag to release (for example v0.8.1)"
+        required: true
+        type: string
+
+permissions:
+  contents: write
+  packages: write
+
+jobs:
+  release:
+    name: Build and publish release assets
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event_name == 'workflow_dispatch' && inputs.tag || github.ref }}
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: "1.24"
+          cache: true
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: npm
+
+      - name: Build frontend
+        run: |
+          npm ci
+          npm run build
+          test -d web/static
+
+      - name: Build Linux binary
+        env:
+          CGO_ENABLED: "1"
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential libsqlite3-dev
+          go build -trimpath -ldflags="-s -w" -o dist/paisa .
+
+      - name: Package Debian application
+        run: |
+          set -euo pipefail
+          VERSION="${GITHUB_REF_NAME#v}"
+          if [ "${GITHUB_EVENT_NAME}" = "workflow_dispatch" ]; then
+            VERSION="${{ inputs.tag }}"
+            VERSION="${VERSION#v}"
+          fi
+          PKG="dist/deb"
+          mkdir -p "$PKG/DEBIAN" "$PKG/usr/bin" "$PKG/usr/share/doc/paisa"
+          install -m 0755 dist/paisa "$PKG/usr/bin/paisa"
+          install -m 0644 COPYING "$PKG/usr/share/doc/paisa/copyright"
+          cat > "$PKG/DEBIAN/control" <<EOF
+          Package: paisa
+          Version: $VERSION
+          Section: utils
+          Priority: optional
+          Architecture: amd64
+          Maintainer: Deb426
+          Depends: libc6, libsqlite3-0, ledger
+          Description: Personal finance manager
+           Self-hosted personal finance manager.
+          EOF
+          dpkg-deb --root-owner-group --build "$PKG" "dist/paisa_${VERSION}_amd64.deb"
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Prepare image metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/${{ github.repository }}
+          tags: |
+            type=raw,value=${{ github.event_name == 'workflow_dispatch' && inputs.tag || github.ref_name }}
+            type=raw,value=latest
+
+      - name: Build and publish Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+
+      - name: Export Docker image for release download
+        run: |
+          IMAGE="ghcr.io/${GITHUB_REPOSITORY,,}:${GITHUB_REF_NAME}"
+          if [ "${GITHUB_EVENT_NAME}" = "workflow_dispatch" ]; then
+            IMAGE="ghcr.io/${GITHUB_REPOSITORY,,}:${{ inputs.tag }}"
+          fi
+          docker pull "$IMAGE"
+          docker save "$IMAGE" | gzip > "dist/paisa-docker-image.tar.gz"
+
+      - name: Prepare release notes
+        run: |
+          TAG="${GITHUB_REF_NAME}"
+          if [ "${GITHUB_EVENT_NAME}" = "workflow_dispatch" ]; then
+            TAG="${{ inputs.tag }}"
+          fi
+          cat > dist/release-notes.md <<EOF
+          ## Downloads
+
+          - **Debian / Ubuntu (amd64):** Download the .deb package below and install it with `sudo apt install ./paisa_*_amd64.deb`.
+          - **Docker image archive:** Download `paisa-docker-image.tar.gz`, then load it with `docker load -i paisa-docker-image.tar.gz`.
+
+          ## Docker image
+
+          The image is also published to GitHub Container Registry:
+
+          `docker pull ghcr.io/${GITHUB_REPOSITORY,,}:${TAG}`
+
+          `latest` is updated for each release.
+          EOF
+
+      - name: Publish GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TAG="${GITHUB_REF_NAME}"
+          if [ "${GITHUB_EVENT_NAME}" = "workflow_dispatch" ]; then
+            TAG="${{ inputs.tag }}"
+          fi
+          gh release create "$TAG" \
+            dist/paisa_*_amd64.deb \
+            dist/paisa-docker-image.tar.gz \
+            --title "Paisa $TAG" \
+            --notes-file dist/release-notes.md

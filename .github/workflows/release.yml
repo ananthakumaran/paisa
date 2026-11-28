@@ -17,8 +17,8 @@ permissions:
 
 jobs:
   release:
-    name: Build and publish release assets
-    runs-on: ubuntu-latest
+    name: Build and publish Linux desktop, CLI and Docker
+    runs-on: ubuntu-24.04
     steps:
       - name: Check out source
         uses: actions/checkout@v4
@@ -37,24 +37,48 @@ jobs:
           node-version: "24"
           cache: npm
 
+      - name: Install Linux desktop build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            build-essential \
+            pkg-config \
+            sqlite3 \
+            libsqlite3-dev \
+            libgtk-3-dev \
+            libwebkit2gtk-4.1-dev
+
+      - name: Install Nix
+        uses: cachix/install-nix-action@v31
+        with:
+          nix_path: nixpkgs=channel:nixos-24.11
+
       - name: Build frontend
         run: |
           npm ci
           npm run build
           test -d web/static
 
-      - name: Build Linux binary
-        run: mkdir -p dist
+      - name: Build and bundle Ledger
+        run: |
+          nix-build ledger.nix
+          install -m 0755 ./result/bin/ledger internal/binary/ledger
 
-      - name: Compile Linux binary
+      - name: Build Linux desktop application
+        run: |
+          cd desktop
+          go install github.com/wailsapp/wails/v2/cmd/wails@v2.10.2
+          wails build -tags webkit2_41
+          test -x build/bin/Paisa
+
+      - name: Build Linux CLI
         env:
           CGO_ENABLED: "1"
         run: |
-          sudo apt-get update
-          sudo apt-get install -y build-essential libsqlite3-dev
-          go build -trimpath -ldflags="-s -w" -o dist/paisa .
+          mkdir -p dist
+          go build -trimpath -ldflags="-s -w" -o dist/paisa-cli .
 
-      - name: Package Debian application
+      - name: Package Debian desktop application
         run: |
           set -euo pipefail
           VERSION="${GITHUB_REF_NAME#v}"
@@ -62,22 +86,40 @@ jobs:
             VERSION="${{ inputs.tag }}"
             VERSION="${VERSION#v}"
           fi
-          PKG="dist/deb"
-          mkdir -p "$PKG/DEBIAN" "$PKG/usr/bin" "$PKG/usr/share/doc/paisa"
-          install -m 0755 dist/paisa "$PKG/usr/bin/paisa"
-          install -m 0644 COPYING "$PKG/usr/share/doc/paisa/copyright"
+
+          PKG="dist/paisa-desktop"
+          cp -a desktop/build/linux "$PKG"
+          install -m 0755 desktop/build/bin/Paisa "$PKG/usr/local/bin/Paisa"
+          install -m 0644 desktop/build/appicon.png "$PKG/usr/share/icons/hicolor/512x512/apps/paisa.png"
+
+          sed -i "s/^Version:.*/Version: ${VERSION}/" "$PKG/DEBIAN/control"
+          dpkg-deb --root-owner-group --build "$PKG" "dist/paisa_${VERSION}_amd64.deb"
+
+      - name: Package Debian CLI
+        run: |
+          set -euo pipefail
+          VERSION="${GITHUB_REF_NAME#v}"
+          if [ "${GITHUB_EVENT_NAME}" = "workflow_dispatch" ]; then
+            VERSION="${{ inputs.tag }}"
+            VERSION="${VERSION#v}"
+          fi
+
+          PKG="dist/paisa-cli"
+          mkdir -p "$PKG/DEBIAN" "$PKG/usr/bin" "$PKG/usr/share/doc/paisa-cli"
+          install -m 0755 dist/paisa-cli "$PKG/usr/bin/paisa-cli"
+          install -m 0644 COPYING "$PKG/usr/share/doc/paisa-cli/copyright"
           cat > "$PKG/DEBIAN/control" <<EOF
-          Package: paisa
-          Version: $VERSION
+          Package: paisa-cli
+          Version: ${VERSION}
           Section: utils
           Priority: optional
           Architecture: amd64
           Maintainer: Deb426
-          Depends: libc6, libsqlite3-0, ledger
-          Description: Personal finance manager
-           Self-hosted personal finance manager.
+          Depends: libc6, libsqlite3-0
+          Description: Paisa command-line interface
+           Command-line interface for the Paisa personal finance manager.
           EOF
-          dpkg-deb --root-owner-group --build "$PKG" "dist/paisa_${VERSION}_amd64.deb"
+          dpkg-deb --root-owner-group --build "$PKG" "dist/paisa-cli_${VERSION}_amd64.deb"
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -125,8 +167,11 @@ jobs:
           cat > dist/release-notes.md <<EOF
           ## Downloads
 
-          - **Debian / Ubuntu (amd64):** Download the .deb package below and install it with `sudo apt install ./paisa_*_amd64.deb`.
-          - **Docker image archive:** Download `paisa-docker-image.tar.gz`, then load it with `docker load -i paisa-docker-image.tar.gz`.
+          - **Paisa Desktop (Debian / Ubuntu, amd64):** `paisa_${TAG#v}_amd64.deb`
+          - **Paisa CLI (Debian / Ubuntu, amd64):** `paisa-cli_${TAG#v}_amd64.deb`
+          - **Docker image archive:** `paisa-docker-image.tar.gz`
+
+          Install either Debian package with `sudo apt install ./PACKAGE.deb`.
 
           ## Docker image
 
@@ -145,13 +190,12 @@ jobs:
           if [ "${GITHUB_EVENT_NAME}" = "workflow_dispatch" ]; then
             TAG="${{ inputs.tag }}"
           fi
+          ASSETS=(dist/paisa_*_amd64.deb dist/paisa-cli_*_amd64.deb dist/paisa-docker-image.tar.gz)
           if gh release view "$TAG" >/dev/null 2>&1; then
-            gh release upload "$TAG" dist/paisa_*_amd64.deb dist/paisa-docker-image.tar.gz --clobber
+            gh release upload "$TAG" "${ASSETS[@]}" --clobber
             gh release edit "$TAG" --title "Paisa $TAG" --notes-file dist/release-notes.md
           else
-            gh release create "$TAG" \
-              dist/paisa_*_amd64.deb \
-              dist/paisa-docker-image.tar.gz \
+            gh release create "$TAG" "${ASSETS[@]}" \
               --title "Paisa $TAG" \
               --notes-file dist/release-notes.md
           fi

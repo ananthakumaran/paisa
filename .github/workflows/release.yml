@@ -67,7 +67,7 @@ jobs:
       - name: Build Linux desktop application
         run: |
           cd desktop
-          go install github.com/wailsapp/wails/v2/cmd/wails@v2.10.2
+          go install github.com/wailsapp/wails/v2/cmd/wails@v2.9.3
           wails build -tags webkit2_41
           test -x build/bin/Paisa
 
